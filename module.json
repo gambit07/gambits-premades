@@ -165,5 +165,8 @@
         }
       }
     ]
-	}
+	},
+  "url": "https://github.com/gambit07/gambits-premades",
+  "manifest": "https://github.com/gambit07/gambits-premades/releases/download/gambits-premades/module.json",
+  "download": "https://github.com/gambit07/gambits-premades/releases/download/gambits-premades/gambits-premades.zip"
 }
