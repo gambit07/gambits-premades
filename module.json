@@ -1,0 +1,169 @@
+{
+  "id": "gambits-premades",
+  "title": "Gambit's Premades",
+  "description": "A custom collection of spells, items, and feats for Foundry VTT.",
+  "authors": [
+		{
+		"name": "Gambit"
+		}
+	],
+  "version": "0.0.1",
+	"compatibility": {
+	"minimum": "11",
+	"verified": "11",
+	"maximum": "11"
+  	},
+	"packs": [
+		{
+			"label": "GPS Spells",
+      		"type": "Item",
+			"name": "gps-spells",
+      		"path": "packs/gps-spells",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Class Features",
+      		"type": "Item",
+			"name": "gps-class-features",
+      		"path": "packs/gps-class-features",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Items",
+      		"type": "Item",
+			"name": "gps-items",
+      		"path": "packs/gps-items",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Monster Features",
+      		"type": "Item",
+			"name": "gps-monster-features",
+      		"path": "packs/gps-monster-features",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Generic Features",
+      		"type": "Item",
+			"name": "gps-generic-features",
+      		"path": "packs/gps-generic-features",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Homebrew Features",
+      		"type": "Item",
+			"name": "gps-homebrew-features",
+      		"path": "packs/gps-homebrew-features",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Homebrew Items",
+      		"type": "Item",
+			"name": "gps-homebrew-items",
+      		"path": "packs/gps-homebrew-items",
+			"module": "gambits-premades"
+		}],
+	"relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+			"minimum": "2.0.1",
+      		"verified": "2.4.1"
+		}
+	}],
+    "requires": [
+      {
+        "id": "midi-qol",
+        "type": "module",
+        "manifest": "https://gitlab.com/tposney/midi-qol/raw/v11/package/module.json",
+        "compatibility": {
+          "minimum": "11.0.0",
+          "verified": "11.1.10"
+        }
+      },
+      {
+        "id": "ActiveAuras",
+        "type": "module",
+        "manifest": "https://github.com/kandashi/Active-Auras/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "0.8.2"
+        }
+      },
+      {
+        "id": "dfreds-convenient-effects",
+        "type": "module",
+        "manifest": "https://github.com/DFreds/dfreds-convenient-effects/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "6.0.0"
+        }
+      },
+      {
+        "id": "warpgate",
+        "type": "module",
+        "manifest": "https://github.com/trioderegion/warpgate/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "1.19.0"
+        }
+      },
+      {
+        "id": "effectmacro",
+        "type": "module",
+        "manifest": "https://github.com/krbz999/effectmacro/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "11.0.3"
+        }
+      },
+      {
+        "id": "templatemacro",
+        "type": "module",
+        "manifest": "https://github.com/krbz999/templatemacro/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "11.0.1"
+        }
+      },
+      {
+        "id": "sequencer",
+        "type": "module",
+        "manifest": "https://github.com/fantasycalendar/FoundryVTT-Sequencer/releases/latest/download/manifest.json",
+        "compatibility": {
+          "verified": "3.1.4"
+        }
+      },
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
+        "compatibility": {
+          "verified": "1.0.13"
+        }
+      },
+      {
+        "id": "walledtemplates",
+        "type": "module",
+        "manifest": "https://github.com/caewok/fvtt-walled-templates/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "0.6.10"
+        }
+      },
+      {
+        "id": "dae",
+        "type": "module",
+        "manifest": "https://gitlab.com/tposney/dae/raw/v11/package/module.json",
+        "compatibility": {
+          "minimum": "11.0.0",
+          "verified": "11.0.22"
+        }
+      },
+      {
+        "id": "autoanimations",
+        "type": "module",
+        "manifest": "https://github.com/otigon/automated-jb2a-animations/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "4.2.68"
+        }
+      }
+    ]
+	}
+}
