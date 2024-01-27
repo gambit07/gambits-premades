@@ -11,6 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # Specify the Node.js version you need
+
       - name: Zip Files
         working-directory: ./
         run: zip -r ./module.zip ./*
