@@ -37,7 +37,19 @@ async function releaseFoundryPackage() {
             body: JSON.stringify(body)
         });
 
-        const responseData = await response.json();
+        // Log the raw response and status code
+        const responseText = await response.text();
+        console.log(`Response Status Code: ${response.status}`);
+        console.log(`Raw Response Text: ${responseText}`);
+
+        // Try parsing the response text as JSON
+        let responseData;
+        try {
+            responseData = JSON.parse(responseText);
+        } catch (parseError) {
+            console.error('Failed to parse response as JSON:', parseError);
+            throw new Error(`Invalid JSON response: ${parseError.message}`);
+        }
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status} - ${JSON.stringify(responseData)}`);
