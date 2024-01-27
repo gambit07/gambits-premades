@@ -27,7 +27,7 @@ jobs:
           allowUpdates: true
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
-          prelease: false
+          prerelease: false
           token: ${{secrets.GITHUB_TOKEN}}
           artifacts: './module.zip, ./releases/latest/download/module.json'
           tag: ${{ steps.get-version.outputs.version }}
