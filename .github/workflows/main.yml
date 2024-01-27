@@ -20,7 +20,7 @@ jobs:
         id: get-version
         run: echo "version=$(node ./.github/workflows/get-version.js)" >> $GITHUB_OUTPUT
 
-      -name: Create Release
+      - name: Create Release
         id: create-release
         uses: ncipollo/release-action@v1
         with:
