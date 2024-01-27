@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-
+console.log('Starting Foundry VTT Package Release Process...');
 async function releaseFoundryPackage() {
     const apiToken = process.env.FOUNDRY_API_TOKEN;
     const packageId = process.env.PACKAGE_ID;
@@ -9,7 +9,7 @@ async function releaseFoundryPackage() {
     const foundryMinVersion = process.env.FOUNDRY_MIN_VERSION;
     const foundryVerifiedVersion = process.env.FOUNDRY_VERIFIED_VERSION;
     const foundryMaxVersion = process.env.FOUNDRY_MAX_VERSION;
-
+    console.log(`Releasing package: ${packageId}, version: ${packageVersion}`);
     const body = {
         id: packageId,
         release: {
@@ -24,7 +24,10 @@ async function releaseFoundryPackage() {
         }
     };
 
+    console.log(`Request body: ${JSON.stringify(body, null, 2)}`);
+
     try {
+        console.log('Sending request to Foundry VTT API...');
         const response = await fetch('https://api.foundryvtt.com/_api/packages/release_version', {
             method: 'POST',
             headers: {
