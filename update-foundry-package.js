@@ -32,7 +32,7 @@ async function releaseFoundryPackage() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `fvttp_${apiToken}`
+                'Authorization': `${apiToken}`
             },
             body: JSON.stringify(body)
         });
