@@ -41,7 +41,7 @@ jobs:
         id: foundry-release
         run: node ./update-foundry-package.js
         env:
-          FOUNDRY_API_TOKEN: ${{ secrets.FOUNDRY_API_TOKEN }}
+          FOUNDRY_API_TOKEN: fvttp_*u$r6B#E7cp$12o55CYGCWa5
           PACKAGE_ID: 'gambits-premades' # Add your package ID here
           PACKAGE_VERSION: '${{ steps.get-version.outputs.version }}' # Add your package version here
           MANIFEST_URL: 'https://github.com/gambit07/gambits-premades/releases/latest/download/module.json' # Add your manifest URL here
