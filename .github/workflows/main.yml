@@ -3,13 +3,13 @@ name: Module Builder
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Zip Files
         working-directory: ./
@@ -18,7 +18,7 @@ jobs:
       - name: Get Version
         shell: bash
         id: get-version
-        run: echo "::set-ouput name=version::$(node ./.github/workflows/get-version.js)"
+        run: echo "version=$(node ./.github/workflows/get-version.js)" >> $GITHUB_OUTPUT
 
       -name: Create Release
         id: create-release
