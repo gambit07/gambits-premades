@@ -1,0 +1,33 @@
+name: Module Builder
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Zip Files
+        working-directory: ./
+        run: zip -r ./module.zip ./*
+
+      - name: Get Version
+        shell: bash
+        id: get-version
+        run: echo "::set-ouput name=version::$(node ./.github/workflows/get-version.js)"
+
+      -name: Create Release
+        id: create-release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          name: Release ${{ steps.get-version.outputs.version }}
+          draft: false
+          prelease: false
+          token: ${{secrets.GITHUB_TOKEN}}
+          artifacts: './module.zip, ./module.json'
+          tag: ${{ steps.get-version.outputs.version }}
