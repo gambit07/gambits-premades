@@ -11,14 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20' # Specify the Node.js version you need
-
-      - name: Install NPM dependencies
-        run: npm install
-
       - name: Zip Files
         working-directory: ./
         run: zip -r ./module.zip ./*
@@ -39,16 +31,31 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
+
+      - name: Release Foundry Package
+        run: |
+          API_TOKEN="${{ secrets.FOUNDRY_API_TOKEN }}"
+          PACKAGE_ID="gambits-premades"
+          PACKAGE_VERSION="${{ steps.get-version.outputs.version }}"
+          MANIFEST_URL="https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"
+          RELEASE_NOTES_URL="https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"
+          FOUNDRY_MIN_VERSION="11"
+          FOUNDRY_VERIFIED_VERSION="11"
+          FOUNDRY_MAX_VERSION="11"
       
-      - name: Foundry Release
-        id: foundry-release
-        run: node ./update-foundry-package.js
-        env:
-          FOUNDRY_API_TOKEN: ${{ secrets.FOUNDRY_API_TOKEN }}
-          PACKAGE_ID: 'gambits-premades'
-          PACKAGE_VERSION: '${{ steps.get-version.outputs.version }}'
-          MANIFEST_URL: 'https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json'
-          RELEASE_NOTES_URL: 'https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}'
-          FOUNDRY_MIN_VERSION: '11'
-          FOUNDRY_VERIFIED_VERSION: '11'
-          FOUNDRY_MAX_VERSION: '11'
+          curl -X POST "https://api.foundryvtt.com/_api/packages/release_version" \
+          -H "Content-Type: application/json" \
+          -H "Authorization: ${{ secrets.FOUNDRY_API_TOKEN }}" \
+          -d '{
+            "id": "'"gambits-premades"'",
+            "release": {
+              "version": "'"${{ steps.get-version.outputs.version }}"'",
+              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
+              "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
+              "compatibility": {
+                "minimum": "'"11"'",
+                "verified": "'"11"'",
+                "maximum": "'"11"'"
+              }
+            }
+          }'
