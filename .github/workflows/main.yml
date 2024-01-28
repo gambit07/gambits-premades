@@ -30,7 +30,7 @@ jobs:
           prerelease: false
           body: |
             These are my release notes.
-            These are still my release notes.
+            These are still my release notes 2.
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
