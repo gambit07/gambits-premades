@@ -45,17 +45,17 @@ jobs:
       
           curl -X POST "https://api.foundryvtt.com/_api/packages/release_version" \
           -H "Content-Type: application/json" \
-          -H "Authorization: ${{ secrets.FOUNDRY_API_TOKEN }}" \
+          -H "Authorization: ${API_TOKEN}" \
           -d '{
-            "id": "'"gambits-premades"'",
+            "id": "'"$PACKAGE_ID"'",
             "release": {
-              "version": "'"${{ steps.get-version.outputs.version }}"'",
-              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
-              "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
+              "version": "'"$PACKAGE_VERSION"'",
+              "manifest": "'"$MANIFEST_URL"'",
+              "notes": "'"$RELEASE_NOTES_URL"'",
               "compatibility": {
-                "minimum": "'"11"'",
-                "verified": "'"11"'",
-                "maximum": "'"11"'"
+                "minimum": "'"$FOUNDRY_MIN_VERSION"'",
+                "verified": "'"$FOUNDRY_VERIFIED_VERSION"'",
+                "maximum": "'"$FOUNDRY_MAX_VERSION"'"
               }
             }
           }'
