@@ -29,8 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            These are my release notes.
-            These are still my release notes 2.
+            First official release?
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
