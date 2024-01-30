@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.0.19",
+  "version": "0.0.20",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
@@ -62,7 +62,29 @@
 			"name": "gps-homebrew-items",
       		"path": "packs/gps-homebrew-items",
 			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS World Scripts",
+      		"type": "Macro",
+			"name": "gps-world-scripts",
+      		"path": "packs/gps-world-scripts",
+			"module": "gambits-premades"
 		}],
+  "packFolders": [
+    {
+      "name": "Gambit's Premades",
+      "sorting": "a",
+      "color": "#99badd",
+      "packs": [
+        "GPS Spells",
+        "GPS Class Features",
+        "GPS Items",
+        "GPS Monster Features",
+        "GPS Generic Features",
+        "GPS Homebrew Features",
+        "GPS Homebrew Items"
+      ]
+    }],
 	"relationships": {
     "systems": [
       {
@@ -154,14 +176,6 @@
         "compatibility": {
           "minimum": "11.0.0",
           "verified": "11.0.22"
-        }
-      },
-      {
-        "id": "autoanimations",
-        "type": "module",
-        "manifest": "https://github.com/otigon/automated-jb2a-animations/releases/latest/download/module.json",
-        "compatibility": {
-          "verified": "4.2.68"
         }
       }
     ]
