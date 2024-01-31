@@ -29,7 +29,12 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            First official release?
+            Update: Opportunity Attack - Added Battle Master Fighters Brace Opportunity Attack option.
+            This works best with Chris Premades Brace automation
+
+            Bugfix: Opportunity Attack - Fixed vehicles generating opportunity attacks
+
+            Removed Walled Templates dependency, although I highly recommend it to remove template highlighting at minimum
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}

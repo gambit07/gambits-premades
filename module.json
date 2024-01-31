@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.0.20",
+  "version": "0.0.21",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
@@ -159,14 +159,6 @@
         "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
         "compatibility": {
           "verified": "1.0.13"
-        }
-      },
-      {
-        "id": "walledtemplates",
-        "type": "module",
-        "manifest": "https://github.com/caewok/fvtt-walled-templates/releases/latest/download/module.json",
-        "compatibility": {
-          "verified": "0.6.10"
         }
       },
       {
