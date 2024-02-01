@@ -1,5 +1,6 @@
 Hooks.once('init', () => {
     registerSettings();
+    loadCompendiumData();
     game.modules.get('gambits-premades').medkitApi = medkitApi;
 });
 

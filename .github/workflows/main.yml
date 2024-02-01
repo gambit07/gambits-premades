@@ -29,9 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Update:
-              -Made CPR integration less bad
-              -Added logging to Opportunity Attack module functionality
+            Bugfix: cpr integration
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
