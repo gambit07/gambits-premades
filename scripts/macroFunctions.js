@@ -1,6 +1,6 @@
 async function enableOpportunityAttack(combat) {
-    if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
-    if (!game.user.isGM) return;
+    if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return console.log("Opportunity Attack setting not enabled");
+    if (!game.user.isGM) return console.log("User is not the GM");
     let combatants = await combat.combatants;
     const itemName = 'Opportunity Attack';
     let compendium = game.packs.get("gambits-premades.gps-generic-features");
@@ -20,6 +20,8 @@ async function enableOpportunityAttack(combat) {
             await combatant.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
         }
     }
+
+    if(npcs.length === 0) return console.log("No npcs are valid for combat");
 
     await new Dialog({
         title: "Enable Opportunity Attack",

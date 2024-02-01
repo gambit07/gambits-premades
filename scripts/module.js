@@ -4,23 +4,32 @@ Hooks.once('init', () => {
 });
 
 Hooks.on('createCombat', async (combat, options, userId) => {
-    await new Promise(resolve => {
-        const checkReadyInterval = setInterval(async () => {
-            let allReady = true;
-            for (const combatant of combat.combatants) {
-                if (!combatant) {
-                    allReady = false;
-                    break;
+    try {
+        await new Promise((resolve, reject) => {
+            const checkReadyInterval = setInterval(async () => {
+                try {
+                    let allReady = true;
+                    for (const combatant of combat.combatants) {
+                        if (!combatant) {
+                            allReady = false;
+                            break;
+                        }
+                    }
+                    if (allReady) {
+                        clearInterval(checkReadyInterval);
+                        resolve();
+                    }
+                } catch (error) {
+                    clearInterval(checkReadyInterval);
+                    reject(error);
                 }
-            }
-            if (allReady) {
-                clearInterval(checkReadyInterval);
-                resolve();
-            }
-        }, 100);
-    });
+            }, 100);
+        });
 
-    await enableOpportunityAttack(combat);
+        await enableOpportunityAttack(combat);
+    } catch (error) {
+        console.error("Error during combat creation or enabling opportunity attack:", error);
+    }
 });
 
 Hooks.on('deleteCombat', async (combat) => {

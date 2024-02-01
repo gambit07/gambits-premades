@@ -29,7 +29,9 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Bugfix: Counterspell - Fixed downed creatures generating counterspell dialog
+            Update:
+              -Made CPR integration less bad
+              -Added logging to Opportunity Attack module functionality
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
