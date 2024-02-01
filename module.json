@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.0.23",
+  "version": "0.0.24",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
@@ -69,22 +69,20 @@
 			"name": "gps-world-scripts",
       		"path": "packs/gps-world-scripts",
 			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Homebrew Spells",
+      		"type": "Item",
+			"name": "gps-homebrew-spells",
+      		"path": "packs/gps-homebrew-spells",
+			"module": "gambits-premades"
 		}],
-  "packFolders": [
-    {
-      "name": "Gambit's Premades",
-      "sorting": "a",
-      "color": "#99badd",
-      "packs": [
-        "GPS Spells",
-        "GPS Class Features",
-        "GPS Items",
-        "GPS Monster Features",
-        "GPS Generic Features",
-        "GPS Homebrew Features",
-        "GPS Homebrew Items"
-      ]
-    }],
+    "scripts": [
+      "scripts/integrations/cpr.js",
+      "scripts/macroFunctions.js",
+      "scripts/module.js",
+      "scripts/settings.js"
+    ],
 	"relationships": {
     "systems": [
       {
