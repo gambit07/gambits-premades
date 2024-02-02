@@ -2,17 +2,27 @@ async function enableOpportunityAttack(combat) {
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return console.log("Opportunity Attack setting not enabled");
     if (!game.user.isGM) return console.log("User is not the GM");
     let combatants = await combat.combatants;
+    let npcs = [];
     const itemName = 'Opportunity Attack';
     let compendium = game.packs.get("gambits-premades.gps-generic-features");
-    let compendiumItems = await compendium.getDocuments();
-    let newItem = compendiumItems.find(i => i.name === itemName);
-    let npcs = [];
+    let compendiumIndex = await compendium.getIndex();
+    let itemEntry = compendiumIndex.getName(itemName);
+
+    if (!itemEntry) {
+        return console.error("Item not found in compendium");
+    }
+    
+    let newItem = await compendium.getDocument(itemEntry._id);
+    
+    if (!newItem) {
+        return console.error("Failed to retrieve item from compendium");
+    }
 
     for (let combatant of combatants.values()) {
         if (combatant.actor.type === 'npc') {
             npcs.push(combatant);
         } else if (combatant.actor.type !== 'npc') {
-            let existingItem = combatant.actor.items.find(i => i.name === itemName);
+            let existingItem = combatant.actor.items.getName(itemName);
 
             if (existingItem) {
                 await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
@@ -31,7 +41,7 @@ async function enableOpportunityAttack(combat) {
                 label: "Yes",
                 callback: async () => {
                     for (let npc of npcs) {
-                        let existingItem = npc.actor.items.find(i => i.name === itemName);
+                        let existingItem = npc.actor.items.getName(itemName);
 
                         if (existingItem) {
                             await npc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
@@ -45,7 +55,7 @@ async function enableOpportunityAttack(combat) {
                 label: "No",
                 callback: async () => {
                    for (let npc of npcs) {
-                        let existingItem = npc.actor.items.find(i => i.name === itemName);
+                        let existingItem = npc.actor.items.getName(itemName);
 
                         if (existingItem) {
                             await npc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
@@ -64,7 +74,7 @@ async function disableOpportunityAttack(combat) {
     const itemName = 'Opportunity Attack';
 
     for (let combatant of combat.combatants.values()) {
-        let existingItem = combatant.actor.items.find(i => i.name === itemName);
+        let existingItem = combatant.actor.items.getName(itemName);
         let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
 
         if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);

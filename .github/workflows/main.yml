@@ -29,7 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Merged commit 2e3029f
+            Update: Shield Wall - Now takes into account the originating actors shield for full functionality, requires Active Auras 0.9.5+
+            Update: Opportunity Attack - Default item to Auto Target on Template Draw = None. Switch to compendium getIndex function to improve efficiency
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
