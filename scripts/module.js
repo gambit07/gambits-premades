@@ -1,7 +1,13 @@
 Hooks.once('init', () => {
     registerSettings();
-    loadCompendiumData();
-    game.modules.get('gambits-premades').medkitApi = medkitApi;
+});
+
+Hooks.once('ready', () => {
+    loadCompendiumData().then(() => {
+        game.modules.get('gambits-premades').medkitApi = medkitApi;
+    }).catch(error => {
+        console.error("Error loading compendium data:", error);
+    });
 });
 
 Hooks.on('createCombat', async (combat, options, userId) => {

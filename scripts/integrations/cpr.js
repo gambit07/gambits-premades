@@ -1,7 +1,9 @@
-// Define a global variable to hold the static data
 let medkitItems = null;
 
 async function loadCompendiumData() {
+
+    let items = {};
+
     const compendiumNames = [
         'gambits-premades.gps-class-features',
         'gambits-premades.gps-generic-features',
@@ -12,7 +14,6 @@ async function loadCompendiumData() {
         'gambits-premades.gps-homebrew-spells',
         'gambits-premades.gps-monster-features'
     ];
-    let items = {};
 
     for (const name of compendiumNames) {
         let compendium = game.packs.get(name);
@@ -24,6 +25,8 @@ async function loadCompendiumData() {
                     version: item.system.source?.custom || 'Unknown'
                 };
             });
+        } else {
+            console.warn(`Compendium ${name} not found.`);
         }
     }
 
