@@ -18,7 +18,7 @@ async function loadCompendiumData() {
     for (const name of compendiumNames) {
         let compendium = game.packs.get(name);
         if (compendium) {
-            let content = await compendium.getDocuments();
+            let content = await compendium.getIndex({'fields': ['name', 'system.source.custom']});
             content.forEach(item => {
                 items[item.name] = {
                     name: item.name,
