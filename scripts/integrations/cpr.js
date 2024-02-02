@@ -18,20 +18,21 @@ async function loadCompendiumData() {
     for (const name of compendiumNames) {
         let compendium = game.packs.get(name);
         if (compendium) {
-            let index = await compendium.getIndex();
-            index.forEach(entry => {
-                items[entry.name] = {
-                    name: entry.name,
-                    version: entry.system.source?.custom || 'Unknown'
+            let content = await compendium.getIndex({'fields': ['name', 'system.source.custom']});
+            content.forEach(item => {
+                items[item.name] = {
+                    name: item.name,
+                    version: item.system.source?.custom || 'Unknown'
                 };
             });
+        } else {
+            console.warn(`Compendium ${name} not found.`);
         }
     }
-    // Assign the loaded data to medkitItems
+
     medkitItems = { 'automations': items };
 }
 
-// Define medkitApi to return the loaded data
 function medkitApi() {
     return medkitItems || { 'automations': {} };
 }
