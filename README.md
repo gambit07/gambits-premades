@@ -8,7 +8,7 @@ Currently all automations are included as items in my compendiums, which are lab
 
 - This automates opportunity attacks while taking into account opportunity attack specific features of the Sentinel feat, War Caster feat, Polearm Master feat, and Battle Master Fighters Brace feature. This feature will only function while actors are in combat. Note: The Sentinel part of this automation does not stop a token from moving when hit.
 
-![Opportunity Attack](https://github.com/gambit07/gambits-premades/blob/previews/OpportunityAttack.gif)
+![Opportunity Attack](https://github.com/gambit07/gambits-premades/blob/main/previews/OpportunityAttack.gif)
 
 </p>
 </details>
