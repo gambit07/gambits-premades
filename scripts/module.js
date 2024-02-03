@@ -10,35 +10,22 @@ Hooks.once('ready', () => {
     });
 });
 
-Hooks.on('createCombat', async (combat, options, userId) => {
-    try {
-        await new Promise((resolve, reject) => {
-            const checkReadyInterval = setInterval(async () => {
-                try {
-                    let allReady = true;
-                    for (const combatant of combat.combatants) {
-                        if (!combatant) {
-                            allReady = false;
-                            break;
-                        }
-                    }
-                    if (allReady) {
-                        clearInterval(checkReadyInterval);
-                        resolve();
-                    }
-                } catch (error) {
-                    clearInterval(checkReadyInterval);
-                    reject(error);
-                }
-            }, 100);
-        });
+Hooks.on("preUpdateCombat", (combat, update, options) => {
+    const startedPath = `gambits-premades.started`;
+    const prevStarted = combat.started;
+    foundry.utils.setProperty(options, startedPath, prevStarted);
+})
 
+Hooks.on("updateCombat", async (combat, update, options) => {
+    const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
+
+    if(combatStarted) {
         await enableOpportunityAttack(combat);
-    } catch (error) {
-        console.error("Error during combat creation or enabling opportunity attack:", error);
+        await enableCounterspell(combat);
     }
-});
+})
 
 Hooks.on('deleteCombat', async (combat) => {
     await disableOpportunityAttack(combat);
+    await disableCounterspell(combat);
 });

@@ -29,8 +29,10 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Update: Shield Wall - Now takes into account the originating actors shield for full functionality, requires Active Auras 0.9.5+
-            Update: Opportunity Attack - Default item to Auto Target on Template Draw = None. Switch to compendium getIndex function to improve efficiency
+            Bugfix: Cloud of Daggers - Removed Walled Template dependencies that were un-needed
+            Bugfix: Opportunity Attack - Modified combat initialization to correctly account for combat startup time delays
+            Update: Counterspell - Counterspell can now be enabled/disabled in module settings. If you have the old worldscript version make sure to remove it and refresh your browser
+            Update: Stroke of Luck - Added homebrew option to allow Saving Throws as part of the feature. Disabled by default, can be enabled in the items Active Effect under Effect Macro's 'On Saving Throw' option
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
