@@ -64,7 +64,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/73f6087f-9b78-4a61-8
 
 - This automates the Rod of the Pact Keeper, including buffs to spell dc and spell attack, as well as item uses to recover spell slots
 
-![RodOfThePactKeeper](https://github.com/gambit07/gambits-premades/blob/main/previews/RodOfThePactKeeper.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/5d4fb5b8-b968-4648-9de3-97ac8cb265bb
 
 </p>
 </details>
