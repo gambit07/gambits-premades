@@ -51,9 +51,9 @@ https://github.com/gambit07/gambits-premades/assets/4236874/73f6087f-9b78-4a61-8
 <summary><b>Torch</b> (click to expand)</summary>
 <p>
 
-- This automates the hooded lantern with a hooded lantern animation and lighting
+- This automates torches with animation and lighting
 
-![Torch](https://github.com/gambit07/gambits-premades/blob/main/previews/Torch.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/17657ca0-b10c-445e-bdab-de547669e957
 
 </p>
 </details>
