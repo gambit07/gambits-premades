@@ -74,7 +74,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/5d4fb5b8-b968-4648-9
 
 - This automates the Staff of Withering, including charge uses and damage application + save and effect handling
 
-![StaffOfWithering](https://github.com/gambit07/gambits-premades/blob/main/previews/StaffOfWithering.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/a5544f8e-d151-445b-9422-d3c214b969ce
 
 </p>
 </details>
