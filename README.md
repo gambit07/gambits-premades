@@ -30,8 +30,7 @@ Currently all automations are included as items in my compendiums, which are lab
 
 - This automates the bullseye lantern with a bullseye lantern animation and lighting
 
-https://github.com/gambit07/gambits-premades/assets/4236874/73f6087f-9b78-4a61-86a6-412132fc3f0f
-
+https://github.com/gambit07/gambits-premades/assets/4236874/a38b7393-a8df-4677-9152-ae5b6571d986
 
 </p>
 </details>
