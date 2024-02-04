@@ -42,7 +42,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/73f6087f-9b78-4a61-8
 
 - This automates the hooded lantern with a hooded lantern animation and lighting
 
-![HoodedLantern](https://github.com/gambit07/gambits-premades/blob/main/previews/HoodedLantern.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/41371e6d-e59e-4aec-bb62-e531a4974e28
 
 </p>
 </details>
