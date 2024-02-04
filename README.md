@@ -47,7 +47,7 @@ Currently all automations are included as items in my compendiums, which are lab
 </details>
 
 <details>
-<summary><b>Torch/b> (click to expand)</summary>
+<summary><b>Torch</b> (click to expand)</summary>
 <p>
 
 - This automates the hooded lantern with a hooded lantern animation and lighting
@@ -58,7 +58,7 @@ Currently all automations are included as items in my compendiums, which are lab
 </details>
 
 <details>
-<summary><b>Rod of the Pact Keeper/b> (click to expand)</summary>
+<summary><b>Rod of the Pact Keeper</b> (click to expand)</summary>
 <p>
 
 - This automates the Rod of the Pact Keeper, including buffs to spell dc and spell attack, as well as item uses to recover spell slots
@@ -69,7 +69,7 @@ Currently all automations are included as items in my compendiums, which are lab
 </details>
 
 <details>
-<summary><b>Staff Of Withering/b> (click to expand)</summary>
+<summary><b>Staff Of Withering</b> (click to expand)</summary>
 <p>
 
 - This automates the Staff of Withering, including charge uses and damage application + save and effect handling
