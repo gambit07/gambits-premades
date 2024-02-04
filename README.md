@@ -19,7 +19,8 @@ Currently all automations are included as items in my compendiums, which are lab
 
 - This automates counterspell. All situations should work with the exception of counter-counterspell for allies of the initially counterspelled creature. Only the counterspelled creature currently has the ability to counter-counterspell, hoping to add the functionality for allied counter-counterspell in the future.
 
-![Counterspell](https://github.com/gambit07/gambits-premades/blob/main/previews/Counterspell.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/734b71a3-2c23-408d-91fe-627ff5d2dcfd
+
 
 </p>
 </details>
