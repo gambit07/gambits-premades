@@ -3,6 +3,7 @@ async function enableOpportunityAttack(combat) {
     if (!game.user.isGM) return console.log("User is not the GM");
     let combatants = await combat.combatants;
     let npcs = [];
+    let pcs = [];
     const itemName = 'Opportunity Attack';
     let compendium = game.packs.get("gambits-premades.gps-generic-features");
     let compendiumIndex = await compendium.getIndex();
@@ -20,22 +21,15 @@ async function enableOpportunityAttack(combat) {
     }
 
     for (let combatant of combatants.values()) {
-        console.log(combatant)
         if (combatant.actor.type === 'npc') {
             npcs.push(combatant);
-        } else if (combatant.actor.type !== 'npc') {
-            let existingItem = combatant.actor.items.getName(itemName);
-            console.log(existingItem)
-
-            if (existingItem) {
-                await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
-            }
-            await combatant.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
-            await combatant.actor.items.getName("Opportunity Attack").use();
+        } else if (combatant.actor.type === 'character') {
+            pcs.push(combatant);
         }
     }
 
-    if(npcs.length === 0) return console.log("No npcs are valid for combat");
+    if(npcs.length === 0 && pcs.length === 0) return console.log("No pcs or npcs are valid for combat");
+
 
     await new Dialog({
         title: "Enable Opportunity Attack",
@@ -64,6 +58,41 @@ async function enableOpportunityAttack(combat) {
 
                         if (existingItem) {
                             await npc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                        }
+                    }
+				}
+            }
+        },
+        default: "no"
+    }).render(true);
+
+    await new Dialog({
+        title: "Enable Opportunity Attack",
+        content: `<p>Would you like to enable Opportunity Attack automation for all PC's?</p>`,
+        buttons: {
+            yes: {
+                label: "Yes",
+                callback: async () => {
+                    for (let pc of pcs) {
+                        let existingItem = pc.actor.items.getName(itemName);
+
+                        if (existingItem) {
+                            await pc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                        }
+
+                        await pc.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
+                        await pc.actor.items.getName("Opportunity Attack").use();
+                    }
+                }
+            },
+            no: {
+                label: "No",
+                callback: async () => {
+                   for (let pc of pcs) {
+                        let existingItem = pc.actor.items.getName(itemName);
+
+                        if (existingItem) {
+                            await pc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
                         }
                     }
 				}

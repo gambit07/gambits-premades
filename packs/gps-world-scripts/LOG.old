@@ -1,7 +1,7 @@
-2024/02/03-17:06:31.561 5164 Recovering log #317
-2024/02/03-17:06:31.568 5164 Delete type=0 #317
-2024/02/03-17:06:31.568 5164 Delete type=3 #315
-2024/02/04-00:19:15.297 3710 Level-0 table #322: started
-2024/02/04-00:19:15.297 3710 Level-0 table #322: 0 bytes OK
-2024/02/04-00:19:15.302 3710 Delete type=0 #320
-2024/02/04-00:19:15.307 3710 Manual compaction at level-0 from 'undefined' @ 72057594037927935 : 1 .. 'undefined' @ 0 : 0; will stop at (end)
+2024/02/04-18:02:49.011 25dc Recovering log #329
+2024/02/04-18:02:49.018 25dc Delete type=0 #329
+2024/02/04-18:02:49.018 25dc Delete type=3 #327
+2024/02/04-19:43:20.715 3710 Level-0 table #334: started
+2024/02/04-19:43:20.716 3710 Level-0 table #334: 0 bytes OK
+2024/02/04-19:43:20.717 3710 Delete type=0 #332
+2024/02/04-19:43:20.717 3710 Manual compaction at level-0 from 'undefined' @ 72057594037927935 : 1 .. 'undefined' @ 0 : 0; will stop at (end)
