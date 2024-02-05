@@ -125,3 +125,25 @@ https://github.com/gambit07/gambits-premades/assets/4236874/cf0e6a98-96e5-43d5-a
 
 </p>
 </details>
+
+<details>
+<summary><b>Dragon's Breath</b> (click to expand)</summary>
+<p>
+
+- This automates the spell Dragon's Breath
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Ill Omen Bow</b> (click to expand)</summary>
+<p>
+
+- This automates the homebrew item Ill Omen Bow
+
+https://github.com/gambit07/gambits-premades/assets/4236874/dc7fc344-b368-45bf-957d-0517ca09fc7c
+
+</p>
+</details>
