@@ -2,6 +2,8 @@ A collection of automated items, spells, feats, and anything else I decide to do
 
 Currently all automations are included as items in my compendiums, which are lableled as GPS [Automation Item Type]. I have plans to take a module based approach to some of my more advanced automations such as Counterspell and Opportunity Attacks in the future.
 
+I feel like videos are the best way to see these type of automations, so including a partial list of videos below. I'll continue to add more over time.
+
 <details>
 <summary><b>Opportunity Attack</b> (click to expand)</summary>
 <p>
@@ -19,7 +21,8 @@ Currently all automations are included as items in my compendiums, which are lab
 
 - This automates counterspell. All situations should work with the exception of counter-counterspell for allies of the initially counterspelled creature. Only the counterspelled creature currently has the ability to counter-counterspell, hoping to add the functionality for allied counter-counterspell in the future.
 
-![Counterspell](https://github.com/gambit07/gambits-premades/blob/main/previews/Counterspell.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/734b71a3-2c23-408d-91fe-627ff5d2dcfd
+
 
 </p>
 </details>
@@ -30,7 +33,7 @@ Currently all automations are included as items in my compendiums, which are lab
 
 - This automates the bullseye lantern with a bullseye lantern animation and lighting
 
-![BullseyeLantern](https://github.com/gambit07/gambits-premades/blob/main/previews/BullseyeLantern.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/a38b7393-a8df-4677-9152-ae5b6571d986
 
 </p>
 </details>
@@ -41,40 +44,40 @@ Currently all automations are included as items in my compendiums, which are lab
 
 - This automates the hooded lantern with a hooded lantern animation and lighting
 
-![HoodedLantern](https://github.com/gambit07/gambits-premades/blob/main/previews/HoodedLantern.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/41371e6d-e59e-4aec-bb62-e531a4974e28
 
 </p>
 </details>
 
 <details>
-<summary><b>Torch/b> (click to expand)</summary>
+<summary><b>Torch</b> (click to expand)</summary>
 <p>
 
-- This automates the hooded lantern with a hooded lantern animation and lighting
+- This automates torches with animation and lighting
 
-![Torch](https://github.com/gambit07/gambits-premades/blob/main/previews/Torch.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/17657ca0-b10c-445e-bdab-de547669e957
 
 </p>
 </details>
 
 <details>
-<summary><b>Rod of the Pact Keeper/b> (click to expand)</summary>
+<summary><b>Rod of the Pact Keeper</b> (click to expand)</summary>
 <p>
 
 - This automates the Rod of the Pact Keeper, including buffs to spell dc and spell attack, as well as item uses to recover spell slots
 
-![RodOfThePactKeeper](https://github.com/gambit07/gambits-premades/blob/main/previews/RodOfThePactKeeper.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/5d4fb5b8-b968-4648-9de3-97ac8cb265bb
 
 </p>
 </details>
 
 <details>
-<summary><b>Staff Of Withering/b> (click to expand)</summary>
+<summary><b>Staff Of Withering</b> (click to expand)</summary>
 <p>
 
 - This automates the Staff of Withering, including charge uses and damage application + save and effect handling
 
-![StaffOfWithering](https://github.com/gambit07/gambits-premades/blob/main/previews/StaffOfWithering.mp4)
+https://github.com/gambit07/gambits-premades/assets/4236874/a5544f8e-d151-445b-9422-d3c214b969ce
 
 </p>
 </details>
