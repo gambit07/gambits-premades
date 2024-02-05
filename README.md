@@ -221,7 +221,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/9e74b32f-5dbe-4598-9
 
 - This automates the homebrew feature Transient Healing
 
-https://github.com/gambit07/gambits-premades/assets/4236874/9e74b32f-5dbe-4598-9670-c36334d7e7dc
+https://github.com/gambit07/gambits-premades/assets/4236874/d6e5ccf7-33aa-4267-8caf-c114050903ba
 
 </p>
 </details>
