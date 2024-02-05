@@ -147,3 +147,26 @@ https://github.com/gambit07/gambits-premades/assets/4236874/dc7fc344-b368-45bf-9
 
 </p>
 </details>
+
+
+<details>
+<summary><b>Defile Ground</b> (click to expand)</summary>
+<p>
+
+- This automates the Druid feature Defile Ground
+
+https://github.com/gambit07/gambits-premades/assets/4236874/14bb450b-43b6-4099-a6ef-2e59d7afaad6
+
+</p>
+</details>
+
+<details>
+<summary><b>Confusion</b> (click to expand)</summary>
+<p>
+
+- This automates the spell Confusion
+
+https://github.com/gambit07/gambits-premades/assets/4236874/28448d90-b465-4a6e-9f3d-56a7289ab06e
+
+</p>
+</details>
