@@ -108,9 +108,20 @@ https://github.com/gambit07/gambits-premades/assets/4236874/64db7d8a-8589-4dde-8
 <summary><b>Divine Sense</b> (click to expand)</summary>
 <p>
 
-- This is the Paladin feature Divine Sense. This is primarily if you don't want to use the vision5e setting where divine sense is always active.
+- This automates the Paladin feature Divine Sense. This is primarily if you don't want to use the vision5e setting where divine sense is always active.
 
 https://github.com/gambit07/gambits-premades/assets/4236874/77b70335-5f79-4b25-a1dd-c821de13d2fe
+
+</p>
+</details>
+
+<details>
+<summary><b>Circle of Power</b> (click to expand)</summary>
+<p>
+
+- This automates the spell Circle of Power. It covers magic resistance as well as no damage on magical effect saving throws where you would take half damage on a save. This requires the magic effect midi property being set for damage spells.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/cf0e6a98-96e5-43d5-a862-7073160190ec
 
 </p>
 </details>
