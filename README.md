@@ -258,3 +258,59 @@ https://github.com/gambit07/gambits-premades/assets/4236874/b616a083-bad2-48ee-a
 
 </p>
 </details>
+
+<details>
+<summary><b>Hunter's Sense</b> (click to expand)</summary>
+<p>
+
+- This automates the Ranger feature Hunter's Sense
+
+https://github.com/gambit07/gambits-premades/assets/4236874/77c71b27-f82e-4982-95c3-be6056ae75c3
+
+</p>
+</details>
+
+<details>
+<summary><b>Holy Aura</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Healing Surge</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Heated Body</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Perfect Self</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Enervation</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
