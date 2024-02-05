@@ -28,8 +28,7 @@ async function enableOpportunityAttack(combat) {
         }
     }
 
-    if(npcs.length === 0 && pcs.length === 0) return console.log("No pcs or npcs are valid for combat");
-
+    if(npcs.length !== 0) {
 
     await new Dialog({
         title: "Enable Opportunity Attack",
@@ -65,6 +64,9 @@ async function enableOpportunityAttack(combat) {
         },
         default: "no"
     }).render(true);
+    }
+
+    if(pcs.length !== 0) {
 
     await new Dialog({
         title: "Enable Opportunity Attack",
@@ -100,6 +102,7 @@ async function enableOpportunityAttack(combat) {
         },
         default: "no"
     }).render(true);
+}
 };
 
 async function disableOpportunityAttack(combat) {

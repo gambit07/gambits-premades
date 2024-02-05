@@ -29,8 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Bugfix: Opportunity Attack - Resolved root cause of initialization issue, should be resolved.
-            Update: Opportunity Attack - Added opportunity attack for the Battle Master Fighter's Riposte feature
+            Bugfix: Opportunity Attack - Fixed bug in riposte, fixed PC and NPC gm allow dialogs
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
