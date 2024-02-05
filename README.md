@@ -181,3 +181,47 @@ https://github.com/gambit07/gambits-premades/assets/4236874/b22a2472-636a-4847-b
 
 </p>
 </details>
+
+<details>
+<summary><b>Aura of Conquest</b> (click to expand)</summary>
+<p>
+
+- This automates the Paladin feature Aura of Conquest
+
+https://github.com/gambit07/gambits-premades/assets/4236874/0a6cd18b-8371-40a1-b15b-a70231751e57
+
+</p>
+</details>
+
+<details>
+<summary><b>Tentacles</b> (click to expand)</summary>
+<p>
+
+- This automates the Mindflayers Tentacles feature.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/a86e8454-5112-45ae-9191-a20a3f70234e
+
+</p>
+</details>
+
+<details>
+<summary><b>Conquering Presence</b> (click to expand)</summary>
+<p>
+
+- This automates the Paladin Conquering Presence feature
+
+https://github.com/gambit07/gambits-premades/assets/4236874/9e74b32f-5dbe-4598-9670-c36334d7e7dc
+
+</p>
+</details>
+
+<details>
+<summary><b>Transient Healing</b> (click to expand)</summary>
+<p>
+
+- This automates the homebrew feature Transient Healing
+
+https://github.com/gambit07/gambits-premades/assets/4236874/9e74b32f-5dbe-4598-9670-c36334d7e7dc
+
+</p>
+</details>
