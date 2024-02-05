@@ -81,3 +81,36 @@ https://github.com/gambit07/gambits-premades/assets/4236874/a5544f8e-d151-445b-9
 
 </p>
 </details>
+
+<details>
+<summary><b>Cloud of Daggers</b> (click to expand)</summary>
+<p>
+
+- This automates Cloud of Daggers, will only work while in combat.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/cc030dcf-12e6-44b0-bca4-8a45fbefd2bb
+
+</p>
+</details>
+
+<details>
+<summary><b>Stroke of Luck</b> (click to expand)</summary>
+<p>
+
+- This automates the Rogue Feature, Stroke of Luck. This automates Attack Roll, Ability Check, and Skill Check components, and adds a homebrew option (disabled by default) for Saving Throws as well.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/64db7d8a-8589-4dde-851b-87718ac4e727
+
+</p>
+</details>
+
+<details>
+<summary><b>Divine Sense</b> (click to expand)</summary>
+<p>
+
+- This is the Paladin feature Divine Sense. This is primarily if you don't want to use the vision5e setting where divine sense is always active.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/77b70335-5f79-4b25-a1dd-c821de13d2fe
+
+</p>
+</details>
