@@ -29,8 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Bugfix: Opportunity Attack - Fixed another small bug in the Battle Maneuver Brace implementation.
-            Note: Chris Premades is recommended for the Battle Master Brace and Riposte core features
+            Bugfix: Opportunity Attack - Fixed syntax issue
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
