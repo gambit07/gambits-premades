@@ -225,3 +225,36 @@ https://github.com/gambit07/gambits-premades/assets/4236874/d6e5ccf7-33aa-4267-8
 
 </p>
 </details>
+
+<details>
+<summary><b>Rust Metal</b> (click to expand)</summary>
+<p>
+
+- This automates the Rust Monster feature Rust Metal
+
+https://github.com/gambit07/gambits-premades/assets/4236874/b8fa2587-23b9-4634-a48c-fbd8d14ebb5b
+
+</p>
+</details>
+
+<details>
+<summary><b>Nova</b> (click to expand)</summary>
+<p>
+
+- This automates the homebrew feature Nova
+
+https://github.com/gambit07/gambits-premades/assets/4236874/bfdd53c4-a22c-4fbc-a254-813dad23474a
+
+</p>
+</details>
+
+<details>
+<summary><b>Scornful Rebuke</b> (click to expand)</summary>
+<p>
+
+- This automates the paladin feature Scornful Rebuke
+
+https://github.com/gambit07/gambits-premades/assets/4236874/b616a083-bad2-48ee-a751-afa31ef07b13
+
+</p>
+</details>
