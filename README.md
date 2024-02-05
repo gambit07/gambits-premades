@@ -2,6 +2,8 @@ A collection of automated items, spells, feats, and anything else I decide to do
 
 Currently all automations are included as items in my compendiums, which are lableled as GPS [Automation Item Type]. I have plans to take a module based approach to some of my more advanced automations such as Counterspell and Opportunity Attacks in the future.
 
+I feel like videos are the best way to see these type of automations, so including a partial list of videos below. I'll continue to add more over time.
+
 <details>
 <summary><b>Opportunity Attack</b> (click to expand)</summary>
 <p>
