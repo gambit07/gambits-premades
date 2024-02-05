@@ -170,3 +170,14 @@ https://github.com/gambit07/gambits-premades/assets/4236874/28448d90-b465-4a6e-9
 
 </p>
 </details>
+
+<details>
+<summary><b>Portent & Greater Portent</b> (click to expand)</summary>
+<p>
+
+- This automates the Wizard features Portent and (at the appropriate level) Greater Portent
+
+https://github.com/gambit07/gambits-premades/assets/4236874/b22a2472-636a-4847-b5d3-fa33a67441eb
+
+</p>
+</details>
