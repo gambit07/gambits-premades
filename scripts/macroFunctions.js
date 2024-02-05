@@ -151,7 +151,7 @@ async function enableCounterspell(combat) {
 
     async function processCombatants(combatants) {
         for (let combatant of combatants) {
-            let magicItem = combatant.actor.items.find(i => i.type === "spell" && i.system.level !== 0);
+            let magicItem = combatant.actor.items.find(i => i.type === "spell");
 
             if (magicItem) {
                 await combatant.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
