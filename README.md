@@ -10,7 +10,7 @@ I feel like videos are the best way to see these type of automations, so includi
 
 - This automates opportunity attacks while taking into account opportunity attack specific features of the Sentinel feat, War Caster feat, Polearm Master feat, and Battle Master Fighters Brace feature. This feature will only function while actors are in combat. Note: The Sentinel part of this automation does not stop a token from moving when hit.
 
-![Opportunity Attack](https://github.com/gambit07/gambits-premades/blob/main/previews/OpportunityAttack.gif)
+https://github.com/gambit07/gambits-premades/assets/4236874/a69d6510-4a64-485e-a705-344a264e324c
 
 </p>
 </details>
@@ -78,6 +78,239 @@ https://github.com/gambit07/gambits-premades/assets/4236874/5d4fb5b8-b968-4648-9
 - This automates the Staff of Withering, including charge uses and damage application + save and effect handling
 
 https://github.com/gambit07/gambits-premades/assets/4236874/a5544f8e-d151-445b-9422-d3c214b969ce
+
+</p>
+</details>
+
+<details>
+<summary><b>Cloud of Daggers</b> (click to expand)</summary>
+<p>
+
+- This automates Cloud of Daggers, will only work while in combat.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/cc030dcf-12e6-44b0-bca4-8a45fbefd2bb
+
+</p>
+</details>
+
+<details>
+<summary><b>Stroke of Luck</b> (click to expand)</summary>
+<p>
+
+- This automates the Rogue Feature, Stroke of Luck. This automates Attack Roll, Ability Check, and Skill Check components, and adds a homebrew option (disabled by default) for Saving Throws as well.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/64db7d8a-8589-4dde-851b-87718ac4e727
+
+</p>
+</details>
+
+<details>
+<summary><b>Divine Sense</b> (click to expand)</summary>
+<p>
+
+- This automates the Paladin feature Divine Sense. This is primarily if you don't want to use the vision5e setting where divine sense is always active.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/77b70335-5f79-4b25-a1dd-c821de13d2fe
+
+</p>
+</details>
+
+<details>
+<summary><b>Circle of Power</b> (click to expand)</summary>
+<p>
+
+- This automates the spell Circle of Power. It covers magic resistance as well as no damage on magical effect saving throws where you would take half damage on a save. This requires the magic effect midi property being set for damage spells.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/cf0e6a98-96e5-43d5-a862-7073160190ec
+
+</p>
+</details>
+
+<details>
+<summary><b>Dragon's Breath</b> (click to expand)</summary>
+<p>
+
+- This automates the spell Dragon's Breath
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Ill Omen Bow</b> (click to expand)</summary>
+<p>
+
+- This automates the homebrew item Ill Omen Bow
+
+https://github.com/gambit07/gambits-premades/assets/4236874/dc7fc344-b368-45bf-957d-0517ca09fc7c
+
+</p>
+</details>
+
+
+<details>
+<summary><b>Defile Ground</b> (click to expand)</summary>
+<p>
+
+- This automates the Druid feature Defile Ground
+
+https://github.com/gambit07/gambits-premades/assets/4236874/14bb450b-43b6-4099-a6ef-2e59d7afaad6
+
+</p>
+</details>
+
+<details>
+<summary><b>Confusion</b> (click to expand)</summary>
+<p>
+
+- This automates the spell Confusion
+
+https://github.com/gambit07/gambits-premades/assets/4236874/28448d90-b465-4a6e-9f3d-56a7289ab06e
+
+</p>
+</details>
+
+<details>
+<summary><b>Portent & Greater Portent</b> (click to expand)</summary>
+<p>
+
+- This automates the Wizard features Portent and (at the appropriate level) Greater Portent
+
+https://github.com/gambit07/gambits-premades/assets/4236874/b22a2472-636a-4847-b5d3-fa33a67441eb
+
+</p>
+</details>
+
+<details>
+<summary><b>Aura of Conquest</b> (click to expand)</summary>
+<p>
+
+- This automates the Paladin feature Aura of Conquest
+
+https://github.com/gambit07/gambits-premades/assets/4236874/0a6cd18b-8371-40a1-b15b-a70231751e57
+
+</p>
+</details>
+
+<details>
+<summary><b>Tentacles</b> (click to expand)</summary>
+<p>
+
+- This automates the Mindflayers Tentacles feature.
+
+https://github.com/gambit07/gambits-premades/assets/4236874/a86e8454-5112-45ae-9191-a20a3f70234e
+
+</p>
+</details>
+
+<details>
+<summary><b>Conquering Presence</b> (click to expand)</summary>
+<p>
+
+- This automates the Paladin Conquering Presence feature
+
+https://github.com/gambit07/gambits-premades/assets/4236874/9e74b32f-5dbe-4598-9670-c36334d7e7dc
+
+</p>
+</details>
+
+<details>
+<summary><b>Transient Healing</b> (click to expand)</summary>
+<p>
+
+- This automates the homebrew feature Transient Healing
+
+https://github.com/gambit07/gambits-premades/assets/4236874/d6e5ccf7-33aa-4267-8caf-c114050903ba
+
+</p>
+</details>
+
+<details>
+<summary><b>Rust Metal</b> (click to expand)</summary>
+<p>
+
+- This automates the Rust Monster feature Rust Metal
+
+https://github.com/gambit07/gambits-premades/assets/4236874/b8fa2587-23b9-4634-a48c-fbd8d14ebb5b
+
+</p>
+</details>
+
+<details>
+<summary><b>Nova</b> (click to expand)</summary>
+<p>
+
+- This automates the homebrew feature Nova
+
+https://github.com/gambit07/gambits-premades/assets/4236874/bfdd53c4-a22c-4fbc-a254-813dad23474a
+
+</p>
+</details>
+
+<details>
+<summary><b>Scornful Rebuke</b> (click to expand)</summary>
+<p>
+
+- This automates the paladin feature Scornful Rebuke
+
+https://github.com/gambit07/gambits-premades/assets/4236874/b616a083-bad2-48ee-a751-afa31ef07b13
+
+</p>
+</details>
+
+<details>
+<summary><b>Hunter's Sense</b> (click to expand)</summary>
+<p>
+
+- This automates the Ranger feature Hunter's Sense
+
+https://github.com/gambit07/gambits-premades/assets/4236874/77c71b27-f82e-4982-95c3-be6056ae75c3
+
+</p>
+</details>
+
+<details>
+<summary><b>Holy Aura</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Healing Surge</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Heated Body</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Perfect Self</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Enervation</b> (click to expand)</summary>
+<p>
+
+Placeholder
 
 </p>
 </details>
