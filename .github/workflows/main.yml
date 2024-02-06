@@ -29,8 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Bugfix: Counterspell - Fixed issue with setFlag needing midi socket, fixed small logic issue that wasn't taking into account counter-counterspell level on counter-counter-counterspell
-            Update: Opportunity Attack - Removed player specific option to enable/disable, this is now left up to the GM exclusively
+            Added: Cause Fear, Roksja's Husk, Weaver's Hoop, Memento Mori, Smolder
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
