@@ -1,3 +1,5 @@
+<b>NOTE: This module is only dnd5e 2.x compatible currently, because Midi QOL is only 2.x compatible. These automations will not work for dnd5e 3.0+ currently.</b>
+
 A collection of automated items, spells, feats, and anything else I decide to do! This module primarily uses MidiQOL along with other synergistic modules to achieve these automations, credit to tposney, caewok, zhell, aedif, and saibot for all of their relevant modules.
 
 Currently all automations are included as items in my compendiums, which are lableled as GPS [Automation Item Type]. I have plans to take a module based approach to some of my more advanced automations such as Counterspell and Opportunity Attacks in the future.
