@@ -10,7 +10,7 @@ I feel like videos are the best way to see these type of automations, so includi
 
 - This automates opportunity attacks while taking into account opportunity attack specific features of the Sentinel feat, War Caster feat, Polearm Master feat, and Battle Master Fighters Brace feature. This feature will only function while actors are in combat. Note: The Sentinel part of this automation does not stop a token from moving when hit.
 
-![Opportunity Attack](https://github.com/gambit07/gambits-premades/blob/main/previews/OpportunityAttack.gif)
+https://github.com/gambit07/gambits-premades/assets/4236874/a69d6510-4a64-485e-a705-344a264e324c
 
 </p>
 </details>
