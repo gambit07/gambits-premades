@@ -29,7 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Added: Cause Fear, Roksja's Husk, Weaver's Hoop, Memento Mori, Smolder
+            Update: Tweak to Counterspell Initializer assignment
+            Added: Boldin's Beard Oil, Dipolar Gages
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
