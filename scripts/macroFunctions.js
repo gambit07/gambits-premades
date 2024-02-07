@@ -163,10 +163,10 @@ async function enableCounterspell(combat) {
         let npcs = [], pcs = [];
         for (let combatant of combat.combatants.values()) {
             let existingItem = combatant.actor.items.find(i => i.name === itemName);
-            if (combatant.actor.type === 'npc' || (combatant.actor.type === 'character' && combatant.document.disposition === -1)) {
+            if ((combatant.actor.type === 'npc' || combatant.actor.type === 'character') && combatant.document.disposition === -1) {
                 if(existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
                 npcs.push(combatant);
-            } else if (combatant.actor.type === 'character') {
+            } else if ((combatant.actor.type === 'npc' || combatant.actor.type === 'character') && combatant.document.disposition === 1) {
                 if(existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
                 pcs.push(combatant);
             }
@@ -184,14 +184,14 @@ async function enableCounterspell(combat) {
 
         if (hasPcWithCounterspell) {
             buttons.pc = {
-                label: "PCs",
+                label: "Friendlies",
                 callback: () => processCombatants(npcs)
             };
         }
 
         if (hasNpcWithCounterspell) {
             buttons.npc = {
-                label: "NPCs",
+                label: "Hostiles",
                 callback: () => processCombatants(pcs)
             };
         }
