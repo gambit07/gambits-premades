@@ -312,7 +312,7 @@ Placeholder
 <summary><b>Enervation</b> (click to expand)</summary>
 <p>
 
-Placeholder
+https://github.com/gambit07/gambits-premades/assets/4236874/11df20c2-7f0e-4524-b2af-9f4675647597
 
 </p>
 </details>
