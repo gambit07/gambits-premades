@@ -316,3 +316,111 @@ Placeholder
 
 </p>
 </details>
+
+<details>
+<summary><b>Scatter</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/a63ecc04-8af3-4ac7-bb17-74826d90537c
+
+</p>
+</details>
+
+<details>
+<summary><b>Stinking Cloud</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/cc947ee4-5135-48de-8e96-588c70c43261
+
+</p>
+</details>
+
+<details>
+<summary><b>Identify</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/36224de1-6c8f-4110-a551-8dcfc5085b48
+
+</p>
+</details>
+
+<details>
+<summary><b>Mind Blast</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/ff1aa39e-d1ec-4064-ad56-52297231337f
+
+</p>
+</details>
+
+<details>
+<summary><b>Motivational Speech</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/62173b0c-1836-4f1b-b2fe-ab3049fd56dd
+
+</p>
+</details>
+
+<details>
+<summary><b>Black Tentacles</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Enemies Abound</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/7766b3d8-2005-447e-b19e-86c630a57a4e
+
+</p>
+</details>
+
+<details>
+<summary><b>Ray of Sickness</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/ba11c3a2-cdc6-4eb3-a6f6-dbd430234afc
+
+</p>
+</details>
+
+<details>
+<summary><b>Dissonant Whispers</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/fc2ae75e-ecb2-4d43-9d2d-c0961c37eda0
+
+</p>
+</details>
+
+<details>
+<summary><b>Vicious Mockery</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/774aaf32-895d-4cce-aa82-c93b565a7f68
+
+</p>
+</details>
+
+<details>
+<summary><b>Tasha's Hideous Laughter</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/5dab58c7-d74c-4a9a-8587-3d4ca0c53b4d
+
+</p>
+</details>
+
+<details>
+<summary><b>Entangle</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/c3c61a43-71f7-421c-a69a-2446ad02def3
+
+</p>
+</details>
