@@ -160,15 +160,20 @@ async function enableCounterspell(combat) {
     }
 
     async function categorizeCombatants(combat) {
-        let npcs = [], pcs = [];
+        let npcs = [];
+        let pcs = [];
+        
         for (let combatant of combat.combatants.values()) {
             let existingItem = combatant.actor.items.find(i => i.name === itemName);
-            if ((combatant.actor.type === 'npc' || combatant.actor.type === 'character') && combatant.document.disposition === -1) {
-                if(existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
-                npcs.push(combatant);
-            } else if ((combatant.actor.type === 'npc' || combatant.actor.type === 'character') && combatant.document.disposition === 1) {
-                if(existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
-                pcs.push(combatant);
+        console.log(combatant)
+            if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
+                if (combatant.token.disposition === -1) {
+                    if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                    npcs.push(combatant);
+                } else if (combatant.token.disposition === 1) {
+                    if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                    pcs.push(combatant);
+                }
             }
         }
         return { npcs, pcs };
