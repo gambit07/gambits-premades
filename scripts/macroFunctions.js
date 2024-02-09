@@ -1,9 +1,6 @@
 async function enableOpportunityAttack(combat) {
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return console.log("Opportunity Attack setting not enabled");
     if (!game.user.isGM) return console.log("User is not the GM");
-    let combatants = await combat.combatants;
-    let npcs = [];
-    let pcs = [];
     const itemName = 'Opportunity Attack';
     let compendium = game.packs.get("gambits-premades.gps-generic-features");
     let compendiumIndex = await compendium.getIndex();
@@ -14,95 +11,87 @@ async function enableOpportunityAttack(combat) {
     }
     
     let newItem = await compendium.getDocument(itemEntry._id);
-    console.log(newItem)
-    
+	
     if (!newItem) {
         return console.error("Failed to retrieve item from compendium");
     }
 
-    for (let combatant of combatants.values()) {
-        if (combatant.actor.type === 'npc') {
-            npcs.push(combatant);
-        } else if (combatant.actor.type === 'character') {
-            pcs.push(combatant);
+    const { npcs, pcs } = await categorizeCombatants(combat);
+
+    const buttons = createDialogButtons(npcs, pcs);
+
+    new Dialog({
+        title: "Enable Opportunity Attack",
+        content: "<p>Who would you like to automate Opportunity Attacks for?</p>",
+        buttons: buttons,
+        default: "none"
+    }).render(true);
+
+    async function processCombatants(combatants) {
+        for (let combatant of combatants) {
+                await combatant.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
+                await combatant.actor.items.getName("Opportunity Attack").use();
         }
     }
 
-    if(npcs.length !== 0) {
-
-    await new Dialog({
-        title: "Enable Opportunity Attack",
-        content: `<p>Would you like to enable Opportunity Attack automation for all NPC's?</p>`,
-        buttons: {
-            yes: {
-                label: "Yes",
-                callback: async () => {
-                    for (let npc of npcs) {
-                        let existingItem = npc.actor.items.getName(itemName);
-
-                        if (existingItem) {
-                            await npc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
-                        }
-
-                        await npc.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
-                        await npc.actor.items.getName("Opportunity Attack").use();
-                    }
+    async function categorizeCombatants(combat) {
+        let npcs = [];
+        let pcs = [];
+        
+        for (let combatant of combat.combatants.values()) {
+            if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
+				let existingItem = combatant.actor.items.find(i => i.name === itemName);
+				
+                if (combatant.token.disposition === -1) {
+                    if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                    npcs.push(combatant);
+                } else if (combatant.token.disposition === 1) {
+                    if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                    pcs.push(combatant);
                 }
-            },
-            no: {
-                label: "No",
-                callback: async () => {
-                   for (let npc of npcs) {
-                        let existingItem = npc.actor.items.getName(itemName);
-
-                        if (existingItem) {
-                            await npc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
-                        }
-                    }
-				}
             }
-        },
-        default: "no"
-    }).render(true);
+        }
+        return { npcs, pcs };
     }
 
-    if(pcs.length !== 0) {
+    function createDialogButtons(npcs, pcs) {
+        let buttons = {};
 
-    await new Dialog({
-        title: "Enable Opportunity Attack",
-        content: `<p>Would you like to enable Opportunity Attack automation for all PC's?</p>`,
-        buttons: {
-            yes: {
-                label: "Yes",
+        if (pcs.length > 0) {
+            buttons.pc = {
+                label: "Friendlies",
+                callback: () => processCombatants(pcs)
+            };
+        }
+
+        if (npcs.length > 0) {
+            buttons.npc = {
+                label: "Hostiles",
+                callback: () => processCombatants(npcs)
+            };
+        }
+
+        if (pcs.length > 0 && npcs.length > 0) {
+            buttons.both = {
+                label: "Both",
+                callback: () => processCombatants([...npcs, ...pcs])
+            };
+        }
+
+        buttons.none = {
+                label: "None",
                 callback: async () => {
-                    for (let pc of pcs) {
-                        let existingItem = pc.actor.items.getName(itemName);
-
+                    for (let combatant of combat.combatants.values()) {
+                        let existingItem = combatant.actor.items.find(i => i.name === itemName);
                         if (existingItem) {
-                            await pc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                            await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
                         }
-
-                        await pc.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
-                        await pc.actor.items.getName("Opportunity Attack").use();
                     }
                 }
-            },
-            no: {
-                label: "No",
-                callback: async () => {
-                   for (let pc of pcs) {
-                        let existingItem = pc.actor.items.getName(itemName);
-
-                        if (existingItem) {
-                            await pc.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
-                        }
-                    }
-				}
             }
-        },
-        default: "no"
-    }).render(true);
-}
+
+        return buttons;
+    }
 };
 
 async function disableOpportunityAttack(combat) {
@@ -134,6 +123,10 @@ async function enableCounterspell(combat) {
     
     let newItem = await compendium.getDocument(itemEntry._id);
 
+    if (!newItem) {
+        return console.error("Failed to retrieve item from compendium");
+    }
+
     const { npcs, pcs } = await categorizeCombatants(combat);
     const hasNpcWithCounterspell = checkForCounterspell(npcs);
     const hasPcWithCounterspell = checkForCounterspell(pcs);
@@ -164,9 +157,9 @@ async function enableCounterspell(combat) {
         let pcs = [];
         
         for (let combatant of combat.combatants.values()) {
-            let existingItem = combatant.actor.items.find(i => i.name === itemName);
-        console.log(combatant)
             if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
+                let existingItem = combatant.actor.items.find(i => i.name === itemName);
+                
                 if (combatant.token.disposition === -1) {
                     if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
                     npcs.push(combatant);
