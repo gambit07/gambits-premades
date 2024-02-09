@@ -12,7 +12,8 @@ async function loadCompendiumData() {
         'gambits-premades.gps-items',
         'gambits-premades.gps-spells',
         'gambits-premades.gps-homebrew-spells',
-        'gambits-premades.gps-monster-features'
+        'gambits-premades.gps-monster-features',
+        'gambits-premades.gps-homebrew-spells'
     ];
 
     for (const name of compendiumNames) {
