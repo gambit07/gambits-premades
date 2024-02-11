@@ -29,7 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Added: Grim Siphon, Cecily's Stormshot, Shroom of Doom
+            Added: Staff of Rooted Hills
+            Update: Shroom of Doom - Cleaned up a bit of the implementation
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
