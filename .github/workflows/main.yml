@@ -29,8 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Added: Staff of Rooted Hills
-            Update: Shroom of Doom - Cleaned up a bit of the implementation
+            Added: Homebrew Items - Oils of Arcane, Frost, Flame, Spark, Insanity, Anti-Demon, Corrosive
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
