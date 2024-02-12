@@ -29,8 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Added: Mobile Feat - Automates the additional 10 feet of movement, and works in concert with my Opportunity Attack automation to prevent opportunity attacks when conditions are met
-            Rogue Feature: Fancy Footwork - Works in concert with my Opportunity Attack automation to prevent opportunity attacks when conditions are met
+            Update: Mobile Feat - Add on combat start removal to minimize cases with actors opp attacks generating flag
+            Fancy Footwork - Add check to prevent flag generation outside of the actors current turn
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
