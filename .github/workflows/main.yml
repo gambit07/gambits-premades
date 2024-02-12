@@ -29,10 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Added: Homebrew Spell - Contagious Healing
-            Update: Roksja's Husk - added the midi qol canSee method for bonus action follow up applications, updated animation
-                    Counterspell Initializer - replaced old sight methods with the midi qol canSee method
-                    Shroom of Doom - Updated animation
+            Update: Anti-Demon Oil - Only apply advantage when attacking a fiend or undead
+            All weapon oils - Remove destroy on empty as it breaks the callback macro
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
