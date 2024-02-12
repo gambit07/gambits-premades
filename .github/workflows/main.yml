@@ -29,8 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Update: Anti-Demon Oil - Only apply advantage when attacking a fiend or undead
-            All weapon oils - Remove destroy on empty as it breaks the callback macro
+            Added: Mobile Feat - Automates the additional 10 feet of movement, and works in concert with my Opportunity Attack automation to prevent opportunity attacks when conditions are met
+            Rogue Feature: Fancy Footwork - Works in concert with my Opportunity Attack automation to prevent opportunity attacks when conditions are met
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
