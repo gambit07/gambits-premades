@@ -29,7 +29,10 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Added: Homebrew Items - Oils of Arcane, Frost, Flame, Spark, Insanity, Anti-Demon, Corrosive
+            Added: Homebrew Spell - Contagious Healing
+            Update: Roksja's Husk - added the midi qol canSee method for bonus action follow up applications, updated animation
+                    Counterspell Initializer - replaced old sight methods with the midi qol canSee method
+                    Shroom of Doom - Updated animation
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
