@@ -29,8 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Update: Mobile Feat - Add on combat start removal to minimize cases with actors opp attacks generating flag
-            Fancy Footwork - Add check to prevent flag generation outside of the actors current turn
+            Update: Counterspell & Opportunity Attack - Combat start dialogs removed! You can now choose which actors the automations should apply to in the module settings, as well as adding a custom dialog timeout.
+            Additionally, combatants will now have features enabled even if they are added after combat start, and features will be removed if they are removed while combat is still active.
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
