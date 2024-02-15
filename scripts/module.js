@@ -1,6 +1,14 @@
+//import { showSimpleDialog } from './macros/testFunctions.js';
+export let socket;
+
 Hooks.once('init', () => {
     registerSettings();
 });
+
+Hooks.once('socketlib.ready', () => {
+    socket = socketlib.registerModule('gambits-premades');
+    //socket.register("showSimpleDialog", showSimpleDialog);
+})
 
 Hooks.once('ready', () => {
     loadCompendiumData().then(() => {
@@ -8,6 +16,11 @@ Hooks.once('ready', () => {
     }).catch(error => {
         console.error("Error loading compendium data:", error);
     });
+
+    /*Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
+            console.log("Hook for midi-qol.preambleComplete triggered.");
+            await socket.executeAsGM("showSimpleDialog");
+        });*/
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {

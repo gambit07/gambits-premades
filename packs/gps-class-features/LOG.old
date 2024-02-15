@@ -1,8 +1,61 @@
-2024/02/12-21:42:51.078 4f24 Recovering log #701
-2024/02/12-21:42:51.085 4f24 Delete type=0 #701
-2024/02/12-21:42:51.085 4f24 Delete type=3 #699
-2024/02/12-22:09:10.909 4204 Level-0 table #706: started
-2024/02/12-22:09:10.909 4204 Level-0 table #706: 0 bytes OK
-2024/02/12-22:09:10.911 4204 Delete type=0 #704
-2024/02/12-22:09:10.914 4204 Manual compaction at level-0 from '!folders!Bx9M27esbZ3oMhQa' @ 72057594037927935 : 1 .. '!items.effects!wLd8HBhcDcpEy0Gp.DWegiMAKX43CuDbS' @ 0 : 0; will stop at (end)
-2024/02/12-22:09:10.915 4204 Manual compaction at level-1 from '!folders!Bx9M27esbZ3oMhQa' @ 72057594037927935 : 1 .. '!items.effects!wLd8HBhcDcpEy0Gp.DWegiMAKX43CuDbS' @ 0 : 0; will stop at (end)
+2024/02/15-11:16:37.521 11e00 Recovering log #768
+2024/02/15-11:16:37.527 11e00 Delete type=2 #5
+2024/02/15-11:16:37.527 11e00 Delete type=0 #23
+2024/02/15-11:16:37.527 11e00 Delete type=0 #171
+2024/02/15-11:16:37.527 11e00 Delete type=0 #175
+2024/02/15-11:16:37.527 11e00 Delete type=2 #182
+2024/02/15-11:16:37.527 11e00 Delete type=0 #200
+2024/02/15-11:16:37.527 11e00 Delete type=0 #212
+2024/02/15-11:16:37.527 11e00 Delete type=2 #219
+2024/02/15-11:16:37.527 11e00 Delete type=0 #223
+2024/02/15-11:16:37.527 11e00 Delete type=0 #239
+2024/02/15-11:16:37.527 11e00 Delete type=0 #243
+2024/02/15-11:16:37.527 11e00 Delete type=0 #247
+2024/02/15-11:16:37.527 11e00 Delete type=0 #251
+2024/02/15-11:16:37.527 11e00 Delete type=0 #267
+2024/02/15-11:16:37.527 11e00 Delete type=0 #331
+2024/02/15-11:16:37.528 11e00 Delete type=2 #334
+2024/02/15-11:16:37.528 11e00 Delete type=0 #446
+2024/02/15-11:16:37.528 11e00 Delete type=0 #482
+2024/02/15-11:16:37.528 11e00 Delete type=2 #490
+2024/02/15-11:16:37.528 11e00 Delete type=0 #504
+2024/02/15-11:16:37.528 11e00 Delete type=0 #529
+2024/02/15-11:16:37.528 11e00 Delete type=0 #549
+2024/02/15-11:16:37.528 11e00 Delete type=0 #554
+2024/02/15-11:16:37.528 11e00 Delete type=0 #574
+2024/02/15-11:16:37.528 11e00 Delete type=0 #590
+2024/02/15-11:16:37.528 11e00 Delete type=0 #602
+2024/02/15-11:16:37.528 11e00 Delete type=0 #623
+2024/02/15-11:16:37.528 11e00 Delete type=0 #638
+2024/02/15-11:16:37.528 11e00 Delete type=0 #712
+2024/02/15-11:16:37.528 11e00 Delete type=0 #768
+2024/02/15-11:16:37.528 11e00 Delete type=3 #22
+2024/02/15-11:16:37.528 11e00 Delete type=3 #170
+2024/02/15-11:16:37.528 11e00 Delete type=3 #174
+2024/02/15-11:16:37.528 11e00 Delete type=3 #199
+2024/02/15-11:16:37.528 11e00 Delete type=3 #211
+2024/02/15-11:16:37.528 11e00 Delete type=3 #222
+2024/02/15-11:16:37.529 11e00 Delete type=3 #238
+2024/02/15-11:16:37.529 11e00 Delete type=3 #242
+2024/02/15-11:16:37.529 11e00 Delete type=3 #246
+2024/02/15-11:16:37.529 11e00 Delete type=3 #250
+2024/02/15-11:16:37.529 11e00 Delete type=3 #266
+2024/02/15-11:16:37.529 11e00 Delete type=3 #330
+2024/02/15-11:16:37.529 11e00 Delete type=3 #445
+2024/02/15-11:16:37.529 11e00 Delete type=3 #481
+2024/02/15-11:16:37.529 11e00 Delete type=3 #503
+2024/02/15-11:16:37.529 11e00 Delete type=3 #527
+2024/02/15-11:16:37.529 11e00 Delete type=3 #547
+2024/02/15-11:16:37.529 11e00 Delete type=3 #553
+2024/02/15-11:16:37.529 11e00 Delete type=3 #573
+2024/02/15-11:16:37.529 11e00 Delete type=3 #589
+2024/02/15-11:16:37.529 11e00 Delete type=3 #601
+2024/02/15-11:16:37.529 11e00 Delete type=3 #621
+2024/02/15-11:16:37.529 11e00 Delete type=3 #637
+2024/02/15-11:16:37.529 11e00 Delete type=3 #711
+2024/02/15-11:16:37.530 11e00 Delete type=3 #767
+2024/02/15-11:23:56.602 96d8 Level-0 table #772: started
+2024/02/15-11:23:56.602 96d8 Level-0 table #772: 0 bytes OK
+2024/02/15-11:23:56.602 96d8 Delete type=0 #770
+2024/02/15-11:23:56.609 96d8 Manual compaction at level-0 from '!folders!Bx9M27esbZ3oMhQa' @ 72057594037927935 : 1 .. '!items.effects!wLd8HBhcDcpEy0Gp.DWegiMAKX43CuDbS' @ 0 : 0; will stop at (end)
+2024/02/15-11:23:56.609 96d8 Manual compaction at level-1 from '!folders!Bx9M27esbZ3oMhQa' @ 72057594037927935 : 1 .. '!items.effects!wLd8HBhcDcpEy0Gp.DWegiMAKX43CuDbS' @ 0 : 0; will stop at (end)

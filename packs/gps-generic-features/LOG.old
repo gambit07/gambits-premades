@@ -1,15 +1,76 @@
-2024/02/12-21:42:51.128 4f98 Recovering log #717
-2024/02/12-21:42:51.142 4f98 Delete type=0 #717
-2024/02/12-21:42:51.142 4f98 Delete type=3 #715
-2024/02/12-22:09:10.926 4204 Level-0 table #722: started
-2024/02/12-22:09:10.932 4204 Level-0 table #722: 73868 bytes OK
-2024/02/12-22:09:10.935 4204 Delete type=0 #720
-2024/02/12-22:09:10.935 4204 Manual compaction at level-0 from '!items!dV0FzUTUxfvhGWVj' @ 72057594037927935 : 1 .. '!items.effects!vu9zZPIXk0CNgpSo.FYYJl1ODvL3o3WCd' @ 0 : 0; will stop at (end)
-2024/02/12-22:09:10.935 4204 Manual compaction at level-1 from '!items!dV0FzUTUxfvhGWVj' @ 72057594037927935 : 1 .. '!items.effects!vu9zZPIXk0CNgpSo.FYYJl1ODvL3o3WCd' @ 0 : 0; will stop at '!items!vu9zZPIXk0CNgpSo' @ 157 : 1
-2024/02/12-22:09:10.935 4204 Compacting 1@1 + 1@2 files
-2024/02/12-22:09:10.942 4204 Generated table #723@1: 8 keys, 22592 bytes
-2024/02/12-22:09:10.942 4204 Compacted 1@1 + 1@2 files => 22592 bytes
-2024/02/12-22:09:10.945 4204 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/02/12-22:09:10.945 4204 Delete type=2 #686
-2024/02/12-22:09:10.945 4204 Delete type=2 #722
-2024/02/12-22:09:10.953 4204 Manual compaction at level-1 from '!items!vu9zZPIXk0CNgpSo' @ 157 : 1 .. '!items.effects!vu9zZPIXk0CNgpSo.FYYJl1ODvL3o3WCd' @ 0 : 0; will stop at (end)
+2024/02/15-11:16:37.568 164c8 Recovering log #786
+2024/02/15-11:16:37.573 164c8 Delete type=2 #5
+2024/02/15-11:16:37.573 164c8 Delete type=0 #23
+2024/02/15-11:16:37.574 164c8 Delete type=0 #171
+2024/02/15-11:16:37.574 164c8 Delete type=0 #175
+2024/02/15-11:16:37.574 164c8 Delete type=2 #178
+2024/02/15-11:16:37.574 164c8 Delete type=0 #200
+2024/02/15-11:16:37.574 164c8 Delete type=0 #212
+2024/02/15-11:16:37.574 164c8 Delete type=2 #219
+2024/02/15-11:16:37.574 164c8 Delete type=0 #223
+2024/02/15-11:16:37.574 164c8 Delete type=2 #238
+2024/02/15-11:16:37.574 164c8 Delete type=0 #240
+2024/02/15-11:16:37.574 164c8 Delete type=2 #243
+2024/02/15-11:16:37.574 164c8 Delete type=0 #245
+2024/02/15-11:16:37.574 164c8 Delete type=0 #249
+2024/02/15-11:16:37.574 164c8 Delete type=0 #253
+2024/02/15-11:16:37.574 164c8 Delete type=2 #268
+2024/02/15-11:16:37.574 164c8 Delete type=0 #270
+2024/02/15-11:16:37.574 164c8 Delete type=2 #317
+2024/02/15-11:16:37.574 164c8 Delete type=0 #335
+2024/02/15-11:16:37.576 164c8 Delete type=2 #338
+2024/02/15-11:16:37.576 164c8 Delete type=0 #450
+2024/02/15-11:16:37.576 164c8 Delete type=2 #478
+2024/02/15-11:16:37.576 164c8 Delete type=0 #488
+2024/02/15-11:16:37.576 164c8 Delete type=2 #505
+2024/02/15-11:16:37.576 164c8 Delete type=0 #511
+2024/02/15-11:16:37.576 164c8 Delete type=0 #541
+2024/02/15-11:16:37.576 164c8 Delete type=2 #543
+2024/02/15-11:16:37.577 164c8 Delete type=0 #562
+2024/02/15-11:16:37.577 164c8 Delete type=0 #567
+2024/02/15-11:16:37.577 164c8 Delete type=0 #587
+2024/02/15-11:16:37.577 164c8 Delete type=2 #595
+2024/02/15-11:16:37.577 164c8 Delete type=0 #605
+2024/02/15-11:16:37.577 164c8 Delete type=0 #617
+2024/02/15-11:16:37.577 164c8 Delete type=0 #638
+2024/02/15-11:16:37.577 164c8 Delete type=2 #652
+2024/02/15-11:16:37.577 164c8 Delete type=0 #654
+2024/02/15-11:16:37.578 164c8 Delete type=0 #730
+2024/02/15-11:16:37.578 164c8 Delete type=0 #786
+2024/02/15-11:16:37.578 164c8 Delete type=3 #22
+2024/02/15-11:16:37.578 164c8 Delete type=3 #170
+2024/02/15-11:16:37.578 164c8 Delete type=3 #174
+2024/02/15-11:16:37.578 164c8 Delete type=3 #199
+2024/02/15-11:16:37.578 164c8 Delete type=3 #211
+2024/02/15-11:16:37.578 164c8 Delete type=3 #222
+2024/02/15-11:16:37.578 164c8 Delete type=3 #239
+2024/02/15-11:16:37.578 164c8 Delete type=3 #244
+2024/02/15-11:16:37.578 164c8 Delete type=3 #248
+2024/02/15-11:16:37.578 164c8 Delete type=3 #252
+2024/02/15-11:16:37.578 164c8 Delete type=3 #269
+2024/02/15-11:16:37.578 164c8 Delete type=3 #334
+2024/02/15-11:16:37.579 164c8 Delete type=3 #449
+2024/02/15-11:16:37.579 164c8 Delete type=3 #487
+2024/02/15-11:16:37.579 164c8 Delete type=3 #510
+2024/02/15-11:16:37.579 164c8 Delete type=3 #539
+2024/02/15-11:16:37.579 164c8 Delete type=3 #560
+2024/02/15-11:16:37.579 164c8 Delete type=3 #566
+2024/02/15-11:16:37.579 164c8 Delete type=3 #586
+2024/02/15-11:16:37.579 164c8 Delete type=3 #604
+2024/02/15-11:16:37.579 164c8 Delete type=3 #616
+2024/02/15-11:16:37.579 164c8 Delete type=3 #636
+2024/02/15-11:16:37.579 164c8 Delete type=3 #653
+2024/02/15-11:16:37.579 164c8 Delete type=3 #729
+2024/02/15-11:16:37.579 164c8 Delete type=3 #785
+2024/02/15-11:23:56.617 96d8 Level-0 table #790: started
+2024/02/15-11:23:56.621 96d8 Level-0 table #790: 33407 bytes OK
+2024/02/15-11:23:56.621 96d8 Delete type=0 #788
+2024/02/15-11:23:56.625 96d8 Manual compaction at level-0 from '!items!dV0FzUTUxfvhGWVj' @ 72057594037927935 : 1 .. '!items.effects!vu9zZPIXk0CNgpSo.FYYJl1ODvL3o3WCd' @ 0 : 0; will stop at (end)
+2024/02/15-11:23:56.625 96d8 Manual compaction at level-1 from '!items!dV0FzUTUxfvhGWVj' @ 72057594037927935 : 1 .. '!items.effects!vu9zZPIXk0CNgpSo.FYYJl1ODvL3o3WCd' @ 0 : 0; will stop at '!items!eUTU3JSbo7X98INw' @ 166 : 1
+2024/02/15-11:23:56.625 96d8 Compacting 1@1 + 1@2 files
+2024/02/15-11:23:56.633 96d8 Generated table #791@1: 8 keys, 22695 bytes
+2024/02/15-11:23:56.633 96d8 Compacted 1@1 + 1@2 files => 22695 bytes
+2024/02/15-11:23:56.634 96d8 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/02/15-11:23:56.634 96d8 Delete type=2 #728
+2024/02/15-11:23:56.634 96d8 Delete type=2 #790
+2024/02/15-11:23:56.642 96d8 Manual compaction at level-1 from '!items!eUTU3JSbo7X98INw' @ 166 : 1 .. '!items.effects!vu9zZPIXk0CNgpSo.FYYJl1ODvL3o3WCd' @ 0 : 0; will stop at (end)

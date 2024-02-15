@@ -1,8 +1,65 @@
-2024/02/12-21:42:51.178 4f98 Recovering log #703
-2024/02/12-21:42:51.186 4f98 Delete type=0 #703
-2024/02/12-21:42:51.186 4f98 Delete type=3 #701
-2024/02/12-22:09:10.946 4204 Level-0 table #708: started
-2024/02/12-22:09:10.946 4204 Level-0 table #708: 0 bytes OK
-2024/02/12-22:09:10.948 4204 Delete type=0 #706
-2024/02/12-22:09:10.953 4204 Manual compaction at level-0 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zU5rb6IHhnrk4kHv.s5vVugxWuFKNWeL3' @ 0 : 0; will stop at (end)
-2024/02/12-22:09:10.953 4204 Manual compaction at level-1 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zU5rb6IHhnrk4kHv.s5vVugxWuFKNWeL3' @ 0 : 0; will stop at (end)
+2024/02/15-11:16:37.607 164c8 Recovering log #771
+2024/02/15-11:16:37.613 164c8 Delete type=2 #5
+2024/02/15-11:16:37.613 164c8 Delete type=0 #23
+2024/02/15-11:16:37.613 164c8 Delete type=0 #171
+2024/02/15-11:16:37.613 164c8 Delete type=2 #173
+2024/02/15-11:16:37.613 164c8 Delete type=0 #175
+2024/02/15-11:16:37.613 164c8 Delete type=2 #182
+2024/02/15-11:16:37.613 164c8 Delete type=0 #200
+2024/02/15-11:16:37.614 164c8 Delete type=0 #212
+2024/02/15-11:16:37.614 164c8 Delete type=2 #219
+2024/02/15-11:16:37.614 164c8 Delete type=0 #223
+2024/02/15-11:16:37.614 164c8 Delete type=0 #239
+2024/02/15-11:16:37.614 164c8 Delete type=0 #243
+2024/02/15-11:16:37.614 164c8 Delete type=0 #247
+2024/02/15-11:16:37.614 164c8 Delete type=0 #251
+2024/02/15-11:16:37.614 164c8 Delete type=0 #267
+2024/02/15-11:16:37.614 164c8 Delete type=0 #331
+2024/02/15-11:16:37.614 164c8 Delete type=2 #334
+2024/02/15-11:16:37.614 164c8 Delete type=0 #446
+2024/02/15-11:16:37.615 164c8 Delete type=0 #482
+2024/02/15-11:16:37.615 164c8 Delete type=0 #502
+2024/02/15-11:16:37.615 164c8 Delete type=0 #527
+2024/02/15-11:16:37.615 164c8 Delete type=2 #546
+2024/02/15-11:16:37.615 164c8 Delete type=0 #549
+2024/02/15-11:16:37.615 164c8 Delete type=0 #554
+2024/02/15-11:16:37.615 164c8 Delete type=2 #561
+2024/02/15-11:16:37.615 164c8 Delete type=0 #575
+2024/02/15-11:16:37.615 164c8 Delete type=0 #591
+2024/02/15-11:16:37.615 164c8 Delete type=0 #603
+2024/02/15-11:16:37.615 164c8 Delete type=0 #624
+2024/02/15-11:16:37.615 164c8 Delete type=2 #639
+2024/02/15-11:16:37.615 164c8 Delete type=0 #641
+2024/02/15-11:16:37.615 164c8 Delete type=2 #648
+2024/02/15-11:16:37.615 164c8 Delete type=0 #714
+2024/02/15-11:16:37.615 164c8 Delete type=0 #771
+2024/02/15-11:16:37.615 164c8 Delete type=3 #22
+2024/02/15-11:16:37.615 164c8 Delete type=3 #170
+2024/02/15-11:16:37.615 164c8 Delete type=3 #174
+2024/02/15-11:16:37.615 164c8 Delete type=3 #199
+2024/02/15-11:16:37.615 164c8 Delete type=3 #211
+2024/02/15-11:16:37.615 164c8 Delete type=3 #222
+2024/02/15-11:16:37.616 164c8 Delete type=3 #238
+2024/02/15-11:16:37.616 164c8 Delete type=3 #242
+2024/02/15-11:16:37.616 164c8 Delete type=3 #246
+2024/02/15-11:16:37.616 164c8 Delete type=3 #250
+2024/02/15-11:16:37.616 164c8 Delete type=3 #266
+2024/02/15-11:16:37.616 164c8 Delete type=3 #330
+2024/02/15-11:16:37.616 164c8 Delete type=3 #445
+2024/02/15-11:16:37.616 164c8 Delete type=3 #481
+2024/02/15-11:16:37.616 164c8 Delete type=3 #501
+2024/02/15-11:16:37.616 164c8 Delete type=3 #525
+2024/02/15-11:16:37.616 164c8 Delete type=3 #547
+2024/02/15-11:16:37.616 164c8 Delete type=3 #553
+2024/02/15-11:16:37.616 164c8 Delete type=3 #574
+2024/02/15-11:16:37.616 164c8 Delete type=3 #590
+2024/02/15-11:16:37.616 164c8 Delete type=3 #602
+2024/02/15-11:16:37.616 164c8 Delete type=3 #622
+2024/02/15-11:16:37.616 164c8 Delete type=3 #640
+2024/02/15-11:16:37.616 164c8 Delete type=3 #713
+2024/02/15-11:16:37.616 164c8 Delete type=3 #770
+2024/02/15-11:23:56.613 96d8 Level-0 table #775: started
+2024/02/15-11:23:56.613 96d8 Level-0 table #775: 0 bytes OK
+2024/02/15-11:23:56.617 96d8 Delete type=0 #773
+2024/02/15-11:23:56.625 96d8 Manual compaction at level-0 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zU5rb6IHhnrk4kHv.s5vVugxWuFKNWeL3' @ 0 : 0; will stop at (end)
+2024/02/15-11:23:56.625 96d8 Manual compaction at level-1 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zU5rb6IHhnrk4kHv.s5vVugxWuFKNWeL3' @ 0 : 0; will stop at (end)

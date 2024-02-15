@@ -1,8 +1,62 @@
-2024/02/12-21:42:51.059 3d64 Recovering log #701
-2024/02/12-21:42:51.066 3d64 Delete type=0 #701
-2024/02/12-21:42:51.066 3d64 Delete type=3 #699
-2024/02/12-22:09:10.905 4204 Level-0 table #706: started
-2024/02/12-22:09:10.906 4204 Level-0 table #706: 0 bytes OK
-2024/02/12-22:09:10.909 4204 Delete type=0 #704
-2024/02/12-22:09:10.914 4204 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!xFD4m6hfvfjoyEDW.wRpxyz4JPVPpP0KV' @ 0 : 0; will stop at (end)
-2024/02/12-22:09:10.915 4204 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!xFD4m6hfvfjoyEDW.wRpxyz4JPVPpP0KV' @ 0 : 0; will stop at (end)
+2024/02/15-11:16:37.504 164c8 Recovering log #768
+2024/02/15-11:16:37.509 164c8 Delete type=2 #5
+2024/02/15-11:16:37.510 164c8 Delete type=0 #23
+2024/02/15-11:16:37.510 164c8 Delete type=0 #171
+2024/02/15-11:16:37.510 164c8 Delete type=2 #174
+2024/02/15-11:16:37.510 164c8 Delete type=0 #176
+2024/02/15-11:16:37.510 164c8 Delete type=2 #183
+2024/02/15-11:16:37.510 164c8 Delete type=0 #201
+2024/02/15-11:16:37.510 164c8 Delete type=0 #213
+2024/02/15-11:16:37.510 164c8 Delete type=2 #220
+2024/02/15-11:16:37.510 164c8 Delete type=0 #224
+2024/02/15-11:16:37.510 164c8 Delete type=0 #240
+2024/02/15-11:16:37.510 164c8 Delete type=0 #244
+2024/02/15-11:16:37.510 164c8 Delete type=0 #248
+2024/02/15-11:16:37.510 164c8 Delete type=0 #252
+2024/02/15-11:16:37.510 164c8 Delete type=0 #268
+2024/02/15-11:16:37.510 164c8 Delete type=0 #332
+2024/02/15-11:16:37.510 164c8 Delete type=2 #335
+2024/02/15-11:16:37.510 164c8 Delete type=0 #447
+2024/02/15-11:16:37.510 164c8 Delete type=0 #483
+2024/02/15-11:16:37.511 164c8 Delete type=2 #486
+2024/02/15-11:16:37.511 164c8 Delete type=0 #504
+2024/02/15-11:16:37.511 164c8 Delete type=0 #529
+2024/02/15-11:16:37.511 164c8 Delete type=0 #550
+2024/02/15-11:16:37.511 164c8 Delete type=0 #556
+2024/02/15-11:16:37.511 164c8 Delete type=0 #576
+2024/02/15-11:16:37.511 164c8 Delete type=0 #592
+2024/02/15-11:16:37.511 164c8 Delete type=0 #604
+2024/02/15-11:16:37.511 164c8 Delete type=0 #625
+2024/02/15-11:16:37.511 164c8 Delete type=0 #640
+2024/02/15-11:16:37.511 164c8 Delete type=0 #712
+2024/02/15-11:16:37.511 164c8 Delete type=0 #768
+2024/02/15-11:16:37.511 164c8 Delete type=3 #22
+2024/02/15-11:16:37.511 164c8 Delete type=3 #170
+2024/02/15-11:16:37.511 164c8 Delete type=3 #175
+2024/02/15-11:16:37.511 164c8 Delete type=3 #200
+2024/02/15-11:16:37.511 164c8 Delete type=3 #212
+2024/02/15-11:16:37.511 164c8 Delete type=3 #223
+2024/02/15-11:16:37.511 164c8 Delete type=3 #239
+2024/02/15-11:16:37.511 164c8 Delete type=3 #243
+2024/02/15-11:16:37.512 164c8 Delete type=3 #247
+2024/02/15-11:16:37.512 164c8 Delete type=3 #251
+2024/02/15-11:16:37.512 164c8 Delete type=3 #267
+2024/02/15-11:16:37.512 164c8 Delete type=3 #331
+2024/02/15-11:16:37.512 164c8 Delete type=3 #446
+2024/02/15-11:16:37.512 164c8 Delete type=3 #482
+2024/02/15-11:16:37.512 164c8 Delete type=3 #503
+2024/02/15-11:16:37.512 164c8 Delete type=3 #527
+2024/02/15-11:16:37.512 164c8 Delete type=3 #548
+2024/02/15-11:16:37.512 164c8 Delete type=3 #555
+2024/02/15-11:16:37.512 164c8 Delete type=3 #575
+2024/02/15-11:16:37.512 164c8 Delete type=3 #591
+2024/02/15-11:16:37.512 164c8 Delete type=3 #603
+2024/02/15-11:16:37.512 164c8 Delete type=3 #623
+2024/02/15-11:16:37.512 164c8 Delete type=3 #639
+2024/02/15-11:16:37.512 164c8 Delete type=3 #711
+2024/02/15-11:16:37.512 164c8 Delete type=3 #767
+2024/02/15-11:23:56.598 96d8 Level-0 table #772: started
+2024/02/15-11:23:56.598 96d8 Level-0 table #772: 0 bytes OK
+2024/02/15-11:23:56.602 96d8 Delete type=0 #770
+2024/02/15-11:23:56.609 96d8 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!xFD4m6hfvfjoyEDW.wRpxyz4JPVPpP0KV' @ 0 : 0; will stop at (end)
+2024/02/15-11:23:56.609 96d8 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!xFD4m6hfvfjoyEDW.wRpxyz4JPVPpP0KV' @ 0 : 0; will stop at (end)
