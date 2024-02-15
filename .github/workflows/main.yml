@@ -29,9 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Bugfix: Defile Ground - Correctly suppress damage after the first bonus damage is done
-            Opportunity Attack - Several small fixes to ensure basic compatability with 5e v3.0 when midi releases a 3.0 compatible update
-            Update: Opportunity Attack - Allow upcasting war caster spells
+            Fix unintended json inclusions
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}

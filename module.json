@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.0.52",
+  "version": "0.0.53",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
@@ -79,9 +79,7 @@
       "scripts/module.js",
       "scripts/integrations/cpr.js",
       "scripts/macroFunctions.js",
-      "scripts/settings.js",
-      "scripts/macros/testHooks.js",
-      "scripts/macros/testFunctions.js"
+      "scripts/settings.js"
     ],
 	"relationships": {
     "systems": [
