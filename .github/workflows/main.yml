@@ -29,8 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Bugfix: Opportunity Attack - Fixed issue with Sentinel not checking conditions against the origin actor. Loosened the name check on Polearm Master. Correctly attributed Opportunity Attack timeout.
-            Added: Festering Fever
+            Update: Opportunity Attack - Slightly increase template radius for gridded scenes, optimize Polearm Master check slightly
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
