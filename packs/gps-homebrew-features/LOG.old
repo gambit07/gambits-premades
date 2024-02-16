@@ -1,61 +1,8 @@
-2024/02/15-11:16:37.589 11e00 Recovering log #766
-2024/02/15-11:16:37.595 11e00 Delete type=2 #5
-2024/02/15-11:16:37.595 11e00 Delete type=0 #23
-2024/02/15-11:16:37.595 11e00 Delete type=0 #171
-2024/02/15-11:16:37.595 11e00 Delete type=0 #175
-2024/02/15-11:16:37.595 11e00 Delete type=2 #182
-2024/02/15-11:16:37.595 11e00 Delete type=0 #200
-2024/02/15-11:16:37.595 11e00 Delete type=0 #212
-2024/02/15-11:16:37.595 11e00 Delete type=2 #219
-2024/02/15-11:16:37.595 11e00 Delete type=0 #223
-2024/02/15-11:16:37.595 11e00 Delete type=0 #239
-2024/02/15-11:16:37.595 11e00 Delete type=0 #243
-2024/02/15-11:16:37.595 11e00 Delete type=0 #247
-2024/02/15-11:16:37.595 11e00 Delete type=0 #251
-2024/02/15-11:16:37.595 11e00 Delete type=0 #267
-2024/02/15-11:16:37.595 11e00 Delete type=2 #322
-2024/02/15-11:16:37.595 11e00 Delete type=0 #332
-2024/02/15-11:16:37.595 11e00 Delete type=2 #335
-2024/02/15-11:16:37.595 11e00 Delete type=0 #447
-2024/02/15-11:16:37.595 11e00 Delete type=0 #484
-2024/02/15-11:16:37.595 11e00 Delete type=0 #504
-2024/02/15-11:16:37.596 11e00 Delete type=0 #529
-2024/02/15-11:16:37.596 11e00 Delete type=0 #549
-2024/02/15-11:16:37.596 11e00 Delete type=0 #554
-2024/02/15-11:16:37.596 11e00 Delete type=0 #574
-2024/02/15-11:16:37.596 11e00 Delete type=0 #590
-2024/02/15-11:16:37.596 11e00 Delete type=0 #602
-2024/02/15-11:16:37.596 11e00 Delete type=0 #623
-2024/02/15-11:16:37.596 11e00 Delete type=0 #638
-2024/02/15-11:16:37.596 11e00 Delete type=0 #710
-2024/02/15-11:16:37.596 11e00 Delete type=0 #766
-2024/02/15-11:16:37.596 11e00 Delete type=3 #22
-2024/02/15-11:16:37.596 11e00 Delete type=3 #170
-2024/02/15-11:16:37.596 11e00 Delete type=3 #174
-2024/02/15-11:16:37.596 11e00 Delete type=3 #199
-2024/02/15-11:16:37.596 11e00 Delete type=3 #211
-2024/02/15-11:16:37.596 11e00 Delete type=3 #222
-2024/02/15-11:16:37.596 11e00 Delete type=3 #238
-2024/02/15-11:16:37.596 11e00 Delete type=3 #242
-2024/02/15-11:16:37.596 11e00 Delete type=3 #246
-2024/02/15-11:16:37.596 11e00 Delete type=3 #250
-2024/02/15-11:16:37.596 11e00 Delete type=3 #266
-2024/02/15-11:16:37.597 11e00 Delete type=3 #331
-2024/02/15-11:16:37.597 11e00 Delete type=3 #446
-2024/02/15-11:16:37.597 11e00 Delete type=3 #483
-2024/02/15-11:16:37.597 11e00 Delete type=3 #503
-2024/02/15-11:16:37.597 11e00 Delete type=3 #527
-2024/02/15-11:16:37.597 11e00 Delete type=3 #547
-2024/02/15-11:16:37.597 11e00 Delete type=3 #553
-2024/02/15-11:16:37.597 11e00 Delete type=3 #573
-2024/02/15-11:16:37.597 11e00 Delete type=3 #589
-2024/02/15-11:16:37.597 11e00 Delete type=3 #601
-2024/02/15-11:16:37.597 11e00 Delete type=3 #621
-2024/02/15-11:16:37.597 11e00 Delete type=3 #637
-2024/02/15-11:16:37.597 11e00 Delete type=3 #709
-2024/02/15-11:16:37.597 11e00 Delete type=3 #765
-2024/02/15-11:23:56.605 96d8 Level-0 table #770: started
-2024/02/15-11:23:56.605 96d8 Level-0 table #770: 0 bytes OK
-2024/02/15-11:23:56.605 96d8 Delete type=0 #768
-2024/02/15-11:23:56.609 96d8 Manual compaction at level-0 from '!items!Ftq2EZtyz3mv7C7Q' @ 72057594037927935 : 1 .. '!items.effects!ba3fwkX1XMdyqBaE.hPR9ii2vho7FqWlZ' @ 0 : 0; will stop at (end)
-2024/02/15-11:23:56.609 96d8 Manual compaction at level-1 from '!items!Ftq2EZtyz3mv7C7Q' @ 72057594037927935 : 1 .. '!items.effects!ba3fwkX1XMdyqBaE.hPR9ii2vho7FqWlZ' @ 0 : 0; will stop at (end)
+2024/02/16-09:57:25.575 613c Recovering log #791
+2024/02/16-09:57:25.582 613c Delete type=0 #791
+2024/02/16-09:57:25.582 613c Delete type=3 #789
+2024/02/16-10:08:20.228 6544 Level-0 table #796: started
+2024/02/16-10:08:20.228 6544 Level-0 table #796: 0 bytes OK
+2024/02/16-10:08:20.231 6544 Delete type=0 #794
+2024/02/16-10:08:20.237 6544 Manual compaction at level-0 from '!items!Ftq2EZtyz3mv7C7Q' @ 72057594037927935 : 1 .. '!items.effects!ba3fwkX1XMdyqBaE.hPR9ii2vho7FqWlZ' @ 0 : 0; will stop at (end)
+2024/02/16-10:08:20.237 6544 Manual compaction at level-1 from '!items!Ftq2EZtyz3mv7C7Q' @ 72057594037927935 : 1 .. '!items.effects!ba3fwkX1XMdyqBaE.hPR9ii2vho7FqWlZ' @ 0 : 0; will stop at (end)

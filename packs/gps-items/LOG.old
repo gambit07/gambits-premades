@@ -1,63 +1,8 @@
-2024/02/15-11:16:37.535 164c8 Recovering log #768
-2024/02/15-11:16:37.541 164c8 Delete type=2 #5
-2024/02/15-11:16:37.541 164c8 Delete type=0 #23
-2024/02/15-11:16:37.541 164c8 Delete type=0 #171
-2024/02/15-11:16:37.541 164c8 Delete type=2 #174
-2024/02/15-11:16:37.541 164c8 Delete type=0 #176
-2024/02/15-11:16:37.541 164c8 Delete type=0 #200
-2024/02/15-11:16:37.541 164c8 Delete type=2 #207
-2024/02/15-11:16:37.541 164c8 Delete type=0 #213
-2024/02/15-11:16:37.542 164c8 Delete type=2 #220
-2024/02/15-11:16:37.542 164c8 Delete type=0 #224
-2024/02/15-11:16:37.542 164c8 Delete type=2 #239
-2024/02/15-11:16:37.542 164c8 Delete type=0 #241
-2024/02/15-11:16:37.542 164c8 Delete type=2 #244
-2024/02/15-11:16:37.542 164c8 Delete type=0 #246
-2024/02/15-11:16:37.542 164c8 Delete type=0 #250
-2024/02/15-11:16:37.542 164c8 Delete type=0 #254
-2024/02/15-11:16:37.542 164c8 Delete type=0 #270
-2024/02/15-11:16:37.542 164c8 Delete type=0 #334
-2024/02/15-11:16:37.542 164c8 Delete type=2 #337
-2024/02/15-11:16:37.542 164c8 Delete type=0 #449
-2024/02/15-11:16:37.542 164c8 Delete type=0 #485
-2024/02/15-11:16:37.542 164c8 Delete type=0 #505
-2024/02/15-11:16:37.542 164c8 Delete type=0 #530
-2024/02/15-11:16:37.542 164c8 Delete type=0 #550
-2024/02/15-11:16:37.542 164c8 Delete type=0 #555
-2024/02/15-11:16:37.542 164c8 Delete type=0 #575
-2024/02/15-11:16:37.542 164c8 Delete type=0 #591
-2024/02/15-11:16:37.543 164c8 Delete type=0 #603
-2024/02/15-11:16:37.543 164c8 Delete type=0 #624
-2024/02/15-11:16:37.543 164c8 Delete type=0 #640
-2024/02/15-11:16:37.543 164c8 Delete type=0 #712
-2024/02/15-11:16:37.543 164c8 Delete type=0 #768
-2024/02/15-11:16:37.543 164c8 Delete type=3 #22
-2024/02/15-11:16:37.543 164c8 Delete type=3 #170
-2024/02/15-11:16:37.543 164c8 Delete type=3 #175
-2024/02/15-11:16:37.543 164c8 Delete type=3 #199
-2024/02/15-11:16:37.543 164c8 Delete type=3 #212
-2024/02/15-11:16:37.543 164c8 Delete type=3 #223
-2024/02/15-11:16:37.543 164c8 Delete type=3 #240
-2024/02/15-11:16:37.543 164c8 Delete type=3 #245
-2024/02/15-11:16:37.543 164c8 Delete type=3 #249
-2024/02/15-11:16:37.543 164c8 Delete type=3 #253
-2024/02/15-11:16:37.543 164c8 Delete type=3 #269
-2024/02/15-11:16:37.543 164c8 Delete type=3 #333
-2024/02/15-11:16:37.543 164c8 Delete type=3 #448
-2024/02/15-11:16:37.543 164c8 Delete type=3 #484
-2024/02/15-11:16:37.543 164c8 Delete type=3 #504
-2024/02/15-11:16:37.543 164c8 Delete type=3 #528
-2024/02/15-11:16:37.543 164c8 Delete type=3 #548
-2024/02/15-11:16:37.544 164c8 Delete type=3 #554
-2024/02/15-11:16:37.544 164c8 Delete type=3 #574
-2024/02/15-11:16:37.544 164c8 Delete type=3 #590
-2024/02/15-11:16:37.544 164c8 Delete type=3 #602
-2024/02/15-11:16:37.544 164c8 Delete type=3 #622
-2024/02/15-11:16:37.544 164c8 Delete type=3 #639
-2024/02/15-11:16:37.544 164c8 Delete type=3 #711
-2024/02/15-11:16:37.544 164c8 Delete type=3 #767
-2024/02/15-11:23:56.602 96d8 Level-0 table #772: started
-2024/02/15-11:23:56.602 96d8 Level-0 table #772: 0 bytes OK
-2024/02/15-11:23:56.605 96d8 Delete type=0 #770
-2024/02/15-11:23:56.609 96d8 Manual compaction at level-0 from '!items!6k4ycpLSro1bWCMa' @ 72057594037927935 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at (end)
-2024/02/15-11:23:56.609 96d8 Manual compaction at level-1 from '!items!6k4ycpLSro1bWCMa' @ 72057594037927935 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at (end)
+2024/02/16-09:57:25.532 6268 Recovering log #793
+2024/02/16-09:57:25.538 6268 Delete type=0 #793
+2024/02/16-09:57:25.538 6268 Delete type=3 #791
+2024/02/16-10:08:20.205 6544 Level-0 table #798: started
+2024/02/16-10:08:20.205 6544 Level-0 table #798: 0 bytes OK
+2024/02/16-10:08:20.207 6544 Delete type=0 #796
+2024/02/16-10:08:20.217 6544 Manual compaction at level-0 from '!items!6k4ycpLSro1bWCMa' @ 72057594037927935 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at (end)
+2024/02/16-10:08:20.217 6544 Manual compaction at level-1 from '!items!6k4ycpLSro1bWCMa' @ 72057594037927935 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at (end)
