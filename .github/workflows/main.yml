@@ -29,7 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Update: Opportunity Attack - Slightly increase template radius for gridded scenes, optimize Polearm Master check slightly
+            Added: Kinetic Jaunt
+            Update: Opportunity Attack - Account for the Kinetic Jaunt spell
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
