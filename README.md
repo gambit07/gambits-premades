@@ -1,4 +1,4 @@
-<b>NOTE: This module is only dnd5e 2.x compatible currently, because Midi QOL is only 2.x compatible. These automations will not work for dnd5e 3.0+ currently.</b>
+<b>NOTE: This module is only fully validated for dnd5e 2.x compatability currently. Automations may or may not work on dnd5e 3.0+ and have not been fully tested.</b>
 
 My Kofi if you'd like to buy me a coffee: https://ko-fi.com/gambit07
 
