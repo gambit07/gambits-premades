@@ -29,8 +29,8 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Added: Kinetic Jaunt
-            Update: Opportunity Attack - Account for the Kinetic Jaunt spell
+            Added: Infestation (Works in concert with Opportunity Attack), Toll the Dead
+            Updated: Cloud of Daggers, Vicious Mockery
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
