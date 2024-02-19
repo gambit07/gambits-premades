@@ -10,6 +10,17 @@ jobs:
  github-releases-to-discord:
   runs-on: ubuntu-latest
   steps:
+   - name: Fetch the latest release
+     id: get-latest-release
+     uses: octokit/request-action@v2.x
+     with:
+      route: GET /repos/${{ github.repository }}/releases/latest
+     env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+   - name: Print release data
+     run: echo "${{ steps.get-latest-release.outputs.data }}"
+
    - name: Checkout
      uses: actions/checkout@v3
    - name: Github Releases To Discord
@@ -17,3 +28,4 @@ jobs:
      with:
       webhook_url: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
       username: "Gambits Premades - Release"
+      content: ${{ fromJson(steps.get-latest-release.outputs.data).body }}
