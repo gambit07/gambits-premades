@@ -29,7 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Updated: Counterspell - Counterspell is now fully hosted within the module and no longer requires the item deployment. It should be much better optimized. Additionally, Counter-Counterspelling now allows party members of the initially counterspelled creature to also cast counterspell. The item should be fully functional now and I'll be working on some additional options in the future to allow some modification around when players/npcs see dialogs based on GM preference.
+            Updated: Counterspell - Counterspell is now fully hosted within the module and no longer requires item deployment. It should be much better optimized. Additionally, Counter-Counterspelling now allows party members of the initially counterspelled creature to also cast counterspell. The item should be fully functional now and I'll be working on some additional options in the future to allow some modification around when players/npcs see dialogs based on GM preference.
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
