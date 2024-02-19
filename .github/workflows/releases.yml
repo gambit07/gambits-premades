@@ -2,14 +2,13 @@ name: Create Discord Webhook Release
 
 on:
   release:
-    types: [published]
 
 jobs:
  github-releases-to-discord:
   runs-on: ubuntu-latest
   steps:
    - name: Checkout
-     uses: actions/checkout@v4
+     uses: actions/checkout@v3
    - name: Github Releases To Discord
      uses: SethCohen/github-releases-to-discord@v1.13.1
      with:
