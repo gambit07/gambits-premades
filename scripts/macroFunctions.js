@@ -103,7 +103,7 @@ async function disableOpportunityAttack(combat, combatEvent) {
     }
 };
 
-async function enableCounterspell(combat, combatEvent) {
+/*async function enableCounterspell(combat, combatEvent) {
     if (game.settings.get('gambits-premades', 'Enable Counterspell') === false) return console.log("Counterspell setting not enabled");
     if (!game.user.isGM) return console.log("User is not the GM");
     const targetSetting = game.settings.get('gambits-premades', 'Counterspell Targets');
@@ -213,4 +213,4 @@ async function disableCounterspell(combat, combatEvent) {
         if (counterspellFlag1) await combatant.actor.unsetFlag("midi-qol", "checkCounterspellSuccess");
         if (counterspellFlag2) await combatant.actor.unsetFlag("midi-qol", "checkCounterspellLevel");
     }    
-};
+};*/

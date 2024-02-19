@@ -1,26 +1,28 @@
-//import { showSimpleDialog } from './macros/testFunctions.js';
+import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
 export let socket;
 
-Hooks.once('init', () => {
+Hooks.once('init', async function() {
     registerSettings();
 });
 
-Hooks.once('socketlib.ready', () => {
+Hooks.once('socketlib.ready', async function() {
     socket = socketlib.registerModule('gambits-premades');
-    //socket.register("showSimpleDialog", showSimpleDialog);
+    socket.register("counterspell", counterspell);
+    socket.register("showCounterspellDialog", showCounterspellDialog);
 })
 
-Hooks.once('ready', () => {
+Hooks.once('ready', async function() {
     loadCompendiumData().then(() => {
         game.modules.get('gambits-premades').medkitApi = medkitApi;
     }).catch(error => {
         console.error("Error loading compendium data:", error);
     });
 
-    /*Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
-            console.log("Hook for midi-qol.preambleComplete triggered.");
-            await socket.executeAsGM("showSimpleDialog");
-        });*/
+    if (game.settings.get('gambits-premades', 'Enable Counterspell') === true) {
+        Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
+            await socket.executeAsGM("counterspell");
+        });
+    }
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {
@@ -34,7 +36,6 @@ Hooks.on("updateCombat", async (combat, update, options) => {
 
     if(combatStarted) {
         await enableOpportunityAttack(combat, "startCombat");
-        await enableCounterspell(combat, "startCombat");
     }
 })
 
@@ -42,19 +43,16 @@ Hooks.on("createCombatant", async (combatant, options, userId) => {
     let combat = game.combat;
     if (combat && combat.started) {
         await enableOpportunityAttack(combatant, "enterCombat");
-        await enableCounterspell(combatant, "enterCombat");
     }
 });
 
 Hooks.on('deleteCombat', async (combat) => {
     await disableOpportunityAttack(combat, "endCombat");
-    await disableCounterspell(combat, "endCombat");
 });
 
 Hooks.on("deleteCombatant", async (combatant, options, userId) => {
     let combat = game.combat;
     if (combat && combat.started) {
         await disableOpportunityAttack(combatant, "exitCombat");
-        await disableCounterspell(combatant, "exitCombat");
     }
 });

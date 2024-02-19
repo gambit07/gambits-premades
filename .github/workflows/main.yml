@@ -29,8 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Added: Infestation (Works in concert with Opportunity Attack), Toll the Dead
-            Updated: Cloud of Daggers, Vicious Mockery
+            Updated: Counterspell - Counterspell is now fully hosted within the module and no longer requires the item deployment. It should be much better optimized. Additionally, Counter-Counterspelling now allows party members of the initially counterspelled creature to also cast counterspell. The item should be fully functional now and I'll be working on some additional options in the future to allow some modification around when players/npcs see dialogs based on GM preference.
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
@@ -53,3 +52,14 @@ jobs:
               }
             }
           }'
+
+  github-releases-to-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Github Releases To Discord
+        uses: SethCohen/github-releases-to-discord@v1.13.1
+        with:
+          webhook_url: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
+          username: "Gambits Premades - Release"
