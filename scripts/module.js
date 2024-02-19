@@ -18,11 +18,9 @@ Hooks.once('ready', async function() {
         console.error("Error loading compendium data:", error);
     });
 
-    if (game.settings.get('gambits-premades', 'Enable Counterspell') === true) {
         Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
             await socket.executeAsGM("counterspell");
         });
-    }
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {

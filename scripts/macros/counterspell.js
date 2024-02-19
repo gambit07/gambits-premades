@@ -1,5 +1,6 @@
 export async function counterspell() {
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
+        if (game.settings.get('gambits-premades', 'Enable Counterspell') === false) return;
         if(workflow.item.type !== "spell" || workflow.item.name.toLowerCase() === "counterspell") return console.log("No spell was cast");
         
         //if(workflow.item.type !== "spell" || (workflow.item.type === "spell" && workflow.item.system.level === 0) || workflow.item.name.toLowerCase() === "counterspell") return; //Use this instead if you'd like to disable cantrips
