@@ -18,9 +18,6 @@ jobs:
      env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-   - name: Print release data
-     run: echo "${{ steps.get-latest-release.outputs.data }}"
-
    - name: Checkout
      uses: actions/checkout@v3
    - name: Github Releases To Discord
