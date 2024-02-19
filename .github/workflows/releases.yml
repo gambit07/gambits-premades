@@ -1,8 +1,10 @@
 name: Create Discord Webhook Release
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: [Module Builder]
+    types:
+       - completed
 
 jobs:
  github-releases-to-discord:
