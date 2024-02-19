@@ -51,15 +51,6 @@ function registerSettings() {
         default: false
     });
 
-    game.settings.register('gambits-premades', 'Counterspell Targets', {
-        name: "Counterspell Targets",
-        scope: 'world',
-        config: true,
-        type: Number,
-        choices: targetOptions,
-        default: 2 // Default to "Both"
-    });
-
     game.settings.register('gambits-premades', 'Counterspell Timeout', {
         name: "Counterspell Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
