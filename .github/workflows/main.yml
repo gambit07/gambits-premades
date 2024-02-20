@@ -16,15 +16,11 @@ jobs:
       - name: Set Release Notes
         id: set-release-notes
         run: |
-          echo "::set-output name=release-notes::A summary of things that I might post:\n- Bullet point 1\n- Bullet point 2\n- Bullet point 3"
-
-      - name: Convert Release Notes for GitHub
-        id: convert-notes
-        run: |
-          github_notes="${{ steps.set-release-notes.outputs.release-notes }}"
-          github_notes="${github_notes//'\\n'/$'\n'}"
-          echo "github_notes<<EOF" >> $GITHUB_ENV
-          echo -e "${github_notes}" >> $GITHUB_ENV
+          echo "release-notes<<EOF" >> $GITHUB_ENV
+          echo "A summary of things that I might post:" >> $GITHUB_ENV
+          echo "- Bullet point 1" >> $GITHUB_ENV
+          echo "- Bullet point 2" >> $GITHUB_ENV
+          echo "- Bullet point 3" >> $GITHUB_ENV
           echo "EOF"
 
       - name: Zip Files
@@ -44,7 +40,7 @@ jobs:
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
           prerelease: false
-          body: ${{ env.github_notes }}
+          body: ${{ env.release-notes }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
@@ -72,13 +68,20 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
+          prefix="**To support my continued work on this module!\\n<https://ko-fi.com/gambit07> ❤️**\\n\\n"
+          suffix="\\n\\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>"
+      
+          # Combine the static parts with the dynamic release notes, ensuring JSON compatibility
+          combined_notes=$(echo -n "${prefix}" && echo -n "${{ steps.set-release-notes.outputs.release-notes }}" && echo -n "${suffix}" | jq -aRs .)
+      
+          # Use the combined, JSON-safe string in the curl command
           curl -H "Content-Type: application/json" \
-          -d '{
-          "embeds": [{
-            "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
-            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.set-release-notes.outputs.release-notes }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
-            "image": {
-              "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=2f993aedba89921df143b36ba2b511639434b3a4&v=4&s=50"
-            }
-          }]
-          }' $DISCORD_WEBHOOK
+          -d "{
+            \"embeds\": [{
+              \"title\": \"Gambit's Premades Release: ${{ steps.get-version.outputs.version }}\",
+              \"description\": ${combined_notes},
+              \"image\": {
+                \"url\": \"https://avatars.githubusercontent.com/u/4236874?s=400&u=2f993aedba89921df143b36ba2b511639434b3a4&v=4&s=50\"
+              }
+            }]
+          }" $DISCORD_WEBHOOK
