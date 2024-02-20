@@ -16,17 +16,24 @@ jobs:
       - name: Set Release Notes
         id: set-release-notes
         run: |
-          echo "release-notes<<EOF" >> $GITHUB_ENV
-          echo "A summary of things that I might post:\n" >> $GITHUB_ENV
-          echo "- Bullet point 1\n" >> $GITHUB_ENV
-          echo "- Bullet point 2\n" >> $GITHUB_ENV
-          echo "- Bullet point 3" >> $GITHUB_ENV
+          # Echo each line to a file or directly setting an environment variable
+          echo "A summary of things that I might post:" >> release_notes.txt
+          echo "- Bullet point 1" >> release_notes.txt
+          echo "- Bullet point 2" >> release_notes.txt
+          echo "- Bullet point 3" >> release_notes.txt
+          # Setting for GitHub
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+          # Prepare for Discord with `echo "::set-output name=release-notes-discord::$(<release_notes.txt)"`
+          # This will be adjusted in the next step
 
-      - name: Set Release Notes Discord
-        id: set-release-notes-discord
+      - name: Format Release Notes for Discord
+        id: format-release-notes-discord
         run: |
-          echo "::set-output name=release-notes-discord::A summary of things that I might post:\n- Bullet point 1\n- Bullet point 2\n- Bullet point 3"
+          # Read the file and replace newlines with '\n' for Discord formatting
+          DISCORD_NOTES=$(awk '{printf "%s\\n", $0}' release_notes.txt | sed 's/\\n$//')
+          echo "::set-output name=release-notes-discord::$DISCORD_NOTES"
 
       - name: Zip Files
         working-directory: ./
@@ -77,7 +84,7 @@ jobs:
           -d '{
           "embeds": [{
             "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
-            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ env.release-notes }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
+            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
             "image": {
               "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=2f993aedba89921df143b36ba2b511639434b3a4&v=4&s=50"
             }
