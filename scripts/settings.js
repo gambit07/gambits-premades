@@ -44,7 +44,7 @@ function registerSettings() {
 
     game.settings.register('gambits-premades', 'Enable Counterspell', {
         name: "Enable Counterspell",
-        hint: "If enabled, automatically adds 'Counterspell Initializer' item to appropriate combatants on combat start and removes 'Counterspell Initializer' item on combat end.",
+        hint: "If enabled, this will present an appropriate dialog to users with counterspell, and automate counterspell application when used.",
         scope: 'world',
         config: true,
         type: Boolean,
