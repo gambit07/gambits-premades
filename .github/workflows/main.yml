@@ -16,20 +16,17 @@ jobs:
       - name: Set Release Notes
         id: set-release-notes
         run: |
-          # Define release notes with actual newlines
-          read -r -d '' RELEASE_NOTES <<EOM
-          A summary of things that I might post:
-          - Bullet point 1
-          - Bullet point 2
-          - Bullet point 3
-          EOM
-            # For GitHub: Directly echo into $GITHUB_ENV, preserving newlines
-            echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-            echo "$RELEASE_NOTES" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-            # For Discord: Use output with escaped newlines
-            DISCORD_NOTES="${RELEASE_NOTES//$'\n'/\\n}"
-            echo "::set-output name=release-notes-discord::$DISCORD_NOTES"
+          echo "release-notes<<EOF" >> $GITHUB_ENV
+          echo "A summary of things that I might post:" >> $GITHUB_ENV
+          echo "- Bullet point 1" >> $GITHUB_ENV
+          echo "- Bullet point 2" >> $GITHUB_ENV
+          echo "- Bullet point 3" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Set Release Notes Discord
+        id: set-release-notes-discord
+        run: |
+          echo "::set-output name=release-notes-discord::A summary of things that I might post:\n- Bullet point 1\n- Bullet point 2\n- Bullet point 3"
 
       - name: Zip Files
         working-directory: ./
@@ -48,7 +45,7 @@ jobs:
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
           prerelease: false
-          body: ${{ env.RELEASE_NOTES }}
+          body: ${{ env.release-notes }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
