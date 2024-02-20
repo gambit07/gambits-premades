@@ -16,7 +16,7 @@ jobs:
       - name: Set Release Notes
         id: set-release-notes
         run: |
-          echo "::set-output name=release-notes::$(echo 'A summary of things that I might post, such as, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')"
+          echo "::set-output name=release-notes::A summary of things that I might post:\n- Bullet point 1\n- Bullet point 2\n- Bullet point 3"
 
       - name: Zip Files
         working-directory: ./
@@ -64,5 +64,5 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           curl -H "Content-Type: application/json" \
-               -d "{\"content\": \"**New Release Published:**\nVersion: ${{ steps.get-version.outputs.version }}\n${{ steps.set-release-notes.outputs.release-notes }}\nCheck it out here: https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}\"}" \
+               -d "{\"content\": \"**Gambit's Premades Release:**\n\nVersion: ${{ steps.get-version.outputs.version }}\n\n${{ steps.set-release-notes.outputs.release-notes }}\n\nCheck it out here: https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}\"}" \
                $DISCORD_WEBHOOK
