@@ -21,11 +21,10 @@ jobs:
       - name: Convert Release Notes for GitHub
         id: convert-notes
         run: |
-          # Replace \n with actual newline characters
           github-notes="${{ steps.set-release-notes.outputs.release-notes }}"
-          github-notes="${github-notes//'\\n'/$'\n'}"
+          github-notes="${github-notes//'\\n'/'%0A'}"
           echo "github-notes<<EOF" >> $GITHUB_ENV
-          echo -e "$github-notes" >> $GITHUB_ENV
+          echo "${github-notes}" >> $GITHUB_ENV
           echo "EOF"
 
       - name: Zip Files
