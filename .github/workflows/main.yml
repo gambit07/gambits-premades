@@ -66,9 +66,10 @@ jobs:
 
       - name: Convert Release Notes for Discord
         run: |
-          RELEASE_NOTES="${{ steps.set-release-notes.outputs.release-notes }}"
-          RELEASE_NOTES="${RELEASE_NOTES//$'\n'/\\n}"
-          echo "RELEASE_NOTES=$RELEASE_NOTES" >> $GITHUB_ENV
+          RELEASE_NOTES=$(echo -n "${RELEASE_NOTES}" | sed 's/$/\\n/g' | tr -d '\n')
+          echo "RELEASE_NOTES=${RELEASE_NOTES}" >> $GITHUB_ENV
+        env:
+          RELEASE_NOTES: ${{ steps.set-release-notes.outputs.release-notes }}        
 
       - name: Print Release Notes
         run: echo "$RELEASE_NOTES"
