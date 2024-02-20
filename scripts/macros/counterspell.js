@@ -164,7 +164,7 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                         if(itemRoll) {
                         const spellThreshold = castLevel + 10;
 
-                        if(itemRoll.castData.castLevel <= castLevel) {
+                        if(itemRoll.castData.castLevel < castLevel) {
                             const skillCheck = await actor.rollAbilityTest(actor.system.attributes.spellcasting);
                             if (skillCheck.total >= spellThreshold) {
                                 chatList = `<div class="midi-qol-flex-container"><div class="midi-qol-target-npc midi-qol-target-name" id="${originToken.id}"></br>The creature was counterspelled, you rolled a ${skillCheck.total} ${skillCheck.options.flavor}.</div><div><img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></div></div>`;
