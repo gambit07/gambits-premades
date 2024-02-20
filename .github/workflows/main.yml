@@ -64,5 +64,13 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           curl -H "Content-Type: application/json" \
-               -d "{\"content\": \"To support my continued work on this module! <https://ko-fi.com/gambit07>\n**Gambit's Premades Release: ${{ steps.get-version.outputs.version }} ![Profile Picture](https://avatars.githubusercontent.com/u/4236874?s=400&u=af6506b699c2ec68c4abb318655c8ccdede1695a&v=4)**\n\n${{ steps.set-release-notes.outputs.release-notes }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>\"}" \
-               $DISCORD_WEBHOOK
+          -d '{
+                "embeds": [{
+                  "title": "Gambit\'s Premades Release: ${{ steps.get-version.outputs.version }}",
+                  "description": "**(To support my continued work on this module! <3 <https://ko-fi.com/gambit07>)**\n\n${{ steps.set-release-notes.outputs.release-notes }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
+                  "image": {
+                    "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=af6506b699c2ec68c4abb318655c8ccdede1695a&v=4"
+                  }
+                }]
+              }' \
+          $DISCORD_WEBHOOK
