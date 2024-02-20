@@ -21,10 +21,10 @@ jobs:
       - name: Convert Release Notes for GitHub
         id: convert-notes
         run: |
-          github-notes="${{ steps.set-release-notes.outputs.release-notes }}"
-          github-notes="${github-notes//'\\n'/'%0A'}"
-          echo "github-notes<<EOF" >> $GITHUB_ENV
-          echo "${github-notes}" >> $GITHUB_ENV
+          github_notes="${{ steps.set-release-notes.outputs.release-notes }}"
+          github_notes="${github_notes//'\\n'/$'\n'}"
+          echo "github_notes<<EOF" >> $GITHUB_ENV
+          echo -e "${github_notes}" >> $GITHUB_ENV
           echo "EOF"
 
       - name: Zip Files
@@ -44,7 +44,7 @@ jobs:
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
           prerelease: false
-          body: ${{ env.github-notes }}
+          body: ${{ env.github_notes }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
