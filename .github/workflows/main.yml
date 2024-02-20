@@ -16,9 +16,15 @@ jobs:
       - name: Set Release Notes
         id: set-release-notes
         run: |
-          RELEASE_NOTES="A summary of things that I might post:\n- Bullet point 1\n- Bullet point 2\n- Bullet point 3"
-          echo "RELEASE_NOTES=${RELEASE_NOTES}" >> $GITHUB_ENV
-          echo "::set-output name=release-notes::$RELEASE_NOTES"
+          # Use $'\n' for actual newlines in bash
+          RELEASE_NOTES="A summary of things that I might post:$'\n'- Bullet point 1$'\n'- Bullet point 2$'\n'- Bullet point 3"
+          # Setting for GitHub
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "${RELEASE_NOTES}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          # Setting for Discord (and others) with escaped newlines
+          ESCAPED_NOTES="${RELEASE_NOTES//$'\n'/\\n}"
+          echo "::set-output name=release-notes::$ESCAPED_NOTES"
 
       - name: Zip Files
         working-directory: ./
