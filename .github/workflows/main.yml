@@ -16,15 +16,20 @@ jobs:
       - name: Set Release Notes
         id: set-release-notes
         run: |
-          # Use $'\n' for actual newlines in bash
-          RELEASE_NOTES="A summary of things that I might post:$'\n'- Bullet point 1$'\n'- Bullet point 2$'\n'- Bullet point 3"
-          # Setting for GitHub
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "${RELEASE_NOTES}" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          # Setting for Discord (and others) with escaped newlines
-          ESCAPED_NOTES="${RELEASE_NOTES//$'\n'/\\n}"
-          echo "::set-output name=release-notes::$ESCAPED_NOTES"
+          # Define release notes with actual newlines
+          read -r -d '' RELEASE_NOTES <<EOM
+          A summary of things that I might post:
+          - Bullet point 1
+          - Bullet point 2
+          - Bullet point 3
+          EOM
+            # For GitHub: Directly echo into $GITHUB_ENV, preserving newlines
+            echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+            echo "$RELEASE_NOTES" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            # For Discord: Use output with escaped newlines
+            DISCORD_NOTES="${RELEASE_NOTES//$'\n'/\\n}"
+            echo "::set-output name=release-notes-discord::$DISCORD_NOTES"
 
       - name: Zip Files
         working-directory: ./
@@ -75,7 +80,7 @@ jobs:
           -d '{
           "embeds": [{
             "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
-            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.set-release-notes.outputs.release-notes }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
+            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.set-release-notes.outputs.release-notes-discord }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
             "image": {
               "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=2f993aedba89921df143b36ba2b511639434b3a4&v=4&s=50"
             }
