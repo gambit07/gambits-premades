@@ -13,25 +13,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set Release Notes
-        id: set-release-notes
+      - name: Set Release Notes for Github
+        id: set-release-notes-github
         run: |
-          # Echo each line to a file or directly setting an environment variable
           echo "A summary of things that I might post:" >> release_notes.txt
           echo "- Bullet point 1" >> release_notes.txt
           echo "- Bullet point 2" >> release_notes.txt
           echo "- Bullet point 3" >> release_notes.txt
-          # Setting for GitHub
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "FINAL TEST" >> release_notes.txt
+          echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          # Prepare for Discord with `echo "::set-output name=release-notes-discord::$(<release_notes.txt)"`
-          # This will be adjusted in the next step
 
       - name: Format Release Notes for Discord
         id: format-release-notes-discord
         run: |
-          # Read the file and replace newlines with '\n' for Discord formatting
           DISCORD_NOTES=$(awk '{printf "%s\\n", $0}' release_notes.txt | sed 's/\\n$//')
           echo "::set-output name=release-notes-discord::$DISCORD_NOTES"
 
@@ -52,7 +48,7 @@ jobs:
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
           prerelease: false
-          body: ${{ env.RELEASE_NOTES }}
+          body: ${{ env.release-notes-github }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
