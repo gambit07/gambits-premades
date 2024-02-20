@@ -21,7 +21,7 @@ jobs:
           echo "- Bullet point 1" >> $GITHUB_ENV
           echo "- Bullet point 2" >> $GITHUB_ENV
           echo "- Bullet point 3" >> $GITHUB_ENV
-          echo "EOF"
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Zip Files
         working-directory: ./
