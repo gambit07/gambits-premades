@@ -69,8 +69,8 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           RELEASE_NOTES: ${{ env.release-notes }}
         run: |
-            prefix="**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n"
-            suffix="\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>"
+            prefix=$'**To support my continued work on this module!\\n<https://ko-fi.com/gambit07> ❤️**\\n\\n'
+            suffix=$'\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>'
             
             # Use jq to encode the release notes with actual newline characters
             # This time, we directly use the environment variable without replacing \\n
