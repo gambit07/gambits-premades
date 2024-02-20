@@ -29,7 +29,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Bugfix: Opportunity Attack - Fix Effect origins on OA item, update Sentinel implementation to be compatible with 5eV3.0. Opportunity Attack should now be fully compatible with V3.0 while maintaining compatability with V2.4.
+            Test: Discord webhook
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
