@@ -23,6 +23,12 @@ jobs:
           echo "- Bullet point 3" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Print Release Notes
+        run: echo "$RELEASE_NOTES"
+        env:
+          RELEASE_NOTES: ${{ steps.set-release-notes.outputs.release-notes }}
+
+
       - name: Zip Files
         working-directory: ./
         run: zip -r ./module.zip ./*
