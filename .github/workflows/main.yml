@@ -40,7 +40,7 @@ jobs:
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
           prerelease: false
-          body: ${{ env.release-notes }}
+          body: ${{ steps.set-release-notes.outputs.release-notes }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
@@ -84,7 +84,7 @@ jobs:
           -d '{
           "embeds": [{
             "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
-            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ env.RELEASE_NOTES }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
+            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${env.RELEASE_NOTES}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
             "image": {
               "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=2f993aedba89921df143b36ba2b511639434b3a4&v=4&s=50"
             }
