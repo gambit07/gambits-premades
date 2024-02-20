@@ -18,9 +18,13 @@ jobs:
         run: |
           echo "A summary of things that I might post:" >> release_notes.txt
           echo "- Bullet point 1" >> release_notes.txt
+          echo "  - Bullet point 1A" >> release_notes.txt
+          echo "  - Bullet point 1B" >> release_notes.txt
           echo "- Bullet point 2" >> release_notes.txt
-          echo "- Bullet point 3" >> release_notes.txt
-          echo "FINAL TEST" >> release_notes.txt
+          echo "  - Bullet point 2B" >> release_notes.txt
+          echo "    - Bullet point 2B1" >> release_notes.txt
+          echo "    - Bullet point 2B2" >> release_notes.txt
+          echo "FINAL TEST (jk I lied)" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -82,7 +86,7 @@ jobs:
             "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
             "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
             "image": {
-              "url": "https://avatars.githubusercontent.com/u/4236874?s=200&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
+              "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
             }
           }]
           }' $DISCORD_WEBHOOK
