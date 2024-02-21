@@ -16,12 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Updates:" >> release_notes.txt
-          echo "- Counterspell: Revised logic to correctly follow RAW for cast level. Updated Settings description to match the new Counterspell implementation. Removed Counterspell Initializer compendium item." >> release_notes.txt
           echo "Bugfixes:" >> release_notes.txt
-          echo "- Opportunity Attack: Fixed application of Sentinal and Riposte effects for 3.0. Still combatible with 2.4.x" >> release_notes.txt
-          echo "Additions:" >> release_notes.txt
-          echo "  - Witch Feature: Drawing the Hearth" >> release_notes.txt
+          echo "- Counterspell: Fixed bad bug that wouldn't allow a No selection. Fixed chat cards in DND5e v3.0+, still combatible with 2.4.x" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -81,7 +77,7 @@ jobs:
           -d '{
           "embeds": [{
             "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
-            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out here: <https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
+            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
             "image": {
               "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
             }

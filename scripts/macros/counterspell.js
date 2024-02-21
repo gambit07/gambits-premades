@@ -1,4 +1,5 @@
 export async function counterspell() {
+    if(!game.user.isGM) return;
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         if (game.settings.get('gambits-premades', 'Enable Counterspell') === false) return;
         if(workflow.item.type !== "spell" || workflow.item.name.toLowerCase() === "counterspell") return console.log("No spell was cast");
@@ -167,22 +168,21 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                         if(itemRoll.castData.castLevel < castLevel) {
                             const skillCheck = await actor.rollAbilityTest(actor.system.attributes.spellcasting);
                             if (skillCheck.total >= spellThreshold) {
-                                chatList = `<div class="midi-qol-flex-container"><div class="midi-qol-target-npc midi-qol-target-name" id="${originToken.id}"></br>The creature was counterspelled, you rolled a ${skillCheck.total} ${skillCheck.options.flavor}.</div><div><img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></div></div>`;
+                                chatList = `The creature was counterspelled, you rolled a ${skillCheck.total} ${skillCheck.options.flavor}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
                                 counterspellSuccess = true;
                                 counterspellLevel = itemRoll.castData.castLevel;
                             }
                             else {
-                                chatList = `<div class="midi-qol-flex-container"><div class="midi-qol-target-npc midi-qol-target-name" id="${originToken.id}"></br>The creature was not counterspelled, you rolled a ${skillCheck.total} ${skillCheck.options.flavor} and needed a ${spellThreshold}.</div><div><img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></div></div>`;
+                                chatList = `The creature was not counterspelled, you rolled a ${skillCheck.total} ${skillCheck.options.flavor} and needed a ${spellThreshold}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
                                 counterspellSuccess = false;
                             }
                         }
                         else {
-                            chatList = `<div class="midi-qol-flex-container"><div class="midi-qol-target-npc midi-qol-target-name" id="${originToken.id}"></br>The creature was counterspelled because you cast counterspell at a higher level.</div><div><img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></div></div>`;
+                            chatList = `The creature was counterspelled because you cast counterspell at a higher level. <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
                             counterspellSuccess = true;
                             counterspellLevel = itemRoll.castData.castLevel;
                         }
                         }
-                        let finalResults = `<div><div class="midi-qol-nobox">` + chatList + `</div></div>`;
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {
                             if (message.flags["midi-qol"]?.itemId === chosenSpell._id && message.speaker.token === token.id) msgHistory.push(message.id);
@@ -190,9 +190,9 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                         let itemCard = msgHistory[msgHistory.length - 1];
                         let chatMessage = await game.messages.get(itemCard);
                         let content = await duplicate(chatMessage.content);
-                        let insertPosition = content.indexOf('<div class="end-midi-qol-other-roll"></div>');
+                        let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
                         if (insertPosition !== -1) {
-                            content = content.slice(0, insertPosition) + finalResults + content.slice(insertPosition);
+                            content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
                         }
                         await chatMessage.update({ content: content });
                         resolve({counterspellSuccess, counterspellLevel});
