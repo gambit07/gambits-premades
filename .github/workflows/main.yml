@@ -16,8 +16,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Bugfixes:" >> release_notes.txt
-          echo "- Counterspell: Fixed bad bug that wouldn't allow a No selection. Fixed chat cards in DND5e v3.0+, still combatible with 2.4.x" >> release_notes.txt
+          echo "- Counterspell: Fixed bad bug that wouldnt allow a No selection. Fixed chat cards in DND5e v3.0+, still combatible with 2.4.x" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
