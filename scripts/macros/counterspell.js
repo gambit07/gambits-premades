@@ -1,29 +1,37 @@
-export async function counterspell() {
+export async function counterspell(data) {
     if(!game.user.isGM) return;
-    Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
-        if (game.settings.get('gambits-premades', 'Enable Counterspell') === false) return;
-        if(workflow.item.type !== "spell" || workflow.item.name.toLowerCase() === "counterspell") return console.log("No spell was cast");
-        
-        //if(workflow.item.type !== "spell" || (workflow.item.type === "spell" && workflow.item.system.level === 0) || workflow.item.name.toLowerCase() === "counterspell") return; //Use this instead if you'd like to disable cantrips
-        function findCounterspellTokens(token, dispositionCheck) {
+    if (game.settings.get('gambits-premades', 'Enable Counterspell') === false) return;
+    const workflowUuid = data.workflowData;
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
+    if(!workflow) return;
+    if(workflow.item.type !== "spell" || workflow.item.name.toLowerCase() === "counterspell") return;     
+    //if(workflow.item.type !== "spell" || (workflow.item.type === "spell" && workflow.item.system.level === 0) || workflow.item.name.toLowerCase() === "counterspell") return; //Use this instead if you'd like to disable cantrips
+    
+    if (!game.combat) return;
+
+    function findCounterspellTokens(token, dispositionCheck) {
         let validTokens = canvas.tokens.placeables.filter(t => {
-            // Check if token is within 60 feet
-            let distance = canvas.grid.measureDistance(workflow.token, t, { gridSpaces: true });
-            if(distance > 60) return console.log(t.document.name, "token not within 60 feet");
-            
             // Check if the token has counterspell available
-            if (!t.actor.items.find(i => i.name.toLowerCase() === "counterspell")) return console.log(t.document.name, "token no counterspell");
-            
+            if (!t.actor.items.find(i => i.name.toLowerCase() === "counterspell")) return;
+
             // Check if the tokens reaction already used
             let reactionUsed = t.actor.effects.find(i => i.name.toLowerCase() === "reaction");
-            if (reactionUsed) return console.log(t.document.name, "token already used reaction");
+            if (reactionUsed) return;
             
             // Check if the token is the initiating token or is not an opposite token disposition
-            if (dispositionCheck(t, workflow.token)) return console.log(t.document.name, "token did not pass disposition params");
+            if (dispositionCheck(t, token)) return;
 
-            let midiSightTest = MidiQOL.canSee(t, workflow.token);
+            let midiSightTest = MidiQOL.canSee(t, token);
             
-            if (midiSightTest === false) return console.log(t.document.name, "token can't see/sense caster");
+            if (midiSightTest === false) return;
+
+            // Check if scene is gridless
+            let gridDecision;
+            canvas.scene.grid.type === 0 ? gridDecision = false : gridDecision = true;
+
+            // Check if token is within 60 feet
+            let distance = canvas.grid.measureDistance(token, t, { gridSpaces: gridDecision });
+            if(distance > 60) return;
 
             // Check if the token has available spell slots/uses for counterspell
             const spells = t.actor.system.spells;
@@ -53,69 +61,69 @@ export async function counterspell() {
             }
 
             if (!hasSpellSlots) {
-                return console.log(t.document.name, "token has no available spell slots for Counterspell");
+                return;
             }
 
             return t;
         });
 
-        return validTokens;
+    return validTokens;
     }
 
-        const module = await import('../module.js');
-        const socket = module.socket;
+    const module = await import('../module.js');
+    const socket = module.socket;
 
-        let findCounterspellTokensPrimary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
-            return checkedToken.id === initiatingToken.id || checkedToken.document.disposition === initiatingToken.document.disposition;
-        });
+    let findCounterspellTokensPrimary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
+        return checkedToken.id === initiatingToken.id || checkedToken.document.disposition === initiatingToken.document.disposition;
+    });
+    
+    let castLevel = false;
+    let browserUser;
+    
+    for (const validTokenPrimary of findCounterspellTokensPrimary) {
+        let workflowStatus = workflow.aborted;
+        if(workflowStatus === true) return;
+        let actorUuidPrimary = validTokenPrimary.actor.uuid;
+        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | Counterspell`;
+        castLevel = !castLevel ? workflow.castData.castLevel : castLevel;
+        let originTokenUuidPrimary = workflow.token.document.uuid;
+        browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
+        if (!browserUser.active) {
+            browserUser = game.users?.activeGM;
+        }
         
-        let castLevel = false;
-        for (const validToken of findCounterspellTokensPrimary) {
-            let workflowStatus = workflow.aborted;
-            if(workflowStatus === true) return;
-            let actorUuid = validToken.actor.uuid;
-            const dialogTitle = `${validToken.actor.name} | Counterspell`;
-            castLevel = !castLevel ? workflow.castData.castLevel : castLevel;
-            let originTokenUuid = workflow.token.document.uuid;
-            let browserUser = MidiQOL.playerForActor(validToken.actor);
-            if (!browserUser.active) {
-                browserUser = game.users?.activeGM;
-            }
-            
-            const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuid, actorUuid, validToken.document.uuid, castLevel, dialogTitle);
-            if (counterspellSuccess === false) continue;
-            if (counterspellSuccess === true) {
-                castLevel = counterspellLevel;
-                let findCounterspellTokensSecondary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
-                    return checkedToken.document.disposition !== initiatingToken.document.disposition;
-                });
+        const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary);
+        if (counterspellSuccess === false) continue;
+        if (counterspellSuccess === true) {
+            castLevel = counterspellLevel;
+            let findCounterspellTokensSecondary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
+                return checkedToken.document.disposition !== initiatingToken.document.disposition;
+            });
 
-                if(findCounterspellTokensSecondary.length === 0) return workflow.aborted = true;
+            if(findCounterspellTokensSecondary.length === 0) return workflow.aborted = true;
 
-                for (const validTokenSecondary of findCounterspellTokensSecondary) {
-                    let actorUuid = validTokenSecondary.actor.uuid;
-                    const dialogTitle = `${validTokenSecondary.actor.name} | Counterspell`;
-                    let originTokenUuid = validToken.document.uuid;
+            for (const validTokenSecondary of findCounterspellTokensSecondary) {
+                let actorUuidSecondary = validTokenSecondary.actor.uuid;
+                const dialogTitleSecondary = `${validTokenSecondary.actor.name} | Counterspell`;
+                let originTokenUuidSecondary = validTokenPrimary.document.uuid;
 
-                    const currentIndex = findCounterspellTokensSecondary.indexOf(validTokenSecondary);
-                    const isLastToken = currentIndex === findCounterspellTokensSecondary.length - 1;
-                    browserUser = MidiQOL.playerForActor(validTokenSecondary.actor);
-                    if (!browserUser.active) {
-                        browserUser = game.users?.activeGM;
-                    }
-
-                    const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuid, actorUuid, validTokenSecondary.document.uuid, castLevel, dialogTitle);
-                    
-                    if (counterspellSuccess === true) {
-                        castLevel = counterspellLevel;
-                        break;
-                    }
-                    if (!counterspellSuccess && isLastToken) return workflow.aborted = true;
-                    if (!counterspellSuccess) continue;
+                const currentIndex = findCounterspellTokensSecondary.indexOf(validTokenSecondary);
+                const isLastToken = currentIndex === findCounterspellTokensSecondary.length - 1;
+                browserUser = MidiQOL.playerForActor(validTokenSecondary.actor);
+                if (!browserUser.active) {
+                    browserUser = game.users?.activeGM;
                 }
+
+                const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary);
+                if (counterspellSuccess === true) {
+                    castLevel = counterspellLevel;
+                    break;
+                }
+                if (!counterspellSuccess && isLastToken) return workflow.aborted = true;
+                if (!counterspellSuccess) continue;
             }
         }
-    });
+    }
 }
 
 export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUuid, castLevel, dialogTitle) {
@@ -141,6 +149,7 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                     label: "Yes",
                     callback: async () => {
                         let actor = await fromUuid(actorUuid);
+                        let uuid = actor.uuid;
                         let token = await fromUuid(tokenUuid);
                         let originToken = await fromUuid(originTokenUuid);
 
@@ -167,20 +176,29 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
 
                         if(itemRoll.castData.castLevel < castLevel) {
                             const skillCheck = await actor.rollAbilityTest(actor.system.attributes.spellcasting);
-                            if (skillCheck.total >= spellThreshold) {
-                                chatList = `The creature was counterspelled, you rolled a ${skillCheck.total} ${skillCheck.options.flavor}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
+                            let skillCheckTotal;
+                            let abjurationCheck = actor.items.find(i => i.name.toLowerCase() === "improved abjuration");
+                            abjurationCheck ? skillCheckTotal = skillCheck.total + actor.system?.attributes?.prof : skillCheckTotal = skillCheck.total;
+                            if (skillCheckTotal >= spellThreshold) {
+                                chatList = `The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
                                 counterspellSuccess = true;
                                 counterspellLevel = itemRoll.castData.castLevel;
                             }
                             else {
-                                chatList = `The creature was not counterspelled, you rolled a ${skillCheck.total} ${skillCheck.options.flavor} and needed a ${spellThreshold}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
+                                chatList = `The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
                                 counterspellSuccess = false;
                             }
                         }
                         else {
-                            chatList = `The creature was counterspelled because you cast counterspell at a higher level. <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
+                            chatList = `The creature was counterspelled because you cast counterspell at an equal or higher level. <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
                             counterspellSuccess = true;
                             counterspellLevel = itemRoll.castData.castLevel;
+                        }
+
+                        const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
+
+                        if (!hasEffectApplied) {
+                            game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
                         }
                         let msgHistory = [];
@@ -201,7 +219,7 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                 no: {
                     label: "No",
                     callback: async () => {
-                        console.log("Reaction declined");
+                        // Reaction Declined
                         resolve({ counterspellSuccess: false, counterspellLevel: false });
                     }
                 },

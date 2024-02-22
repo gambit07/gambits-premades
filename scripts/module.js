@@ -18,9 +18,10 @@ Hooks.once('ready', async function() {
         console.error("Error loading compendium data:", error);
     });
 
-        Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
-            await socket.executeAsGM("counterspell");
-        });
+    Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
+        let workflowItemUuid = workflow.itemUuid;
+        await socket.executeAsGM("counterspell", { workflowData: workflowItemUuid });
+    });
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {
