@@ -1,6 +1,6 @@
 async function enableOpportunityAttack(combat, combatEvent) {
+    if(!game.user.isGM) return;
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return console.log("Opportunity Attack setting not enabled");
-    if (!game.user.isGM) return console.log("User is not the GM");
     const targetSetting = game.settings.get('gambits-premades', 'Opportunity Attack Targets');
     
     const itemName = 'Opportunity Attack';
@@ -77,8 +77,8 @@ async function enableOpportunityAttack(combat, combatEvent) {
 };
 
 async function disableOpportunityAttack(combat, combatEvent) {
+    if(!game.user.isGM) return;
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
-    if (!game.user.isGM) return;
     const itemName = 'Opportunity Attack';
 
     if(combatEvent === "endCombat") {    

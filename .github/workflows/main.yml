@@ -17,10 +17,10 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "Updates:" >> release_notes.txt
-          echo "- Counterspell: Optimized token validity checks. Added Improved Abjuration handling." >> release_notes.txt
+          echo "- Confusion: Complete re-write. Now compatible with 5e 3.x and 2.4.x." >> release_notes.txt
+          echo "- Opportunity Attack: Improved Dialog layout. Re-worked War Caster to support RAW. Because a lot of spells can be available, introduced a general change to allow Favoriting attacks which will move them up to the top of the dialog selection options." >> release_notes.txt
           echo "Bugfixes:" >> release_notes.txt
-          echo "- Counterspell: Additional fixes for naughty looping." >> release_notes.txt
-          echo "- Opportunity Attack: Slight addition to template radius for gridded scenes" >> release_notes.txt
+          echo "- Opportunity Attack: Fixed timeout value not referencing the Opportunity Attack timeout value" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
