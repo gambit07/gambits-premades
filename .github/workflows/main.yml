@@ -17,10 +17,12 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "Updates:" >> release_notes.txt
-          echo "- Confusion: Complete re-write. Now compatible with 5e 3.x and 2.4.x." >> release_notes.txt
-          echo "- Opportunity Attack: Improved Dialog layout. Re-worked War Caster to support RAW. Because a lot of spells can be available, introduced a general change to allow Favoriting attacks which will move them up to the top of the dialog selection options." >> release_notes.txt
+          echo "- Opportunity Attack: Added note in item description for how to enable transparent templates." >> release_notes.txt
           echo "Bugfixes:" >> release_notes.txt
-          echo "- Opportunity Attack: Fixed timeout value not referencing the Opportunity Attack timeout value" >> release_notes.txt
+          echo "- Enervation: Fixed initial save card not displaying to user. Fixed per round damage dialog showing to GM not client." >> release_notes.txt
+          echo "- Grim Siphon: Fix save not set to no damage on save." >> release_notes.txt
+          echo "- Drawing the Hearth: Fix some incorrect logic." >> release_notes.txt
+          echo "- Shroom of Doom: Fix incorrect effect timer." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
