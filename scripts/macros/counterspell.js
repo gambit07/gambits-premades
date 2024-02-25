@@ -1,3 +1,5 @@
+const module = await import('../module.js');
+const socket = module.socket;
 export async function counterspell(data) {
     if(!game.user.isGM) return;
     if (game.settings.get('gambits-premades', 'Enable Counterspell') === false) return;
@@ -69,9 +71,6 @@ export async function counterspell(data) {
 
     return validTokens;
     }
-
-    const module = await import('../module.js');
-    const socket = module.socket;
 
     let findCounterspellTokensPrimary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
         return checkedToken.id === initiatingToken.id || checkedToken.document.disposition === initiatingToken.document.disposition;

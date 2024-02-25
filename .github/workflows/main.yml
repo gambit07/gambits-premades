@@ -16,12 +16,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "Added:" >> release_notes.txt
-          echo "- Witch Spell - Healing Glyph" >> release_notes.txt
-          echo "- Disengage: Simple Disengage active effect added for Opportunity Attack recognition." >> release_notes.txt
-          echo "- Nimble Escape - Disengage: Simple Disengage active effect added for Opportunity Attack recognition." >> release_notes.txt
-          echo "Updates:" >> release_notes.txt
-          echo "- Opportunity Attack: Added handling to remove multiple Opportunity Attack items on combat start/end if multiple exist on an actor due to old manually added features. Cleaned up and added additional incapacitated, spell and charm effects to check against when initiating an OA." >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Opportunity Attack: Added Flyby handling. Added Sentinel and Riposte handling of additional effects preventing Reactions" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Hideous Laughter: Added missing incapacitated effect." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
