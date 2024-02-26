@@ -1,8 +1,8 @@
-const module = await import('../module.js');
-const socket = module.socket;
 export async function counterspell(data) {
     if(!game.user.isGM) return;
     if (game.settings.get('gambits-premades', 'Enable Counterspell') === false) return;
+    const module = await import('../module.js');
+    const socket = module.socket;
     const workflowUuid = data.workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
     if(!workflow) return;

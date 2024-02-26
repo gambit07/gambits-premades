@@ -16,10 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Added Flyby handling. Added Sentinel and Riposte handling of additional effects preventing Reactions" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Hideous Laughter: Added missing incapacitated effect." >> release_notes.txt
+          echo "  - Fix bug that stopped settings from displaying" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
