@@ -16,8 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Fix bug that stopped settings from displaying" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Infestation: Added automated movement when a creature fails the infestation saving throw" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
