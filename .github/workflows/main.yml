@@ -17,7 +17,8 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Updates:" >> release_notes.txt
-          echo "  - Infestation: Added automated movement when a creature fails the infestation saving throw" >> release_notes.txt
+          echo "  - Infestation: Refined automated movement." >> release_notes.txt
+          echo "  - Confusion: Added automated movement when the target rolls a movement related effect." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
