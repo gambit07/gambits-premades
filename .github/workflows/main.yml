@@ -16,11 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Spell: Electric Eels" >> release_notes.txt
-          echo "  - Actor: Electric Eel" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix Riposte effect origin on creation." >> release_notes.txt
+          echo "  - Opportunity Attack: Fixed an issue with workflow always returning a hitTarget for Riposte, various other Riposte bugfixes. Fixed an issue with favorited weapons causing an attack not to occur." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

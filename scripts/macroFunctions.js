@@ -41,7 +41,7 @@ async function enableOpportunityAttack(combat, combatEvent) {
         let npcs = [];
         let pcs = [];
         
-        if(combatEvent === "startCombat" || combatEvent === "enterCombat") {
+        if(combatEvent === "startCombat") {
             for (let combatant of combat.combatants.values()) {
                 if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
                     const itemsToDelete = combatant.actor.items.filter(item => item.name === itemName);
@@ -59,6 +59,22 @@ async function enableOpportunityAttack(combat, combatEvent) {
                 }
             }
         }
+
+        if(combatEvent === "enterCombat") {
+            let combatant = combat;
+                if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
+                    let existingItem = combatant.actor.items.find(i => i.name === itemName);
+                    
+                    if (combatant.token.disposition === -1) {
+                        if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                        npcs.push(combatant);
+                    } else if (combatant.token.disposition === 1) {
+                        if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+                        pcs.push(combatant);
+                    }
+                }
+        }
+
         return { npcs, pcs };
     }
 };
@@ -68,7 +84,7 @@ async function disableOpportunityAttack(combat, combatEvent) {
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
     const itemName = 'Opportunity Attack';
 
-    if(combatEvent === "endCombat" || combatEvent === "exitCombat") {    
+    if(combatEvent === "endCombat") {    
         for (let combatant of combat.combatants.values()) {
             const itemsToDelete = combatant.actor.items.filter(item => item.name === itemName);
             const itemIdsToDelete = itemsToDelete.map(item => item.id);
@@ -78,6 +94,16 @@ async function disableOpportunityAttack(combat, combatEvent) {
             }
 
             let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
+            if (templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
+        }
+
+        if(combatEvent === "exitCombat") {       
+            let combatant = combat;
+            let existingItem = combatant.actor.items.getName(itemName);
+            let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
+    
+            if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
+    
             if (templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
         }
     }
