@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.0.76",
+  "version": "0.0.77",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
@@ -73,6 +73,13 @@
       		"type": "Item",
 			"name": "gps-homebrew-spells",
       		"path": "packs/gps-homebrew-spells",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Actors",
+      		"type": "Actor",
+			"name": "gps-actors",
+      		"path": "packs/gps-actors",
 			"module": "gambits-premades"
 		}],
     "scripts": [

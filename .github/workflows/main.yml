@@ -16,8 +16,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Infestation: Added missing chat card when no movement is available." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Spell: Electric Eels" >> release_notes.txt
+          echo "  - Actor: Electric Eel" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Opportunity Attack: Fix Riposte effect origin on creation." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
