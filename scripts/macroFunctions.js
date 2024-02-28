@@ -63,13 +63,16 @@ async function enableOpportunityAttack(combat, combatEvent) {
         if(combatEvent === "enterCombat") {
             let combatant = combat;
                 if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
-                    let existingItem = combatant.actor.items.find(i => i.name === itemName);
+                    const itemsToDelete = combatant.actor.items.filter(item => item.name === itemName);
+                    const itemIdsToDelete = itemsToDelete.map(item => item.id);
+            
+                    if (itemIdsToDelete.length > 0) {
+                        await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
+                    }
                     
                     if (combatant.token.disposition === -1) {
-                        if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
                         npcs.push(combatant);
                     } else if (combatant.token.disposition === 1) {
-                        if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
                         pcs.push(combatant);
                     }
                 }
@@ -86,26 +89,43 @@ async function disableOpportunityAttack(combat, combatEvent) {
 
     if(combatEvent === "endCombat") {    
         for (let combatant of combat.combatants.values()) {
-            const itemsToDelete = combatant.actor.items.filter(item => item.name === itemName);
-            const itemIdsToDelete = itemsToDelete.map(item => item.id);
+            let existingItems = combatant.actor.items.filter(item => item.name === itemName);
+            let itemIdsToDelete = existingItems.map(item => item.id);
+            let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
+            let checkRiposteFlag = await combatant.actor.getFlag("midi-qol", "checkRiposteDecision");
+            let checkBraceFlag = await combatant.actor.getFlag("midi-qol", "checkBraceDecision");
     
             if (itemIdsToDelete.length > 0) {
                 await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
             }
 
-            let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
+            let templateData = await fromUuid(templateFlag);
+            templateData.delete();
+    
             if (templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
+            if(checkRiposteFlag) await combatant.actor.unsetFlag("midi-qol", "checkRiposteDecision");
+            if(checkBraceFlag) await combatant.actor.unsetFlag("midi-qol", "checkBraceDecision");
+        }
+    }
+
+    if(combatEvent === "exitCombat") {       
+        let combatant = combat;
+        let existingItems = combatant.actor.items.filter(item => item.name === itemName);
+        let itemIdsToDelete = existingItems.map(item => item.id);
+        let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
+        let checkRiposteFlag = await combatant.actor.getFlag("midi-qol", "checkRiposteDecision");
+        let checkBraceFlag = await combatant.actor.getFlag("midi-qol", "checkBraceDecision");
+
+        if (itemIdsToDelete.length > 0) {
+            await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
         }
 
-        if(combatEvent === "exitCombat") {       
-            let combatant = combat;
-            let existingItem = combatant.actor.items.getName(itemName);
-            let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
-    
-            if (existingItem) await combatant.actor.deleteEmbeddedDocuments("Item", [existingItem.id]);
-    
-            if (templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
-        }
+        let templateData = await fromUuid(templateFlag);
+        templateData.delete();
+
+        if (templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
+        if(checkRiposteFlag) await combatant.actor.unsetFlag("midi-qol", "checkRiposteDecision");
+        if(checkBraceFlag) await combatant.actor.unsetFlag("midi-qol", "checkBraceDecision");
     }
 };
 
