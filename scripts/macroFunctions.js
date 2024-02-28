@@ -1,7 +1,6 @@
 async function enableOpportunityAttack(combat, combatEvent) {
     if(!game.user.isGM) return;
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return console.log("Opportunity Attack setting not enabled");
-    const targetSetting = game.settings.get('gambits-premades', 'Opportunity Attack Targets');
     
     const itemName = 'Opportunity Attack';
     let compendium = game.packs.get("gambits-premades.gps-generic-features");
@@ -12,120 +11,75 @@ async function enableOpportunityAttack(combat, combatEvent) {
     let newItem = await compendium.getDocument(itemEntry._id);
     if (!newItem) return console.error("Failed to retrieve item from compendium");
 
-    const { npcs, pcs } = await categorizeCombatants(combat);
-    
-    // Process based on settings
-    switch (targetSetting) {
-        case 0: // Friendlies
-            await processCombatants(pcs);
-            break;
-        case 1: // Enemies
-            await processCombatants(npcs);
-            break;
-        case 2: // Both
-            await processCombatants([...npcs, ...pcs]);
-            break;
-        default:
-            // No action for "None" or undefined setting
-            break;
-    }
-
-    async function processCombatants(combatants) {
-        for (let combatant of combatants) {
-                await combatant.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
-                await combatant.actor.items.getName("Opportunity Attack").use();
-        }
-    }
+    await categorizeCombatants(combat);
 
     async function categorizeCombatants(combat) {
-        let npcs = [];
-        let pcs = [];
-        
-        if(combatEvent === "startCombat") {
-            for (let combatant of combat.combatants.values()) {
-                if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
-                    const itemsToDelete = combatant.actor.items.filter(item => item.name === itemName);
-                    const itemIdsToDelete = itemsToDelete.map(item => item.id);
-            
-                    if (itemIdsToDelete.length > 0) {
-                        await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
-                    }
-                    
-                    if (combatant.token.disposition === -1) {
-                        npcs.push(combatant);
-                    } else if (combatant.token.disposition === 1) {
-                        pcs.push(combatant);
-                    }
+        async function processCombatant(combatant) {
+            if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
+                const itemsToDelete = combatant.actor.items.filter(item => item.name === itemName);
+                const itemIdsToDelete = itemsToDelete.map(item => item.id);
+                let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
+                let checkRiposteFlag = await combatant.actor.getFlag("midi-qol", "checkRiposteDecision");
+                let checkBraceFlag = await combatant.actor.getFlag("midi-qol", "checkBraceDecision");
+    
+                if (itemIdsToDelete.length > 0) {
+                    await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
                 }
+    
+                if(templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
+                if(checkRiposteFlag) await combatant.actor.unsetFlag("midi-qol", "checkRiposteDecision");
+                if(checkBraceFlag) await combatant.actor.unsetFlag("midi-qol", "checkBraceDecision");
+    
+                await combatant.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
+                await combatant.actor.items.getName("Opportunity Attack").use();
             }
         }
-
+    
+        if(combatEvent === "startCombat") {
+            for (let combatant of combat.combatants.values()) {
+                await processCombatant(combatant);
+            }
+        }
+    
         if(combatEvent === "enterCombat") {
             let combatant = combat;
-                if (combatant.actor.type === 'npc' || combatant.actor.type === 'character') {
-                    const itemsToDelete = combatant.actor.items.filter(item => item.name === itemName);
-                    const itemIdsToDelete = itemsToDelete.map(item => item.id);
-            
-                    if (itemIdsToDelete.length > 0) {
-                        await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
-                    }
-                    
-                    if (combatant.token.disposition === -1) {
-                        npcs.push(combatant);
-                    } else if (combatant.token.disposition === 1) {
-                        pcs.push(combatant);
-                    }
-                }
+            await processCombatant(combatant);
         }
-
-        return { npcs, pcs };
     }
 };
 
 async function disableOpportunityAttack(combat, combatEvent) {
-    if(!game.user.isGM) return;
+    if (!game.user.isGM) return;
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
     const itemName = 'Opportunity Attack';
 
-    if(combatEvent === "endCombat") {    
-        for (let combatant of combat.combatants.values()) {
-            let existingItems = combatant.actor.items.filter(item => item.name === itemName);
-            let itemIdsToDelete = existingItems.map(item => item.id);
-            let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
-            let checkRiposteFlag = await combatant.actor.getFlag("midi-qol", "checkRiposteDecision");
-            let checkBraceFlag = await combatant.actor.getFlag("midi-qol", "checkBraceDecision");
-    
-            if (itemIdsToDelete.length > 0) {
-                await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
-            }
-
-            let templateData = await fromUuid(templateFlag);
-            templateData.delete();
-    
-            if (templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
-            if(checkRiposteFlag) await combatant.actor.unsetFlag("midi-qol", "checkRiposteDecision");
-            if(checkBraceFlag) await combatant.actor.unsetFlag("midi-qol", "checkBraceDecision");
-        }
-    }
-
-    if(combatEvent === "exitCombat") {       
-        let combatant = combat;
+    async function processCombatant(combatant) {
         let existingItems = combatant.actor.items.filter(item => item.name === itemName);
         let itemIdsToDelete = existingItems.map(item => item.id);
         let templateFlag = await combatant.actor.getFlag("midi-qol", "opportunityAttackTemplate");
         let checkRiposteFlag = await combatant.actor.getFlag("midi-qol", "checkRiposteDecision");
         let checkBraceFlag = await combatant.actor.getFlag("midi-qol", "checkBraceDecision");
+        let templateData = templateFlag ? await fromUuid(templateFlag) : null;
 
         if (itemIdsToDelete.length > 0) {
             await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
         }
 
-        let templateData = await fromUuid(templateFlag);
-        templateData.delete();
-
+        if (templateData) await templateData.delete();
         if (templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
-        if(checkRiposteFlag) await combatant.actor.unsetFlag("midi-qol", "checkRiposteDecision");
-        if(checkBraceFlag) await combatant.actor.unsetFlag("midi-qol", "checkBraceDecision");
+        if (checkRiposteFlag) await combatant.actor.unsetFlag("midi-qol", "checkRiposteDecision");
+        if (checkBraceFlag) await combatant.actor.unsetFlag("midi-qol", "checkBraceDecision");
+    }
+
+    if (combatEvent === "endCombat") {
+        for (let combatant of combat.combatants.values()) {
+            await processCombatant(combatant);
+        }
+    }
+
+    if (combatEvent === "exitCombat") {
+        let combatant = combat;
+        await processCombatant(combatant);
     }
 };
 
