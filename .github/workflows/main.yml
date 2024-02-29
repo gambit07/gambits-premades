@@ -17,7 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fixed v3 issue generating a weird active effect deletion error. Cleaned up creation and deletion in the module, mostly resolved intermittent chat card not found error on combat start." >> release_notes.txt
+          echo "  - Opportunity Attack: Actually remove the offending effect..." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
