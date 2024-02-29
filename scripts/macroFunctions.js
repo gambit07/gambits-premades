@@ -1,5 +1,4 @@
 async function enableOpportunityAttack(combat, combatEvent) {
-    if(!game.user.isGM) return;
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return console.log("Opportunity Attack setting not enabled");
     
     const itemName = 'Opportunity Attack';
@@ -25,6 +24,15 @@ async function enableOpportunityAttack(combat, combatEvent) {
                 if (itemIdsToDelete.length > 0) {
                     await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
                 }
+
+                let effectNames = ["Opportunity Attack", "Opportunity Attack - Sentinel", "Opportunity Attack - Riposte"];
+                let effectIdsToDelete = combatant.actor.effects
+                    .filter(effect => effectNames.includes(effect.name))
+                    .map(effect => effect.id);
+        
+                if (effectIdsToDelete.length > 0) {
+                    await combatant.actor.deleteEmbeddedDocuments("ActiveEffect", effectIdsToDelete);
+                }
     
                 if(templateFlag) await combatant.actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
                 if(checkRiposteFlag) await combatant.actor.unsetFlag("midi-qol", "checkRiposteDecision");
@@ -32,6 +40,9 @@ async function enableOpportunityAttack(combat, combatEvent) {
     
                 await combatant.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
                 await combatant.actor.items.getName("Opportunity Attack").use();
+                let itemUuid = await combatant.actor.items.getName("Opportunity Attack").uuid;
+                const workflow = await MidiQOL.Workflow.getWorkflow(itemUuid);
+                console.log(workflow, "module workflow pull")
             }
         }
     
@@ -49,7 +60,6 @@ async function enableOpportunityAttack(combat, combatEvent) {
 };
 
 async function disableOpportunityAttack(combat, combatEvent) {
-    if (!game.user.isGM) return;
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
     const itemName = 'Opportunity Attack';
 
@@ -63,6 +73,15 @@ async function disableOpportunityAttack(combat, combatEvent) {
 
         if (itemIdsToDelete.length > 0) {
             await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
+        }
+
+        let effectNames = ["Opportunity Attack", "Opportunity Attack - Sentinel", "Opportunity Attack - Riposte"];
+        let effectIdsToDelete = combatant.actor.effects
+            .filter(effect => effectNames.includes(effect.name))
+            .map(effect => effect.id);
+
+        if (effectIdsToDelete.length > 0) {
+            await combatant.actor.deleteEmbeddedDocuments("ActiveEffect", effectIdsToDelete);
         }
 
         if (templateData) await templateData.delete();

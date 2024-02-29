@@ -16,8 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Vicious Mockery: Added options at the top of the macro to give a dropdown menu of choices or disable the animation entirely, fixed an issue that would cause Counterspell to activate for allies when using this spell." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Opportunity Attack: Fixed v3 issue generating a weird active effect deletion error. Cleaned up creation and deletion in the module, mostly resolved intermittent chat card not found error on combat start." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

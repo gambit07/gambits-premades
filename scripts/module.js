@@ -12,6 +12,7 @@ Hooks.once('socketlib.ready', async function() {
 })
 
 Hooks.once('ready', async function() {
+    if(!game.user.isGM) return;
     loadCompendiumData().then(() => {
         game.modules.get('gambits-premades').medkitApi = medkitApi;
     }).catch(error => {
@@ -25,12 +26,14 @@ Hooks.once('ready', async function() {
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {
+    if(!game.user.isGM) return;
     const startedPath = `gambits-premades.started`;
     const prevStarted = combat.started;
     foundry.utils.setProperty(options, startedPath, prevStarted);
 })
 
 Hooks.on("updateCombat", async (combat, update, options) => {
+    if(!game.user.isGM) return;
     const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
 
     if(combatStarted) {
@@ -39,6 +42,7 @@ Hooks.on("updateCombat", async (combat, update, options) => {
 })
 
 Hooks.on("createCombatant", async (combatant, options, userId) => {
+    if(!game.user.isGM) return;
     let combat = game.combat;
     if (combat && combat.started) {
         await enableOpportunityAttack(combatant, "enterCombat");
@@ -46,10 +50,12 @@ Hooks.on("createCombatant", async (combatant, options, userId) => {
 });
 
 Hooks.on('deleteCombat', async (combat) => {
+    if(!game.user.isGM) return;
     await disableOpportunityAttack(combat, "endCombat");
 });
 
 Hooks.on("deleteCombatant", async (combatant, options, userId) => {
+    if(!game.user.isGM) return;
     let combat = game.combat;
     if (combat && combat.started) {
         await disableOpportunityAttack(combatant, "exitCombat");

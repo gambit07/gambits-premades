@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.0.81",
+  "version": "0.0.82",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
