@@ -16,8 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Resolved a few problems related to trying to remove the OA item, cleaned up OA addition. The Opportunity Attack Targets setting no longer exists, and Opportunity Attack will be enabled for all valid characters in Combat/entering Combat" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Vicious Mockery: Added options at the top of the macro to give a dropdown menu of choices or disable the animation entirely, fixed an issue that would cause Counterspell to activate for allies when using this spell." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

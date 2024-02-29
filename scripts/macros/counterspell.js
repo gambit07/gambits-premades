@@ -92,7 +92,8 @@ export async function counterspell(data) {
         }
         
         const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary);
-        if (counterspellSuccess === false) continue;
+        console.log(counterspellSuccess, "counterspell success first loop")
+        if (counterspellSuccess === false || !counterspellSuccess) continue;
         if (counterspellSuccess === true) {
             castLevel = counterspellLevel;
             let findCounterspellTokensSecondary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
@@ -114,6 +115,7 @@ export async function counterspell(data) {
                 }
 
                 const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary);
+                console.log(counterspellSuccess, "counterspell success second loop")
                 if (counterspellSuccess === true) {
                     castLevel = counterspellLevel;
                     break;
