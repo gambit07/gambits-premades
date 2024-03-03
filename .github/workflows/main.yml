@@ -17,8 +17,8 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Updates:" >> release_notes.txt
-          echo "  - Black Tentacles: Add descriptive chat cards for save successand failure. Recreate item, old item had old Item Macro data that I didnt like" >> release_notes.txt
-          echo "  - Opportunity Attack: Add check to disable Levels height label so it doesnt overlap with standard foundry height label" >> release_notes.txt
+          echo "  - Divine Sense: Change sense check to account for RAW. This will now allow tokens not visible but not behind a wall to output the chat card correctly. Will look to update visibility of the token in the future." >> release_notes.txt
+          echo "  - Opportunity Attack: Hotfix for issue in last update, first pass at supporting metric template size creation" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
