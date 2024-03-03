@@ -17,7 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Updates:" >> release_notes.txt
-          echo "  - Divine Sense: Additional modification to allow sensing a relevant token via vision5e when the originating token has no sight." >> release_notes.txt
+          echo "  - Divine Sense: Additional modification to allow sensing a relevant token via vision5e when the originating token has no sight. Time that vision can be sensed can be modified in the macro in the timeoutValue variable, default value is 30 seconds." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
