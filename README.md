@@ -4,7 +4,7 @@
 
 A collection of automated items, spells, feats, and anything else I decide to do! This module primarily uses MidiQOL along with other synergistic modules to achieve these automations, credit to tposney, caewok, zhell, aedif, and saibot for all of their relevant modules.
 
-Currently all automations are included as items in my compendiums, which are labeled as GPS [Automation Item Type]. I have plans to take a module based approach to some of my more advanced automations such as Counterspell and Opportunity Attacks in the future.
+Currently all automations are included as items in my compendiums, which are labeled as GPS [Automation Item Type].
 
 I feel like videos are the best way to see these type of automations, so including a partial list of videos below. I'll continue to add more over time.
 
@@ -423,6 +423,114 @@ https://github.com/gambit07/gambits-premades/assets/4236874/5dab58c7-d74c-4a9a-8
 <p>
 
 https://github.com/gambit07/gambits-premades/assets/4236874/c3c61a43-71f7-421c-a69a-2446ad02def3
+
+</p>
+</details>
+
+<details>
+<summary><b>Infestation</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Staff of Rooted Hills</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Cause Fear</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Healing Glyph</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Drawing the Hearth</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Electric Eels</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Toll the Dead</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Festering Fever</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Contagious Healing</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Shroom of Doom</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Cecily's Stormshot</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Grim Siphon</b> (click to expand)</summary>
+<p>
+
+Placeholder
 
 </p>
 </details>

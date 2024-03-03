@@ -16,10 +16,9 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Stinking Cloud: Updated to fix concentration in V3, revised and cleaned up effect application. " >> release_notes.txt
-          echo "  - Black Tentacles: Complete overhaul. Removed requirements for Effect Macro, Active Auras, and DAE. Automation now properly accounts for targets moving through the area, and will automate movement back to template entry if the token fails restrained." >> release_notes.txt
-          echo "  - Counterspell: Add check for invalid/corrupt tokens" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Black Tentacles: Add descriptive chat cards for save success/failure. Re-create item, old item had old Item Macro data that I didn't like" >> release_notes.txt
+          echo "  - Opportunity Attack: Add check to disable Levels height label so it doesn't overlap with standard foundry height label" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
