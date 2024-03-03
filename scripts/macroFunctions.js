@@ -40,9 +40,6 @@ async function enableOpportunityAttack(combat, combatEvent) {
     
                 await combatant.actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
                 await combatant.actor.items.getName("Opportunity Attack").use();
-                let itemUuid = await combatant.actor.items.getName("Opportunity Attack").uuid;
-                const workflow = await MidiQOL.Workflow.getWorkflow(itemUuid);
-                console.log(workflow, "module workflow pull")
             }
         }
     

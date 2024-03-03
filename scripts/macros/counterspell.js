@@ -13,6 +13,9 @@ export async function counterspell(data) {
 
     function findCounterspellTokens(token, dispositionCheck) {
         let validTokens = canvas.tokens.placeables.filter(t => {
+            // Check if invalid token on the canvas
+            if (!t.actor) return;
+
             // Check if the token has counterspell available
             if (!t.actor.items.find(i => i.name.toLowerCase() === "counterspell")) return;
 
@@ -92,7 +95,6 @@ export async function counterspell(data) {
         }
         
         const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary);
-        console.log(counterspellSuccess, "counterspell success first loop")
         if (counterspellSuccess === false || !counterspellSuccess) continue;
         if (counterspellSuccess === true) {
             castLevel = counterspellLevel;
@@ -115,7 +117,6 @@ export async function counterspell(data) {
                 }
 
                 const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary);
-                console.log(counterspellSuccess, "counterspell success second loop")
                 if (counterspellSuccess === true) {
                     castLevel = counterspellLevel;
                     break;
