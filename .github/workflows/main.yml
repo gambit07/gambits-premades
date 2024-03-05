@@ -16,8 +16,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Intellect Fortress: Handles the standard spell pieces as well as validation for range, target total, and sight." >> release_notes.txt
+          echo "  - Fortunes Favor: This one existed pre-module, just never officially mentioned its existence." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Divine Sense: Additional modification to allow sensing a relevant token via vision5e when the originating token has no sight. Time that vision can be sensed can be modified in the macro in the timeoutValue variable, default value is 30 seconds." >> release_notes.txt
+          echo "  - Opportunity Attack: Add checks for a couple additional temp effects that could be left over from bugs in previous releases." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

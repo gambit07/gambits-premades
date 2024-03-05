@@ -25,7 +25,7 @@ async function enableOpportunityAttack(combat, combatEvent) {
                     await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
                 }
 
-                let effectNames = ["Opportunity Attack", "Opportunity Attack - Sentinel", "Opportunity Attack - Riposte"];
+                let effectNames = ["Opportunity Attack", "Opportunity Attack - Sentinel", "Opportunity Attack - Riposte", "Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack", "Maneuvers: Riposte Opportunity Attack"];
                 let effectIdsToDelete = combatant.actor.effects
                     .filter(effect => effectNames.includes(effect.name))
                     .map(effect => effect.id);
@@ -72,7 +72,7 @@ async function disableOpportunityAttack(combat, combatEvent) {
             await combatant.actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
         }
 
-        let effectNames = ["Opportunity Attack", "Opportunity Attack - Sentinel", "Opportunity Attack - Riposte"];
+        let effectNames = ["Opportunity Attack", "Opportunity Attack - Sentinel", "Opportunity Attack - Riposte", "Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack", "Maneuvers: Riposte Opportunity Attack"];
         let effectIdsToDelete = combatant.actor.effects
             .filter(effect => effectNames.includes(effect.name))
             .map(effect => effect.id);
