@@ -1,4 +1,5 @@
 import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
+import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -9,6 +10,8 @@ Hooks.once('socketlib.ready', async function() {
     socket = socketlib.registerModule('gambits-premades');
     socket.register("counterspell", counterspell);
     socket.register("showCounterspellDialog", showCounterspellDialog);
+    socket.register("silveryBarbs", silveryBarbs);
+    socket.register("showSilveryBarbsDialog", showSilveryBarbsDialog);
 })
 
 Hooks.once('ready', async function() {
@@ -23,6 +26,16 @@ Hooks.once('ready', async function() {
         let workflowItemUuid = workflow.itemUuid;
         await socket.executeAsGM("counterspell", { workflowData: workflowItemUuid });
     });
+
+    /*Hooks.on("midi-qol.preCheckHits", async (workflow) => {
+        let workflowItemUuid = workflow.itemUuid;
+        await socket.executeAsGM("silveryBarbs", { workflowData: workflowItemUuid, workflowType: "attack" });
+    });
+
+    Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
+        let workflowItemUuid = workflow.itemUuid;
+        await socket.executeAsGM("silveryBarbs", { workflowData: workflowItemUuid, workflowType: "save" });
+    });*/
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {
@@ -35,8 +48,9 @@ Hooks.on("preUpdateCombat", (combat, update, options) => {
 Hooks.on("updateCombat", async (combat, update, options) => {
     if(!game.user.isGM) return;
     const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
-
-    if(combatStarted) {
+    const hasProcessedStart = await combat.getFlag('gambits-premades', `startProcessed-${combat.id}`);
+    if(combatStarted && !hasProcessedStart) {
+        await combat.setFlag('gambits-premades', `startProcessed-${combat.id}`, true);
         await enableOpportunityAttack(combat, "startCombat");
     }
 })

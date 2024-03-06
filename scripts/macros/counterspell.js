@@ -43,6 +43,7 @@ export async function counterspell(data) {
             let checkSpell = t.actor.items.find(i => i.name.toLowerCase() === "counterspell");
             let checkType = checkSpell.system.preparation.mode;
             let hasSpellSlots = false;
+            if(checkType === "prepared" && checkSpell.system.preparation.prepared === false) return;
             if(checkType === "prepared" || checkType === "always")
             {
                 for (let level = 3; level <= 9; level++) {
