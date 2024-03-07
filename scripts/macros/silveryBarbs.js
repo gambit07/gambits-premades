@@ -298,6 +298,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                         let advantageToken = await fromUuid(html.find("#advantagedSelection").val());
                         if(outcomeType === "attack") {
                             originToken = await fromUuid(tokenUuids);
+                            originToken = await MidiQOL.tokenForActor(originToken.actor.uuid);
                         }
                         if(outcomeType === "save") {
                             originToken = await MidiQOL.tokenForActor(html.find("#targetSelection").val());
