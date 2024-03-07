@@ -68,7 +68,7 @@ function registerSettings() {
         scope: 'world',
         config: true,
         type: String,
-        default: "15",
+        default: "30",
         onChange: value => {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {

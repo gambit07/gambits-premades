@@ -333,7 +333,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                               "duration": {
                                 "rounds": null,
                                 "startTime": null,
-                                "seconds": 999999,
+                                "seconds": 60,
                                 "combat": null,
                                 "turns": null,
                                 "startRound": null,
