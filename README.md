@@ -32,6 +32,15 @@ https://github.com/gambit07/gambits-premades/assets/4236874/734b71a3-2c23-408d-9
 </details>
 
 <details>
+<summary><b>Silvery Barbs</b> (click to expand)</summary>
+<p>
+
+Placeholder
+
+</p>
+</details>
+
+<details>
 <summary><b>Lantern, Bullseye</b> (click to expand)</summary>
 <p>
 
