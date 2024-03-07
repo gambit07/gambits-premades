@@ -143,7 +143,6 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                 </div>
             </div>`;
 
-        // Create temporary item for dialog
         let dialog = new Dialog({
             title: dialogTitle,
             content: dialogContent,

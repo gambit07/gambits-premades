@@ -53,7 +53,7 @@ function registerSettings() {
         }
     });
 
-    /*game.settings.register('gambits-premades', 'Enable Silvery Barbs', {
+    game.settings.register('gambits-premades', 'Enable Silvery Barbs', {
         name: "Enable Silvery Barbs",
         hint: "If enabled, this will present an appropriate dialog to users with silvery barbs, and automate silvery barbs application when used.",
         scope: 'world',
@@ -78,5 +78,5 @@ function registerSettings() {
                 console.error("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
-    });*/
+    });
 }

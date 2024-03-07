@@ -5,10 +5,10 @@ export async function silveryBarbs({workflowData,workflowType}) {
     const socket = module.socket;
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
-    if(!workflow) return console.log("no workflow");
-    if(workflow.item.name.toLowerCase() === "silvery barbs") return console.log("item is silvery barbs");
+    if(!workflow) return;
+    if(workflow.item.name.toLowerCase() === "silvery barbs") return;
     
-    if (!game.combat) return console.log("no combat");
+    if (!game.combat) return;
 
     if(workflowType === "attack" && !workflow.hitTargets.first()) return;
 
@@ -45,11 +45,12 @@ export async function silveryBarbs({workflowData,workflowType}) {
             let distance = canvas.grid.measureDistance(token, t, { gridSpaces: gridDecision });
             if(distance > 60) return;
 
-            // Check if the token has available spell slots/uses for counterspell
+            // Check if the token has available spell slots/uses for silvery barbs
             const spells = t.actor.system.spells;
             let checkSpell = t.actor.items.find(i => i.name.toLowerCase() === "silvery barbs");
             let checkType = checkSpell.system.preparation.mode;
             let hasSpellSlots = false;
+            if(checkType === "prepared" && checkSpell.system.preparation.prepared === false) return;
             if(checkType === "prepared" || checkType === "always")
             {
                 for (let level = 1; level <= 9; level++) {
@@ -98,28 +99,38 @@ export async function silveryBarbs({workflowData,workflowType}) {
             browserUser = game.users?.activeGM;
         }
         if(workflowType === "save") {
-            let targetUuids = Array.from(workflow.saves).map(token => token.actor.uuid);
-        const {silveryBarbsDecision} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary);
-        if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
-        if (silveryBarbsDecision === true) {
-                console.log(workflow, "saveroll")
-                let target = workflow.saves.first();
-                let reroll = await new Roll(`1d20`).roll({async: true});
-                //let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total
-                //let rerollResult = reroll.total + rerollAddition;
-                let targetAC = workflow.actor.system.attributes.spelldc;
-                if(reroll.total < targetAC) {
-                    workflow.saves.delete(target);
-                    workflow.failedSaves.add(target);
+            let targetUuids = Array.from(workflow.saves)
+            .filter(token => token.document.disposition !== validTokenPrimary.document.disposition)
+            .map(token => token.actor.uuid);
+            let targetNames = Array.from(workflow.saves)
+            .filter(token => token.document.disposition !== validTokenPrimary.document.disposition)
+            .map(token => token.actor.name);
+            const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save");
+            if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
+            if (silveryBarbsDecision === true) {
+                let saveDC = workflow.saveItem.system.save.dc;
+                let saveAbility = workflow.saveItem.system.save.ability;
+                let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === returnedTokenUuid);
+                const workflowIndex = Array.from(workflow.saves).findIndex(t => t.document.uuid === returnedTokenUuid);
+                let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
+                let reroll = await new Roll(`1d20 + ${targetSaveBonus}`).roll({async: true});
+                await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
+                if(reroll.total < saveDC) {
+                    workflow.saves.delete(workflowTarget);
+                    workflow.failedSaves.add(workflowTarget);
+                    workflow.saveDisplayData[workflowIndex].saveString = ' fails';
+                    workflow.saveDisplayData[workflowIndex].saveSymbol = 'fa-times';
+                    workflow.saveDisplayData[workflowIndex].rollTotal = reroll.total;
+                    workflow.saveDisplayData[workflowIndex].saveClass = 'miss';
+
                     let chatList = [];
 
-                    chatList = `The creature was silvery barbed, they rolled a ${reroll.total} and needed a ${targetAC} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px">`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
                         if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
                     }, msgHistory);
-                    console.log(msgHistory)
                     let itemCard = msgHistory[msgHistory.length - 1];
                     let chatMessage = await game.messages.get(itemCard);
                     let content = await duplicate(chatMessage.content);
@@ -133,7 +144,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 else {
                     let chatList = [];
 
-                    chatList = `The creature was silvery barbed, but still succeeded their save. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `The creature was silvery barbed, but still succeeded their save. <img src="${target.actor.img}" width="30" height="30" style="border:0px">`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
@@ -152,7 +163,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
         }
 
             if(workflowType === "attack") {
-                const {silveryBarbsDecision} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary);
+                const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack");
                 if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
                 if (silveryBarbsDecision === true) {
 
@@ -166,7 +177,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 if(workflow.attackTotal < targetAC) {
                     let chatList = [];
 
-                    chatList = `The creature was silvery barbed, they rolled a ${workflow.attackTotal} and needed a ${targetAC} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
@@ -205,32 +216,92 @@ export async function silveryBarbs({workflowData,workflowType}) {
     }
 }
 
-export async function showSilveryBarbsDialog(originTokenUuid, actorUuid, tokenUuid, dialogTitle) {
+export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType) {
     return await new Promise(resolve => {
         const initialTimeLeft = Number(game.settings.get('gambits-premades', 'Silvery Barbs Timeout'));
-        let dialogContent = `
-            <div style='display: flex; align-items: center; justify-content: space-between;'>
-                <div style='flex: 1;'>
-                    Would you like to use your reaction to cast Silvery Barbs?<br/><br/>
+        let dialogContent;
+        let dropdownOptions;
+        let originToken = fromUuidSync(tokenUuid);
+
+        const nearbyFriendlies = MidiQOL.findNearby(null, originToken.object, 60, { includeToken: true });
+        let validFriendlies = nearbyFriendlies.filter(token => token.document.disposition === originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid) && !token.actor.effects.getName("Silvery Barbs - Advantage"));
+        if(outcomeType === "attack") {
+        dialogContent = `
+            <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
+            <div style='margin-bottom: 20px;'>
+                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs?</p>
+            </div>
+            <div style='display: flex; width: 100%; gap: 20px;'>
+                <div style='flex-grow: 1; display: flex; flex-direction: column;'>
+                    <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
+                    ${validFriendlies.length > 1 ? 
+                        `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
+                            ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
+                        </select>` : '<p>No valid friendlies in range.</p>'
+                    }
                 </div>
-                <div style='border-left: 1px solid #ccc; padding-left: 10px; text-align: center;'>
+                <div style='padding-left: 20px; border-left: 1px solid #ccc;'>
                     <p><b>Time remaining</b></p>
                     <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
                 </div>
-            </div>`;
+            </div>
+        </div>
+        `;
+        }
 
-        // Create temporary item for dialog
+        if(outcomeType === "save") {
+        dropdownOptions = tokenUuids.map((uuid, index) => 
+            `<option value="${uuid}">${targetNames[index]}</option>`
+        ).join('');
+        
+        dialogContent = `
+            <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
+                <div style='margin-bottom: 20px;'>
+                    <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs?</p>
+                </div>
+                <div style='display: flex; width: 100%; gap: 20px;'>
+
+                        <div style='flex-grow: 1; display: flex; flex-direction: column;'>
+                            <p style='margin: 0 0 10px 0;'>Choose a target:</p>
+                            <select id="targetSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
+                                ${targetNames.map((name, index) => `<option value="${tokenUuids[index]}">${name}</option>`).join('')}
+                            </select>
+                        </div>
+
+                    <div style='flex-grow: 1; display: flex; flex-direction: column; border-left: 1px solid #ccc; padding-left: 20px;'>
+                        <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
+                        ${validFriendlies.length > 1 ? 
+                            `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
+                                ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
+                            </select>` : '<p>No valid friendlies in range.</p>'
+                        }
+                    </div>
+                </div>
+                <div style='padding-top: 20px; text-align: center; width: 100%;'>
+                    <p><b>Time remaining</b></p>
+                    <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
+                </div>
+            </div>
+        `;
+        }
+
         let dialog = new Dialog({
             title: dialogTitle,
             content: dialogContent,
             buttons: {
                 yes: {
                     label: "Yes",
-                    callback: async () => {
+                    callback: async (html) => {
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
-                        let token = await fromUuid(tokenUuid);
-                        let originToken = await fromUuid(originTokenUuid);
+                        let originToken;
+                        let advantageToken = await fromUuid(html.find("#advantagedSelection").val());
+                        if(outcomeType === "attack") {
+                            originToken = await fromUuid(tokenUuids);
+                        }
+                        if(outcomeType === "save") {
+                            originToken = await MidiQOL.tokenForActor(html.find("#targetSelection").val());
+                        }
 
                         let chosenSpell = actor.items.find(i => i.name.toLowerCase() === "silvery barbs");
 
@@ -242,11 +313,13 @@ export async function showSilveryBarbsDialog(originTokenUuid, actorUuid, tokenUu
                             createWorkflow: true,
                             versatile: false,
                             configureDialog: true,
-                            targetUuids: [originToken.uuid],
+                            targetUuids: [originToken.document.uuid],
                         };
 
                         const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
+                        
                         let silveryBarbsDecision = true;
+                        let returnedTokenUuid = originToken.document.uuid;
 
                         const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
 
@@ -254,14 +327,62 @@ export async function showSilveryBarbsDialog(originTokenUuid, actorUuid, tokenUu
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
 
-                        resolve({silveryBarbsDecision});
+                        let effectData = [
+                            {
+                              "icon": "icons/magic/control/control-influence-puppet.webp",
+                              "duration": {
+                                "rounds": null,
+                                "startTime": null,
+                                "seconds": 999999,
+                                "combat": null,
+                                "turns": null,
+                                "startRound": null,
+                                "startTurn": null
+                              },
+                              "disabled": false,
+                              "name": "Silvery Barbs - Advantage",
+                              "changes": [
+                                {
+                                  "key": "flags.midi-qol.advantage.attack.all",
+                                  "mode": 0,
+                                  "value": "1",
+                                  "priority": 20
+                                },
+                                {
+                                  "key": "flags.midi-qol.advantage.ability.check.all",
+                                  "mode": 0,
+                                  "value": "1",
+                                  "priority": 20
+                                },
+                                {
+                                  "key": "flags.midi-qol.advantage.ability.save.all",
+                                  "mode": 0,
+                                  "value": "1",
+                                  "priority": 20
+                                }
+                              ],
+                              "transfer": false,
+                              "flags": {
+                                "dae": {
+                                  "specialDuration": [
+                                    "1Attack",
+                                    "isCheck",
+                                    "isSave"
+                                  ]
+                                }
+                              }
+                            }
+                          ];
+                        await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.uuid, effects: effectData });
+
+                        resolve({silveryBarbsDecision, returnedTokenUuid});
                     }
                 },
                 no: {
                     label: "No",
                     callback: async () => {
                         // Reaction Declined
-                        resolve({ silveryBarbsDecision: false });
+                        resolve({ silveryBarbsDecision: false, returnedTokenUuid: null });
                     }
                 },
             }, default: "no",

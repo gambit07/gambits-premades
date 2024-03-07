@@ -27,7 +27,7 @@ Hooks.once('ready', async function() {
         await socket.executeAsGM("counterspell", { workflowData: workflowItemUuid });
     });
 
-    /*Hooks.on("midi-qol.preCheckHits", async (workflow) => {
+    Hooks.on("midi-qol.preCheckHits", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         await socket.executeAsGM("silveryBarbs", { workflowData: workflowItemUuid, workflowType: "attack" });
     });
@@ -35,7 +35,7 @@ Hooks.once('ready', async function() {
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         await socket.executeAsGM("silveryBarbs", { workflowData: workflowItemUuid, workflowType: "save" });
-    });*/
+    });
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {
