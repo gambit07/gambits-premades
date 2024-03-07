@@ -17,7 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Silvery Barbs: **BETA** - First release! From what I've tested so far things seem to be working well, but I'm sure bugs will be found with this out in the wild. Currently the chat card will not be updated to reflect changes for a saving throw, but there is a chat card output with the result to the triggering actor. Silvery Barbs can be enabled in the module settings." >> release_notes.txt
+          echo "  - Silvery Barbs: **BETA** - First release! From what Ive tested so far things seem to be working well, but Im sure bugs will be found with this out in the wild. Currently the chat card will not be updated to reflect changes for a saving throw, but there is a chat card output with the result to the triggering actor. Silvery Barbs can be enabled in the module settings." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
