@@ -6,7 +6,7 @@ A collection of automated items, spells, feats, and anything else I decide to do
 
 <b>Instructions:</b>
 <p>
-Most of my automations exist as an item in my compendiums, which are labeled as GPS [Automation Item Type]. To use these automations, you can simply replace the item on the characters sheet with the item from my compendium. Alternatively, this module is also integrated with Chris Premades modules 'Medkit' button. This is a button on the item sheet which can be pressed to automatically import an item automation, based on compendium priorities within the Chris Premades module. To setup my module for proper integration with Chris Premades see the screenshot below:
+Most of my automations exist as an item in my compendiums, which are labeled as GPS [Automation Item Type]. Each automation item in a compendium will include an item description with the required dependencies, and any relevant information related to the setup of the item. To use these automations, you can simply replace the item on the characters sheet with the item from my compendium. Alternatively, this module is also integrated with Chris Premades modules 'Medkit' button. This is a button on the item sheet which can be pressed to automatically import an item automation, based on compendium priorities within the Chris Premades module. To setup my module for proper integration with Chris Premades see the screenshot below:
 
 ![cpr_medkit](https://github.com/gambit07/gambits-premades/assets/4236874/bf17af7b-2304-48e2-a9f1-985b688a4e5e)
 
