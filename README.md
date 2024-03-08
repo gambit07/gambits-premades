@@ -4,8 +4,8 @@
 
 A collection of automated items, spells, feats, and anything else I decide to do! This module primarily uses MidiQOL along with other synergistic modules to achieve these automations, credit to tposney, caewok, zhell, aedif, and saibot for all of their relevant modules.
 
-<b>Instructions:</b<
-
+<b>Instructions:</b>
+<p>
 Most of my automations exist as an item in my compendiums, which are labeled as GPS [Automation Item Type]. To use these automations, you can simply replace the item on the characters sheet with the item from my compendium. Alternatively, this module is also integrated with Chris Premades modules 'Medkit' button. This is a button on the item sheet which can be pressed to automatically import an item automation, based on compendium priorities within the Chris Premades module. To setup my module for proper integration with Chris Premades see the screenshot below:
 
 ![cpr_medkit](https://github.com/gambit07/gambits-premades/assets/4236874/bf17af7b-2304-48e2-a9f1-985b688a4e5e)
@@ -13,6 +13,7 @@ Most of my automations exist as an item in my compendiums, which are labeled as 
 Finally, three of my more complex automations are setup within my modules settings page. These automations are Counterspell, Silvery Barbs, and Opportunity Attacks. Simply click the checkbox on my module settings page to activate these automations. Screenshot below:
 
 ![gps_settings](https://github.com/gambit07/gambits-premades/assets/4236874/989d273a-a8b5-43cd-b725-097723be15b8)
+</p>
 
 I feel like videos are the best way to see these type of automations, so including a partial list of videos below. I'll continue to add more over time.
 
