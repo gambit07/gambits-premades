@@ -10,7 +10,8 @@ export async function silveryBarbs({workflowData,workflowType}) {
     
     if (!game.combat) return;
 
-    if(workflowType === "attack" && !workflow.hitTargets.first()) return;
+    // Check if attack hits
+    if((workflowType === "attack" && workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) || workflow.item.name === "Opportunity Attack") return;
 
     function findSilveryBarbsTokens(token, dispositionCheck) {
         let validTokens = canvas.tokens.placeables.filter(t => {

@@ -16,10 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Silvery Barbs: Now compatible with the Counterspell automation, Silvery Barbs will be cancelled if counterspelled." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Silvery Barbs: Fix advantage targets not displaying if only one target was present." >> release_notes.txt
+          echo "  - Silvery Barbs: Fix wrong check being done for is hit on attacks for the relevant workflow. Fix Silvery Barbs being triggered on combat start." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
