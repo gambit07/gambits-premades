@@ -103,6 +103,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
             let targetUuids = Array.from(workflow.saves)
             .filter(token => token.document.disposition !== validTokenPrimary.document.disposition)
             .map(token => token.actor.uuid);
+            if(!targetUuids) return;
             let targetNames = Array.from(workflow.saves)
             .filter(token => token.document.disposition !== validTokenPrimary.document.disposition)
             .map(token => token.actor.name);
@@ -164,6 +165,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
         }
 
             if(workflowType === "attack") {
+                if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
                 const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack");
                 if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
                 if (silveryBarbsDecision === true) {

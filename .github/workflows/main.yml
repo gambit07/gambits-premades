@@ -17,7 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Silvery Barbs: Fix wrong check being done for is hit on attacks for the relevant workflow. Fix Silvery Barbs being triggered on combat start." >> release_notes.txt
+          echo "  - Silvery Barbs: Add additional checks to prevent ally on ally violence." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
