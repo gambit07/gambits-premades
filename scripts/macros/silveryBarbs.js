@@ -166,51 +166,50 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack");
                 if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
                 if (silveryBarbsDecision === true) {
+                    let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total
+                    let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
+                    const saveSetting = workflow.options.noOnUseMacro;
+                    workflow.options.noOnUseMacro = true;
+                    await workflow.setAttackRoll(await new Roll(`1d20 + ${rerollAddition}`).roll({async: true}));
+                    workflow.options.noOnUseMacro = saveSetting;
 
-                let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total
-                let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
-                const saveSetting = workflow.options.noOnUseMacro;
-                workflow.options.noOnUseMacro = true;
-                await workflow.setAttackRoll(await new Roll(`1d20 + ${rerollAddition}`).roll({async: true}));
-                workflow.options.noOnUseMacro = saveSetting;
+                    if(workflow.attackTotal < targetAC) {
+                        let chatList = [];
 
-                if(workflow.attackTotal < targetAC) {
-                    let chatList = [];
+                        chatList = `The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
 
-                    chatList = `The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
+                        let msgHistory = [];
+                        game.messages.reduce((list, message) => {
+                            if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                        }, msgHistory);
+                        let itemCard = msgHistory[msgHistory.length - 1];
+                        let chatMessage = await game.messages.get(itemCard);
+                        let content = await duplicate(chatMessage.content);
+                        let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
+                        if (insertPosition !== -1) {
+                            content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
+                        }
+                        await chatMessage.update({ content: content });
                     }
-                    await chatMessage.update({ content: content });
-                }
 
-                else {
-                    let chatList = [];
+                    else {
+                        let chatList = [];
 
-                    chatList = `The creature was silvery barbed, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                        chatList = `The creature was silvery barbed, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
 
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
+                        let msgHistory = [];
+                        game.messages.reduce((list, message) => {
+                            if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                        }, msgHistory);
+                        let itemCard = msgHistory[msgHistory.length - 1];
+                        let chatMessage = await game.messages.get(itemCard);
+                        let content = await duplicate(chatMessage.content);
+                        let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
+                        if (insertPosition !== -1) {
+                            content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
+                        }
+                        await chatMessage.update({ content: content });
                     }
-                    await chatMessage.update({ content: content });
-                }
             }
         }
     }
@@ -234,7 +233,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
             <div style='display: flex; width: 100%; gap: 20px;'>
                 <div style='flex-grow: 1; display: flex; flex-direction: column;'>
                     <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
-                    ${validFriendlies.length > 1 ? 
+                    ${validFriendlies.length >= 1 ? 
                         `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
                             ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
                         </select>` : '<p>No valid friendlies in range.</p>'
@@ -270,7 +269,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
 
                     <div style='flex-grow: 1; display: flex; flex-direction: column; border-left: 1px solid #ccc; padding-left: 20px;'>
                         <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
-                        ${validFriendlies.length > 1 ? 
+                        ${validFriendlies.length >= 1 ? 
                             `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
                                 ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
                             </select>` : '<p>No valid friendlies in range.</p>'
@@ -318,15 +317,17 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                         };
 
                         const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
-                        
-                        let silveryBarbsDecision = true;
-                        let returnedTokenUuid = originToken.document.uuid;
 
                         const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
 
                         if (!hasEffectApplied) {
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
+
+                        if(itemRoll.aborted === true) return resolve({ silveryBarbsDecision: false, returnedTokenUuid: null });
+                        
+                        let silveryBarbsDecision = true;
+                        let returnedTokenUuid = originToken.document.uuid;
 
                         let effectData = [
                             {

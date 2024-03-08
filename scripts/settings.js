@@ -64,7 +64,7 @@ function registerSettings() {
 
     game.settings.register('gambits-premades', 'Silvery Barbs Timeout', {
         name: "Silvery Barbs Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
         scope: 'world',
         config: true,
         type: String,
