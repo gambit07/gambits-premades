@@ -79,4 +79,47 @@ function registerSettings() {
             }
         }
     });
+
+    game.settings.registerMenu('gambits-premades', 'customConfig', {
+        name: game.i18n.localize("Configure Homebrew Options"),
+        label: game.i18n.localize("Configure"),
+        hint: game.i18n.localize("Homebrew options for the spells below"),
+        icon: 'fas fa-wrench',
+        scope: 'world',
+        config: true,
+        type: homebrewSettingsMenu,
+        restricted: true
+    });
+
+    game.settings.register("gambits-premades", "disableSilveryBarbsOnNat20", {
+        name: "disableSilveryBarbsOnNat20",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+}
+
+class homebrewSettingsMenu extends FormApplication {
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id: "homebrewSettingsMenu",
+            title: "Homebrew Options",
+            template: "modules/gambits-premades/templates/homebrewSettingsMenu.html",
+            classes: ["gambits-premades", "settings-window"],
+            width: 500,
+            closeOnSubmit: true
+        });
+    }
+
+    getData() {
+        return {
+            disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20")
+        };
+    }
+
+    async _updateObject(event, formData) {
+        await game.settings.set("gambits-premades", "disableSilveryBarbsOnNat20", formData.disableSilveryBarbsOnNat20);
+    }
 }

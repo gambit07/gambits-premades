@@ -6,13 +6,16 @@ export async function silveryBarbs({workflowData,workflowType}) {
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
     if(!workflow) return;
-    console.log(workflow)
     if(workflow.item.name.toLowerCase() === "silvery barbs") return;
     
     if (!game.combat) return;
 
     // Check if attack hits
-    if((workflowType === "attack" && workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) || workflow.item.name === "Opportunity Attack") return;
+    if(workflowType === "attack" && workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) return;
+    // Check if there is a save success target
+    if(workflowType === "save" && workflow.saves.size === 0) return;
+    // Check if Opportunity Attack is initiating the workflow
+    if(workflow.item.name === "Opportunity Attack") return;
 
     function findSilveryBarbsTokens(token, dispositionCheck) {
         let validTokens = canvas.tokens.placeables.filter(t => {
@@ -167,6 +170,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
 
             if(workflowType === "attack") {
                 if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
+                if (game.settings.get('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
                 const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack");
                 if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
                 if (silveryBarbsDecision === true) {
@@ -308,7 +312,6 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                         }
 
                         let chosenSpell = actor.items.find(i => i.name.toLowerCase() === "silvery barbs");
-                        console.log(chosenSpell)
 
                         chosenSpell.prepareData();
                         chosenSpell.prepareFinalAttributes();

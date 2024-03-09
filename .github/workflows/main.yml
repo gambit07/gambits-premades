@@ -16,8 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Silvery Barbs: Fix attack rolls of allies triggering silvery barbs. Updated Effect icon to use the Silvery Barbs item icon" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Silvery Barbs: Add homebrew option to disable Silvery Barbs on a nat 20 attack roll. Optimize validation checks slightly" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
