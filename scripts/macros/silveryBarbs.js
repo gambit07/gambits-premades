@@ -6,6 +6,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
     if(!workflow) return;
+    console.log(workflow)
     if(workflow.item.name.toLowerCase() === "silvery barbs") return;
     
     if (!game.combat) return;
@@ -103,7 +104,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
             let targetUuids = Array.from(workflow.saves)
             .filter(token => token.document.disposition !== validTokenPrimary.document.disposition)
             .map(token => token.actor.uuid);
-            if(!targetUuids) return;
+            if(targetUuids.length === 0) return;
             let targetNames = Array.from(workflow.saves)
             .filter(token => token.document.disposition !== validTokenPrimary.document.disposition)
             .map(token => token.actor.name);
@@ -307,6 +308,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                         }
 
                         let chosenSpell = actor.items.find(i => i.name.toLowerCase() === "silvery barbs");
+                        console.log(chosenSpell)
 
                         chosenSpell.prepareData();
                         chosenSpell.prepareFinalAttributes();
@@ -334,7 +336,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
 
                         let effectData = [
                             {
-                              "icon": "icons/magic/control/control-influence-puppet.webp",
+                              "icon": `${chosenSpell.img}`,
                               "duration": {
                                 "rounds": null,
                                 "startTime": null,

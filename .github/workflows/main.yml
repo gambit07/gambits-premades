@@ -17,7 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Silvery Barbs: Add additional checks to prevent ally on ally violence." >> release_notes.txt
+          echo "  - Silvery Barbs: Fix attack rolls of allies triggering silvery barbs. Updated Effect icon to use the Silvery Barbs item icon" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
