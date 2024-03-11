@@ -143,6 +143,9 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                 </div>
             </div>`;
 
+        let dialogInteraction = undefined;
+        let timer;
+
         let dialog = new Dialog({
             title: dialogTitle,
             content: dialogContent,
@@ -150,6 +153,7 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                 yes: {
                     label: "Yes",
                     callback: async () => {
+                        dialogInteraction = true;
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
                         let token = await fromUuid(tokenUuid);
@@ -222,11 +226,27 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                     label: "No",
                     callback: async () => {
                         // Reaction Declined
+                        dialogInteraction = true;
                         resolve({ counterspellSuccess: false, counterspellLevel: false });
                     }
                 },
             }, default: "no",
-                render: (html) => { let timeLeft = initialTimeLeft; const countdownElement = html.find("#countdown"); const timer = setInterval(() => { timeLeft--; countdownElement.text(timeLeft); if (timeLeft <= 0) { clearInterval(timer); dialog.close(); } }, 1000); setTimeout(() => { clearInterval(timer); if (timeLeft > 0) dialog.close(); }, timeLeft * 1000); }
+            render: (html) => {
+                let timeLeft = initialTimeLeft;
+                const countdownElement = html.find("#countdown");
+                timer = setInterval(() => {
+                    timeLeft--;
+                    countdownElement.text(timeLeft);
+                    if (timeLeft <= 0) {
+                        dialog.data.buttons.no.callback();
+                        dialog.close();
+                    }
+                }, 1000);
+            },
+            close: () => {
+                clearInterval(timer);
+                if (dialogInteraction === undefined) resolve({ counterspellSuccess: false, counterspellLevel: false });
+            }
         });
         dialog.render(true);
     })

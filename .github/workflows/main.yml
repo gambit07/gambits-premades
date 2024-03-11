@@ -17,7 +17,10 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Reckless Attack: Presents a dialog to the user on their first attack asking if they would like to use reckless attack. Automatically handles initiating actors advantage on their turn and advantage against them for the round" >> release_notes.txt
+          echo "  - Reckless: Monster feature, sends a dialog to the gm on their first attack asking if they would like to use reckless. Automatically handles initiating monsters mwak advantage on their turn and advantage against them for the round" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Silvery Barbs: Fix dialog not progressing if timed out. Fix error if no tokens in range for advantage. Add dsn for attack re-roll." >> release_notes.txt
+          echo "  - Counterspell: Fix dialog not progressing if timed out." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

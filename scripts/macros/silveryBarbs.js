@@ -178,7 +178,9 @@ export async function silveryBarbs({workflowData,workflowType}) {
                     let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
                     const saveSetting = workflow.options.noOnUseMacro;
                     workflow.options.noOnUseMacro = true;
-                    await workflow.setAttackRoll(await new Roll(`1d20 + ${rerollAddition}`).roll({async: true}));
+                    let reroll = await new Roll(`1d20 + ${rerollAddition}`).roll({async: true});
+                    await workflow.setAttackRoll(reroll);
+                    await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
                     workflow.options.noOnUseMacro = saveSetting;
 
                     if(workflow.attackTotal < targetAC) {
@@ -292,6 +294,9 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
         `;
         }
 
+        let dialogInteraction = undefined;
+        let timer;
+
         let dialog = new Dialog({
             title: dialogTitle,
             content: dialogContent,
@@ -299,6 +304,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                 yes: {
                     label: "Yes",
                     callback: async (html) => {
+                        dialogInteraction = true;
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
                         let originToken;
@@ -383,8 +389,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                               }
                             }
                           ];
-                        await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.uuid, effects: effectData });
-
+                        if(advantageToken) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.uuid, effects: effectData });
                         resolve({silveryBarbsDecision, returnedTokenUuid});
                     }
                 },
@@ -392,11 +397,27 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                     label: "No",
                     callback: async () => {
                         // Reaction Declined
+                        dialogInteraction = true;
                         resolve({ silveryBarbsDecision: false, returnedTokenUuid: null });
                     }
                 },
             }, default: "no",
-                render: (html) => { let timeLeft = initialTimeLeft; const countdownElement = html.find("#countdown"); const timer = setInterval(() => { timeLeft--; countdownElement.text(timeLeft); if (timeLeft <= 0) { clearInterval(timer); dialog.close(); } }, 1000); setTimeout(() => { clearInterval(timer); if (timeLeft > 0) dialog.close(); }, timeLeft * 1000); }
+            render: (html) => {
+                let timeLeft = initialTimeLeft;
+                const countdownElement = html.find("#countdown");
+                timer = setInterval(() => {
+                    timeLeft--;
+                    countdownElement.text(timeLeft);
+                    if (timeLeft <= 0) {
+                        dialog.data.buttons.no.callback();
+                        dialog.close();
+                    }
+                }, 1000);
+            },
+            close: () => {
+                clearInterval(timer);
+                if (dialogInteraction === undefined) resolve({ silveryBarbsDecision: false, returnedTokenUuid: null });
+            }
         });
         dialog.render(true);
     })
