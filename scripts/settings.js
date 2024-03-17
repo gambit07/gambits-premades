@@ -80,6 +80,33 @@ function registerSettings() {
         }
     });
 
+    /*game.settings.register('gambits-premades', 'Enable Cutting Words', {
+        name: "Enable Cutting Words",
+        hint: "If enabled, this will present an appropriate dialog to users with cutting words, and automate cutting words application when used.",
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });*/
+
+    /*game.settings.register('gambits-premades', 'Cutting Words Timeout', {
+        name: "Cutting Words Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        scope: 'world',
+        config: true,
+        type: String,
+        default: "30",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+                // Used numericValue as a number
+            } else {
+                // Handle invalid input
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });*/
+
     game.settings.registerMenu('gambits-premades', 'customConfig', {
         name: game.i18n.localize("Configure Homebrew Options"),
         label: game.i18n.localize("Configure"),
@@ -93,6 +120,15 @@ function registerSettings() {
 
     game.settings.register("gambits-premades", "disableSilveryBarbsOnNat20", {
         name: "disableSilveryBarbsOnNat20",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register("gambits-premades", "enableSilveryBarbsOnNat20", {
+        name: "enableSilveryBarbsOnNat20",
         scope: "world",
         config: false,
         type: Boolean,
@@ -115,11 +151,13 @@ class homebrewSettingsMenu extends FormApplication {
 
     getData() {
         return {
-            disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20")
+            disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
+            enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20")
         };
     }
 
     async _updateObject(event, formData) {
         await game.settings.set("gambits-premades", "disableSilveryBarbsOnNat20", formData.disableSilveryBarbsOnNat20);
+        await game.settings.set("gambits-premades", "enableSilveryBarbsOnNat20", formData.enableSilveryBarbsOnNat20);
     }
 }

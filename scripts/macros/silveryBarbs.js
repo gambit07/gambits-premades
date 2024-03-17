@@ -1,6 +1,4 @@
 export async function silveryBarbs({workflowData,workflowType}) {
-    if(!game.user.isGM) return;
-    if (game.settings.get('gambits-premades', 'Enable Silvery Barbs') === false) return;
     const module = await import('../module.js');
     const socket = module.socket;
     const workflowUuid = workflowData;
@@ -111,6 +109,15 @@ export async function silveryBarbs({workflowData,workflowType}) {
             let targetNames = Array.from(workflow.saves)
             .filter(token => token.document.disposition !== validTokenPrimary.document.disposition)
             .map(token => token.actor.name);
+            
+            let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering Silvery Barbs.`
+            let chatData = {
+            user: game.users.find(u => u.isGM).id,
+            content: content,
+            whisper: game.users.find(u => u.isGM).id
+            };
+            ChatMessage.create(chatData);
+
             const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save");
             if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
             if (silveryBarbsDecision === true) {
@@ -171,6 +178,16 @@ export async function silveryBarbs({workflowData,workflowType}) {
             if(workflowType === "attack") {
                 if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
                 if (game.settings.get('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
+                if (game.settings.get('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return;
+
+                let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering Silvery Barbs.`
+                let chatData = {
+                user: game.users.find(u => u.isGM).id,
+                content: content,
+                whisper: game.users.find(u => u.isGM).id
+                };
+                ChatMessage.create(chatData);
+
                 const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack");
                 if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
                 if (silveryBarbsDecision === true) {
@@ -179,7 +196,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                     const saveSetting = workflow.options.noOnUseMacro;
                     workflow.options.noOnUseMacro = true;
                     let reroll = await new Roll(`1d20 + ${rerollAddition}`).roll({async: true});
-                    await workflow.setAttackRoll(reroll);
+                    if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
                     await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
                     workflow.options.noOnUseMacro = saveSetting;
 
@@ -383,7 +400,8 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                                   "specialDuration": [
                                     "1Attack",
                                     "isCheck",
-                                    "isSave"
+                                    "isSave",
+                                    "isSkill"
                                   ]
                                 }
                               }

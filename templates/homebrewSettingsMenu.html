@@ -1,7 +1,19 @@
-<form>
+<form class="categories flexcol">
   <div class="form-group">
-    <label for="disableSilveryBarbsOnNat20">Silvery Barbs: Disable on a Nat 20 Attack Roll</label>
-    <input type="checkbox" id="disableSilveryBarbsOnNat20" name="disableSilveryBarbsOnNat20" data-dtype="Boolean" {{checked disableSilveryBarbsOnNat20}}>
+    <label style="flex-grow: 1; flex-basis: auto;" for="disableSilveryBarbsOnNat20">Silvery Barbs: Disable on a Nat 20 Attack Roll</label>
+    <div class="form-fields">
+      <input type="checkbox" id="disableSilveryBarbsOnNat20" name="disableSilveryBarbsOnNat20" data-dtype="Boolean" {{checked disableSilveryBarbsOnNat20}}/>
+    </div>
+    </div>
+    <div class="form-group">
+    <label style="flex-grow: 1; flex-basis: auto;" for="enableSilveryBarbsOnNat20">Silvery Barbs: Enable only on a Nat 20 Attack Roll</label>
+    <div class="form-fields">
+      <input type="checkbox" id="enableSilveryBarbsOnNat20" name="enableSilveryBarbsOnNat20" data-dtype="Boolean" {{checked enableSilveryBarbsOnNat20}}/>
+    </div>
   </div>
-  <button type="submit">Save Changes</button>
+  <footer class="sheet-footer flexrow">
+    <button type="submit" name="submit">
+        <i class="fa fa-check"></i> Save Changes
+    </button>
+</footer>
 </form>

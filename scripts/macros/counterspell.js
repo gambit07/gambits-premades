@@ -1,13 +1,17 @@
-export async function counterspell(data) {
-    if(!game.user.isGM) return;
-    if (game.settings.get('gambits-premades', 'Enable Counterspell') === false) return;
+export async function counterspell({ workflowData }) {
     const module = await import('../module.js');
     const socket = module.socket;
-    const workflowUuid = data.workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
+    const workflowUuid = workflowData;
+    const workflow = await MidiQOL.Workflow.getWorkflow(`${workflowUuid}`);
     if(!workflow) return;
-    if(workflow.item.type !== "spell" || workflow.item.name.toLowerCase() === "counterspell") return;     
-    //if(workflow.item.type !== "spell" || (workflow.item.type === "spell" && workflow.item.system.level === 0) || workflow.item.name.toLowerCase() === "counterspell") return; //Use this instead if you'd like to disable cantrips
+    if(workflow.item.type !== "spell" || workflow.item.name.toLowerCase() === "counterspell") return;
+    
+    let lastMessage = game.messages.contents[game.messages.contents.length - 1]
+    if(lastMessage) {
+        lastMessage.update({
+            whisper: [game.users.find((u) => u.isGM && u.active).id]
+        });
+    }
     
     if (!game.combat) return;
 
@@ -94,10 +98,22 @@ export async function counterspell(data) {
         if (!browserUser.active) {
             browserUser = game.users?.activeGM;
         }
+
+        let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a spell triggering Counterspell.`
+        let chatData = {
+        user: game.users.find(u => u.isGM).id,
+        content: content,
+        whisper: game.users.find(u => u.isGM).id
+        };
+        let notificationMessage = await ChatMessage.create(chatData);
         
         const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary);
-        if (counterspellSuccess === false || !counterspellSuccess) continue;
+        if (counterspellSuccess === false || !counterspellSuccess) {
+            await notificationMessage.delete();
+            continue;
+        }
         if (counterspellSuccess === true) {
+            await notificationMessage.delete();
             castLevel = counterspellLevel;
             let findCounterspellTokensSecondary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
                 return checkedToken.document.disposition !== initiatingToken.document.disposition;
@@ -117,6 +133,14 @@ export async function counterspell(data) {
                     browserUser = game.users?.activeGM;
                 }
 
+                let contentSecondary = `<img src="${validTokenSecondary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenSecondary.actor.name} has a reaction available for a spell triggering Counterspell.`
+                let chatDataSecondary = {
+                user: game.users.find(u => u.isGM).id,
+                content: contentSecondary,
+                whisper: game.users.find(u => u.isGM).id
+                };
+                await ChatMessage.create(chatDataSecondary);
+
                 const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary);
                 if (counterspellSuccess === true) {
                     castLevel = counterspellLevel;
@@ -131,6 +155,7 @@ export async function counterspell(data) {
 
 export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUuid, castLevel, dialogTitle) {
     return await new Promise(resolve => {
+        async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); };
         const initialTimeLeft = Number(game.settings.get('gambits-premades', 'Counterspell Timeout'));
         let dialogContent = `
             <div style='display: flex; align-items: center; justify-content: space-between;'>
@@ -207,6 +232,7 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
                         }
+                        await wait(100); //Short pause for chat message creation
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {
                             if (message.flags["midi-qol"]?.itemId === chosenSpell._id && message.speaker.token === token.id) msgHistory.push(message.id);

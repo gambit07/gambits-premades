@@ -1,6 +1,4 @@
 async function enableOpportunityAttack(combat, combatEvent) {
-    if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
-    
     const itemName = 'Opportunity Attack';
     let compendium = game.packs.get("gambits-premades.gps-generic-features");
     let compendiumIndex = await compendium.getIndex();
