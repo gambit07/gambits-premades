@@ -96,7 +96,6 @@ export async function cuttingWords({workflowData,workflowType}) {
 
                     let adjustedFormula = formulas.map(term => {
                         if (term instanceof Die && term.flavor === damageChosen) {
-                            // Directly use the reroll total for adjustment
                             return `${term.number}d${term.faces}[${term.flavor}] - ${reroll.total}`;
                         } else {
                             return term.formula ? term.formula : term;
@@ -104,7 +103,6 @@ export async function cuttingWords({workflowData,workflowType}) {
                     }).join(" + ");
                 
                     let newRoll = await new Roll(adjustedFormula).roll({async: true});
-                    // Update the workflow with the new Roll object
                     await workflow.setDamageRoll(newRoll);
                     }
 
