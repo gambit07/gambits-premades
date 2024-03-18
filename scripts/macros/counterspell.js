@@ -105,15 +105,15 @@ export async function counterspell({ workflowData }) {
         content: content,
         whisper: game.users.find(u => u.isGM).id
         };
-        let notificationMessage = await ChatMessage.create(chatData);
+        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
         
         const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary);
         if (counterspellSuccess === false || !counterspellSuccess) {
-            await notificationMessage.delete();
+            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         if (counterspellSuccess === true) {
-            await notificationMessage.delete();
+            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             castLevel = counterspellLevel;
             let findCounterspellTokensSecondary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
                 return checkedToken.document.disposition !== initiatingToken.document.disposition;
@@ -134,20 +134,27 @@ export async function counterspell({ workflowData }) {
                 }
 
                 let contentSecondary = `<img src="${validTokenSecondary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenSecondary.actor.name} has a reaction available for a spell triggering Counterspell.`
-                let chatDataSecondary = {
+                let chatData = {
                 user: game.users.find(u => u.isGM).id,
                 content: contentSecondary,
                 whisper: game.users.find(u => u.isGM).id
                 };
-                await ChatMessage.create(chatDataSecondary);
+                let notificationMessageSecondary = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
 
                 const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary);
                 if (counterspellSuccess === true) {
+                    await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     castLevel = counterspellLevel;
                     break;
                 }
-                if (!counterspellSuccess && isLastToken) return workflow.aborted = true;
-                if (!counterspellSuccess) continue;
+                if (!counterspellSuccess && isLastToken) {
+                    await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
+                    return workflow.aborted = true;
+                }
+                if (!counterspellSuccess) {
+                    await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
+                    continue;
+                }
             }
         }
     }

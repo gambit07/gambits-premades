@@ -1,6 +1,7 @@
 import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
 import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
+import { deleteChatMessage } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -15,6 +16,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("showSilveryBarbsDialog", showSilveryBarbsDialog);
     socket.register("cuttingWords", cuttingWords);
     socket.register("showCuttingWordsDialog", showCuttingWordsDialog);
+    socket.register("deleteChatMessage", deleteChatMessage);
 })
 
 Hooks.once('ready', async function() {

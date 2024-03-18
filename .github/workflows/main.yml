@@ -16,18 +16,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Fireball: Automation to include the excellent cast effects from Eskiemoh. Cast variables are included at the top of the script so they can be easily changed per color preferences." >> release_notes.txt
-          echo "  - Triumph: 3rd Party Automation for Abyssal Brews Triumph Horn." >> release_notes.txt
-          echo "  - Duskfall Greatsword: Homebrew Automation that grants +2 to AC when being attacked with advantage." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Counterspell: Update to hide cast spell chat card prior to dialog display. Add and subsequently remove a notification message to GM while player dialog present." >> release_notes.txt
-          echo "  - Silvery Barbs: Add Homebrew option for attack rolls to only be enabled on a nat 20. Add and subsequently remove a notification message to GM while player dialog present." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix potential dialog not progressing if timed out." >> release_notes.txt
-          echo "  - Silvery Barbs: Add correct advantage effect expiration for skill checks. Fix to only set re-rolled attack if it is lower than the initial roll. Add homebrew option to only enable on a nat 20 for attack rolls. Correct the hook implementation for player initializations. I consider Silvery Barbs out of beta at this point." >> release_notes.txt
-          echo "  - Counterspell: Correct the hook implementation for player initializations." >> release_notes.txt
-          echo "  - Stroke of Luck: Fix chat card not displaying correctly on v3+ for attack rolls via re-working the implementation." >> release_notes.txt
+          echo "  - Opportunity Attack: Update token offset based on rippers/spoobs feedback." >> release_notes.txt
+          echo "  - Silvery Barbs: Fix for GM Notification message, correctly handles create/delete when initiated by a non-GM." >> release_notes.txt
+          echo "  - Counterspell: Fix for GM Notification message, correctly handles create/delete when initiated by a non-GM." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

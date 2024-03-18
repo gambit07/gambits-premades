@@ -116,11 +116,15 @@ export async function silveryBarbs({workflowData,workflowType}) {
             content: content,
             whisper: game.users.find(u => u.isGM).id
             };
-            ChatMessage.create(chatData);
+            let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
 
             const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save");
-            if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
+            if (silveryBarbsDecision === false || !silveryBarbsDecision) {
+                await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+                continue;
+            }
             if (silveryBarbsDecision === true) {
+                await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                 let saveDC = workflow.saveItem.system.save.dc;
                 let saveAbility = workflow.saveItem.system.save.ability;
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === returnedTokenUuid);
@@ -186,11 +190,16 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 content: content,
                 whisper: game.users.find(u => u.isGM).id
                 };
-                ChatMessage.create(chatData);
+                let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+                
 
                 const {silveryBarbsDecision, returnedTokenUuid} = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack");
-                if (silveryBarbsDecision === false || !silveryBarbsDecision) continue;
+                if (silveryBarbsDecision === false || !silveryBarbsDecision) {
+                    await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+                    continue;
+                }
                 if (silveryBarbsDecision === true) {
+                    await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                     let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total
                     let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
                     const saveSetting = workflow.options.noOnUseMacro;
