@@ -80,7 +80,11 @@ export async function counterspell({ workflowData }) {
     return validTokens;
     }
 
-    let findCounterspellTokensPrimary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
+    let validTokenSecondary;
+    let selectedToken;
+    (!validTokenSecondary) ? selectedToken = workflow.token : selectedToken = validTokenSecondary;
+
+    let findCounterspellTokensPrimary = findCounterspellTokens(selectedToken, (checkedToken, initiatingToken) => {
         return checkedToken.id === initiatingToken.id || checkedToken.document.disposition === initiatingToken.document.disposition;
     });
     
@@ -115,13 +119,13 @@ export async function counterspell({ workflowData }) {
         if (counterspellSuccess === true) {
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             castLevel = counterspellLevel;
-            let findCounterspellTokensSecondary = findCounterspellTokens(workflow.token, (checkedToken, initiatingToken) => {
-                return checkedToken.document.disposition !== initiatingToken.document.disposition;
+            let findCounterspellTokensSecondary = findCounterspellTokens(validTokenPrimary, (checkedToken, initiatingToken) => {
+                return checkedToken.document.disposition === initiatingToken.document.disposition;
             });
 
             if(findCounterspellTokensSecondary.length === 0) return workflow.aborted = true;
 
-            for (const validTokenSecondary of findCounterspellTokensSecondary) {
+            for (validTokenSecondary of findCounterspellTokensSecondary) {
                 let actorUuidSecondary = validTokenSecondary.actor.uuid;
                 const dialogTitleSecondary = `${validTokenSecondary.actor.name} | Counterspell`;
                 let originTokenUuidSecondary = validTokenPrimary.document.uuid;

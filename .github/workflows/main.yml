@@ -16,10 +16,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Identify: Updated to account for system implementation of unidentified items. V3 will now support the system implementation directly, V2.x continues to be supported via the Forien and Archon modules, but they will not be accounted for on V3." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Update token offset based on rippers/spoobs feedback." >> release_notes.txt
-          echo "  - Silvery Barbs: Fix for GM Notification message, correctly handles create/delete when initiated by a non-GM." >> release_notes.txt
-          echo "  - Counterspell: Fix for GM Notification message, correctly handles create/delete when initiated by a non-GM." >> release_notes.txt
+          echo "  - Counterspell: Found issue with counter-counterspell not calculating distance to initial counterspell caster correctly, resolved" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
