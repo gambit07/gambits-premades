@@ -1,5 +1,3 @@
-<b>NOTE: This module is only fully validated for dnd5e 2.x compatability currently. Automations may or may not work on dnd5e 3.0+ and have not been fully tested.</b>
-
 <b>To support my continued work on this module! https://ko-fi.com/gambit07</b>
 
 A collection of automated items, spells, feats, and anything else I decide to do! This module primarily uses MidiQOL along with other synergistic modules to achieve these automations, credit to tposney, caewok, zhell, aedif, and saibot for all of their relevant modules.
