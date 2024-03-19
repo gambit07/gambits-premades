@@ -5,13 +5,7 @@ export async function counterspell({ workflowData }) {
     const workflow = await MidiQOL.Workflow.getWorkflow(`${workflowUuid}`);
     if(!workflow) return;
     if(workflow.item.type !== "spell" || workflow.item.name.toLowerCase() === "counterspell") return;
-    
-    let lastMessage = game.messages.contents[game.messages.contents.length - 1]
-    if(lastMessage) {
-        lastMessage.update({
-            whisper: [game.users.find((u) => u.isGM && u.active).id]
-        });
-    }
+    const lastMessage = game.messages.contents[game.messages.contents.length - 1];
     
     if (!game.combat) return;
 
@@ -92,6 +86,8 @@ export async function counterspell({ workflowData }) {
     let browserUser;
     
     for (const validTokenPrimary of findCounterspellTokensPrimary) {
+        if(lastMessage) lastMessage.update({ whisper: [game.users.find((u) => u.isGM && u.active).id] });
+
         let workflowStatus = workflow.aborted;
         if(workflowStatus === true) return;
         let actorUuidPrimary = validTokenPrimary.actor.uuid;
@@ -113,10 +109,12 @@ export async function counterspell({ workflowData }) {
         
         const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary);
         if (counterspellSuccess === false || !counterspellSuccess) {
+            if(lastMessage) lastMessage.update({ whisper: [] });
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         if (counterspellSuccess === true) {
+            if(lastMessage) lastMessage.update({ whisper: [] });
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             castLevel = counterspellLevel;
             let findCounterspellTokensSecondary = findCounterspellTokens(validTokenPrimary, (checkedToken, initiatingToken) => {
@@ -147,15 +145,18 @@ export async function counterspell({ workflowData }) {
 
                 const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary);
                 if (counterspellSuccess === true) {
+                    if(lastMessage) lastMessage.update({ whisper: [] });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     castLevel = counterspellLevel;
                     break;
                 }
                 if (!counterspellSuccess && isLastToken) {
+                    if(lastMessage) lastMessage.update({ whisper: [] });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     return workflow.aborted = true;
                 }
                 if (!counterspellSuccess) {
+                    if(lastMessage) lastMessage.update({ whisper: [] });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     continue;
                 }

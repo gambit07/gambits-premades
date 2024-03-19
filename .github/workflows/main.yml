@@ -16,11 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "**Module items are now coming from a 5e V3.x world. 0.1.2 is the last module version that was built on 5e 2.x. Moving forward all development will be for 5e 3.x, use 0.1.2 if you want to maintain full compatability with 5e 2.x, I will not be doing any more development for 2.x directly.**" >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Added support for deadly reach. Updated dialog titles to make it clear what actor the opportunity attack reaction is for" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - General: Fixed hidden startup error" >> release_notes.txt
+          echo "  - Counterspell: Fix counterspell blanket hiding all spell cards when turned on" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
