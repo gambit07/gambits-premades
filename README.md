@@ -20,6 +20,20 @@ I feel like videos are the best way to see these type of automations, so includi
 <p>
 
 - This automates opportunity attacks while taking into account opportunity attack specific features of the Sentinel feat, War Caster feat, Polearm Master feat, and Battle Master Fighters Brace feature. This feature will only function while actors are in combat. Note: The Sentinel part of this automation does not stop a token from moving when hit.
+- Opportunity Attack will account for the following features/spells when on an actor:
+  - Feat: Mobile
+  - Feat Polearm Master
+  - Feat: Sentinel
+  - Feat: War Caster
+  - Fighter Feature: Battle Master - Brace
+  - Fighter Feature: Battle Master - Riposte
+  - Generic Feature: Disengage
+  - Goblin Feature: Nimble Escape - Disengage
+  - Monster Feature: Deadly Reach
+  - Monster Feature: Flyby
+  - Rogue Feature: Swashbuckler - Fancy Footwork
+  - Spell: Infestation
+  - Spell: Kinetic Jaunt
 
 https://github.com/gambit07/gambits-premades/assets/4236874/a69d6510-4a64-485e-a705-344a264e324c
 
