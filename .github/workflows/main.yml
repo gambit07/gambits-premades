@@ -16,8 +16,9 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Counterspell: Fix counterspell blanket hiding all spell cards when turned on" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Tashas Hideous Laughter: Remove unnecessary chat card" >> release_notes.txt
+          echo "  - Counterspell: Tweak initial card hiding to only occur if an npc casts the initial spell" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

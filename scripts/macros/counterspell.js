@@ -86,7 +86,7 @@ export async function counterspell({ workflowData }) {
     let browserUser;
     
     for (const validTokenPrimary of findCounterspellTokensPrimary) {
-        if(lastMessage) lastMessage.update({ whisper: [game.users.find((u) => u.isGM && u.active).id] });
+        if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [game.users.find((u) => u.isGM && u.active).id] });
 
         let workflowStatus = workflow.aborted;
         if(workflowStatus === true) return;
