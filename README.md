@@ -373,7 +373,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/cc947ee4-5135-48de-8
 <summary><b>Identify</b> (click to expand)</summary>
 <p>
 
-https://github.com/gambit07/gambits-premades/assets/4236874/36224de1-6c8f-4110-a551-8dcfc5085b48
+https://github.com/gambit07/gambits-premades/assets/4236874/2125dc92-57a0-4dc7-b3b6-98655102b5c8
 
 </p>
 </details>
