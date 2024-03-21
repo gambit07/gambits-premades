@@ -1,8 +1,15 @@
-2024/03/19-15:05:47.003 70b0 Recovering log #1612
-2024/03/19-15:05:47.011 70b0 Delete type=0 #1612
-2024/03/19-15:05:47.011 70b0 Delete type=3 #1610
-2024/03/19-23:30:32.986 4434 Level-0 table #1617: started
-2024/03/19-23:30:32.986 4434 Level-0 table #1617: 0 bytes OK
-2024/03/19-23:30:32.990 4434 Delete type=0 #1615
-2024/03/19-23:30:33.018 4434 Manual compaction at level-0 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ys3CUptIPpG1FpZt.HvqYLk6a33Mq6j0n' @ 0 : 0; will stop at (end)
-2024/03/19-23:30:33.044 4434 Manual compaction at level-1 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ys3CUptIPpG1FpZt.HvqYLk6a33Mq6j0n' @ 0 : 0; will stop at (end)
+2024/03/19-23:41:50.714 70c4 Recovering log #1616
+2024/03/19-23:41:50.721 70c4 Delete type=0 #1616
+2024/03/19-23:41:50.721 70c4 Delete type=3 #1614
+2024/03/20-22:31:42.438 4434 Level-0 table #1621: started
+2024/03/20-22:31:42.446 4434 Level-0 table #1621: 49830 bytes OK
+2024/03/20-22:31:42.450 4434 Delete type=0 #1619
+2024/03/20-22:31:42.457 4434 Manual compaction at level-0 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!wLd8HBhcDcpEy0Gp.DWegiMAKX43CuDbS' @ 0 : 0; will stop at (end)
+2024/03/20-22:31:42.489 4434 Manual compaction at level-1 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!wLd8HBhcDcpEy0Gp.DWegiMAKX43CuDbS' @ 0 : 0; will stop at '!items.effects!ys3CUptIPpG1FpZt.HvqYLk6a33Mq6j0n' @ 155 : 1
+2024/03/20-22:31:42.489 4434 Compacting 1@1 + 1@2 files
+2024/03/20-22:31:42.494 4434 Generated table #1622@1: 35 keys, 61550 bytes
+2024/03/20-22:31:42.494 4434 Compacted 1@1 + 1@2 files => 61550 bytes
+2024/03/20-22:31:42.497 4434 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/03/20-22:31:42.498 4434 Delete type=2 #1579
+2024/03/20-22:31:42.498 4434 Delete type=2 #1621
+2024/03/20-22:31:42.502 4434 Manual compaction at level-1 from '!items.effects!ys3CUptIPpG1FpZt.HvqYLk6a33Mq6j0n' @ 155 : 1 .. '!items.effects!wLd8HBhcDcpEy0Gp.DWegiMAKX43CuDbS' @ 0 : 0; will stop at (end)

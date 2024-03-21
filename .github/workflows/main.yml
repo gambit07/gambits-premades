@@ -17,8 +17,10 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Updates:" >> release_notes.txt
-          echo "  - Tashas Hideous Laughter: Remove unnecessary chat card" >> release_notes.txt
-          echo "  - Counterspell: Tweak initial card hiding to only occur if an npc casts the initial spell" >> release_notes.txt
+          echo "  - Identify: Complete overhaul for 5e V3. No longer compatible with 5e V2.x. Identify will now present a list of unidentified items when cast. The user can choose to cast ritually, if not each row will have a list of valid spell slots that will be used when identified. Example video here: https://github.com/gambit07/gambits-premades/assets/4236874/2125dc92-57a0-4dc7-b3b6-98655102b5c8" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Reckless Attack: Resolve issue with mwak not being accounted for" >> release_notes.txt
+          echo "  - Counterspell: Couple small fixes" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

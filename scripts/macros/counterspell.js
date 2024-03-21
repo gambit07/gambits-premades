@@ -45,8 +45,8 @@ export async function counterspell({ workflowData }) {
             if(checkType === "prepared" || checkType === "always")
             {
                 for (let level = 3; level <= 9; level++) {
-                    let spellSlot = t.actor.system.spells[`spell${level}`];
-                    if (spellSlot) {
+                    let spellSlot = t.actor.system.spells[`spell${level}`].value;
+                    if (spellSlot > 0) {
                         hasSpellSlots = true;
                         break;
                     }
@@ -109,12 +109,12 @@ export async function counterspell({ workflowData }) {
         
         const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary);
         if (counterspellSuccess === false || !counterspellSuccess) {
-            if(lastMessage) lastMessage.update({ whisper: [] });
+            if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         if (counterspellSuccess === true) {
-            if(lastMessage) lastMessage.update({ whisper: [] });
+            if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             castLevel = counterspellLevel;
             let findCounterspellTokensSecondary = findCounterspellTokens(validTokenPrimary, (checkedToken, initiatingToken) => {
@@ -145,13 +145,13 @@ export async function counterspell({ workflowData }) {
 
                 const {counterspellSuccess, counterspellLevel} = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary);
                 if (counterspellSuccess === true) {
-                    if(lastMessage) lastMessage.update({ whisper: [] });
+                    if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     castLevel = counterspellLevel;
                     break;
                 }
                 if (!counterspellSuccess && isLastToken) {
-                    if(lastMessage) lastMessage.update({ whisper: [] });
+                    if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     return workflow.aborted = true;
                 }
