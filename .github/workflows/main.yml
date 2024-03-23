@@ -20,7 +20,7 @@ jobs:
           echo "  - Caltrops: Automation for the Caltrops item. Should cover all pieces." >> release_notes.txt
           echo "  - Fey Glass Caltrops: Homebrew automation for the Fey Glass Caltrops item." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Identify: Added settings option to prevent players from identifying items themselves. This works in conjunction with Identify which now uses a GM socket to identify the item on player use." >> release_notes.txt
+          echo "  - Identify: Added settings option to prevent players from identifying items themselves. This works in conjunction with Identify which now uses a GM socket to identify the item on player uses." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
