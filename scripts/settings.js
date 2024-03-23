@@ -80,6 +80,15 @@ function registerSettings() {
         }
     });
 
+    game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
+        name: "Enable Identify Restrictions",
+        hint: "If enabled, this will prevent player characters from Identifying unidentified items.",
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     /*game.settings.register('gambits-premades', 'Enable Cutting Words', {
         name: "Enable Cutting Words",
         hint: "If enabled, this will present an appropriate dialog to users with cutting words, and automate cutting words application when used.",

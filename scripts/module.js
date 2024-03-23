@@ -1,7 +1,7 @@
 import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
 import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
-import { deleteChatMessage } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -20,12 +20,13 @@ Hooks.once('socketlib.ready', async function() {
 })
 
 Hooks.once('ready', async function() {
-    //if(!game.user.isGM) return;
     loadCompendiumData().then(() => {
         game.modules.get('gambits-premades').medkitApi = medkitApi;
     }).catch(error => {
         console.error("Error loading compendium data:", error);
     });
+
+    game.modules.get('gambits-premades').gmIdentifyItem = gmIdentifyItem;
 
     async function executeWorkflow({ workflowItem, workflowData, workflowType }) {
         if (game.user.isGM) {
@@ -51,6 +52,13 @@ Hooks.once('ready', async function() {
         if (game.settings.get('gambits-premades', 'Enable Silvery Barbs') === true) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save" });
         //if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "save" });
     });
+
+    Hooks.on("preUpdateItem", (item, update) => {
+        if (!game.user.isGM && ("identified" in (update.system ?? {})) && game.settings.get('gambits-premades', 'Enable Identify Restrictions') === true) {
+            ui.notifications.error(`${game.users.find(u=>u.isGM)?.name}: Nice try, DENIED ;)`);
+            return false;
+        }
+      });
 
     /*Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;

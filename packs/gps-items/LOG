@@ -1,8 +1,15 @@
-2024/03/19-23:41:50.725 70c8 Recovering log #1608
-2024/03/19-23:41:50.731 70c8 Delete type=0 #1608
-2024/03/19-23:41:50.731 70c8 Delete type=3 #1606
-2024/03/20-22:31:42.450 4434 Level-0 table #1613: started
-2024/03/20-22:31:42.450 4434 Level-0 table #1613: 0 bytes OK
-2024/03/20-22:31:42.453 4434 Delete type=0 #1611
-2024/03/20-22:31:42.457 4434 Manual compaction at level-0 from '!items!6k4ycpLSro1bWCMa' @ 72057594037927935 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at (end)
-2024/03/20-22:31:42.489 4434 Manual compaction at level-1 from '!items!6k4ycpLSro1bWCMa' @ 72057594037927935 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at (end)
+2024/03/21-14:11:27.528 70c8 Recovering log #1616
+2024/03/21-14:11:27.539 70c8 Delete type=0 #1616
+2024/03/21-14:11:27.539 70c8 Delete type=3 #1614
+2024/03/23-16:08:05.655 4434 Level-0 table #1621: started
+2024/03/23-16:08:05.674 4434 Level-0 table #1621: 46585 bytes OK
+2024/03/23-16:08:05.677 4434 Delete type=0 #1619
+2024/03/23-16:08:05.677 4434 Manual compaction at level-0 from '!items!6k4ycpLSro1bWCMa' @ 72057594037927935 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at (end)
+2024/03/23-16:08:05.677 4434 Manual compaction at level-1 from '!items!6k4ycpLSro1bWCMa' @ 72057594037927935 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at '!items.effects!cWm5r6tAvamfPlgn.1924CZNFslmS12jz' @ 64 : 1
+2024/03/23-16:08:05.678 4434 Compacting 1@1 + 1@2 files
+2024/03/23-16:08:05.691 4434 Generated table #1622@1: 13 keys, 31647 bytes
+2024/03/23-16:08:05.691 4434 Compacted 1@1 + 1@2 files => 31647 bytes
+2024/03/23-16:08:05.695 4434 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/03/23-16:08:05.696 4434 Delete type=2 #1571
+2024/03/23-16:08:05.696 4434 Delete type=2 #1621
+2024/03/23-16:08:05.709 4434 Manual compaction at level-1 from '!items.effects!cWm5r6tAvamfPlgn.1924CZNFslmS12jz' @ 64 : 1 .. '!items.effects!rPLED9VTdrxEzpRX.gCMcWr5UW0b0GirN' @ 0 : 0; will stop at (end)

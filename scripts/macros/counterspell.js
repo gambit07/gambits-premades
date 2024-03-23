@@ -15,7 +15,8 @@ export async function counterspell({ workflowData }) {
             if (!t.actor) return;
 
             // Check if the token has counterspell available
-            if (!t.actor.items.find(i => i.name.toLowerCase() === "counterspell")) return;
+            let checkSpell = t.actor.items.find(i => i.name.toLowerCase() === "counterspell");
+            if (!checkSpell) return;
 
             // Check if the tokens reaction already used
             let reactionUsed = t.actor.effects.find(i => i.name.toLowerCase() === "reaction");
@@ -38,7 +39,7 @@ export async function counterspell({ workflowData }) {
 
             // Check if the token has available spell slots/uses for counterspell
             const spells = t.actor.system.spells;
-            let checkSpell = t.actor.items.find(i => i.name.toLowerCase() === "counterspell");
+            
             let checkType = checkSpell.system.preparation.mode;
             let hasSpellSlots = false;
             if(checkType === "prepared" && checkSpell.system.preparation.prepared === false) return;

@@ -16,11 +16,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Caltrops: Automation for the Caltrops item. Should cover all pieces." >> release_notes.txt
+          echo "  - Fey Glass Caltrops: Homebrew automation for the Fey Glass Caltrops item." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Identify: Complete overhaul for 5e V3. No longer compatible with 5e V2.x. Identify will now present a list of unidentified items when cast. The user can choose to cast ritually, if not each row will have a list of valid spell slots that will be used when identified. Example video here: https://github.com/gambit07/gambits-premades/assets/4236874/2125dc92-57a0-4dc7-b3b6-98655102b5c8" >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Reckless Attack: Resolve issue with mwak not being accounted for" >> release_notes.txt
-          echo "  - Counterspell: Couple small fixes" >> release_notes.txt
+          echo "  - Identify: Added settings option to prevent players from identifying items themselves. This works in conjunction with Identify which now uses a GM socket to identify the item on player use." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
