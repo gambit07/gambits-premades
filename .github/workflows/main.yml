@@ -17,10 +17,8 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Caltrops: Automation for the Caltrops item. Should cover all pieces." >> release_notes.txt
-          echo "  - Fey Glass Caltrops: Homebrew automation for the Fey Glass Caltrops item." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Identify: Added settings option to prevent players from identifying items themselves. This works in conjunction with Identify which now uses a GM socket to identify the item on player uses." >> release_notes.txt
+          echo "  - Indomitable: Automation for fighters Indomitable feature." >> release_notes.txt
+          echo "  - Indomitable Homebrew: Homebrew option in settings for auto succeeding a saving throw when using Indomitable instead of rolling." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

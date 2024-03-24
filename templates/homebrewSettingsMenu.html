@@ -1,5 +1,11 @@
 <form class="categories flexcol">
   <div class="form-group">
+    <label style="flex-grow: 1; flex-basis: auto;" for="enableAutoSucceedIndomitable">Indomitable: Enable auto success on use</label>
+    <div class="form-fields">
+      <input type="checkbox" id="enableAutoSucceedIndomitable" name="enableAutoSucceedIndomitable" data-dtype="Boolean" {{checked enableAutoSucceedIndomitable}}/>
+    </div>
+  </div>
+  <div class="form-group">
     <label style="flex-grow: 1; flex-basis: auto;" for="disableSilveryBarbsOnNat20">Silvery Barbs: Disable on a Nat 20 Attack Roll</label>
     <div class="form-fields">
       <input type="checkbox" id="disableSilveryBarbsOnNat20" name="disableSilveryBarbsOnNat20" data-dtype="Boolean" {{checked disableSilveryBarbsOnNat20}}/>

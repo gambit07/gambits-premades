@@ -135,9 +135,18 @@ function registerSettings() {
         default: false,
         type: Boolean
     });
-
+    
     game.settings.register("gambits-premades", "enableSilveryBarbsOnNat20", {
         name: "enableSilveryBarbsOnNat20",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register("gambits-premades", "enableAutoSucceedIndomitable", {
+        name: "enableAutoSucceedIndomitable",
         scope: "world",
         config: false,
         type: Boolean,
@@ -161,12 +170,14 @@ class homebrewSettingsMenu extends FormApplication {
     getData() {
         return {
             disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
-            enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20")
+            enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20"),
+            enableAutoSucceedIndomitable: game.settings.get("gambits-premades", "enableAutoSucceedIndomitable")
         };
     }
 
     async _updateObject(event, formData) {
         await game.settings.set("gambits-premades", "disableSilveryBarbsOnNat20", formData.disableSilveryBarbsOnNat20);
         await game.settings.set("gambits-premades", "enableSilveryBarbsOnNat20", formData.enableSilveryBarbsOnNat20);
+        await game.settings.set("gambits-premades", "enableAutoSucceedIndomitable", formData.enableAutoSucceedIndomitable);
     }
 }
