@@ -18,9 +18,9 @@ jobs:
         run: |
           echo "- General:" >> release_notes.txt
           echo "  - Quality of Life 3rd Party Dialog Updates" >> release_notes.txt
-          echo "    - Added GM Dialog Mirror setting. For Silvery Barbs and Counterspell (and future 3rd party reactions), this will duplicate a dialog to the GM if a player receives a dialog. The dialog is interactable for either party and will process the dialog choice for the selector while dismissing the dialog for the other party. This should resolve any time delay issues for GM's with players who are afk by allowing them to take control." >> release_notes.txt
+          echo "    - Added GM Dialog Mirror setting. For Silvery Barbs and Counterspell (and future 3rd party reactions), this will duplicate a dialog to the GM if a player receives a dialog. The dialog is interactable for either party and will process the dialog choice for the selector while dismissing the dialog for the other party. This should resolve any time delay issues for GMs with players who are afk by allowing them to take control." >> release_notes.txt
           echo "    - Added dialog Pause button if user needs more time to resolve, such as a decision with the GM for example." >> release_notes.txt
-          echo "  - Added top level compendium folder labeled Gambit's Premades. Split homebrew compendiums into additional compendiums for GPS Homebrew X vs GPS 3rd Party X" >> release_notes.txt
+          echo "  - Added top level compendium folder labeled Gambits Premades. Split homebrew compendiums into additional compendiums for GPS Homebrew X vs GPS 3rd Party X" >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
           echo "  - Amulet of the Devout: Automates regaining a charge of channel divinity by using the item." >> release_notes.txt
           echo "  - Dragon Turtle Dueling Shield: Homebrew item Dragon Turtle Dueling Shield. Because this is homebrew you will find the description on the compendium item. Works in concert with Opportunity Attack" >> release_notes.txt
