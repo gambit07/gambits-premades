@@ -1,7 +1,7 @@
 import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
 import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
-import { deleteChatMessage, gmIdentifyItem } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -17,6 +17,8 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("cuttingWords", cuttingWords);
     socket.register("showCuttingWordsDialog", showCuttingWordsDialog);
     socket.register("deleteChatMessage", deleteChatMessage);
+    socket.register("closeDialogById", closeDialogById);
+    socket.register("handleDialogPromises", handleDialogPromises);
 })
 
 Hooks.once('ready', async function() {
@@ -50,12 +52,11 @@ Hooks.once('ready', async function() {
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (game.settings.get('gambits-premades', 'Enable Silvery Barbs') === true) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save" });
-        //if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "save" });
     });
 
     Hooks.on("preUpdateItem", (item, update) => {
         if (!game.user.isGM && ("identified" in (update.system ?? {})) && game.settings.get('gambits-premades', 'Enable Identify Restrictions') === true) {
-            ui.notifications.error(`${game.users.find(u=>u.isGM)?.name}: Nice try, DENIED ;)`);
+            ui.notifications.error(`${game.settings.get('gambits-premades', 'Identify Restriction Message')}`);
             return false;
         }
       });

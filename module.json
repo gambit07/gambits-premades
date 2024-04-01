@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.1.8",
+  "version": "0.1.9",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
@@ -81,7 +81,49 @@
 			"name": "gps-actors",
       		"path": "packs/gps-actors",
 			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS 3rd Party Features",
+      		"type": "Item",
+			"name": "gps-3rd-party-features",
+      		"path": "packs/gps-3rd-party-features",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS 3rd Party Items",
+      		"type": "Item",
+			"name": "gps-3rd-party-items",
+      		"path": "packs/gps-3rd-party-items",
+			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS 3rd Party Spells",
+      		"type": "Item",
+			"name": "gps-3rd-party-spells",
+      		"path": "packs/gps-3rd-party-spells",
+			"module": "gambits-premades"
 		}],
+    "packFolders": [
+      {
+        "name": "Gambit's Premades",
+        "sorting": "m",
+        "color": "#1c8ad9",
+        "packs": [
+          "gps-spells",
+          "gps-class-features",
+          "gps-items",
+          "gps-monster-features",
+          "gps-generic-features",
+          "gps-homebrew-features",
+          "gps-homebrew-items",
+          "gps-homebrew-spells",
+          "gps-3rd-party-features",
+          "gps-3rd-party-items",
+          "gps-3rd-party-spells",
+          "gps-actors"
+        ]
+      }
+    ],
     "scripts": [
       "scripts/integrations/cpr.js",
       "scripts/macroFunctions.js",

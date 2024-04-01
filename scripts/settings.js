@@ -1,4 +1,13 @@
 function registerSettings() {
+    game.settings.register('gambits-premades', 'Mirror 3rd Party Dialog for GMs', {
+        name: "Mirror 3rd Party Dialog for GMs",
+        hint: "If enabled, 3rd party dialog's with the exception of Opportunity Attack will be sent to the GM as well as the player. Either party can interact with the dialog to use or dismiss it.",
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     game.settings.register('gambits-premades', 'Enable Opportunity Attack', {
         name: "Enable Opportunity Attack",
         hint: "If enabled, automatically adds 'Opportunity Attack' item to appropriate combatants on combat start and removes 'Opportunity Attack' item on combat end.",
@@ -82,11 +91,20 @@ function registerSettings() {
 
     game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
         name: "Enable Identify Restrictions",
-        hint: "If enabled, this will prevent player characters from Identifying unidentified items.",
+        hint: "If enabled, this will prevent player characters from Identifying unidentified items through usual methods.",
         scope: 'world',
         config: true,
         type: Boolean,
         default: false
+    });
+
+    game.settings.register('gambits-premades', 'Identify Restriction Message', {
+        name: "Identify Restriction Message",
+        hint: "This is the message that will display to users if they are restricted.",
+        scope: 'world',
+        config: true,
+        type: String,
+        default: "Nice try, DENIED ;)"
     });
 
     /*game.settings.register('gambits-premades', 'Enable Cutting Words', {

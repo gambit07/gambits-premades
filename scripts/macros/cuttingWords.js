@@ -13,7 +13,7 @@ export async function cuttingWords({workflowData,workflowType}) {
     if(workflow.item.name === "Opportunity Attack") return;
 
     function findCuttingWordsTokens(token, dispositionCheck) {
-        let validTokens = canvas.tokens.placeables.filter(t => {
+        let validTokens = game.combat.combatants.map(combatant => combatant.value).filter(t => {
             // Check if invalid token on the canvas
             if (!t.actor) return;
 
@@ -79,7 +79,6 @@ export async function cuttingWords({workflowData,workflowType}) {
         console.log("made it before damage")
         if(workflowType === "damage") {
             console.log(workflow, "damage cutting words")
-               //if(workflow.isCritical === true || workflow.isFumble === true) return;
                if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
                let damageTypes = workflow.damageRoll.dice.map(die => die.flavor);
                const {cuttingWordsDecision, damageChosen} = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes);
@@ -110,7 +109,7 @@ export async function cuttingWords({workflowData,workflowType}) {
 
                     let chatList = [];
 
-                    chatList = `The creature takes a cutting word, and their damage is reduced. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `The creature takes a cutting word, and their damage is reduced by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
@@ -125,9 +124,6 @@ export async function cuttingWords({workflowData,workflowType}) {
                     }
                     await chatMessage.update({ content: content });
            }
-        }
-        else {
-            console.log("why didn't the thing happennnn")
         }
 
             if(workflowType === "attack") {
