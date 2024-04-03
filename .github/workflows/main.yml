@@ -17,9 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Hideous Laughter: Put workaround in place for DAE issue not allowing spell animations to end" >> release_notes.txt
-          echo "  - Counterspell: Added better handling for Counterspell item lookup" >> release_notes.txt
-          echo "  - Silvery Barbs: Added better handling for Silvery Barbs item lookup" >> release_notes.txt
+          echo "  - Identify: Actually deploy the updated Identify item" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
