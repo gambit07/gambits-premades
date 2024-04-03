@@ -22,7 +22,9 @@ export async function silveryBarbs({workflowData,workflowType}) {
             if (!t.actor) return;
 
             // Check if the token has silvery barbs available
-            if (!t.actor.items.find(i => i.name.toLowerCase().includes("silvery barbs"))) return;
+            let checkSpells = t.actor.items.filter(i => i.name.toLowerCase().includes("silvery barbs"));
+            let checkSpell = checkSpells.find(spell => spell?.system?.preparation?.mode);
+            if(!checkSpell) return;
 
             // Check if the tokens reaction already used
             if (t.actor.effects.find(i => i.name.toLowerCase() === "reaction")) return;
@@ -43,8 +45,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
 
             // Check if the token has available spell slots/uses for silvery barbs
             const spells = t.actor.system.spells;
-            let checkSpell = t.actor.items.find(i => i.name.toLowerCase().includes("silvery barbs"));
-            let checkType = checkSpell.system.preparation.mode;
+            let checkType = checkSpell?.system?.preparation?.mode;
             let hasSpellSlots = false;
             if(checkType === "prepared" && checkSpell.system.preparation.prepared === false) return;
             if(checkType === "prepared" || checkType === "always")

@@ -16,13 +16,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Dissonant Whispers: Updated to work correctly with the new OA behaviour." >> release_notes.txt
-          echo "  - Opportunity Attack: Changed behaviour to prevent forced movement from triggering Opportunity Attacks by default. Added exception for Dissonant Whispers." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Identify: Resolved issues with the new player identify restriction to allow the Identify spell to properly work" >> release_notes.txt
-          echo "  - Opportunity Attack: Fixed issue with War Caster not accounting for all possible spell types on initialization. Fixed Brace and Riposte not looking for the correct item name with CPR." >> release_notes.txt
-          echo "  - Defile Ground: Fixed permissions issue for player based attacks within Defile Ground." >> release_notes.txt
+          echo "  - Hideous Laughter: Put workaround in place for DAE issue not allowing spell animations to end" >> release_notes.txt
+          echo "  - Counterspell: Added better handling for Counterspell item lookup" >> release_notes.txt
+          echo "  - Silvery Barbs: Added better handling for Silvery Barbs item lookup" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
