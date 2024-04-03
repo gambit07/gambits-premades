@@ -19,6 +19,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("deleteChatMessage", deleteChatMessage);
     socket.register("closeDialogById", closeDialogById);
     socket.register("handleDialogPromises", handleDialogPromises);
+    socket.register("gmIdentifyItem", gmIdentifyItem);
 })
 
 Hooks.once('ready', async function() {
@@ -28,7 +29,10 @@ Hooks.once('ready', async function() {
         console.error("Error loading compendium data:", error);
     });
 
-    game.modules.get('gambits-premades').gmIdentifyItem = gmIdentifyItem;
+    game.gps = {
+        gmIdentifyItem,
+        socket
+    };
 
     async function executeWorkflow({ workflowItem, workflowData, workflowType }) {
         if (game.user.isGM) {
@@ -56,6 +60,7 @@ Hooks.once('ready', async function() {
 
     Hooks.on("preUpdateItem", (item, update) => {
         if (!game.user.isGM && ("identified" in (update.system ?? {})) && game.settings.get('gambits-premades', 'Enable Identify Restrictions') === true) {
+            console.log(item, update)
             ui.notifications.error(`${game.settings.get('gambits-premades', 'Identify Restriction Message')}`);
             return false;
         }

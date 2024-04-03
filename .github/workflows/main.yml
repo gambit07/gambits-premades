@@ -16,22 +16,13 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Quality of Life 3rd Party Dialog Updates" >> release_notes.txt
-          echo "    - Added GM Dialog Mirror setting. For Silvery Barbs and Counterspell (and future 3rd party reactions), this will duplicate a dialog to the GM if a player receives a dialog. The dialog is interactable for either party and will process the dialog choice for the selector while dismissing the dialog for the other party. This should resolve any time delay issues for GMs with players who are afk by allowing them to take control." >> release_notes.txt
-          echo "    - Added dialog Pause button if user needs more time to resolve, such as a decision with the GM for example." >> release_notes.txt
-          echo "  - Added top level compendium folder labeled Gambits Premades. Split homebrew compendiums into additional compendiums for GPS Homebrew X vs GPS 3rd Party X" >> release_notes.txt
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Amulet of the Devout: Automates regaining a charge of channel divinity by using the item." >> release_notes.txt
-          echo "  - Dragon Turtle Dueling Shield: Homebrew item Dragon Turtle Dueling Shield. Because this is homebrew you will find the description on the compendium item. Works in concert with Opportunity Attack" >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Counterspell: Added dummy item for medkit with a correct reaction manual type. Modified to only process tokens with counterspell that are in combat." >> release_notes.txt
-          echo "  - Silvery Barbs: Added dummy item for medkit with a correct reaction manual type. Modified to only process tokens with counterspell that are in combat." >> release_notes.txt
-          echo "  - Identify Restriction: Added setting for GMs to modify the warning message players see when being bad." >> release_notes.txt
-          echo "  - Opportunity Attack: Added Zephyr Strike exclusion check." >> release_notes.txt
+          echo "  - Dissonant Whispers: Updated to work correctly with the new OA behaviour." >> release_notes.txt
+          echo "  - Opportunity Attack: Changed behaviour to prevent forced movement from triggering Opportunity Attacks by default. Added exception for Dissonant Whispers." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Silvery Barbs: Resolved issue with Saving Throws not correctly qualifying enemy tokens. Resolved issue with 0 spell slots still prompting a reaction." >> release_notes.txt
-          echo "  - Hideous Laughter: Fixed Prone being removed on effect end. Fixed missing asset error." >> release_notes.txt
+          echo "  - Identify: Resolved issues with the new player identify restriction to allow the Identify spell to properly work" >> release_notes.txt
+          echo "  - Opportunity Attack: Fixed issue with War Caster not accounting for all possible spell types on initialization. Fixed Brace and Riposte not looking for the correct item name with CPR." >> release_notes.txt
+          echo "  - Defile Ground: Fixed permissions issue for player based attacks within Defile Ground." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
