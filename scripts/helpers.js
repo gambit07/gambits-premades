@@ -33,13 +33,12 @@ export async function handleDialogPromises(userDialogPromise, gmDialogPromise) {
         let anyDialogInteracted = false;
 
         const checkAndResolve = () => {
-            // If either dialog has been interacted with by a user, resolve.
             if (anyDialogInteracted) {
                 resolve(anyDialogInteracted);
             }
-            // If both dialogs resolved without user interaction, resolve or reject based on your logic.
+
             else if (userResolved && gmResolved) {
-                resolve({programmaticallyClosed: true}); // or use reject based on your needs
+                resolve({programmaticallyClosed: true});
             }
         };
 
