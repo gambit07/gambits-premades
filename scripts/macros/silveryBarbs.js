@@ -169,7 +169,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 else {
                     let chatList = [];
 
-                    chatList = `The creature was silvery barbed, but still succeeded their save. <img src="${target.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `The creature was silvery barbed, but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px">`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {

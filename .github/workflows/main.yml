@@ -16,12 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt        
-          echo "  - Opportunity Attack: Support for Walled Templates new per template hiding option. The OA template will now hide border/highlighting even if general Walled Templates settings have border/highlighting on." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Counterspell: Fix an invalid variable declaration. Re-wrote function handling to better account for GM dialog mirror promises." >> release_notes.txt
-          echo "  - Opportunity Attack: Fix additional lookup issue effecting Brace and Riposte. Fix Zephyr Strike looking at the origin token instead of the initiating token." >> release_notes.txt
-          echo "  - Reckless Attack: Removed Adv Reminder check" >> release_notes.txt
+          echo "  - Silvery Barbs: Fix an invalid variable declaration." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
