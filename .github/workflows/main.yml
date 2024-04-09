@@ -16,8 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Silvery Barbs: Fix an invalid variable declaration." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Armor of Hexes: Handles all aspects of Warlock's Armor of Hexes." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
