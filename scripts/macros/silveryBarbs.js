@@ -115,12 +115,12 @@ export async function silveryBarbs({workflowData,workflowType}) {
             let result;
 
             if (game.settings.get('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user"}));
-                let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, targetNames, "save", `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm"}));
+                let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", null, `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user"}));
+                let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, targetNames, "save", null, `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm"}));
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save");
+                result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", null);
             }
             
             const { silveryBarbsDecision, returnedTokenUuid, source } = result;
@@ -169,7 +169,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 else {
                     let chatList = [];
 
-                    chatList = `The creature was silvery barbed, but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px">`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
@@ -192,7 +192,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 if (game.settings.get('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
                 if (game.settings.get('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return;
 
-                let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering Silvery Barbs.`
+                let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering Silvery Barbs.`
                 let chatData = {
                 user: game.users.find(u => u.isGM).id,
                 content: content,
@@ -202,12 +202,12 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 let result;
 
                 if (game.settings.get('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user"}));
-                    let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "attack", `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm"}));
+                    let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", workflow.attackTotal, `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user"}));
+                    let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "attack", workflow.attackTotal, `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm"}));
                 
                     result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
                 } else {
-                    result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack");
+                    result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", workflow.attackTotal);
                 }
                 
                 const { silveryBarbsDecision, returnedTokenUuid, source } = result;
@@ -220,7 +220,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 }
                 if (silveryBarbsDecision === true) {
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
-                    let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total
+                    let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
                     let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
                     const saveSetting = workflow.options.noOnUseMacro;
                     workflow.options.noOnUseMacro = true;
@@ -271,7 +271,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
     }
 }
 
-export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, dialogId, source) {
+export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, attackTotal, dialogId, source) {
     const module = await import('../module.js');
     const socket = module.socket;
 
@@ -287,7 +287,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
         dialogContent = `
             <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
             <div style='margin-bottom: 20px;'>
-                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs?</p>
+                <p style='margin: 0; font-weight: bold;'>The target rolled a ${attackTotal} to attack. Would you like to use your reaction to cast Silvery Barbs?</p>
             </div>
             <div style='display: flex; width: 100%; gap: 20px;'>
                 <div style='flex-grow: 1; display: flex; flex-direction: column;'>
@@ -314,33 +314,33 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
         ).join('');
         
         dialogContent = `
-            <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
-                <div style='margin-bottom: 20px;'>
-                    <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs?</p>
+            <div style='display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;'>
+            <div style='margin-bottom: 20px;'>
+                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs?</p>
+            </div>
+            <div style='display: flex; width: 100%; gap: 20px; align-items: start; padding-bottom: 5px; border-bottom: 1px solid #ccc;'>
+                <div style='flex-grow: 1; display: flex; flex-direction: column;'>
+                    <p style='margin: 0 0 10px 0;'>Choose a target:</p>
+                    <select id="targetSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
+                        ${targetNames.map((name, index) => `<option value="${tokenUuids[index]}">${name}</option>`).join('')}
+                    </select>
                 </div>
-                <div style='display: flex; width: 100%; gap: 20px;'>
-
-                        <div style='flex-grow: 1; display: flex; flex-direction: column;'>
-                            <p style='margin: 0 0 10px 0;'>Choose a target:</p>
-                            <select id="targetSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
-                                ${targetNames.map((name, index) => `<option value="${tokenUuids[index]}">${name}</option>`).join('')}
-                            </select>
-                        </div>
-
-                    <div style='flex-grow: 1; display: flex; flex-direction: column; border-left: 1px solid #ccc; padding-left: 20px;'>
-                        <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
-                        ${validFriendlies.length >= 1 ? 
-                            `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
-                                ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
-                            </select>` : '<p>No valid friendlies in range.</p>'
-                        }
-                    </div>
+        
+                <div style='flex-grow: 1; display: flex; flex-direction: column; border-left: 1px solid #ccc; padding-left: 20px;'>
+                    <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
+                    ${validFriendlies.length >= 1 ? 
+                        `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
+                            ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
+                        </select>` : '<p>No valid friendlies in range.</p>'
+                    }
                 </div>
-                <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
-                    <p><b>Time remaining</b></p>
-                    <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
-                    <p><button id='pauseButton' style='margin-top: 16px;'>Pause</button></p>
-                </div>
+            </div>
+            <!-- This div is now moved outside and after the flex container of the two columns -->
+            <div style='width: 100%; text-align: center;'>
+                <p><b>Time remaining</b></p>
+                <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
+                <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
+            </div>
             </div>
         `;
         }

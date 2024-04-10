@@ -17,7 +17,12 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Armor of Hexes: Handles all aspects of Warlocks Armor of Hexes." >> release_notes.txt
+          echo "  - Fighting Style Protection: Fighters Protection Fighting Style." >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Armor of Hexes: Update to support dialog timer." >> release_notes.txt
+          echo "  - Silvery Barbs: Update saving throw dialog to visually align elements better. Add attack total into Attack roll dialog. Couple small bugfixes." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Opportunity Attack: Fix War Caster template sizing if no valid melee weapons." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
