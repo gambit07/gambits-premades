@@ -35,7 +35,7 @@ I feel like videos are the best way to see these type of automations, so includi
   - Spell: Infestation
   - Spell: Kinetic Jaunt
 
-https://github.com/gambit07/gambits-premades/assets/4236874/a69d6510-4a64-485e-a705-344a264e324c
+https://github.com/gambit07/gambits-premades/assets/4236874/9a16a77a-4623-47e0-aad0-8c54e3f7674a
 
 </p>
 </details>
@@ -49,7 +49,6 @@ https://github.com/gambit07/gambits-premades/assets/4236874/a69d6510-4a64-485e-a
   - Improved Abjuration
 
 https://github.com/gambit07/gambits-premades/assets/4236874/734b71a3-2c23-408d-91fe-627ff5d2dcfd
-
 
 </p>
 </details>
