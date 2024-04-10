@@ -55,7 +55,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/9a16a77a-4623-47e0-a
 - Counterspell will account for the following features/spells when on an actor:
   - Improved Abjuration
 
-https://github.com/gambit07/gambits-premades/assets/4236874/734b71a3-2c23-408d-91fe-627ff5d2dcfd
+https://github.com/gambit07/gambits-premades/assets/4236874/9890ef7e-99a9-481a-b2e8-9ff726479c8c
 
 </p>
 </details>
@@ -64,7 +64,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/734b71a3-2c23-408d-9
 <summary><b>Silvery Barbs</b> (click to expand)</summary>
 <p>
 
-Placeholder
+https://github.com/gambit07/gambits-premades/assets/4236874/845902f7-8f87-4d22-9177-eb7b6d69ec85
 
 </p>
 </details>
