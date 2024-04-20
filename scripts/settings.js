@@ -89,6 +89,33 @@ function registerSettings() {
         }
     });
 
+    game.settings.register('gambits-premades', 'Enable Cutting Words', {
+        name: "Enable Cutting Words",
+        hint: "If enabled, this will present an appropriate dialog to users with cutting words, and automate cutting words application when used.",
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Cutting Words Timeout', {
+        name: "Cutting Words Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        scope: 'world',
+        config: true,
+        type: String,
+        default: "30",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+                // Used numericValue as a number
+            } else {
+                // Handle invalid input
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
         name: "Enable Identify Restrictions",
         hint: "If enabled, this will prevent player characters from Identifying unidentified items through usual methods.",
@@ -106,33 +133,6 @@ function registerSettings() {
         type: String,
         default: "Nice try, DENIED ;)"
     });
-
-    /*game.settings.register('gambits-premades', 'Enable Cutting Words', {
-        name: "Enable Cutting Words",
-        hint: "If enabled, this will present an appropriate dialog to users with cutting words, and automate cutting words application when used.",
-        scope: 'world',
-        config: true,
-        type: Boolean,
-        default: false
-    });*/
-
-    /*game.settings.register('gambits-premades', 'Cutting Words Timeout', {
-        name: "Cutting Words Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
-        scope: 'world',
-        config: true,
-        type: String,
-        default: "30",
-        onChange: value => {
-            const numericValue = Number(value);
-            if (!isNaN(numericValue)) {
-                // Used numericValue as a number
-            } else {
-                // Handle invalid input
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
-            }
-        }
-    });*/
 
     game.settings.registerMenu('gambits-premades', 'customConfig', {
         name: game.i18n.localize("Configure Homebrew Options"),

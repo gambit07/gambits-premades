@@ -1,7 +1,7 @@
 import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
 import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -20,6 +20,8 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("closeDialogById", closeDialogById);
     socket.register("handleDialogPromises", handleDialogPromises);
     socket.register("gmIdentifyItem", gmIdentifyItem);
+    socket.register("rollAsUser", rollAsUser);
+    socket.register("convertFromFeet", convertFromFeet);
 })
 
 Hooks.once('ready', async function() {
@@ -31,6 +33,7 @@ Hooks.once('ready', async function() {
 
     game.gps = {
         gmIdentifyItem,
+        convertFromFeet,
         socket
     };
 
@@ -50,7 +53,7 @@ Hooks.once('ready', async function() {
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (game.settings.get('gambits-premades', 'Enable Silvery Barbs') === true) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack" });
-        //if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack" });
+        if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack" });
     });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
@@ -66,10 +69,10 @@ Hooks.once('ready', async function() {
         }
       });
 
-    /*Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
+    Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage" });
-    });*/
+    });
 
     /*Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {
         if (game.settings.get('gambits-premades', 'Enable Cutting Words')) {

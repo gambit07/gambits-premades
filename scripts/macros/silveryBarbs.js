@@ -36,12 +36,10 @@ export async function silveryBarbs({workflowData,workflowType}) {
             // Check if token can see initiating token for attacks
             if (workflowType === "attack" && !MidiQOL.canSee(t, token)) return;
 
-            // Check if scene is gridless
-            canvas.scene.grid.type === 0 ? gridDecision = false : gridDecision = true;
-
-            // Check if token is within 60 feet for attacks
-            let distance = canvas.grid.measureDistance(token, t, { gridSpaces: gridDecision });
-            if(distance > 60 && workflowType === "attack") return;
+            // Check if token is within 60 feet
+            let measuredDistance = MidiQOL.computeDistance(token,t,true);
+            let range = game.gps.convertFromFeet({range: 60});
+            if (measuredDistance === -1 || (measuredDistance > range)) return;
 
             // Check if the token has available spell slots/uses for silvery barbs
             const spells = t.actor.system.spells;
@@ -98,11 +96,11 @@ export async function silveryBarbs({workflowData,workflowType}) {
 
         if(workflowType === "save") {
             let targetUuids = Array.from(workflow.saves)
-            .filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, token) && canvas.grid.measureDistance(validTokenPrimary, token, { gridSpaces: gridDecision }) <= 60)
+            .filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, token) && MidiQOL.computeDistance(validTokenPrimary, token, true) <= 60)
             .map(token => token.actor.uuid);
             if(targetUuids.length === 0) return;
             let targetNames = Array.from(workflow.saves)
-            .filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, token) && canvas.grid.measureDistance(validTokenPrimary, token, { gridSpaces: gridDecision }) <= 60)
+            .filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, token) && MidiQOL.computeDistance(validTokenPrimary, token, true) <= 60)
             .map(token => token.actor.name);
             
             let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering Silvery Barbs.`
@@ -113,21 +111,21 @@ export async function silveryBarbs({workflowData,workflowType}) {
             };
             let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
             let result;
-
-            if (game.settings.get('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", null, `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user"}));
-                let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, targetNames, "save", null, `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm"}));
+            
+            if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
+                let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", null, `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
+                let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, targetNames, "save", null, `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", null);
+                result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", null).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));;
             }
             
-            const { silveryBarbsDecision, returnedTokenUuid, source } = result;
+            const { silveryBarbsDecision, returnedTokenUuid, source, type } = result;
 
             if (silveryBarbsDecision === false || !silveryBarbsDecision) {
-                if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `silverybarbs_${game.users?.activeGM.id}` });
-                if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `silverybarbs_${browserUser.id}` });
+                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `silverybarbs_${game.users?.activeGM.id}` });
+                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `silverybarbs_${browserUser.id}` });
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                 continue;
             }
@@ -138,8 +136,10 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === returnedTokenUuid);
                 const workflowIndex = Array.from(workflow.saves).findIndex(t => t.document.uuid === returnedTokenUuid);
                 let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
-                let reroll = await new Roll(`1d20 + ${targetSaveBonus}`).roll({async: true});
-                await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
+                let reroll;
+                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d20 + ${targetSaveBonus}` });
+                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${targetSaveBonus}` });
+
                 if(reroll.total < saveDC) {
                     workflow.saves.delete(workflowTarget);
                     workflow.failedSaves.add(workflowTarget);
@@ -189,8 +189,9 @@ export async function silveryBarbs({workflowData,workflowType}) {
 
             if(workflowType === "attack") {
                 if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
-                if (game.settings.get('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
-                if (game.settings.get('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return;
+                
+                if (MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
+                if (MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return;
 
                 let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering Silvery Barbs.`
                 let chatData = {
@@ -200,21 +201,21 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 };
                 let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
                 let result;
-
-                if (game.settings.get('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", workflow.attackTotal, `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user"}));
-                    let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "attack", workflow.attackTotal, `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm"}));
+                
+                if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
+                    let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", workflow.attackTotal, `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
+                    let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "attack", workflow.attackTotal, `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
                 
                     result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
                 } else {
-                    result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", workflow.attackTotal);
+                    result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", workflow.attackTotal).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
                 }
                 
-                const { silveryBarbsDecision, returnedTokenUuid, source } = result;
+                const { silveryBarbsDecision, returnedTokenUuid, source, type } = result;
 
                 if (silveryBarbsDecision === false || !silveryBarbsDecision) {
-                    if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `silverybarbs_${game.users?.activeGM.id}` });
-                    if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `silverybarbs_${browserUser.id}` });
+                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `silverybarbs_${game.users?.activeGM.id}` });
+                    if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `silverybarbs_${browserUser.id}` });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                     continue;
                 }
@@ -224,9 +225,11 @@ export async function silveryBarbs({workflowData,workflowType}) {
                     let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
                     const saveSetting = workflow.options.noOnUseMacro;
                     workflow.options.noOnUseMacro = true;
-                    let reroll = await new Roll(`1d20 + ${rerollAddition}`).roll({async: true});
+                    let reroll;
+                    if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d20 + ${rerollAddition}` });
+                    if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${rerollAddition}` });
                     if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
-                    await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
+
                     workflow.options.noOnUseMacro = saveSetting;
 
                     if(workflow.attackTotal < targetAC) {
@@ -276,7 +279,8 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
     const socket = module.socket;
 
     return await new Promise(resolve => {
-        const initialTimeLeft = Number(game.settings.get('gambits-premades', 'Silvery Barbs Timeout'));
+        
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', 'Silvery Barbs Timeout'));
         let dialogContent;
         let originToken = fromUuidSync(tokenUuid);
         let browserUser = MidiQOL.playerForActor(originToken.actor);

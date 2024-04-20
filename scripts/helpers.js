@@ -26,6 +26,26 @@ export async function closeDialogById({ dialogId }) {
     }
 }
 
+export async function rollAsUser({ rollParams, type }) {
+    if(!rollParams) return;
+    let reroll;
+    //const DamageRoll = CONFIG.Dice.DamageRoll;
+    
+    reroll = await new Roll(`${rollParams}`).evaluate({async: true});
+
+    await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
+    console.log(reroll,"this is reroll helper")
+    return reroll;
+}
+
+export function convertFromFeet({ range }) {
+    const units = canvas.scene.grid.units;
+    let conversionFactor;
+    if (units === "meters" || units === "m" || units === "mt") conversionFactor = 0.3;
+    else conversionFactor = 1;
+    return range * conversionFactor;
+}
+
 export async function handleDialogPromises(userDialogPromise, gmDialogPromise) {
     return new Promise((resolve, reject) => {
         let userResolved = false;

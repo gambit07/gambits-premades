@@ -28,13 +28,10 @@ export async function counterspell({ workflowData }) {
             // Check if token can see initiating token that cast spell
             if(!MidiQOL.canSee(t, token)) return;
 
-            // Check if scene is gridless
-            let gridDecision;
-            canvas.scene.grid.type === 0 ? gridDecision = false : gridDecision = true;
-
             // Check if token is within 60 feet
-            let distance = canvas.grid.measureDistance(token, t, { gridSpaces: gridDecision });
-            if(distance > 60) return;
+            let measuredDistance = MidiQOL.computeDistance(token,t,true);
+            let range = game.gps.convertFromFeet({range: 60});
+            if (measuredDistance === -1 || (measuredDistance > range)) return;
 
             // Check if the token has available spell slots/uses for counterspell
             const spells = t.actor.system.spells;
@@ -113,33 +110,33 @@ export async function counterspell({ workflowData }) {
             let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
 
             let result;
-
-            if (game.settings.get('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary, `counterspell_${browserUser.id}`, 'user').then(res => ({...res, source: "user"}));
-                let gmDialogPromise = socket.executeAsGM("showCounterspellDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitleGM, `counterspell_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm"}));
+            
+            if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
+                let userDialogPromise = socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary, `counterspell_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
+                let gmDialogPromise = socket.executeAsGM("showCounterspellDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitleGM, `counterspell_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
         
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary);
+                result = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, castLevel, dialogTitlePrimary).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
             }
             
-            let { counterspellSuccess, counterspellLevel, source, programmaticallyClosed } = result;
+            let { counterspellSuccess, counterspellLevel, source, type } = result;
             
-            if (!counterspellSuccess && !programmaticallyClosed) {
-                if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `counterspell_${game.users?.activeGM.id}` });
-                if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `counterspell_${browserUser.id}` });
+            if (!counterspellSuccess) {
+                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `counterspell_${game.users?.activeGM.id}` });
+                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `counterspell_${browserUser.id}` });
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                 continue;
             }
-            else if (!counterspellSuccess && isLastToken && !programmaticallyClosed) {
-                if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `counterspell_${game.users?.activeGM.id}` });
-                if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `counterspell_${browserUser.id}` });
+            else if (!counterspellSuccess && isLastToken) {
+                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `counterspell_${game.users?.activeGM.id}` });
+                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `counterspell_${browserUser.id}` });
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                 return workflow.aborted = false;
             }
-            else if (counterspellSuccess === true && !programmaticallyClosed) {
+            else if (counterspellSuccess === true) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                 castLevel = counterspellLevel;
@@ -179,34 +176,34 @@ export async function counterspell({ workflowData }) {
 
                 let result;
 
-                if (game.settings.get('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary, `counterspell_${browserUser.id}`, 'user').then(res => ({...res, source: "user"}));
-                    let gmDialogPromise = socket.executeAsGM("showCounterspellDialog", originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleGMSecondary, `counterspell_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm"}));
+                if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
+                    let userDialogPromise = socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary, `counterspell_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
+                    let gmDialogPromise = socket.executeAsGM("showCounterspellDialog", originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleGMSecondary, `counterspell_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
                 
                     result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
                 } else {
-                    result = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary);
+                    result = await socket.executeAsUser("showCounterspellDialog", browserUser.id, originTokenUuidSecondary, actorUuidSecondary, validTokenSecondary.document.uuid, castLevel, dialogTitleSecondary).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
                 }
 
-                let { counterspellSuccess, counterspellLevel, source, programmaticallyClosed } = result;
+                let { counterspellSuccess, counterspellLevel, source, type } = result;
 
-                if (counterspellSuccess === true && !programmaticallyClosed) {
+                if (counterspellSuccess === true) {
                     if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     castLevel = counterspellLevel;
                     await initialCounterspellProcess(workflow, lastMessage, castLevel, validTokenSecondary);
                     break;
                 }
-                else if (!counterspellSuccess && isLastToken && !programmaticallyClosed) {
-                    if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `counterspell_${game.users?.activeGM.id}` });
-                    if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `counterspell_${browserUser.id}` });
+                else if (!counterspellSuccess && isLastToken) {
+                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `counterspell_${game.users?.activeGM.id}` });
+                    if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `counterspell_${browserUser.id}` });
                     if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     return workflow.aborted = true;
                 }
-                else if (!counterspellSuccess && !programmaticallyClosed) {
-                    if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `counterspell_${game.users?.activeGM.id}` });
-                    if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `counterspell_${browserUser.id}` });
+                else if (!counterspellSuccess) {
+                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `counterspell_${game.users?.activeGM.id}` });
+                    if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `counterspell_${browserUser.id}` });
                     if(lastMessage) lastMessage.update({ whisper: [] });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessageSecondary._id });
                     continue;
@@ -221,7 +218,8 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
 
     return await new Promise(resolve => {
         async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); };
-        const initialTimeLeft = Number(game.settings.get('gambits-premades', 'Counterspell Timeout'));
+        
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', 'Counterspell Timeout'));
         let dialogContent = `
             <div style='display: flex; align-items: center; justify-content: space-between;'>
                 <div style='flex: 1;'>
