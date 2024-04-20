@@ -22,20 +22,27 @@ I feel like videos are the best way to see these type of automations, so includi
 - This automates opportunity attacks while taking into account opportunity attack specific features of the Sentinel feat, War Caster feat, Polearm Master feat, and Battle Master Fighters Brace feature. This feature will only function while actors are in combat. Note: The Sentinel part of this automation does not stop a token from moving when hit.
 - Opportunity Attack will account for the following features/spells when on an actor:
   - Feat: Mobile
-  - Feat Polearm Master
+  - Feat: Polearm Master
   - Feat: Sentinel
   - Feat: War Caster
   - Fighter Feature: Battle Master - Brace
   - Fighter Feature: Battle Master - Riposte
+  - Generic Effect: Charmed (Against Charmer)
   - Generic Feature: Disengage
   - Goblin Feature: Nimble Escape - Disengage
   - Monster Feature: Deadly Reach
   - Monster Feature: Flyby
   - Rogue Feature: Swashbuckler - Fancy Footwork
-  - Spell: Infestation
+  - Spell: Arms of Hadar
+  - Spell: Confusion
+  - Spell: Dissonant Whispers
   - Spell: Kinetic Jaunt
+  - Spell: Shocking Grasp
+  - Spell: Slow
+  - Spell: Staggering Smite
+  - Spell: Zephyr Strike
 
-https://github.com/gambit07/gambits-premades/assets/4236874/a69d6510-4a64-485e-a705-344a264e324c
+https://github.com/gambit07/gambits-premades/assets/4236874/9a16a77a-4623-47e0-aad0-8c54e3f7674a
 
 </p>
 </details>
@@ -48,8 +55,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/a69d6510-4a64-485e-a
 - Counterspell will account for the following features/spells when on an actor:
   - Improved Abjuration
 
-https://github.com/gambit07/gambits-premades/assets/4236874/734b71a3-2c23-408d-91fe-627ff5d2dcfd
-
+https://github.com/gambit07/gambits-premades/assets/4236874/9890ef7e-99a9-481a-b2e8-9ff726479c8c
 
 </p>
 </details>
@@ -58,7 +64,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/734b71a3-2c23-408d-9
 <summary><b>Silvery Barbs</b> (click to expand)</summary>
 <p>
 
-Placeholder
+https://github.com/gambit07/gambits-premades/assets/4236874/845902f7-8f87-4d22-9177-eb7b6d69ec85
 
 </p>
 </details>
