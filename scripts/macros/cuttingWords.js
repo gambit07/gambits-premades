@@ -37,8 +37,8 @@ export async function cuttingWords({workflowData,workflowType}) {
             let range = game.gps.convertFromFeet({range: 60});
             if (measuredDistance === -1 || (measuredDistance > range)) return;
 
-            // Check if the token has available uses of Cutting Words
-            const itemNames = ["cutting words"];
+            // Check if the token has available uses of Bardic Inspiration for Cutting Words
+            const itemNames = ["Bardic Inspiration"];
 
             let resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource =>
                 itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
@@ -349,6 +349,8 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                         };
 
                         const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
+
+                        if(!itemRoll) return;
 
                         const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
 

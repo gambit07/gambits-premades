@@ -16,17 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Cutting Words: Initial release, will cover attack and damage rolls via 3rd party dialog. Damage rolls will have a draggable list of types that can be used to define priority. This feature will also work with the GM Mirror Dialog functionality" >> release_notes.txt
-          echo "  - Rod of the Pact Keeper & Amulet of the Devout: Added +2 and +3 variants" >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Update to support cprs monsters/summons that classify weapons as features. Update to support simple elevation checking to prevent OA from triggering based on current token threshold, this will not handle elevation changes in relation to OA and is meant to be a temporaryish solution for creatures flying above a group, etc." >> release_notes.txt
-          echo "  - Counterspell: Updated to MidiQOL.computeDistance for range checking. Convert to use helper convertFromFeet to check if a game world is using meters and do conversion" >> release_notes.txt
-          echo "  - Silvery Barbs: Updated to MidiQOL.computeDistance for range checking. Convert to use helper convertFromFeet to check if a game world is using meters and do conversion" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: A number of fixes for Sentinel and Riposte which could cause issues if both features were on an actor." >> release_notes.txt
-          echo "  - Silvery Barbs: Fix for re-rolls being triggered from the GM client instead of the User client under certain situations." >> release_notes.txt
-          echo "  - Fighting Style Protection: Fix for reaction not being checked." >> release_notes.txt
+          echo "  - Cutting Words: Fix for incorrectly checking cutting words item uses so that it is checking bardic inspiration uses instead." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
