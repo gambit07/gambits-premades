@@ -26,6 +26,7 @@ jobs:
           echo "- Bugfixes:" >> release_notes.txt
           echo "  - Opportunity Attack: A number of fixes for Sentinel and Riposte which could cause issues if both features were on an actor." >> release_notes.txt
           echo "  - Silvery Barbs: Fix for re-rolls being triggered from the GM client instead of the User client under certain situations." >> release_notes.txt
+          echo "  - Fighting Style Protection: Fix for reaction not being checked." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
