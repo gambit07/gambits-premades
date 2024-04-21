@@ -141,7 +141,7 @@ export async function cuttingWords({workflowData,workflowType}) {
 
                     let chatList = [];
 
-                    chatList = `The creature takes a cutting word, and their damage is reduced by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word, and their damage is reduced by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
@@ -194,7 +194,7 @@ export async function cuttingWords({workflowData,workflowType}) {
                     if((workflow.attackTotal - reroll.total) < targetAC) {
                         let chatList = [];
 
-                        chatList = `The creature takes a cutting word reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                        chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {
@@ -208,12 +208,13 @@ export async function cuttingWords({workflowData,workflowType}) {
                             content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
                         }
                         await chatMessage.update({ content: content });
+                        console.log(content, "this is chat content")
                     }
 
                     else {
                         let chatList = [];
 
-                        chatList = `The creature takes a cutting word reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                        chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {

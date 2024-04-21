@@ -101,7 +101,7 @@ export async function counterspell({ workflowData }) {
             const currentIndex = findCounterspellTokensPrimary.indexOf(validTokenPrimary);
             const isLastToken = currentIndex === findCounterspellTokensPrimary.length - 1;
 
-            let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a spell triggering Counterspell.`
+            let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a spell triggering Counterspell.</span>`
             let chatData = {
             user: game.users.find(u => u.isGM).id,
             content: content,
@@ -166,7 +166,7 @@ export async function counterspell({ workflowData }) {
                     browserUser = game.users?.activeGM;
                 }
 
-                let contentSecondary = `<img src="${validTokenSecondary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenSecondary.actor.name} has a reaction available for a spell triggering Counterspell.`
+                let contentSecondary = `<span style='text-wrap: wrap;'><img src="${validTokenSecondary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenSecondary.actor.name} has a reaction available for a spell triggering Counterspell.</span>`
                 let chatData = {
                 user: game.users.find(u => u.isGM).id,
                 content: contentSecondary,
@@ -280,17 +280,17 @@ export async function showCounterspellDialog(originTokenUuid, actorUuid, tokenUu
                             let abjurationCheck = actor.items.find(i => i.name.toLowerCase() === "improved abjuration");
                             abjurationCheck ? skillCheckTotal = skillCheck.total + actor.system?.attributes?.prof : skillCheckTotal = skillCheck.total;
                             if (skillCheckTotal >= spellThreshold) {
-                                chatList = `The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
+                                chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                                 counterspellSuccess = true;
                                 counterspellLevel = itemRoll.castData.castLevel;
                             }
                             else {
-                                chatList = `The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
+                                chatList = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                                 counterspellSuccess = false;
                             }
                         }
                         else {
-                            chatList = `The creature was counterspelled because you cast counterspell at an equal or higher level. <img src="${originToken.actor.img}" width="30" height="30" style="border:0px">`;
+                            chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled because you cast counterspell at an equal or higher level. <img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                             counterspellSuccess = true;
                             counterspellLevel = itemRoll.castData.castLevel;
                         }

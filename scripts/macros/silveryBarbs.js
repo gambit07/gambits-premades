@@ -103,7 +103,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
             .filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, token) && MidiQOL.computeDistance(validTokenPrimary, token, true) <= 60)
             .map(token => token.actor.name);
             
-            let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering Silvery Barbs.`
+            let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering Silvery Barbs.</span>`
             let chatData = {
             user: game.users.find(u => u.isGM).id,
             content: content,
@@ -150,7 +150,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
 
                     let chatList = [];
 
-                    chatList = `The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
@@ -169,7 +169,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 else {
                     let chatList = [];
 
-                    chatList = `The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px">`;
+                    chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
@@ -193,7 +193,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return;
 
-                let content = `<img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering Silvery Barbs.`
+                let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering Silvery Barbs.</span>`
                 let chatData = {
                 user: game.users.find(u => u.isGM).id,
                 content: content,
@@ -235,7 +235,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                     if(workflow.attackTotal < targetAC) {
                         let chatList = [];
 
-                        chatList = `The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                        chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {
@@ -254,7 +254,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                     else {
                         let chatList = [];
 
-                        chatList = `The creature was silvery barbed, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px">`;
+                        chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {
