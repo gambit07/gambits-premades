@@ -70,6 +70,15 @@ https://github.com/gambit07/gambits-premades/assets/4236874/845902f7-8f87-4d22-9
 </details>
 
 <details>
+<summary><b>Cutting Words</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/36d2bd22-61fc-4d80-a90c-c86d994e00c8
+
+</p>
+</details>
+
+<details>
 <summary><b>Lantern, Bullseye</b> (click to expand)</summary>
 <p>
 
