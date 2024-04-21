@@ -38,7 +38,7 @@ export async function cuttingWords({workflowData,workflowType}) {
             if (measuredDistance === -1 || (measuredDistance > range)) return;
 
             // Check if the token has available uses of Bardic Inspiration for Cutting Words
-            const itemNames = ["Bardic Inspiration"];
+            const itemNames = ["bardic inspiration"];
 
             let resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource =>
                 itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);

@@ -17,7 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Cutting Words: Fix for incorrectly checking cutting words item uses so that it is checking bardic inspiration uses instead." >> release_notes.txt
+          echo "  - Cutting Words: Fix fix for incorrectly checking cutting words item uses so that it is checking bardic inspiration uses instead." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
