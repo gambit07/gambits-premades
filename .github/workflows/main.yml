@@ -17,9 +17,9 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Cutting Words: Fix for 3.1.x not correctly wrapping chat message content." >> release_notes.txt
-          echo "  - Silvery Barbs: Fix for 3.1.x not correctly wrapping chat message content." >> release_notes.txt
-          echo "  - Counterspell: Fix for 3.1.x not correctly wrapping chat message content." >> release_notes.txt
+          echo "  - Opportunity Attack: Added correct attack validation check to Sentinel and Riposte." >> release_notes.txt
+          echo "  - Entangle: Rewrote the whole thing to be more better-er, now also uses a modified version of Eskiemohs Entangle animation." >> release_notes.txt
+          echo "  - Black Tentacles: Address grid-aligned square templates option in sequencer to try and keep the animation aligned appropriately." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

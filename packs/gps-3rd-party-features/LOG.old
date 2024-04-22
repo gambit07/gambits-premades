@@ -1,3 +1,8 @@
-2024/04/16-17:16:26.336 7830 Recovering log #118
-2024/04/16-17:16:26.345 7830 Delete type=0 #118
-2024/04/16-17:16:26.346 7830 Delete type=3 #116
+2024/04/16-17:24:06.942 4cf0 Recovering log #121
+2024/04/16-17:24:06.950 4cf0 Delete type=0 #121
+2024/04/16-17:24:06.950 4cf0 Delete type=3 #120
+2024/04/20-14:16:52.952 df80 Level-0 table #125: started
+2024/04/20-14:16:52.952 df80 Level-0 table #125: 0 bytes OK
+2024/04/20-14:16:52.955 df80 Delete type=0 #123
+2024/04/20-14:16:52.961 df80 Manual compaction at level-0 from '!folders!rvG7tD4SnTeXT7ji' @ 72057594037927935 : 1 .. '!items.effects!F4WlBlrL1aHesheL.d9dBh3emP8HLgrMk' @ 0 : 0; will stop at (end)
+2024/04/20-14:16:52.961 df80 Manual compaction at level-1 from '!folders!rvG7tD4SnTeXT7ji' @ 72057594037927935 : 1 .. '!items.effects!F4WlBlrL1aHesheL.d9dBh3emP8HLgrMk' @ 0 : 0; will stop at (end)

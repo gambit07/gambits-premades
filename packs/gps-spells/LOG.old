@@ -1,3 +1,8 @@
-2024/04/16-17:16:25.988 7830 Recovering log #1766
-2024/04/16-17:16:25.997 7830 Delete type=0 #1766
-2024/04/16-17:16:25.997 7830 Delete type=3 #1764
+2024/04/16-17:24:06.809 4cf0 Recovering log #1769
+2024/04/16-17:24:06.815 4cf0 Delete type=0 #1769
+2024/04/16-17:24:06.815 4cf0 Delete type=3 #1768
+2024/04/20-14:16:52.877 df80 Level-0 table #1773: started
+2024/04/20-14:16:52.877 df80 Level-0 table #1773: 0 bytes OK
+2024/04/20-14:16:52.880 df80 Delete type=0 #1771
+2024/04/20-14:16:52.890 df80 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!vxrggTopkxhq3MAn.T70VAw9NbZZUV7tZ' @ 0 : 0; will stop at (end)
+2024/04/20-14:16:52.900 df80 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!vxrggTopkxhq3MAn.T70VAw9NbZZUV7tZ' @ 0 : 0; will stop at (end)

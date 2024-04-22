@@ -1,3 +1,8 @@
-2024/04/16-17:16:26.279 2858 Recovering log #591
-2024/04/16-17:16:26.287 2858 Delete type=0 #591
-2024/04/16-17:16:26.287 2858 Delete type=3 #589
+2024/04/16-17:24:06.930 d808 Recovering log #594
+2024/04/16-17:24:06.939 d808 Delete type=0 #594
+2024/04/16-17:24:06.939 d808 Delete type=3 #593
+2024/04/20-14:16:52.940 df80 Level-0 table #598: started
+2024/04/20-14:16:52.940 df80 Level-0 table #598: 0 bytes OK
+2024/04/20-14:16:52.943 df80 Delete type=0 #596
+2024/04/20-14:16:52.945 df80 Manual compaction at level-0 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
+2024/04/20-14:16:52.945 df80 Manual compaction at level-1 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
