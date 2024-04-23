@@ -1,15 +1,8 @@
-2024/04/23-09:09:52.393 df84 Recovering log #1829
-2024/04/23-09:09:52.400 df84 Delete type=0 #1829
-2024/04/23-09:09:52.400 df84 Delete type=3 #1827
-2024/04/23-09:18:16.096 df80 Level-0 table #1835: started
-2024/04/23-09:18:16.116 df80 Level-0 table #1835: 72864 bytes OK
-2024/04/23-09:18:16.121 df80 Delete type=0 #1833
-2024/04/23-09:18:16.122 df80 Manual compaction at level-0 from '!items!1ZFwig1DSBIyGfDL' @ 72057594037927935 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at (end)
-2024/04/23-09:18:16.122 df80 Manual compaction at level-1 from '!items!1ZFwig1DSBIyGfDL' @ 72057594037927935 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at '!items.effects!eUTU3JSbo7X98INw.1IkBgxOFEYJd4z53' @ 409 : 1
-2024/04/23-09:18:16.123 df80 Compacting 1@1 + 1@2 files
-2024/04/23-09:18:16.137 df80 Generated table #1836@1: 8 keys, 26409 bytes
-2024/04/23-09:18:16.137 df80 Compacted 1@1 + 1@2 files => 26409 bytes
-2024/04/23-09:18:16.141 df80 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/04/23-09:18:16.141 df80 Delete type=2 #1831
-2024/04/23-09:18:16.142 df80 Delete type=2 #1835
-2024/04/23-09:18:16.156 df80 Manual compaction at level-1 from '!items.effects!eUTU3JSbo7X98INw.1IkBgxOFEYJd4z53' @ 409 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at (end)
+2024/04/23-09:33:51.706 df84 Recovering log #1839
+2024/04/23-09:33:51.716 df84 Delete type=0 #1839
+2024/04/23-09:33:51.717 df84 Delete type=3 #1837
+2024/04/23-09:51:23.310 df80 Level-0 table #1844: started
+2024/04/23-09:51:23.310 df80 Level-0 table #1844: 0 bytes OK
+2024/04/23-09:51:23.313 df80 Delete type=0 #1842
+2024/04/23-09:51:23.316 df80 Manual compaction at level-0 from '!items!1ZFwig1DSBIyGfDL' @ 72057594037927935 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at (end)
+2024/04/23-09:51:23.317 df80 Manual compaction at level-1 from '!items!1ZFwig1DSBIyGfDL' @ 72057594037927935 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at (end)

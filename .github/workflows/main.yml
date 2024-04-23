@@ -16,8 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Various bugfixes including a critical bugfix for an undefined variable" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Black Tentacles: Add duration for restrained effect to make VAE happy" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
