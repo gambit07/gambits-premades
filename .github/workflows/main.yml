@@ -17,9 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Added turn end check to re-validate template size and adjust if necessary due to weapon changes, etc. This will now also create a template if an actor did not have one initially due to no valid weapon but equips one in a later round. Thanks to Spoob for providing some of the code for this add on" >> release_notes.txt
-          echo "  - Entangle: Added handling to remove animation and restrained effect on concentration loss." >> release_notes.txt
-          echo "  - Black Tentacles: Renamed item uses to try and prevent AA autorecs." >> release_notes.txt
+          echo "  - Opportunity Attack: Fix some riposte issues I missed on the last go round" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
