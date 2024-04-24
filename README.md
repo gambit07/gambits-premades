@@ -415,7 +415,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/62173b0c-1836-4f1b-b
 <summary><b>Black Tentacles</b> (click to expand)</summary>
 <p>
 
-Placeholder
+https://github.com/gambit07/gambits-premades/assets/4236874/402f41ef-20c0-4084-98c6-30a20c7f49de
 
 </p>
 </details>
@@ -578,6 +578,15 @@ Placeholder
 <p>
 
 Placeholder
+
+</p>
+</details>
+
+<details>
+<summary><b>Dipolar Gauges</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/8b3d74e8-a4c6-4a50-9454-c5e15e5e5517
 
 </p>
 </details>
