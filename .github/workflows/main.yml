@@ -16,8 +16,14 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- General:" >> release_notes.txt
+          echo "  - Added subfolders for Monster Features with the monsters name." >> release_notes.txt
+          echo "- Additons:" >> release_notes.txt
+          echo "  - Bloody But Unbowed: Automates the homebrew Pugilist Class feature." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Black Tentacles: Add duration for restrained effect to make VAE happy" >> release_notes.txt
+          echo "  - Identify: Change to suppress spell use instead of using an at-will type to work better with medkit. A few small usability improvements." >> release_notes.txt
+          echo "  - Cutting Words: Updated Attack dialog to display the attack roll or damage roll totals to the user if Midis GM Roll Details Hiding setting is set appropriately." >> release_notes.txt
+          echo "  - Opportunity Attack: Updated to support checking whether the initiating token can be seen for validation. Added support for monsters with a weapon/feat thats a melee spell attack type." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

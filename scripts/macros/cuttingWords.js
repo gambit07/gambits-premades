@@ -77,16 +77,17 @@ export async function cuttingWords({workflowData,workflowType}) {
         if(workflowType === "damage") {
                if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
                let damageTypes = workflow.damageRolls.map(roll => roll.options.type);
+               let damageTotals = workflow.damageRolls.map(roll => roll.total);
 
                let result;
 
                if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes, `cuttingwords_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
-                let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "damage", damageTypes, `cuttingwords_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
+                let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes, `cuttingwords_${browserUser.id}`, 'user', damageTotals).then(res => ({...res, source: "user", type: "multiDialog"}));
+                let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "damage", damageTypes, `cuttingwords_${game.users?.activeGM.id}`, 'gm', damageTotals).then(res => ({...res, source: "gm", type: "multiDialog"}));
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
                 } else {
-                    result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                    result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes, null, null, damageTotals).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
                 }
                     
                 const { cuttingWordsDecision, damageChosen, source, type } = result;
@@ -102,7 +103,6 @@ export async function cuttingWords({workflowData,workflowType}) {
                    let reroll;
                    if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1${bardicDie}`, type: workflowType });
                    if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1${bardicDie}`, type: workflowType });
-                   let modifiedRoll;
 
                    let remainingReduction = reroll.total;
                    let updatedRolls = [];
@@ -164,12 +164,12 @@ export async function cuttingWords({workflowData,workflowType}) {
                 let result;
 
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", null, `cuttingwords_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
-                    let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "attack", null, `cuttingwords_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
+                    let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", null, `cuttingwords_${browserUser.id}`, 'user', workflow.attackTotal).then(res => ({...res, source: "user", type: "multiDialog"}));
+                    let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "attack", null, `cuttingwords_${game.users?.activeGM.id}`, 'gm', workflow.attackTotal).then(res => ({...res, source: "gm", type: "multiDialog"}));
                 
                     result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
                 } else {
-                    result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", null).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                    result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", null, null, null, workflow.attackTotal).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
                 }
                     
                 const { cuttingWordsDecision, damageChosen, source, type } = result;
@@ -208,7 +208,6 @@ export async function cuttingWords({workflowData,workflowType}) {
                             content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
                         }
                         await chatMessage.update({ content: content });
-                        console.log(content, "this is chat content")
                     }
 
                     else {
@@ -234,7 +233,7 @@ export async function cuttingWords({workflowData,workflowType}) {
     }
 }
 
-export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source) {
+export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, rollTotals) {
     const module = await import('../module.js');
     const socket = module.socket;
 
@@ -244,12 +243,13 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
         let dialogContent;
         let originToken = fromUuidSync(tokenUuid);
         let browserUser = MidiQOL.playerForActor(originToken.actor);
+        const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
 
         if(outcomeType === "attack") {
         dialogContent = `
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px; background-color: transparent; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <div style="flex-grow: 1; margin-right: 20px;">
-                    <p>Would you like to use your reaction to use Cutting Words for this ${outcomeType} roll?</p>
+                    <p>${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `The target rolled a ${rollTotals} to attack. ` : ""}Would you like to use your reaction to use Cutting Words for this ${outcomeType} roll?</p>
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
                     <p><b>Time Remaining</b></p>
@@ -269,10 +269,10 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                         <div style='flex-grow: 1; display: flex; flex-direction: column;'>
                             <p style='margin: 0 0 10px 0;'>Order damage types to prioritize which reduction should be applied first:</p>
                             <ul id="damageList" class="sortable" style="padding: 0; margin: 0; list-style-type: none;">
-                                ${damageTypes.map(name => `
-                                    <li draggable="true" style="padding: 6px; margin-bottom: 4px; cursor: grab; border: 1px solid #ccc;">
-                                        ${name}
-                                    </li>`).join('')}
+                                ${damageTypes.map((name, index) => `
+                                <li draggable="true" style="padding: 6px; margin-bottom: 4px; cursor: grab; border: 1px solid #ccc;">
+                                    <span class="damage-type">${name}</span>${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? ` - ${rollTotals[index]} pts` : ""}
+                                </li>`).join('')}
                             </ul>
                         </div>
                     </div>
@@ -327,12 +327,13 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                         if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `cuttingwords_${game.users?.activeGM.id}` });
                         if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `cuttingwords_${browserUser.id}` });
                         let actor = await fromUuid(actorUuid);
+                        let token = await MidiQOL.tokenForActor(actorUuid);
                         let uuid = actor.uuid;
                         let originToken;
                         originToken = await fromUuid(tokenUuids);
                         originToken = await MidiQOL.tokenForActor(originToken.actor.uuid);
                         let damageChosen = [];
-                        html.find("#damageList li").each(function() {
+                        html.find("#damageList li .damage-type").each(function() {
                             damageChosen.push($(this).text().trim());
                         });
 
@@ -362,10 +363,28 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                         if(itemRoll.aborted === true) return resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: false });
 
                         let hasDeafened = originToken.actor.effects.find(i => i.name.toLowerCase() === "deafened");
-                        if (hasDeafened) return resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: false });
-            
                         let charmImmunity = originToken.actor.system.traits.ci.value.has("charmed");
-                        if (charmImmunity) return resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: false });
+                        
+                        if (charmImmunity || hasDeafened) {
+                        let chatList = [];
+
+                        chatList = `<span style='text-wrap: wrap;'>The creature seems to not be effected by your cutting words.<img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+
+                        let msgHistory = [];
+                        game.messages.reduce((list, message) => {
+                            if (message.flags["midi-qol"]?.itemId === chosenSpell._id && message.speaker.token === token.id) msgHistory.push(message.id);
+                        }, msgHistory);
+                        let itemCard = msgHistory[msgHistory.length - 1];
+                        let chatMessage = await game.messages.get(itemCard);
+                        let content = await duplicate(chatMessage.content);
+                        let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
+                        if (insertPosition !== -1) {
+                            content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
+                        }
+                        await chatMessage.update({ content: content });
+
+                        return resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: false });
+                        }
                         
                         let cuttingWordsDecision = true;
 
