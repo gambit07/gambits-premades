@@ -523,7 +523,7 @@ Placeholder
 <summary><b>Electric Eels</b> (click to expand)</summary>
 <p>
 
-Placeholder
+https://github.com/gambit07/gambits-premades/assets/4236874/bf23a625-d26d-458d-89e7-668cdea28abb
 
 </p>
 </details>
