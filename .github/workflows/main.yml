@@ -16,14 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additons:" >> release_notes.txt
-          echo "  - Blood Frenzy: Automates the monster feature Blood Frenzy." >> release_notes.txt
-          echo "  - Gravity Well: Automates the 3rd party spell from Steinhardts Guide to the Eldritch Hunt. Please support their work." >> release_notes.txt
-          echo "  - Skeletal Tail: Automates the 3rd party spell from Steinhardts Guide to the Eldritch Hunt. Please support their work." >> release_notes.txt
-          echo "  - Wickerbone Behemoth: Automates the 3rd party class feature from Steinhardts Guide to the Eldritch Hunt. Please support their work." >> release_notes.txt
-          echo "  - Shocking Grasp: This uses CPRs automation, all Ive done is add an armor check for advantage" >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Updated to prevent multiple Sentinel dialogs in low performance environments. Integrated a helper to update template size when doing the per round check." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Opportunity Attack: Fix issue with War Caster displaying unprepared spells as valid to use" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
