@@ -16,8 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix issue with War Caster displaying unprepared spells as valid to use" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Opportunity Attack: Added some custom handling for various template sizes to get template bounds as close as possible without exceeding what the max size should be." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
