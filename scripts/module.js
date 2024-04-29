@@ -1,7 +1,7 @@
 import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
 import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -22,6 +22,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("gmIdentifyItem", gmIdentifyItem);
     socket.register("rollAsUser", rollAsUser);
     socket.register("convertFromFeet", convertFromFeet);
+    socket.register("gmUpdateTemplateSize", gmUpdateTemplateSize);
 })
 
 Hooks.once('ready', async function() {
@@ -34,6 +35,7 @@ Hooks.once('ready', async function() {
     game.gps = {
         gmIdentifyItem,
         convertFromFeet,
+        gmUpdateTemplateSize,
         socket
     };
 

@@ -10,6 +10,12 @@ export async function gmIdentifyItem({ itemUuid }) {
     if(itemData) await itemData.update({"system.identified": true});
 }
 
+export async function gmUpdateTemplateSize({ templateUuid, templateSize }) {
+    if(!templateUuid || !templateSize) return;
+    let template = await fromUuid(`${templateUuid}`);
+    if(template) await template.update({"distance": templateSize});
+}
+
 export async function closeDialogById({ dialogId }) {
     let activeDialog = ui.activeWindow?.data?.id;
 
