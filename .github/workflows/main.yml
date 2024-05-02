@@ -17,14 +17,11 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Arcane Shot: Automation for Fighters Arcane Shot class feature. Mainly used to check that a bow was used to validate arrow use." >> release_notes.txt
-          echo "  - Grasping Arrow: Automation for Fighters Arcane Shot Grasping Arrow feature. Covers movement based damage, allied effect removal checks, and movement reduction." >> release_notes.txt
-          echo "  - War Caster: Added in order to have a correctly setup item to work with Opportunity Attack. Also includes Concentration advantage." >> release_notes.txt
-          echo "  - Polearm Master: Added in order to have a correctly setup item to work with Opportunity Attack." >> release_notes.txt
-          echo "  - Sentinel: Added in order to have a correctly setup item to work with Opportunity Attack." >> release_notes.txt
-          echo "  - Flyby: Added in order to have a correctly setup item to work with Opportunity Attack." >> release_notes.txt
+          echo "  - Matalotok: Fully automated with some fun sequencer effects." >> release_notes.txt
+          echo "  - Bursting Arrow:  Automation for Fighters Arcane Shot Bursting Arrow feature." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Added transparent image to give some transparency functionality if WT not installed or a 3d setting is in use. Added checking for generic effect Opportunity Attack Immunity which can be used for homebrew features to prevent opp attacks." >> release_notes.txt
+          echo "  - Opportunity Attack: A number of small under the hood optimizations in the quest for efficiency. The largest among them is OA will now check the items version and only remove and re-add the OA item if a change is found, but a bunch of other small poorly written things have been made more better as well. Added handling for the Escape the Hoard feature." >> release_notes.txt
+          echo "  - Grasping Arrow: Updated the sequencer effect to persist on the effected token while the effect is active and tied mask to token." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

@@ -11,16 +11,20 @@ async function enableOpportunityAttack(combat, combatEvent) {
     async function processCombatant(combatant) {
         const { actor } = combatant;
         if (actor.type === 'npc' || actor.type === 'character') {
-            const itemsToDelete = actor.items.filter(item => item.name === itemName);
-            const itemIdsToDelete = itemsToDelete.map(item => item.id);
-            let templateFlag = actor.getFlag("midi-qol", "opportunityAttackTemplate");
-            let checkRiposteFlag = actor.getFlag("midi-qol", "checkRiposteDecision");
-            let checkBraceFlag = actor.getFlag("midi-qol", "checkBraceDecision");
-            let oaValidWeapons = actor.getFlag("midi-qol", "opportunityAttackTemplateValidWeapons");
-            let oaValidSpells = actor.getFlag("midi-qol", "opportunityAttackTemplateValidSpells");
-            let mwakRange = actor.getFlag("midi-qol", "opportunityAttackTemplateMwakRange");
-            let oaTTS = actor.getFlag("midi-qol", "opportunityAttackTemplateTokenSize");
-            let oaConFac = actor.getFlag("midi-qol", "opportunityAttackTemplateConFac");
+            const existingOA = actor.items.filter(item => item.name === itemName);
+            if(existingOA.length > 0 && existingOA[0].system.source?.custom === newItem.system.source?.custom && existingOA.length === 1) {
+                await existingOA[0].use();
+                return;
+            }
+            const itemIdsToDelete = existingOA.map(item => item.id);
+            let templateFlag = await actor.getFlag("midi-qol", "opportunityAttackTemplate");
+            let checkRiposteFlag = await actor.getFlag("midi-qol", "checkRiposteDecision");
+            let checkBraceFlag = await actor.getFlag("midi-qol", "checkBraceDecision");
+            let oaValidWeapons = await actor.getFlag("midi-qol", "opportunityAttackTemplateValidWeapons");
+            let oaValidSpells = await actor.getFlag("midi-qol", "opportunityAttackTemplateValidSpells");
+            let mwakRange = await actor.getFlag("midi-qol", "opportunityAttackTemplateMwakRange");
+            let oaTTS = await actor.getFlag("midi-qol", "opportunityAttackTemplateTokenSize");
+            let oaConFac = await actor.getFlag("midi-qol", "opportunityAttackTemplateConFac");
 
             if (itemIdsToDelete.length > 0) {
                 await actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
@@ -63,25 +67,18 @@ async function enableOpportunityAttack(combat, combatEvent) {
 
 async function disableOpportunityAttack(combat, combatEvent) {
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
-    const itemName = 'Opportunity Attack';
 
     async function processCombatant(combatant) {
         const { actor } = combatant;
-        let existingItems = actor.items.filter(item => item.name === itemName);
-        let itemIdsToDelete = existingItems.map(item => item.id);
-        let templateFlag = actor.getFlag("midi-qol", "opportunityAttackTemplate");
-        let checkRiposteFlag = actor.getFlag("midi-qol", "checkRiposteDecision");
-        let checkBraceFlag = actor.getFlag("midi-qol", "checkBraceDecision");
-        let oaValidWeapons = actor.getFlag("midi-qol", "opportunityAttackTemplateValidWeapons");
-        let oaValidSpells = actor.getFlag("midi-qol", "opportunityAttackTemplateValidSpells");
-        let mwakRange = actor.getFlag("midi-qol", "opportunityAttackTemplateMwakRange");
-        let oaTTS = actor.getFlag("midi-qol", "opportunityAttackTemplateTokenSize");
-        let oaConFac = actor.getFlag("midi-qol", "opportunityAttackTemplateConFac");
+        let templateFlag = await actor.getFlag("midi-qol", "opportunityAttackTemplate");
+        let checkRiposteFlag = await actor.getFlag("midi-qol", "checkRiposteDecision");
+        let checkBraceFlag = await actor.getFlag("midi-qol", "checkBraceDecision");
+        let oaValidWeapons = await actor.getFlag("midi-qol", "opportunityAttackTemplateValidWeapons");
+        let oaValidSpells = await actor.getFlag("midi-qol", "opportunityAttackTemplateValidSpells");
+        let mwakRange = await actor.getFlag("midi-qol", "opportunityAttackTemplateMwakRange");
+        let oaTTS = await actor.getFlag("midi-qol", "opportunityAttackTemplateTokenSize");
+        let oaConFac = await actor.getFlag("midi-qol", "opportunityAttackTemplateConFac");
         let templateData = templateFlag ? await fromUuid(templateFlag) : null;
-
-        if (itemIdsToDelete.length > 0) {
-            await actor.deleteEmbeddedDocuments("Item", itemIdsToDelete);
-        }
 
         let effectNames = ["Opportunity Attack", "Opportunity Attack - Sentinel", "Opportunity Attack - Riposte", "Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack", "Maneuvers: Riposte Opportunity Attack", "Sentinel Attack", "Riposte Attack"];
         let effectIdsToDelete = actor.effects
