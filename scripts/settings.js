@@ -116,6 +116,60 @@ function registerSettings() {
         }
     });
 
+    game.settings.register('gambits-premades', 'Enable Interception', {
+        name: "Enable Interception",
+        hint: "If enabled, this will present an appropriate dialog to users with fighting style: interception, and automate interception application when used.",
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Interception Timeout', {
+        name: "Interception Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        scope: 'world',
+        config: true,
+        type: String,
+        default: "30",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+                // Used numericValue as a number
+            } else {
+                // Handle invalid input
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
+    /*game.settings.register('gambits-premades', 'Enable Poetry In Misery', {
+        name: "Enable Poetry In Misery",
+        hint: "If enabled, this will present an appropriate dialog to users with bards Poetry in Misery feature, and automate application when used.",
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Poetry In Misery Timeout', {
+        name: "Poetry In Misery Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: true,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+                // Used numericValue as a number
+            } else {
+                // Handle invalid input
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });*/
+
     game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
         name: "Enable Identify Restrictions",
         hint: "If enabled, this will prevent player characters from Identifying unidentified items through usual methods.",
@@ -165,6 +219,15 @@ function registerSettings() {
 
     game.settings.register("gambits-premades", "enableAutoSucceedIndomitable", {
         name: "enableAutoSucceedIndomitable",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register("gambits-premades", "enableProtectionOnSuccess", {
+        name: "enableProtectionOnSuccess",
         scope: "world",
         config: false,
         type: Boolean,

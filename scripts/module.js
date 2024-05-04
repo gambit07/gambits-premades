@@ -1,7 +1,9 @@
 import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
 import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize } from './helpers.js';
+import { interception, showInterceptionDialog } from './macros/interception.js';
+//import { poetryInMisery, showPoetryInMiseryDialog } from './macros/poetryInMisery.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -23,6 +25,11 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("rollAsUser", rollAsUser);
     socket.register("convertFromFeet", convertFromFeet);
     socket.register("gmUpdateTemplateSize", gmUpdateTemplateSize);
+    socket.register("findValidTokens", findValidTokens);
+    socket.register("interception", interception);
+    socket.register("showInterceptionDialog", showInterceptionDialog);
+    //socket.register("poetryInMisery", poetryInMisery);
+    //socket.register("showPoetryInMiseryDialog", showPoetryInMiseryDialog);
 })
 
 Hooks.once('ready', async function() {
@@ -56,7 +63,13 @@ Hooks.once('ready', async function() {
         let workflowItemUuid = workflow.itemUuid;
         if (game.settings.get('gambits-premades', 'Enable Silvery Barbs') === true) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack" });
         if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack" });
+        
     });
+
+    /*Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
+        let workflowItemUuid = workflow.itemUuid;
+        if (game.settings.get('gambits-premades', 'Enable Poetry In Misery') === true) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack" });
+    });*/
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
@@ -74,6 +87,7 @@ Hooks.once('ready', async function() {
     Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage" });
+        if (game.settings.get('gambits-premades', 'Enable Interception') === true) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage" });
     });
 
     /*Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {

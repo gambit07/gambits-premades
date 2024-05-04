@@ -17,11 +17,13 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Matalotok: Fully automated with some fun sequencer effects." >> release_notes.txt
-          echo "  - Bursting Arrow:  Automation for Fighters Arcane Shot Bursting Arrow feature." >> release_notes.txt
+          echo "  - Cold Aura: Automates the Ice Spider Queen monsters Cold Aura feature." >> release_notes.txt
+          echo "  - Fighting Style Interception: Automates the fighters fighting style interception. This feature can be enabled in the modules settings." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: A number of small under the hood optimizations in the quest for efficiency. The largest among them is OA will now check the items version and only remove and re-add the OA item if a change is found, but a bunch of other small poorly written things have been made more better as well. Added handling for the Escape the Hoard feature." >> release_notes.txt
-          echo "  - Grasping Arrow: Updated the sequencer effect to persist on the effected token while the effect is active and tied mask to token." >> release_notes.txt
+          echo "  - Fighting Style Protection: Added homebrew option to only enable dialog if the target takes a successful hit." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Indomitable: Prompt to use Indomitable will now only display on a failed saving throw." >> release_notes.txt
+          echo "  - Identify: Fixed a typo preventing identify from working when the identify lockdown setting is off." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

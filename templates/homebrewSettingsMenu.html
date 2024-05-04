@@ -1,5 +1,11 @@
 <form class="categories flexcol">
   <div class="form-group">
+    <label style="flex-grow: 1; flex-basis: auto;" for="enableProtectionOnSuccess">Fighting Style - Protection: Enable only on a successful attack</label>
+    <div class="form-fields">
+      <input type="checkbox" id="enableProtectionOnSuccess" name="enableProtectionOnSuccess" data-dtype="Boolean" {{checked enableProtectionOnSuccess}}/>
+    </div>
+  </div>
+  <div class="form-group">
     <label style="flex-grow: 1; flex-basis: auto;" for="enableAutoSucceedIndomitable">Indomitable: Enable auto success on use</label>
     <div class="form-fields">
       <input type="checkbox" id="enableAutoSucceedIndomitable" name="enableAutoSucceedIndomitable" data-dtype="Boolean" {{checked enableAutoSucceedIndomitable}}/>
