@@ -16,14 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Cold Aura: Automates the Ice Spider Queen monsters Cold Aura feature." >> release_notes.txt
-          echo "  - Fighting Style Interception: Automates the fighters fighting style interception. This feature can be enabled in the modules settings." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Fighting Style Protection: Added homebrew option to only enable dialog if the target takes a successful hit." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Indomitable: Prompt to use Indomitable will now only display on a failed saving throw." >> release_notes.txt
-          echo "  - Identify: Fixed a typo preventing identify from working when the identify lockdown setting is off." >> release_notes.txt
+          echo "  - Fighting Style Protection: Fixed the new homebrew option and added chat card outputs for the disadvantaged attack roll result." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

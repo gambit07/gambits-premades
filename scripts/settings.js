@@ -252,7 +252,8 @@ class homebrewSettingsMenu extends FormApplication {
         return {
             disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
             enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20"),
-            enableAutoSucceedIndomitable: game.settings.get("gambits-premades", "enableAutoSucceedIndomitable")
+            enableAutoSucceedIndomitable: game.settings.get("gambits-premades", "enableAutoSucceedIndomitable"),
+            enableProtectionOnSuccess: game.settings.get("gambits-premades", "enableProtectionOnSuccess")
         };
     }
 
@@ -260,5 +261,6 @@ class homebrewSettingsMenu extends FormApplication {
         await game.settings.set("gambits-premades", "disableSilveryBarbsOnNat20", formData.disableSilveryBarbsOnNat20);
         await game.settings.set("gambits-premades", "enableSilveryBarbsOnNat20", formData.enableSilveryBarbsOnNat20);
         await game.settings.set("gambits-premades", "enableAutoSucceedIndomitable", formData.enableAutoSucceedIndomitable);
+        await game.settings.set("gambits-premades", "enableProtectionOnSuccess", formData.enableProtectionOnSuccess);
     }
 }
