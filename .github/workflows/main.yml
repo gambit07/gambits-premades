@@ -16,10 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Poetry in Misery: Automates the Bard College of Tragedys feature for attack rolls, saving throws, and ability checks (made via the core 5e ability system)" >> release_notes.txt
-          echo "  - Shadow Arrow: Automation for Fighters Arcane Shot Shadow Arrow feature." >> release_notes.txt
-          echo "  - Beguiling Arrow: Automation for Fighters Arcane Shot Beguiling Arrow feature." >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Poetry in Misery: Added the ability to use character sheet initiations of Ability Checks and Saving Throws outside of combat." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

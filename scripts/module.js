@@ -102,17 +102,11 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {
-        if (poetryInMiseryEnabled) {
-            await executeWorkflow({
-                workflowItem: "poetryInMisery",
-                workflowData: {
-                    actor: actor,
-                    roll: roll,
-                    abilityId: abilityId
-                },
-                workflowType: "ability"
-            });
-        }
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "ability" });
+    });
+    
+    Hooks.on("dnd5e.rollAbilitySave", async (actor, roll, abilityId) => {
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "save" });
     });
 });
 

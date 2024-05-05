@@ -10,7 +10,7 @@ export async function poetryInMisery({workflowData,workflowType}) {
     let initiatingToken;
     (workflow) ? initiatingToken = workflow.token : initiatingToken = await MidiQOL.tokenForActor(workflowData.actor.uuid);
 
-    if (!game.combat) return;
+    if (!game.combat && (workflowType === "attack")) return;
 
     // Check if Opportunity Attack is initiating the workflow
     if(workflow?.item.name === "Opportunity Attack") return;
@@ -50,10 +50,17 @@ export async function poetryInMisery({workflowData,workflowType}) {
             if(!workflow.attackRoll.isFumble) return;
         }
         if (workflowType === "save") {
-            if(initiatingToken.document.disposition === validTokenPrimary.document.disposition) return;
-            const fumbleRoll = workflow.saveRolls.find(roll => roll.isFumble && roll.data.token.document.disposition === validTokenPrimary.document.disposition);
-            if(!fumbleRoll) return;
-            chatActor = fumbleRoll.data.token.actor;
+            if(workflow) {
+                if(initiatingToken.document.disposition === validTokenPrimary.document.disposition) return;
+                const fumbleRoll = workflow.saveRolls.find(roll => roll.isFumble && roll.data.token.document.disposition === validTokenPrimary.document.disposition);
+                if(!fumbleRoll) return;
+                chatActor = fumbleRoll.data.token.actor;
+            }
+            else {
+                if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) return;
+                if(!workflowData.roll.isFumble) return;
+                chatActor = initiatingToken.actor;
+            }
         }
         if(workflowType === "ability") {
             if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) return;
