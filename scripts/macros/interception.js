@@ -18,7 +18,7 @@ export async function interception({workflowData,workflowType}) {
     // Check if Opportunity Attack is initiating the workflow
     if(workflow.item.name === "Opportunity Attack") return;
 
-    let findInterceptionTokens = helpers.findValidTokens(workflow.token, target, itemName, "item", ["mwak", "shield"], true, true, true, 5, true, "ally");
+    let findInterceptionTokens = helpers.findValidTokens({token: workflow.token, target: target, itemName: itemName, itemType: "item", itemChecked: ["mwak", "shield"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType});
 
     let browserUser;
 

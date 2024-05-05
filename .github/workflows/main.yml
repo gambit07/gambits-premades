@@ -16,8 +16,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Fighting Style Protection: Fixed the new homebrew option and added chat card outputs for the disadvantaged attack roll result." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Poetry in Misery: Automates the Bard College of Tragedys feature for attack rolls, saving throws, and ability checks (made via the core 5e ability system)" >> release_notes.txt
+          echo "  - Shadow Arrow: Automation for Fighters Arcane Shot Shadow Arrow feature." >> release_notes.txt
+          echo "  - Beguiling Arrow: Automation for Fighters Arcane Shot Beguiling Arrow feature." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

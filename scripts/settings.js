@@ -27,9 +27,7 @@ function registerSettings() {
         onChange: value => {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
-                // Used numericValue as a number
             } else {
-                // Handle invalid input
                 console.error("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
@@ -54,9 +52,7 @@ function registerSettings() {
         onChange: value => {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
-                // Used numericValue as a number
             } else {
-                // Handle invalid input
                 console.error("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
@@ -81,9 +77,7 @@ function registerSettings() {
         onChange: value => {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
-                // Used numericValue as a number
             } else {
-                // Handle invalid input
                 console.error("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
@@ -108,9 +102,7 @@ function registerSettings() {
         onChange: value => {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
-                // Used numericValue as a number
             } else {
-                // Handle invalid input
                 console.error("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
@@ -135,15 +127,13 @@ function registerSettings() {
         onChange: value => {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
-                // Used numericValue as a number
             } else {
-                // Handle invalid input
                 console.error("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
 
-    /*game.settings.register('gambits-premades', 'Enable Poetry In Misery', {
+    game.settings.register('gambits-premades', 'Enable Poetry In Misery', {
         name: "Enable Poetry In Misery",
         hint: "If enabled, this will present an appropriate dialog to users with bards Poetry in Misery feature, and automate application when used.",
         scope: 'world',
@@ -162,13 +152,11 @@ function registerSettings() {
         onChange: value => {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
-                // Used numericValue as a number
             } else {
-                // Handle invalid input
                 console.error("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
-    });*/
+    });
 
     game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
         name: "Enable Identify Restrictions",

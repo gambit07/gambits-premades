@@ -40,7 +40,6 @@ export async function rollAsUser({ rollParams, type }) {
     reroll = await new Roll(`${rollParams}`).evaluate({async: true});
 
     await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
-    console.log(reroll,"this is reroll helper")
     return reroll;
 }
 
@@ -86,7 +85,7 @@ export async function handleDialogPromises(userDialogPromise, gmDialogPromise) {
     });
 }
 
-export function findValidTokens(token, target, itemName, itemType, itemChecked, reactionCheck, sightCheck, rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType) {
+export function findValidTokens({token, target, itemName, itemType, itemChecked, reactionCheck, sightCheck, rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType}) {
     let validTokens = game.combat.combatants.map(combatant => canvas.tokens.get(combatant.tokenId)).filter(t => {
 
         // Check if invalid token on the canvas

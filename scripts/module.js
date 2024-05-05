@@ -2,7 +2,7 @@ import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
 import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
 import { interception, showInterceptionDialog } from './macros/interception.js';
-//import { poetryInMisery, showPoetryInMiseryDialog } from './macros/poetryInMisery.js';
+import { poetryInMisery, showPoetryInMiseryDialog } from './macros/poetryInMisery.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens } from './helpers.js';
 export let socket;
 
@@ -28,8 +28,8 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("findValidTokens", findValidTokens);
     socket.register("interception", interception);
     socket.register("showInterceptionDialog", showInterceptionDialog);
-    //socket.register("poetryInMisery", poetryInMisery);
-    //socket.register("showPoetryInMiseryDialog", showPoetryInMiseryDialog);
+    socket.register("poetryInMisery", poetryInMisery);
+    socket.register("showPoetryInMiseryDialog", showPoetryInMiseryDialog);
 })
 
 Hooks.once('ready', async function() {
@@ -46,6 +46,13 @@ Hooks.once('ready', async function() {
         socket
     };
 
+    const counterspellEnabled = game.settings.get('gambits-premades', 'Enable Counterspell');
+    const silveryBarbsEnabled = game.settings.get('gambits-premades', 'Enable Silvery Barbs');
+    const cuttingWordsEnabled = game.settings.get('gambits-premades', 'Enable Cutting Words');
+    const poetryInMiseryEnabled = game.settings.get('gambits-premades', 'Enable Poetry In Misery');
+    const interceptionEnabled = game.settings.get('gambits-premades', 'Enable Interception');
+    const identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
+
     async function executeWorkflow({ workflowItem, workflowData, workflowType }) {
         if (game.user.isGM) {
             await socket.executeAsGM( workflowItem, { workflowData: workflowData, workflowType: workflowType });
@@ -56,29 +63,33 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (game.settings.get('gambits-premades', 'Enable Counterspell') === true) await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid });
+        if (counterspellEnabled) await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid });
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (game.settings.get('gambits-premades', 'Enable Silvery Barbs') === true) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack" });
-        if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack" });
+        if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack" });
+        if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack" });
         
     });
 
-    /*Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
+    Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (game.settings.get('gambits-premades', 'Enable Poetry In Misery') === true) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack" });
-    });*/
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack" });
+    });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (game.settings.get('gambits-premades', 'Enable Silvery Barbs') === true) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save" });
+        if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save" });
+    });
+
+    Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
+        let workflowItemUuid = workflow.itemUuid;
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save" });
     });
 
     Hooks.on("preUpdateItem", (item, update) => {
-        if (!game.user.isGM && ("identified" in (update.system ?? {})) && game.settings.get('gambits-premades', 'Enable Identify Restrictions') === true) {
-            console.log(item, update)
+        if (!game.user.isGM && ("identified" in (update.system ?? {})) && identifyRestrictionEnabled) {
             ui.notifications.error(`${game.settings.get('gambits-premades', 'Identify Restriction Message')}`);
             return false;
         }
@@ -86,14 +97,14 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (game.settings.get('gambits-premades', 'Enable Cutting Words') === true) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage" });
-        if (game.settings.get('gambits-premades', 'Enable Interception') === true) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage" });
+        if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage" });
+        if (interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage" });
     });
 
-    /*Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {
-        if (game.settings.get('gambits-premades', 'Enable Cutting Words')) {
+    Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {
+        if (poetryInMiseryEnabled) {
             await executeWorkflow({
-                workflowItem: "cuttingWords",
+                workflowItem: "poetryInMisery",
                 workflowData: {
                     actor: actor,
                     roll: roll,
@@ -102,7 +113,7 @@ Hooks.once('ready', async function() {
                 workflowType: "ability"
             });
         }
-    });*/
+    });
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {
