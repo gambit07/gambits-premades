@@ -17,7 +17,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Updates:" >> release_notes.txt
-          echo "  - Poetry in Misery: Added the ability to use character sheet initiations of Ability Checks and Saving Throws outside of combat." >> release_notes.txt
+          echo "  - Poetry in Misery: Optimized split between combat and non combat triggers." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

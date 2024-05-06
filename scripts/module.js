@@ -53,11 +53,11 @@ Hooks.once('ready', async function() {
     const interceptionEnabled = game.settings.get('gambits-premades', 'Enable Interception');
     const identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
 
-    async function executeWorkflow({ workflowItem, workflowData, workflowType }) {
+    async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
         if (game.user.isGM) {
-            await socket.executeAsGM( workflowItem, { workflowData: workflowData, workflowType: workflowType });
+            await socket.executeAsGM( workflowItem, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
         } else {
-            await socket.executeAsUser( workflowItem, game.user.id, { workflowData: workflowData, workflowType: workflowType });
+            await socket.executeAsUser( workflowItem, game.user.id, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
         }
     }
 
@@ -68,24 +68,24 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack" });
-        if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack" });
+        if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack" });
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save" });
+        if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save" });
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("preUpdateItem", (item, update) => {
@@ -97,16 +97,16 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage" });
-        if (interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage" });
+        if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
+        if (interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
     });
 
     Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "ability" });
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "ability", workflowCombat: false });
     });
     
     Hooks.on("dnd5e.rollAbilitySave", async (actor, roll, abilityId) => {
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "save" });
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "save", workflowCombat: false });
     });
 });
 

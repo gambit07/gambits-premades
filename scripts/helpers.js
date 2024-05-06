@@ -85,9 +85,16 @@ export async function handleDialogPromises(userDialogPromise, gmDialogPromise) {
     });
 }
 
-export function findValidTokens({token, target, itemName, itemType, itemChecked, reactionCheck, sightCheck, rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType}) {
-    let validTokens = game.combat.combatants.map(combatant => canvas.tokens.get(combatant.tokenId)).filter(t => {
+export function findValidTokens({token, target, itemName, itemType, itemChecked, reactionCheck, sightCheck, rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat}) {
+    let validTokens;
 
+    if (workflowCombat === false) {
+        validTokens = canvas.tokens.placeables.filter(t => filterToken(t));
+    } else {
+        validTokens = game.combat.combatants.map(combatant => canvas.tokens.get(combatant.tokenId)).filter(t => filterToken(t));
+    }
+    
+    function filterToken(t) {
         // Check if invalid token on the canvas
         if (!t.actor) return;
 
@@ -170,7 +177,7 @@ export function findValidTokens({token, target, itemName, itemType, itemChecked,
         }
 
         return t;
-    });
+    };
 
-return validTokens;
+    return validTokens;
 }

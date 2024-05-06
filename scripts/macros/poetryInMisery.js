@@ -1,9 +1,10 @@
-export async function poetryInMisery({workflowData,workflowType}) {
+export async function poetryInMisery({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
     const socket = module.socket;
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
+    console.log(workflowCombat)
     let itemName = "poetry in misery";
     if(!workflow && !workflowData.actor) return;
     if(workflow?.item.name.toLowerCase() === itemName) return;
@@ -15,7 +16,7 @@ export async function poetryInMisery({workflowData,workflowType}) {
     // Check if Opportunity Attack is initiating the workflow
     if(workflow?.item.name === "Opportunity Attack") return;
 
-    let findPoetryInMiseryTokens = helpers.findValidTokens({token: initiatingToken, target: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: false, dispositionCheckType: "ally", workflowType: workflowType});
+    let findPoetryInMiseryTokens = helpers.findValidTokens({token: initiatingToken, target: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: false, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
 
     let browserUser;
 
@@ -97,7 +98,7 @@ export async function poetryInMisery({workflowData,workflowType}) {
             }
 
             let content;
-            if (workflowType === "attack" || workflowType === "ability") content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${initiatingToken.actor.name}'s nat 1 attack roll and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+            if (workflowType === "attack") content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${initiatingToken.actor.name}'s nat 1 attack roll and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             else if (workflowType === "ability") content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${initiatingToken.actor.name}'s nat 1 ability check and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             else if (workflowType === "save") content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${chatActor.name}'s nat 1 saving throw and regain a use of Bardic Inspiration.<br/><img src="${chatActor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
