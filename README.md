@@ -79,6 +79,15 @@ https://github.com/gambit07/gambits-premades/assets/4236874/36d2bd22-61fc-4d80-a
 </details>
 
 <details>
+<summary><b>Poetry in Misery</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/cda2836c-1d9c-4290-8993-1efedcb69e15
+
+</p>
+</details>
+
+<details>
 <summary><b>Lantern, Bullseye</b> (click to expand)</summary>
 <p>
 
