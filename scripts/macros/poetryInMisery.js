@@ -63,7 +63,7 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
                 chatActor = initiatingToken.actor;
             }
         }
-        if(workflowType === "ability") {
+        if(workflowType === "ability" || workflowType === "skill") {
             if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) return;
             if(!workflowData.roll.isFumble) return;
         }
@@ -97,10 +97,10 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
                 await itemData.update({ 'system.uses.value' : itemData.system.uses.value + 1 })
             }
 
-            let content;
-            if (workflowType === "attack") content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${initiatingToken.actor.name}'s nat 1 attack roll and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
-            else if (workflowType === "ability") content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${initiatingToken.actor.name}'s nat 1 ability check and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
-            else if (workflowType === "save") content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${chatActor.name}'s nat 1 saving throw and regain a use of Bardic Inspiration.<br/><img src="${chatActor.img}" width="30" height="30" style="border:0px"></span>`;
+            let typeText = (workflowType === "attack") ? `${initiatingToken.actor.name}'s nat 1 attack roll` : (workflowType === "ability") ? `${initiatingToken.actor.name}'s nat 1 ability check` : (workflowType === "skill") ? `${initiatingToken.actor.name}'s nat 1 skill check` : `${chatActor.name}'s nat 1 saving throw`;
+
+
+            let content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${typeText} and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
             let chatData = {
             user: actorPlayer.id,

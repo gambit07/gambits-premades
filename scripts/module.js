@@ -101,12 +101,16 @@ Hooks.once('ready', async function() {
         if (interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
     });
 
+    Hooks.on("dnd5e.rollAbilitySave", async (actor, roll, abilityId) => {
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "save", workflowCombat: false });
+    });
+
     Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {
         if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "ability", workflowCombat: false });
     });
-    
-    Hooks.on("dnd5e.rollAbilitySave", async (actor, roll, abilityId) => {
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "save", workflowCombat: false });
+
+    Hooks.on("dnd5e.rollSkill", async (actor, roll, abilityId) => {
+        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "skill", workflowCombat: false });
     });
 });
 
