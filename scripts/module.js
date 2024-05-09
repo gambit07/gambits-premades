@@ -141,6 +141,7 @@ Hooks.on("createCombatant", async (combatant, options, userId) => {
 
 Hooks.on('deleteCombat', async (combat) => {
     if(!game.user.isGM) return;
+    console.log(game.user, "how are we getting here")
     if(game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) await disableOpportunityAttack(combat, "endCombat");
 });
 

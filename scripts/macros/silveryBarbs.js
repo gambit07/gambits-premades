@@ -284,6 +284,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
         let dialogContent;
         let originToken = fromUuidSync(tokenUuid);
         let browserUser = MidiQOL.playerForActor(originToken.actor);
+        const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
 
         const nearbyFriendlies = MidiQOL.findNearby(null, originToken.object, 60, { includeToken: true });
         let validFriendlies = nearbyFriendlies.filter(token => token.document.disposition === originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid) && !token.actor.effects.getName("Silvery Barbs - Advantage"));
@@ -291,7 +292,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
         dialogContent = `
             <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
             <div style='margin-bottom: 20px;'>
-                <p style='margin: 0; font-weight: bold;'>The target rolled a ${attackTotal} to attack. Would you like to use your reaction to cast Silvery Barbs?</p>
+                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs? ${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `An enemy successfully hit your ally with a ${attackTotal}.` : "An enemy successfully hit your ally."}</p>
             </div>
             <div style='display: flex; width: 100%; gap: 20px;'>
                 <div style='flex-grow: 1; display: flex; flex-direction: column;'>
@@ -320,7 +321,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
         dialogContent = `
             <div style='display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;'>
             <div style='margin-bottom: 20px;'>
-                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs?</p>
+                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs? An enemy succeeded their saving throw.</p>
             </div>
             <div style='display: flex; width: 100%; gap: 20px; align-items: start; padding-bottom: 5px; border-bottom: 1px solid #ccc;'>
                 <div style='flex-grow: 1; display: flex; flex-direction: column;'>
