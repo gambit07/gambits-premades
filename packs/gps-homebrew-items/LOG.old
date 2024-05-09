@@ -1,23 +1,8 @@
-2024/05/07-19:16:31.419 7274 Recovering log #1937
-2024/05/07-19:16:31.419 7274 Level-0 table #1939: started
-2024/05/07-19:16:31.424 7274 Level-0 table #1939: 4254 bytes OK
-2024/05/07-19:16:31.430 7274 Delete type=0 #1937
-2024/05/07-19:16:31.430 7274 Delete type=3 #1936
-2024/05/08-18:34:53.102 358c Level-0 table #1942: started
-2024/05/08-18:34:53.102 358c Level-0 table #1942: 0 bytes OK
-2024/05/08-18:34:53.105 358c Delete type=0 #1940
-2024/05/08-18:34:53.105 358c Manual compaction at level-0 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.eA3jhjz26f35OLfw' @ 0 : 0; will stop at '!items!94e5PuWVEwaapgWY' @ 288 : 1
-2024/05/08-18:34:53.105 358c Compacting 1@0 + 0@1 files
-2024/05/08-18:34:53.108 358c Generated table #1943@0: 1 keys, 4254 bytes
-2024/05/08-18:34:53.108 358c Compacted 1@0 + 0@1 files => 4254 bytes
-2024/05/08-18:34:53.111 358c compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/05/08-18:34:53.111 358c Delete type=2 #1939
-2024/05/08-18:34:53.114 358c Manual compaction at level-0 from '!items!94e5PuWVEwaapgWY' @ 288 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.eA3jhjz26f35OLfw' @ 0 : 0; will stop at (end)
-2024/05/08-18:34:53.119 358c Manual compaction at level-1 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.eA3jhjz26f35OLfw' @ 0 : 0; will stop at '!items!94e5PuWVEwaapgWY' @ 288 : 1
-2024/05/08-18:34:53.119 358c Compacting 1@1 + 1@2 files
-2024/05/08-18:34:53.125 358c Generated table #1944@1: 21 keys, 36527 bytes
-2024/05/08-18:34:53.125 358c Compacted 1@1 + 1@2 files => 36527 bytes
-2024/05/08-18:34:53.127 358c compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/05/08-18:34:53.127 358c Delete type=2 #1821
-2024/05/08-18:34:53.127 358c Delete type=2 #1943
-2024/05/08-18:34:53.127 358c Manual compaction at level-1 from '!items!94e5PuWVEwaapgWY' @ 288 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.eA3jhjz26f35OLfw' @ 0 : 0; will stop at (end)
+2024/05/08-20:45:53.863 7274 Recovering log #1947
+2024/05/08-20:45:53.868 7274 Delete type=0 #1947
+2024/05/08-20:45:53.869 7274 Delete type=3 #1945
+2024/05/08-21:28:17.109 358c Level-0 table #1952: started
+2024/05/08-21:28:17.109 358c Level-0 table #1952: 0 bytes OK
+2024/05/08-21:28:17.112 358c Delete type=0 #1950
+2024/05/08-21:28:17.119 358c Manual compaction at level-0 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.eA3jhjz26f35OLfw' @ 0 : 0; will stop at (end)
+2024/05/08-21:28:17.119 358c Manual compaction at level-1 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.eA3jhjz26f35OLfw' @ 0 : 0; will stop at (end)

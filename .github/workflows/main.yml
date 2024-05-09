@@ -16,14 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Command: This will display a chat output and a sequencer effect of the word the user selects to the target on their turn. Credit to @motomoto0295 for getting this one rolling" >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Poetry in Misery: Add support for skill checks." >> release_notes.txt
-          echo "  - Opportunity Attack: Default template on hover to false via Walled Templates. Removed need for Token Attacher if Walled Templates active, in the future token attacher will be removed completely. Fixed visual glitch with template outlines displaying after combat start." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Dragon Turtle Dueling Shield: Fix flag not being cleared if OA declined." >> release_notes.txt
-          echo "  - Enervation: A number of bug fixes and updates including support for 1 Action effect expiration, full cover effect expiration, non dfreds CE concentration failing, and item not referencing macroItem correctly." >> release_notes.txt
+          echo "  - Opportunity Attack: Couple quick bugfixes." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
