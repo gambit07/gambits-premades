@@ -16,10 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Silvery Barbs: Update to make use of Midi Roll detail settings to determine whether attack total will be displayed" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix for Walled Templates default token attach effect throwing errors on template deletion. Fix for per round template re-sizing not including the workaround for token attacher (if needed)" >> release_notes.txt
+          echo "  - Opportunity Attack: smh forgot to remove default token attaching via Walled Templates" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
