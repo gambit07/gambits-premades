@@ -17,6 +17,15 @@ function registerSettings() {
         default: false
     });
 
+    game.settings.register('gambits-premades', 'Enable Opportunity Attack Legacy System', {
+        name: "Enable Opportunity Attack Legacy System",
+        hint: "If enabled, this will use Token Attacher for template attaching and expect Drag Ruler for movement. Default behaviour uses Walled Templates for template attaching and expects Elevation Ruler for movement. This option will be deprecated in the future.",
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     game.settings.register('gambits-premades', 'Opportunity Attack Timeout', {
         name: "Opportunity Attack Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",

@@ -1,8 +1,15 @@
-2024/05/09-10:43:40.182 72c0 Recovering log #2033
-2024/05/09-10:43:40.188 72c0 Delete type=0 #2033
-2024/05/09-10:43:40.189 72c0 Delete type=3 #2031
-2024/05/09-10:43:43.857 358c Level-0 table #2039: started
-2024/05/09-10:43:43.857 358c Level-0 table #2039: 0 bytes OK
-2024/05/09-10:43:43.861 358c Delete type=0 #2037
-2024/05/09-10:43:43.867 358c Manual compaction at level-0 from '!items!0XoQ7lGPSwjM8Gw4' @ 72057594037927935 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at (end)
-2024/05/09-10:43:43.867 358c Manual compaction at level-1 from '!items!0XoQ7lGPSwjM8Gw4' @ 72057594037927935 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at (end)
+2024/05/10-17:34:18.811 7274 Recovering log #2055
+2024/05/10-17:34:18.820 7274 Delete type=0 #2055
+2024/05/10-17:34:18.821 7274 Delete type=3 #2053
+2024/05/10-18:08:06.736 358c Level-0 table #2060: started
+2024/05/10-18:08:06.759 358c Level-0 table #2060: 174893 bytes OK
+2024/05/10-18:08:06.762 358c Delete type=0 #2058
+2024/05/10-18:08:06.762 358c Manual compaction at level-0 from '!items!0XoQ7lGPSwjM8Gw4' @ 72057594037927935 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at (end)
+2024/05/10-18:08:06.762 358c Manual compaction at level-1 from '!items!0XoQ7lGPSwjM8Gw4' @ 72057594037927935 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at '!items.effects!eUTU3JSbo7X98INw.1IkBgxOFEYJd4z53' @ 507 : 1
+2024/05/10-18:08:06.762 358c Compacting 1@1 + 1@2 files
+2024/05/10-18:08:06.781 358c Generated table #2061@1: 12 keys, 31917 bytes
+2024/05/10-18:08:06.781 358c Compacted 1@1 + 1@2 files => 31917 bytes
+2024/05/10-18:08:06.783 358c compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/05/10-18:08:06.783 358c Delete type=2 #2044
+2024/05/10-18:08:06.784 358c Delete type=2 #2060
+2024/05/10-18:08:06.795 358c Manual compaction at level-1 from '!items.effects!eUTU3JSbo7X98INw.1IkBgxOFEYJd4z53' @ 507 : 1 .. '!items.effects!svKaRfNtOXMOXoW6.NcYMpQ7B3RwBuLC7' @ 0 : 0; will stop at (end)

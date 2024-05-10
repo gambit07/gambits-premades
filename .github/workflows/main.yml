@@ -16,8 +16,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: smh forgot to remove default token attaching via Walled Templates" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Opportunity Attack: Added settings option Enable Opportunity Attack Legacy System. If set this will use token attacher to attach the template to a token instead of using Walled Templates. This will allow Drag Ruler to continue to work. If this setting is off, Elevation Ruler must be used in place of Drag Ruler, and Walled Templates will be used for attaching the template to a token. Some small bugfixes I cant remember as well" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
