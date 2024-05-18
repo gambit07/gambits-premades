@@ -1,0 +1,239 @@
+<head>
+    <style>
+        form.categories .settings-table {
+            width: 100%;
+        }
+
+        .column-item {
+            width: 72%;
+            text-align: left;
+        }
+
+        .column-item-th {
+            width: 72%;
+            text-align: left;
+            padding-left: 4px;
+        }
+
+        .column-enable {
+            width: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .column-enable-td {
+            width: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 0;
+            margin-top: 5px;
+        }
+
+        .column-timeout {
+            width: 18%;
+        }
+
+        form.categories .small-text {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .checkbox-inline input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .sheet-footer button[type="submit"] {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 15px;
+        }
+
+        .sheet-footer button[type="submit"]:hover {
+            background-color: #4A90E2;
+            box-shadow: 0 0 8px #333;
+            border-color: #333;
+        }
+
+        .sheet-footer button[type="submit"]:active {
+            background-color: #3973CF;
+            box-shadow: 0 0 8px #333;
+            border-color: #333;
+        }
+
+        .sheet-footer {
+            height: 60px;
+            padding: 10px 2px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            box-sizing: border-box;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .collapsible-content {
+            display: none;
+        }
+
+        .collapsible-content.show {
+            display: table-row-group;
+        }
+
+        .clickable {
+            cursor: pointer;
+        }
+
+        .clickable label {
+            cursor: pointer;
+        }
+
+        .collapsible-content label {
+            margin-left: 20px;
+        }
+
+        .settings-table tr:hover {
+            background-color: #3972cf71;
+        }
+
+        .form-container {
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+<body>
+    <form class="categories flexcol">
+        <table class="settings-table" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th class="column-item-th">Class Features</th>
+                    <th class="column-enable">Enable</th>
+                    <th class="column-timeout">Timeout (seconds)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="column-item">
+                        <label for="enableCuttingWords">Cutting Words<br><span class="small-text">Presents a dialog to users with cutting words.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableCuttingWords" name="enableCuttingWords" data-dtype="Boolean" {{checked enableCuttingWords}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="cuttingWordsTimeout" name="cuttingWordsTimeout" value="{{cuttingWordsTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="column-item">
+                        <label for="enableInterception">Fighting Style: Interception<br><span class="small-text">Presents a dialog to users with Interception.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableInterception" name="enableInterception" data-dtype="Boolean" {{checked enableInterception}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="interceptionTimeout" name="interceptionTimeout" value="{{interceptionTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+
+                <tr class="clickable" data-content-id="collapsible-content-protection">
+                    <td class="column-item">
+                        <label>Fighting Style: Protection <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to users with Protection.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableProtection" name="enableProtection" data-dtype="Boolean" {{checked enableProtection}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="protectionTimeout" name="protectionTimeout" value="{{protectionTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+                <tbody class="collapsible-content" id="collapsible-content-protection">
+                    <tr>
+                        <td class="column-item">
+                            <label for="enableProtectionOnSuccess">Enable only on a successful attack.</label>
+                        </td>
+                        <td class="column-enable-td">
+                            <div>
+                                <input type="checkbox" id="enableProtectionOnSuccess" name="enableProtectionOnSuccess" data-dtype="Boolean" {{checked enableProtectionOnSuccess}}/>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+
+                <tr class="clickable" data-content-id="collapsible-content-indomitable">
+                    <td class="column-item">
+                        <label>Indomitable <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to users with Indomitable.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableIndomitable" name="enableIndomitable" data-dtype="Boolean" {{checked enableIndomitable}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="indomitableTimeout" name="indomitableTimeout" value="{{indomitableTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+                <tbody class="collapsible-content" id="collapsible-content-indomitable">
+                    <tr>
+                        <td class="column-item">
+                            <label for="enableAutoSucceedIndomitable">Enable auto success on use.</label>
+                        </td>
+                        <td class="column-enable-td">
+                            <div>
+                                <input type="checkbox" id="enableAutoSucceedIndomitable" name="enableAutoSucceedIndomitable" data-dtype="Boolean" {{checked enableAutoSucceedIndomitable}}/>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                <tr>
+                    <td class="column-item">
+                        <label for="enableRiposte">Maneuvers: Riposte<br><span class="small-text">Presents a dialog to users with Riposte.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableRiposte" name="enableRiposte" data-dtype="Boolean" {{checked enableRiposte}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="riposteTimeout" name="riposteTimeout" value="{{riposteTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="column-item">
+                        <label for="enablePoetryInMisery">Poetry in Misery<br><span class="small-text">Presents a dialog to users with Bards Poetry in Misery feature.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enablePoetryInMisery" name="enablePoetryInMisery" data-dtype="Boolean" {{checked enablePoetryInMisery}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="poetryInMiseryTimeout" name="poetryInMiseryTimeout" value="{{poetryInMiseryTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <footer class="sheet-footer flexrow">
+            <button type="submit" name="submit">
+                <i class="fa fa-check"></i> Save Changes
+            </button>
+        </footer>
+    </form>
+</body>

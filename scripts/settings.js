@@ -12,16 +12,16 @@ function registerSettings() {
         name: "Enable Opportunity Attack",
         hint: "If enabled, automatically adds 'Opportunity Attack' item to appropriate combatants on combat start and removes 'Opportunity Attack' item on combat end.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
 
     game.settings.register('gambits-premades', 'Enable Opportunity Attack Legacy System', {
-        name: "Enable Opportunity Attack Legacy System",
-        hint: "If enabled, this will use Token Attacher for template attaching and expect Drag Ruler for movement. Default behaviour uses Walled Templates for template attaching and expects Elevation Ruler for movement. This option will be deprecated in the future.",
+        name: "Enable Legacy Template Attachment",
+        hint: "If enabled, Opportunity Attack will use Token Attacher for template attaching and expect Drag Ruler for movement. Default behaviour uses Walled Templates for template attaching and expects Elevation Ruler for movement. This option will be deprecated in the future.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -30,23 +30,16 @@ function registerSettings() {
         name: "Opportunity Attack Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
         scope: 'world',
-        config: true,
+        config: false,
         type: String,
-        default: "15",
-        onChange: value => {
-            const numericValue = Number(value);
-            if (!isNaN(numericValue)) {
-            } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
-            }
-        }
+        default: "15"
     });
 
     game.settings.register('gambits-premades', 'Enable Counterspell', {
         name: "Enable Counterspell",
         hint: "If enabled, this will present an appropriate dialog to users with counterspell, and automate counterspell application when used.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -55,7 +48,7 @@ function registerSettings() {
         name: "Counterspell Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
         scope: 'world',
-        config: true,
+        config: false,
         type: String,
         default: "15",
         onChange: value => {
@@ -71,7 +64,7 @@ function registerSettings() {
         name: "Enable Silvery Barbs",
         hint: "If enabled, this will present an appropriate dialog to users with silvery barbs, and automate silvery barbs application when used.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -80,7 +73,7 @@ function registerSettings() {
         name: "Silvery Barbs Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
         scope: 'world',
-        config: true,
+        config: false,
         type: String,
         default: "30",
         onChange: value => {
@@ -96,7 +89,7 @@ function registerSettings() {
         name: "Enable Cutting Words",
         hint: "If enabled, this will present an appropriate dialog to users with cutting words, and automate cutting words application when used.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -105,7 +98,7 @@ function registerSettings() {
         name: "Cutting Words Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
         scope: 'world',
-        config: true,
+        config: false,
         type: String,
         default: "30",
         onChange: value => {
@@ -121,7 +114,7 @@ function registerSettings() {
         name: "Enable Interception",
         hint: "If enabled, this will present an appropriate dialog to users with fighting style: interception, and automate interception application when used.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -130,7 +123,7 @@ function registerSettings() {
         name: "Interception Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
         scope: 'world',
-        config: true,
+        config: false,
         type: String,
         default: "30",
         onChange: value => {
@@ -142,20 +135,120 @@ function registerSettings() {
         }
     });
 
-    game.settings.register('gambits-premades', 'Enable Poetry In Misery', {
-        name: "Enable Poetry In Misery",
-        hint: "If enabled, this will present an appropriate dialog to users with bards Poetry in Misery feature, and automate application when used.",
+    game.settings.register('gambits-premades', 'Enable Indomitable', {
+        name: "Enable Indomitable",
+        hint: "",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
 
-    game.settings.register('gambits-premades', 'Poetry In Misery Timeout', {
-        name: "Poetry In Misery Timeout",
+    game.settings.register('gambits-premades', 'Indomitable Timeout', {
+        name: "Indomitable Timeout",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
+    game.settings.register('gambits-premades', 'Enable Protection', {
+        name: "Enable Protection",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Protection Timeout', {
+        name: "Protection Timeout",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
+    game.settings.register('gambits-premades', 'Enable Sentinel', {
+        name: "Enable Sentinel",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Sentinel Timeout', {
+        name: "Sentinel Timeout",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
+    game.settings.register('gambits-premades', 'Enable Riposte', {
+        name: "Enable Riposte",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Riposte Timeout', {
+        name: "Riposte Timeout",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
+    game.settings.register('gambits-premades', 'Enable Poetry in Misery', {
+        name: "Enable Poetry in Misery",
+        hint: "If enabled, this will present an appropriate dialog to users with bards Poetry in Misery feature, and automate application when used.",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Poetry in Misery Timeout', {
+        name: "Poetry in Misery Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
         scope: 'world',
-        config: true,
+        config: false,
         type: String,
         default: "15",
         onChange: value => {
@@ -185,15 +278,13 @@ function registerSettings() {
         default: "Nice try, DENIED ;)"
     });
 
-    game.settings.registerMenu('gambits-premades', 'customConfig', {
-        name: game.i18n.localize("Configure Homebrew Options"),
-        label: game.i18n.localize("Configure"),
-        hint: game.i18n.localize("Homebrew options for the spells below"),
-        icon: 'fas fa-wrench',
+    game.settings.register('gambits-premades', 'debugEnabled', {
+        name: "Enable Debug",
+        hint: "If enabled, this will output console logs for the reaction validation process for troubleshooting.",
         scope: 'world',
         config: true,
-        type: homebrewSettingsMenu,
-        restricted: true
+        type: Boolean,
+        default: false
     });
 
     game.settings.register("gambits-premades", "disableSilveryBarbsOnNat20", {
@@ -231,33 +322,233 @@ function registerSettings() {
         default: false,
         type: Boolean
     });
+
+    game.settings.registerMenu('gambits-premades', 'spells', {
+        name: game.i18n.localize("Spells"),
+        label: game.i18n.localize("Enable Spells"),
+        hint: game.i18n.localize("Counterspell, Silvery Barbs"),
+        icon: 'fas fa-magic',
+        scope: 'world',
+        config: true,
+        type: spellSettingsMenu,
+        restricted: true
+    });
+
+    game.settings.registerMenu('gambits-premades', 'classFeatures', {
+        name: game.i18n.localize("Class Features"),
+        label: game.i18n.localize("Enable Class Features"),
+        hint: game.i18n.localize("Cutting Words, Interception, Poetry in Misery"),
+        icon: 'fas fa-book',
+        scope: 'world',
+        config: true,
+        type: classFeaturesSettingsMenu,
+        restricted: true
+    });
+
+    game.settings.registerMenu('gambits-premades', 'genericFeatures', {
+        name: game.i18n.localize("Generic Features"),
+        label: game.i18n.localize("Enable Generic Features"),
+        hint: game.i18n.localize("Opportunity Attack"),
+        icon: 'fas fa-globe',
+        scope: 'world',
+        config: true,
+        type: genericFeatureSettingsMenu,
+        restricted: true
+    });
 }
 
-class homebrewSettingsMenu extends FormApplication {
+class BaseSettingsMenu extends FormApplication {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            id: "homebrewSettingsMenu",
-            title: "Homebrew Options",
-            template: "modules/gambits-premades/templates/homebrewSettingsMenu.html",
             classes: ["gambits-premades", "settings-window"],
-            width: 500,
+            width: 700,
             closeOnSubmit: true
+        });
+    }
+
+    activateListeners(html) {
+        super.activateListeners(html);
+        this.expandCheckedCollapsibleSections(html);
+
+        function validateNumericInput(inputElement) {
+            const numericValue = Number(inputElement.value);
+            if (isNaN(numericValue)) {
+                console.error("Invalid input: Not a number.");
+                inputElement.value = inputElement.defaultValue;
+            }
+        }
+
+        html.find('.column-enable-td input[type="checkbox"]').on('click', (event) => {
+            event.stopPropagation();
+        });
+
+        html.find('.clickable').on('click', (event) => {
+            const contentId = $(event.currentTarget).data('content-id');
+            this.toggleCollapsibleContent(event, contentId);
+        });
+
+        html.find('.column-timeout input[data-dtype="String"]').on('input', function() {
+            validateNumericInput(this);
+        });
+    }
+
+    expandCheckedCollapsibleSections(html) {
+        const data = this.getData();
+
+        if (data.enableProtection && data.enableProtectionOnSuccess) {
+            const protectionContent = html.find('#collapsible-content-protection');
+            if (protectionContent.length) {
+                protectionContent.addClass('show');
+            }
+        }
+
+        if (data.enableIndomitable && data.enableAutoSucceedIndomitable) {
+            const indomitableContent = html.find('#collapsible-content-indomitable');
+            if (indomitableContent.length) {
+                indomitableContent.addClass('show');
+            }
+        }
+
+        if (data.enableSilveryBarbs && (data.disableSilveryBarbsOnNat20 || data.enableSilveryBarbsOnNat20)) {
+            const silveryBarbsContent = html.find('#collapsible-content-silverybarbs');
+            if (silveryBarbsContent.length) {
+                silveryBarbsContent.addClass('show');
+            }
+        }
+    }
+
+    toggleCollapsibleContent(event, contentId) {
+        if (event.target.tagName.toLowerCase() === 'input' || event.target.tagName.toLowerCase() === 'label') {
+            return;
+        }
+
+        const content = document.getElementById(contentId);
+        if (!content) return;
+        const wasVisible = content.classList.contains('show');
+        content.classList.toggle('show');
+
+        const form = event.currentTarget.closest('form.categories');
+        let newHeight = form.scrollHeight;
+        const parent = form.closest('.window-app');
+
+        if (parent) {
+            parent.style.height = newHeight + 'px';
+            if (wasVisible) {
+                newHeight -= content.scrollHeight;
+            } else {
+                newHeight += content.scrollHeight;
+            }
+            parent.style.height = newHeight + 'px';
+        }
+    }
+}
+
+class classFeaturesSettingsMenu extends BaseSettingsMenu {
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id: "classFeaturesSettingsMenu",
+            title: "Enable Class Features",
+            template: "modules/gambits-premades/templates/classFeaturesSettingsMenu.html",
         });
     }
 
     getData() {
         return {
-            disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
-            enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20"),
+            enableCuttingWords: game.settings.get("gambits-premades", "Enable Cutting Words"),
+            cuttingWordsTimeout: game.settings.get("gambits-premades", "Cutting Words Timeout"),
+            enableInterception: game.settings.get("gambits-premades", "Enable Interception"),
+            interceptionTimeout: game.settings.get("gambits-premades", "Interception Timeout"),
+            enablePoetryInMisery: game.settings.get("gambits-premades", "Enable Poetry in Misery"),
+            poetryInMiseryTimeout: game.settings.get("gambits-premades", "Poetry in Misery Timeout"),
+            enableIndomitable: game.settings.get("gambits-premades", "Enable Indomitable"),
+            indomitableTimeout: game.settings.get("gambits-premades", "Indomitable Timeout"),
             enableAutoSucceedIndomitable: game.settings.get("gambits-premades", "enableAutoSucceedIndomitable"),
-            enableProtectionOnSuccess: game.settings.get("gambits-premades", "enableProtectionOnSuccess")
+            enableProtection: game.settings.get("gambits-premades", "Enable Protection"),
+            protectionTimeout: game.settings.get("gambits-premades", "Protection Timeout"),
+            enableProtectionOnSuccess: game.settings.get("gambits-premades", "enableProtectionOnSuccess"),
+            enableRiposte: game.settings.get("gambits-premades", "Enable Riposte"),
+            riposteTimeout: game.settings.get("gambits-premades", "Riposte Timeout"),
         };
     }
 
     async _updateObject(event, formData) {
+        await game.settings.set("gambits-premades", "Enable Cutting Words", formData.enableCuttingWords);
+        await game.settings.set("gambits-premades", "Cutting Words Timeout", formData.cuttingWordsTimeout);
+        await game.settings.set("gambits-premades", "Enable Interception", formData.enableInterception);
+        await game.settings.set("gambits-premades", "Interception Timeout", formData.interceptionTimeout);
+        await game.settings.set("gambits-premades", "Enable Poetry in Misery", formData.enablePoetryInMisery);
+        await game.settings.set("gambits-premades", "Poetry in Misery Timeout", formData.poetryInMiseryTimeout);
+        await game.settings.set("gambits-premades", "Enable Indomitable", formData.enableIndomitable);
+        await game.settings.set("gambits-premades", "Indomitable Timeout", formData.indomitableTimeout);
+        await game.settings.set("gambits-premades", "enableAutoSucceedIndomitable", formData.enableAutoSucceedIndomitable);
+        await game.settings.set("gambits-premades", "Enable Protection", formData.enableProtection);
+        await game.settings.set("gambits-premades", "Protection Timeout", formData.protectionTimeout);
+        await game.settings.set("gambits-premades", "enableProtectionOnSuccess", formData.enableProtectionOnSuccess);
+        await game.settings.set("gambits-premades", "Enable Riposte", formData.enableRiposte);
+        await game.settings.set("gambits-premades", "Riposte Timeout", formData.riposteTimeout);
+    }
+}
+
+class genericFeatureSettingsMenu extends BaseSettingsMenu {
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id: "genericFeatureSettingsMenu",
+            title: "Enable Generic Features",
+            template: "modules/gambits-premades/templates/genericFeatureSettingsMenu.html",
+        });
+    }
+
+    getData() {
+        return {
+            enableOpportunityAttack: game.settings.get("gambits-premades", "Enable Opportunity Attack"),
+            enableLegacyTemplateAttachment: game.settings.get("gambits-premades", "Enable Opportunity Attack Legacy System"),
+            opportunityAttackTimeout: game.settings.get("gambits-premades", "Opportunity Attack Timeout"),
+            enableSentinel: game.settings.get("gambits-premades", "Enable Sentinel"),
+            sentinelTimeout: game.settings.get("gambits-premades", "Sentinel Timeout")
+        };
+    }
+
+    async _updateObject(event, formData) {
+        const prevEnableOpportunityAttack = game.settings.get("gambits-premades", "Enable Opportunity Attack");
+        if (!game.combat) {
+            await game.settings.set("gambits-premades", "Enable Opportunity Attack", formData.enableOpportunityAttack);
+        }
+        else if (game.combat && prevEnableOpportunityAttack !== formData.enableOpportunityAttack) {
+            ui.notifications.warn("You may only enable/disable Opportunity Attack outside of combat, otherwise it will create a number of issues.")
+        }
+        await game.settings.set("gambits-premades", "Enable Opportunity Attack Legacy System", formData.enableLegacyTemplateAttachment);
+        await game.settings.set("gambits-premades", "Opportunity Attack Timeout", formData.opportunityAttackTimeout);
+        await game.settings.set("gambits-premades", "Enable Sentinel", formData.enableSentinel);
+        await game.settings.set("gambits-premades", "Sentinel Timeout", formData.sentinelTimeout);
+    }
+}
+
+class spellSettingsMenu extends BaseSettingsMenu {
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id: "spellSettingsMenu",
+            title: "Enable Spells",
+            template: "modules/gambits-premades/templates/spellSettingsMenu.html",
+        });
+    }
+
+    getData() {
+        return {
+            enableCounterspell: game.settings.get("gambits-premades", "Enable Counterspell"),
+            counterspellTimeout: game.settings.get("gambits-premades", "Counterspell Timeout"),
+            enableSilveryBarbs: game.settings.get("gambits-premades", "Enable Silvery Barbs"),
+            silveryBarbsTimeout: game.settings.get("gambits-premades", "Silvery Barbs Timeout"),
+            disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
+            enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20")
+        };
+    }
+
+    async _updateObject(event, formData) {
+        await game.settings.set("gambits-premades", "Enable Counterspell", formData.enableCounterspell);
+        await game.settings.set("gambits-premades", "Counterspell Timeout", formData.counterspellTimeout);
+        await game.settings.set("gambits-premades", "Enable Silvery Barbs", formData.enableSilveryBarbs);
+        await game.settings.set("gambits-premades", "Silvery Barbs Timeout", formData.silveryBarbsTimeout);
         await game.settings.set("gambits-premades", "disableSilveryBarbsOnNat20", formData.disableSilveryBarbsOnNat20);
         await game.settings.set("gambits-premades", "enableSilveryBarbsOnNat20", formData.enableSilveryBarbsOnNat20);
-        await game.settings.set("gambits-premades", "enableAutoSucceedIndomitable", formData.enableAutoSucceedIndomitable);
-        await game.settings.set("gambits-premades", "enableProtectionOnSuccess", formData.enableProtectionOnSuccess);
     }
 }

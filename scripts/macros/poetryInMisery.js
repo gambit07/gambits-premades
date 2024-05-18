@@ -4,8 +4,9 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     const socket = module.socket;
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
-    console.log(workflowCombat)
     let itemName = "poetry in misery";
+    let itemProperName = "Poetry in Misery";
+    let dialogId = "poetryinmisery";
     if(!workflow && !workflowData.actor) return;
     if(workflow?.item.name.toLowerCase() === itemName) return;
     let initiatingToken;
@@ -16,11 +17,11 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     // Check if Opportunity Attack is initiating the workflow
     if(workflow?.item.name === "Opportunity Attack") return;
 
-    let findPoetryInMiseryTokens = helpers.findValidTokens({token: initiatingToken, target: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: false, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: initiatingToken, targetedToken: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
 
     let browserUser;
 
-    for (const validTokenPrimary of findPoetryInMiseryTokens) {
+    for (const validTokenPrimary of findValidTokens) {
         const itemData = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "bardic inspiration");
         const resources = ['primary', 'secondary', 'tertiary'];
         let resourceKey = resources.find(key => {
@@ -37,8 +38,8 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         else return;
 
         let actorUuidPrimary = validTokenPrimary.actor.uuid;
-        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | Poetry In Misery`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | Poetry In Misery`;
+        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
+        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let originTokenUuidPrimary = initiatingToken.document.uuid;
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         let chatActor;
@@ -71,22 +72,23 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogPromise = socket.executeAsUser("showPoetryInMiseryDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, workflowType, `poetryinmisery_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
-            let gmDialogPromise = socket.executeAsGM("showPoetryInMiseryDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, workflowType, `poetryinmisery_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
+            let userDialogPromise = socket.executeAsUser("showPoetryInMiseryDialog", browserUser.id, {tokenUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: workflowType, dialogId: `${dialogId}_${browserUser.id}`, itemProperName: itemProperName, source: "user", type: "multiDialog"}).then(res => ({...res, source: "user", type: "multiDialog"}));
+            
+            let gmDialogPromise = socket.executeAsGM("showPoetryInMiseryDialog", {tokenUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: workflowType, dialogId: `${dialogId}_${game.users?.activeGM.id}`, itemProperName: itemProperName, source: "gm", type: "multiDialog"}).then(res => ({...res, source: "gm", type: "multiDialog"}));
         
             result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showPoetryInMiseryDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, workflowType, null, null).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                result = await socket.executeAsUser("showPoetryInMiseryDialog", browserUser.id, {tokenUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: workflowType, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
             }
                 
-            const { poetryInMiseryDecision, source, type } = result;
+            const { userDecision, source, type } = result;
 
-            if (poetryInMiseryDecision === false || !poetryInMiseryDecision) {
-                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `poetryinmisery_${game.users?.activeGM.id}` });
-                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `poetryinmisery_${browserUser.id}` });
+            if (userDecision === false || !userDecision) {
+                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                 continue;
         }
-        if (poetryInMiseryDecision === true) {
+        if (userDecision === true) {
 
             if (resourceKey) {
                 let updatePath = `system.resources.${resourceKey}.value`;
@@ -100,7 +102,7 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
             let typeText = (workflowType === "attack") ? `${initiatingToken.actor.name}'s nat 1 attack roll` : (workflowType === "ability") ? `${initiatingToken.actor.name}'s nat 1 ability check` : (workflowType === "skill") ? `${initiatingToken.actor.name}'s nat 1 skill check` : `${chatActor.name}'s nat 1 saving throw`;
 
 
-            let content = `<span style='text-wrap: wrap;'>You use Poetry In Misery to soliloquize over ${typeText} and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+            let content = `<span style='text-wrap: wrap;'>You use ${itemProperName} to soliloquize over ${typeText} and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
             let chatData = {
             user: actorPlayer.id,
@@ -112,12 +114,12 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     }
 }
 
-export async function showPoetryInMiseryDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, dialogId, source) {
+export async function showPoetryInMiseryDialog({tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, dialogId, source, type, itemProperName}) {
     const module = await import('../module.js');
     const socket = module.socket;
 
     return await new Promise(resolve => {
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', 'Poetry In Misery Timeout'));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
         
         let dialogContent;
         let originToken = fromUuidSync(tokenUuid);
@@ -126,7 +128,7 @@ export async function showPoetryInMiseryDialog(tokenUuids, actorUuid, tokenUuid,
         dialogContent = `
         <div style='display: flex; align-items: center; justify-content: space-between;'>
             <div style='flex: 1;'>
-            Would you like to use your reaction to use Poetry In Misery for this nat 1 ${outcomeType} roll?<br/><br/>
+            Would you like to use your reaction to use ${itemProperName} for this nat 1 ${outcomeType} roll?<br/><br/>
             </div>
             <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
                 <p><b>Time remaining</b></p>
@@ -147,8 +149,8 @@ export async function showPoetryInMiseryDialog(tokenUuids, actorUuid, tokenUuid,
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `poetryinmisery_${game.users?.activeGM.id}` });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `poetryinmisery_${browserUser.id}` });
+                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
 
@@ -158,9 +160,9 @@ export async function showPoetryInMiseryDialog(tokenUuids, actorUuid, tokenUuid,
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
                         
-                        let poetryInMiseryDecision = true;
+                        let userDecision = true;
 
-                        resolve({poetryInMiseryDecision, programmaticallyClosed: false});
+                        resolve({userDecision, programmaticallyClosed: false});
                     }
                 },
                 no: {
@@ -169,7 +171,7 @@ export async function showPoetryInMiseryDialog(tokenUuids, actorUuid, tokenUuid,
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ poetryInMiseryDecision: false, programmaticallyClosed: false});
+                        resolve({ userDecision: false, programmaticallyClosed: false});
                     }
                 },
             }, default: "no",
@@ -179,8 +181,15 @@ export async function showPoetryInMiseryDialog(tokenUuids, actorUuid, tokenUuid,
                 let isPaused = false;
                 const countdownElement = html.find("#countdown");
                 const pauseButton = html.find("#pauseButton");
-            
-                const timer = setInterval(() => {
+
+                dialog.updateTimer = (newTimeLeft, paused) => {
+                    timeLeft = newTimeLeft;
+                    isPaused = paused;
+                    countdownElement.text(`${timeLeft}`);
+                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                };
+
+                timer = setInterval(() => {
                     if (!isPaused) {
                         timeLeft--;
                         countdownElement.text(`${timeLeft}`);
@@ -190,27 +199,28 @@ export async function showPoetryInMiseryDialog(tokenUuids, actorUuid, tokenUuid,
                         }
                     }
                 }, 1000);
-            
+
                 pauseButton.click(() => {
                     isPaused = !isPaused;
                     pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                    if (source && source === "user" && type === "multiDialog") {
+                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
+                    } else if (source && source === "gm" && type === "multiDialog") {
+                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
+                    }
                 });
             },
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ poetryInMiseryDecision: false, programmaticallyClosed: true });
+                    resolve({ userDecision: false, programmaticallyClosed: true });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ poetryInMiseryDecision: false, programmaticallyClosed: false });
+                    resolve({ userDecision: false, programmaticallyClosed: false });
                 }
             }
         });
-        dialog.dialogState = {
-            interacted: false,
-            decision: null,
-            programmaticallyClosed: false
-        };
+        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
         dialog.render(true);
-    })
+    });
 }

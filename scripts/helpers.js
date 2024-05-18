@@ -10,6 +10,12 @@ export async function gmIdentifyItem({ itemUuid }) {
     if(itemData) await itemData.update({"system.identified": true});
 }
 
+export async function chooseUseItemUser({ itemUuid }) {
+    if(!itemUuid) return;
+    let itemData = await fromUuid(`${itemUuid}`);
+    if(itemData) await itemData.use();
+}
+
 export async function gmUpdateTemplateSize({ templateUuid, templateSize }) {
     if(!templateUuid || !templateSize) return;
     let template = await fromUuid(`${templateUuid}`);
@@ -28,6 +34,19 @@ export async function closeDialogById({ dialogId }) {
         if (dialog) {
             dialog.dialogState.programmaticallyClosed = true;
             dialog.close();
+        }
+    }
+}
+
+export function pauseDialogById({ dialogId, timeLeft, isPaused }) {
+    let activeDialog = ui.activeWindow?.data?.id;
+
+    if (activeDialog.split('_')[0] === dialogId.split('_')[0]) {
+        ui.activeWindow.updateTimer(timeLeft, isPaused);
+    } else {
+        let dialog = Object.values(ui.windows).find(d => d.data?.id.split('_')[0] === dialogId.split('_')[0]);
+        if (dialog) {
+            dialog.updateTimer(timeLeft, isPaused);
         }
     }
 }
@@ -85,8 +104,10 @@ export async function handleDialogPromises(userDialogPromise, gmDialogPromise) {
     });
 }
 
-export function findValidTokens({token, target, itemName, itemType, itemChecked, reactionCheck, sightCheck, rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat}) {
+export function findValidTokens({initiatingToken, targetedToken, itemName, itemType, itemChecked, reactionCheck, sightCheck, rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat}) {
     let validTokens;
+
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
 
     if (workflowCombat === false) {
         validTokens = canvas.tokens.placeables.filter(t => filterToken(t));
@@ -97,28 +118,34 @@ export function findValidTokens({token, target, itemName, itemType, itemChecked,
     function filterToken(t) {
         // Check if invalid token on the canvas
         if (!t.actor) return;
+        if(debugEnabled) console.log(`${t.actor.name} made it past actor`)
 
         // Check if the token has the actual item to use
         let checkItem = t.actor.items.find(i => i.name.toLowerCase() === itemName);
         if(!checkItem) return;
+        if(debugEnabled) console.log(`${t.actor.name} made it past check item initial`)
 
         // Check if the tokens reaction already used
         if (reactionCheck && t.actor.effects.find(i => i.name.toLowerCase() === "reaction")) return;
-        
+        if(debugEnabled) console.log(`${t.actor.name} made it past reaction`)
+
         // Check if the token is the initiating token or not a qualifying token disposition
-        if (dispositionCheck && (t.id === token.id || (dispositionCheckType === "enemy" && t.document.disposition === token.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== target.document.disposition))) {
+        if (dispositionCheck && (t.id === initiatingToken.id || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
             return;
         }
+        if(debugEnabled) console.log(`${t.actor.name} made it past disposition check`)
 
         // Check if token can see initiating token
-        if(sightCheck && !MidiQOL.canSee(t, token)) return;
+        if(sightCheck && !MidiQOL.canSee(t, initiatingToken)) return;
+        if(debugEnabled) console.log(`${t.actor.name} made it past sight check`)
 
-        // Check if token is within 60 feet
+        // Check if token is within range
         if(rangeCheck) {
-            let measuredDistance = (dispositionCheckType === "ally") ? MidiQOL.computeDistance(target,t,true) : MidiQOL.computeDistance(token,t,true);
+            let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
             let range = game.gps.convertFromFeet({range: rangeTotal});
             if (measuredDistance === -1 || (measuredDistance > range)) return;
         }
+        if(debugEnabled) console.log(`${t.actor.name} made it past range check`)
 
         // Check if the token has available spell slots/uses
         if(itemType === "spell") {
@@ -153,6 +180,7 @@ export function findValidTokens({token, target, itemName, itemType, itemChecked,
                 return;
             }
         }
+        if(debugEnabled) console.log(`${t.actor.name} made it past check spell`)
 
         // Check if the token has available resource or item uses
         if(itemType === "feature") {
@@ -168,6 +196,7 @@ export function findValidTokens({token, target, itemName, itemType, itemChecked,
 
             if (!resourceExistsWithValue && !itemExistsWithValue) return;
         }
+        if(debugEnabled) console.log(`${t.actor.name} made it past check feature`)
 
         if(itemType === "item") {
             const itemNames = itemChecked.map(item => item.toLowerCase());
@@ -175,6 +204,7 @@ export function findValidTokens({token, target, itemName, itemType, itemChecked,
 
             if (!itemExists) return;
         }
+        if(debugEnabled) console.log(`${t.actor.name} Reaction validation passed`)
 
         return t;
     };

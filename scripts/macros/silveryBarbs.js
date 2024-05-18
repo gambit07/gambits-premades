@@ -1,96 +1,41 @@
-export async function silveryBarbs({workflowData,workflowType}) {
+export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const socket = module.socket;
+    const helpers = await import('../helpers.js');
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
+    let itemName = "silvery barbs";
+    let itemProperName = "Silvery Barbs";
+    let dialogId = "silverybarbs";
     if(!workflow) return;
-    if(workflow.item.name.toLowerCase().includes("silvery barbs")) return;
-    let gridDecision;
+    if(workflow.item.name === itemProperName) return;
     
     if (!game.combat) return;
 
     // Check if attack hits
     if(workflowType === "attack" && workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) return;
-    // Check if there is a save success target
+    // Check if there is a save success
     if(workflowType === "save" && workflow.saves.size === 0) return;
     // Check if Opportunity Attack is initiating the workflow
     if(workflow.item.name === "Opportunity Attack") return;
 
-    function findSilveryBarbsTokens(token, dispositionCheck) {
-        let validTokens = game.combat.combatants.map(combatant => canvas.tokens.get(combatant.tokenId)).filter(t => {
-            // Check if invalid token on the canvas
-            if (!t.actor) return;
-
-            // Check if the token has silvery barbs available
-            let checkSpells = t.actor.items.filter(i => i.name.toLowerCase().includes("silvery barbs"));
-            let checkSpell = checkSpells.find(spell => spell?.system?.preparation?.mode);
-            if(!checkSpell) return;
-
-            // Check if the tokens reaction already used
-            if (t.actor.effects.find(i => i.name.toLowerCase() === "reaction")) return;
-            
-            // Check if the token is the initiating token or is not an opposite token disposition
-            if (workflowType === "attack" && dispositionCheck(t, token)) return;
-            if (workflowType === "save" && t.document.disposition !== token.document.disposition) return;
-
-            // Check if token can see initiating token for attacks
-            if (workflowType === "attack" && !MidiQOL.canSee(t, token)) return;
-
-            // Check if token is within 60 feet
-            let measuredDistance = MidiQOL.computeDistance(token,t,true);
-            let range = game.gps.convertFromFeet({range: 60});
-            if (measuredDistance === -1 || (measuredDistance > range)) return;
-
-            // Check if the token has available spell slots/uses for silvery barbs
-            const spells = t.actor.system.spells;
-            let checkType = checkSpell?.system?.preparation?.mode;
-            let hasSpellSlots = false;
-            if(checkType === "prepared" && checkSpell.system.preparation.prepared === false) return;
-            if(checkType === "prepared" || checkType === "always")
-            {
-                for (let level = 1; level <= 9; level++) {
-                    let spellSlot = t.actor.system.spells[`spell${level}`].value;
-                    if (spellSlot) {
-                        hasSpellSlots = true;
-                        break;
-                    }
-                }
-            }
-            else if(checkType === "pact")
-            {
-                let spellSlotValue = spells.pact.value;
-                if (spellSlotValue > 0) hasSpellSlots = true;
-            }
-            else if(checkType === "innate" || checkType === "atwill")
-            {
-                let slotValue = checkSpell.system.uses.value;
-                let slotEnabled = checkSpell.system.uses.per;
-                if (slotValue > 0 || slotEnabled === null) hasSpellSlots = true;
-            }
-
-            if (!hasSpellSlots) {
-                return;
-            }
-
-            return t;
-        });
-
-    return validTokens;
+    let findValidTokens;
+    
+    if(workflowType === "attack") {
+        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
     }
-
-    let findSilveryBarbs = findSilveryBarbsTokens(workflow.token, (checkedToken, initiatingToken) => {
-        return checkedToken.id === initiatingToken.id || checkedToken.document.disposition === initiatingToken.document.disposition;
-    });
+    else if(workflowType === "save") {
+        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
+    }
     
     let browserUser;
     
-    for (const validTokenPrimary of findSilveryBarbs) {
+    for (const validTokenPrimary of findValidTokens) {
         let actorUuidPrimary = validTokenPrimary.actor.uuid;
-        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | Silvery Barbs`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | Silvery Barbs`;
+        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
+        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let originTokenUuidPrimary = workflow.token.document.uuid;
-        let spellData = validTokenPrimary.actor.items.find(i => i.name.toLowerCase().includes("silvery barbs"));
-        canvas.scene.grid.type === 0 ? gridDecision = false : gridDecision = true;
+        let spellData = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) browserUser = game.users?.activeGM;
 
@@ -103,7 +48,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
             .filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, token) && MidiQOL.computeDistance(validTokenPrimary, token, true) <= 60)
             .map(token => token.actor.name);
             
-            let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering Silvery Barbs.</span>`
+            let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
             let chatData = {
             user: game.users.find(u => u.isGM).id,
             content: content,
@@ -113,23 +58,24 @@ export async function silveryBarbs({workflowData,workflowType}) {
             let result;
             
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", null, `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
-                let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, targetNames, "save", null, `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
+                let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: targetNames, outcomeType: "save", attackTotal: null, dialogId: `${dialogId}_${browserUser.id}`, source: 'user', itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                
+                let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: targetNames, outcomeType: "save", attackTotal: null, dialogId: `${dialogId}_${game.users?.activeGM.id}`, source: 'gm', itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, targetUuids, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, targetNames, "save", null).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));;
+                result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: targetNames, outcomeType: "save", itemProperName: itemProperName}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));;
             }
             
-            const { silveryBarbsDecision, returnedTokenUuid, source, type } = result;
+            const { userDecision, returnedTokenUuid, source, type } = result;
 
-            if (silveryBarbsDecision === false || !silveryBarbsDecision) {
-                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `silverybarbs_${game.users?.activeGM.id}` });
-                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `silverybarbs_${browserUser.id}` });
+            if (userDecision === false || !userDecision) {
+                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                 continue;
             }
-            if (silveryBarbsDecision === true) {
+            if (userDecision === true) {
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                 let saveDC = workflow.saveItem.system.save.dc;
                 let saveAbility = workflow.saveItem.system.save.ability;
@@ -143,10 +89,6 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 if(reroll.total < saveDC) {
                     workflow.saves.delete(workflowTarget);
                     workflow.failedSaves.add(workflowTarget);
-                    workflow.saveDisplayData[workflowIndex].saveString = ' fails';
-                    workflow.saveDisplayData[workflowIndex].saveSymbol = 'fa-times';
-                    workflow.saveDisplayData[workflowIndex].rollTotal = reroll.total;
-                    workflow.saveDisplayData[workflowIndex].saveClass = 'miss';
 
                     let chatList = [];
 
@@ -193,7 +135,7 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return;
 
-                let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering Silvery Barbs.</span>`
+                let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
                 let chatData = {
                 user: game.users.find(u => u.isGM).id,
                 content: content,
@@ -203,23 +145,24 @@ export async function silveryBarbs({workflowData,workflowType}) {
                 let result;
                 
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", workflow.attackTotal, `silverybarbs_${browserUser.id}`, 'user').then(res => ({...res, source: "user", type: "multiDialog"}));
-                    let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "attack", workflow.attackTotal, `silverybarbs_${game.users?.activeGM.id}`, 'gm').then(res => ({...res, source: "gm", type: "multiDialog"}));
+                    let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: `${dialogId}_${browserUser.id}`, source: 'user', itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
+
+                    let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: `${dialogId}_${game.users?.activeGM.id}`, source: 'gm', itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
                 
                     result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
                 } else {
-                    result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", workflow.attackTotal).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                    result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, itemProperName: itemProperName}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
                 }
                 
-                const { silveryBarbsDecision, returnedTokenUuid, source, type } = result;
+                const { userDecision, returnedTokenUuid, source, type } = result;
 
-                if (silveryBarbsDecision === false || !silveryBarbsDecision) {
-                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `silverybarbs_${game.users?.activeGM.id}` });
-                    if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `silverybarbs_${browserUser.id}` });
+                if (userDecision === false || !userDecision) {
+                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                    if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                     continue;
                 }
-                if (silveryBarbsDecision === true) {
+                if (userDecision === true) {
                     await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                     let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
                     let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
@@ -274,60 +217,60 @@ export async function silveryBarbs({workflowData,workflowType}) {
     }
 }
 
-export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, attackTotal, dialogId, source) {
+export async function showSilveryBarbsDialog({targetUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, attackTotal, dialogId, source, type, itemProperName}) {
     const module = await import('../module.js');
     const socket = module.socket;
 
     return await new Promise(resolve => {
         
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', 'Silvery Barbs Timeout'));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
         let dialogContent;
         let originToken = fromUuidSync(tokenUuid);
         let browserUser = MidiQOL.playerForActor(originToken.actor);
         const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
 
         const nearbyFriendlies = MidiQOL.findNearby(null, originToken.object, 60, { includeToken: true });
-        let validFriendlies = nearbyFriendlies.filter(token => token.document.disposition === originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid) && !token.actor.effects.getName("Silvery Barbs - Advantage"));
+        let validFriendlies = nearbyFriendlies.filter(token => token.document.disposition === originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid) && !token.actor.effects.getName(`${itemProperName} - Advantage`));
         if(outcomeType === "attack") {
         dialogContent = `
             <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
-            <div style='margin-bottom: 20px;'>
-                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs? ${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `An enemy successfully hit your ally with a ${attackTotal}.` : "An enemy successfully hit your ally."}</p>
-            </div>
-            <div style='display: flex; width: 100%; gap: 20px;'>
-                <div style='flex-grow: 1; display: flex; flex-direction: column;'>
-                    <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
-                    ${validFriendlies.length >= 1 ? 
-                        `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
-                            ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
-                        </select>` : '<p>No valid friendlies in range.</p>'
-                    }
+                <div style='margin-bottom: 20px;'>
+                    <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast ${itemProperName}? ${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `An enemy successfully hit your ally with a ${attackTotal}.` : "An enemy successfully hit your ally."}</p>
                 </div>
-                <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
-                    <p><b>Time remaining</b></p>
-                    <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
-                    <p><button id='pauseButton' style='margin-top: 16px;'>Pause</button></p>
+                <div style='display: flex; width: 100%; gap: 20px;'>
+                    <div style='flex-grow: 1; display: flex; flex-direction: column;'>
+                        <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
+                        ${validFriendlies.length >= 1 ? 
+                            `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
+                                ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
+                            </select>` : '<p>No valid friendlies in range.</p>'
+                        }
+                    </div>
+                    <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
+                        <p><b>Time remaining</b></p>
+                        <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
+                        <p><button id='pauseButton' style='margin-top: 16px;'>Pause</button></p>
+                    </div>
                 </div>
             </div>
-        </div>
-        `;
+            `;
         }
 
         if(outcomeType === "save") {
-            tokenUuids.map((uuid, index) => 
+            targetUuids.map((uuid, index) => 
                 `<option value="${uuid}">${targetNames[index]}</option>`
         ).join('');
         
         dialogContent = `
             <div style='display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;'>
             <div style='margin-bottom: 20px;'>
-                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast Silvery Barbs? An enemy succeeded their saving throw.</p>
+                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast ${itemProperName}? An enemy succeeded their saving throw.</p>
             </div>
             <div style='display: flex; width: 100%; gap: 20px; align-items: start; padding-bottom: 5px; border-bottom: 1px solid #ccc;'>
                 <div style='flex-grow: 1; display: flex; flex-direction: column;'>
                     <p style='margin: 0 0 10px 0;'>Choose a target:</p>
                     <select id="targetSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
-                        ${targetNames.map((name, index) => `<option value="${tokenUuids[index]}">${name}</option>`).join('')}
+                        ${targetNames.map((name, index) => `<option value="${targetUuids[index]}">${name}</option>`).join('')}
                     </select>
                 </div>
         
@@ -362,21 +305,21 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `silverybarbs_${game.users?.activeGM.id}` });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `silverybarbs_${browserUser.id}` });
+                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
                         let originToken;
                         let advantageToken = await fromUuid(html.find("#advantagedSelection").val());
                         if(outcomeType === "attack") {
-                            originToken = await fromUuid(tokenUuids);
+                            originToken = await fromUuid(targetUuids);
                             originToken = await MidiQOL.tokenForActor(originToken.actor.uuid);
                         }
                         if(outcomeType === "save") {
                             originToken = await MidiQOL.tokenForActor(html.find("#targetSelection").val());
                         }
 
-                        let chosenSpell = actor.items.find(i => i.name.toLowerCase().includes("silvery barbs"));
+                        let chosenSpell = actor.items.find(i => i.name === itemProperName);
 
                         chosenSpell.prepareData();
                         chosenSpell.prepareFinalAttributes();
@@ -397,9 +340,9 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
 
-                        if(itemRoll.aborted === true) return resolve({ silveryBarbsDecision: false, returnedTokenUuid: null, programmaticallyClosed: false });
+                        if(itemRoll.aborted === true) return resolve({ userDecision: false, returnedTokenUuid: null, programmaticallyClosed: false });
                         
-                        let silveryBarbsDecision = true;
+                        let userDecision = true;
                         let returnedTokenUuid = originToken.document.uuid;
 
                         let effectData = [
@@ -450,7 +393,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                             }
                           ];
                         if(advantageToken) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.uuid, effects: effectData });
-                        resolve({ silveryBarbsDecision, returnedTokenUuid, programmaticallyClosed: false });
+                        resolve({ userDecision, returnedTokenUuid, programmaticallyClosed: false });
                     }
                 },
                 no: {
@@ -459,7 +402,7 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ silveryBarbsDecision: false, returnedTokenUuid: null, programmaticallyClosed: false });
+                        resolve({ userDecision: false, returnedTokenUuid: null, programmaticallyClosed: false });
                     }
                 },
             }, default: "no",
@@ -469,8 +412,15 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                 let isPaused = false;
                 const countdownElement = html.find("#countdown");
                 const pauseButton = html.find("#pauseButton");
-            
-                const timer = setInterval(() => {
+
+                dialog.updateTimer = (newTimeLeft, paused) => {
+                    timeLeft = newTimeLeft;
+                    isPaused = paused;
+                    countdownElement.text(`${timeLeft}`);
+                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                };
+
+                timer = setInterval(() => {
                     if (!isPaused) {
                         timeLeft--;
                         countdownElement.text(`${timeLeft}`);
@@ -480,27 +430,28 @@ export async function showSilveryBarbsDialog(tokenUuids, actorUuid, tokenUuid, d
                         }
                     }
                 }, 1000);
-            
+
                 pauseButton.click(() => {
                     isPaused = !isPaused;
                     pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                    if (source && source === "user" && type === "multiDialog") {
+                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
+                    } else if (source && source === "gm" && type === "multiDialog") {
+                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
+                    }
                 });
             },
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ silveryBarbsDecision: false, returnedTokenUuid: null, programmaticallyClosed: true });
+                    resolve({ userDecision: false, programmaticallyClosed: true });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ silveryBarbsDecision: false, returnedTokenUuid: null, programmaticallyClosed: false });
+                    resolve({ userDecision: false, programmaticallyClosed: false });
                 }
             }
         });
-        dialog.dialogState = {
-            interacted: false,
-            decision: null,
-            programmaticallyClosed: false
-        };
+        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
         dialog.render(true);
     });
 }

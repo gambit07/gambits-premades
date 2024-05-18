@@ -3,7 +3,12 @@ import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
 import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
 import { interception, showInterceptionDialog } from './macros/interception.js';
 import { poetryInMisery, showPoetryInMiseryDialog } from './macros/poetryInMisery.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens } from './helpers.js';
+import { protection, showProtectionDialog } from './macros/protection.js';
+import { indomitable, showIndomitableDialog } from './macros/indomitable.js';
+import { sentinel, showSentinelDialog } from './macros/sentinel.js';
+import { riposte, showRiposteDialog } from './macros/riposte.js';
+import { enableOpportunityAttack, disableOpportunityAttack } from './macros/opportunityAttack.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, chooseUseItemUser, pauseDialogById } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -30,6 +35,18 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("showInterceptionDialog", showInterceptionDialog);
     socket.register("poetryInMisery", poetryInMisery);
     socket.register("showPoetryInMiseryDialog", showPoetryInMiseryDialog);
+    socket.register("chooseUseItemUser", chooseUseItemUser);
+    socket.register("enableOpportunityAttack", enableOpportunityAttack);
+    socket.register("disableOpportunityAttack", disableOpportunityAttack);
+    socket.register("protection", protection);
+    socket.register("showProtectionDialog", showProtectionDialog);
+    socket.register("indomitable", indomitable);
+    socket.register("showIndomitableDialog", showIndomitableDialog);
+    socket.register("sentinel", sentinel);
+    socket.register("showSentinelDialog", showSentinelDialog);
+    socket.register("pauseDialogById", pauseDialogById);
+    socket.register("riposte", riposte);
+    socket.register("showRiposteDialog", showRiposteDialog);
 })
 
 Hooks.once('ready', async function() {
@@ -49,8 +66,12 @@ Hooks.once('ready', async function() {
     const counterspellEnabled = game.settings.get('gambits-premades', 'Enable Counterspell');
     const silveryBarbsEnabled = game.settings.get('gambits-premades', 'Enable Silvery Barbs');
     const cuttingWordsEnabled = game.settings.get('gambits-premades', 'Enable Cutting Words');
-    const poetryInMiseryEnabled = game.settings.get('gambits-premades', 'Enable Poetry In Misery');
+    const poetryInMiseryEnabled = game.settings.get('gambits-premades', 'Enable Poetry in Misery');
     const interceptionEnabled = game.settings.get('gambits-premades', 'Enable Interception');
+    const indomitableEnabled = game.settings.get('gambits-premades', 'Enable Indomitable');
+    const protectionEnabled = game.settings.get('gambits-premades', 'Enable Protection');
+    const sentinelEnabled = game.settings.get('gambits-premades', 'Enable Sentinel');
+    const riposteEnabled = game.settings.get('gambits-premades', 'Enable Riposte');
     const identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
 
     async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
@@ -63,24 +84,35 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (counterspellEnabled) await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid });
+        if (counterspellEnabled) await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        
+    });
+
+    Hooks.on("midi-qol.preAttackRoll", async (workflow) => {
+        let workflowItemUuid = workflow.itemUuid;
+        if (protectionEnabled) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+    });
+
+    Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
+        let workflowItemUuid = workflow.itemUuid;
+        if (sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (riposteEnabled) await executeWorkflow({ workflowItem: "riposte", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        if (indomitableEnabled) await executeWorkflow({ workflowItem: "indomitable", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {

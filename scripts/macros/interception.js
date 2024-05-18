@@ -1,10 +1,12 @@
-export async function interception({workflowData,workflowType}) {
+export async function interception({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
     const socket = module.socket;
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
     let itemName = "fighting style: interception";
+    let itemProperName = "Interception";
+    let dialogId = "interception";
     let target = workflow.hitTargets.first();
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
@@ -18,14 +20,14 @@ export async function interception({workflowData,workflowType}) {
     // Check if Opportunity Attack is initiating the workflow
     if(workflow.item.name === "Opportunity Attack") return;
 
-    let findInterceptionTokens = helpers.findValidTokens({token: workflow.token, target: target, itemName: itemName, itemType: "item", itemChecked: ["mwak", "shield"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "item", itemChecked: ["mwak", "shield"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemyAlly", workflowType: workflowType, workflowCombat: workflowCombat});
 
     let browserUser;
 
-    for (const validTokenPrimary of findInterceptionTokens) {
+    for (const validTokenPrimary of findValidTokens) {
         let actorUuidPrimary = validTokenPrimary.actor.uuid;
-        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | Interception`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | Interception`;
+        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
+        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let originTokenUuidPrimary = workflow.token.document.uuid;
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) {
@@ -40,27 +42,29 @@ export async function interception({workflowData,workflowType}) {
             let result;
 
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-             let userDialogPromise = socket.executeAsUser("showInterceptionDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes, `interception_${browserUser.id}`, 'user', damageTotals).then(res => ({...res, source: "user", type: "multiDialog"}));
-             let gmDialogPromise = socket.executeAsGM("showInterceptionDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "damage", damageTypes, `interception_${game.users?.activeGM.id}`, 'gm', damageTotals).then(res => ({...res, source: "gm", type: "multiDialog"}));
-         
-             result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
+                let userDialogPromise = socket.executeAsUser("showInterceptionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: `${dialogId}_${browserUser.id}`, rollTotals: damageTotals, itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                
+                let gmDialogPromise = socket.executeAsGM("showInterceptionDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: `${dialogId}_${game.users?.activeGM.id}`, rollTotals: damageTotals, itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
+            
+                result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
              } else {
-                 result = await socket.executeAsUser("showInterceptionDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes, null, null, damageTotals).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                 result = await socket.executeAsUser("showInterceptionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, rollTotals: damageTotals, itemProperName: itemProperName}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
              }
                  
-             const { interceptionDecision, damageChosen, source, type } = result;
+             const { userDecision, damageChosen, source, type } = result;
 
-             if (interceptionDecision === false || !interceptionDecision) {
-                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `interception_${game.users?.activeGM.id}` });
-                 if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `interception_${browserUser.id}` });
+             if (userDecision === false || !userDecision) {
+                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                 if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                  continue;
             }
-            if (interceptionDecision === true) {
+            if (userDecision === true) {
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
+                let actorProf = validTokenPrimary.actor.system.attributes.prof;
                 let reroll;
-                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d10`, type: workflowType });
-                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d10`, type: workflowType });
+                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d10 + ${actorProf}`, type: workflowType });
+                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d10 + ${actorProf}`, type: workflowType });
 
                 let remainingReduction = reroll.total;
                 let updatedRolls = [];
@@ -97,7 +101,7 @@ export async function interception({workflowData,workflowType}) {
         
                 workflow.options.noOnUseMacro = saveSetting;
 
-                 let content = `<span style='text-wrap: wrap;'>You use interception and reduce damage taken for ${target.actor.name} by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                 let content = `<span style='text-wrap: wrap;'>You use ${itemProperName} and reduce damage taken for ${target.actor.name} by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                  let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
                  let chatData = {
                  user: actorPlayer.id,
@@ -110,12 +114,12 @@ export async function interception({workflowData,workflowType}) {
     }
 }
 
-export async function showInterceptionDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, rollTotals) {
+export async function showInterceptionDialog({targetUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, type, itemProperName, rollTotals}) {
     const module = await import('../module.js');
     const socket = module.socket;
 
     return await new Promise(resolve => {
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', 'Interception Timeout'));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
         
         let dialogContent;
         let originToken = fromUuidSync(tokenUuid);
@@ -126,7 +130,7 @@ export async function showInterceptionDialog(tokenUuids, actorUuid, tokenUuid, d
             dialogContent = `
                 <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
                     <div style='margin-bottom: 20px;'>
-                        <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to use Interception for this ${outcomeType} roll?</p>
+                        <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to use ${itemProperName} for this ${outcomeType} roll?</p>
                     </div>
                     <div style='display: flex; width: 100%; gap: 20px;'>
                         <div style='flex-grow: 1; display: flex; flex-direction: column;'>
@@ -142,6 +146,7 @@ export async function showInterceptionDialog(tokenUuids, actorUuid, tokenUuid, d
                     <div style='padding-top: 20px; text-align: center; width: 100%;'>
                         <p><b>Time remaining</b></p>
                         <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
+                        <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
                     </div>
                 </div>
                 <script>
@@ -187,12 +192,12 @@ export async function showInterceptionDialog(tokenUuids, actorUuid, tokenUuid, d
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `interception_${game.users?.activeGM.id}` });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `interception_${browserUser.id}` });
+                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
                         let originToken;
-                        originToken = await fromUuid(tokenUuids);
+                        originToken = await fromUuid(targetUuids);
                         originToken = await MidiQOL.tokenForActor(originToken.actor.uuid);
                         let damageChosen = [];
                         html.find("#damageList li .damage-type").each(function() {
@@ -205,9 +210,9 @@ export async function showInterceptionDialog(tokenUuids, actorUuid, tokenUuid, d
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
                         
-                        let interceptionDecision = true;
+                        let userDecision = true;
 
-                        resolve({interceptionDecision, damageChosen, programmaticallyClosed: false});
+                        resolve({userDecision, damageChosen, programmaticallyClosed: false});
                     }
                 },
                 no: {
@@ -216,7 +221,7 @@ export async function showInterceptionDialog(tokenUuids, actorUuid, tokenUuid, d
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ interceptionDecision: false, damageChosen: false, programmaticallyClosed: false});
+                        resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false});
                     }
                 },
             }, default: "no",
@@ -226,8 +231,15 @@ export async function showInterceptionDialog(tokenUuids, actorUuid, tokenUuid, d
                 let isPaused = false;
                 const countdownElement = html.find("#countdown");
                 const pauseButton = html.find("#pauseButton");
-            
-                const timer = setInterval(() => {
+
+                dialog.updateTimer = (newTimeLeft, paused) => {
+                    timeLeft = newTimeLeft;
+                    isPaused = paused;
+                    countdownElement.text(`${timeLeft}`);
+                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                };
+
+                timer = setInterval(() => {
                     if (!isPaused) {
                         timeLeft--;
                         countdownElement.text(`${timeLeft}`);
@@ -237,27 +249,28 @@ export async function showInterceptionDialog(tokenUuids, actorUuid, tokenUuid, d
                         }
                     }
                 }, 1000);
-            
+
                 pauseButton.click(() => {
                     isPaused = !isPaused;
                     pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                    if (source && source === "user" && type === "multiDialog") {
+                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
+                    } else if (source && source === "gm" && type === "multiDialog") {
+                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
+                    }
                 });
             },
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ interceptionDecision: false, damageChosen: false, programmaticallyClosed: true });
+                    resolve({ userDecision: false, programmaticallyClosed: true });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ interceptionDecision: false, damageChosen: false, programmaticallyClosed: false });
+                    resolve({ userDecision: false, programmaticallyClosed: false });
                 }
             }
         });
-        dialog.dialogState = {
-            interacted: false,
-            decision: null,
-            programmaticallyClosed: false
-        };
+        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
         dialog.render(true);
-    })
+    });
 }

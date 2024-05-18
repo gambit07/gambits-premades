@@ -1,73 +1,32 @@
-export async function cuttingWords({workflowData,workflowType}) {
+export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const socket = module.socket;
+    const helpers = await import('../helpers.js');
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
+    let itemName = "cutting words";
+    let itemProperName = "Cutting Words";
+    let dialogId = "cuttingwords";
     if(!workflow) return;
-    if(workflow.item.name.toLowerCase() === "cutting words") return;
+    if(workflow.item.name === itemProperName) return;
     
     if (!game.combat) return;
 
     // Check if Opportunity Attack is initiating the workflow
     if(workflow.item.name === "Opportunity Attack") return;
 
-    function findCuttingWordsTokens(token, dispositionCheck) {
-        let validTokens = game.combat.combatants.map(combatant => canvas.tokens.get(combatant.tokenId)).filter(t => {
-            // Check if invalid token on the canvas
-            if (!t.actor) return;
+    let findValidTokens;
 
-            // Check if the token has cutting words available
-            if (!t.actor.items.find(i => i.name.toLowerCase() === "cutting words")) return;
-
-            // Check if the tokens reaction already used
-            let reactionUsed = t.actor.effects.find(i => i.name.toLowerCase() === "reaction");
-            if (reactionUsed) return;
-            
-            // Check if the token is the initiating token or is not an opposite token disposition
-            if (workflowType === "attack" || workflowType === "damage") {
-                if (dispositionCheck(t, token)) return;
-            }
-
-            let midiSightTest = MidiQOL.canSee(t, token);
-            
-            if (midiSightTest === false) return;
-
-            // Check if token is within 60 feet
-            let measuredDistance = MidiQOL.computeDistance(token,t,true);
-            let range = game.gps.convertFromFeet({range: 60});
-            if (measuredDistance === -1 || (measuredDistance > range)) return;
-
-            // Check if the token has available uses of Bardic Inspiration for Cutting Words
-            const itemNames = ["bardic inspiration"];
-
-            let resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource =>
-                itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
-            let itemExistsWithValue;
-
-            if (!resourceExistsWithValue) {
-                itemExistsWithValue = !!t.actor.items.find(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses.value !== 0);
-            }
-
-            if (!resourceExistsWithValue && !itemExistsWithValue) return;
-
-            return t;
-        });
-
-    return validTokens;
-    }
-
-    let findCuttingWords = findCuttingWordsTokens(workflow.token, (checkedToken, initiatingToken) => {
-        return checkedToken.id === initiatingToken.id || checkedToken.document.disposition === initiatingToken.document.disposition;
-    });
+    findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["bardic inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
     
     let browserUser;
 
-    for (const validTokenPrimary of findCuttingWords) {
+    for (const validTokenPrimary of findValidTokens) {
         let actorUuidPrimary = validTokenPrimary.actor.uuid;
-        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | Cutting Words`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | Cutting Words`;
+        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
+        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let originTokenUuidPrimary = workflow.token.document.uuid;
-        let spellData = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "cutting words");
+        let spellData = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
         let bardicDie = validTokenPrimary.actor.system.scale.bard["bardic-inspiration"].die;
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) {
@@ -82,22 +41,23 @@ export async function cuttingWords({workflowData,workflowType}) {
             let result;
 
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes, `cuttingwords_${browserUser.id}`, 'user', damageTotals).then(res => ({...res, source: "user", type: "multiDialog"}));
-            let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "damage", damageTypes, `cuttingwords_${game.users?.activeGM.id}`, 'gm', damageTotals).then(res => ({...res, source: "gm", type: "multiDialog"}));
+            let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: `${dialogId}_${browserUser.id}`, rollTotals: damageTotals, itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
+
+            let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: `${dialogId}_${game.users?.activeGM.id}`, rollTotals: damageTotals, itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
         
             result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "damage", damageTypes, null, null, damageTotals).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, rollTotals: damageTotals, itemProperName: itemProperName}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
             }
                 
-            const { cuttingWordsDecision, damageChosen, source, type } = result;
+            const { userDecision, damageChosen, source, type } = result;
 
-            if (cuttingWordsDecision === false || !cuttingWordsDecision) {
-                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `cuttingwords_${game.users?.activeGM.id}` });
-                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `cuttingwords_${browserUser.id}` });
+            if (userDecision === false || !userDecision) {
+                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                 continue;
             }
-            if (cuttingWordsDecision === true) {
+            if (userDecision === true) {
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let reroll;
@@ -164,22 +124,23 @@ export async function cuttingWords({workflowData,workflowType}) {
                 let result;
 
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", null, `cuttingwords_${browserUser.id}`, 'user', workflow.attackTotal).then(res => ({...res, source: "user", type: "multiDialog"}));
-                    let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitleGM, originTokenUuidPrimary, "attack", null, `cuttingwords_${game.users?.activeGM.id}`, 'gm', workflow.attackTotal).then(res => ({...res, source: "gm", type: "multiDialog"}));
+                    let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", dialogId: `${dialogId}_${browserUser.id}`, rollTotals: workflow.attackTotal, itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                    
+                    let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", dialogId: `${dialogId}_${game.users?.activeGM.id}`, rollTotals: workflow.attackTotal, itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
                 
                     result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
                 } else {
-                    result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, originTokenUuidPrimary, actorUuidPrimary, validTokenPrimary.document.uuid, dialogTitlePrimary, originTokenUuidPrimary, "attack", null, null, null, workflow.attackTotal).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                    result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", rollTotals: workflow.attackTotal, itemProperName: itemProperName}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
                 }
                     
-                const { cuttingWordsDecision, damageChosen, source, type } = result;
+                const { userDecision, damageChosen, source, type } = result;
 
-                if (cuttingWordsDecision === false || !cuttingWordsDecision) {
-                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `cuttingwords_${game.users?.activeGM.id}` });
-                    if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `cuttingwords_${browserUser.id}` });
+                if (userDecision === false || !userDecision) {
+                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                    if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                     continue;
                 }
-                if (cuttingWordsDecision === true) {
+                if (userDecision === true) {
                     let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
                     const saveSetting = workflow.options.noOnUseMacro;
                     workflow.options.noOnUseMacro = true;
@@ -233,12 +194,12 @@ export async function cuttingWords({workflowData,workflowType}) {
     }
 }
 
-export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, rollTotals) {
+export async function showCuttingWordsDialog({targetUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, type, itemProperName, rollTotals}) {
     const module = await import('../module.js');
     const socket = module.socket;
 
     return await new Promise(resolve => {
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', 'Cutting Words Timeout'));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
         
         let dialogContent;
         let originToken = fromUuidSync(tokenUuid);
@@ -249,11 +210,12 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
         dialogContent = `
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px; background-color: transparent; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <div style="flex-grow: 1; margin-right: 20px;">
-                    <p>${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `The target rolled a ${rollTotals} to attack. ` : ""}Would you like to use your reaction to use Cutting Words for this ${outcomeType} roll?</p>
+                    <p>${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `The target rolled a ${rollTotals} to attack. ` : ""}Would you like to use your reaction to use ${itemProperName} for this ${outcomeType} roll?</p>
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
                     <p><b>Time Remaining</b></p>
                     <p><span id="countdown" style="font-size: 16px; color: red;">${initialTimeLeft}</span> seconds</p>
+                    <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
                 </div>
             </div>
         `;
@@ -263,7 +225,7 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
             dialogContent = `
                 <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
                     <div style='margin-bottom: 20px;'>
-                        <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to use Cutting Words for this ${outcomeType} roll?</p>
+                        <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to use ${itemProperName} for this ${outcomeType} roll?</p>
                     </div>
                     <div style='display: flex; width: 100%; gap: 20px;'>
                         <div style='flex-grow: 1; display: flex; flex-direction: column;'>
@@ -279,6 +241,7 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                     <div style='padding-top: 20px; text-align: center; width: 100%;'>
                         <p><b>Time remaining</b></p>
                         <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
+                        <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
                     </div>
                 </div>
                 <script>
@@ -324,20 +287,20 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `cuttingwords_${game.users?.activeGM.id}` });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `cuttingwords_${browserUser.id}` });
+                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
+                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
                         let actor = await fromUuid(actorUuid);
                         let token = await MidiQOL.tokenForActor(actorUuid);
                         let uuid = actor.uuid;
                         let originToken;
-                        originToken = await fromUuid(tokenUuids);
+                        originToken = await fromUuid(targetUuids);
                         originToken = await MidiQOL.tokenForActor(originToken.actor.uuid);
                         let damageChosen = [];
                         html.find("#damageList li .damage-type").each(function() {
                             damageChosen.push($(this).text().trim());
                         });
 
-                        let chosenSpell = actor.items.find(i => i.name.toLowerCase() === "cutting words");
+                        let chosenSpell = actor.items.find(i => i.name === itemProperName);
 
                         chosenSpell.prepareData();
                         chosenSpell.prepareFinalAttributes();
@@ -360,7 +323,7 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
 
-                        if(itemRoll.aborted === true) return resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: false });
+                        if(itemRoll.aborted === true) return resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false });
 
                         let hasDeafened = originToken.actor.effects.find(i => i.name.toLowerCase() === "deafened");
                         let charmImmunity = originToken.actor.system.traits.ci.value.has("charmed");
@@ -368,7 +331,7 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                         if (charmImmunity || hasDeafened) {
                         let chatList = [];
 
-                        chatList = `<span style='text-wrap: wrap;'>The creature seems to not be effected by your cutting words.<img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatList = `<span style='text-wrap: wrap;'>The creature seems to not be effected by your ${itemProperName}.<img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {
@@ -383,12 +346,12 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                         }
                         await chatMessage.update({ content: content });
 
-                        return resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: false });
+                        return resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false });
                         }
                         
-                        let cuttingWordsDecision = true;
+                        let userDecision = true;
 
-                        resolve({cuttingWordsDecision, damageChosen, programmaticallyClosed: false});
+                        resolve({userDecision, damageChosen, programmaticallyClosed: false});
                     }
                 },
                 no: {
@@ -397,7 +360,7 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: false});
+                        resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false});
                     }
                 },
             }, default: "no",
@@ -407,8 +370,15 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                 let isPaused = false;
                 const countdownElement = html.find("#countdown");
                 const pauseButton = html.find("#pauseButton");
-            
-                const timer = setInterval(() => {
+
+                dialog.updateTimer = (newTimeLeft, paused) => {
+                    timeLeft = newTimeLeft;
+                    isPaused = paused;
+                    countdownElement.text(`${timeLeft}`);
+                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                };
+
+                timer = setInterval(() => {
                     if (!isPaused) {
                         timeLeft--;
                         countdownElement.text(`${timeLeft}`);
@@ -418,27 +388,28 @@ export async function showCuttingWordsDialog(tokenUuids, actorUuid, tokenUuid, d
                         }
                     }
                 }, 1000);
-            
+
                 pauseButton.click(() => {
                     isPaused = !isPaused;
                     pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                    if (source && source === "user" && type === "multiDialog") {
+                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
+                    } else if (source && source === "gm" && type === "multiDialog") {
+                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
+                    }
                 });
             },
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: true });
+                    resolve({ userDecision: false, programmaticallyClosed: true });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ cuttingWordsDecision: false, damageChosen: false, programmaticallyClosed: false });
+                    resolve({ userDecision: false, programmaticallyClosed: false });
                 }
             }
         });
-        dialog.dialogState = {
-            interacted: false,
-            decision: null,
-            programmaticallyClosed: false
-        };
+        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
         dialog.render(true);
-    })
+    });
 }
