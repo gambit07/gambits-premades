@@ -8,9 +8,10 @@ Most of my automations exist as an item in my compendiums, which are labeled as 
 
 ![cpr_medkit](https://github.com/gambit07/gambits-premades/assets/4236874/bf17af7b-2304-48e2-a9f1-985b688a4e5e)
 
-Finally, three of my more complex automations are setup within my modules settings page. These automations are Counterspell, Silvery Barbs, and Opportunity Attacks. Simply click the checkbox on my module settings page to activate these automations. Screenshot below:
+Finally, my more complex automations are setup within my modules settings page. Simply select the appropriate checkboxes and options to activate these automations. Video below:
 
-![gps_settings](https://github.com/gambit07/gambits-premades/assets/4236874/989d273a-a8b5-43cd-b725-097723be15b8)
+https://github.com/gambit07/gambits-premades/assets/4236874/a8f30a75-0f33-4f56-a3b3-bccdf8c48f0d
+
 </p>
 
 I feel like videos are the best way to see these type of automations, so including a partial list of videos below. I'll continue to add more over time.
