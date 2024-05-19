@@ -10,11 +10,13 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     let target = workflow.targets.first();
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
+    let enableProtectionOnSuccess = MidiQOL.safeGetGameSetting('gambits-premades', 'enableProtectionOnSuccess');
     
     if (!game.combat) return;
+    if (workflow.attackRoll.formula.includes("kl")) return;
 
     // Check if attack hits
-    if(workflowType === "attack" && workflow.attackTotal < target.actor.system.attributes.ac.value) return;
+    if(enableProtectionOnSuccess && (workflow.attackTotal < target.actor.system.attributes.ac.value)) return;
     // Check if Opportunity Attack is initiating the workflow
     if(workflow.item.name === "Opportunity Attack") return;
 
@@ -35,7 +37,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
         if (!browserUser.active) browserUser = game.users?.activeGM;
 
         if(workflowType === "attack") {
-            if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
+            if (target.document.uuid === validTokenPrimary.document.uuid) return;
 
             let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
             let chatData = {
@@ -66,7 +68,50 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
             }
             if (userDecision === true) {
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
-                workflow.disadvantage = true;
+                if(!enableProtectionOnSuccess) workflow.disadvantage = true;
+                else if(enableProtectionOnSuccess) {
+                    let straightRoll = workflow.attackRoll.dice[0].results[0].result + (workflow.attackRoll.total - workflow.attackRoll.dice[0].total);
+                    if(workflow.attackRoll.formula.includes("kh")) {
+                        const saveSetting = workflow.options.noOnUseMacro;
+                        workflow.options.noOnUseMacro = true;
+                        let reroll = await new Roll(`${straightRoll}`).roll({async: true});
+                        await workflow.setAttackRoll(reroll);
+                        workflow.options.noOnUseMacro = saveSetting;
+
+                        if(target.actor.system.attributes.ac.value > reroll.total) content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection to turn the advantage roll into a straight roll, and cause the target to miss ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection to turn the advantage roll into a straight roll, but the target still hits ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                
+                        let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
+                        let chatData = {
+                        user: actorPlayer.id,
+                        speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
+                        content: content
+                        };
+                        ChatMessage.create(chatData);
+                    }
+                    else {
+                        const saveSetting = workflow.options.noOnUseMacro;
+                        let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
+                        workflow.options.noOnUseMacro = true;
+                        let reroll = await new Roll(`1d20 + ${rerollAddition}`).roll({async: true});
+                        if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
+                        await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
+                        workflow.options.noOnUseMacro = saveSetting;
+                
+                        let content;
+                
+                        if(target.actor.system.attributes.ac.value > reroll.total) content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection and cause the target to miss ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection but the target still hits ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                
+                        let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
+                        let chatData = {
+                        user: actorPlayer.id,
+                        speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
+                        content: content
+                        };
+                        ChatMessage.create(chatData);
+                    }
+                }
             }
         }
     }

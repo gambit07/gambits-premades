@@ -63,10 +63,10 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             let newOA = await actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
 
             if(browserUser.id !== game.users?.activeGM.id) {
-                await socket.executeAsUser("chooseUseItemUser", browserUser.id, { itemUuid: newOA.uuid });
+                await socket.executeAsUser("chooseUseItemUser", browserUser.id, { itemUuid: newOA[0].uuid });
             }
             else {
-                await socket.executeAsGM("chooseUseItemUser", { itemUuid: newOA.uuid });
+                await socket.executeAsGM("chooseUseItemUser", { itemUuid: newOA[0].uuid });
             }
         }
     }

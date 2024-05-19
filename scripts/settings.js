@@ -19,7 +19,7 @@ function registerSettings() {
 
     game.settings.register('gambits-premades', 'Enable Opportunity Attack Legacy System', {
         name: "Enable Legacy Template Attachment",
-        hint: "If enabled, Opportunity Attack will use Token Attacher for template attaching and expect Drag Ruler for movement. Default behaviour uses Walled Templates for template attaching and expects Elevation Ruler for movement. This option will be deprecated in the future.",
+        hint: "*For now this setting is always enabled on the back end due to issues with the non legacy implementation.* If enabled, Opportunity Attack will use Token Attacher for template attaching and expect Drag Ruler for movement.",
         scope: 'world',
         config: false,
         type: Boolean,

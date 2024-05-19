@@ -70,6 +70,7 @@ Hooks.once('ready', async function() {
     const interceptionEnabled = game.settings.get('gambits-premades', 'Enable Interception');
     const indomitableEnabled = game.settings.get('gambits-premades', 'Enable Indomitable');
     const protectionEnabled = game.settings.get('gambits-premades', 'Enable Protection');
+    const enableProtectionOnSuccess = game.settings.get('gambits-premades', 'enableProtectionOnSuccess');
     const sentinelEnabled = game.settings.get('gambits-premades', 'Enable Sentinel');
     const riposteEnabled = game.settings.get('gambits-premades', 'Enable Riposte');
     const identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
@@ -95,12 +96,13 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.preAttackRoll", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (protectionEnabled) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (protectionEnabled && !enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (protectionEnabled && enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
@@ -174,6 +176,7 @@ Hooks.on("createCombatant", async (combatant, options, userId) => {
 Hooks.on('deleteCombat', async (combat) => {
     if(!game.user.isGM) return;
     if(game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) await disableOpportunityAttack(combat, "endCombat");
+    console.log("are we deleting combat technically deleteCombat")
 });
 
 Hooks.on("deleteCombatant", async (combatant, options, userId) => {
@@ -181,5 +184,6 @@ Hooks.on("deleteCombatant", async (combatant, options, userId) => {
     let combat = game.combat;
     if (combat && combat.started && game.settings.get('gambits-premades', 'Enable Opportunity Attack')) {
         await disableOpportunityAttack(combatant, "exitCombat");
+        console.log("are we deleting combat technically deleteCombatant")
     }
 });
