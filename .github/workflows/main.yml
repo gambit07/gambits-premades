@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: A couple additional bugfixes. I've disabled the non-legacy option for now on the backend. The setting can be changed but it will not actually modify the behavior" >> release_notes.txt
+          echo "  - Opportunity Attack: A couple additional bugfixes. Ive disabled the non-legacy option for now on the backend. The setting can be changed but it will not actually modify the behavior" >> release_notes.txt
           echo "  - Fighting Style - Protection: Fixed the actor with protection generating the dialog when attacked themselves. Fixed the Homebrew option to function correctly." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
