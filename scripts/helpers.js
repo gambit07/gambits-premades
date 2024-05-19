@@ -12,6 +12,7 @@ export async function gmIdentifyItem({ itemUuid }) {
 
 export async function chooseUseItemUser({ itemUuid }) {
     if(!itemUuid) return;
+
     let itemData = await fromUuid(`${itemUuid}`);
     if(itemData) await itemData.use();
 }

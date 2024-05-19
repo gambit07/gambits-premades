@@ -18,6 +18,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
         }
         if (actor.type === 'npc' || actor.type === 'character') {
             const existingOA = actor.items.filter(item => item.name === itemName);
+
             if(existingOA.length > 0 && existingOA[0].system.source?.custom === newItem.system.source?.custom && existingOA.length === 1) {
                 if(browserUser.id !== game.users?.activeGM.id) {
                     await socket.executeAsUser("chooseUseItemUser", browserUser.id, { itemUuid: existingOA[0].uuid });
@@ -59,13 +60,13 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             if(oaTTS) await actor.unsetFlag("midi-qol", "opportunityAttackTemplateTokenSize");
             if(oaConFac) await actor.unsetFlag("midi-qol", "opportunityAttackTemplateConFac");
 
-            await actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
+            let newOA = await actor.createEmbeddedDocuments("Item", [newItem.toObject()]);
 
             if(browserUser.id !== game.users?.activeGM.id) {
-                await socket.executeAsUser("chooseUseItemUser", browserUser.id, { itemUuid: existingOA[0].uuid });
+                await socket.executeAsUser("chooseUseItemUser", browserUser.id, { itemUuid: newOA.uuid });
             }
             else {
-                await socket.executeAsGM("chooseUseItemUser", { itemUuid: existingOA[0].uuid });
+                await socket.executeAsGM("chooseUseItemUser", { itemUuid: newOA.uuid });
             }
         }
     }

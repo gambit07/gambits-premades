@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'README.md'
 
 jobs:
   build:
@@ -16,24 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: GM Mirror Dialog will now sync the state of the pause button across both clients. This addresses an issue where the user could pause their dialog but the GMs would close and complete as No if they did not also pause theirs, or vice versa. Started to generalize some functions throughout automations and cleaned up all of the 3rd party automations to a certain extent." >> release_notes.txt
-          echo "- General: Complete settings rework. Item types are now selectable buttons with a list of automations that can be enabled within that item type. Should make navigating much easier. Added Debug option to help with identifying where a 3rd party reaction may be failing." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Added custom handling for Booming Blade. Added additional validation for metric vs imperial calculations. Changed setting name for enabling legacy setup (token attacher + drag ruler) to Enable Legacy Template Attachment to reduce confusion. Added a workaround for Walled Templates attachment throwing an error on movement for player characters. Removed Riposte and Sentinel from the Opportunity Attack Item, should make OA deployment lighter. Added check to prevent enabling/disabling OA via settings during combat as it wont actually effect the current combat and can cause downline issues if proper cleanup is not allowed to occur, so the user will receive a message that this must be done outside combat." >> release_notes.txt
-          echo "  - Black Tentacles: Remove Warpgate dependency for token movement when restrained." >> release_notes.txt
-          echo "  - Heated Body: Updated to be more efficient. Added folders/implementation for Remorhaz and Reduced threat Remorhaz." >> release_notes.txt
-          echo "  - Tentacles: Updated to be more efficient." >> release_notes.txt
-          echo "  - Sentinel: Item implementation via OA completely removed, can now be enabled in the Module settings. Now uses additional functionality afforded by the module including pause and GM Mirror Dialog" >> release_notes.txt
-          echo "  - Maneuvers - Riposte: Item implementation via OA completely removed, can now be enabled in the Module settings. Now uses additional functionality afforded by the module including pause and GM Mirror Dialog" >> release_notes.txt
-          echo "  - Indomitable: Item implementation completely removed, can now be enabled in the Module settings. Make sure to update to the latest version of the item as well. Now uses additional functionality afforded by the module including pause and GM Mirror Dialog" >> release_notes.txt
-          echo "  - Fighting Style - Protection: Item implementation completely removed, can now be enabled in the Module settings. Make sure to update to the latest version of the item as well. Now uses additional functionality afforded by the module including pause and GM Mirror Dialog" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Motivational Speech: Some cleanup of the code and various small bugfixes" >> release_notes.txt
-          echo "  - Scatter: A few small issues resolved. Will be looking at migrating the teleport function away from Warpgate in the future." >> release_notes.txt
-          echo "  - Cloud of Daggers: A number of bugfixes and cleanup." >> release_notes.txt
-          echo "  - Roksjas Husk: A number of bugfixes." >> release_notes.txt
-          echo "  - Opportunity Attack: Fixed bug where per turn OA settings would run even if OA was disabled in settings." >> release_notes.txt
-          echo "  - Fighting Style - Interception: Added missing proficiency bonus to d10 roll." >> release_notes.txt
+          echo "  - Opportunity Attack: Hot fix for error on OA deployment. **NOTE**: I recommend enabling the Enable Legacy Template Attachment setting for now." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
