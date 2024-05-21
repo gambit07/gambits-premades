@@ -118,35 +118,45 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     
     function filterToken(t) {
         // Check if invalid token on the canvas
-        if (!t.actor) return;
-        if(debugEnabled) console.log(`${t.actor.name} made it past actor`)
+        if (!t.actor) {
+            if (debugEnabled) console.error(`${itemName} for ${t.actor ? t.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
+            return;
+        }
 
         // Check if the token has the actual item to use
         let checkItem = t.actor.items.find(i => i.name.toLowerCase() === itemName);
-        if(!checkItem) return;
-        if(debugEnabled) console.log(`${t.actor.name} made it past check item initial`)
+        if(!checkItem) {
+            if (debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
+            return;
+        }
 
         // Check if the tokens reaction already used
-        if (reactionCheck && t.actor.effects.find(i => i.name.toLowerCase() === "reaction")) return;
-        if(debugEnabled) console.log(`${t.actor.name} made it past reaction`)
+        if (reactionCheck && t.actor.effects.find(i => i.name.toLowerCase() === "reaction")) {
+            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at reaction available`);
+            return;
+        }
 
         // Check if the token is the initiating token or not a qualifying token disposition
         if (dispositionCheck && (t.id === initiatingToken.id || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
+            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at token disposition check`);
             return;
         }
-        if(debugEnabled) console.log(`${t.actor.name} made it past disposition check`)
 
         // Check if token can see initiating token
-        if(sightCheck && !MidiQOL.canSee(t, initiatingToken)) return;
-        if(debugEnabled) console.log(`${t.actor.name} made it past sight check`)
+        if(sightCheck && !MidiQOL.canSee(t, initiatingToken)) {
+            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at sight check`);
+            return;
+        }
 
         // Check if token is within range
         if(rangeCheck) {
             let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
             let range = game.gps.convertFromFeet({range: rangeTotal});
-            if (measuredDistance === -1 || (measuredDistance > range)) return;
+            if (measuredDistance === -1 || (measuredDistance > range)) {
+                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at range check`);
+                return;
+            }
         }
-        if(debugEnabled) console.log(`${t.actor.name} made it past range check`)
 
         // Check if the token has available spell slots/uses
         if(itemType === "spell") {
@@ -178,10 +188,10 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             }
 
             if (!hasSpellSlots) {
+                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check valid spell slots/preparation`);
                 return;
             }
         }
-        if(debugEnabled) console.log(`${t.actor.name} made it past check spell`)
 
         // Check if the token has available resource or item uses
         if(itemType === "feature") {
@@ -195,17 +205,23 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
                 itemExistsWithValue = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.value !== 0);
             }
 
-            if (!resourceExistsWithValue && !itemExistsWithValue) return;
+            if (!resourceExistsWithValue && !itemExistsWithValue) {
+                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check valid feature item/resource uses`);
+                return;
+            }
         }
-        if(debugEnabled) console.log(`${t.actor.name} made it past check feature`)
 
         if(itemType === "item") {
             const itemNames = itemChecked.map(item => item.toLowerCase());
             let itemExists = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
 
-            if (!itemExists) return;
+            if (!itemExists) {
+                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at valid item supporting feature`);
+                return;
+            }
         }
-        if(debugEnabled) console.log(`${t.actor.name} Reaction validation passed`)
+
+        if(debugEnabled) console.warn(`%c${itemName} for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
 
         return t;
     };

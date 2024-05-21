@@ -323,6 +323,47 @@ function registerSettings() {
         type: Boolean
     });
 
+    game.settings.register("gambits-premades", "enableInterceptionCustomDice", {
+        name: "enableInterceptionCustomDice",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'enableInterceptionCustomDiceNumber', {
+        name: "enableInterceptionCustomDiceNumber",
+        hint: "Enter custom number. Default timeout value is 1.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "1",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for enableInterceptionCustomDiceNumber: Not a number.");
+            }
+        }
+    });
+
+    game.settings.register('gambits-premades', 'enableInterceptionCustomDiceFace', {
+        name: "enableInterceptionCustomDiceFace",
+        hint: "Enter custom number. Default timeout value is 10.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "10",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for enableInterceptionCustomDiceFace: Not a number.");
+            }
+        }
+    });
+
     game.settings.registerMenu('gambits-premades', 'spells', {
         name: game.i18n.localize("Spells"),
         label: game.i18n.localize("Enable Spells"),
@@ -369,6 +410,7 @@ class BaseSettingsMenu extends FormApplication {
     activateListeners(html) {
         super.activateListeners(html);
         this.expandCheckedCollapsibleSections(html);
+        this.populateSelectElements(html);
 
         function validateNumericInput(inputElement) {
             const numericValue = Number(inputElement.value);
@@ -415,6 +457,13 @@ class BaseSettingsMenu extends FormApplication {
                 silveryBarbsContent.addClass('show');
             }
         }
+
+        if (data.enableInterception && data.enableInterceptionCustomDice) {
+            const interceptionContent = html.find('#collapsible-content-interception');
+            if (interceptionContent.length) {
+                interceptionContent.addClass('show');
+            }
+        }
     }
 
     toggleCollapsibleContent(event, contentId) {
@@ -441,6 +490,37 @@ class BaseSettingsMenu extends FormApplication {
             parent.style.height = newHeight + 'px';
         }
     }
+
+    populateSelectElements(html) {
+
+        const settings = {
+            enableInterceptionCustomDiceNumber: Number(game.settings.get("gambits-premades", "enableInterceptionCustomDiceNumber")),
+            enableInterceptionCustomDiceFace: Number(game.settings.get("gambits-premades", "enableInterceptionCustomDiceFace")),
+        };
+
+        const numberSelect = html.find('#enableInterceptionCustomDiceNumber');
+        for (let i = 1; i <= 10; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            if (i === settings.enableInterceptionCustomDiceNumber) {
+                option.selected = true;
+            }
+            numberSelect.append(option);
+        }
+
+        const faceSelect = html.find('#enableInterceptionCustomDiceFace');
+        const faces = [4, 6, 8, 10, 12, 20];
+        faces.forEach(face => {
+            const option = document.createElement('option');
+            option.value = face;
+            option.textContent = `d${face}`;
+            if (face === settings.enableInterceptionCustomDiceFace) {
+                option.selected = true;
+            }
+            faceSelect.append(option);
+        });
+    }
 }
 
 class classFeaturesSettingsMenu extends BaseSettingsMenu {
@@ -453,11 +533,14 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
     }
 
     getData() {
-        return {
+        const data = {
             enableCuttingWords: game.settings.get("gambits-premades", "Enable Cutting Words"),
             cuttingWordsTimeout: game.settings.get("gambits-premades", "Cutting Words Timeout"),
             enableInterception: game.settings.get("gambits-premades", "Enable Interception"),
             interceptionTimeout: game.settings.get("gambits-premades", "Interception Timeout"),
+            enableInterceptionCustomDice: game.settings.get("gambits-premades", "enableInterceptionCustomDice"),
+            enableInterceptionCustomDiceNumber: game.settings.get("gambits-premades", "enableInterceptionCustomDiceNumber"),
+            enableInterceptionCustomDiceFace: game.settings.get("gambits-premades", "enableInterceptionCustomDiceFace"),
             enablePoetryInMisery: game.settings.get("gambits-premades", "Enable Poetry in Misery"),
             poetryInMiseryTimeout: game.settings.get("gambits-premades", "Poetry in Misery Timeout"),
             enableIndomitable: game.settings.get("gambits-premades", "Enable Indomitable"),
@@ -469,6 +552,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             enableRiposte: game.settings.get("gambits-premades", "Enable Riposte"),
             riposteTimeout: game.settings.get("gambits-premades", "Riposte Timeout"),
         };
+
+        return data;
     }
 
     async _updateObject(event, formData) {
@@ -476,6 +561,9 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Cutting Words Timeout", formData.cuttingWordsTimeout);
         await game.settings.set("gambits-premades", "Enable Interception", formData.enableInterception);
         await game.settings.set("gambits-premades", "Interception Timeout", formData.interceptionTimeout);
+        await game.settings.set("gambits-premades", "enableInterceptionCustomDice", formData.enableInterceptionCustomDice);
+        await game.settings.set("gambits-premades", "enableInterceptionCustomDiceNumber", formData.enableInterceptionCustomDiceNumber);
+        await game.settings.set("gambits-premades", "enableInterceptionCustomDiceFace", formData.enableInterceptionCustomDiceFace);
         await game.settings.set("gambits-premades", "Enable Poetry in Misery", formData.enablePoetryInMisery);
         await game.settings.set("gambits-premades", "Poetry in Misery Timeout", formData.poetryInMiseryTimeout);
         await game.settings.set("gambits-premades", "Enable Indomitable", formData.enableIndomitable);

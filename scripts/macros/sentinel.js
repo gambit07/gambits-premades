@@ -22,6 +22,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
+        if (target.document.uuid === validTokenPrimary.document.uuid) return;
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
         let hasEffectOrigin = (gameVersion >= 3 ? validTokenPrimary.actor.appliedEffects : validTokenPrimary.actor.effects)
             .some(effect => effectNamesOrigin.includes(effect.name));

@@ -130,9 +130,10 @@
                         <input type="text" id="cuttingWordsTimeout" name="cuttingWordsTimeout" value="{{cuttingWordsTimeout}}" data-dtype="String">
                     </td>
                 </tr>
-                <tr>
+
+                <tr class="clickable" data-content-id="collapsible-content-interception">
                     <td class="column-item">
-                        <label for="enableInterception">Fighting Style: Interception<br><span class="small-text">Presents a dialog to users with Interception.</span>
+                        <label>Fighting Style: Interception <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to users with Interception.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -144,6 +145,23 @@
                         <input type="text" id="interceptionTimeout" name="interceptionTimeout" value="{{interceptionTimeout}}" data-dtype="String">
                     </td>
                 </tr>
+                
+                <tbody class="collapsible-content" id="collapsible-content-interception">
+                    <tr>
+                        <td class="column-item">
+                            <label for="enableInterceptionCustomDice">Enable custom dice to use with Interceptions damage reduction.</label>
+                        </td>
+                        <td class="column-enable-td">
+                            <div>
+                                <input type="checkbox" id="enableInterceptionCustomDice" name="enableInterceptionCustomDice" data-dtype="Boolean" {{checked enableInterceptionCustomDice}}/>
+                            </div>
+                        </td>
+                        <td class="column-timeout">
+                            <select id="enableInterceptionCustomDiceNumber" name="enableInterceptionCustomDiceNumber" data-dtype="String"></select>
+                            <select id="enableInterceptionCustomDiceFace" name="enableInterceptionCustomDiceFace" data-dtype="String"></select>
+                        </td>
+                    </tr>
+                </tbody>
 
                 <tr class="clickable" data-content-id="collapsible-content-protection">
                     <td class="column-item">

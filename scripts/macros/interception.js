@@ -35,7 +35,7 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
         }
 
         if(workflowType === "damage") {
-            if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
+            if (target.document.uuid === validTokenPrimary.document.uuid) return;
             let damageTypes = workflow.damageRolls.map(roll => roll.options.type);
             let damageTotals = workflow.damageRolls.map(roll => roll.total);
 
@@ -63,8 +63,15 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
                 workflow.options.noOnUseMacro = true;
                 let actorProf = validTokenPrimary.actor.system.attributes.prof;
                 let reroll;
-                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d10 + ${actorProf}`, type: workflowType });
-                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d10 + ${actorProf}`, type: workflowType });
+                let numDice = '1d10';
+                if(MidiQOL.safeGetGameSetting('gambits-premades', 'enableInterceptionCustomDice')) {
+                    let dieNumber = MidiQOL.safeGetGameSetting('gambits-premades', 'enableInterceptionCustomDiceNumber');
+                    let dieFace = MidiQOL.safeGetGameSetting('gambits-premades', 'enableInterceptionCustomDiceFace');
+                    numDice = `${dieNumber}d${dieFace}`;
+                }
+
+                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
+                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
 
                 let remainingReduction = reroll.total;
                 let updatedRolls = [];
