@@ -116,9 +116,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr class="clickable" data-content-id="collapsible-content-counterspell">
                 <td class="column-item">
-                    <label for="enableCounterspell">Counterspell<br><span class="small-text">Presents a dialog to users with counterspell, and automates counterspell application.</span>
+                    <label">Counterspell <span class="small-text">(Click for Homebrew/3rd Party options...)<br>Presents a dialog to users with counterspell, and automates counterspell application.</span>
                     </label>
                 </td>
                 <td class="column-enable-td">
@@ -130,6 +130,19 @@
                     <input type="text" id="counterspellTimeout" name="counterspellTimeout" value="{{counterspellTimeout}}" data-dtype="String">
                 </td>
             </tr>
+            <tbody class="collapsible-content" id="collapsible-content-counterspell">
+                <tr>
+                    <td class="column-item">
+                        <label for="enableCounterspellSpellPenetration">Enable optional Bloodied & Bruised feature Spell Penetration.</label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableCounterspellSpellPenetration" name="enableCounterspellSpellPenetration" data-dtype="Boolean" {{checked enableCounterspellSpellPenetration}}/>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
 
             <tr class="clickable" data-content-id="collapsible-content-silverybarbs">
                 <td class="column-item">

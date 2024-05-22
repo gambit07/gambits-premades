@@ -8,7 +8,7 @@ import { indomitable, showIndomitableDialog } from './macros/indomitable.js';
 import { sentinel, showSentinelDialog } from './macros/sentinel.js';
 import { riposte, showRiposteDialog } from './macros/riposte.js';
 import { enableOpportunityAttack, disableOpportunityAttack } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, chooseUseItemUser, pauseDialogById } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, chooseUseItemUser, pauseDialogById, freeSpellUse } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -47,6 +47,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("pauseDialogById", pauseDialogById);
     socket.register("riposte", riposte);
     socket.register("showRiposteDialog", showRiposteDialog);
+    socket.register("freeSpellUse", freeSpellUse);
 })
 
 Hooks.once('ready', async function() {
@@ -60,6 +61,7 @@ Hooks.once('ready', async function() {
         gmIdentifyItem,
         convertFromFeet,
         gmUpdateTemplateSize,
+        freeSpellUse,
         socket
     };
 

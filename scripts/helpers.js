@@ -10,6 +10,30 @@ export async function gmIdentifyItem({ itemUuid }) {
     if(itemData) await itemData.update({"system.identified": true});
 }
 
+export async function freeSpellUse({ macroPass, workflowUuid }) {
+    if(!macroPass || macroPass !== "preItemRoll" || !workflowUuid) return;
+
+    const workflow = await MidiQOL.Workflow.getWorkflow(`${workflowUuid}`);
+
+    const effectName = `${workflow.item.name}: Long Rest Charge Used`;
+    
+
+    if (!workflow.actor.appliedEffects.some(e => e.name === effectName)) {
+        workflow.config.consumeSpellSlot = false;
+        workflow.config.consumeSpellLevel = false;
+        workflow.config.needsConfiguration = false;
+        workflow.options.configureDialog = false;
+        const effectData = {
+            name: effectName,
+            icon: workflow.item.img,
+            duration: {},
+            origin: workflow.actor.uuid,
+            flags: {dae:{specialDuration:['longRest']}}
+        }
+        return await workflow.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+    }
+}
+
 export async function chooseUseItemUser({ itemUuid }) {
     if(!itemUuid) return;
 

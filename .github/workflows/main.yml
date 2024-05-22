@@ -19,14 +19,9 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- General:" >> release_notes.txt
-          echo "  - Debug Log: Enhanced 3rd party reaction debug logging to only output the step that failed with actor and item name, or an output if all checks passed successfully." >> release_notes.txt
+          echo "  - Helper: Added a helper for a free item use per long rest to allow a simple single item solution. Input ```await game.gps.freeSpellUse({macroPass: args[0].macroPass, workflowUuid: workflow.itemUuid});``` on the top line of the items DIME macro, and set the On Use Macro option on the Midi Qol tab to - Called before the item is rolled." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Fighting Style - Interception: Added a homebrew option for a custom number/face of dice." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Infestation: Socketed token movement correctly so should no longer fail when cast on a PC." >> release_notes.txt
-          echo "  - Fighting Style - Interception: Fix for the actor with the feature receiving the dialog when attacked directly." >> release_notes.txt
-          echo "  - Sentinel: Fix for the actor with the feature receiving the dialog when attacked directly." >> release_notes.txt
-          echo "  - Hideous Laughter: A number of fixes/updates to modernize the code and make it compatible with midis core implementation of concentration." >> release_notes.txt
+          echo "  - Counterspell: Added a 3rd party settings option for Bloodied and Bruised features Spell Penetration and Greater Spell Penetration" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

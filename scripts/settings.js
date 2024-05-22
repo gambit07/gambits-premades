@@ -364,6 +364,15 @@ function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableCounterspellSpellPenetration", {
+        name: "enableCounterspellSpellPenetration",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
     game.settings.registerMenu('gambits-premades', 'spells', {
         name: game.i18n.localize("Spells"),
         label: game.i18n.localize("Enable Spells"),
@@ -462,6 +471,13 @@ class BaseSettingsMenu extends FormApplication {
             const interceptionContent = html.find('#collapsible-content-interception');
             if (interceptionContent.length) {
                 interceptionContent.addClass('show');
+            }
+        }
+
+        if (data.enableCounterspell && data.enableCounterspellSpellPenetration) {
+            const counterspellContent = html.find('#collapsible-content-counterspell');
+            if (counterspellContent.length) {
+                counterspellContent.addClass('show');
             }
         }
     }
@@ -624,6 +640,7 @@ class spellSettingsMenu extends BaseSettingsMenu {
         return {
             enableCounterspell: game.settings.get("gambits-premades", "Enable Counterspell"),
             counterspellTimeout: game.settings.get("gambits-premades", "Counterspell Timeout"),
+            enableCounterspellSpellPenetration: game.settings.get("gambits-premades", "enableCounterspellSpellPenetration"),
             enableSilveryBarbs: game.settings.get("gambits-premades", "Enable Silvery Barbs"),
             silveryBarbsTimeout: game.settings.get("gambits-premades", "Silvery Barbs Timeout"),
             disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
@@ -634,6 +651,7 @@ class spellSettingsMenu extends BaseSettingsMenu {
     async _updateObject(event, formData) {
         await game.settings.set("gambits-premades", "Enable Counterspell", formData.enableCounterspell);
         await game.settings.set("gambits-premades", "Counterspell Timeout", formData.counterspellTimeout);
+        await game.settings.set("gambits-premades", "enableCounterspellSpellPenetration", formData.enableCounterspellSpellPenetration);
         await game.settings.set("gambits-premades", "Enable Silvery Barbs", formData.enableSilveryBarbs);
         await game.settings.set("gambits-premades", "Silvery Barbs Timeout", formData.silveryBarbsTimeout);
         await game.settings.set("gambits-premades", "disableSilveryBarbsOnNat20", formData.disableSilveryBarbsOnNat20);

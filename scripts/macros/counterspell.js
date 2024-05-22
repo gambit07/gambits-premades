@@ -214,6 +214,24 @@ export async function showCounterspellDialog({targetUuids, actorUuid, tokenUuid,
                         let counterspellLevel = false;
                         let programmaticallyClosed = false;
 
+                        let spellPenetrationEnabled = MidiQOL.safeGetGameSetting('gambits-premades', `enableCounterspellSpellPenetration`);
+                        let spellPenetration;
+                        let spellPenetrationGreater;
+                        let spellPenetrationChat;
+                        
+                        if(spellPenetrationEnabled) {
+                            spellPenetration = originToken.actor.items.find(i => i.name === "Spell Penetration");
+                            spellPenetrationGreater = originToken.actor.items.find(i => i.name === "Greater Spell Penetration");
+                            if(spellPenetration) {
+                                castLevel = castLevel + 3;
+                                spellPenetrationChat = "<br><br>The spell being countered was considered 3 levels higher due to the caster's <b>Spell Penetration</b> feature.";
+                            }
+                            else if(spellPenetrationGreater) {
+                                castLevel = castLevel + 5;
+                                spellPenetrationChat = "<br><br>The spell being countered was considered 5 levels higher due to the caster's <b>Greater Spell Penetration</b> feature.";
+                            }
+                        }
+
                         let chatList = [];
                         if(itemRoll) {
                         const spellThreshold = castLevel + 10;
@@ -224,17 +242,17 @@ export async function showCounterspellDialog({targetUuids, actorUuid, tokenUuid,
                             let abjurationCheck = actor.items.find(i => i.name.toLowerCase() === "improved abjuration");
                             abjurationCheck ? skillCheckTotal = skillCheck.total + actor.system?.attributes?.prof : skillCheckTotal = skillCheck.total;
                             if (skillCheckTotal >= spellThreshold) {
-                                chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                                chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.<br><img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                                 userDecision = true;
                                 counterspellLevel = itemRoll.castData.castLevel;
                             }
                             else {
-                                chatList = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.  <img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                                chatList = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                                 userDecision = false;
                             }
                         }
                         else {
-                            chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled because you cast ${itemProperName} at an equal or higher level. <img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                            chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled because you cast ${itemProperName} at an equal or higher level.<br><img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                             userDecision = true;
                             counterspellLevel = itemRoll.castData.castLevel;
                         }
