@@ -10,10 +10,11 @@ export async function gmIdentifyItem({ itemUuid }) {
     if(itemData) await itemData.update({"system.identified": true});
 }
 
-export async function freeSpellUse({ macroPass, workflowUuid }) {
-    if(!macroPass || macroPass !== "preItemRoll" || !workflowUuid) return;
+export async function freeSpellUse({ workflowUuid }) {
+    if(!workflowUuid) return;
 
     const workflow = await MidiQOL.Workflow.getWorkflow(`${workflowUuid}`);
+    if(workflow.macroPass !== "preItemRoll") return;
 
     const effectName = `${workflow.item.name}: Long Rest Charge Used`;
     
@@ -30,6 +31,7 @@ export async function freeSpellUse({ macroPass, workflowUuid }) {
             origin: workflow.actor.uuid,
             flags: {dae:{specialDuration:['longRest']}}
         }
+        ui.notifications.info(`You used your once per long rest use of ${workflow.item.name} and did not use a spell slot`)
         return await workflow.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
     }
 }
