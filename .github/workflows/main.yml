@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- General:" >> release_notes.txt
-          echo "  - Helper: Added a helper for a free item use per long rest to allow a simple single item solution. Input `await game.gps.freeSpellUse({macroPass: args[0].macroPass, workflowUuid: workflow.itemUuid});` on the top line of the items DIME macro, and set the On Use Macro option on the Midi Qol tab to - Called before the item is rolled." >> release_notes.txt
+          echo "  - Helper: Added a helper for a free item use per long rest to allow a simple single item solution. Input, await game.gps.freeSpellUse({macroPass: args[0].macroPass, workflowUuid: workflow.itemUuid}); on the top line of the items DIME macro, and set the On Use Macro option on the Midi Qol tab to - Called before the item is rolled." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
           echo "  - Counterspell: Added a 3rd party settings option for Bloodied and Bruised features Spell Penetration and Greater Spell Penetration" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
