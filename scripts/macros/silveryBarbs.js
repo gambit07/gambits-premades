@@ -58,13 +58,13 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             let result;
             
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: targetNames, outcomeType: "save", attackTotal: null, dialogId: `${dialogId}_${browserUser.id}`, source: 'user', itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: targetNames, outcomeType: "save", attackTotal: null, dialogId: `${dialogId}_${browserUser.id}`, source: "user", type: "multiDialog", itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
                 
-                let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: targetNames, outcomeType: "save", attackTotal: null, dialogId: `${dialogId}_${game.users?.activeGM.id}`, source: 'gm', itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
+                let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: targetNames, outcomeType: "save", attackTotal: null, dialogId: `${dialogId}_${game.users?.activeGM.id}`, source: "gm", type: "multiDialog", itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: targetNames, outcomeType: "save", itemProperName: itemProperName}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));;
+                result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: targetNames, outcomeType: "save", itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));;
             }
             
             const { userDecision, returnedTokenUuid, source, type } = result;
@@ -145,13 +145,13 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 let result;
                 
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: `${dialogId}_${browserUser.id}`, source: 'user', itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                    let userDialogPromise = socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: `${dialogId}_${browserUser.id}`, source: "user", type: "multiDialog", itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
 
-                    let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: `${dialogId}_${game.users?.activeGM.id}`, source: 'gm', itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
+                    let gmDialogPromise = socket.executeAsGM("showSilveryBarbsDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: `${dialogId}_${game.users?.activeGM.id}`, source: "gm", type: "multiDialog", itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
                 
                     result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
                 } else {
-                    result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, itemProperName: itemProperName}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                    result = await socket.executeAsUser("showSilveryBarbsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", attackTotal: workflow.attackTotal, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
                 }
                 
                 const { userDecision, returnedTokenUuid, source, type } = result;
@@ -444,10 +444,10 @@ export async function showSilveryBarbsDialog({targetUuids, actorUuid, tokenUuid,
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true });
+                    resolve({ userDecision: false, returnedTokenUuid: null, programmaticallyClosed: true });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false });
+                    resolve({ userDecision: false, returnedTokenUuid: null, programmaticallyClosed: false });
                 }
             }
         });

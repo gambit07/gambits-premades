@@ -159,6 +159,8 @@ Hooks.on("preUpdateCombat", (combat, update, options) => {
 
 Hooks.on("updateCombat", async (combat, update, options) => {
     if(!game.user.isGM) return;
+    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); };
+    await wait(5000);
     const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
     const hasProcessedStart = await combat.getFlag('gambits-premades', `startProcessed-${combat.id}`);
     if(combatStarted && !hasProcessedStart && game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) {
@@ -189,3 +191,38 @@ Hooks.on("deleteCombatant", async (combatant, options, userId) => {
         console.log("are we deleting combat technically deleteCombatant")
     }
 });
+
+/* Store initial positions
+let initialPositions = new Map();
+
+Hooks.on('canvasReady', (canvas) => {
+    console.log('Canvas is ready. Setting up token movement tracking.');
+
+    canvas.tokens.placeables.forEach(token => {
+        initialPositions.set(token.id, {x: token.x, y: token.y});
+    });
+
+    canvas.stage.on('pointerdown', (event) => {
+        let interactionData = canvas.mouseInteractionManager.interactionData;
+        if (interactionData.origin) {
+            let token = interactionData.origin;
+            initialPositions.set(token.id, {x: token.x, y: token.y});
+            console.log(`Token ${token.name} is moving from (${token.x}, ${token.y}).`);
+        }
+    });
+});
+
+Hooks.on('preUpdateToken', (token, updateData, options, userId) => {
+    //if (updateData.x !== undefined || updateData.y !== undefined) {
+        let startX = initialPositions.get(token.id).x;
+        let startY = initialPositions.get(token.id).y;
+        let endX = updateData.x !== undefined ? updateData.x : token.x;
+        let endY = updateData.y !== undefined ? updateData.y : token.y;
+
+        console.log(`Token ${token.name} is moving from (${startX}, ${startY}) to (${endX}, ${endY}).`);
+    //}
+});
+
+Hooks.on('updateToken', (token, updateData, options, userId) => {
+    initialPositions.set(token.id, {x: token.x, y: token.y});
+});*/
