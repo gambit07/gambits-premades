@@ -49,20 +49,20 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
             let result;
             
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showProtectionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: target.document.uuid, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: `${dialogId}_${browserUser.id}`, source: "user", type: "multiDialog", itemProperName: itemProperName}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                let userDialogPromise = socket.executeAsUser("showProtectionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: target.document.uuid, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: dialogId, source: "user", type: "multiDialog", itemProperName: itemProperName});
                 
-                let gmDialogPromise = socket.executeAsGM("showProtectionDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: target.document.uuid, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: `${dialogId}_${game.users?.activeGM.id}`, source: "gm", type: "multiDialog", itemProperName: itemProperName}).then(res => ({...res, source: "gm", type: "multiDialog"}));
+                let gmDialogPromise = socket.executeAsGM("showProtectionDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: target.document.uuid, outcomeType: "attack", attackTotal: workflow.attackTotal, dialogId: dialogId, source: "gm", type: "multiDialog", itemProperName: itemProperName});
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showProtectionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: target.document.uuid, outcomeType: "attack", attackTotal: workflow.attackTotal, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                result = await socket.executeAsUser("showProtectionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: target.document.uuid, outcomeType: "attack", attackTotal: workflow.attackTotal, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
             }
             
             const { userDecision, source, type } = result;
 
             if (userDecision === false || !userDecision) {
-                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
-                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
+                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                 continue;
             }
@@ -156,8 +156,8 @@ export async function showProtectionDialog({targetUuids, actorUuid, tokenUuid, d
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
 
@@ -169,7 +169,7 @@ export async function showProtectionDialog({targetUuids, actorUuid, tokenUuid, d
                         
                         let userDecision = true;
 
-                        resolve({ userDecision, programmaticallyClosed: false });
+                        resolve({ userDecision, programmaticallyClosed: false, source, type });
                     }
                 },
                 no: {
@@ -178,7 +178,7 @@ export async function showProtectionDialog({targetUuids, actorUuid, tokenUuid, d
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, programmaticallyClosed: false });
+                        resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                     }
                 },
             }, default: "no",
@@ -189,14 +189,14 @@ export async function showProtectionDialog({targetUuids, actorUuid, tokenUuid, d
                 const countdownElement = html.find("#countdown");
                 const pauseButton = html.find("#pauseButton");
 
-                const updateTimer = (newTimeLeft, paused) => {
+                dialog.updateTimer = (newTimeLeft, paused) => {
                     timeLeft = newTimeLeft;
                     isPaused = paused;
                     countdownElement.text(`${timeLeft}`);
                     pauseButton.text(isPaused ? 'Paused' : 'Pause');
                 };
 
-                const timer = setInterval(() => {
+                timer = setInterval(() => {
                     if (!isPaused) {
                         timeLeft--;
                         countdownElement.text(`${timeLeft}`);
@@ -220,18 +220,14 @@ export async function showProtectionDialog({targetUuids, actorUuid, tokenUuid, d
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true });
+                    resolve({ userDecision: false, programmaticallyClosed: true, source, type });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false });
+                    resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                 }
             }
         });
-        dialog.dialogState = {
-            interacted: false,
-            decision: null,
-            programmaticallyClosed: false
-        };
+        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
         dialog.render(true);
     });
 }

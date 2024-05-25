@@ -42,20 +42,20 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
             let result;
 
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showInterceptionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: `${dialogId}_${browserUser.id}`, rollTotals: damageTotals, itemProperName: itemProperName, source: "user", type: "multiDialog"}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                let userDialogPromise = socket.executeAsUser("showInterceptionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: dialogId, rollTotals: damageTotals, itemProperName: itemProperName, source: "user", type: "multiDialog"});
                 
-                let gmDialogPromise = socket.executeAsGM("showInterceptionDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: `${dialogId}_${game.users?.activeGM.id}`, rollTotals: damageTotals, itemProperName: itemProperName, source: "gm", type: "multiDialog"}).then(res => ({...res, source: "gm", type: "multiDialog"}));
+                let gmDialogPromise = socket.executeAsGM("showInterceptionDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: dialogId, rollTotals: damageTotals, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
              } else {
-                 result = await socket.executeAsUser("showInterceptionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, rollTotals: damageTotals, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                 result = await socket.executeAsUser("showInterceptionDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, rollTotals: damageTotals, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
              }
                  
              const { userDecision, damageChosen, source, type } = result;
 
              if (userDecision === false || !userDecision) {
-                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
-                 if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
+                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                 if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                  continue;
             }
             if (userDecision === true) {
@@ -199,8 +199,8 @@ export async function showInterceptionDialog({targetUuids, actorUuid, tokenUuid,
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
+                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
                         let originToken;
@@ -219,7 +219,7 @@ export async function showInterceptionDialog({targetUuids, actorUuid, tokenUuid,
                         
                         let userDecision = true;
 
-                        resolve({userDecision, damageChosen, programmaticallyClosed: false});
+                        resolve({userDecision, damageChosen, programmaticallyClosed: false, source, type});
                     }
                 },
                 no: {
@@ -228,7 +228,7 @@ export async function showInterceptionDialog({targetUuids, actorUuid, tokenUuid,
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false});
+                        resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false, source, type});
                     }
                 },
             }, default: "no",
@@ -270,10 +270,10 @@ export async function showInterceptionDialog({targetUuids, actorUuid, tokenUuid,
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: true });
+                    resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: true, source, type });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false });
+                    resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false, source, type });
                 }
             }
         });

@@ -160,7 +160,7 @@ Hooks.on("preUpdateCombat", (combat, update, options) => {
 Hooks.on("updateCombat", async (combat, update, options) => {
     if(!game.user.isGM) return;
     async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); };
-    await wait(5000);
+    await wait(3000); //Give the canvas time to settle down
     const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
     const hasProcessedStart = await combat.getFlag('gambits-premades', `startProcessed-${combat.id}`);
     if(combatStarted && !hasProcessedStart && game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) {
@@ -180,7 +180,6 @@ Hooks.on("createCombatant", async (combatant, options, userId) => {
 Hooks.on('deleteCombat', async (combat) => {
     if(!game.user.isGM) return;
     if(game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) await disableOpportunityAttack(combat, "endCombat");
-    console.log("are we deleting combat technically deleteCombat")
 });
 
 Hooks.on("deleteCombatant", async (combatant, options, userId) => {
@@ -188,7 +187,6 @@ Hooks.on("deleteCombatant", async (combatant, options, userId) => {
     let combat = game.combat;
     if (combat && combat.started && game.settings.get('gambits-premades', 'Enable Opportunity Attack')) {
         await disableOpportunityAttack(combatant, "exitCombat");
-        console.log("are we deleting combat technically deleteCombatant")
     }
 });
 

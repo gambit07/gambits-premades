@@ -17,22 +17,37 @@ export async function freeSpellUse({ workflowUuid }) {
     if(workflow.macroPass !== "preItemRoll") return;
 
     const effectName = `${workflow.item.name}: Long Rest Charge Used`;
-    
 
     if (!workflow.actor.appliedEffects.some(e => e.name === effectName)) {
-        workflow.config.consumeSpellSlot = false;
-        workflow.config.consumeSpellLevel = false;
-        workflow.config.needsConfiguration = false;
-        workflow.options.configureDialog = false;
-        const effectData = {
-            name: effectName,
-            icon: workflow.item.img,
-            duration: {},
-            origin: workflow.actor.uuid,
-            flags: {dae:{specialDuration:['longRest']}}
-        }
-        ui.notifications.info(`You used your once per long rest use of ${workflow.item.name} and did not use a spell slot`)
-        return await workflow.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+        let title = `Free ${workflow.item.name} Use`;
+        let content = `<p>Would you like to activate your free use of ${workflow.item.name}? It will be cast at its base level.</p>`;
+
+        let buttons = {
+            yes: {
+                label: "Yes",
+                callback: async (html) => {
+                    workflow.config.consumeSpellSlot = false;
+                    workflow.config.consumeSpellLevel = false;
+                    workflow.config.needsConfiguration = false;
+                    workflow.options.configureDialog = false;
+                    const effectData = {
+                        name: effectName,
+                        icon: workflow.item.img,
+                        duration: {},
+                        origin: workflow.actor.uuid,
+                        flags: {dae:{specialDuration:['longRest']}}
+                    }
+                    ui.notifications.info(`You used your once per long rest use of ${workflow.item.name} and did not use a spell slot`)
+                    return await workflow.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+                }
+            },
+            no: {
+                label: "No",
+                callback: async () => false
+            }
+        };
+
+        await Dialog.wait({ title, content, buttons, default: "No" });
     }
 }
 
@@ -50,15 +65,19 @@ export async function gmUpdateTemplateSize({ templateUuid, templateSize }) {
 }
 
 export async function closeDialogById({ dialogId }) {
+    console.log("made it here")
     let activeDialog = ui.activeWindow?.data?.id;
-
+    console.log(activeDialog, "active dialog")
     if (activeDialog === dialogId) {
+        console.log("dialog matched")
         ui.activeWindow.dialogState.programmaticallyClosed = true;
         ui.activeWindow.close();
     }
     else {
         let dialog = Object.values(ui.windows).find(d => d.data?.id === dialogId);
+        console.log(dialog, "else dialog")
         if (dialog) {
+            console.log("dialog matched")
             dialog.dialogState.programmaticallyClosed = true;
             dialog.close();
         }
@@ -68,10 +87,10 @@ export async function closeDialogById({ dialogId }) {
 export function pauseDialogById({ dialogId, timeLeft, isPaused }) {
     let activeDialog = ui.activeWindow?.data?.id;
 
-    if (activeDialog.split('_')[0] === dialogId.split('_')[0]) {
+    if (activeDialog === dialogId) {
         ui.activeWindow.updateTimer(timeLeft, isPaused);
     } else {
-        let dialog = Object.values(ui.windows).find(d => d.data?.id.split('_')[0] === dialogId.split('_')[0]);
+        let dialog = Object.values(ui.windows).find(d => d.data?.id === dialogId);
         if (dialog) {
             dialog.updateTimer(timeLeft, isPaused);
         }

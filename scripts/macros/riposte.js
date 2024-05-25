@@ -53,20 +53,20 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
             let result;
 
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showRiposteDialog", browserUser.id, {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: workflow, outcomeType: "attack", damageTypes: null, dialogId: `${dialogId}_${browserUser.id}`, rollTotals: null, itemProperName: itemProperName, source: "user", type: "multiDialog"}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                let userDialogPromise = socket.executeAsUser("showRiposteDialog", browserUser.id, {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: workflow, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "user", type: "multiDialog"});
                 
-                let gmDialogPromise = socket.executeAsGM("showRiposteDialog", {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, dialogId: `${dialogId}_${game.users?.activeGM.id}`, rollTotals: null, itemProperName: itemProperName, source: "gm", type: "multiDialog"}).then(res => ({...res, source: "gm", type: "multiDialog"}));
+                let gmDialogPromise = socket.executeAsGM("showRiposteDialog", {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
              } else {
-                 result = await socket.executeAsUser("showRiposteDialog", browserUser.id, {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, rollTotals: null, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                 result = await socket.executeAsUser("showRiposteDialog", browserUser.id, {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, rollTotals: null, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
              }
                  
              const { userDecision, source, type } = result;
 
              if (userDecision === false || userDecision === true || !userDecision) {
-                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
-                 if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
+                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                 if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                  continue;
             }
         }
@@ -148,15 +148,15 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
+                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                         let actor = await fromUuid(actorUuid);
                         const uuid = actor.uuid;
 
                         let riposteItem = actor.items.find(i => i.name === "Maneuvers: Riposte");
 
                         const riposteRoll = await riposteItem.use();
-                        if(riposteRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false });
+                        if(riposteRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
 
                         const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
 
@@ -202,14 +202,10 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
                             createWorkflow: true,
                             versatile: false,
                             configureDialog: false,
-                            targetUuids: [`${targetUuids}`],
-                            workflowOptions: {
-                                autoRollDamage: 'onHit',
-                                autoFastDamage: true
-                            }
+                            targetUuids: [`${targetUuids}`]
                         };
                         const itemRoll = await MidiQOL.completeItemUse(chosenWeapon, {}, options);
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false });
+                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                         if(itemRoll) {
                             const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
 
@@ -220,7 +216,7 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
                         
                         let userDecision = true;
 
-                        resolve({userDecision, programmaticallyClosed: false});
+                        resolve({userDecision, programmaticallyClosed: false, source, type});
                     }
                 },
                 no: {
@@ -229,7 +225,7 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, programmaticallyClosed: false});
+                        resolve({ userDecision: false, programmaticallyClosed: false, source, type});
                     }
                 },
             }, default: "no",
@@ -271,10 +267,10 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true });
+                    resolve({ userDecision: false, programmaticallyClosed: true, source, type });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false });
+                    resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                 }
             }
         });

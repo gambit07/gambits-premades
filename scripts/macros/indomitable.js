@@ -48,20 +48,20 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
             let result;
             
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showIndomitableDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, dialogId: `${dialogId}_${browserUser.id}`, itemProperName: itemProperName, source: "user", type: "multiDialog"}).then(res => ({...res, source: "user", type: "multiDialog"}));
+                let userDialogPromise = socket.executeAsUser("showIndomitableDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, dialogId: dialogId, itemProperName: itemProperName, source: "user", type: "multiDialog"});
                 
-                let gmDialogPromise = socket.executeAsGM("showIndomitableDialog", {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, dialogId: `${dialogId}_${game.users?.activeGM.id}`, itemProperName: itemProperName, source: "gm", type: "multiDialog"}).then(res => ({...res, source: "gm", type: "multiDialog"}));
+                let gmDialogPromise = socket.executeAsGM("showIndomitableDialog", {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, dialogId: dialogId, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
             } else {
-                result = await socket.executeAsUser("showIndomitableDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}).then(res => ({...res, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"}));
+                result = await socket.executeAsUser("showIndomitableDialog", browserUser.id, {targetUuids: targetUuids, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
             }
             
             const { userDecision, source, type } = result;
 
             if (userDecision === false || !userDecision) {
-                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
-                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
+                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
                 continue;
             }
@@ -161,8 +161,8 @@ export async function showIndomitableDialog({targetUuids, actorUuid, tokenUuid, 
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
 
@@ -181,7 +181,7 @@ export async function showIndomitableDialog({targetUuids, actorUuid, tokenUuid, 
 
                         const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
 
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false });
+                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
 
                         const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
 
@@ -189,11 +189,11 @@ export async function showIndomitableDialog({targetUuids, actorUuid, tokenUuid, 
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
 
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false });
+                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                         
                         let userDecision = true;
 
-                        resolve({ userDecision, programmaticallyClosed: false });
+                        resolve({ userDecision, programmaticallyClosed: false, source, type });
                     }
                 },
                 no: {
@@ -202,7 +202,7 @@ export async function showIndomitableDialog({targetUuids, actorUuid, tokenUuid, 
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, programmaticallyClosed: false });
+                        resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                     }
                 },
             }, default: "no",
@@ -244,10 +244,10 @@ export async function showIndomitableDialog({targetUuids, actorUuid, tokenUuid, 
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true });
+                    resolve({ userDecision: false, programmaticallyClosed: true, source, type });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false });
+                    resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                 }
             }
         });

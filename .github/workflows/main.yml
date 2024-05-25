@@ -19,7 +19,15 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- General:" >> release_notes.txt
-          echo "  - 3rd Party Dialogs: Fix for most of the 3rd party dialogs not calling the new pause sync functionality correctly." >> release_notes.txt
+          echo "  - Helper: Enhanced the Free Item Use helper to display a dialog on use asking if the user would like to activate it. This way they can choose not to in order to upcast instead." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Ashardalons Stride: Covers all aspects and works to suppress opportunity attacks." >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Opportunity Attack: Added support for a flag labeled opportunityAttackDisabled. If set to true for a given template (identified with the template flag opportunityAttackSet) this will prevent Opportunity Attacks. Updated flags across the board to be housed on the template instead of the actor." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Kinetic Jaunt: Fix application." >> release_notes.txt
+          echo "  - Stinking Cloud: Fix application." >> release_notes.txt
+          echo "  - 3rd Party Dialogs: Hopefully fixed all the remaining bugs in the synced pause dialog functionality." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
