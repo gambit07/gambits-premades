@@ -19,16 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- General:" >> release_notes.txt
-          echo "  - Helper: Fix token validator not appropriately checking spell level against valid spells." >> release_notes.txt
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Ashardalons Stride: Covers all aspects and works to suppress opportunity attacks." >> release_notes.txt
-          echo "  - Cloak of Vermin: Automates the Deep Magic Vol 2 spell Cloak of Vermin." >> release_notes.txt
-          echo "  - Drafyns Bane of Excellence: Automates the Deep Magic Vol 2 spell Drafyns Bane of Excellence. Currently only covers the attack roll fully and offers a chat readout for saving throws, if a hook is added in the future to handle this it will be incorporated." >> release_notes.txt
-          echo "  - Dream Shear: Automates the Deep Magic Vol 2 spell Dream Shear." >> release_notes.txt
-          echo "  - Leilochs Interminable Yarn: Automates the Deep Magic Vol 2 spell Leilochs Interminable Yarn." >> release_notes.txt
-          echo "  - Storm Mote: Automates the Deep Magic Vol 2 spell Storm Mote." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Enemies Abound: Fixed a bunch of bugs." >> release_notes.txt
+          echo "  - Helper: Actually fix token validator not appropriately checking spell level against valid spells." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

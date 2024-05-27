@@ -206,7 +206,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         // Check if the token has available spell slots/uses
         if(itemType === "spell") {
             const spells = t.actor.system.spells;
-            let spellLevel = t.actor.system.level;
+            let spellLevel = checkItem?.system?.level;
             let checkType = checkItem?.system?.preparation?.mode;
             let hasSpellSlots = false;
             if(checkType === "prepared" && checkItem?.system?.preparation?.prepared === false) return;
