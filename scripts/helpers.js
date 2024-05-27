@@ -182,7 +182,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token is the initiating token or not a qualifying token disposition
-        if (dispositionCheck && (t.id === initiatingToken.id || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
+        if (dispositionCheck && ((t.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at token disposition check`);
             return;
         }
@@ -206,13 +206,13 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         // Check if the token has available spell slots/uses
         if(itemType === "spell") {
             const spells = t.actor.system.spells;
-            
+            let spellLevel = t.actor.system.level;
             let checkType = checkItem?.system?.preparation?.mode;
             let hasSpellSlots = false;
             if(checkType === "prepared" && checkItem?.system?.preparation?.prepared === false) return;
             if(checkType === "prepared" || checkType === "always")
             {
-                for (let level = 3; level <= 9; level++) {
+                for (let level = spellLevel; level <= 9; level++) {
                     let spellSlot = t.actor.system.spells[`spell${level}`].value;
                     if (spellSlot > 0) {
                         hasSpellSlots = true;
