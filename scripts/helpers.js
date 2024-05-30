@@ -100,7 +100,6 @@ export function pauseDialogById({ dialogId, timeLeft, isPaused }) {
 export async function rollAsUser({ rollParams, type }) {
     if(!rollParams) return;
     let reroll;
-    //const DamageRoll = CONFIG.Dice.DamageRoll;
     
     reroll = await new Roll(`${rollParams}`).evaluate({async: true});
 

@@ -246,6 +246,21 @@
                         <input type="text" id="poetryInMiseryTimeout" name="poetryInMiseryTimeout" value="{{poetryInMiseryTimeout}}" data-dtype="String">
                     </td>
                 </tr>
+
+                <tr>
+                    <td class="column-item">
+                        <label for="enableWitchesHex">Witches Hex<br><span class="small-text">Presents a dialog to users for the Witch classes Hex. Hex item must be renamed to 'Witches Hex'.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableWitchesHex" name="enableWitchesHex" data-dtype="Boolean" {{checked enableWitchesHex}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="witchesHexTimeout" name="witchesHexTimeout" value="{{witchesHexTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
             </tbody>
         </table>
         <footer class="sheet-footer flexrow">

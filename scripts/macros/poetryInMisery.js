@@ -12,7 +12,7 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     let initiatingToken;
     (workflow) ? initiatingToken = workflow.token : initiatingToken = await MidiQOL.tokenForActor(workflowData.actor.uuid);
 
-    if (!game.combat && (workflowType === "attack")) return;
+    if (!game.combat && (workflowType === "attack" || (workflowType === "save" && workflowCombat === true))) return;
 
     // Check if Opportunity Attack is initiating the workflow
     if(workflow?.item.name === "Opportunity Attack") return;

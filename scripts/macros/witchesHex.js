@@ -14,6 +14,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
 
     // Check if Opportunity Attack is initiating the workflow
     if(workflow.item.name === "Opportunity Attack") return;
+    if(workflowType === "save" && workflow.saveResults.length === 0) return;
 
     let findValidTokens;
 
@@ -31,7 +32,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let originTokenUuidPrimary = workflow.token.document.uuid;
-        let spellData = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
+        let itemData = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
         let hexDie = validTokenPrimary.actor.system.scale["kp-witch"]["hex-die"].die;
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) {
@@ -76,26 +77,29 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             }
             if (userDecision === true) {
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+                const saveSetting = workflow.options.noOnUseMacro;
+                workflow.options.noOnUseMacro = true;
                 let saveDC = workflow.saveItem.system.save.dc;
-                let saveAbility = workflow.saveItem.system.save.ability;
-                let workflowTarget = Array.from(workflow.targets).find(t => t.document.uuid === returnedTokenUuid);
-                const workflowIndex = Array.from(workflow.targets).findIndex(t => t.document.uuid === returnedTokenUuid);
-                let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
-                let reroll;
-                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d20 + ${targetSaveBonus}` });
-                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${targetSaveBonus}` });
 
-                if(reroll.total < saveDC) {
+                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1${hexDie}`, type: workflowType });
+                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1${hexDie}`, type: workflowType });
+                let rollFound = workflow.saveRolls.find(roll => roll.data.tokenUuid === returnedTokenUuid);
+                let rollTotal = rollFound.total;
+                let modifiedRoll = await new Roll(`${rollTotal} - ${reroll.total}`).evaluate({async: true});
+
+                workflow.options.noOnUseMacro = saveSetting;
+
+                if(modifiedRoll < saveDC) {
                     workflow.saves.delete(workflowTarget);
                     workflow.failedSaves.add(workflowTarget);
 
                     let chatList = [];
 
-                    chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatList = `<span style='text-wrap: wrap;'>The creature was hexed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                        if (message.flags["midi-qol"]?.itemId === itemData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
                     }, msgHistory);
                     let itemCard = msgHistory[msgHistory.length - 1];
                     let chatMessage = await game.messages.get(itemCard);
@@ -110,11 +114,11 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 else {
                     let chatList = [];
 
-                    chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatList = `<span style='text-wrap: wrap;'>The creature was hexed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                     let msgHistory = [];
                     game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                        if (message.flags["midi-qol"]?.itemId === itemData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
                     }, msgHistory);
                     let itemCard = msgHistory[msgHistory.length - 1];
                     let chatMessage = await game.messages.get(itemCard);
@@ -129,8 +133,6 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         }
 
             if(workflowType === "attack") {
-                if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
-
                 let result;
 
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
@@ -143,7 +145,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                     result = await socket.executeAsUser("showWitchesHexDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", rollTotals: workflow.attackTotal, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
                 }
                     
-                const { userDecision, damageChosen, source, type } = result;
+                const { userDecision, returnedTokenUuid, source, type } = result;
 
                 if (userDecision === false || !userDecision) {
                     if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
@@ -162,14 +164,14 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                     await workflow.setAttackRoll(rerollNew);
                     workflow.options.noOnUseMacro = saveSetting;
 
-                    if((workflow.attackTotal - reroll.total) < targetAC) {
+                    if(rerollNew.total < targetAC) {
                         let chatList = [];
 
-                        chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatList = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {
-                            if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                            if (message.flags["midi-qol"]?.itemId === itemData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
                         }, msgHistory);
                         let itemCard = msgHistory[msgHistory.length - 1];
                         let chatMessage = await game.messages.get(itemCard);
@@ -184,11 +186,11 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                     else {
                         let chatList = [];
 
-                        chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatList = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                         let msgHistory = [];
                         game.messages.reduce((list, message) => {
-                            if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                            if (message.flags["midi-qol"]?.itemId === itemData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
                         }, msgHistory);
                         let itemCard = msgHistory[msgHistory.length - 1];
                         let chatMessage = await game.messages.get(itemCard);
@@ -214,30 +216,17 @@ export async function showWitchesHexDialog({targetUuids, actorUuid, tokenUuid, d
         let dialogContent;
         let originToken = fromUuidSync(tokenUuid);
         let browserUser = MidiQOL.playerForActor(originToken.actor);
-        const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
 
-        const nearbyFriendlies = MidiQOL.findNearby(null, originToken.object, 60, { includeToken: true });
-        let validFriendlies = nearbyFriendlies.filter(token => token.document.disposition === originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid) && !token.actor.effects.getName(`${itemProperName} - Advantage`));
         if(outcomeType === "attack") {
         dialogContent = `
-            <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
-                <div style='margin-bottom: 20px;'>
-                    <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast ${itemProperName}? ${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `An enemy successfully hit your ally with a ${attackTotal}.` : "An enemy successfully hit your ally."}</p>
+            <div style='display: flex; align-items: center; justify-content: space-between;'>
+                <div style='flex: 1;'>
+                    <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast ${itemProperName}?</p>
                 </div>
-                <div style='display: flex; width: 100%; gap: 20px;'>
-                    <div style='flex-grow: 1; display: flex; flex-direction: column;'>
-                        <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
-                        ${validFriendlies.length >= 1 ? 
-                            `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
-                                ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
-                            </select>` : '<p>No valid friendlies in range.</p>'
-                        }
-                    </div>
-                    <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
-                        <p><b>Time remaining</b></p>
-                        <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
-                        <p><button id='pauseButton' style='margin-top: 16px;'>Pause</button></p>
-                    </div>
+                <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
+                    <p><b>Time remaining</b></p>
+                    <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
+                    <p><button id='pauseButton' style='margin-top: 16px;'>Pause</button></p>
                 </div>
             </div>
             `;
@@ -260,17 +249,7 @@ export async function showWitchesHexDialog({targetUuids, actorUuid, tokenUuid, d
                         ${targetNames.map((name, index) => `<option value="${targetUuids[index]}">${name}</option>`).join('')}
                     </select>
                 </div>
-        
-                <div style='flex-grow: 1; display: flex; flex-direction: column; border-left: 1px solid #ccc; padding-left: 20px;'>
-                    <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
-                    ${validFriendlies.length >= 1 ? 
-                        `<select id="advantagedSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
-                            ${validFriendlies.map(friendly => `<option value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
-                        </select>` : '<p>No valid friendlies in range.</p>'
-                    }
-                </div>
             </div>
-            <!-- This div is now moved outside and after the flex container of the two columns -->
             <div style='width: 100%; text-align: center;'>
                 <p><b>Time remaining</b></p>
                 <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
@@ -292,12 +271,11 @@ export async function showWitchesHexDialog({targetUuids, actorUuid, tokenUuid, d
                     callback: async (html) => {
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "yes";
-                        if(source && source === "user") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                        if(source && source === "gm") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                         let actor = await fromUuid(actorUuid);
                         let uuid = actor.uuid;
                         let originToken;
-                        let advantageToken = await fromUuid(html.find("#advantagedSelection").val());
                         if(outcomeType === "attack") {
                             originToken = await fromUuid(targetUuids);
                             originToken = await MidiQOL.tokenForActor(originToken.actor.uuid);
@@ -306,80 +284,122 @@ export async function showWitchesHexDialog({targetUuids, actorUuid, tokenUuid, d
                             originToken = await MidiQOL.tokenForActor(html.find("#targetSelection").val());
                         }
 
-                        let chosenSpell = actor.items.find(i => i.name === itemProperName);
-
-                        chosenSpell.prepareData();
-                        chosenSpell.prepareFinalAttributes();
+                        let chosenItem = actor.items.find(i => i.name === itemProperName);
+                        chosenItem.prepareData();
+                        chosenItem.prepareFinalAttributes();
 
                         const options = {
                             showFullCard: false,
                             createWorkflow: true,
                             versatile: false,
                             configureDialog: true,
-                            targetUuids: [originToken.document.uuid],
+                            targetUuids: [originToken.uuid],
                         };
 
-                        const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
+                        const itemRoll = await MidiQOL.completeItemUse(chosenItem, {}, options);
+                        if(itemRoll.aborted === true) return resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: false, source, type });
 
                         const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
 
                         if (!hasEffectApplied) {
                             game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
                         }
-
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, returnedTokenUuid: null, programmaticallyClosed: false, source, type });
                         
                         let userDecision = true;
                         let returnedTokenUuid = originToken.document.uuid;
 
-                        let effectData = [
-                            {
-                              "icon": `${chosenSpell.img}`,
-                              "duration": {
-                                "rounds": null,
-                                "startTime": null,
-                                "seconds": 60,
-                                "combat": null,
-                                "turns": null,
-                                "startRound": null,
-                                "startTurn": null
-                              },
-                              "disabled": false,
-                              "name": "Silvery Barbs - Advantage",
-                              "changes": [
-                                {
-                                  "key": "flags.midi-qol.advantage.attack.all",
-                                  "mode": 0,
-                                  "value": "1",
-                                  "priority": 20
+                        let actorLevel = actor.system.details.level;
+                        let flamesEmbrace = actor.items.getName("Flame's Embrace");
+
+                        if(actorLevel >= 6 && flamesEmbrace) {
+
+                            let spellDC = actor.system.attributes.spelldc;
+                            let saveData = {
+                            name: "Flame's Embrace Save",
+                            type: "feat",
+                            img: `${flamesEmbrace.img}`,
+                            effects: [],
+                            flags: {
+                                "midi-qol": {
+                                    noProvokeReaction: true,
+                                    onUseMacroName: null,
+                                    forceCEOff: true
                                 },
-                                {
-                                  "key": "flags.midi-qol.advantage.ability.check.all",
-                                  "mode": 0,
-                                  "value": "1",
-                                  "priority": 20
+                                "midiProperties": {
+                                    nodam: true,
+                                    magiceffect: true
                                 },
-                                {
-                                  "key": "flags.midi-qol.advantage.ability.save.all",
-                                  "mode": 0,
-                                  "value": "1",
-                                  "priority": 20
+                                "autoanimations": {
+                                    killAnim: true
                                 }
-                              ],
-                              "transfer": false,
-                              "flags": {
-                                "dae": {
-                                  "specialDuration": [
-                                    "1Attack",
-                                    "isCheck",
-                                    "isSave",
-                                    "isSkill"
-                                  ]
+                            },
+                            system: {
+                                equipped: true,
+                                actionType: "save",
+                                save: { "dc": `${spellDC}`, "ability": 'con', "scaling": "flat" },
+                                components: { concentration: false, material: false, ritual: false, somatic: false, value: "", vocal: false },
+                                duration: { units: "inst", value: undefined },
+                                properties: {mgc: true}
+                            },
+                            };
+                            const itemUpdate = new CONFIG.Item.documentClass(saveData, {parent: actor});
+                            const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [`${originToken.document.uuid}`] };
+                            let saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);
+                    
+                            if(saveResult.failedSaves.size !== 0) {
+
+                                let itemData = {
+                                    "name": "Flame's Embrace",
+                                    "type": "feat",
+                                    "img": `${flamesEmbrace.img}`,
+                                    "system": {
+                                    "description": {
+                                        "value": "<p>You have been hexed and are under the effect of Flame's Embrace.</p>"
+                                    },
+                                    },
+                                    "effects": [
+                                    {
+                                        "icon": `${flamesEmbrace.img}`,
+                                        "duration": {
+                                        "seconds": 60
+                                        },
+                                        "disabled": false,
+                                        "name": "Flame's Embrace",
+                                        "changes": [
+                                        {
+                                            "key": "system.traits.dv.value",
+                                            "mode": 0,
+                                            "value": "fire",
+                                            "priority": 20
+                                        },
+                                        {
+                                            "key": "flags.midi-qol.onUseMacroName",
+                                            "mode": 0,
+                                            "value": "ItemMacro, isDamaged",
+                                            "priority": 20
+                                        }
+                                        ],
+                                        "transfer": true,
+                                        "tint": null
+                                    }
+                                    ],
+                                    "flags": {
+                                        "dae": {
+                                            "macro": {
+                                            "name": "Hexed",
+                                            "img": "systems/dnd5e/icons/svg/items/feature.svg",
+                                            "type": "script",
+                                            "scope": "global",
+                                            "command": `if(args[0].macroPass === \"isDamaged\") {\n    let damageTypes = [\"fire\"];\n    let rollFound = workflow.damageDetail.some(roll => damageTypes.includes(roll.type));\n\n    if(rollFound) {\n        let originActor = await fromUuid(\`${actorUuid}\`);\n        let spellDC = originActor.system.attributes.spelldc;\n        const itemData = {\n        name: \"Flame's Embrace Save\",\n        type: \"feat\",\n        img: \`${flamesEmbrace.img}\`,\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            },\n            \"midiProperties\": {\n                nodam: true, magiceffect: true\n            }, "autoanimations": {\n                killAnim: true\n }},\n        system: {\n            equipped: true,\n            actionType: \"save\",\n            save: { \"dc\": spellDC, \"ability\": 'con', \"scaling\": \"flat\" },\n            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n            duration: { units: \"inst\", value: undefined },\n            properties: {mgc: true}\n        },\n        };\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: originActor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [token.document.uuid] };\n        let saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n        if(saveResult.failedSaves.size === 0) {\n            await macroItem.delete();\n        }\n    }\n}`
+                                            }
+                                        }
+                                    }
                                 }
-                              }
+
+                                await originToken.actor.createEmbeddedDocuments("Item", [itemData]);
                             }
-                          ];
-                        if(advantageToken) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.uuid, effects: effectData });
+                        }
+
                         resolve({ userDecision, returnedTokenUuid, programmaticallyClosed: false, source, type });
                     }
                 },

@@ -260,6 +260,31 @@ function registerSettings() {
         }
     });
 
+    game.settings.register('gambits-premades', 'Enable Witches Hex', {
+        name: "Enable Witches Hex",
+        hint: "If enabled, this will present an appropriate dialog to users with the witches Hex feature, and automate application when used.",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Witches Hex Timeout', {
+        name: "Witches Hex Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "30",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
         name: "Enable Identify Restrictions",
         hint: "If enabled, this will prevent player characters from Identifying unidentified items through usual methods.",
@@ -567,6 +592,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             enableProtectionOnSuccess: game.settings.get("gambits-premades", "enableProtectionOnSuccess"),
             enableRiposte: game.settings.get("gambits-premades", "Enable Riposte"),
             riposteTimeout: game.settings.get("gambits-premades", "Riposte Timeout"),
+            enableWitchesHex: game.settings.get("gambits-premades", "Enable Witches Hex"),
+            witchesHexTimeout: game.settings.get("gambits-premades", "Witches Hex Timeout"),
         };
 
         return data;
@@ -590,6 +617,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "enableProtectionOnSuccess", formData.enableProtectionOnSuccess);
         await game.settings.set("gambits-premades", "Enable Riposte", formData.enableRiposte);
         await game.settings.set("gambits-premades", "Riposte Timeout", formData.riposteTimeout);
+        await game.settings.set("gambits-premades", "Enable Witches Hex", formData.enableWitchesHex);
+        await game.settings.set("gambits-premades", "Witches Hex Timeout", formData.witchesHexTimeout);
     }
 }
 

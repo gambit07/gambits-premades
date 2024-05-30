@@ -7,12 +7,15 @@ import { protection, showProtectionDialog } from './macros/protection.js';
 import { indomitable, showIndomitableDialog } from './macros/indomitable.js';
 import { sentinel, showSentinelDialog } from './macros/sentinel.js';
 import { riposte, showRiposteDialog } from './macros/riposte.js';
+import { witchesHex, showWitchesHexDialog } from './macros/witchesHex.js';
 import { enableOpportunityAttack, disableOpportunityAttack } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, chooseUseItemUser, pauseDialogById, freeSpellUse } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
     registerSettings();
+    game.gpsSettings = game.gpsSettings || {};
+    await updateSettings();
 });
 
 Hooks.once('socketlib.ready', async function() {
@@ -47,6 +50,8 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("pauseDialogById", pauseDialogById);
     socket.register("riposte", riposte);
     socket.register("showRiposteDialog", showRiposteDialog);
+    socket.register("witchesHex", witchesHex);
+    socket.register("showWitchesHexDialog", showWitchesHexDialog);
     socket.register("freeSpellUse", freeSpellUse);
 })
 
@@ -65,18 +70,6 @@ Hooks.once('ready', async function() {
         socket
     };
 
-    const counterspellEnabled = game.settings.get('gambits-premades', 'Enable Counterspell');
-    const silveryBarbsEnabled = game.settings.get('gambits-premades', 'Enable Silvery Barbs');
-    const cuttingWordsEnabled = game.settings.get('gambits-premades', 'Enable Cutting Words');
-    const poetryInMiseryEnabled = game.settings.get('gambits-premades', 'Enable Poetry in Misery');
-    const interceptionEnabled = game.settings.get('gambits-premades', 'Enable Interception');
-    const indomitableEnabled = game.settings.get('gambits-premades', 'Enable Indomitable');
-    const protectionEnabled = game.settings.get('gambits-premades', 'Enable Protection');
-    const enableProtectionOnSuccess = game.settings.get('gambits-premades', 'enableProtectionOnSuccess');
-    const sentinelEnabled = game.settings.get('gambits-premades', 'Enable Sentinel');
-    const riposteEnabled = game.settings.get('gambits-premades', 'Enable Riposte');
-    const identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
-
     async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
         if (game.user.isGM) {
             await socket.executeAsGM( workflowItem, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
@@ -87,45 +80,47 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (counterspellEnabled) await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.counterspellEnabled) await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.enableWitchesHex) await executeWorkflow({ workflowItem: "witchesHex", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preAttackRoll", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (protectionEnabled && !enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.protectionEnabled && !enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        if (protectionEnabled && enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.protectionEnabled && enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        if (riposteEnabled) await executeWorkflow({ workflowItem: "riposte", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.riposteEnabled) await executeWorkflow({ workflowItem: "riposte", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
-        if (indomitableEnabled) await executeWorkflow({ workflowItem: "indomitable", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        if (game.gpsSettings.indomitableEnabled) await executeWorkflow({ workflowItem: "indomitable", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        if (game.gpsSettings.enableWitchesHex) await executeWorkflow({ workflowItem: "witchesHex", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("preUpdateItem", (item, update) => {
-        if (!game.user.isGM && ("identified" in (update.system ?? {})) && identifyRestrictionEnabled) {
+        if (!game.user.isGM && ("identified" in (update.system ?? {})) && game.gpsSettings.identifyRestrictionEnabled) {
             ui.notifications.error(`${game.settings.get('gambits-premades', 'Identify Restriction Message')}`);
             return false;
         }
@@ -133,20 +128,20 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
-        if (interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
+        if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
+        if (game.gpsSettings.interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
     });
 
     Hooks.on("dnd5e.rollAbilitySave", async (actor, roll, abilityId) => {
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "save", workflowCombat: false });
+        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "save", workflowCombat: false });
     });
 
     Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "ability", workflowCombat: false });
+        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "ability", workflowCombat: false });
     });
 
     Hooks.on("dnd5e.rollSkill", async (actor, roll, abilityId) => {
-        if (poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "skill", workflowCombat: false });
+        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "skill", workflowCombat: false });
     });
 });
 
@@ -159,8 +154,7 @@ Hooks.on("preUpdateCombat", (combat, update, options) => {
 
 Hooks.on("updateCombat", async (combat, update, options) => {
     if(!game.user.isGM) return;
-    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); };
-    await wait(3000); //Give the canvas time to settle down
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
     const hasProcessedStart = await combat.getFlag('gambits-premades', `startProcessed-${combat.id}`);
     if(combatStarted && !hasProcessedStart && game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) {
@@ -187,6 +181,51 @@ Hooks.on("deleteCombatant", async (combatant, options, userId) => {
     let combat = game.combat;
     if (combat && combat.started && game.settings.get('gambits-premades', 'Enable Opportunity Attack')) {
         await disableOpportunityAttack(combatant, "exitCombat");
+    }
+});
+
+async function updateSettings(settingKey = null) {
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Counterspell') {
+        game.gpsSettings.counterspellEnabled = game.settings.get('gambits-premades', 'Enable Counterspell');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Silvery Barbs') {
+        game.gpsSettings.silveryBarbsEnabled = game.settings.get('gambits-premades', 'Enable Silvery Barbs');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Cutting Words') {
+        game.gpsSettings.cuttingWordsEnabled = game.settings.get('gambits-premades', 'Enable Cutting Words');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Poetry in Misery') {
+        game.gpsSettings.poetryInMiseryEnabled = game.settings.get('gambits-premades', 'Enable Poetry in Misery');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Interception') {
+        game.gpsSettings.interceptionEnabled = game.settings.get('gambits-premades', 'Enable Interception');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Indomitable') {
+        game.gpsSettings.indomitableEnabled = game.settings.get('gambits-premades', 'Enable Indomitable');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Protection') {
+        game.gpsSettings.protectionEnabled = game.settings.get('gambits-premades', 'Enable Protection');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.enableProtectionOnSuccess') {
+        game.gpsSettings.enableProtectionOnSuccess = game.settings.get('gambits-premades', 'enableProtectionOnSuccess');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Sentinel') {
+        game.gpsSettings.sentinelEnabled = game.settings.get('gambits-premades', 'Enable Sentinel');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Riposte') {
+        game.gpsSettings.riposteEnabled = game.settings.get('gambits-premades', 'Enable Riposte');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Witches Hex') {
+        game.gpsSettings.enableWitchesHex = game.settings.get('gambits-premades', 'Enable Witches Hex');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Identify Restrictions') {
+        game.gpsSettings.identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
+    }
+}
+
+Hooks.on('updateSetting', (setting) => {
+    if (setting.key.startsWith('gambits-premades.')) {
+        updateSettings(setting.key);
     }
 });
 
