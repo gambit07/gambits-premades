@@ -18,14 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Settings: Reworked settings implementation so that a browser refresh is no longer needed when updating a given setting." >> release_notes.txt
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Hex: Automation for the Witch classes Hexing 3rd party reaction. Required changing the name of the item to Witches Hex in order to avoid unwanted crossover with the Hex spell." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Big update. Re-worked the deployment implementation. Canvas freezing has been resolved, template outlines displaying until the ruler is clicked has been resolved. Deployment should be much faster." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Poetry in Misery: Add additional validation check for rogue save hooks firing." >> release_notes.txt
+          echo "  - Opportunity Attack: Second big update. Removed need for an Opportunity Attack item which has been removed. Updated deployment to finally fix canvas freezing on combat start definitivelyTM. Fix bug when selecting a favorited weapon for the first time where the attack would not process. Fix bug with Walled Templates display template on token hover suppression flag. Hugely increase speed of deployment. Most instances should now be looking at a couple seconds of additional processing time max when starting combat." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

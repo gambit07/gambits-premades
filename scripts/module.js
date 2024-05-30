@@ -154,7 +154,6 @@ Hooks.on("preUpdateCombat", (combat, update, options) => {
 
 Hooks.on("updateCombat", async (combat, update, options) => {
     if(!game.user.isGM) return;
-    await new Promise(resolve => setTimeout(resolve, 1000));
     const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
     const hasProcessedStart = await combat.getFlag('gambits-premades', `startProcessed-${combat.id}`);
     if(combatStarted && !hasProcessedStart && game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) {
