@@ -18,8 +18,14 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- General:" >> release_notes.txt
+          echo "  - Template Visibility: Added native setting to hide template visibility, Walled Templates is no longer a requirement to do so. This is always enabled for Opportunity Attacks, turning the module setting on will hide other automations templates in my module. Walled Templates will still work with this setting, but I would recommend disabling it if the only functionality you are using it for is to hide OA templates." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Ball Bearings: Automation for ball bearings with dialog to GM to confirm whether target is moving at half speed." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Second big update. Removed need for an Opportunity Attack item which has been removed. Updated deployment to finally fix canvas freezing on combat start definitivelyTM. Fix bug when selecting a favorited weapon for the first time where the attack would not process. Fix bug with Walled Templates display template on token hover suppression flag. Hugely increase speed of deployment. Most instances should now be looking at a couple seconds of additional processing time max when starting combat." >> release_notes.txt
+          echo "  - Caltrops: Add dialog to GM to confirm whether target is moving at half speed." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Protection: Fix homebrew feature Enable Protection on Success incorrect key" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

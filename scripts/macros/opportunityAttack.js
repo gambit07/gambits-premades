@@ -104,6 +104,9 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                     'hideHighlighting': 'alwaysHide',
                     'showOnHover': 'alwaysHide'
                 },
+                "gambits-premades": {
+                    "templateHiddenOA": true
+                },
                 "templatemacro": {
                     "never": {
                       "asGM": false,
@@ -139,7 +142,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                 const firstTemplate = createdTemplates[0];
           
                 try {
-                tokenAttacher.attachElementsToToken([firstTemplate], token.object, true);
+                tokenAttacher.attachElementToToken(firstTemplate.object, token.object, true);
                 //Handle rippers tooltip overlay
                 if(firstTemplate.object && firstTemplate.object.tooltip) firstTemplate.object.tooltip.visible = false;
                 actor.setFlag("midi-qol", "opportunityAttackTemplate", firstTemplate.uuid);
@@ -169,6 +172,8 @@ export async function disableOpportunityAttack(combat, combatEvent) {
 
     async function processCombatant(combatant) {
         const { actor } = combatant;
+        const { token } = combatant;
+
         let templateFlag = await actor.getFlag("midi-qol", "opportunityAttackTemplate");
         let checkBraceFlag = await actor.getFlag("midi-qol", "checkBraceDecision");
         let templateData = templateFlag ? await fromUuid(templateFlag) : null;
@@ -182,7 +187,11 @@ export async function disableOpportunityAttack(combat, combatEvent) {
             await actor.deleteEmbeddedDocuments("ActiveEffect", effectIdsToDelete);
         }
 
-        if (templateData) await templateData.delete();
+        if (templateData) {
+            await tokenAttacher.detachElementFromToken(templateData.object, token.object, true);
+            if(token.flags["token-attacher"]?.attached?.MeasuredTemplate?.length === 0) await token.unsetFlag("token-attacher", "attached.MeasuredTemplate");
+            await templateData.delete();
+        }
         if (templateFlag) await actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
         if (checkBraceFlag) await actor.unsetFlag("midi-qol", "checkBraceDecision");
     }

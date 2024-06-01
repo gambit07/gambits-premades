@@ -303,6 +303,15 @@ function registerSettings() {
         default: "Nice try, DENIED ;)"
     });
 
+    game.settings.register('gambits-premades', 'hideTemplates', {
+        name: "Hide Templates",
+        hint: "This option is always enabled for Opportunity Attacks. If this setting is enabled, it will fully hide templates for other automations that use templates in my module. It will NOT hide templates for automations or templates created outside of my module.",
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
+    });
+
     game.settings.register('gambits-premades', 'debugEnabled', {
         name: "Enable Debug",
         hint: "If enabled, this will output console logs for the reaction validation process for troubleshooting.",

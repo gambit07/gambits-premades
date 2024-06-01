@@ -70,6 +70,9 @@ Hooks.once('ready', async function() {
         socket
     };
 
+    setupTemplateVisibilityHook();
+    setupTemplateCreationUpdateHooks();
+
     async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
         if (game.user.isGM) {
             await socket.executeAsGM( workflowItem, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
@@ -92,13 +95,13 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.preAttackRoll", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (game.gpsSettings.protectionEnabled && !enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.protectionEnabled && !game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        if (game.gpsSettings.protectionEnabled && enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.protectionEnabled && game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
@@ -220,6 +223,9 @@ async function updateSettings(settingKey = null) {
     if (settingKey === null || settingKey === 'gambits-premades.Enable Identify Restrictions') {
         game.gpsSettings.identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
     }
+    if (settingKey === null || settingKey === 'gambits-premades.hideTemplates') {
+        game.gpsSettings.hideTemplates = game.settings.get('gambits-premades', 'hideTemplates');
+    }
 }
 
 Hooks.on('updateSetting', (setting) => {
@@ -228,37 +234,60 @@ Hooks.on('updateSetting', (setting) => {
     }
 });
 
-/* Store initial positions
-let initialPositions = new Map();
+function hideTemplateElements(template) {
+  if (!template) return;
 
-Hooks.on('canvasReady', (canvas) => {
-    console.log('Canvas is ready. Setting up token movement tracking.');
+  // Check if we're on the template layer, in which case I still want template visibility
+  if(canvas?.activeLayer?.constructor?.name === "TemplateLayer") return;
 
-    canvas.tokens.placeables.forEach(token => {
-        initialPositions.set(token.id, {x: token.x, y: token.y});
-    });
+  // Hide primary template
+  if (template.template) {
+    template.template.alpha = 0;
+  }
 
-    canvas.stage.on('pointerdown', (event) => {
-        let interactionData = canvas.mouseInteractionManager.interactionData;
-        if (interactionData.origin) {
-            let token = interactionData.origin;
-            initialPositions.set(token.id, {x: token.x, y: token.y});
-            console.log(`Token ${token.name} is moving from (${token.x}, ${token.y}).`);
-        }
-    });
-});
+  // Hide highlight
+  const hl = canvas.grid.getHighlightLayer(template.highlightId);
+  if (hl) {
+    hl.alpha = 0;
+  }
 
-Hooks.on('preUpdateToken', (token, updateData, options, userId) => {
-    //if (updateData.x !== undefined || updateData.y !== undefined) {
-        let startX = initialPositions.get(token.id).x;
-        let startY = initialPositions.get(token.id).y;
-        let endX = updateData.x !== undefined ? updateData.x : token.x;
-        let endY = updateData.y !== undefined ? updateData.y : token.y;
+  // Hide border
+  if (template.ruler) {
+    template.ruler.visible = false;
+  }
 
-        console.log(`Token ${token.name} is moving from (${startX}, ${startY}) to (${endX}, ${endY}).`);
-    //}
-});
+  //Reduce unneeded (I think?) refresh activity
+  template.hitArea = null;
+}
 
-Hooks.on('updateToken', (token, updateData, options, userId) => {
-    initialPositions.set(token.id, {x: token.x, y: token.y});
-});*/
+// Make sure we re-apply invisibility, may need more stuff here?
+function setupTemplateVisibilityHook() {
+  Hooks.on('refreshMeasuredTemplate', (template) => {
+    if ((template.document.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
+      hideTemplateElements(template);
+    }
+  });
+
+  canvas.templates.placeables.forEach(template => {
+    if ((template.document.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
+      hideTemplateElements(template);
+    }
+  });
+}
+
+// Hide templates on creation or update, we may need more stuff here?
+function setupTemplateCreationUpdateHooks() {
+  Hooks.on('createMeasuredTemplate', (templateDocument) => {
+    const template = canvas.templates.get(templateDocument.id);
+    if (template && (templateDocument.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || templateDocument.getFlag('gambits-premades', 'templateHiddenOA')) {
+      hideTemplateElements(template);
+    }
+  });
+
+  Hooks.on('updateMeasuredTemplate', (templateDocument) => {
+    const template = canvas.templates.get(templateDocument.id);
+    if (template && (templateDocument.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || templateDocument.getFlag('gambits-premades', 'templateHiddenOA')) {
+      hideTemplateElements(template);
+    }
+  });
+}
