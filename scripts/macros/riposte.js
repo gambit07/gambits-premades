@@ -95,18 +95,21 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
         if (unarmedIndex > -1) {
             unarmedStrike = validWeapons.splice(unarmedIndex, 1)[0];
         }
-
+        
         // Sort the weapons alphabetically
         validWeapons.sort((a, b) => a.name.localeCompare(b.name));
-
+        
+        let favoriteWeaponName;
         let favoriteWeaponUuid = null;
         // Check for favorite weapon and put it on top
-        const favoriteWeapon = originToken.actor.items.find(item => item.flags?.['midi-qol']?.oaFavoriteAttack);
-        if (favoriteWeapon) {
+        const favoriteWeaponIndex = validWeapons.findIndex(item => item.flags?.['midi-qol']?.oaFavoriteAttack);
+        if (favoriteWeaponIndex > -1) {
+            const favoriteWeapon = validWeapons.splice(favoriteWeaponIndex, 1)[0];
             favoriteWeaponUuid = favoriteWeapon.uuid;
-            if(favoriteWeapon.system.actionType === "mwak") validWeapons.unshift(favoriteWeapon);
+            favoriteWeaponName = favoriteWeapon.name;
+            validWeapons.unshift(favoriteWeapon);
         }
-
+        
         if (unarmedStrike) {
             validWeapons.push(unarmedStrike);
         }
@@ -116,7 +119,7 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
         dialogContent = `
         <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px; background-color: transparent; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <div style="flex-grow: 1; margin-right: 20px;">
-                <p>Would you like to use your reaction to attack? This will initiate a use of your Superiority Die.</p>
+                <p>Would you like to use your reaction to attack? This will initiate a use of your Superiority Die for the Riposte maneuver.</p>
                 <div>
                     <label for="item-select" style="display: block; margin-bottom: 8px;">Choose your Attack:</label>
                     <select id="item-select" style="width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 16px; box-sizing: border-box; background-color: transparent; font-size: 16px; height: auto;">
@@ -125,7 +128,7 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
                 </div>
                 <div style="display: flex; align-items: center;">
                     <input type="checkbox" id="favorite-checkbox" style="margin-right: 5px; vertical-align: middle;"/>
-                    <label for="favorite-checkbox">Favorite this Attack?</label>
+                    <label for="favorite-checkbox">Favorite this Attack?${favoriteWeaponName ? "<br>(Current: <b>" + favoriteWeaponName + "</b>)" : ""}</label>
                 </div>
             </div>
             <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
@@ -236,14 +239,14 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
                 const countdownElement = html.find("#countdown");
                 const pauseButton = html.find("#pauseButton");
 
-                const updateTimer = (newTimeLeft, paused) => {
+                dialog.updateTimer = (newTimeLeft, paused) => {
                     timeLeft = newTimeLeft;
                     isPaused = paused;
                     countdownElement.text(`${timeLeft}`);
                     pauseButton.text(isPaused ? 'Paused' : 'Pause');
                 };
 
-                const timer = setInterval(() => {
+                timer = setInterval(() => {
                     if (!isPaused) {
                         timeLeft--;
                         countdownElement.text(`${timeLeft}`);
@@ -274,11 +277,7 @@ export async function showRiposteDialog({targetUuids, actorUuid, tokenUuid, dial
                 }
             }
         });
-        dialog.dialogState = {
-            interacted: false,
-            decision: null,
-            programmaticallyClosed: false
-        };
+        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
         dialog.render(true);
     });
 }

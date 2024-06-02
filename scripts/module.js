@@ -8,7 +8,7 @@ import { indomitable, showIndomitableDialog } from './macros/indomitable.js';
 import { sentinel, showSentinelDialog } from './macros/sentinel.js';
 import { riposte, showRiposteDialog } from './macros/riposte.js';
 import { witchesHex, showWitchesHexDialog } from './macros/witchesHex.js';
-import { enableOpportunityAttack, disableOpportunityAttack } from './macros/opportunityAttack.js';
+import { enableOpportunityAttack, disableOpportunityAttack, showOpportunityAttackDialog } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse } from './helpers.js';
 export let socket;
 
@@ -52,6 +52,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("witchesHex", witchesHex);
     socket.register("showWitchesHexDialog", showWitchesHexDialog);
     socket.register("freeSpellUse", freeSpellUse);
+    socket.register("showOpportunityAttackDialog", showOpportunityAttackDialog);
 })
 
 Hooks.once('ready', async function() {
@@ -66,6 +67,7 @@ Hooks.once('ready', async function() {
         convertFromFeet,
         gmUpdateTemplateSize,
         freeSpellUse,
+        showOpportunityAttackDialog,
         socket
     };
 
@@ -268,6 +270,7 @@ function setupTemplateVisibilityHook() {
   });
 
   canvas.templates.placeables.forEach(template => {
+    if(!game.user.isGM) return;
     if ((template.document.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
       hideTemplateElements(template);
     }
@@ -276,33 +279,35 @@ function setupTemplateVisibilityHook() {
 
 // Hide templates on creation or update, we may need more stuff here?
 function setupTemplateCreationUpdateHooks() {
-  Hooks.on('createMeasuredTemplate', (templateDocument) => {
-    const template = canvas.templates.get(templateDocument.id);
-    if (template && (templateDocument.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || templateDocument.getFlag('gambits-premades', 'templateHiddenOA')) {
-      hideTemplateElements(template);
-    }
-  });
-
-  Hooks.on('updateMeasuredTemplate', (templateDocument) => {
-    const template = canvas.templates.get(templateDocument.id);
-    if (template && (templateDocument.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || templateDocument.getFlag('gambits-premades', 'templateHiddenOA')) {
-      hideTemplateElements(template);
-    }
-  });
-}
-
-function updateTemplatePosition(tokenDocument) {
-    const template = fromUuidSync(tokenDocument.actor.getFlag('gambits-premades', 'templateAttachedToken'));
-    if (!template || !tokenDocument) return;
-    template.update({
-        x: tokenDocument.object.center.x,
-        y: tokenDocument.object.center.y
+    Hooks.on('createMeasuredTemplate', (templateDocument) => {
+        const template = canvas.templates.get(templateDocument.id);
+        if (template && (templateDocument.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || templateDocument.getFlag('gambits-premades', 'templateHiddenOA')) {
+        hideTemplateElements(template);
+        }
     });
+
+    Hooks.on('updateMeasuredTemplate', (templateDocument) => {
+        const template = canvas.templates.get(templateDocument.id);
+        if (template && (templateDocument.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || templateDocument.getFlag('gambits-premades', 'templateHiddenOA')) {
+        hideTemplateElements(template);
+        }
+    });
+    }
+
+    function updateTemplatePosition(tokenDocument) {
+        if(!game.user.isGM) return;
+        const template = fromUuidSync(tokenDocument.actor.getFlag('gambits-premades', 'templateAttachedToken'));
+        if (!template || !tokenDocument) return;
+        template.update({
+            x: tokenDocument.object.center.x,
+            y: tokenDocument.object.center.y
+        });
 }
 
 
 Hooks.on('updateToken', (tokenDocument, updateData, options, userId) => {
     if(!game.combat) return;
+    if(!game.user.isGM) return;
     const tokenId = tokenDocument.actor.getFlag('gambits-premades', 'tokenAttachedTemplate');
     if (tokenId && tokenDocument.id === tokenId) {
         updateTemplatePosition(tokenDocument);

@@ -1,7 +1,7 @@
 function registerSettings() {
     game.settings.register('gambits-premades', 'Mirror 3rd Party Dialog for GMs', {
         name: "Mirror 3rd Party Dialog for GMs",
-        hint: "If enabled, 3rd party dialog's with the exception of Opportunity Attack will be sent to the GM as well as the player. Either party can interact with the dialog to use or dismiss it.",
+        hint: "If enabled, 3rd party dialog's will be sent to the GM as well as the player. Either party can interact with the dialog to use/dismiss/pause it.",
         scope: 'world',
         config: true,
         type: Boolean,

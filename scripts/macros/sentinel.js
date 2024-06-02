@@ -90,18 +90,21 @@ export async function showSentinelDialog({targetUuids, actorUuid, tokenUuid, dia
         if (unarmedIndex > -1) {
             unarmedStrike = validWeapons.splice(unarmedIndex, 1)[0];
         }
-
+        
         // Sort the weapons alphabetically
         validWeapons.sort((a, b) => a.name.localeCompare(b.name));
-
+        
+        let favoriteWeaponName;
         let favoriteWeaponUuid = null;
         // Check for favorite weapon and put it on top
-        const favoriteWeapon = originToken.actor.items.find(item => item.flags?.['midi-qol']?.oaFavoriteAttack);
-        if (favoriteWeapon) {
+        const favoriteWeaponIndex = validWeapons.findIndex(item => item.flags?.['midi-qol']?.oaFavoriteAttack);
+        if (favoriteWeaponIndex > -1) {
+            const favoriteWeapon = validWeapons.splice(favoriteWeaponIndex, 1)[0];
             favoriteWeaponUuid = favoriteWeapon.uuid;
-            if(favoriteWeapon.system.actionType === "mwak") validWeapons.unshift(favoriteWeapon);
+            favoriteWeaponName = favoriteWeapon.name;
+            validWeapons.unshift(favoriteWeapon);
         }
-
+        
         if (unarmedStrike) {
             validWeapons.push(unarmedStrike);
         }
@@ -120,7 +123,7 @@ export async function showSentinelDialog({targetUuids, actorUuid, tokenUuid, dia
                 </div>
                 <div style="display: flex; align-items: center;">
                     <input type="checkbox" id="favorite-checkbox" style="margin-right: 5px; vertical-align: middle;"/>
-                    <label for="favorite-checkbox">Favorite this Attack?</label>
+                    <label for="favorite-checkbox">Favorite this Attack?${favoriteWeaponName ? "<br>(Current: <b>" + favoriteWeaponName + "</b>)" : ""}</label>
                 </div>
             </div>
             <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
