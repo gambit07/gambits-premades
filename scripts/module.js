@@ -302,7 +302,7 @@ function updateTemplatePosition(tokenDocument) {
 
 
 Hooks.on('updateToken', (tokenDocument, updateData, options, userId) => {
-    if(!game.combat.active) return;
+    if(!game.combat) return;
     const tokenId = tokenDocument.actor.getFlag('gambits-premades', 'tokenAttachedTemplate');
     if (tokenId && tokenDocument.id === tokenId) {
         updateTemplatePosition(tokenDocument);

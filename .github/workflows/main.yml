@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- General:" >> release_notes.txt
-          echo "  - Template Attachment: Added native ability to attach templates to a token, Token Attacher is no longer a requirement for Opportunity Attacks." >> release_notes.txt
+          echo "  - Template Attachment: Small bugfix for combat active check." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
