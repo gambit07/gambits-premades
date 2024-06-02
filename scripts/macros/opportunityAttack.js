@@ -3,6 +3,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
 
         const { actor } = combatant;
         const { token } = combatant;
+        let browserUser = MidiQOL.playerForActor(actor);
 
         //Keep some cleanup in place for a bit while I get people switched to the non-item version
         const existingOA = actor.items.find(item => item.name === 'Opportunity Attack');
@@ -78,13 +79,13 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const tokenCenterY = token.y + token.object.h / 2;
             let templateData = {
             't': "circle",
-            'user': game.user.id,
+            'user': browserUser.id,
             'x': tokenCenterX,
             'y': tokenCenterY,
             'texture': "modules/gambits-premades/assets/images/transparentImage.webp",
             'distance': maxRange,
             'direction': 0,
-            'fillColor': game.user.color,
+            'fillColor': browserUser.color,
             'flags': {
                 'dnd5e': {
                     'origin': actor.uuid
@@ -136,21 +137,16 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             },
             'angle': 0
             };
-        
-            await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateData])
-            .then(createdTemplates => {
+
+                let createdTemplates = await canvas.scene.createEmbeddedDocuments('MeasuredTemplate', [templateData]);
                 const firstTemplate = createdTemplates[0];
           
-                try {
-                tokenAttacher.attachElementToToken(firstTemplate.object, token.object, true);
+                actor.setFlag("gambits-premades", "templateAttachedToken", firstTemplate.uuid);
+                actor.setFlag("gambits-premades", "tokenAttachedTemplate", token.id);
+                actor.setFlag("midi-qol", "opportunityAttackTemplate", firstTemplate.uuid);
                 //Handle rippers tooltip overlay
                 if(firstTemplate.object && firstTemplate.object.tooltip) firstTemplate.object.tooltip.visible = false;
-                actor.setFlag("midi-qol", "opportunityAttackTemplate", firstTemplate.uuid);
                 if(oaDisabled) firstTemplate.setFlag("midi-qol", "opportunityAttackDisabled", true);
-                } catch (error) {
-                console.error('Error during token attachment:', error);
-                }
-            });
         }
     }
 
@@ -172,10 +168,10 @@ export async function disableOpportunityAttack(combat, combatEvent) {
 
     async function processCombatant(combatant) {
         const { actor } = combatant;
-        const { token } = combatant;
 
         let templateFlag = await actor.getFlag("midi-qol", "opportunityAttackTemplate");
         let checkBraceFlag = await actor.getFlag("midi-qol", "checkBraceDecision");
+        let templateAttachmentFlag = await actor.getFlag("gambits-premades", "templateAttachedToken");
         let templateData = templateFlag ? await fromUuid(templateFlag) : null;
 
         let effectNames = ["Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack"];
@@ -187,13 +183,10 @@ export async function disableOpportunityAttack(combat, combatEvent) {
             await actor.deleteEmbeddedDocuments("ActiveEffect", effectIdsToDelete);
         }
 
-        if (templateData) {
-            await tokenAttacher.detachElementFromToken(templateData.object, token.object, true);
-            if(token.flags["token-attacher"]?.attached?.MeasuredTemplate?.length === 0) await token.unsetFlag("token-attacher", "attached.MeasuredTemplate");
-            await templateData.delete();
-        }
+        if (templateData) await templateData.delete();
         if (templateFlag) await actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
         if (checkBraceFlag) await actor.unsetFlag("midi-qol", "checkBraceDecision");
+        if (templateAttachmentFlag) await actor.unsetFlag("gambits-premades", "templateAttachedToken");
     }
 
     if (combatEvent === "endCombat") {

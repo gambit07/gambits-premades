@@ -17,15 +17,6 @@ function registerSettings() {
         default: false
     });
 
-    game.settings.register('gambits-premades', 'Enable Opportunity Attack Legacy System', {
-        name: "Enable Legacy Template Attachment",
-        hint: "*For now this setting is always enabled on the back end due to issues with the non legacy implementation.* If enabled, Opportunity Attack will use Token Attacher for template attaching and expect Drag Ruler for movement.",
-        scope: 'world',
-        config: false,
-        type: Boolean,
-        default: false
-    });
-
     game.settings.register('gambits-premades', 'Opportunity Attack Timeout', {
         name: "Opportunity Attack Timeout",
         hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
@@ -643,7 +634,6 @@ class genericFeatureSettingsMenu extends BaseSettingsMenu {
     getData() {
         return {
             enableOpportunityAttack: game.settings.get("gambits-premades", "Enable Opportunity Attack"),
-            enableLegacyTemplateAttachment: game.settings.get("gambits-premades", "Enable Opportunity Attack Legacy System"),
             opportunityAttackTimeout: game.settings.get("gambits-premades", "Opportunity Attack Timeout"),
             enableSentinel: game.settings.get("gambits-premades", "Enable Sentinel"),
             sentinelTimeout: game.settings.get("gambits-premades", "Sentinel Timeout")
@@ -658,7 +648,6 @@ class genericFeatureSettingsMenu extends BaseSettingsMenu {
         else if (game.combat && prevEnableOpportunityAttack !== formData.enableOpportunityAttack) {
             ui.notifications.warn("You may only enable/disable Opportunity Attack outside of combat, otherwise it will create a number of issues.")
         }
-        await game.settings.set("gambits-premades", "Enable Opportunity Attack Legacy System", formData.enableLegacyTemplateAttachment);
         await game.settings.set("gambits-premades", "Opportunity Attack Timeout", formData.opportunityAttackTimeout);
         await game.settings.set("gambits-premades", "Enable Sentinel", formData.enableSentinel);
         await game.settings.set("gambits-premades", "Sentinel Timeout", formData.sentinelTimeout);

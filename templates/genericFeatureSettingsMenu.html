@@ -118,7 +118,7 @@
         <tbody>
             <tr>
                 <td class="column-item">
-                    <label for="enableOpportunityAttack">Opportunity Attack<br><span class="small-text">Automatically adds and removes 'Opportunity Attack' item to combatants.</span>
+                    <label for="enableOpportunityAttack">Opportunity Attack<br><span class="small-text">Automatically enables Opportunity Attacks for combatants in combat.</span>
                     </label>
                 </td>
                 <td class="column-enable-td">
@@ -130,19 +130,7 @@
                     <input type="text" id="opportunityAttackTimeout" name="opportunityAttackTimeout" value="{{opportunityAttackTimeout}}" data-dtype="String">
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <label style="margin-left: 20px;" for="enableLegacyTemplateAttachment">Enable Legacy Template Attachment<br><span style="margin-left: 20px;" class="small-text">Uses Token Attacher for template attaching and expects Drag Ruler for movement.</span>
-                    </label>
-                </td>
-                <td class="column-enable-td">
-                    <div>
-                        <input type="checkbox" id="enableLegacyTemplateAttachment" name="enableLegacyTemplateAttachment" data-dtype="Boolean" {{checked enableLegacyTemplateAttachment}}/>
-                    </div>
-                </td>
-                <td>
-                </td>
-            </tr>
+            
             <tr>
                 <td class="column-item">
                     <label for="enableSentinel">Sentinel<br><span class="small-text">Presents a dialog to users with Sentinel.</span>

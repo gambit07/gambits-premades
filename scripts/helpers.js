@@ -51,13 +51,6 @@ export async function freeSpellUse({ workflowUuid }) {
     }
 }
 
-export async function chooseUseItemUser({ itemUuid }) {
-    if(!itemUuid) return;
-
-    let itemData = await fromUuid(`${itemUuid}`);
-    if(itemData) await itemData.use();
-}
-
 export async function gmUpdateTemplateSize({ templateUuid, templateSize }) {
     if(!templateUuid || !templateSize) return;
     let template = await fromUuid(`${templateUuid}`);
@@ -65,19 +58,14 @@ export async function gmUpdateTemplateSize({ templateUuid, templateSize }) {
 }
 
 export async function closeDialogById({ dialogId }) {
-    console.log("made it here")
     let activeDialog = ui.activeWindow?.data?.id;
-    console.log(activeDialog, "active dialog")
     if (activeDialog === dialogId) {
-        console.log("dialog matched")
         ui.activeWindow.dialogState.programmaticallyClosed = true;
         ui.activeWindow.close();
     }
     else {
         let dialog = Object.values(ui.windows).find(d => d.data?.id === dialogId);
-        console.log(dialog, "else dialog")
         if (dialog) {
-            console.log("dialog matched")
             dialog.dialogState.programmaticallyClosed = true;
             dialog.close();
         }

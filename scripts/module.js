@@ -9,7 +9,7 @@ import { sentinel, showSentinelDialog } from './macros/sentinel.js';
 import { riposte, showRiposteDialog } from './macros/riposte.js';
 import { witchesHex, showWitchesHexDialog } from './macros/witchesHex.js';
 import { enableOpportunityAttack, disableOpportunityAttack } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, chooseUseItemUser, pauseDialogById, freeSpellUse } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -38,7 +38,6 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("showInterceptionDialog", showInterceptionDialog);
     socket.register("poetryInMisery", poetryInMisery);
     socket.register("showPoetryInMiseryDialog", showPoetryInMiseryDialog);
-    socket.register("chooseUseItemUser", chooseUseItemUser);
     socket.register("enableOpportunityAttack", enableOpportunityAttack);
     socket.register("disableOpportunityAttack", disableOpportunityAttack);
     socket.register("protection", protection);
@@ -291,3 +290,21 @@ function setupTemplateCreationUpdateHooks() {
     }
   });
 }
+
+function updateTemplatePosition(tokenDocument) {
+    const template = fromUuidSync(tokenDocument.actor.getFlag('gambits-premades', 'templateAttachedToken'));
+    if (!template || !tokenDocument) return;
+    template.update({
+        x: tokenDocument.object.center.x,
+        y: tokenDocument.object.center.y
+    });
+}
+
+
+Hooks.on('updateToken', (tokenDocument, updateData, options, userId) => {
+    if(!game.combat.active) return;
+    const tokenId = tokenDocument.actor.getFlag('gambits-premades', 'tokenAttachedTemplate');
+    if (tokenId && tokenDocument.id === tokenId) {
+        updateTemplatePosition(tokenDocument);
+    }
+});
