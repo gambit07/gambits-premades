@@ -209,7 +209,6 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
 
     return await new Promise(resolve => {
         const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Opportunity Attack Timeout`));
-        
         let effectOriginToken = fromUuidSync(effectOriginTokenUuid);
         let effectOriginActor = fromUuidSync(effectOriginActorUuid);
         let browserUser = MidiQOL.playerForActor(effectOriginActor);
@@ -219,32 +218,32 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
         let hasSentinel = effectOriginActor.items.some(i => i.name.toLowerCase() === "sentinel");
 
         // Check if origin token can see token moving
-        if(!MidiQOL.canSee(effectOriginToken, token)) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if(!MidiQOL.canSee(effectOriginToken, token)) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         // Check if same disposition token
-        if(token.disposition === effectOriginToken.disposition) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if(token.disposition === effectOriginToken.disposition) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         // Check if origin tokens reaction is already used or a spell effect is preventing reactions
         const effectNamesOrigin = ["Reaction", "Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
         let hasEffectOrigin = (gameVersion >= 3 ? effectOriginActor.appliedEffects : effectOriginActor.effects)
             .some(effect => effectNamesOrigin.includes(effect.name));
-        if(hasEffectOrigin) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if(hasEffectOrigin) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         // Check if origin token is incapacitated
         let isIncapacitated = MidiQOL.checkIncapacitated(effectOriginToken);
-        if(isIncapacitated) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if(isIncapacitated) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         //Check if token is disengaged and origin token does not have Sentinel
         let isDisengaged = token.actor.effects.some(e => e.name.toLowerCase() === "disengage");
-        if(isDisengaged && !hasSentinel) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if(isDisengaged && !hasSentinel) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         //Check if token activated mobile feat attack feature
         let isMobileFeat = token.actor.getFlag("midi-qol", "oaMobileFeatAttack");
-        if (isMobileFeat && isMobileFeat.includes(effectOriginToken.id)) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if (isMobileFeat && isMobileFeat.includes(effectOriginToken.id)) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         //Check if token activated fancy footwork attack feature
         let isFancyFootwork = token.actor.getFlag("midi-qol", "oaFancyFootworkAttack");
-        if (isFancyFootwork && isFancyFootwork.includes(effectOriginToken.id)) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if (isFancyFootwork && isFancyFootwork.includes(effectOriginToken.id)) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         //Check if origin token is Charmed by initiating token
         let isCharmed = (gameVersion >= 3 ? effectOriginActor.appliedEffects : effectOriginActor.effects)
@@ -253,17 +252,17 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
             let charmerItem = fromUuidSync(isCharmed.origin);
             let charmer;
             if(charmerItem) charmer = charmerItem.parent.id;
-            if(charmer === token.actor.id) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+            if(charmer === token.actor.id) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
         }
 
         // Check if the token has cast Kinetic Jaunt, Zephyr Strike, or the generic immunity effect has been applied
         const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Opportunity Attack Immunity"];
         let hasEffectToken = (gameVersion >= 3 ? token.actor.appliedEffects : token.actor.effects)
             .some(effect => effectNamesToken.includes(effect.name));
-        if(hasEffectToken) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if(hasEffectToken) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         let hasFlyby = token.actor.items.find(i => i.name.toLowerCase().includes("flyby"));
-        if(hasFlyby) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if(hasFlyby) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         let originDisadvantage = token.actor.items.some(i => i.name.toLowerCase().includes("escape the hoard"));
         // Check valid weapons
@@ -278,7 +277,7 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
                     item.system?.actionType === "save") && (item.system?.preparation?.prepared === true || item.system?.preparation?.mode !== 'prepared' || !item.system?.preparation) &&
                     (item.system?.target?.type === "creature" || item.system?.target?.type === "enemy")) || overrideItems.includes(item.name))));
         });
-        if (!validWeapons.length) resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+        if (!validWeapons.length) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
 
         // Find 'Unarmed Strike' and remove it to re-add at the end
         const unarmedIndex = validWeapons.findIndex(item => item.name.toLowerCase() === "unarmed strike");
@@ -350,13 +349,13 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
                             let braceItem = await fromUuid(braceItemUuid);
 
                             const braceRoll = await braceItem.use();
-                            if(braceRoll.aborted === true) resolve({ userDecision: false, programmaticallyClosed: false, source, type });
+                            if(braceRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                         }
 
                         let selectedItemUuid = html.find("#item-select").val();
                         if (!selectedItemUuid) {
                             console.log("No weapon selected");
-                            resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+                            return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
                         }
 
                         let chosenWeapon = await fromUuid(selectedItemUuid);
@@ -403,7 +402,7 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
                         }
                         
                         const itemRoll = await MidiQOL.completeItemUse(chosenWeapon, {}, options);
-                        if(itemRoll.aborted === true) resolve({ userDecision: false, programmaticallyClosed: false, source, type });
+                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                         if(itemRoll) {
                             const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
 
@@ -414,7 +413,7 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
 
                         await effectOriginActor.unsetFlag("midi-qol", "dragonTurtleShieldOA");
 
-                        resolve({userDecision: true, programmaticallyClosed: false, source, type});
+                        return resolve({userDecision: true, programmaticallyClosed: false, source, type});
                     }
                 },
                 no: {
@@ -424,7 +423,7 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
                         await effectOriginActor.unsetFlag("midi-qol", "dragonTurtleShieldOA");
-                        resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+                        return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
                     }
                 },
             }, default: "no",
@@ -483,10 +482,10 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true, source, type });
+                    return resolve({ userDecision: false, programmaticallyClosed: true, source, type });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false, source, type });
+                    return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                 }
 
                 effectOriginToken.object.release();

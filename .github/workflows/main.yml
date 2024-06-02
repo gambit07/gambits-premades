@@ -18,10 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Template Attachment: Bugfix for error generated on player clients when a gm moved a token." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Opportunity Attack now uses the module functionality that other 3rd party reactions use. This means that Mirror GM Dialog will function along with synced pause states. Deployment code has been tightened up with less Template Macro code needed and the canvas draw removed. A number of small under the hood updates including displaying the currently favorited weapon if set, token selection when dialog focused, etc." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Opportunity Attack: .57 issue resolved where opportunity attacks were ignoring some validation rules." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
