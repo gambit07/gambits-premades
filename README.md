@@ -2,6 +2,17 @@
 
 A collection of automated items, spells, feats, and anything else I decide to do! This module primarily uses MidiQOL along with other synergistic modules to achieve these automations, credit to tposney, caewok, zhell, aedif, and saibot for all of their relevant modules.
 
+<b>Dependencies</b>
+Midi QOL
+Active Auras
+Dfreds Convenient Effects
+Warp Gate
+Effect Macro
+Template Macro
+Sequencer
+socketlib
+Dynamic effects using Active Effects
+
 <b>Instructions:</b>
 <p>
 Most of my automations exist as an item in my compendiums, which are labeled as GPS [Automation Item Type]. Each automation item in a compendium will include an item description with the required dependencies, and any relevant information related to the setup of the item. To use these automations, you can simply replace the item on the characters sheet with the item from my compendium. Alternatively, this module is also integrated with Chris Premades modules 'Medkit' button. This is a button on the item sheet which can be pressed to automatically import an item automation, based on compendium priorities within the Chris Premades module. To setup my module for proper integration with Chris Premades see the screenshot below:
