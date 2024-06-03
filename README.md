@@ -4,14 +4,14 @@ A collection of automated items, spells, feats, and anything else I decide to do
 
 <b>Dependencies</b>
 <p>
-Midi QOL
-Active Auras
-Dfreds Convenient Effects
-Warp Gate
-Effect Macro
-Template Macro
-Sequencer
-socketlib
+Midi QOL<br>
+Active Auras<br>
+Dfreds Convenient Effects<br>
+Warp Gate<br>
+Effect Macro<br>
+Template Macro<br>
+Sequencer<br>
+socketlib<br>
 Dynamic effects using Active Effects
 </p>
 
