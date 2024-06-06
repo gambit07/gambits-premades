@@ -20,7 +20,6 @@ jobs:
         run: |
           echo "- Additions:" >> release_notes.txt
           echo "  - Power Word Rebound: Automates Deep Magic Vol 2s Power Word Rebound." >> release_notes.txt
-          echo "  - Cloud Rune: Automates the Rune Knights Cloud Rune feature." >> release_notes.txt
           echo "  - Tentacle Slam: Automates the Otyugh and Neo-Otyugh monster feature Tentacle Slam." >> release_notes.txt
           echo "  - Tentacle: Automates the Otyugh, Neo-Otyugh, and Feyr monster feature Tentacle." >> release_notes.txt
           echo "  - Otherworldly Melody: Automates the Whistler monster feature Otherworldly Melody." >> release_notes.txt
