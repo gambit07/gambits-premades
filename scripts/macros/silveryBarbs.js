@@ -31,6 +31,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     let browserUser;
     
     for (const validTokenPrimary of findValidTokens) {
+        let isIncapacitated = await MidiQOL.checkIncapacitated(validTokenPrimary);
+        if(isIncapacitated) return;
         let actorUuidPrimary = validTokenPrimary.actor.uuid;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;

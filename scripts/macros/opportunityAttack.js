@@ -119,7 +119,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                     },
                     "whenEntered": {
                       "asGM": false,
-                      "command": "let oaDisabled = await template.getFlag(\"midi-qol\", \"opportunityAttackDisabled\");\nif(oaDisabled) return;\nif (this.hook.animate === false || (token.actor.type !== 'npc' && token.actor.type !== 'character')) return;\nlet gameVersion = parseInt(game.system.version.split('.')[0], 10);\n\nlet currentCombatant = canvas.tokens.get(game.combat.current.tokenId);\nif (currentCombatant.id !== token.id && currentCombatant.document.disposition === token.document.disposition) return; //Avoid initiating opportunity attack when it's not a tokens turn if they are doing something like riding another allied token. This should allow for dialog to fire if forced movement via an enemy spell moves the token outside range outside of their turn but not when being moved as part of an allied unit\n\nconst effectOriginActor = await fromUuid(template.flags[\"midi-qol\"].actorUuid);\nconst effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\n//Simple elevation check in lieu of a more robust option for actually triggering OA on elevation change\nif((token.document.elevation > (effectOriginToken.document.elevation + template.distance)) || (token.document.elevation < (effectOriginToken.document.elevation - template.distance))) return;\n\nlet hasPolearmReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === \"polearm master\");\nif (hasPolearmReaction) {\nlet weaponNames = [\"glaive\",\"halberd\",\"pike\",\"quarterstaff\",\"spear\"];\nlet hasPolearmWeapon;\nif(gameVersion >= 3) {\n    hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.type?.baseItem && weaponNames.includes(item.system?.type?.baseItem.toLowerCase()) && item.system.equipped === true);\n}\nelse {\n    hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.baseItem && weaponNames.includes(item.system?.baseItem.toLowerCase()) && item.system.equipped === true);\n}\nif(!hasPolearmWeapon) return;\n\nawait template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Polearm Opportunity Attack`, effectOriginToken, effectOriginActor, token });\n}\n\nif(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === \"Battle Master\") {\nlet hasBraceReactionCpr = false;\nif(game.modules.get(\"chris-premades\")?.active) {\n    hasBraceReactionCpr = chrisPremades.helpers.getItem(effectOriginActor, 'Maneuvers: Brace');\n}\nlet hasBraceReaction = effectOriginActor.items.getName(\"Maneuvers: Brace\");\nlet braceItem;\n\nif(hasBraceReactionCpr) {\n    braceItem = hasBraceReactionCpr;\n}\nelse if(hasBraceReaction) {\n    braceItem = hasBraceReaction;\n}\nelse return;\n\nconst superiorityNames = [\"superiority dice\", \"superiority die\"];\n\nlet resourceExistsWithValue = [effectOriginActor.system.resources.primary, effectOriginActor.system.resources.secondary, effectOriginActor.system.resources.tertiary].some(resource =>\n    superiorityNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);\nlet itemExistsWithValue;\n\nif (!resourceExistsWithValue) {\n    itemExistsWithValue = !!effectOriginActor.items.find(i => superiorityNames.includes(i.name.toLowerCase()) && i.system.uses.value !== 0);\n}\n\nif (!resourceExistsWithValue && !itemExistsWithValue) return;\n\nawait template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Maneuvers: Brace Opportunity Attack`, effectOriginTokenUuid: effectOriginToken.document.uuid, effectOriginActorUuid: effectOriginActor.uuid, tokenUuid: token.document.uuid, braceItemUuid: braceItem.uuid });\n}\n\nlet hasDeadlyReachReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === \"deadly reach\");\nif (hasDeadlyReachReaction) {\n    await template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Deadly Reach Opportunity Attack`, effectOriginTokenUuid: effectOriginToken.document.uuid, effectOriginActorUuid: effectOriginActor.uuid, tokenUuid: token.document.uuid });\n}"
+                      "command": "let oaDisabled = await template.getFlag(\"midi-qol\", \"opportunityAttackDisabled\");\nif(oaDisabled) return;\nif (this.hook.animate === false || (token.actor.type !== 'npc' && token.actor.type !== 'character')) return;\nlet gameVersion = parseInt(game.system.version.split('.')[0], 10);\n\nlet currentCombatant = canvas.tokens.get(game.combat.current.tokenId);\nif (currentCombatant.id !== token.id && currentCombatant.document.disposition === token.document.disposition) return; //Avoid initiating opportunity attack when it's not a tokens turn if they are doing something like riding another allied token. This should allow for dialog to fire if forced movement via an enemy spell moves the token outside range outside of their turn but not when being moved as part of an allied unit\n\nconst effectOriginActor = await fromUuid(template.flags[\"midi-qol\"].actorUuid);\nconst effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\n//Simple elevation check in lieu of a more robust option for actually triggering OA on elevation change\nif((token.document.elevation > (effectOriginToken.document.elevation + template.distance)) || (token.document.elevation < (effectOriginToken.document.elevation - template.distance))) return;\n\nlet hasPolearmReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === \"polearm master\");\nif (hasPolearmReaction) {\nlet weaponNames = [\"glaive\",\"halberd\",\"pike\",\"quarterstaff\",\"spear\"];\nlet hasPolearmWeapon;\nif(gameVersion >= 3) {\n    hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.type?.baseItem && weaponNames.includes(item.system?.type?.baseItem.toLowerCase()) && item.system.equipped === true);\n}\nelse {\n    hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.baseItem && weaponNames.includes(item.system?.baseItem.toLowerCase()) && item.system.equipped === true);\n}\nif(!hasPolearmWeapon) return;\n\nawait template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Polearm Opportunity Attack`, effectOriginTokenUuid: effectOriginToken.document.uuid, effectOriginActorUuid: effectOriginActor.uuid, tokenUuid: token.document.uuid });\n}\n\nif(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === \"Battle Master\") {\n\nlet braceItem = effectOriginActor.items.getName(\"Maneuvers: Brace\");\n\nif(!braceItem) return;\n\nconst superiorityNames = [\"superiority dice\", \"superiority die\"];\n\nlet resourceExistsWithValue = [effectOriginActor.system.resources.primary, effectOriginActor.system.resources.secondary, effectOriginActor.system.resources.tertiary].some(resource =>\n    superiorityNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);\nlet itemExistsWithValue;\n\nif (!resourceExistsWithValue) {\n    itemExistsWithValue = !!effectOriginActor.items.find(i => superiorityNames.includes(i.name.toLowerCase()) && i.system.uses.value !== 0);\n}\n\nif (!resourceExistsWithValue && !itemExistsWithValue) return;\n\nawait template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Maneuvers: Brace Opportunity Attack`, effectOriginTokenUuid: effectOriginToken.document.uuid, effectOriginActorUuid: effectOriginActor.uuid, tokenUuid: token.document.uuid, braceItemUuid: braceItem.uuid });\n}\n\nlet hasDeadlyReachReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === \"deadly reach\");\nif (hasDeadlyReachReaction) {\n    await template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Deadly Reach Opportunity Attack`, effectOriginTokenUuid: effectOriginToken.document.uuid, effectOriginActorUuid: effectOriginActor.uuid, tokenUuid: token.document.uuid });\n}"
                     },
                     "whenDeleted": {
                       "asGM": false,
@@ -156,7 +156,6 @@ export async function enableOpportunityAttack(combat, combatEvent) {
         for (let combatant of combat.combatants.values()) {
             await processCombatant(combatant);
         }
-        //await canvas.draw();
     }
 
     if(combatEvent === "enterCombat") {
@@ -172,22 +171,20 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         const { actor } = combatant;
 
         let templateFlag = await actor.getFlag("midi-qol", "opportunityAttackTemplate");
-        let checkBraceFlag = await actor.getFlag("midi-qol", "checkBraceDecision");
         let templateAttachmentFlag = await actor.getFlag("gambits-premades", "templateAttachedToken");
         let templateData = templateFlag ? await fromUuid(templateFlag) : null;
 
-        let effectNames = ["Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack"];
+        /*let effectNames = ["Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack"];
         let effectIdsToDelete = actor.effects
             .filter(effect => effectNames.includes(effect.name))
             .map(effect => effect.id);
 
         if (effectIdsToDelete.length > 0) {
             await actor.deleteEmbeddedDocuments("ActiveEffect", effectIdsToDelete);
-        }
+        }*/
 
         if (templateData) await templateData.delete();
         if (templateFlag) await actor.unsetFlag("midi-qol", "opportunityAttackTemplate");
-        if (checkBraceFlag) await actor.unsetFlag("midi-qol", "checkBraceDecision");
         if (templateAttachmentFlag) await actor.unsetFlag("gambits-premades", "templateAttachedToken");
     }
 
@@ -206,6 +203,8 @@ export async function disableOpportunityAttack(combat, combatEvent) {
 export async function showOpportunityAttackDialog({dialogTitle,effectOriginTokenUuid,effectOriginActorUuid,tokenUuid,braceItemUuid,dialogId,source,type}) {
     const module = await import('../module.js');
     const socket = module.socket;
+    let oaEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'Enable Opportunity Attack');
+    if(!oaEnabled) return;
 
     return await new Promise(resolve => {
         const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Opportunity Attack Timeout`));
@@ -374,15 +373,16 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
                            await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
                         }
                           
-                            chosenWeapon = chosenWeapon.clone({
-                                system: {
-                                    "range": {
-                                        "value": null,
-                                        "long": null,
-                                        "units": ""
-                                    }
+                        chosenWeapon = chosenWeapon.clone({
+                            system: {
+                                "range": {
+                                    "value": null,
+                                    "long": null,
+                                    "units": ""
                                 }
-                            }, { keepId: true });
+                            }
+                        }, { keepId: true });
+                        
                         chosenWeapon.prepareData();
                         chosenWeapon.prepareFinalAttributes();
 

@@ -18,8 +18,20 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Power Word Rebound: Automates Deep Magic Vol 2s Power Word Rebound." >> release_notes.txt
+          echo "  - Cloud Rune: Automates the Rune Knights Cloud Rune feature." >> release_notes.txt
+          echo "  - Tentacle Slam: Automates the Otyugh and Neo-Otyugh monster feature Tentacle Slam." >> release_notes.txt
+          echo "  - Tentacle: Automates the Otyugh, Neo-Otyugh, and Feyr monster feature Tentacle." >> release_notes.txt
+          echo "  - Otherworldly Melody: Automates the Whistler monster feature Otherworldly Melody." >> release_notes.txt
+          echo "  - Surreal Step: Automates the Whistler monster feature Surreal Step." >> release_notes.txt
+          echo "  - Nightmare Fuel: Automates the Feyr monster feature Nightmare Fuel." >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Circle of Power: Updated with correct duration and simplified implementation." >> release_notes.txt
+          echo "  - Opportunity Attack: Some small additional code cleanup for flags that are no longer necessary under the new implementation." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: .57 issue resolved where opportunity attacks were ignoring some validation rules." >> release_notes.txt
+          echo "  - Opportunity Attack: Fixed Polearm Master not calling the new module function correctly." >> release_notes.txt
+          echo "  - Armor of Hexes: Fix origin not being checked correctly." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

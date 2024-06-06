@@ -276,6 +276,31 @@ function registerSettings() {
         }
     });
 
+    game.settings.register('gambits-premades', 'Enable Power Word Rebound', {
+        name: "Enable Power Word Rebound",
+        hint: "If enabled, this will present an appropriate dialog to users with the power word rebound spell, and automate application when used.",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Power Word Rebound Timeout', {
+        name: "Power Word Rebound Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
         name: "Enable Identify Restrictions",
         hint: "If enabled, this will prevent player characters from Identifying unidentified items through usual methods.",
@@ -671,7 +696,9 @@ class spellSettingsMenu extends BaseSettingsMenu {
             enableSilveryBarbs: game.settings.get("gambits-premades", "Enable Silvery Barbs"),
             silveryBarbsTimeout: game.settings.get("gambits-premades", "Silvery Barbs Timeout"),
             disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
-            enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20")
+            enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20"),
+            enablePowerWordRebound: game.settings.get("gambits-premades", "Enable Power Word Rebound"),
+            powerWordReboundTimeout: game.settings.get("gambits-premades", "Power Word Rebound Timeout")
         };
     }
 
@@ -683,5 +710,7 @@ class spellSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Silvery Barbs Timeout", formData.silveryBarbsTimeout);
         await game.settings.set("gambits-premades", "disableSilveryBarbsOnNat20", formData.disableSilveryBarbsOnNat20);
         await game.settings.set("gambits-premades", "enableSilveryBarbsOnNat20", formData.enableSilveryBarbsOnNat20);
+        await game.settings.set("gambits-premades", "Enable Power Word Rebound", formData.enablePowerWordRebound);
+        await game.settings.set("gambits-premades", "Power Word Rebound Timeout", formData.powerWordReboundTimeout);
     }
 }

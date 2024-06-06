@@ -26,6 +26,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
         if(findValidTokens.length === 0 || !findValidTokens) return;
 
         for (const validTokenPrimary of findValidTokens) {
+            let isIncapacitated = await MidiQOL.checkIncapacitated(validTokenPrimary);
+            if(isIncapacitated) return;
             if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [game.users.find((u) => u.isGM && u.active).id] });
             let workflowStatus = workflow.aborted;
             if(workflowStatus === true) return;

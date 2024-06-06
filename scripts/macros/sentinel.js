@@ -22,14 +22,11 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        if (target.document.uuid === validTokenPrimary.document.uuid) return;
+        if (target.document.uuid === validTokenPrimary.document.uuid || workflow.token.document.disposition === target.document.disposition) return;
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
         let hasEffectOrigin = (gameVersion >= 3 ? validTokenPrimary.actor.appliedEffects : validTokenPrimary.actor.effects)
             .some(effect => effectNamesOrigin.includes(effect.name));
         if(hasEffectOrigin) return;
-
-        let isIncapacitated = await MidiQOL.checkIncapacitated(validTokenPrimary);
-        if(isIncapacitated) return;
 
         if(validTokenPrimary.id === target.id) return;
 
@@ -161,13 +158,13 @@ export async function showSentinelDialog({targetUuids, actorUuid, tokenUuid, dia
                         if(favoriteWeaponCheck !== "null") favoriteWeapon = await fromUuid(favoriteWeaponCheck);
                         let favoriteSet = html.find("#favorite-checkbox").is(':checked');
                         if(favoriteSet && favoriteWeaponCheck) {
-                        await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
-                        if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
-                        await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
-                        }
+                           await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
+                           if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
+                           await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
+                           }
                         }
                         else if(favoriteSet) {
-                        await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
+                           await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
                         }
 
                         chosenWeapon = chosenWeapon.clone({

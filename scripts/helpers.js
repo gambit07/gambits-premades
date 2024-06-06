@@ -168,6 +168,11 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             return;
         }
 
+        if(MidiQOL.checkIncapacitated(t)) {
+            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at is incapacitated`);
+            return;
+        }
+
         // Check if the token is the initiating token or not a qualifying token disposition
         if (dispositionCheck && ((t.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at token disposition check`);
