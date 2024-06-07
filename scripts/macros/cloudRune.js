@@ -19,6 +19,9 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
+        const nearbyTokens = MidiQOL.findNearby(null, validTokenPrimary, 30, { includeToken: false });
+        let validTokens = nearbyTokens.filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary.document.uuid,token.document.uuid) && token.document.uuid !== workflow.token.document.uuid);
+        if(validTokens.length === 0) return;
 
         if(validTokenPrimary.id === target.id) return;
 
@@ -32,6 +35,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
         }
 
         if(workflowType === "attack") {
+
             let result;
 
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
@@ -102,8 +106,8 @@ export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, in
         let target = fromUuidSync(targetUuids);
         let browserUser = MidiQOL.playerForActor(originToken.actor);
 
-        const nearbyFriendlies = MidiQOL.findNearby(null, originToken.object, 30, { includeToken: true });
-        let validTokens = nearbyFriendlies.filter(token => token.document.disposition !== originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid));
+        const nearbyTokens = MidiQOL.findNearby(null, originToken.object, 30, { includeToken: false });
+        let validTokens = nearbyTokens.filter(token => token.document.disposition !== originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid) && token.document.uuid !== initiatingTokenUuid);
 
         dialogContent = `
         <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
@@ -112,11 +116,11 @@ export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, in
             </div>
             <div style='display: flex; width: 100%; gap: 20px;'>
                 <div style='flex-grow: 1; display: flex; flex-direction: column;'>
-                    <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
+                    <p style='margin: 0 0 10px 0;'>Choose who the attack is deflected to:</p>
                     ${validTokens.length >= 1 ? 
                         `<select id="targetSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
                             ${validTokens.map(valid => `<option value="${valid.actor.uuid}">${valid.actor.name}</option>`).join('')}
-                        </select>` : '<p>No valid friendlies in range.</p>'
+                        </select>` : '<p>No valid targets in range.</p>'
                     }
                 </div>
                 <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
