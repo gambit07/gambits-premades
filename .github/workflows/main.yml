@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Cloud Rune: Forgot to exclude the attacker." >> release_notes.txt
+          echo "  - Divine Sense: Fix for token size config deprecation." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
