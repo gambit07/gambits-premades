@@ -266,7 +266,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     return validTokens;
 }
 
-export async function process3rdPartyReactionDialog({dialogTitle,dialogContent,dialogId,initialTimeLeft,actorUuid,source,type}) {
+export async function process3rdPartyReactionDialog({dialogTitle,dialogContent,dialogId,initialTimeLeft,actorUuid,itemUuid,source,type}) {
     const module = await import('./module.js');
     const socket = module.socket;
 
@@ -288,7 +288,11 @@ export async function process3rdPartyReactionDialog({dialogTitle,dialogContent,d
                         
                         let userDecision = true;
 
-                        const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Reaction', uuid: actorUuid });
+                        let macroItem = await fromUuid(itemUuid);
+                        let actor = await fromUuid(actorUuid);
+                        if(macroItem) await macroItem.use();
+
+                        let hasEffectApplied = actor.appliedEffects.some(e => e.name === "Reaction");
 
                         if (!hasEffectApplied) {
                             await game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid: actorUuid });
