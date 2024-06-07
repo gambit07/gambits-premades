@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "- General:" >> release_notes.txt
           echo "  - 3rd Party Reactions: Added a 3rd party reaction dialog helper. This allows processing simpler 3rd party reactions that require a yes/no decision dialog that goes to the user which can then be followed with your automation code based on decision. Added (adding?) a post in helpful-helpers that should give some pointers" >> release_notes.txt
-          echo "  - Settings: Cleaned up descriptions a little bit. Probably doesnt matter much but it was annoying me ¯\_(ツ)_/¯" >> release_notes.txt
+          echo "  - Settings: Cleaned up descriptions a little bit. Probably doesnt matter much but it was annoying me" >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
           echo "  - Cloud Rune: Automates the Echo Knights Cloud Rune feature." >> release_notes.txt
           echo "  - Rebuke the Damned: Automates the homebrew Channel Divinity Rebuke the Damned feature." >> release_notes.txt
