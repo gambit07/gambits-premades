@@ -14,7 +14,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
     if(workflow.targets.size > 1) return;
     if(!game.combat) return;
 
-    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: [itemName], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
 
     let browserUser;
 
@@ -44,7 +44,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                 result = await socket.executeAsUser("showCloudRuneDialog", browserUser.id, {targetUuids: target.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, initiatingTokenUuid: workflow.token.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, rollTotals: null, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
              }
                  
-             const { userDecision, source, type } = result;
+             const { userDecision, returnedTokenUuid, source, type } = result;
 
              if (userDecision === false || !userDecision) {
                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
@@ -55,6 +55,16 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                 let rerollNew = await new Roll(`${workflow.attackRoll.result}`).roll({async: true});
                 let newItemData = workflow.item;
 
+                newItemData = newItemData.clone({
+                    system: {
+                        "range": {
+                            "value": null,
+                            "long": null,
+                            "units": ""
+                        }
+                    }
+                }, { keepId: true });
+
                 newItemData.prepareData();
                 newItemData.prepareFinalAttributes();
 
@@ -63,7 +73,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                     createWorkflow: true,
                     versatile: false,
                     configureDialog: true,
-                    targetUuids: [workflow.token.document.uuid],
+                    targetUuids: [returnedTokenUuid],
                     workflowOptions: {autoRollDamage: 'always', autoFastDamage: true, autoRollAttack: true, autoFastAttack: true}
                 };
 
@@ -92,15 +102,28 @@ export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, in
         let target = fromUuidSync(targetUuids);
         let browserUser = MidiQOL.playerForActor(originToken.actor);
 
+        const nearbyFriendlies = MidiQOL.findNearby(null, originToken.object, 30, { includeToken: true });
+        let validTokens = nearbyFriendlies.filter(token => token.document.disposition !== originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid));
+
         dialogContent = `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px; background-color: transparent; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <div style="flex-grow: 1; margin-right: 20px;">
-                <p>${target.actor.name} has been hit by an attack, would you like to use ${itemProperName} to deflect it?</p>
+        <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
+            <div style='margin-bottom: 20px;'>
+                <p>${target.actor.name} has been hit by an attack, would you like to use your ${itemProperName} to deflect it towards another creature?</p>
             </div>
-            <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
-                <p><b>Time Remaining</b></p>
-                <p><span id="countdown" style="font-size: 16px; color: red;">${initialTimeLeft}</span> seconds</p>
-                <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
+            <div style='display: flex; width: 100%; gap: 20px;'>
+                <div style='flex-grow: 1; display: flex; flex-direction: column;'>
+                    <p style='margin: 0 0 10px 0;'>Choose who is advantaged:</p>
+                    ${validTokens.length >= 1 ? 
+                        `<select id="targetSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
+                            ${validTokens.map(valid => `<option value="${valid.actor.uuid}">${valid.actor.name}</option>`).join('')}
+                        </select>` : '<p>No valid friendlies in range.</p>'
+                    }
+                </div>
+                <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
+                    <p><b>Time remaining</b></p>
+                    <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
+                    <p><button id='pauseButton' style='margin-top: 16px;'>Pause</button></p>
+                </div>
             </div>
         </div>
         `;
@@ -120,6 +143,8 @@ export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, in
                         if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
                         if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
 
+                        let returnedTokenUuid = await MidiQOL.tokenForActor(html.find("#targetSelection").val()).document.uuid;
+
                         let chosenSpell = await originToken.actor.items.find(i => i.name === itemProperName);
                         chosenSpell.prepareData();
                         chosenSpell.prepareFinalAttributes();
@@ -133,7 +158,7 @@ export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, in
                         };
 
                         const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
+                        if(itemRoll.aborted === true) return resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: false, source, type });
                         if(itemRoll) {
                             const uuid = originToken.actor.uuid;
                             const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
@@ -145,7 +170,7 @@ export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, in
                         
                         let userDecision = true;
 
-                        resolve({userDecision, programmaticallyClosed: false, source, type});
+                        resolve({userDecision, returnedTokenUuid, programmaticallyClosed: false, source, type});
                     }
                 },
                 no: {
@@ -154,7 +179,7 @@ export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, in
                         // Reaction Declined
                         dialog.dialogState.interacted = true;
                         dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+                        resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: false, source, type});
                     }
                 },
             }, default: "no",
@@ -196,10 +221,10 @@ export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, in
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true, source, type });
+                    resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: true, source, type });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false, source, type });
+                    resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: false, source, type });
                 }
             }
         });

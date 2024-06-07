@@ -18,19 +18,14 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- General:" >> release_notes.txt
+          echo "  - 3rd Party Reactions: Added a 3rd party reaction dialog helper. This allows processing simpler 3rd party reactions that require a yes/no decision dialog that goes to the user which can then be followed with your automation code based on decision. Added (adding?) a post in helpful-helpers that should give some pointers" >> release_notes.txt
+          echo "  - Settings: Cleaned up descriptions a little bit. Probably doesn't matter much but it was annoying me ¯\_(ツ)_/¯" >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
-          echo "  - Power Word Rebound: Automates Deep Magic Vol 2s Power Word Rebound." >> release_notes.txt
-          echo "  - Tentacle Slam: Automates the Otyugh and Neo-Otyugh monster feature Tentacle Slam." >> release_notes.txt
-          echo "  - Tentacle: Automates the Otyugh, Neo-Otyugh, and Feyr monster feature Tentacle." >> release_notes.txt
-          echo "  - Otherworldly Melody: Automates the Whistler monster feature Otherworldly Melody." >> release_notes.txt
-          echo "  - Surreal Step: Automates the Whistler monster feature Surreal Step." >> release_notes.txt
-          echo "  - Nightmare Fuel: Automates the Feyr monster feature Nightmare Fuel." >> release_notes.txt
+          echo "  - Cloud Rune: Automates the Echo Knights Cloud Rune feature." >> release_notes.txt
+          echo "  - Rebuke the Damned: Automates the homebrew Channel Divinity Rebuke the Damned feature." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Circle of Power: Updated with correct duration and simplified implementation." >> release_notes.txt
-          echo "  - Opportunity Attack: Some small additional code cleanup for flags that are no longer necessary under the new implementation." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fixed Polearm Master not calling the new module function correctly." >> release_notes.txt
-          echo "  - Armor of Hexes: Fix origin not being checked correctly." >> release_notes.txt
+          echo "  - Opportunity Attack: Fixed the mirror 3rd party dialog implementation to show the correct GM title when enabled." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

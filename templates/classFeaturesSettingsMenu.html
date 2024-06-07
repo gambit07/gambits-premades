@@ -118,7 +118,22 @@
             <tbody>
                 <tr>
                     <td class="column-item">
-                        <label for="enableCuttingWords">Cutting Words<br><span class="small-text">Presents a dialog to users with cutting words.</span>
+                        <label for="enableCloudRune">Cloud Rune<br><span class="small-text">Presents a dialog to Rune Knight Fighters with Cloud Rune.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableCloudRune" name="enableCloudRune" data-dtype="Boolean" {{checked enableCloudRune}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="cloudRuneTimeout" name="cloudRuneTimeout" value="{{cloudRuneTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="column-item">
+                        <label for="enableCuttingWords">Cutting Words<br><span class="small-text">Presents a dialog to College of Lore Bard users with Cutting Words.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -133,7 +148,7 @@
 
                 <tr class="clickable" data-content-id="collapsible-content-interception">
                     <td class="column-item">
-                        <label>Fighting Style: Interception <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to users with Interception.</span>
+                        <label>Fighting Style: Interception <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to Paladins or Fighters with Interception.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -165,7 +180,7 @@
 
                 <tr class="clickable" data-content-id="collapsible-content-protection">
                     <td class="column-item">
-                        <label>Fighting Style: Protection <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to users with Protection.</span>
+                        <label>Fighting Style: Protection <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to Paladins or Fighters with Protection.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -193,7 +208,7 @@
 
                 <tr class="clickable" data-content-id="collapsible-content-indomitable">
                     <td class="column-item">
-                        <label>Indomitable <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to users with Indomitable.</span>
+                        <label>Indomitable <span class="small-text">(Click for Homebrew options...)<br>Presents a dialog to Fighters with Indomitable.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -220,7 +235,7 @@
                 </tbody>
                 <tr>
                     <td class="column-item">
-                        <label for="enableRiposte">Maneuvers: Riposte<br><span class="small-text">Presents a dialog to users with Riposte.</span>
+                        <label for="enableRiposte">Maneuvers: Riposte<br><span class="small-text">Presents a dialog to Battle Master Fighters with Riposte.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -234,7 +249,7 @@
                 </tr>
                 <tr>
                     <td class="column-item">
-                        <label for="enablePoetryInMisery">Poetry in Misery<br><span class="small-text">Presents a dialog to users with Bards Poetry in Misery feature.</span>
+                        <label for="enablePoetryInMisery">Poetry in Misery<br><span class="small-text">Presents a dialog to College of Tragedy Bards with Poetry in Misery.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -249,7 +264,7 @@
 
                 <tr>
                     <td class="column-item">
-                        <label for="enableWitchesHex">Witches Hex<br><span class="small-text">Presents a dialog to users for the Witch classes Hex. Hex item must be renamed to 'Witches Hex'.</span>
+                        <label for="enableWitchesHex">Witches Hex<br><span class="small-text">Presents a dialog to Witches with Hex. Hex item must be renamed to 'Witches Hex'.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">

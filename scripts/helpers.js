@@ -265,3 +265,94 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
 
     return validTokens;
 }
+
+export async function process3rdPartyReactionDialog({dialogTitle,dialogContent,dialogId,initialTimeLeft,actorUuid,source,type}) {
+    const module = await import('./module.js');
+    const socket = module.socket;
+
+    return await new Promise(resolve => {
+        let timer;
+
+        let dialog = new Dialog({
+            title: dialogTitle,
+            content: dialogContent,
+            id: dialogId,
+            buttons: {
+                yes: {
+                    label: "Yes",
+                    callback: async (html) => {
+                        dialog.dialogState.interacted = true;
+                        dialog.dialogState.decision = "yes";
+                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
+                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+                        
+                        let userDecision = true;
+
+                        const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied({ effectName: 'Reaction', uuid: actorUuid });
+
+                        if (!hasEffectApplied) {
+                            await game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid: actorUuid });
+                        }
+
+                        return resolve({userDecision, programmaticallyClosed: false, source, type});
+                    }
+                },
+                no: {
+                    label: "No",
+                    callback: async () => {
+                        // Reaction Declined
+                        dialog.dialogState.interacted = true;
+                        dialog.dialogState.decision = "no";
+                        return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
+                    }
+                },
+            }, default: "no",
+            render: (html) => {
+                $(html).attr('id', dialog.options.id);
+                let timeLeft = initialTimeLeft;
+                let isPaused = false;
+                const countdownElement = html.find("#countdown");
+                const pauseButton = html.find("#pauseButton");
+
+                dialog.updateTimer = (newTimeLeft, paused) => {
+                    timeLeft = newTimeLeft;
+                    isPaused = paused;
+                    countdownElement.text(`${timeLeft}`);
+                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                };
+
+                timer = setInterval(() => {
+                    if (!isPaused) {
+                        timeLeft--;
+                        countdownElement.text(`${timeLeft}`);
+                        if (timeLeft <= 0) {
+                            dialog.data.buttons.no.callback();
+                            dialog.close();
+                        }
+                    }
+                }, 1000);
+
+                pauseButton.click(() => {
+                    isPaused = !isPaused;
+                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
+                    if (source && source === "user" && type === "multiDialog") {
+                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
+                    } else if (source && source === "gm" && type === "multiDialog") {
+                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
+                    }
+                });
+            },
+            close: () => {
+                clearInterval(timer);
+                if (dialog.dialogState.programmaticallyClosed) {
+                    return resolve({ userDecision: false, programmaticallyClosed: true, source, type });
+                }
+                else if (!dialog.dialogState.interacted) {
+                    return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
+                }
+            }
+        });
+        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
+        dialog.render(true);
+    });
+}

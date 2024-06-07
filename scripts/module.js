@@ -9,8 +9,9 @@ import { sentinel, showSentinelDialog } from './macros/sentinel.js';
 import { riposte, showRiposteDialog } from './macros/riposte.js';
 import { witchesHex, showWitchesHexDialog } from './macros/witchesHex.js';
 import { powerWordRebound, showPowerWordReboundDialog } from './macros/powerWordRebound.js';
+import { cloudRune, showCloudRuneDialog } from './macros/cloudRune.js';
 import { enableOpportunityAttack, disableOpportunityAttack, showOpportunityAttackDialog } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -56,6 +57,9 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("showOpportunityAttackDialog", showOpportunityAttackDialog);
     socket.register("powerWordRebound", powerWordRebound);
     socket.register("showPowerWordReboundDialog", showPowerWordReboundDialog);
+    socket.register("cloudRune", cloudRune);
+    socket.register("showCloudRuneDialog", showCloudRuneDialog);
+    socket.register("process3rdPartyReactionDialog", process3rdPartyReactionDialog);
 })
 
 Hooks.once('ready', async function() {
@@ -71,6 +75,7 @@ Hooks.once('ready', async function() {
         gmUpdateTemplateSize,
         freeSpellUse,
         showOpportunityAttackDialog,
+        process3rdPartyReactionDialog,
         socket
     };
 
@@ -107,6 +112,7 @@ Hooks.once('ready', async function() {
         if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.protectionEnabled && game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.powerWordReboundEnabled) await executeWorkflow({ workflowItem: "powerWordRebound", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.cloudRuneEnabled) await executeWorkflow({ workflowItem: "cloudRune", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
@@ -233,6 +239,9 @@ async function updateSettings(settingKey = null) {
     }
     if (settingKey === null || settingKey === 'gambits-premades.Enable Power Word Rebound') {
         game.gpsSettings.powerWordReboundEnabled = game.settings.get('gambits-premades', 'Enable Power Word Rebound');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Cloud Rune') {
+        game.gpsSettings.cloudRuneEnabled = game.settings.get('gambits-premades', 'Enable Cloud Rune');
     }
 }
 

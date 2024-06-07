@@ -301,9 +301,34 @@ function registerSettings() {
         }
     });
 
+    game.settings.register('gambits-premades', 'Enable Cloud Rune', {
+        name: "Enable Cloud Rune",
+        hint: "If enabled, this will present an appropriate dialog to users with the cloud rune feature, and automate application when used.",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'Cloud Rune Timeout', {
+        name: "Cloud Rune Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "30",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
         name: "Enable Identify Restrictions",
-        hint: "If enabled, this will prevent player characters from Identifying unidentified items through usual methods.",
+        hint: "If enabled, this will prevent player characters from Identifying unidentified items except through the use of my Identify spell automation.",
         scope: 'world',
         config: true,
         type: Boolean,
@@ -619,6 +644,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             riposteTimeout: game.settings.get("gambits-premades", "Riposte Timeout"),
             enableWitchesHex: game.settings.get("gambits-premades", "Enable Witches Hex"),
             witchesHexTimeout: game.settings.get("gambits-premades", "Witches Hex Timeout"),
+            enableCloudRune: game.settings.get("gambits-premades", "Enable Cloud Rune"),
+            cloudRuneTimeout: game.settings.get("gambits-premades", "Cloud Rune Timeout")
         };
 
         return data;
@@ -644,6 +671,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Riposte Timeout", formData.riposteTimeout);
         await game.settings.set("gambits-premades", "Enable Witches Hex", formData.enableWitchesHex);
         await game.settings.set("gambits-premades", "Witches Hex Timeout", formData.witchesHexTimeout);
+        await game.settings.set("gambits-premades", "Enable Cloud Rune", formData.enableCloudRune);
+        await game.settings.set("gambits-premades", "Cloud Rune Timeout", formData.cloudRuneTimeout);
     }
 }
 
