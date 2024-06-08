@@ -168,6 +168,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             return;
         }
 
+        // Check if the token is incapacitated
         if(MidiQOL.checkIncapacitated(t)) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at is incapacitated`);
             return;
@@ -359,4 +360,147 @@ export async function process3rdPartyReactionDialog({dialogTitle,dialogContent,d
         dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
         dialog.render(true);
     });
+}
+
+export async function moveTokenByOriginPoint({ originX, originY, target, distance }) {
+
+    if(!target) return console.log("No valid target to move");
+    if (!distance || isNaN(distance)) return console.log("No valid distance to move");
+    if(!originX || !originY) return console.log("No valid origin x/y coordinate given, for a token object this value should be token.center.x/token.center.y")
+    
+    const gridDistance = canvas.dimensions.distance;
+    const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
+    
+    const moveDistancePixels = distance * pixelsPerFoot;
+    
+    let vectorX = target.center.x - originX;
+    let vectorY = target.center.y - originY;
+    
+    let magnitude = Math.hypot(vectorX, vectorY);
+    vectorX /= magnitude;
+    vectorY /= magnitude;
+    
+    let moveX = vectorX * moveDistancePixels;
+    let moveY = vectorY * moveDistancePixels;
+    const newX = target.x + moveX;
+    const newY = target.y + moveY;
+    
+    let endPoint = new PIXI.Point(newX, newY);
+    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, endPoint, { type: "move", mode: "any" });
+    
+    if (!collisionDetected) {
+        await target.document.update({ x: newX, y: newY });
+    } else {
+        let stepDistance = canvas.scene.grid.size / 10;
+        let totalSteps = moveDistancePixels / stepDistance;
+        let stepCounter = 0;
+    
+        for (let step = 1; step <= totalSteps; step++) {
+            let nextX = target.x + vectorX * stepDistance * step;
+            let nextY = target.y + vectorY * stepDistance * step;
+            let nextPoint = new PIXI.Point(nextX, nextY);
+    
+            collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, nextPoint, { type: "move", mode: "any" });
+    
+            if (collisionDetected) {
+                break;
+            }
+            stepCounter = step;
+        }
+    
+        let finalX = target.x + vectorX * stepDistance * stepCounter;
+        let finalY = target.y + vectorY * stepDistance * stepCounter;
+    
+        if (stepCounter > 0) {
+            await target.document.update({ x: finalX, y: finalY });
+        }
+    }
+}
+
+export async function moveTokenByCardinal({ target, distance, direction }) {
+    
+    const directions = ["North", "South", "East", "West", "Northwest", "Northeast", "Southwest", "Southeast"];
+
+    if(!target) return console.log("No valid target to move");
+    if(!distance || isNaN(distance)) return console.log("No valid distance to move");
+    if (!directions.includes(direction)) return console.log("No valid direction to move (Valid Options: 'North', 'South', 'East', 'West', 'Northwest', 'Northeast', 'Southwest', 'Southeast')");
+    
+    const gridDistance = canvas.dimensions.distance;
+    const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
+    
+    const moveDistancePixels = distance * pixelsPerFoot;
+    const diagonalMultiplier = Math.SQRT2;
+    
+    let moveX = 0;
+    let moveY = 0;
+    
+    switch(direction) {
+        case "North":
+            moveY = -moveDistancePixels;
+            break;
+        case "South":
+            moveY = moveDistancePixels;
+            break;
+        case "East":
+            moveX = moveDistancePixels;
+            break;
+        case "West":
+            moveX = -moveDistancePixels;
+            break;
+        case "Northwest":
+            moveX = -moveDistancePixels / diagonalMultiplier;
+            moveY = -moveDistancePixels / diagonalMultiplier;
+            break;
+        case "Northeast":
+            moveX = moveDistancePixels / diagonalMultiplier;
+            moveY = -moveDistancePixels / diagonalMultiplier;
+            break;
+        case "Southwest":
+            moveX = -moveDistancePixels / diagonalMultiplier;
+            moveY = moveDistancePixels / diagonalMultiplier;
+            break;
+        case "Southeast":
+            moveX = moveDistancePixels / diagonalMultiplier;
+            moveY = moveDistancePixels / diagonalMultiplier;
+            break;
+    }
+    
+    const newX = target.x + moveX;
+    const newY = target.y + moveY;
+    
+    let endPoint = new PIXI.Point(newX, newY);
+    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, endPoint, {type:"move", mode:"any"});
+    
+    if (!collisionDetected) {
+        await target.document.update({ x: newX, y: newY });
+    } else {
+        let directionVector = { x: moveX, y: moveY };
+        let magnitude = Math.hypot(directionVector.x, directionVector.y);
+        directionVector.x /= magnitude;
+        directionVector.y /= magnitude;
+        
+        let totalSteps = moveDistancePixels / (canvas.scene.grid.size / 10);
+        let collisionDetected = false;
+        let stepCounter = 0;
+        
+        for (let step = 1; step <= totalSteps; step++) {
+            let nextX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * step;
+            let nextY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * step;
+            let nextPoint = new PIXI.Point(nextX, nextY);
+            
+            collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, nextPoint, {type:"move", mode:"any"});
+            
+            if (collisionDetected) {
+                break;
+            }
+            stepCounter = step;
+        }
+        
+        let finalX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * stepCounter;
+        let finalY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * stepCounter;
+        
+        if (stepCounter > 0) {
+            await target.document.update({ x: finalX, y: finalY });
+        }
+    }
 }

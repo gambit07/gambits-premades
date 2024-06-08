@@ -1,8 +1,15 @@
-2024/06/07-08:31:42.519 638 Recovering log #2299
-2024/06/07-08:31:42.531 638 Delete type=0 #2299
-2024/06/07-08:31:42.532 638 Delete type=3 #2297
-2024/06/07-09:09:58.480 3d70 Level-0 table #2304: started
-2024/06/07-09:09:58.480 3d70 Level-0 table #2304: 0 bytes OK
-2024/06/07-09:09:58.483 3d70 Delete type=0 #2302
-2024/06/07-09:09:58.484 3d70 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!vxrggTopkxhq3MAn.T70VAw9NbZZUV7tZ' @ 0 : 0; will stop at (end)
-2024/06/07-09:09:58.484 3d70 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!vxrggTopkxhq3MAn.T70VAw9NbZZUV7tZ' @ 0 : 0; will stop at (end)
+2024/06/07-11:01:57.207 20e4 Recovering log #2311
+2024/06/07-11:01:57.235 20e4 Delete type=0 #2311
+2024/06/07-11:01:57.236 20e4 Delete type=3 #2309
+2024/06/08-19:47:06.398 3d70 Level-0 table #2316: started
+2024/06/08-19:47:06.408 3d70 Level-0 table #2316: 23582 bytes OK
+2024/06/08-19:47:06.411 3d70 Delete type=0 #2314
+2024/06/08-19:47:06.411 3d70 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!vxrggTopkxhq3MAn.T70VAw9NbZZUV7tZ' @ 0 : 0; will stop at (end)
+2024/06/08-19:47:06.412 3d70 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!vxrggTopkxhq3MAn.T70VAw9NbZZUV7tZ' @ 0 : 0; will stop at '!items.effects!ZDAPLjDFgwQHVSfO.RoV0IWeb0BCxwJQ8' @ 879 : 1
+2024/06/08-19:47:06.412 3d70 Compacting 1@1 + 1@2 files
+2024/06/08-19:47:06.449 3d70 Generated table #2317@1: 49 keys, 165683 bytes
+2024/06/08-19:47:06.449 3d70 Compacted 1@1 + 1@2 files => 165683 bytes
+2024/06/08-19:47:06.452 3d70 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/06/08-19:47:06.452 3d70 Delete type=2 #2252
+2024/06/08-19:47:06.452 3d70 Delete type=2 #2316
+2024/06/08-19:47:06.460 3d70 Manual compaction at level-1 from '!items.effects!ZDAPLjDFgwQHVSfO.RoV0IWeb0BCxwJQ8' @ 879 : 1 .. '!items.effects!vxrggTopkxhq3MAn.T70VAw9NbZZUV7tZ' @ 0 : 0; will stop at (end)

@@ -18,8 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Rebuke the Damned: Fix to correctly validate channel divinity uses." >> release_notes.txt
+          echo "- General:" >> release_notes.txt
+          echo "  - Helpful Helpers: Added moveTokenByCardinal and moveTokenByOriginPoint along with some documentation, shortly" >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Fizbans Platinum Shield: Automation for the spell Fizbans Platinum Shield. Covers all aspects including transfer animations, proper item effects, and effect transferral via a new item that is created on the actor Fizbans Platinum Shield - Change Target." >> release_notes.txt
+          echo "  - Gift of the Gem Dragon: Automation for the feat Gift of the Gem Dragon. Covers all aspects including a one time selector for the ability score increase and automation of saving throw, damage, and effected token pushed movement on save failure." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

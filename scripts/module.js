@@ -11,7 +11,7 @@ import { witchesHex, showWitchesHexDialog } from './macros/witchesHex.js';
 import { powerWordRebound, showPowerWordReboundDialog } from './macros/powerWordRebound.js';
 import { cloudRune, showCloudRuneDialog } from './macros/cloudRune.js';
 import { enableOpportunityAttack, disableOpportunityAttack, showOpportunityAttackDialog } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -60,6 +60,8 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("cloudRune", cloudRune);
     socket.register("showCloudRuneDialog", showCloudRuneDialog);
     socket.register("process3rdPartyReactionDialog", process3rdPartyReactionDialog);
+    socket.register("moveTokenByCardinal", moveTokenByCardinal);
+    socket.register("moveTokenByOriginPoint", moveTokenByOriginPoint);
 })
 
 Hooks.once('ready', async function() {
