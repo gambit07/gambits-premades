@@ -65,8 +65,7 @@ https://github.com/gambit07/gambits-premades/assets/4236874/9a16a77a-4623-47e0-a
 <summary><b>Counterspell</b> (click to expand)</summary>
 <p>
 
-- This automates counterspell. All situations should work with the exception of counter-counterspell for allies of the initially counterspelled creature. Only the counterspelled creature currently has the ability to counter-counterspell, hoping to add the functionality for allied counter-counterspell in the future.
-- Counterspell will account for the following features/spells when on an actor:
+- This automates counterspell and includes handling for:
   - Improved Abjuration
 
 https://github.com/gambit07/gambits-premades/assets/4236874/9890ef7e-99a9-481a-b2e8-9ff726479c8c
