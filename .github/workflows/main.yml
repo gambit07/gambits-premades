@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Fighting Style Protection: Small bugfix where looking up advantage after preAttackRoll wasn't validated against the homebrew on successful attack setting.
+          echo "  - Fighting Style Protection: Small bugfix where looking up advantage after preAttackRoll wasnt validated against the homebrew on successful attack setting.
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
