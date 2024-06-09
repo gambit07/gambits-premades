@@ -612,3 +612,12 @@ https://github.com/gambit07/gambits-premades/assets/4236874/8b3d74e8-a4c6-4a50-9
 
 </p>
 </details>
+
+<details>
+<summary><b>Fighting Style Protection</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/50d1851b-63d4-473e-8273-ce7c7cb3aa4f
+
+</p>
+</details>
