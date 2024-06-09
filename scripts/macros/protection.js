@@ -13,7 +13,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     let enableProtectionOnSuccess = MidiQOL.safeGetGameSetting('gambits-premades', 'enableProtectionOnSuccess');
     
     if (!game.combat) return;
-    if (workflow.attackRoll.formula.includes("kl")) return;
+    if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kl")) || (!enableProtectionOnSuccess && workflow.advantage === true)) return;
 
     // Check if attack hits
     if(enableProtectionOnSuccess && (workflow.attackTotal < target.actor.system.attributes.ac.value)) return;
