@@ -621,3 +621,12 @@ https://github.com/gambit07/gambits-premades/assets/4236874/50d1851b-63d4-473e-8
 
 </p>
 </details>
+
+<details>
+<summary><b>Fighting Style Interception</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/06649ff1-c5ea-4e3e-a1b9-3b0241bad72a
+
+</p>
+</details>
