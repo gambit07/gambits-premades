@@ -59,6 +59,23 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
                  continue;
             }
             if (userDecision === true) {
+                let primaryFile = "jb2a.spiritual_weapon.sword.spectral.orange";
+                let alternateFile = "jb2a.icon.shield.yellow";
+
+                let fileToPlay = Sequencer.Database.getEntry(primaryFile) ? primaryFile : Sequencer.Database.getEntry(alternateFile) ? alternateFile : "";
+
+                new Sequence()
+                    .effect()
+                    .file(fileToPlay)
+                    .atLocation(validTokenPrimary)
+                    .moveTowards(target)
+                    .scaleToObject(2.0)
+                    .zIndex(0)
+                    .belowTokens(false)
+                    .fadeIn(250)
+                    .fadeOut(250)
+                    .play();
+
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let actorProf = validTokenPrimary.actor.system.attributes.prof;
@@ -157,32 +174,34 @@ export async function showInterceptionDialog({targetUuids, actorUuid, tokenUuid,
                     </div>
                 </div>
                 <script>
-                    let draggedItem = null;
-        
-                    document.querySelectorAll('#damageList li').forEach(item => {
-                        item.addEventListener('dragstart', function(event) {
-                            event.dataTransfer.setData('text/plain', event.target.innerText);
-                            event.dataTransfer.effectAllowed = 'move';
-                            draggedItem = event.target;
+                    (function() {
+                        let draggedItem = null;
+                
+                        document.querySelectorAll('#damageList li').forEach(item => {
+                            item.addEventListener('dragstart', function(event) {
+                                event.dataTransfer.setData('text/plain', event.target.innerText);
+                                event.dataTransfer.effectAllowed = 'move';
+                                draggedItem = event.target;
+                            });
                         });
-                    });
-        
-                    const damageList = document.getElementById('damageList');
-        
-                    damageList.addEventListener('dragover', function(event) {
-                        event.preventDefault();
-                        event.dataTransfer.dropEffect = 'move';
-                        const target = event.target;
-                        if (target && target.nodeName === 'LI') {
-                            const rect = target.getBoundingClientRect();
-                            const next = (event.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-                            damageList.insertBefore(draggedItem, next && target.nextSibling || target);
-                        }
-                    });
-        
-                    damageList.addEventListener('dragend', function() {
-                        draggedItem = null;
-                    });
+                
+                        const damageList = document.getElementById('damageList');
+                
+                        damageList.addEventListener('dragover', function(event) {
+                            event.preventDefault();
+                            event.dataTransfer.dropEffect = 'move';
+                            const target = event.target;
+                            if (target && target.nodeName === 'LI') {
+                                const rect = target.getBoundingClientRect();
+                                const next = (event.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+                                damageList.insertBefore(draggedItem, next && target.nextSibling || target);
+                            }
+                        });
+                
+                        damageList.addEventListener('dragend', function() {
+                            draggedItem = null;
+                        });
+                    })();
                 </script>
             `;
         }

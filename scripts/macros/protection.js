@@ -11,9 +11,9 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
     let enableProtectionOnSuccess = MidiQOL.safeGetGameSetting('gambits-premades', 'enableProtectionOnSuccess');
-    
+    console.log(workflow)
     if (!game.combat) return;
-    if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kl")) || (!enableProtectionOnSuccess && workflow.advantage === true)) return;
+    if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kh")) || (!enableProtectionOnSuccess && workflow.disadvantage === true)) return;
 
     // Check if attack hits
     if(enableProtectionOnSuccess && (workflow.attackTotal < target.actor.system.attributes.ac.value)) return;
@@ -68,6 +68,24 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
             }
             if (userDecision === true) {
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+
+                let primaryFile = "jaamod.condition.magic_shield";
+                let alternateFile = "jb2a.icon.shield.blue";
+
+                let fileToPlay = Sequencer.Database.getEntry(primaryFile) ? primaryFile : Sequencer.Database.getEntry(alternateFile) ? alternateFile : "";
+
+                new Sequence()
+                    .effect()
+                    .file(fileToPlay)
+                    .atLocation(validTokenPrimary)
+                    .moveTowards(target)
+                    .scaleToObject(2.0)
+                    .zIndex(0)
+                    .belowTokens(false)
+                    .fadeIn(250)
+                    .fadeOut(250)
+                    .play();
+
                 if(!enableProtectionOnSuccess) workflow.disadvantage = true;
                 else if(enableProtectionOnSuccess) {
                     let straightRoll = workflow.attackRoll.dice[0].results[0].result + (workflow.attackRoll.total - workflow.attackRoll.dice[0].total);
@@ -133,7 +151,7 @@ export async function showProtectionDialog({targetUuids, actorUuid, tokenUuid, d
         dialogContent = `
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px; background-color: transparent; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <div style="flex-grow: 1; margin-right: 20px;">
-                    <p>Would you like to use Protection to disadvantage the attack against ${targetToken.actor.name}?</p>
+                    <p>Would you like to use <b>${itemProperName}</b> to disadvantage the attack against <b>${targetToken.actor.name}</b>?</p>
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
                     <p><b>Time Remaining</b></p>

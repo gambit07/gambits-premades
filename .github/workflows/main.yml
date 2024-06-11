@@ -18,8 +18,12 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Fighting Style Protection: Add jb2a animation when used" >> release_notes.txt
+          echo "  - Fighting Style Interception: Add jb2a animation when used" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Fighting Style Protection: Small bugfix where looking up advantage after preAttackRoll wasnt validated against the homebrew on successful attack setting." >> release_notes.txt
+          echo "  - Fighting Style Protection: Fix for a check that was meant to prevent popup when an attack is already disadvantaged." >> release_notes.txt
+          echo "  - Power Word Rebound: Update to fix an if statement not returned when a targeted token is above half health. Update to allow reaction when the reaction caster is attacked." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

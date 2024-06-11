@@ -11,7 +11,7 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
     if(workflow.item.name.toLowerCase() === itemName) return;
     let target = workflow.hitTargets.first();
 
-    if(target.actor.system.attributes.hp.value >= Math.floor(target.actor.system.attributes.hp.max / 2))
+    if(target.actor.system.attributes.hp.value >= Math.floor(target.actor.system.attributes.hp.max / 2)) return;
     if(workflow.targets.size > 1) return;
     if(!game.combat) return;
 
@@ -20,8 +20,6 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-
-        if(validTokenPrimary.id === target.id) return;
 
         let actorUuidPrimary = validTokenPrimary.actor.uuid;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;

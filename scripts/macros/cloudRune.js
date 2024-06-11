@@ -78,17 +78,18 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                     versatile: false,
                     configureDialog: true,
                     targetUuids: [returnedTokenUuid],
-                    workflowOptions: {autoRollDamage: 'always', autoFastDamage: true, autoRollAttack: true, autoFastAttack: true}
+                    workflowOptions: {autoFastForward: "on", autoRollAttack: true}
                 };
 
                 workflow.aborted = true;
 
-                Hooks.once("midi-qol.preAttackRollComplete", async (workflow) => {
+                const hookid = Hooks.once("midi-qol.preAttackRollComplete", async (workflow) => {
                     await workflow.setAttackRoll(rerollNew);
                 });
                 
-                // Complete the new item use workflow
                 await MidiQOL.completeItemUse(newItemData, {}, options);
+                
+                Hooks.off('', hookid);
             }
         }
     }

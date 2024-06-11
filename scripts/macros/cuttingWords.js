@@ -245,32 +245,34 @@ export async function showCuttingWordsDialog({targetUuids, actorUuid, tokenUuid,
                     </div>
                 </div>
                 <script>
-                    let draggedItem = null;
-        
-                    document.querySelectorAll('#damageList li').forEach(item => {
-                        item.addEventListener('dragstart', function(event) {
-                            event.dataTransfer.setData('text/plain', event.target.innerText);
-                            event.dataTransfer.effectAllowed = 'move';
-                            draggedItem = event.target;
+                    (function() {
+                        let draggedItem = null;
+                
+                        document.querySelectorAll('#damageList li').forEach(item => {
+                            item.addEventListener('dragstart', function(event) {
+                                event.dataTransfer.setData('text/plain', event.target.innerText);
+                                event.dataTransfer.effectAllowed = 'move';
+                                draggedItem = event.target;
+                            });
                         });
-                    });
-        
-                    const damageList = document.getElementById('damageList');
-        
-                    damageList.addEventListener('dragover', function(event) {
-                        event.preventDefault();
-                        event.dataTransfer.dropEffect = 'move';
-                        const target = event.target;
-                        if (target && target.nodeName === 'LI') {
-                            const rect = target.getBoundingClientRect();
-                            const next = (event.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-                            damageList.insertBefore(draggedItem, next && target.nextSibling || target);
-                        }
-                    });
-        
-                    damageList.addEventListener('dragend', function() {
-                        draggedItem = null;
-                    });
+                
+                        const damageList = document.getElementById('damageList');
+                
+                        damageList.addEventListener('dragover', function(event) {
+                            event.preventDefault();
+                            event.dataTransfer.dropEffect = 'move';
+                            const target = event.target;
+                            if (target && target.nodeName === 'LI') {
+                                const rect = target.getBoundingClientRect();
+                                const next = (event.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+                                damageList.insertBefore(draggedItem, next && target.nextSibling || target);
+                            }
+                        });
+                
+                        damageList.addEventListener('dragend', function() {
+                            draggedItem = null;
+                        });
+                    })();
                 </script>
             `;
         }
