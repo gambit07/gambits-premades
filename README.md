@@ -612,3 +612,30 @@ https://github.com/gambit07/gambits-premades/assets/4236874/8b3d74e8-a4c6-4a50-9
 
 </p>
 </details>
+
+<details>
+<summary><b>Fighting Style Protection</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/50d1851b-63d4-473e-8273-ce7c7cb3aa4f
+
+</p>
+</details>
+
+<details>
+<summary><b>Fighting Style Interception</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/06649ff1-c5ea-4e3e-a1b9-3b0241bad72a
+
+</p>
+</details>
+
+<details>
+<summary><b>Cloud Rune</b> (click to expand)</summary>
+<p>
+
+https://github.com/gambit07/gambits-premades/assets/4236874/6498722e-7f24-4371-ac08-113a7baf70a6
+
+</p>
+</details>
