@@ -133,6 +133,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         }
 
             if(workflowType === "attack") {
+                if(workflow.isCritical === true) return;
                 let result;
 
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
@@ -221,7 +222,7 @@ export async function showWitchesHexDialog({targetUuids, actorUuid, tokenUuid, d
         dialogContent = `
             <div style='display: flex; align-items: center; justify-content: space-between;'>
                 <div style='flex: 1;'>
-                    <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast ${itemProperName}?</p>
+                    <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast ${itemProperName} to try and reduce the targets attack roll?</p>
                 </div>
                 <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
                     <p><b>Time remaining</b></p>
@@ -240,7 +241,7 @@ export async function showWitchesHexDialog({targetUuids, actorUuid, tokenUuid, d
         dialogContent = `
             <div style='display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;'>
             <div style='margin-bottom: 20px;'>
-                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast ${itemProperName}? An enemy succeeded their saving throw.</p>
+                <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to cast ${itemProperName} to try and reduce the targets saving throw?</p>
             </div>
             <div style='display: flex; width: 100%; gap: 20px; align-items: start; padding-bottom: 5px; border-bottom: 1px solid #ccc;'>
                 <div style='flex-grow: 1; display: flex; flex-direction: column;'>

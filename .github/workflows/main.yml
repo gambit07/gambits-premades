@@ -18,12 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Fighting Style Protection: Add jb2a animation when used" >> release_notes.txt
-          echo "  - Fighting Style Interception: Add jb2a animation when used" >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Rabbit Hop: Added the Rabbit Hop Harengon racial feature. This will prevent opportunity attacks when used with my automation, and will prevent use if the user has movement restricted." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Fighting Style Protection: Fix for a check that was meant to prevent popup when an attack is already disadvantaged." >> release_notes.txt
-          echo "  - Power Word Rebound: Update to fix an if statement not returned when a targeted token is above half health. Update to allow reaction when the reaction caster is attacked." >> release_notes.txt
+          echo "  - Enervation: Simplified implementation and fixed per round damage not applying." >> release_notes.txt
+          echo "  - Witches Hex: Tweaked dialog to make reaction clearer." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

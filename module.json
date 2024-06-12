@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.1.66",
+  "version": "0.1.67",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
@@ -102,6 +102,13 @@
 			"name": "gps-3rd-party-spells",
       		"path": "packs/gps-3rd-party-spells",
 			"module": "gambits-premades"
+		},
+		{
+			"label": "GPS Race Features",
+      		"type": "Item",
+			"name": "gps-race-features",
+      		"path": "packs/gps-race-features",
+			"module": "gambits-premades"
 		}],
     "packFolders": [
       {
@@ -114,6 +121,7 @@
           "gps-items",
           "gps-monster-features",
           "gps-generic-features",
+          "gps-race-features",
           "gps-homebrew-features",
           "gps-homebrew-items",
           "gps-homebrew-spells",

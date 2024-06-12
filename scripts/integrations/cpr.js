@@ -15,7 +15,8 @@ async function loadCompendiumData() {
         'gambits-premades.gps-monster-features',
         'gambits-premades.gps-3rd-party-items',
         'gambits-premades.gps-3rd-party-features',
-        'gambits-premades.gps-3rd-party-spells'
+        'gambits-premades.gps-3rd-party-spells',
+        'gambits-premades.gps-race-features'
     ];
 
     for (const name of compendiumNames) {
