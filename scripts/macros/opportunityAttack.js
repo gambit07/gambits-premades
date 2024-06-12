@@ -255,7 +255,7 @@ export async function showOpportunityAttackDialog({dialogTitle,effectOriginToken
         }
 
         // Check if the token has cast Kinetic Jaunt, Zephyr Strike, or the generic immunity effect has been applied
-        const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Opportunity Attack Immunity"];
+        const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Rabbit Hop", "Opportunity Attack Immunity"];
         let hasEffectToken = (gameVersion >= 3 ? token.actor.appliedEffects : token.actor.effects)
             .some(effect => effectNamesToken.includes(effect.name));
         if(hasEffectToken) return resolve({ userDecision: false, programmaticallyClosed: false, source, type});
