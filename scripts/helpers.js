@@ -364,77 +364,123 @@ export async function process3rdPartyReactionDialog({dialogTitle,dialogContent,d
 
 export async function moveTokenByOriginPoint({ originX, originY, target, distance }) {
 
-    if(!target) return console.log("No valid target to move");
+    if (!target) return console.log("No valid target to move");
     if (!distance || isNaN(distance)) return console.log("No valid distance to move");
-    if(!originX || !originY) return console.log("No valid origin x/y coordinate given, for a token object this value should be token.center.x/token.center.y")
-    
+    if (!originX || !originY) return console.log("No valid origin x/y coordinate given, for a token object this value should be token.center.x/token.center.y");
+
     const gridDistance = canvas.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
-    
     const moveDistancePixels = distance * pixelsPerFoot;
-    
+
     let vectorX = target.center.x - originX;
     let vectorY = target.center.y - originY;
-    
-    let magnitude = Math.hypot(vectorX, vectorY);
+    let magnitude;
+
+    const diagonalMovement = game.settings.get("dnd5e", "diagonalMovement");
+
+    switch (diagonalMovement) {
+        case "555":
+            magnitude = Math.max(Math.abs(vectorX), Math.abs(vectorY));
+            break;
+        case "5105":
+            let steps = 0;
+            let dx = Math.abs(vectorX);
+            let dy = Math.abs(vectorY);
+        
+            while (dx > 0 || dy > 0) {
+                if (dx > 0 && dy > 0) {
+                    steps += (steps % 2 === 0) ? 1 : 2;
+                    dx -= 1;
+                    dy -= 1;
+                } else if (dx > 0) {
+                    steps += 1;
+                    dx -= 1;
+                } else if (dy > 0) {
+                    steps += 1;
+                    dy -= 1;
+                }
+            }
+            magnitude = steps;
+            break;
+        case "EUCL":
+        default:
+            magnitude = Math.hypot(vectorX, vectorY);
+            break;
+    }
+
     vectorX /= magnitude;
     vectorY /= magnitude;
-    
+
     let moveX = vectorX * moveDistancePixels;
     let moveY = vectorY * moveDistancePixels;
-    const newX = target.x + moveX;
-    const newY = target.y + moveY;
-    
+    let newX = target.x + moveX;
+    let newY = target.y + moveY;
+
+    if (canvas.scene.grid.type === 1) {
+        const snapped = canvas.grid.getSnappedPosition(newX, newY, canvas.scene.grid.type);
+        newX = snapped.x;
+        newY = snapped.y;
+    }
+
     let endPoint = new PIXI.Point(newX, newY);
     let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, endPoint, { type: "move", mode: "any" });
-    
+
     if (!collisionDetected) {
         await target.document.update({ x: newX, y: newY });
     } else {
         let stepDistance = canvas.scene.grid.size / 10;
         let totalSteps = moveDistancePixels / stepDistance;
         let stepCounter = 0;
-    
+
         for (let step = 1; step <= totalSteps; step++) {
             let nextX = target.x + vectorX * stepDistance * step;
             let nextY = target.y + vectorY * stepDistance * step;
+            if (canvas.scene.grid.type === 1) {
+                const snapped = canvas.grid.getSnappedPosition(nextX, nextY, canvas.scene.grid.type);
+                nextX = snapped.x;
+                nextY = snapped.y;
+            }
             let nextPoint = new PIXI.Point(nextX, nextY);
-    
+
             collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, nextPoint, { type: "move", mode: "any" });
-    
+
             if (collisionDetected) {
                 break;
             }
             stepCounter = step;
         }
-    
+
         let finalX = target.x + vectorX * stepDistance * stepCounter;
         let finalY = target.y + vectorY * stepDistance * stepCounter;
-    
+
         if (stepCounter > 0) {
+            if (canvas.scene.grid.type === 1) {
+                const snapped = canvas.grid.getSnappedPosition(finalX, finalY, canvas.scene.grid.type);
+                finalX = snapped.x;
+                finalY = snapped.y;
+            }
             await target.document.update({ x: finalX, y: finalY });
         }
     }
 }
 
 export async function moveTokenByCardinal({ target, distance, direction }) {
-    
     const directions = ["North", "South", "East", "West", "Northwest", "Northeast", "Southwest", "Southeast"];
 
-    if(!target) return console.log("No valid target to move");
-    if(!distance || isNaN(distance)) return console.log("No valid distance to move");
+    if (!target) return console.log("No valid target to move");
+    if (!distance || isNaN(distance)) return console.log("No valid distance to move");
     if (!directions.includes(direction)) return console.log("No valid direction to move (Valid Options: 'North', 'South', 'East', 'West', 'Northwest', 'Northeast', 'Southwest', 'Southeast')");
-    
+
     const gridDistance = canvas.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
-    
     const moveDistancePixels = distance * pixelsPerFoot;
-    const diagonalMultiplier = Math.SQRT2;
-    
+
+    const diagonalMovement = game.settings.get("dnd5e", "diagonalMovement");
+
     let moveX = 0;
     let moveY = 0;
-    
-    switch(direction) {
+
+    switch (direction) {
         case "North":
             moveY = -moveDistancePixels;
             break;
@@ -448,29 +494,50 @@ export async function moveTokenByCardinal({ target, distance, direction }) {
             moveX = -moveDistancePixels;
             break;
         case "Northwest":
-            moveX = -moveDistancePixels / diagonalMultiplier;
-            moveY = -moveDistancePixels / diagonalMultiplier;
-            break;
         case "Northeast":
-            moveX = moveDistancePixels / diagonalMultiplier;
-            moveY = -moveDistancePixels / diagonalMultiplier;
-            break;
         case "Southwest":
-            moveX = -moveDistancePixels / diagonalMultiplier;
-            moveY = moveDistancePixels / diagonalMultiplier;
-            break;
         case "Southeast":
-            moveX = moveDistancePixels / diagonalMultiplier;
-            moveY = moveDistancePixels / diagonalMultiplier;
+            let dx = 1;
+            let dy = 1;
+
+            if (direction.includes("North")) dy = -1;
+            if (direction.includes("South")) dy = 1;
+            if (direction.includes("East")) dx = 1;
+            if (direction.includes("West")) dx = -1;
+
+            switch (diagonalMovement) {
+                case "555":
+                    moveX = moveDistancePixels * dx;
+                    moveY = moveDistancePixels * dy;
+                    break;
+                case "5105":
+                    const diagonalSteps = Math.min(Math.abs(dx), Math.abs(dy));
+                    const straightSteps = Math.abs(dx - dy);
+                    const magnitude = diagonalSteps * 1.5 + straightSteps;
+                    moveX = (moveDistancePixels / magnitude) * dx;
+                    moveY = (moveDistancePixels / magnitude) * dy;
+                    break;
+                case "EUCL":
+                default:
+                    moveX = (moveDistancePixels / Math.SQRT2) * dx;
+                    moveY = (moveDistancePixels / Math.SQRT2) * dy;
+                    break;
+            }
             break;
     }
-    
-    const newX = target.x + moveX;
-    const newY = target.y + moveY;
-    
+
+    let newX = target.x + moveX;
+    let newY = target.y + moveY;
+
+    if (canvas.scene.grid.type === 1) {
+        const snapped = canvas.grid.getSnappedPosition(newX, newY, canvas.scene.grid.type);
+        newX = snapped.x;
+        newY = snapped.y;
+    }
+
     let endPoint = new PIXI.Point(newX, newY);
-    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, endPoint, {type:"move", mode:"any"});
-    
+    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, endPoint, { type: "move", mode: "any" });
+
     if (!collisionDetected) {
         await target.document.update({ x: newX, y: newY });
     } else {
@@ -478,28 +545,37 @@ export async function moveTokenByCardinal({ target, distance, direction }) {
         let magnitude = Math.hypot(directionVector.x, directionVector.y);
         directionVector.x /= magnitude;
         directionVector.y /= magnitude;
-        
+
         let totalSteps = moveDistancePixels / (canvas.scene.grid.size / 10);
-        let collisionDetected = false;
         let stepCounter = 0;
-        
+
         for (let step = 1; step <= totalSteps; step++) {
             let nextX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * step;
             let nextY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * step;
+            if (canvas.scene.grid.type === 1) {
+                const snapped = canvas.grid.getSnappedPosition(nextX, nextY, canvas.scene.grid.type);
+                nextX = snapped.x;
+                nextY = snapped.y;
+            }
             let nextPoint = new PIXI.Point(nextX, nextY);
-            
-            collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, nextPoint, {type:"move", mode:"any"});
-            
+
+            collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, nextPoint, { type: "move", mode: "any" });
+
             if (collisionDetected) {
                 break;
             }
             stepCounter = step;
         }
-        
+
         let finalX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * stepCounter;
         let finalY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * stepCounter;
-        
+
         if (stepCounter > 0) {
+            if (canvas.scene.grid.type === 1) {
+                const snapped = canvas.grid.getSnappedPosition(finalX, finalY, canvas.scene.grid.type);
+                finalX = snapped.x;
+                finalY = snapped.y;
+            }
             await target.document.update({ x: finalX, y: finalY });
         }
     }
