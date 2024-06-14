@@ -18,11 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Rabbit Hop: Added the Rabbit Hop Harengon racial feature. This will prevent opportunity attacks when used with my automation, and will prevent use if the user has movement restricted." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Enervation: Simplified implementation and fixed per round damage not applying." >> release_notes.txt
-          echo "  - Witches Hex: Tweaked dialog to make reaction clearer." >> release_notes.txt
+          echo "- General:" >> release_notes.txt
+          echo "  - Movement Helpers: Enhanced moveTokenByOriginPoint and moveTokenByCardinal to account for gridded vs gridless and 555/5105/Euclidean grid types" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
