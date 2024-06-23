@@ -13,7 +13,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
     if (!game.combat) return;
 
     // Check if there is a save success
-    if(workflowType === "save" && workflow.failedSaves.size === 0) return;
+    if(workflowType === "save" && ((workflow.failedSaves.size === 0 && workflow.saves.size === 0) || workflow.failedSaves.size === 0)) return;
     // Check if Opportunity Attack is initiating the workflow
     if(workflow.item.name === "Opportunity Attack") return;
 

@@ -18,8 +18,12 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Movement Helpers: Enhanced moveTokenByOriginPoint and moveTokenByCardinal to account for gridded vs gridless and 555/5105/Euclidean grid types" >> release_notes.txt
+          echo "- General: This will likely be my last release for V11. V12 support will be added, and it will not be backwards compatible with V11." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Nova: Fixed a couple small things" >> release_notes.txt
+          echo "  - Hideous Laughter: Fixed an issue with an incorrect origin" >> release_notes.txt
+          echo "  - Hunters Sense: Fixed an issue with the chat output" >> release_notes.txt
+          echo "  - Indomitable: Potential fix for CPRs trip attack triggering this workflow" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
