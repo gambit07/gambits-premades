@@ -98,6 +98,7 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
+        if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
@@ -105,11 +106,13 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.preAttackRoll", async (workflow) => {
+        if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.protectionEnabled && !game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
+        if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.protectionEnabled && game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
@@ -118,12 +121,14 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
+        if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.riposteEnabled) await executeWorkflow({ workflowItem: "riposte", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
+        if(!workflow.item.hasSave) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.indomitableEnabled) await executeWorkflow({ workflowItem: "indomitable", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
@@ -131,6 +136,7 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
+        if(!workflow.item.hasSave) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
@@ -143,6 +149,7 @@ Hooks.once('ready', async function() {
       });
 
     Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
+        if(!workflow.item.hasDamage) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
         if (game.gpsSettings.interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
