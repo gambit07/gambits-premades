@@ -45,7 +45,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
             let result;
 
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showSentinelDialog", browserUser.id, {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: workflow, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "user", type: "multiDialog"});
+                let userDialogPromise = socket.executeAsUser("showSentinelDialog", browserUser.id, {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "user", type: "multiDialog"});
                 
                 let gmDialogPromise = socket.executeAsGM("showSentinelDialog", {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
             
