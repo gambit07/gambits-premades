@@ -1,33 +1,99 @@
-import { counterspell, showCounterspellDialog } from './macros/counterspell.js';
-import { silveryBarbs, showSilveryBarbsDialog } from './macros/silveryBarbs.js';
-import { cuttingWords, showCuttingWordsDialog } from './macros/cuttingWords.js';
-import { interception, showInterceptionDialog } from './macros/interception.js';
-import { poetryInMisery, showPoetryInMiseryDialog } from './macros/poetryInMisery.js';
-import { protection, showProtectionDialog } from './macros/protection.js';
-import { indomitable, showIndomitableDialog } from './macros/indomitable.js';
-import { sentinel, showSentinelDialog } from './macros/sentinel.js';
-import { riposte, showRiposteDialog } from './macros/riposte.js';
-import { witchesHex, showWitchesHexDialog } from './macros/witchesHex.js';
-import { powerWordRebound, showPowerWordReboundDialog } from './macros/powerWordRebound.js';
-import { cloudRune, showCloudRuneDialog } from './macros/cloudRune.js';
-import { enableOpportunityAttack, disableOpportunityAttack, showOpportunityAttackDialog } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint } from './helpers.js';
+import { counterspell } from './macros/counterspell.js';
+import { silveryBarbs } from './macros/silveryBarbs.js';
+import { cuttingWords } from './macros/cuttingWords.js';
+import { interception } from './macros/interception.js';
+import { poetryInMisery } from './macros/poetryInMisery.js';
+import { protection } from './macros/protection.js';
+import { indomitable } from './macros/indomitable.js';
+import { sentinel } from './macros/sentinel.js';
+import { riposte } from './macros/riposte.js';
+import { witchesHex } from './macros/witchesHex.js';
+import { powerWordRebound } from './macros/powerWordRebound.js';
+import { cloudRune } from './macros/cloudRune.js';
+import { blackTentacles } from './macros/blackTentacles.js';
+import { cloudOfDaggers } from './macros/cloudOfDaggers.js';
+import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
     registerSettings();
     game.gpsSettings = game.gpsSettings || {};
     await updateSettings();
+
+    libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
+        const [region, position] = args;
+        if (!this || !this.document) {
+            return false;
+        }
+        
+        const pointsToTest = [];
+        const size = canvas.dimensions.size;
+        const width = this.document.width;
+        const height = this.document.height;
+
+        const points = [
+            { x: this.document.x, y: this.document.y, elevation: this.document.elevation },
+            { x: this.document.x + (width * size), y: this.document.y, elevation: this.document.elevation },
+            { x: this.document.x, y: this.document.y + (height * size), elevation: this.document.elevation },
+            { x: this.document.x + (width * size), y: this.document.y + (height * size), elevation: this.document.elevation },
+            { x: this.document.x + (width * size / 2), y: this.document.y, elevation: this.document.elevation },
+            { x: this.document.x + (width * size / 2), y: this.document.y + (height * size), elevation: this.document.elevation },
+            { x: this.document.x, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
+            { x: this.document.x + (width * size), y: this.document.y + (height * size / 2), elevation: this.document.elevation },
+            { x: this.document.x + (width * size / 2), y: this.document.y + (height * size / 2), elevation: this.document.elevation }
+        ];
+
+        points.forEach(point => {
+            pointsToTest.push(point);
+        });
+
+        const testResults = pointsToTest.map(point => {
+            const result = region.testPoint(point, position?.elevation ?? this.document.elevation);
+            return result;
+        });
+
+        const isInside = testResults.some(x => x);
+        return isInside;
+    }, 'MIXED');
+
+    libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
+        const [region, waypoints, options] = args;
+        if (!this || !this.document) {
+            return [];
+        }
+    
+        const { teleport = false } = options || {};
+        const samples = [];
+        const size = canvas.dimensions.size;
+        const width = this.document.width;
+        const height = this.document.height;
+    
+        const points = [
+            { x: 0, y: 0 },
+            { x: width * size, y: 0 },
+            { x: 0, y: height * size },
+            { x: width * size, y: height * size },
+            { x: width * size / 2, y: 0 },
+            { x: width * size / 2, y: height * size },
+            { x: 0, y: height * size / 2 },
+            { x: width * size, y: height * size / 2 }
+        ];
+    
+        points.forEach(point => {
+            samples.push(point);
+        });
+    
+        const segments = region.segmentizeMovement(waypoints, samples, { teleport });
+        return segments;
+    }, 'MIXED');
 });
 
 Hooks.once('socketlib.ready', async function() {
     socket = socketlib.registerModule('gambits-premades');
     socket.register("counterspell", counterspell);
-    socket.register("showCounterspellDialog", showCounterspellDialog);
     socket.register("silveryBarbs", silveryBarbs);
-    socket.register("showSilveryBarbsDialog", showSilveryBarbsDialog);
     socket.register("cuttingWords", cuttingWords);
-    socket.register("showCuttingWordsDialog", showCuttingWordsDialog);
     socket.register("deleteChatMessage", deleteChatMessage);
     socket.register("closeDialogById", closeDialogById);
     socket.register("handleDialogPromises", handleDialogPromises);
@@ -37,31 +103,27 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("gmUpdateTemplateSize", gmUpdateTemplateSize);
     socket.register("findValidTokens", findValidTokens);
     socket.register("interception", interception);
-    socket.register("showInterceptionDialog", showInterceptionDialog);
     socket.register("poetryInMisery", poetryInMisery);
-    socket.register("showPoetryInMiseryDialog", showPoetryInMiseryDialog);
     socket.register("enableOpportunityAttack", enableOpportunityAttack);
     socket.register("disableOpportunityAttack", disableOpportunityAttack);
     socket.register("protection", protection);
-    socket.register("showProtectionDialog", showProtectionDialog);
     socket.register("indomitable", indomitable);
-    socket.register("showIndomitableDialog", showIndomitableDialog);
     socket.register("sentinel", sentinel);
-    socket.register("showSentinelDialog", showSentinelDialog);
     socket.register("pauseDialogById", pauseDialogById);
     socket.register("riposte", riposte);
-    socket.register("showRiposteDialog", showRiposteDialog);
     socket.register("witchesHex", witchesHex);
-    socket.register("showWitchesHexDialog", showWitchesHexDialog);
     socket.register("freeSpellUse", freeSpellUse);
-    socket.register("showOpportunityAttackDialog", showOpportunityAttackDialog);
     socket.register("powerWordRebound", powerWordRebound);
-    socket.register("showPowerWordReboundDialog", showPowerWordReboundDialog);
     socket.register("cloudRune", cloudRune);
-    socket.register("showCloudRuneDialog", showCloudRuneDialog);
     socket.register("process3rdPartyReactionDialog", process3rdPartyReactionDialog);
     socket.register("moveTokenByCardinal", moveTokenByCardinal);
     socket.register("moveTokenByOriginPoint", moveTokenByOriginPoint);
+    socket.register("opportunityAttackScenarios", opportunityAttackScenarios);
+	socket.register("addReaction", addReaction);
+    socket.register("blackTentacles", blackTentacles);
+    socket.register("cloudOfDaggers", cloudOfDaggers);
+    socket.register("gmUpdateDisposition", gmUpdateDisposition);
+    socket.register("gmToggleStatus", gmToggleStatus);
 })
 
 Hooks.once('ready', async function() {
@@ -76,8 +138,11 @@ Hooks.once('ready', async function() {
         convertFromFeet,
         gmUpdateTemplateSize,
         freeSpellUse,
-        showOpportunityAttackDialog,
         process3rdPartyReactionDialog,
+        opportunityAttackScenarios,
+        addReaction,
+        blackTentacles,
+        cloudOfDaggers,
         socket
     };
 
@@ -98,6 +163,7 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
+        if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
@@ -105,11 +171,13 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.preAttackRoll", async (workflow) => {
+        if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.protectionEnabled && !game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
+        if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.protectionEnabled && game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
@@ -118,12 +186,14 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
+        if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.riposteEnabled) await executeWorkflow({ workflowItem: "riposte", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
+        if(!workflow.item.hasSave) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.indomitableEnabled) await executeWorkflow({ workflowItem: "indomitable", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
@@ -131,6 +201,7 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
+        if(!workflow.item.hasSave) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
@@ -143,6 +214,7 @@ Hooks.once('ready', async function() {
       });
 
     Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
+        if(!workflow.item.hasDamage) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
         if (game.gpsSettings.interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
@@ -233,17 +305,32 @@ async function updateSettings(settingKey = null) {
     if (settingKey === null || settingKey === 'gambits-premades.Enable Witches Hex') {
         game.gpsSettings.enableWitchesHex = game.settings.get('gambits-premades', 'Enable Witches Hex');
     }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Identify Restrictions') {
-        game.gpsSettings.identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.hideTemplates') {
-        game.gpsSettings.hideTemplates = game.settings.get('gambits-premades', 'hideTemplates');
-    }
     if (settingKey === null || settingKey === 'gambits-premades.Enable Power Word Rebound') {
         game.gpsSettings.powerWordReboundEnabled = game.settings.get('gambits-premades', 'Enable Power Word Rebound');
     }
     if (settingKey === null || settingKey === 'gambits-premades.Enable Cloud Rune') {
         game.gpsSettings.cloudRuneEnabled = game.settings.get('gambits-premades', 'Enable Cloud Rune');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Mirror 3rd Party Dialog for GMs') {
+        game.gpsSettings.enableMirrorDialog = game.settings.get('gambits-premades', 'Mirror 3rd Party Dialog for GMs');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.enable3prNoCombat') {
+        game.gpsSettings.enable3prNoCombat = game.settings.get('gambits-premades', 'enable3prNoCombat');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.enableTimerFullAnim') {
+        game.gpsSettings.enableTimerFullAnim = game.settings.get('gambits-premades', 'enableTimerFullAnim');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.hideTemplates') {
+        game.gpsSettings.hideTemplates = game.settings.get('gambits-premades', 'hideTemplates');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.debugEnabled') {
+        game.gpsSettings.debugEnabled = game.settings.get('gambits-premades', 'debugEnabled');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Enable Identify Restrictions') {
+        game.gpsSettings.enableIdentifyRestrictions = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.Identify Restriction Message') {
+        game.gpsSettings.identifyRestrictionMessage = game.settings.get('gambits-premades', 'Identify Restriction Message');
     }
 }
 
@@ -282,14 +369,14 @@ function hideTemplateElements(template) {
 // Make sure we re-apply invisibility, may need more stuff here?
 function setupTemplateVisibilityHook() {
   Hooks.on('refreshMeasuredTemplate', (template) => {
-    if ((template.document.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
+    if (game.gpsSettings.hideTemplates || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
       hideTemplateElements(template);
     }
   });
 
   canvas.templates.placeables.forEach(template => {
     if(!game.user.isGM) return;
-    if ((template.document.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
+    if (game.gpsSettings.hideTemplates || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
       hideTemplateElements(template);
     }
   });
@@ -299,35 +386,85 @@ function setupTemplateVisibilityHook() {
 function setupTemplateCreationUpdateHooks() {
     Hooks.on('createMeasuredTemplate', (templateDocument) => {
         const template = canvas.templates.get(templateDocument.id);
-        if (template && (templateDocument.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || templateDocument.getFlag('gambits-premades', 'templateHiddenOA')) {
+        if (template && (game.gpsSettings.hideTemplates || templateDocument.getFlag('gambits-premades', 'templateHiddenOA'))) {
         hideTemplateElements(template);
         }
     });
 
     Hooks.on('updateMeasuredTemplate', (templateDocument) => {
         const template = canvas.templates.get(templateDocument.id);
-        if (template && (templateDocument.getFlag('gambits-premades', 'templateHidden') && game.gpsSettings.hideTemplates) || templateDocument.getFlag('gambits-premades', 'templateHiddenOA')) {
+        if (template && (game.gpsSettings.hideTemplates || templateDocument.getFlag('gambits-premades', 'templateHiddenOA'))) {
         hideTemplateElements(template);
         }
     });
     }
 
-    function updateTemplatePosition(tokenDocument) {
-        if(!game.user.isGM) return;
-        const template = fromUuidSync(tokenDocument.actor.getFlag('gambits-premades', 'templateAttachedToken'));
-        if (!template || !tokenDocument) return;
-        template.update({
-            x: tokenDocument.object.center.x,
-            y: tokenDocument.object.center.y
-        });
+// Handle OA Movement Stuff
+async function updateRegionPosition(tokenDocument) {
+    if (!game.user.isGM) return;
+
+    const region = fromUuidSync(tokenDocument.actor.getFlag('gambits-premades', 'templateAttachedToken'));
+    if (!region || !tokenDocument) return;
+    let oaDisabled = region.getFlag("gambits-premades", "opportunityAttackDisabled");
+    if(!oaDisabled) region.setFlag("gambits-premades", "opportunityAttackDisabled", true)
+
+    let previousX1 = tokenDocument.object.center.x;
+    let previousY1 = tokenDocument.object.center.y;
+    let previousX2, previousY2;
+
+    const checkPosition = () => {
+        const currentX = tokenDocument.object.center.x;
+        const currentY = tokenDocument.object.center.y;
+
+        if (currentX !== previousX1 || currentY !== previousY1) {
+            previousX2 = previousX1;
+            previousY2 = previousY1;
+            previousX1 = currentX;
+            previousY1 = currentY;
+
+            setTimeout(checkPosition, 25);
+        } else if (previousX1 === previousX2 && previousY1 === previousY2) {
+            region.update({
+                shapes: region.shapes.map(shape => ({
+                    ...shape,
+                    x: currentX,
+                    y: currentY
+                }))
+            });
+            if(!oaDisabled) region.unsetFlag("gambits-premades", "opportunityAttackDisabled")
+            
+            return;
+        } else {
+            previousX2 = previousX1;
+            previousY2 = previousY1;
+            setTimeout(checkPosition, 100);
+        }
+    };
+
+    // Start the initial check
+    checkPosition();
 }
 
+Hooks.on('updateToken', async (tokenDocument, updateData, options, userId) => {
+    if (!game.combat) return;
+    if (!game.user.isGM) return;
 
-Hooks.on('updateToken', (tokenDocument, updateData, options, userId) => {
-    if(!game.combat) return;
-    if(!game.user.isGM) return;
     const tokenId = tokenDocument.actor.getFlag('gambits-premades', 'tokenAttachedTemplate');
     if (tokenId && tokenDocument.id === tokenId) {
-        updateTemplatePosition(tokenDocument);
+        await updateRegionPosition(tokenDocument);
     }
 });
+
+//Handle lack of dfreds effects with midi native reaction handling
+Hooks.on('deleteActiveEffect', async (activeEffect, options, userId) => {
+	if (activeEffect.name === "Reaction") {
+		const actor = activeEffect.parent;
+
+		const hasEffectApplied = MidiQOL.hasUsedReaction(actor);
+		if (hasEffectApplied) {
+			await actor?.unsetFlag("midi-qol", "actions.reactionCombatRound");
+			return actor?.setFlag("midi-qol", "actions.reaction", false);
+		}
+	}
+	return;
+  });

@@ -3,7 +3,7 @@ function registerSettings() {
         name: "Mirror 3rd Party Dialog for GMs",
         hint: "If enabled, 3rd party dialog's will be sent to the GM as well as the player. Either party can interact with the dialog to use/dismiss/pause it.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -330,7 +330,7 @@ function registerSettings() {
         name: "Enable Identify Restrictions",
         hint: "If enabled, this will prevent player characters from Identifying unidentified items except through the use of my Identify spell automation.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -339,16 +339,34 @@ function registerSettings() {
         name: "Identify Restriction Message",
         hint: "This is the message that will display to users if they are restricted.",
         scope: 'world',
-        config: true,
+        config: false,
         type: String,
         default: "Nice try, DENIED ;)"
+    });
+
+    game.settings.register('gambits-premades', 'enableTimerFullAnim', {
+        name: "Enable Timer Full Bar Animation",
+        hint: "If enabled, this will cause the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
+    });
+
+    game.settings.register('gambits-premades', 'enable3prNoCombat', {
+        name: "Enable 3rd Party Reactions Outside Combat",
+        hint: "If enabled, this will allow 3rd party reactions to function while combat is not active.",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: false
     });
 
     game.settings.register('gambits-premades', 'hideTemplates', {
         name: "Hide Templates",
         hint: "This option is always enabled for Opportunity Attacks. If this setting is enabled, it will fully hide templates for other automations that use templates in my module. It will NOT hide templates for automations or templates created outside of my module.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -357,7 +375,7 @@ function registerSettings() {
         name: "Enable Debug",
         hint: "If enabled, this will output console logs for the reaction validation process for troubleshooting.",
         scope: 'world',
-        config: true,
+        config: false,
         type: Boolean,
         default: false
     });
@@ -448,10 +466,21 @@ function registerSettings() {
         type: Boolean
     });
 
+    game.settings.registerMenu('gambits-premades', 'generalSettings', {
+        name: game.i18n.localize("General Settings"),
+        label: game.i18n.localize("General Settings"),
+        hint: game.i18n.localize("Mirror Dialog, Identify Restriction, etc"),
+        icon: 'fas fa-cogs',
+        scope: 'world',
+        config: true,
+        type: generalSettingsMenu,
+        restricted: true
+    });
+
     game.settings.registerMenu('gambits-premades', 'spells', {
         name: game.i18n.localize("Spells"),
         label: game.i18n.localize("Enable Spells"),
-        hint: game.i18n.localize("Counterspell, Silvery Barbs"),
+        hint: game.i18n.localize("Counterspell, Silvery Barbs, etc"),
         icon: 'fas fa-magic',
         scope: 'world',
         config: true,
@@ -462,7 +491,7 @@ function registerSettings() {
     game.settings.registerMenu('gambits-premades', 'classFeatures', {
         name: game.i18n.localize("Class Features"),
         label: game.i18n.localize("Enable Class Features"),
-        hint: game.i18n.localize("Cutting Words, Interception, Poetry in Misery"),
+        hint: game.i18n.localize("Cutting Words, Interception, Poetry in Misery, etc"),
         icon: 'fas fa-book',
         scope: 'world',
         config: true,
@@ -473,7 +502,7 @@ function registerSettings() {
     game.settings.registerMenu('gambits-premades', 'genericFeatures', {
         name: game.i18n.localize("Generic Features"),
         label: game.i18n.localize("Enable Generic Features"),
-        hint: game.i18n.localize("Opportunity Attack"),
+        hint: game.i18n.localize("Opportunity Attack, Sentinel, etc"),
         icon: 'fas fa-globe',
         scope: 'world',
         config: true,
@@ -484,7 +513,7 @@ function registerSettings() {
 
 class BaseSettingsMenu extends FormApplication {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["gambits-premades", "settings-window"],
             width: 700,
             closeOnSubmit: true
@@ -616,7 +645,7 @@ class BaseSettingsMenu extends FormApplication {
 
 class classFeaturesSettingsMenu extends BaseSettingsMenu {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             id: "classFeaturesSettingsMenu",
             title: "Enable Class Features",
             template: "modules/gambits-premades/templates/classFeaturesSettingsMenu.html",
@@ -678,7 +707,7 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
 
 class genericFeatureSettingsMenu extends BaseSettingsMenu {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             id: "genericFeatureSettingsMenu",
             title: "Enable Generic Features",
             template: "modules/gambits-premades/templates/genericFeatureSettingsMenu.html",
@@ -710,7 +739,7 @@ class genericFeatureSettingsMenu extends BaseSettingsMenu {
 
 class spellSettingsMenu extends BaseSettingsMenu {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             id: "spellSettingsMenu",
             title: "Enable Spells",
             template: "modules/gambits-premades/templates/spellSettingsMenu.html",
@@ -741,5 +770,37 @@ class spellSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "enableSilveryBarbsOnNat20", formData.enableSilveryBarbsOnNat20);
         await game.settings.set("gambits-premades", "Enable Power Word Rebound", formData.enablePowerWordRebound);
         await game.settings.set("gambits-premades", "Power Word Rebound Timeout", formData.powerWordReboundTimeout);
+    }
+}
+
+class generalSettingsMenu extends BaseSettingsMenu {
+    static get defaultOptions() {
+        return foundry.utils.mergeObject(super.defaultOptions, {
+            id: "generalSettingsMenu",
+            title: "General Settings",
+            template: "modules/gambits-premades/templates/generalSettingsMenu.html",
+        });
+    }
+
+    getData() {
+        return {
+            enableMirrorDialog: game.settings.get("gambits-premades", "Mirror 3rd Party Dialog for GMs"),
+            enable3prNoCombat: game.settings.get("gambits-premades", "enable3prNoCombat"),
+            enableTimerFullAnim: game.settings.get("gambits-premades", "enableTimerFullAnim"),
+            hideTemplates: game.settings.get("gambits-premades", "hideTemplates"),
+            debugEnabled: game.settings.get("gambits-premades", "debugEnabled"),
+            enableIdentifyRestrictions: game.settings.get("gambits-premades", "Enable Identify Restrictions"),
+            identifyRestrictionMessage: game.settings.get("gambits-premades", "Identify Restriction Message")
+        };
+    }
+
+    async _updateObject(event, formData) {
+        await game.settings.set("gambits-premades", "Mirror 3rd Party Dialog for GMs", formData.enableMirrorDialog);
+        await game.settings.set("gambits-premades", "enable3prNoCombat", formData.enable3prNoCombat);
+        await game.settings.set("gambits-premades", "enableTimerFullAnim", formData.enableTimerFullAnim);
+        await game.settings.set("gambits-premades", "hideTemplates", formData.hideTemplates);
+        await game.settings.set("gambits-premades", "debugEnabled", formData.debugEnabled);
+        await game.settings.set("gambits-premades", "Enable Identify Restrictions", formData.enableIdentifyRestrictions);
+        await game.settings.set("gambits-premades", "Identify Restriction Message", formData.identifyRestrictionMessage);
     }
 }

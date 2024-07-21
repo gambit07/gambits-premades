@@ -18,8 +18,18 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "**A ton of work when into this update. If you use my module and are able to donate, it is much appreciated!**" >> release_notes.txt
+          echo "**There were far too many changes to give a comprehensive list here, almost every single automation was touched in some way with many requiring extensive reworks, this will be a general overview. There are a handful of official 5e automations that do not work currently awaiting a Midi or Sequencer update: Stroke of Luck, Scatter, Armor of Hexes. If you find a bug, please post it to the relevant discord Automations thread or Github. This release should be compatible with the newly released 5e 3.3, but has not been thoroughly tested.**" >> release_notes.txt
           echo "- General:" >> release_notes.txt
-          echo "  - Movement Helpers: Enhanced moveTokenByOriginPoint and moveTokenByCardinal to account for gridded vs gridless and 555/5105/Euclidean grid types" >> release_notes.txt
+          echo "  - Dependencies: Removed dependencies for Warpgate, Dfreds Convenient Effects, Template Macro, Effect Macro, Token Attacher, and Walled Templates. Added dependencies for Bugbears Scripts and Region Attacher." >> release_notes.txt
+          echo "  - Automations: Almost every single automation was touched in this rework to some extent. This includes modifications for general support of v12, bugfixes, as well as enhancements to general functionality and in some cases animations. Each official 5e automation was individually tested to try and make this as painless a transition as possible. 3rd party and homebrew automations were not tested as thoroughly, and some are still in progress." >> release_notes.txt
+          echo "  - Dialogs: Any non system/midi dialog (ie core GPS dialog) was updated to use GPS core dialog functionality and design language based on Foundrys Dialog V2 framework. The dialogs have also all had a design pass to give a consistent and more professional layout across the board. There are a few homebrew dialogs still awaiting an update" >> release_notes.txt
+          echo "  - System Functionality: Thanks to help from Michael, GPS is modifying cores region token testing via libWrapper. With GPS installed, regions will test the edge of a token along with its center point to better align with 5e rules. Native Foundry v12 regions only test a tokens center point. This will be removed if/when the 5e system adapts this change." >> release_notes.txt
+          echo "  - Settings Menu: Consolidated the remaining general settings into a General Settings button menu. Added settings for GPS dialog countdown animation type (border vs full bar) and option to allow 3rd party reactions outside of combat. Modified Template Hiding to be a global setting to hide any placed template, note this is not required for Opportunity Attack since it is now region based." >> release_notes.txt
+          echo "  - Templates: Any template automation in my module has been converted to use a Region for the automation logic. User placement still occurs via a template with Michaels helpful Region Attacher module, say thanks to Michael!" >> release_notes.txt
+          echo "  - Status Effect Application: All status application has been converted to use core which allows toggling of effects from an actor sheet like core natively allows. Midi relevant flags for statuses are maintained via Bugbears Scripts, say thanks to Bugbear! When dfreds ce releases I will probably drop the hard dependency on Bugbears Scripts and have Bugbears Scripts and Dfreds CE as Recommended Modules." >> release_notes.txt
+          echo "  - Opportunity Attack: Large re-work to use v12s core regions in place of templates. Added token movement prevention for Sentinel attacks" >> release_notes.txt
+          echo "  - Added Zephyr Strike." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -64,9 +74,9 @@ jobs:
               "manifest": "'"https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"'",
               "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
               "compatibility": {
-                "minimum": "'"11"'",
-                "verified": "'"11"'",
-                "maximum": "'"11"'"
+                "minimum": "'"12"'",
+                "verified": "'"12"'",
+                "maximum": "'"12"'"
               }
             }
           }'

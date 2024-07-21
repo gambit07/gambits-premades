@@ -1,3 +1,4 @@
+//done
 export async function powerWordRebound({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
@@ -20,189 +21,115 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-
-        let actorUuidPrimary = validTokenPrimary.actor.uuid;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let originTokenUuidPrimary = workflow.token.document.uuid;
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) {
             browserUser = game.users?.activeGM;
         }
 
-        if(workflowType === "attack") {
-            let result;
 
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showPowerWordReboundDialog", browserUser.id, {targetUuids: target.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, initiatingTokenUuid: workflow.token.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: workflow, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "user", type: "multiDialog"});
-                
-                let gmDialogPromise = socket.executeAsGM("showPowerWordReboundDialog", {targetUuids: target.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, initiatingTokenUuid: workflow.token.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
-            
-                result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
-             } else {
-                result = await socket.executeAsUser("showPowerWordReboundDialog", browserUser.id, {targetUuids: target.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, initiatingTokenUuid: workflow.token.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, rollTotals: null, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
-             }
-                 
-             const { userDecision, source, type } = result;
-
-             if (userDecision === false || !userDecision) {
-                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
-                continue;
-            }
-            if (userDecision === true) {
-                let rerollNew = await new Roll(`${workflow.attackRoll.result}`).roll({async: true});
-                let newItemData = workflow.item;
-
-                newItemData.prepareData();
-                newItemData.prepareFinalAttributes();
-
-                const options = {
-                    showFullCard: false,
-                    createWorkflow: true,
-                    versatile: false,
-                    configureDialog: true,
-                    targetUuids: [workflow.token.document.uuid],
-                    workflowOptions: {autoRollDamage: 'always', autoFastDamage: true, autoRollAttack: true, autoFastAttack: true}
-                };
-
-                workflow.aborted = true;
-
-                Hooks.once("midi-qol.preAttackRollComplete", async (workflow) => {
-                    await workflow.setAttackRoll(rerollNew);
-                });
-                
-                // Complete the new item use workflow
-                await MidiQOL.completeItemUse(newItemData, {}, options);
-            }
-        }
-    }
-}
-
-export async function showPowerWordReboundDialog({targetUuids, actorUuid, tokenUuid, initiatingTokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, type, itemProperName, rollTotals}) {
-    const module = await import('../module.js');
-    const socket = module.socket;
-
-    return await new Promise(resolve => {
         const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
-        
-        let dialogContent;
-        let originToken = fromUuidSync(tokenUuid);
-        let target = fromUuidSync(targetUuids);
-        let browserUser = MidiQOL.playerForActor(originToken.actor);
 
-        dialogContent = `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px; background-color: transparent; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <div style="flex-grow: 1; margin-right: 20px;">
-                <p>${target.actor.name} has been hit by an attack and is under half health, would you like to use ${itemProperName} to deflect it?</p>
+        let dialogContent = `
+            <div class="gps-dialog-container">
+                <div class="gps-dialog-section">
+                    <div class="gps-dialog-content">
+                        <div>
+                            <div class="gps-dialog-flex">
+                                <p class="gps-dialog-paragraph">${target.actor.name} has been hit by an attack and is under half health, would you like to use ${itemProperName} to deflect it?</p>
+                                <div id="image-container" class="gps-dialog-image-container">
+                                    <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gps-dialog-button-container">
+                    <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    </button>
+                </div>
             </div>
-            <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
-                <p><b>Time Remaining</b></p>
-                <p><span id="countdown" style="font-size: 16px; color: red;">${initialTimeLeft}</span> seconds</p>
-                <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
-            </div>
-        </div>
         `;
 
-        let timer;
+        let result;
 
-        let dialog = new Dialog({
-            title: dialogTitle,
-            content: dialogContent,
-            id: dialogId,
-            buttons: {
-                yes: {
-                    label: "Yes",
-                    callback: async (html) => {
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "yes";
-                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a roll triggering ${itemProperName}.</span>`
+        let chatData = {
+        user: game.users.find(u => u.isGM).id,
+        content: content,
+        whisper: game.users.find(u => u.isGM).id
+        };
+        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
 
-                        let chosenSpell = await originToken.actor.items.find(i => i.name === itemProperName);
-                        chosenSpell.prepareData();
-                        chosenSpell.prepareFinalAttributes();
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
+            let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog"});
+            
+            let gmDialogPromise = socket.executeAsGM("process3rdPartyReactionDialog", {dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog"});
+        
+            result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
+        } else {
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+        }
 
-                        const options = {
-                            showFullCard: false,
-                            createWorkflow: true,
-                            versatile: false,
-                            configureDialog: true,
-                            targetUuids: [initiatingTokenUuid]
-                        };
+        const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
 
-                        const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
-                        if(itemRoll) {
-                            const uuid = originToken.actor.uuid;
-                            const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
+        if (!userDecision) {
+            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+            continue;
+        }
+        else if (userDecision) {
+            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
 
-                            if (!hasEffectApplied) {
-                                await game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
-                            }
-                        }
-                        
-                        let userDecision = true;
+            chosenItem.prepareData();
 
-                        resolve({userDecision, programmaticallyClosed: false, source, type});
-                    }
-                },
-                no: {
-                    label: "No",
-                    callback: async () => {
-                        // Reaction Declined
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, programmaticallyClosed: false, source, type});
-                    }
-                },
-            }, default: "no",
-            render: (html) => {
-                $(html).attr('id', dialog.options.id);
-                let timeLeft = initialTimeLeft;
-                let isPaused = false;
-                const countdownElement = html.find("#countdown");
-                const pauseButton = html.find("#pauseButton");
+            const options = {
+                showFullCard: false,
+                createWorkflow: true,
+                versatile: false,
+                configureDialog: true,
+                targetUuids: [target.document.uuid]
+            };
 
-                dialog.updateTimer = (newTimeLeft, paused) => {
-                    timeLeft = newTimeLeft;
-                    isPaused = paused;
-                    countdownElement.text(`${timeLeft}`);
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                };
+            let itemRoll;
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(itemRoll.aborted === true) continue;
 
-                timer = setInterval(() => {
-                    if (!isPaused) {
-                        timeLeft--;
-                        countdownElement.text(`${timeLeft}`);
-                        if (timeLeft <= 0) {
-                            dialog.data.buttons.no.callback();
-                            dialog.close();
-                        }
-                    }
-                }, 1000);
+            await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                pauseButton.click(() => {
-                    isPaused = !isPaused;
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                    if (source && source === "user" && type === "multiDialog") {
-                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
-                    } else if (source && source === "gm" && type === "multiDialog") {
-                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
-                    }
-                });
-            },
-            close: () => {
-                clearInterval(timer);
-                if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true, source, type });
-                }
-                else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false, source, type });
-                }
-            }
-        });
-        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
-        dialog.render(true);
-    });
+            let diceConfig = game.settings.get("core", "diceConfiguration");
+            const diceConfigOrig = diceConfig.d20;
+            diceConfig.d20 = '';
+            await game.settings.set("core", "diceConfiguration", diceConfig);
+            let rerollNew = await new CONFIG.Dice.D20Roll(`${workflow.attackRoll.result}`).evaluate();
+            await rerollNew.dice.forEach(d => d.results.forEach(r => foundry.utils.setProperty(r, "hidden", true)));
+            diceConfig.d20 = diceConfigOrig;
+            await game.settings.set("core", "diceConfiguration", diceConfig);
+
+            let newItemData = workflow.item;
+
+            newItemData.prepareData();
+
+            const optionsNew = {
+                showFullCard: false,
+                createWorkflow: true,
+                versatile: false,
+                configureDialog: true,
+                targetUuids: [workflow.token.document.uuid],
+                workflowOptions: {autoRollDamage: 'always', autoFastDamage: true, autoRollAttack: true, autoFastAttack: true}
+            };
+
+            workflow.aborted = true;
+
+            Hooks.once("midi-qol.preAttackRollComplete", async (workflow) => {
+                await workflow.setAttackRoll(rerollNew);
+            });
+            
+            // Complete the new item use workflow
+            await MidiQOL.completeItemUse(newItemData, {}, optionsNew);
+        }
+    }
 }

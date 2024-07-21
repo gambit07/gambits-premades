@@ -1,0 +1,208 @@
+<head>
+    <style>
+        form.categories .settings-table {
+            width: 100%;
+        }
+
+        .column-item {
+            width: 72%;
+            text-align: left;
+        }
+
+        .column-item-th {
+            width: 72%;
+            text-align: left;
+            padding-left: 4px;
+        }
+
+        .column-enable {
+            width: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .column-enable-td {
+            width: 100%;
+            display: flex;
+            align-items: right;
+            justify-content: right;
+            margin-left: -5px;
+            gap: 20px;
+            margin: 0;
+            margin-top: 5px;
+        }
+
+        .column-timeout {
+            width: 18%;
+        }
+
+        form.categories .small-text {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .checkbox-inline input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .sheet-footer button[type="submit"] {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 15px;
+        }
+
+        .sheet-footer button[type="submit"]:hover {
+            background-color: #4A90E2;
+            box-shadow: 0 0 8px #333;
+            border-color: #333;
+        }
+
+        .sheet-footer button[type="submit"]:active {
+            background-color: #3973CF;
+            box-shadow: 0 0 8px #333;
+            border-color: #333;
+        }
+
+        .sheet-footer {
+            height: 60px;
+            padding: 10px 2px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            box-sizing: border-box;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .collapsible-content {
+            display: none;
+        }
+
+        .collapsible-content.show {
+            display: table-row-group;
+        }
+
+        .clickable {
+            cursor: pointer;
+        }
+
+        .clickable label {
+            cursor: pointer;
+        }
+
+        .collapsible-content label {
+            margin-left: 20px;
+        }
+
+        .settings-table tr:hover {
+            background-color: #3972cf71;
+        }
+
+        .form-container {
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+<body>
+<form class="categories flexcol">
+    <table class="settings-table" style="width: 100%;">
+        <thead>
+            <tr>
+                <th class="column-item-th">Settings</th>
+                <th style="align-items: right; justify-content: right; width: 100%; margin-left: -5px;" class="column-enable">Enable</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="column-item">
+                    <label for="enableMirrorDialog">Mirror 3rd Party Dialog for GMs<br><span class="small-text">3rd party dialog's will be sent to the GM and the player so that either party can interact with the dialog to use/dismiss/pause it.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="enableMirrorDialog" name="enableMirrorDialog" data-dtype="Boolean" {{checked enableMirrorDialog}}/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="clickable" data-content-id="collapsible-content-identifyrestrictions">
+                <td class="column-item">
+                    <label>Enable Identify Restrictions <span class="small-text">(Click for additional options...)<br>Prevents players from Identifying items except through the use of my Identify spell.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="enableIdentifyRestrictions" name="enableIdentifyRestrictions" data-dtype="Boolean" {{checked enableIdentifyRestrictions}}/>
+                    </div>
+                </td>
+            </tr>
+            <tbody class="collapsible-content" id="collapsible-content-identifyrestrictions">
+                <tr>
+                    <td class="column-item" style="width: 50%;">
+                        <label for="identifyRestrictionMessage">Custom message that will display to users if they are restricted.</label>
+                    </td>
+                    <td class="column-enable-td" style="width: 100%;">
+                        <input type="text" id="identifyRestrictionMessage" name="identifyRestrictionMessage" value="Nice try, DENIED ;)" data-dtype="String" style="width: 100%; box-sizing: border-box; display: inline-block;"/>
+                    </td>
+                </tr>
+            </tbody>
+            
+            <tr>
+                <td class="column-item">
+                    <label for="enable3prNoCombat">Enable 3rd Party Reactions Outside Combat<br><span class="small-text">Allows 3rd party reactions to function while combat is not active.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="enable3prNoCombat" name="enable3prNoCombat" data-dtype="Boolean" {{checked enable3prNoCombat}}/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="column-item">
+                    <label for="enableTimerFullAnim">Enable Timer Full Bar Animation<br><span class="small-text">Modify the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="enableTimerFullAnim" name="enableTimerFullAnim" data-dtype="Boolean" {{checked enableTimerFullAnim}}/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="column-item">
+                    <label for="hideTemplates">Hide Templates<br><span class="small-text"> Enable template transparency.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="hideTemplates" name="hideTemplates" data-dtype="Boolean" {{checked hideTemplates}}/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="column-item">
+                    <label for="debugEnabled">Enable Debugging<br><span class="small-text"> Enable console logs for the reaction validation process for troubleshooting.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="debugEnabled" name="debugEnabled" data-dtype="Boolean" {{checked debugEnabled}}/>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <footer class="sheet-footer flexrow">
+        <button type="submit" name="submit">
+            <i class="fa fa-check"></i> Save Changes
+        </button>
+    </footer>
+</form>
+</body>

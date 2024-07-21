@@ -1,0 +1,89 @@
+.gps-dialog-container {
+display: flex;
+flex-direction: column;
+align-items: start;
+justify-content: center;
+width: 500px;
+padding-left: 8px;
+padding-right: 8px;
+}
+
+.gps-dialog-section {
+margin-bottom: 8px;
+width: 100%;
+display: flex;
+gap: 20px;
+}
+
+.gps-dialog-content {
+flex-grow: 1;
+}
+
+.gps-dialog-container .gps-dialog-paragraph {
+margin-bottom: 16px;
+font-weight: normal;
+font-size: 14px;
+}
+
+.gps-dialog-paragraph {
+    margin-bottom: 16px;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.gps-dialog-flex {
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.gps-dialog-label {
+font-size: 16px;
+margin-right: 5px;
+}
+
+.gps-dialog-container .gps-dialog-select {
+padding: 4px;
+width: 100%;
+box-sizing: border-box;
+line-height: normal;
+background-color: rgba(181, 99, 69, 0.2);
+}
+
+.gps-dialog-select {
+    padding: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: normal;
+    background-color: rgba(181, 99, 69, 0.2);
+}
+
+.gps-dialog-option {
+font-size: 14.5px;
+}
+
+.gps-dialog-image-container {
+margin-left: 10px;
+display: flex;
+align-items: center;
+}
+
+.gps-dialog-image {
+max-width: 50px;
+max-height: 50px;
+border-width: 2px;
+border-radius: 4px;
+}
+
+.gps-dialog-button-container {
+width: 100%;
+display: flex;
+justify-content: center;
+margin-top: 12px;
+margin-bottom: 5px;
+}
+
+.gps-dialog-button {
+margin-bottom: 8px;
+width: 150px;
+}

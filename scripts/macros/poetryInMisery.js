@@ -1,21 +1,19 @@
+//done
 export async function poetryInMisery({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
     const socket = module.socket;
     const workflowUuid = workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid) ?? null;
     let itemName = "poetry in misery";
     let itemProperName = "Poetry in Misery";
     let dialogId = "poetryinmisery";
-    if(!workflow && !workflowData.actor) return;
-    if(workflow?.item.name.toLowerCase() === itemName) return;
+    if(!workflow && workflowCombat === true) return;
+    if(workflow?.item?.name.toLowerCase() === itemName) return;
     let initiatingToken;
     (workflow) ? initiatingToken = workflow.token : initiatingToken = await MidiQOL.tokenForActor(workflowData.actor.uuid);
 
     if (!game.combat && (workflowType === "attack" || (workflowType === "save" && workflowCombat === true))) return;
-
-    // Check if Opportunity Attack is initiating the workflow
-    if(workflow?.item.name === "Opportunity Attack") return;
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: initiatingToken, targetedToken: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
 
@@ -30,65 +28,96 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         });
 
         if(resourceKey) {
-            if(validTokenPrimary.actor.system.resources[resourceKey].value === validTokenPrimary.actor.system.resources[resourceKey].max) return;
+            if(validTokenPrimary.actor.system.resources[resourceKey].value === validTokenPrimary.actor.system.resources[resourceKey].max) continue;
         }
         else if(itemData) {
-            if(itemData.system.uses.value === itemData.system.uses.max) return;
+            if(itemData.system.uses.value === itemData.system.uses.max) continue;
         }
-        else return;
+        else continue;
 
-        let actorUuidPrimary = validTokenPrimary.actor.uuid;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let originTokenUuidPrimary = initiatingToken.document.uuid;
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         let chatActor;
         if (!browserUser.active) {
             browserUser = game.users?.activeGM;
         }
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
 
         if (workflowType === "attack") {
-            if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) return;
+            if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) continue;
             if(!workflow.attackRoll.isFumble) return;
         }
         if (workflowType === "save") {
             if(workflow) {
-                if(initiatingToken.document.disposition === validTokenPrimary.document.disposition) return;
+                if(initiatingToken.document.disposition === validTokenPrimary.document.disposition) continue;
                 const fumbleRoll = workflow.saveRolls.find(roll => roll.isFumble && roll.data.token.document.disposition === validTokenPrimary.document.disposition);
                 if(!fumbleRoll) return;
                 chatActor = fumbleRoll.data.token.actor;
             }
             else {
-                if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) return;
+                if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) continue;
                 if(!workflowData.roll.isFumble) return;
                 chatActor = initiatingToken.actor;
             }
         }
         if(workflowType === "ability" || workflowType === "skill") {
-            if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) return;
+            if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) continue;
             if(!workflowData.roll.isFumble) return;
         }
 
+        let dialogContent = `
+            <div class="gps-dialog-container">
+                <div class="gps-dialog-section">
+                    <div class="gps-dialog-content">
+                        <div>
+                            <div class="gps-dialog-flex">
+                                <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName} for this nat 1 ${workflowType} roll?</p>
+                                <div id="image-container" class="gps-dialog-image-container">
+                                    <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gps-dialog-button-container">
+                    <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    </button>
+                </div>
+            </div>
+        `;
+
         let result;
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a roll triggering ${itemProperName}.</span>`
+        let chatData = {
+        user: game.users.find(u => u.isGM).id,
+        content: content,
+        whisper: game.users.find(u => u.isGM).id
+        };
+        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogPromise = socket.executeAsUser("showPoetryInMiseryDialog", browserUser.id, {tokenUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: workflowType, dialogId: dialogId, itemProperName: itemProperName, source: "user", type: "multiDialog"});
+            let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog"});
             
-            let gmDialogPromise = socket.executeAsGM("showPoetryInMiseryDialog", {tokenUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: workflowType, dialogId: dialogId, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
+            let gmDialogPromise = socket.executeAsGM("process3rdPartyReactionDialog", {dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog"});
         
             result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
-            } else {
-                result = await socket.executeAsUser("showPoetryInMiseryDialog", browserUser.id, {tokenUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: workflowType, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
-            }
-                
-            const { userDecision, source, type } = result;
-
-            if (userDecision === false || !userDecision) {
-                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
-                continue;
+        } else {
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
         }
-        if (userDecision === true) {
+
+        const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
+
+        if (!userDecision) {
+            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+            continue;
+        }
+        else if (userDecision) {
+            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+
+            await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
             if (resourceKey) {
                 let updatePath = `system.resources.${resourceKey}.value`;
@@ -101,126 +130,15 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
 
             let typeText = (workflowType === "attack") ? `${initiatingToken.actor.name}'s nat 1 attack roll` : (workflowType === "ability") ? `${initiatingToken.actor.name}'s nat 1 ability check` : (workflowType === "skill") ? `${initiatingToken.actor.name}'s nat 1 skill check` : `${chatActor.name}'s nat 1 saving throw`;
 
-
-            let content = `<span style='text-wrap: wrap;'>You use ${itemProperName} to soliloquize over ${typeText} and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+            let contentOutcome = `<span style='text-wrap: wrap;'>You use ${itemProperName} to soliloquize over ${typeText} and regain a use of Bardic Inspiration.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
-            let chatData = {
+            let chatDataOutcome = {
             user: actorPlayer.id,
             speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
-            content: content
+            content: contentOutcome
             };
-            ChatMessage.create(chatData);
+            ChatMessage.create(chatDataOutcome);
+            continue;
         }
     }
-}
-
-export async function showPoetryInMiseryDialog({tokenUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, dialogId, source, type, itemProperName}) {
-    const module = await import('../module.js');
-    const socket = module.socket;
-
-    return await new Promise(resolve => {
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
-        
-        let dialogContent;
-        let originToken = fromUuidSync(tokenUuid);
-        let browserUser = MidiQOL.playerForActor(originToken.actor);
-
-        dialogContent = `
-        <div style='display: flex; align-items: center; justify-content: space-between;'>
-            <div style='flex: 1;'>
-            Would you like to use your reaction to use ${itemProperName} for this nat 1 ${outcomeType} roll?<br/><br/>
-            </div>
-            <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
-                <p><b>Time remaining</b></p>
-                <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
-                <p><button id='pauseButton' style='margin-top: 16px;'>Pause</button></p>
-            </div>
-        </div>`;
-
-        let timer;
-
-        let dialog = new Dialog({
-            title: dialogTitle,
-            content: dialogContent,
-            id: dialogId,
-            buttons: {
-                yes: {
-                    label: "Yes",
-                    callback: async (html) => {
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "yes";
-                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
-                        let actor = await fromUuid(actorUuid);
-                        let uuid = actor.uuid;
-
-                        const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
-
-                        if (!hasEffectApplied) {
-                            game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
-                        }
-                        
-                        let userDecision = true;
-
-                        resolve({userDecision, programmaticallyClosed: false, source, type});
-                    }
-                },
-                no: {
-                    label: "No",
-                    callback: async () => {
-                        // Reaction Declined
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, programmaticallyClosed: false, source, type});
-                    }
-                },
-            }, default: "no",
-            render: (html) => {
-                $(html).attr('id', dialog.options.id);
-                let timeLeft = initialTimeLeft;
-                let isPaused = false;
-                const countdownElement = html.find("#countdown");
-                const pauseButton = html.find("#pauseButton");
-
-                dialog.updateTimer = (newTimeLeft, paused) => {
-                    timeLeft = newTimeLeft;
-                    isPaused = paused;
-                    countdownElement.text(`${timeLeft}`);
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                };
-
-                timer = setInterval(() => {
-                    if (!isPaused) {
-                        timeLeft--;
-                        countdownElement.text(`${timeLeft}`);
-                        if (timeLeft <= 0) {
-                            dialog.data.buttons.no.callback();
-                            dialog.close();
-                        }
-                    }
-                }, 1000);
-
-                pauseButton.click(() => {
-                    isPaused = !isPaused;
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                    if (source && source === "user" && type === "multiDialog") {
-                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
-                    } else if (source && source === "gm" && type === "multiDialog") {
-                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
-                    }
-                });
-            },
-            close: () => {
-                clearInterval(timer);
-                if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true, source, type });
-                }
-                else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false, source, type });
-                }
-            }
-        });
-        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
-        dialog.render(true);
-    });
 }

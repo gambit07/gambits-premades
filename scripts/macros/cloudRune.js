@@ -20,43 +20,89 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
 
     for (const validTokenPrimary of findValidTokens) {
         const nearbyTokens = MidiQOL.findNearby(null, validTokenPrimary, 30, { includeToken: false });
-        let validTokens = nearbyTokens.filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary.document.uuid,token.document.uuid) && token.document.uuid !== workflow.token.document.uuid);
-        if(validTokens.length === 0) return;
+        let targetNames = nearbyTokens.filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary.document.uuid,token.document.uuid) && token.document.uuid !== workflow.token.document.uuid);
+        if(targetNames.length === 0) continue;
 
-        if(validTokenPrimary.id === target.id) return;
+        if(validTokenPrimary.id === target.id) continue;
 
-        let actorUuidPrimary = validTokenPrimary.actor.uuid;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let originTokenUuidPrimary = workflow.token.document.uuid;
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) {
             browserUser = game.users?.activeGM;
         }
 
         if(workflowType === "attack") {
+            const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
+            let chosenItem = await validTokenPrimary.actor.items.find(i => i.name === itemProperName);
+
+            const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
+    
+            let dialogContent = `
+                <div class="gps-dialog-container">
+                    <div class="gps-dialog-section">
+                        <div class="gps-dialog-content">
+                            <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName}? An enemy succeeded their saving throw. Choose an enemy to target and an ally to give advantage to below.</p>
+                            <div>
+                                <div class="gps-dialog-flex">
+                                    <label for="enemy-token" class="gps-dialog-label"Target:</label>
+                                    ${validTokens.length >= 1 ? 
+                                        `<select id="enemy-token" class="gps-dialog-select">
+                                            ${targetNames.map((name, index) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${targetUuids[index]}">${name}</option>`).join('')}
+                                        </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid enemies in range.</div>'
+                                    }
+                                    <div id="image-container" class="gps-dialog-image-container">
+                                        <img id="weapon-img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gps-dialog-button-container">
+                        <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        </button>
+                    </div>
+                </div>
+            `;
 
             let result;
 
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showCloudRuneDialog", browserUser.id, {targetUuids: target.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, initiatingTokenUuid: workflow.token.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: workflow, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "user", type: "multiDialog"});
+                let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog"});
                 
-                let gmDialogPromise = socket.executeAsGM("showCloudRuneDialog", {targetUuids: target.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, initiatingTokenUuid: workflow.token.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
+                let gmDialogPromise = socket.executeAsGM("process3rdPartyReactionDialog", {dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog"});
             
                 result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
-             } else {
-                result = await socket.executeAsUser("showCloudRuneDialog", browserUser.id, {targetUuids: target.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, initiatingTokenUuid: workflow.token.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, rollTotals: null, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
-             }
+            } else {
+                result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            }
                  
-             const { userDecision, returnedTokenUuid, source, type } = result;
+             const { userDecision, enemyTokenUuid, source, type } = result;
 
-             if (userDecision === false || !userDecision) {
+             if (!userDecision) {
                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
                 if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
                 continue;
             }
-            if (userDecision === true) {
-                let rerollNew = await new Roll(`${workflow.attackRoll.result}`).roll({async: true});
+            else if (userDecision) {
+                chosenItem.prepareData();
+                chosenItem.prepareFinalAttributes();
+
+                const optionsChosenItem = {
+                    showFullCard: false,
+                    createWorkflow: true,
+                    versatile: false,
+                    configureDialog: true,
+                    targetUuids: [validTokenPrimary.document.uuid]
+                };
+
+                const itemRoll = await MidiQOL.completeItemUse(chosenItem, {}, optionsChosenItem);
+                if(itemRoll.aborted === true) continue;
+
+                await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
+                
+                let rerollNew = await new Roll(`${workflow.attackRoll.result}`).evaluate();
                 let newItemData = workflow.item;
 
                 newItemData = newItemData.clone({
@@ -77,7 +123,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                     createWorkflow: true,
                     versatile: false,
                     configureDialog: true,
-                    targetUuids: [returnedTokenUuid],
+                    targetUuids: [enemyTokenUuid],
                     workflowOptions: {autoFastForward: "on", autoRollAttack: true}
                 };
 
@@ -93,147 +139,4 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
             }
         }
     }
-}
-
-export async function showCloudRuneDialog({targetUuids, actorUuid, tokenUuid, initiatingTokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, type, itemProperName, rollTotals}) {
-    const module = await import('../module.js');
-    const socket = module.socket;
-
-    return await new Promise(resolve => {
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
-        
-        let dialogContent;
-        let originToken = fromUuidSync(tokenUuid);
-        let target = fromUuidSync(targetUuids);
-        let browserUser = MidiQOL.playerForActor(originToken.actor);
-
-        const nearbyTokens = MidiQOL.findNearby(null, originToken.object, 30, { includeToken: false });
-        let validTokens = nearbyTokens.filter(token => token.document.disposition !== originToken.disposition && MidiQOL.canSee(tokenUuid,token.document.uuid) && token.document.uuid !== initiatingTokenUuid);
-
-        dialogContent = `
-        <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
-            <div style='margin-bottom: 20px;'>
-                <p>${target.actor.name} has been hit by an attack, would you like to use your ${itemProperName} to deflect it towards another creature?</p>
-            </div>
-            <div style='display: flex; width: 100%; gap: 20px;'>
-                <div style='flex-grow: 1; display: flex; flex-direction: column;'>
-                    <p style='margin: 0 0 10px 0;'>Choose who the attack is deflected to:</p>
-                    ${validTokens.length >= 1 ? 
-                        `<select id="targetSelection" style="padding: 4px; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;">
-                            ${validTokens.map(valid => `<option value="${valid.actor.uuid}">${valid.actor.name}</option>`).join('')}
-                        </select>` : '<p>No valid targets in range.</p>'
-                    }
-                </div>
-                <div style='padding-left: 20px; text-align: center; border-left: 1px solid #ccc;'>
-                    <p><b>Time remaining</b></p>
-                    <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
-                    <p><button id='pauseButton' style='margin-top: 16px;'>Pause</button></p>
-                </div>
-            </div>
-        </div>
-        `;
-
-        let timer;
-
-        let dialog = new Dialog({
-            title: dialogTitle,
-            content: dialogContent,
-            id: dialogId,
-            buttons: {
-                yes: {
-                    label: "Yes",
-                    callback: async (html) => {
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "yes";
-                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
-
-                        let returnedTokenUuid = await MidiQOL.tokenForActor(html.find("#targetSelection").val()).document.uuid;
-
-                        let chosenSpell = await originToken.actor.items.find(i => i.name === itemProperName);
-                        chosenSpell.prepareData();
-                        chosenSpell.prepareFinalAttributes();
-
-                        const options = {
-                            showFullCard: false,
-                            createWorkflow: true,
-                            versatile: false,
-                            configureDialog: true,
-                            targetUuids: [initiatingTokenUuid]
-                        };
-
-                        const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: false, source, type });
-                        if(itemRoll) {
-                            const uuid = originToken.actor.uuid;
-                            const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
-
-                            if (!hasEffectApplied) {
-                                await game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
-                            }
-                        }
-                        
-                        let userDecision = true;
-
-                        resolve({userDecision, returnedTokenUuid, programmaticallyClosed: false, source, type});
-                    }
-                },
-                no: {
-                    label: "No",
-                    callback: async () => {
-                        // Reaction Declined
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: false, source, type});
-                    }
-                },
-            }, default: "no",
-            render: (html) => {
-                $(html).attr('id', dialog.options.id);
-                let timeLeft = initialTimeLeft;
-                let isPaused = false;
-                const countdownElement = html.find("#countdown");
-                const pauseButton = html.find("#pauseButton");
-
-                dialog.updateTimer = (newTimeLeft, paused) => {
-                    timeLeft = newTimeLeft;
-                    isPaused = paused;
-                    countdownElement.text(`${timeLeft}`);
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                };
-
-                timer = setInterval(() => {
-                    if (!isPaused) {
-                        timeLeft--;
-                        countdownElement.text(`${timeLeft}`);
-                        if (timeLeft <= 0) {
-                            dialog.data.buttons.no.callback();
-                            dialog.close();
-                        }
-                    }
-                }, 1000);
-
-                pauseButton.click(() => {
-                    isPaused = !isPaused;
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                    if (source && source === "user" && type === "multiDialog") {
-                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
-                    } else if (source && source === "gm" && type === "multiDialog") {
-                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
-                    }
-                });
-            },
-            close: () => {
-                clearInterval(timer);
-                if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: true, source, type });
-                }
-                else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, returnedTokenUuid: false, programmaticallyClosed: false, source, type });
-                }
-            }
-        });
-        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
-        dialog.render(true);
-    });
 }

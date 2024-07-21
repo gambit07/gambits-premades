@@ -1,3 +1,4 @@
+//done
 export async function sentinel({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
@@ -7,257 +8,222 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     let itemName = "sentinel";
     let itemProperName = "Sentinel";
     let dialogId = "sentinel";
-    let gameVersion = parseInt(game.system.version.split('.')[0], 10);
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
     let target = workflow.hitTargets.first();
+    let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
 
     if (!game.combat) return;
 
-    // Check if Opportunity Attack is initiating the workflow
-    if(workflow.item.name === "Opportunity Attack") return;
-
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
 
-    let browserUser;
-
     for (const validTokenPrimary of findValidTokens) {
-        if (target.document.uuid === validTokenPrimary.document.uuid || workflow.token.document.disposition === target.document.disposition) return;
+        if (target.document.uuid === validTokenPrimary.document.uuid || workflow.token.document.disposition === target.document.disposition) continue;
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
-        let hasEffectOrigin = (gameVersion >= 3 ? validTokenPrimary.actor.appliedEffects : validTokenPrimary.actor.effects)
-            .some(effect => effectNamesOrigin.includes(effect.name));
-        if(hasEffectOrigin) return;
+        let hasEffectOrigin = validTokenPrimary.actor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
+        if(hasEffectOrigin) continue;
 
-        if(validTokenPrimary.id === target.id) return;
+        if(validTokenPrimary.id === target.id) continue;
 
         if(target.actor.items.find(i => i.name === itemProperName)) return;
 
-        let actorUuidPrimary = validTokenPrimary.actor.uuid;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let originTokenUuidPrimary = workflow.token.document.uuid;
-        browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
+        let browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) {
             browserUser = game.users?.activeGM;
         }
+        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
-        if(workflowType === "attack") {
-            let result;
-
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                let userDialogPromise = socket.executeAsUser("showSentinelDialog", browserUser.id, {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: workflow, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "user", type: "multiDialog"});
-                
-                let gmDialogPromise = socket.executeAsGM("showSentinelDialog", {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, dialogId: dialogId, rollTotals: null, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
-            
-                result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
-             } else {
-                 result = await socket.executeAsUser("showSentinelDialog", browserUser.id, {targetUuids: workflow.token.document.uuid, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", damageTypes: null, rollTotals: null, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
-             }
-                 
-             const { userDecision, source, type } = result;
-
-             if (userDecision === false || userDecision === true || !userDecision) {
-                 if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                 if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
-                 continue;
-            }
-        }
-    }
-}
-
-export async function showSentinelDialog({targetUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, type, itemProperName, rollTotals}) {
-    const module = await import('../module.js');
-    const socket = module.socket;
-
-    return await new Promise(resolve => {
         const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
-        
-        let dialogContent;
-        let originToken = fromUuidSync(tokenUuid);
-        let browserUser = MidiQOL.playerForActor(originToken.actor);
 
         // Check valid weapons
-        let validWeapons = originToken.actor.items.filter(item => {
+        let validWeapons = validTokenPrimary.actor.items.filter(item => {
             return (item.system.actionType === "mwak" && item.system.equipped === true);
         });
-        if (!validWeapons.length) return;
-        // Find 'Unarmed Strike' from the validWeapons array and add to end of list
-        const unarmedIndex = validWeapons.findIndex(item => item.name.toLowerCase() === "unarmed strike");
-        let unarmedStrike;
-        if (unarmedIndex > -1) {
-            unarmedStrike = validWeapons.splice(unarmedIndex, 1)[0];
-        }
+        if (!validWeapons.length) continue;
         
         // Sort the weapons alphabetically
         validWeapons.sort((a, b) => a.name.localeCompare(b.name));
         
-        let favoriteWeaponName;
-        let favoriteWeaponUuid = null;
         // Check for favorite weapon and put it on top
+        let favoriteWeaponUuid = null;
         const favoriteWeaponIndex = validWeapons.findIndex(item => item.flags?.['midi-qol']?.oaFavoriteAttack);
         if (favoriteWeaponIndex > -1) {
             const favoriteWeapon = validWeapons.splice(favoriteWeaponIndex, 1)[0];
             favoriteWeaponUuid = favoriteWeapon.uuid;
-            favoriteWeaponName = favoriteWeapon.name;
             validWeapons.unshift(favoriteWeapon);
         }
-        
-        if (unarmedStrike) {
-            validWeapons.push(unarmedStrike);
+
+        // Find 'Unarmed Strike' from the validWeapons array and add to end of list
+        const unarmedIndex = validWeapons.findIndex(item => item.name.toLowerCase() === "unarmed strike");
+        if (unarmedIndex > -1) {
+            if(validWeapons[unarmedIndex]?.uuid !== favoriteWeaponUuid) {
+                let unarmedStrike = validWeapons.splice(unarmedIndex, 1)[0];
+                validWeapons.push(unarmedStrike);
+            }
         }
 
-        let optionData = validWeapons.map(item => `<option value="${item.uuid}">${item.name}</option>`).join("");
+        let dialogContent = `
+            <style>
+            #gps-favorite-checkbox {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            }
 
-        dialogContent = `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px; background-color: transparent; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <div style="flex-grow: 1; margin-right: 20px;">
-                <p>Would you like to use your reaction to attack?</p>
-                <div>
-                    <label for="item-select" style="display: block; margin-bottom: 8px;">Choose your Attack:</label>
-                    <select id="item-select" style="width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 16px; box-sizing: border-box; background-color: transparent; font-size: 16px; height: auto;">
-                        ${optionData}
-                    </select>
+            #gps-favorite-checkbox + label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            }
+
+            #gps-favorite-checkbox + label::before {
+            content: "\\2606"; /* Unicode empty star (☆) for my remembrance*/
+            font-size: 30px;
+            margin-right: 5px;
+            line-height: 1;
+            vertical-align: middle;
+            }
+
+            #gps-favorite-checkbox:checked + label::before {
+                content: "\\2605"; /* Unicode filled star (★) also for my remembrance */
+            }
+            </style>
+            <div class="gps-dialog-container">
+                <div class="gps-dialog-section">
+                    <div class="gps-dialog-content">
+                        <p class="gps-dialog-paragraph">Would you like to use your reaction to attack using Sentinel? Choose your weapon below.</p>
+                        <div>
+                            <div class="gps-dialog-flex">
+                                <label for="item-select_${dialogId}" class="gps-dialog-label">Weapon:</label>
+                                <select id="item-select_${dialogId}" class="gps-dialog-select">
+                                    ${validWeapons.map(item => `<option name="${item.img}" value="${item.uuid}" class="gps-dialog-option" style="background-color: ${optionBackground};">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""} ${item.system.actionType === "msak" ? "(Melee)" : item.system.actionType === "rsak" ? "(Ranged)" : item.system.actionType === "save" ? "(Save)" : ""}</option>`).join('')}
+                                </select>
+                                <div id="image-container" class="gps-dialog-image-container">
+                                    <img id="weapon-img_${dialogId}" class="gps-dialog-image">
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-top: 12px;">
+                                <input type="checkbox" id="gps-favorite-checkbox" style="vertical-align: middle;"/>
+                                <label for="gps-favorite-checkbox">Favorite this Option?</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="display: flex; align-items: center;">
-                    <input type="checkbox" id="favorite-checkbox" style="margin-right: 5px; vertical-align: middle;"/>
-                    <label for="favorite-checkbox">Favorite this Attack?${favoriteWeaponName ? "<br>(Current: <b>" + favoriteWeaponName + "</b>)" : ""}</label>
+                <div class="gps-dialog-button-container">
+                    <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    </button>
                 </div>
             </div>
-            <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
-                <p><b>Time Remaining</b></p>
-                <p><span id="countdown" style="font-size: 16px; color: red;">${initialTimeLeft}</span> seconds</p>
-                <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
-            </div>
-        </div>
         `;
 
-        let timer;
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
+        let chatData = {
+        user: game.users.find(u => u.isGM).id,
+        content: content,
+        whisper: game.users.find(u => u.isGM).id
+        };
+        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
 
-        let dialog = new Dialog({
-            title: dialogTitle,
-            content: dialogContent,
-            id: dialogId,
-            buttons: {
-                yes: {
-                    label: "Yes",
-                    callback: async (html) => {
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "yes";
-                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+        let result;
 
-                        let selectedItemUuid = html.find("#item-select").val();
-                        if (!selectedItemUuid) {
-                            console.log("No weapon selected");
-                            return;
-                        }
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
+            let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog"});
+            
+            let gmDialogPromise = socket.executeAsGM("process3rdPartyReactionDialog", {dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog"});
+        
+            result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
+        } else {
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+        }
 
-                        let chosenWeapon = await fromUuid(selectedItemUuid);
-                        let favoriteWeaponCheck = favoriteWeaponUuid;
-                        let favoriteWeapon;
-                        if(favoriteWeaponCheck !== "null") favoriteWeapon = await fromUuid(favoriteWeaponCheck);
-                        let favoriteSet = html.find("#favorite-checkbox").is(':checked');
-                        if(favoriteSet && favoriteWeaponCheck) {
-                           await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
-                           if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
-                           await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
-                           }
-                        }
-                        else if(favoriteSet) {
-                           await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
-                        }
+        const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, source, type } = result;
 
-                        chosenWeapon = chosenWeapon.clone({
-                            system: {
-                                "range": {
-                                    "value": null,
-                                    "long": null,
-                                    "units": ""
-                                }
-                            }
-                        }, { keepId: true });
-                        chosenWeapon.prepareData();
-                        chosenWeapon.prepareFinalAttributes();
-
-                        const options = {
-                            showFullCard: false,
-                            createWorkflow: true,
-                            versatile: false,
-                            configureDialog: false,
-                            targetUuids: [`${targetUuids}`]
-                        };
-                        const itemRoll = await MidiQOL.completeItemUse(chosenWeapon, {}, options);
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
-                        if(itemRoll) {
-                            const uuid = actor.uuid;
-                            const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
-
-                            if (!hasEffectApplied) {
-                            await game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
-                            }
-                        }
-                        
-                        let userDecision = true;
-
-                        resolve({userDecision, programmaticallyClosed: false, source, type});
-                    }
-                },
-                no: {
-                    label: "No",
-                    callback: async () => {
-                        // Reaction Declined
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, programmaticallyClosed: false, source, type});
-                    }
-                },
-            }, default: "no",
-            render: (html) => {
-                $(html).attr('id', dialog.options.id);
-                let timeLeft = initialTimeLeft;
-                let isPaused = false;
-                const countdownElement = html.find("#countdown");
-                const pauseButton = html.find("#pauseButton");
-
-                dialog.updateTimer = (newTimeLeft, paused) => {
-                    timeLeft = newTimeLeft;
-                    isPaused = paused;
-                    countdownElement.text(`${timeLeft}`);
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                };
-
-                timer = setInterval(() => {
-                    if (!isPaused) {
-                        timeLeft--;
-                        countdownElement.text(`${timeLeft}`);
-                        if (timeLeft <= 0) {
-                            dialog.data.buttons.no.callback();
-                            dialog.close();
-                        }
-                    }
-                }, 1000);
-
-                pauseButton.click(() => {
-                    isPaused = !isPaused;
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                    if (source && source === "user" && type === "multiDialog") {
-                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
-                    } else if (source && source === "gm" && type === "multiDialog") {
-                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
-                    }
-                });
-            },
-            close: () => {
-                clearInterval(timer);
-                if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, programmaticallyClosed: true, source, type });
-                }
-                else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, programmaticallyClosed: false, source, type });
-                }
+        if (!userDecision) {
+            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+            continue;
+        }
+        else if (userDecision) {
+            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+            
+            if (!selectedItemUuid) {
+                console.log("No weapon selected");
+                continue;
             }
-        });
-        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
-        dialog.render(true);
-    });
+
+            let chosenWeapon = await fromUuid(selectedItemUuid);
+            let favoriteWeaponCheck = favoriteWeaponUuid;
+            let favoriteWeapon;
+            if(favoriteWeaponCheck !== "null") favoriteWeapon = await fromUuid(favoriteWeaponCheck);
+            if(favoriteCheck && favoriteWeaponCheck) {
+               await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
+               if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
+               await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
+               }
+            }
+            else if(favoriteCheck) {
+               await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
+            }
+
+            chosenWeapon = chosenWeapon.clone({
+                system: {
+                    "range": {
+                        "value": null,
+                        "long": null,
+                        "units": ""
+                    }
+                }
+            }, { keepId: true });
+            chosenWeapon.prepareData();
+            chosenWeapon.prepareFinalAttributes();
+
+            const options = {
+                showFullCard: false,
+                createWorkflow: true,
+                versatile: false,
+                configureDialog: false,
+                targetUuids: [`${workflow.token.document.uuid}`]
+            };
+
+            let checkHits;
+            Hooks.once("midi-qol.postActiveEffects", async (workflow) => {
+                checkHits = workflow.hitTargets.first();
+            });
+
+            let itemRoll;
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(itemRoll.aborted === true) continue;
+
+            if(checkHits) {
+                let effectData = [
+                    {
+                        "icon": `${chosenItem.img}`,
+                        "origin": `${validTokenPrimary.actor.uuid}`,
+                        "duration": {
+                        "seconds": 1
+                        },
+                        "disabled": false,
+                        "name": "Sentinel - Movement",
+                        "changes": [
+                        {
+                            "key": "system.attributes.movement.all",
+                            "mode": 0,
+                            "value": "0",
+                            "priority": 20
+                        }
+                        ],
+                        "transfer": false
+                    }
+                ];
+
+                await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: target.actor.uuid, effects: effectData });
+            }
+
+            await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
+        }
+    }
 }

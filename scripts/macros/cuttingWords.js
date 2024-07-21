@@ -1,3 +1,4 @@
+//done
 export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const socket = module.socket;
@@ -12,52 +13,160 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     
     if (!game.combat) return;
 
-    // Check if Opportunity Attack is initiating the workflow
-    if(workflow.item.name === "Opportunity Attack") return;
-
-    let findValidTokens;
-
-    findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["bardic inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["bardic inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
     
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        let actorUuidPrimary = validTokenPrimary.actor.uuid;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let originTokenUuidPrimary = workflow.token.document.uuid;
-        let spellData = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
-        let bardicDie = validTokenPrimary.actor.system.scale.bard["bardic-inspiration"].die;
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
+        let bardicDie = validTokenPrimary.actor.system.scale?.bard["bardic-inspiration"]?.die;
+        if(!bardicDie) {
+            ui.notifications.error("You must have a Bard scale for this actor named 'bardic-inspiration'")
+            continue;
+        }
         browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) {
             browserUser = game.users?.activeGM;
         }
 
+        let dialogContent;
+        const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
+
         if(workflowType === "damage") {
-            if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
+            if (workflow.token.document.disposition === validTokenPrimary.document.disposition) continue;
+
             let damageTypes = workflow.damageRolls.map(roll => roll.options.type);
             let damageTotals = workflow.damageRolls.map(roll => roll.total);
+            dialogContent = `
+                <div class="gps-dialog-container">
+                    <div class="gps-dialog-section">
+                        <div class="gps-dialog-content">
+                            <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName} for this ${workflowType} roll?</p>
+                            <div>
+                                <div class="gps-dialog-flex">
+                                    <label for="damage-list" class="gps-dialog-label">Damage:</label>
+                                    <ul id="damage-list" class="sortable" style="padding: 0; margin: 0; list-style-type: none;">
+                                        ${damageTypes.map((name, index) => `
+                                        <li draggable="true" style="padding: 6px; margin-bottom: 4px; cursor: grab; border: 1px solid #ccc;">
+                                            <span class="damage-type">${name}</span>${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? ` - ${damageTotals[index]} pts` : ""}
+                                        </li>`).join('')}
+                                    </ul>
+                                    <div id="image-container" class="gps-dialog-image-container">
+                                        <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gps-dialog-button-container">
+                        <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        else if(workflowType === "attack") {
+            if(workflow.token.document.disposition === validTokenPrimary.document.disposition) continue;
 
-            let result;
+            dialogContent = `
+                <div class="gps-dialog-container">
+                    <div class="gps-dialog-section">
+                        <div class="gps-dialog-content">
+                            <div>
+                                <div class="gps-dialog-flex">
+                                    <p class="gps-dialog-paragraph">${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `The target rolled a ${workflow.attackTotal} to attack. ` : ""}Would you like to use your reaction to use ${itemProperName} for this ${workflowType} roll?</p>
+                                    <div id="image-container" class="gps-dialog-image-container">
+                                        <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gps-dialog-button-container">
+                        <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
 
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: `${dialogId}_${browserUser.id}`, rollTotals: damageTotals, itemProperName: itemProperName, source: "user", type: "multiDialog"});
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
+        let chatData = {
+        user: game.users.find(u => u.isGM).id,
+        content: content,
+        roll: false,
+        whisper: game.users.find(u => u.isGM).id
+        };
+        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
 
-            let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, dialogId: `${dialogId}_${game.users?.activeGM.id}`, rollTotals: damageTotals, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
+        let result;
+
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
+            let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog"});
+            
+            let gmDialogPromise = socket.executeAsGM("process3rdPartyReactionDialog", {dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog"});
         
             result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
-            } else {
-                result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "damage", damageTypes: damageTypes, rollTotals: damageTotals, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
-            }
+        } else {
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+        }
                 
-            const { userDecision, damageChosen, source, type } = result;
+        const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
 
-            if (userDecision === false || !userDecision) {
-                if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: `${dialogId}_${game.users?.activeGM.id}` });
-                if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: `${dialogId}_${browserUser.id}` });
+        if (!userDecision) {
+            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+            continue;
+        }
+        else if (userDecision) {
+            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+            chosenItem.prepareData();
+
+            const options = {
+                showFullCard: false,
+                createWorkflow: true,
+                versatile: false,
+                configureDialog: true,
+                targetUuids: [workflow.token.document.uuid],
+            };
+
+            let itemRoll;
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+
+            if(itemRoll.aborted === true) continue;
+
+            await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
+
+            let hasDeafened = workflow.actor.appliedEffects.find(i => i.name.toLowerCase() === "deafened");
+            let charmImmunity = workflow.actor.system.traits.ci.value.has("charmed");
+            
+            if (charmImmunity || hasDeafened) {
+                let chatList = [];
+
+                chatList = `<span style='text-wrap: wrap;'>The creature seems to not be effected by your ${itemProperName}.<img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+
+                let msgHistory = [];
+                game.messages.reduce((list, message) => {
+                    if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                }, msgHistory);
+                let itemCard = msgHistory[msgHistory.length - 1];
+                let chatMessage = await game.messages.get(itemCard);
+                let content = await foundry.utils.duplicate(chatMessage.content);
+                let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
+                if (insertPosition !== -1) {
+                    content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
+                }
+                await chatMessage.update({ content: content, roll: false });
+
                 continue;
             }
-            if (userDecision === true) {
+
+            if(workflowType === "damage") {
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let reroll;
@@ -75,25 +184,25 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
                     processedRolls.add(rollFound);
                         let rollTotal = rollFound.total;
                         if (rollTotal >= remainingReduction) {
-                            let modifiedRoll = await new Roll(`${rollTotal} - ${remainingReduction}`).evaluate({async: true});
-                            modifiedRoll.options.type = priority;
+                            let modifiedRoll = await new CONFIG.Dice.DamageRoll(`${rollTotal} - ${remainingReduction}`).evaluate();
+                            modifiedRoll.options = rollFound.options;
                             updatedRolls.push(modifiedRoll);
                             remainingReduction = 0;
                             break;
                         } else {
                             remainingReduction -= rollTotal;
-                            let zeroRoll = await new Roll(`${rollTotal} - ${rollTotal}`).evaluate({async: true});
-                            zeroRoll.options.type = priority;
+                            let zeroRoll = await new CONFIG.Dice.DamageRoll(`${rollTotal} - ${rollTotal}`).evaluate();
+                            zeroRoll.options = rollFound.options;
                             updatedRolls.push(zeroRoll);
                         }
                     }
                 }
                 
                 workflow.damageRolls.forEach(roll => {
-                if (!processedRolls.has(roll)) {
-                    updatedRolls.push(roll);
-                }
-            });
+                    if (!processedRolls.has(roll)) {
+                        updatedRolls.push(roll);
+                    }
+                });
 
                 await workflow.setDamageRolls(updatedRolls);
         
@@ -105,313 +214,71 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
 
                 let msgHistory = [];
                 game.messages.reduce((list, message) => {
-                    if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                    if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
                 }, msgHistory);
                 let itemCard = msgHistory[msgHistory.length - 1];
                 let chatMessage = await game.messages.get(itemCard);
-                let content = await duplicate(chatMessage.content);
+                let content = await foundry.utils.duplicate(chatMessage.content);
                 let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
                 if (insertPosition !== -1) {
                     content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
                 }
-                await chatMessage.update({ content: content });
+                await chatMessage.update({ content: content, roll: updatedRolls });
+                continue;
             }
-        }
 
-            if(workflowType === "attack") {
-                if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
+            else if(workflowType === "attack") {
+                let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
+                const saveSetting = workflow.options.noOnUseMacro;
+                workflow.options.noOnUseMacro = true;
+                let reroll;
+                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1${bardicDie}`, type: workflowType });
+                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1${bardicDie}`, type: workflowType });
+                let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).evaluate();
 
-                let result;
+                await workflow.setAttackRoll(rerollNew);
+                workflow.options.noOnUseMacro = saveSetting;
 
-                if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("showCuttingWordsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", dialogId: dialogId, rollTotals: workflow.attackTotal, itemProperName: itemProperName, source: "user", type: "multiDialog"});
-                    
-                    let gmDialogPromise = socket.executeAsGM("showCuttingWordsDialog", {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitleGM, targetNames: originTokenUuidPrimary, outcomeType: "attack", dialogId: dialogId, rollTotals: workflow.attackTotal, itemProperName: itemProperName, source: "gm", type: "multiDialog"});
-                
-                    result = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
-                } else {
-                    result = await socket.executeAsUser("showCuttingWordsDialog", browserUser.id, {targetUuids: originTokenUuidPrimary, actorUuid: actorUuidPrimary, tokenUuid: validTokenPrimary.document.uuid, dialogTitle: dialogTitlePrimary, targetNames: originTokenUuidPrimary, outcomeType: "attack", rollTotals: workflow.attackTotal, itemProperName: itemProperName, source: browserUser.isGM ? "gm" : "user", type: "singleDialog"});
+                if((workflow.attackTotal - reroll.total) < targetAC) {
+                    let chatList = [];
+
+                    chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+
+                    let msgHistory = [];
+                    game.messages.reduce((list, message) => {
+                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                    }, msgHistory);
+                    let itemCard = msgHistory[msgHistory.length - 1];
+                    let chatMessage = await game.messages.get(itemCard);
+                    let content = await foundry.utils.duplicate(chatMessage.content);
+                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
+                    if (insertPosition !== -1) {
+                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
+                    }
+                    await chatMessage.update({ content: content, roll: rerollNew });
+                    return;
                 }
-                    
-                const { userDecision, damageChosen, source, type } = result;
 
-                if (userDecision === false || !userDecision) {
-                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                    if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+                else {
+                    let chatList = [];
+
+                    chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+
+                    let msgHistory = [];
+                    game.messages.reduce((list, message) => {
+                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
+                    }, msgHistory);
+                    let itemCard = msgHistory[msgHistory.length - 1];
+                    let chatMessage = await game.messages.get(itemCard);
+                    let content = await foundry.utils.duplicate(chatMessage.content);
+                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
+                    if (insertPosition !== -1) {
+                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
+                    }
+                    await chatMessage.update({ content: content, roll: rerollNew });
                     continue;
                 }
-                if (userDecision === true) {
-                    let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
-                    const saveSetting = workflow.options.noOnUseMacro;
-                    workflow.options.noOnUseMacro = true;
-                    let reroll;
-                    if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1${bardicDie}`, type: workflowType });
-                    if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1${bardicDie}`, type: workflowType });
-                    let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).roll({async: true});
-
-                    await workflow.setAttackRoll(rerollNew);
-                    workflow.options.noOnUseMacro = saveSetting;
-
-                    if((workflow.attackTotal - reroll.total) < targetAC) {
-                        let chatList = [];
-
-                        chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                        let msgHistory = [];
-                        game.messages.reduce((list, message) => {
-                            if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                        }, msgHistory);
-                        let itemCard = msgHistory[msgHistory.length - 1];
-                        let chatMessage = await game.messages.get(itemCard);
-                        let content = await duplicate(chatMessage.content);
-                        let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                        if (insertPosition !== -1) {
-                            content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                        }
-                        await chatMessage.update({ content: content });
-                    }
-
-                    else {
-                        let chatList = [];
-
-                        chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                        let msgHistory = [];
-                        game.messages.reduce((list, message) => {
-                            if (message.flags["midi-qol"]?.itemId === spellData._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                        }, msgHistory);
-                        let itemCard = msgHistory[msgHistory.length - 1];
-                        let chatMessage = await game.messages.get(itemCard);
-                        let content = await duplicate(chatMessage.content);
-                        let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                        if (insertPosition !== -1) {
-                            content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                        }
-                        await chatMessage.update({ content: content });
-                    }
             }
         }
     }
-}
-
-export async function showCuttingWordsDialog({targetUuids, actorUuid, tokenUuid, dialogTitle, targetNames, outcomeType, damageTypes, dialogId, source, type, itemProperName, rollTotals}) {
-    const module = await import('../module.js');
-    const socket = module.socket;
-
-    return await new Promise(resolve => {
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
-        
-        let dialogContent;
-        let originToken = fromUuidSync(tokenUuid);
-        let browserUser = MidiQOL.playerForActor(originToken.actor);
-        const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
-
-        if(outcomeType === "attack") {
-        dialogContent = `
-            <div style="display: flex; align-items: center; justify-content: space-between; padding: 5px; background-color: transparent; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                <div style="flex-grow: 1; margin-right: 20px;">
-                    <p>${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `The target rolled a ${rollTotals} to attack. ` : ""}Would you like to use your reaction to use ${itemProperName} for this ${outcomeType} roll?</p>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 20px; border-left: 1px solid #ccc; text-align: center;">
-                    <p><b>Time Remaining</b></p>
-                    <p><span id="countdown" style="font-size: 16px; color: red;">${initialTimeLeft}</span> seconds</p>
-                    <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
-                </div>
-            </div>
-        `;
-        }
-
-        if (outcomeType === "damage") {
-            dialogContent = `
-                <div style='display: flex; flex-direction: column; align-items: start; justify-content: center; padding: 10px;'>
-                    <div style='margin-bottom: 20px;'>
-                        <p style='margin: 0; font-weight: bold;'>Would you like to use your reaction to use ${itemProperName} for this ${outcomeType} roll?</p>
-                    </div>
-                    <div style='display: flex; width: 100%; gap: 20px;'>
-                        <div style='flex-grow: 1; display: flex; flex-direction: column;'>
-                            <p style='margin: 0 0 10px 0;'>Order damage types to prioritize which reduction should be applied first:</p>
-                            <ul id="damageList" class="sortable" style="padding: 0; margin: 0; list-style-type: none;">
-                                ${damageTypes.map((name, index) => `
-                                <li draggable="true" style="padding: 6px; margin-bottom: 4px; cursor: grab; border: 1px solid #ccc;">
-                                    <span class="damage-type">${name}</span>${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? ` - ${rollTotals[index]} pts` : ""}
-                                </li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                    <div style='padding-top: 20px; text-align: center; width: 100%;'>
-                        <p><b>Time remaining</b></p>
-                        <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>
-                        <button id='pauseButton' style='margin-top: 5px; width: 100px;'>Pause</button>
-                    </div>
-                </div>
-                <script>
-                    (function() {
-                        let draggedItem = null;
-                
-                        document.querySelectorAll('#damageList li').forEach(item => {
-                            item.addEventListener('dragstart', function(event) {
-                                event.dataTransfer.setData('text/plain', event.target.innerText);
-                                event.dataTransfer.effectAllowed = 'move';
-                                draggedItem = event.target;
-                            });
-                        });
-                
-                        const damageList = document.getElementById('damageList');
-                
-                        damageList.addEventListener('dragover', function(event) {
-                            event.preventDefault();
-                            event.dataTransfer.dropEffect = 'move';
-                            const target = event.target;
-                            if (target && target.nodeName === 'LI') {
-                                const rect = target.getBoundingClientRect();
-                                const next = (event.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-                                damageList.insertBefore(draggedItem, next && target.nextSibling || target);
-                            }
-                        });
-                
-                        damageList.addEventListener('dragend', function() {
-                            draggedItem = null;
-                        });
-                    })();
-                </script>
-            `;
-        }
-
-        let timer;
-
-        let dialog = new Dialog({
-            title: dialogTitle,
-            content: dialogContent,
-            id: dialogId,
-            buttons: {
-                yes: {
-                    label: "Yes",
-                    callback: async (html) => {
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "yes";
-                        if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                        if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
-                        let actor = await fromUuid(actorUuid);
-                        let token = await MidiQOL.tokenForActor(actorUuid);
-                        let uuid = actor.uuid;
-                        let originToken;
-                        originToken = await fromUuid(targetUuids);
-                        originToken = await MidiQOL.tokenForActor(originToken.actor.uuid);
-                        let damageChosen = [];
-                        html.find("#damageList li .damage-type").each(function() {
-                            damageChosen.push($(this).text().trim());
-                        });
-
-                        let chosenSpell = actor.items.find(i => i.name === itemProperName);
-
-                        chosenSpell.prepareData();
-                        chosenSpell.prepareFinalAttributes();
-
-                        const options = {
-                            showFullCard: false,
-                            createWorkflow: true,
-                            versatile: false,
-                            configureDialog: true,
-                            targetUuids: [originToken.document.uuid],
-                        };
-
-                        const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
-
-                        if(!itemRoll) return;
-
-                        const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
-
-                        if (!hasEffectApplied) {
-                            game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
-                        }
-
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false, source, type });
-
-                        let hasDeafened = originToken.actor.effects.find(i => i.name.toLowerCase() === "deafened");
-                        let charmImmunity = originToken.actor.system.traits.ci.value.has("charmed");
-                        
-                        if (charmImmunity || hasDeafened) {
-                        let chatList = [];
-
-                        chatList = `<span style='text-wrap: wrap;'>The creature seems to not be effected by your ${itemProperName}.<img src="${originToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                        let msgHistory = [];
-                        game.messages.reduce((list, message) => {
-                            if (message.flags["midi-qol"]?.itemId === chosenSpell._id && message.speaker.token === token.id) msgHistory.push(message.id);
-                        }, msgHistory);
-                        let itemCard = msgHistory[msgHistory.length - 1];
-                        let chatMessage = await game.messages.get(itemCard);
-                        let content = await duplicate(chatMessage.content);
-                        let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                        if (insertPosition !== -1) {
-                            content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                        }
-                        await chatMessage.update({ content: content });
-
-                        return resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false, source, type });
-                        }
-                        
-                        let userDecision = true;
-
-                        resolve({userDecision, damageChosen, programmaticallyClosed: false, source, type});
-                    }
-                },
-                no: {
-                    label: "No",
-                    callback: async () => {
-                        // Reaction Declined
-                        dialog.dialogState.interacted = true;
-                        dialog.dialogState.decision = "no";
-                        resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false, source, type});
-                    }
-                },
-            }, default: "no",
-            render: (html) => {
-                $(html).attr('id', dialog.options.id);
-                let timeLeft = initialTimeLeft;
-                let isPaused = false;
-                const countdownElement = html.find("#countdown");
-                const pauseButton = html.find("#pauseButton");
-
-                dialog.updateTimer = (newTimeLeft, paused) => {
-                    timeLeft = newTimeLeft;
-                    isPaused = paused;
-                    countdownElement.text(`${timeLeft}`);
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                };
-
-                timer = setInterval(() => {
-                    if (!isPaused) {
-                        timeLeft--;
-                        countdownElement.text(`${timeLeft}`);
-                        if (timeLeft <= 0) {
-                            dialog.data.buttons.no.callback();
-                            dialog.close();
-                        }
-                    }
-                }, 1000);
-
-                pauseButton.click(() => {
-                    isPaused = !isPaused;
-                    pauseButton.text(isPaused ? 'Paused' : 'Pause');
-                    if (source && source === "user" && type === "multiDialog") {
-                        socket.executeAsGM("pauseDialogById", { dialogId, timeLeft, isPaused });
-                    } else if (source && source === "gm" && type === "multiDialog") {
-                        socket.executeAsUser("pauseDialogById", browserUser.id, { dialogId, timeLeft, isPaused });
-                    }
-                });
-            },
-            close: () => {
-                clearInterval(timer);
-                if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, damageChosen, programmaticallyClosed: true, source, type });
-                }
-                else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, damageChosen, programmaticallyClosed: false, source, type });
-                }
-            }
-        });
-        dialog.dialogState = { interacted: false, decision: null, programmaticallyClosed: false };
-        dialog.render(true);
-    });
 }
