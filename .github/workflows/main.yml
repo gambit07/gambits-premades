@@ -74,7 +74,7 @@ jobs:
               "manifest": "'"https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"'",
               "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
               "compatibility": {
-                "minimum": "'"12"'",
+                "minimum": "'"12.328"'",
                 "verified": "'"12"'",
                 "maximum": "'"12"'"
               }
