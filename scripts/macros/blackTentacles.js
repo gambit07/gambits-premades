@@ -57,7 +57,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     const damageType = "bludgeoning";
     const spellDC = effectOriginActor.system.attributes.spelldc;
     let saveAbility = "dex";
-    const hasEffectApplied = await token.actor.effects.getName('Restrained');
+    const hasEffectApplied = await token.actor.appliedEffects.find(e => e.name === 'Restrained');
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkBlackTentacleRound");
     if(damagedThisTurn && damagedThisTurn === `${token.id}_${game.combat.round}`) return;
 
@@ -248,7 +248,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
     
             if (!userDecision) {
-                await token.document.update({ x: originX, y: originY }, { animate: false });
+                if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
                 return;
             }
             else if (userDecision) {
@@ -264,7 +264,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                         ChatMessage.create(chatData);
                     }
                     else {
-                        await token.document.update({ x: originX, y: originY }, { animate: false });
+                        if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
                         let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),
