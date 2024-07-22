@@ -212,7 +212,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     let validTokens;
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
-    let workflowNonCombat = game.settings.get("gambits-premades", "enable3prNoCombat");
+    let workflowNonCombat = MidiQOL.safeGetGameSetting('gambits-premades', 'enable3prNoCombat');
 
     if (workflowCombat === false || workflowNonCombat) {
         validTokens = canvas.tokens.placeables.filter(t => filterToken(t));

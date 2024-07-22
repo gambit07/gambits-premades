@@ -12,6 +12,9 @@ import { powerWordRebound } from './macros/powerWordRebound.js';
 import { cloudRune } from './macros/cloudRune.js';
 import { blackTentacles } from './macros/blackTentacles.js';
 import { cloudOfDaggers } from './macros/cloudOfDaggers.js';
+import { caltrops } from './macros/caltrops.js';
+import { caltropsFeyGlass } from './macros/caltropsFeyGlass.js';
+import { ballBearings } from './macros/ballBearings.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus } from './helpers.js';
 export let socket;
@@ -124,6 +127,9 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("cloudOfDaggers", cloudOfDaggers);
     socket.register("gmUpdateDisposition", gmUpdateDisposition);
     socket.register("gmToggleStatus", gmToggleStatus);
+    socket.register("caltrops", caltrops);
+    socket.register("caltropsFeyGlass", caltropsFeyGlass);
+    socket.register("ballBearings", ballBearings);
 })
 
 Hooks.once('ready', async function() {
@@ -143,6 +149,9 @@ Hooks.once('ready', async function() {
         addReaction,
         blackTentacles,
         cloudOfDaggers,
+        ballBearings,
+        caltrops,
+        caltropsFeyGlass,
         socket
     };
 

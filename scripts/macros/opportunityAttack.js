@@ -19,13 +19,16 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
     const effectOriginActor = await fromUuid(region.flags["gambits-premades"].actorUuid);
     const effectOriginToken = await fromUuid(region.flags["gambits-premades"].tokenUuid);
-
-    let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
-    if(sentinelUsed) return effectOriginActor.unsetFlag("gambits-premades", "sentinelUsed");
-    let sentinelDeclined = effectOriginActor.getFlag("gambits-premades", "sentinelDeclined");
-    if(sentinelDeclined) return effectOriginActor.unsetFlag("gambits-premades", "sentinelDeclined");
     
     let hasSentinel = effectOriginActor.items.find(i => i.name.toLowerCase() === "sentinel");
+
+    if(hasSentinel) {
+        let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
+        if(sentinelUsed) return effectOriginActor.unsetFlag("gambits-premades", "sentinelUsed");
+        let sentinelDeclined = effectOriginActor.getFlag("gambits-premades", "sentinelDeclined");
+        if(sentinelDeclined) return effectOriginActor.unsetFlag("gambits-premades", "sentinelDeclined");
+    }
+
     let hasPolearmReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === "polearm master");
     let hasDeadlyReachReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === "deadly reach");
 
