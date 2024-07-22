@@ -18,14 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions (V12 Compatability):" >> release_notes.txt
-          echo "  - Dragon Turtle Dueling Shield" >> release_notes.txt
-          echo "  - Duskfall Greatsword" >> release_notes.txt
-          echo "  - Longsword (Corrosion)" >> release_notes.txt
-          echo "  - Oils (Anti-Demon, Arcane, Corrosive, Flame, Frost, Insanity, Spark)" >> release_notes.txt
-          echo "  - Fey Glass Caltrops" >> release_notes.txt
-          echo "  - Masterful Aim" >> release_notes.txt
-          echo "  - Life Absorption" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Cloud of Daggers: Fix template initialization issue" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
