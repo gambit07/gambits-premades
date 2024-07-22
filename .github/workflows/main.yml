@@ -19,7 +19,11 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Cloud of Daggers: Fix template initialization issue" >> release_notes.txt
+          echo "  - Entangle: Update to use core status effect lookup so that translations are accounted for" >> release_notes.txt
+          echo "  - Ball Bearings: Update to use core status effect lookup so that translations are accounted for" >> release_notes.txt
+          echo "  - Hideous Laughter: Update to use core status effect lookup so that translations are accounted for" >> release_notes.txt
+          echo "  - Staff of the Rooted Hills: Update to use core status effect lookup so that translations are accounted for" >> release_notes.txt
+          echo "  - Opportunity Attack: Default conversion factor to 1 so that the automation does not fail if no valid measurement type is found" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

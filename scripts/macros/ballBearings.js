@@ -114,7 +114,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
         if (saveResult.failedSaves.size !== 0) {
             await token.document.update({ x: originX, y: originY }, { animate: false });
 
-            const hasEffectApplied = token.actor.appliedEffects.find(e => e.name === "Prone");
+            const hasEffectApplied = tokenDocument.hasStatusEffect("prone");
 
             if (!hasEffectApplied) {
                 await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${token.document.uuid}`, status: "prone", active: true });

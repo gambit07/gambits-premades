@@ -437,11 +437,10 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             
             const units = canvas.scene.grid.units;
             let conversionFactor;
-            if (units === "feet" || units === "f" || units === "ft") {
-                conversionFactor = 1;
-            } else if (units === "meters" || units === "m" || units === "mt") {
+            if (units === "meters" || units === "m" || units === "mt") {
                 conversionFactor = 0.3;
             }
+            else conversionFactor = 1;
         
             let maxRange;
             if (onlyThrownWeapons || (validSpells && !validWeapons)) {
