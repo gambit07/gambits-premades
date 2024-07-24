@@ -19,12 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Enable 3rd Party Reactions Outside Combat: Updated multiple pieces that prevented this setting from working properly." >> release_notes.txt
-          echo "  - Black Tentacles: Update to fix effect application, effect removal on spell ending, and addition of half movement for quasi difficult terrain." >> release_notes.txt
-          echo "  - Hideous Laughter: Revert sequencer change to modify animation, seems it was a sequencer bug. Fix concentration removal on initial saving throw success." >> release_notes.txt
-          echo "  - Ball Bearings: Fix for potential issue on move through" >> release_notes.txt
-          echo "  - Caltrops: Fix for potential issue on move through" >> release_notes.txt
-          echo "  - Cloud of Daggers: Fix for potential issue on move through" >> release_notes.txt
+          echo "  - Opportunity Attack: Resolve double dialog prompts. Add some additional flag cleanup when needed.
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

@@ -1,6 +1,7 @@
 const regionTokenStates = new Map();
 
 export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, originX, originY}) {
+    if(!game.user.isGM) return;
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
     const socket = module.socket;
@@ -568,6 +569,9 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         let templateFlag = await actor.getFlag("gambits-premades", "opportunityAttackTemplate");
         let templateAttachmentFlag = await actor.getFlag("gambits-premades", "templateAttachedToken");
         let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
+        let sentinelUsed = actor.getFlag("gambits-premades", "sentinelUsed");
+        let sentinelDeclined = actor.getFlag("gambits-premades", "sentinelDeclined");
+        
         let templateData = templateFlag ? await fromUuid(templateFlag) : null;
 
         /*let effectNames = ["Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack"];
@@ -583,6 +587,8 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         if (templateFlag) await actor.unsetFlag("gambits-premades", "opportunityAttackTemplate");
         if (templateAttachmentFlag) await actor.unsetFlag("gambits-premades", "templateAttachedToken");
         if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
+        if(sentinelUsed) await actor.unsetFlag("gambits-premades", "sentinelUsed");
+        if(sentinelDeclined) await actor.unsetFlag("gambits-premades", "sentinelDeclined");
     }
 
     if (combatEvent === "endCombat") {
