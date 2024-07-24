@@ -10,8 +10,6 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     let dialogId = "silverybarbs";
     if(!workflow) return;
     if(workflow.item.name === itemProperName) return;
-    
-    if (!game.combat) return;
 
     // Check if attack hits
     if(workflowType === "attack" && workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) return;

@@ -13,8 +13,6 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     let target = workflow.hitTargets.first();
     let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
 
-    if (!game.combat) return;
-
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
 
     for (const validTokenPrimary of findValidTokens) {

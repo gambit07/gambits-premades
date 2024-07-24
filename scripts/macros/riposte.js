@@ -21,8 +21,6 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
     let attackTotal = workflow.attackTotal;
     if (attackTotal >= targetAC) return;
 
-    if (!game.combat) return;
-
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: ["superiority dice", "superiority die"], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
 
     let browserUser;

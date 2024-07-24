@@ -10,8 +10,6 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     let dialogId = "cuttingwords";
     if(!workflow) return;
     if(workflow.item.name === itemProperName) return;
-    
-    if (!game.combat) return;
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["bardic inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
     

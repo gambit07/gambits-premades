@@ -14,7 +14,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let oaDisabled = await region.getFlag("gambits-premades", "opportunityAttackDisabled");
     if(oaDisabled) return;
     
-    let currentCombatant = canvas.tokens.get(game.combat.current.tokenId);
+    let currentCombatant = canvas.tokens.get(game.combat?.current.tokenId);
     if (currentCombatant.id !== token.object.id) return; // Avoid initiating opportunity attack when it's not a token's turn
 
     const effectOriginActor = await fromUuid(region.flags["gambits-premades"].actorUuid);

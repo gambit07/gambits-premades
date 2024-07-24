@@ -10,8 +10,6 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
     let dialogId = "indomitable";
     if(!workflow) return;
     if(workflow.item.name === itemProperName) return;
-    
-    if (!game.combat) return;
 
     // Check if there is a save success
     if(workflowType === "save" && workflow.failedSaves.size === 0) return;

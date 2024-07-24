@@ -159,6 +159,8 @@ Hooks.once('ready', async function() {
     setupTemplateCreationUpdateHooks();
 
     async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
+        if(!game.gpsSettings.enable3prNoCombat && !game.combat && workflowCombat) return;
+
         if (game.user.isGM) {
             await socket.executeAsGM( workflowItem, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
         } else {
@@ -340,6 +342,9 @@ async function updateSettings(settingKey = null) {
     }
     if (settingKey === null || settingKey === 'gambits-premades.Identify Restriction Message') {
         game.gpsSettings.identifyRestrictionMessage = game.settings.get('gambits-premades', 'Identify Restriction Message');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.enable3prNoCombat') {
+        game.gpsSettings.enable3prNoCombat = game.settings.get('gambits-premades', 'enable3prNoCombat');
     }
 }
 

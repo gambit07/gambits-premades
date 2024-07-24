@@ -1,6 +1,7 @@
 const regionTokenStates = new Map();
 
 export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario}) {
+    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     let region = await fromUuid(regionUuid);
     let template = await fromUuid(region.flags["region-attacher"].attachedTemplate)
     let tokenDocument = await fromUuid(tokenUuid);
@@ -31,7 +32,8 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario}) {
         regionTokenStates.set(`${region.id}-${token.id}-entered`, true);
     }
     else if(regionScenario === "onPostMove") {
-        if (token?.regions?.has(region)) return;
+        await wait(250);
+        
         const entered = regionTokenStates.get(`${region.id}-${token.id}-entered`);
         const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
     
@@ -41,6 +43,8 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario}) {
             regionTokenStates.delete(`${region.id}-${token.id}-exited`);
             return;
         }
+
+        if (token?.regions?.has(region)) return;
     }
 
     let turn = game.combat.round + '-' + game.combat.turn;

@@ -12,7 +12,6 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
     let target = workflow.hitTargets.first();
 
     if(workflow.targets.size > 1) return;
-    if(!game.combat) return;
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: [itemName], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
 

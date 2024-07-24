@@ -217,7 +217,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     if (workflowCombat === false || workflowNonCombat) {
         validTokens = canvas.tokens.placeables.filter(t => filterToken(t));
     } else {
-        validTokens = game.combat.combatants.map(combatant => canvas.tokens.get(combatant.tokenId)).filter(t => filterToken(t));
+        validTokens = game.combat?.combatants?.map(combatant => canvas.tokens.get(combatant.tokenId)).filter(t => filterToken(t));
     }
     
     function filterToken(t) {

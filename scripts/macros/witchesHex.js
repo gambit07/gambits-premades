@@ -11,7 +11,6 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
     if(!workflow) return;
     if(workflow.item.name === itemProperName) return;
     
-    if (!game.combat) return;
     if(workflowType === "save" && workflow.saveResults.length === 0) return;
     if(workflowType === "attack" && (workflow.isCritical === true || workflow.isFumble === true)) return;
 

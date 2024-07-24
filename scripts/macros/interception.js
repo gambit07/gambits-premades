@@ -14,8 +14,6 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
     const actionTypes = ["mwak", "rwak", "msak", "rsak"];
     if (!actionTypes.some(type => workflow.item.system.actionType?.includes(type))) return;
 
-    if (!game.combat) return;
-
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "item", itemChecked: ["mwak", "shield"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemyAlly", workflowType: workflowType, workflowCombat: workflowCombat});
 
     let browserUser;

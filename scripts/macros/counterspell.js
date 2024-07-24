@@ -11,8 +11,6 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     if(workflow.item.type !== "spell" || workflow.item.name === itemProperName) return;
     const lastMessage = game.messages.contents[game.messages.contents.length - 1]; // Use to hide initial spell message
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
-    
-    if (!game.combat) return;
 
     let selectedToken = workflow.token;
     let castLevel = false;

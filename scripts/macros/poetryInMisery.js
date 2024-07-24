@@ -13,8 +13,6 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     let initiatingToken;
     (workflow) ? initiatingToken = workflow.token : initiatingToken = await MidiQOL.tokenForActor(workflowData.actor.uuid);
 
-    if (!game.combat && (workflowType === "attack" || (workflowType === "save" && workflowCombat === true))) return;
-
     let findValidTokens = helpers.findValidTokens({initiatingToken: initiatingToken, targetedToken: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
 
     let browserUser;

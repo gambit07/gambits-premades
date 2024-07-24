@@ -14,7 +14,6 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
 
     if(target.actor.system.attributes.hp.value >= Math.floor(target.actor.system.attributes.hp.max / 2)) return;
     if(workflow.targets.size > 1) return;
-    if(!game.combat) return;
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
 
@@ -128,7 +127,6 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
                 await workflow.setAttackRoll(rerollNew);
             });
             
-            // Complete the new item use workflow
             await MidiQOL.completeItemUse(newItemData, {}, optionsNew);
         }
     }

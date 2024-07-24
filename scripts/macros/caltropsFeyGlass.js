@@ -1,6 +1,7 @@
 const regionTokenStates = new Map();
 
 export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, originX, originY}) {
+    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     const module = await import('../module.js');
     const socket = module.socket;
     let region = await fromUuid(regionUuid);
@@ -41,7 +42,8 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
         regionTokenStates.set(`${region.id}-${token.id}-entered`, true);
     }
     else if(regionScenario === "onPostMove") {
-        if (token?.regions?.has(region)) return;
+        await wait(250);
+
         const entered = regionTokenStates.get(`${region.id}-${token.id}-entered`);
         const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
     
@@ -51,6 +53,8 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
             regionTokenStates.delete(`${region.id}-${token.id}-exited`);
             return;
         }
+
+        if (token?.regions?.has(region)) return;
     }
 
     let dialogContent = `
