@@ -19,7 +19,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Hopefully fix package deployment to allow v11 installs again" >> release_notes.txt
+          echo "- General: Hopefully fix package deployment to allow v11 installs again-v2" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -61,7 +61,7 @@ jobs:
             "id": "'"gambits-premades"'",
             "release": {
               "version": "'"${{ steps.get-version.outputs.version }}"'",
-              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"'",
+              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}/module.json"'",
               "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
               "compatibility": {
                 "minimum": "'"11"'",
