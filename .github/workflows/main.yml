@@ -39,6 +39,18 @@ jobs:
         id: get-version
         run: echo "version=$(node ./.github/workflows/get-version.js)" >> $GITHUB_OUTPUT
 
+      - name: Modify Module Manifest With Release-Specific Values
+        id: sub_manifest_link_version
+        uses: cschleiden/replace-tokens@v1
+        with:
+          files: 'module.json'
+        env:
+          VERSION: ${{steps.get_version.outputs.version-without-v}}
+          URL: ${{ env.project_url }}
+          MANIFEST: ${{ env.latest_manifest_url }}
+          DOWNLOAD: ${{ env.release_module_url }}
+          CHANGELOG: ${{ env.changelog_url }}
+
       - name: Create Release
         id: create-release
         uses: ncipollo/release-action@v1
