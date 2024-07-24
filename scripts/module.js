@@ -338,3 +338,24 @@ Hooks.on('updateToken', (tokenDocument, updateData, options, userId) => {
         updateTemplatePosition(tokenDocument);
     }
 });
+
+Hooks.on('midi-qol.ready', () => {
+    const imgSource = game.version < 12 ? 'icon' : 'img';
+    const isMidi = CONFIG.statusEffects.find((e) => e.id == 'reaction');
+    const isDFreds = CONFIG.statusEffects.find((e) => e.id == 'Convenient Effect: Reaction');
+    if (isMidi) isMidi.name == 'Reaction';
+    else if (isDFreds) {
+        foundry.utils.mergeObject(isDFreds, {
+            id: 'reaction',
+            _id: 'dnd5ereaction000',
+            changes: [{ key: 'flags.midi-qol.actions.reaction', mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: true }],
+            [imgSource]: 'modules/midi-qol/icons/reaction.svg',
+            effectData: { transfer: false },
+            flags: { dae: { specialDuration: ['turnStart', 'combatEnd', 'shortRest'] } },
+        });
+        ActiveEffect.implementation.fromStatusEffect("reaction", { keepId: true }).then(effect => {
+          //midiReactionEffect = effect;
+          globalThis.MidiQOL.midiReactionEffect = effect;
+      });
+    }
+});

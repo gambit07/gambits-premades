@@ -19,11 +19,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: A little housecleaning for some outstanding bugs that caused automations to fail in v11. This will likely be my last release for V11, V12 support will be added, and it will not be backwards compatible with V11." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Sentinel: Fixed errant parameter entry causing the users dialog not to pop when mirror dialog enabled" >> release_notes.txt
-          echo "  - Arcane Shot: Removed Uses Prompt on the compendium item to fix double usage" >> release_notes.txt
-          echo "  - Dissonant Whispers: A few miscellaneous bugfixes causing the item to fail" >> release_notes.txt
+          echo "- General: Hopefully fix package deployment to allow v11 installs again" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
