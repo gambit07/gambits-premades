@@ -2,7 +2,7 @@
 
 A collection of automated items, spells, feats, and anything else I decide to do! This module primarily uses MidiQOL along with other synergistic modules to achieve these automations, credit to tposney, caewok, zhell, aedif, and saibot for all of their relevant modules.
 
-<b>Dependencies</b>
+<b>Dependencies V11</b>
 <p>
 Midi QOL<br>
 Active Auras<br>
@@ -13,6 +13,17 @@ Template Macro<br>
 Sequencer<br>
 socketlib<br>
 Dynamic effects using Active Effects
+</p>
+
+<b>Dependencies V12</b>
+<p>
+Midi QOL<br>
+Active Auras<br>
+Sequencer<br>
+socketlib<br>
+Dynamic effects using Active Effects<br>
+Region Attacher<br>
+Bugbears Scripts
 </p>
 
 <b>Instructions:</b>
