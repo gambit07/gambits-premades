@@ -18,8 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Fully automated release versioning. Hooray!-v2" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Fix dependencies not actually being dependencies" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

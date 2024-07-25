@@ -216,78 +216,78 @@
           "verified": "3.2.1"
         }
       }
+    ],
+    "requires": [
+      {
+        "id": "midi-qol",
+        "type": "module",
+        "manifest": "https://gitlab.com/tposney/midi-qol/raw/v11/package/module.json",
+        "compatibility": {
+          "minimum": "11.4.42",
+          "verified": "11.4.42"
+        }
+      },
+      {
+        "id": "ActiveAuras",
+        "type": "module",
+        "manifest": "https://github.com/kandashi/Active-Auras/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "0.9.13"
+        }
+      },
+      {
+        "id": "sequencer",
+        "type": "module",
+        "manifest": "https://github.com/fantasycalendar/FoundryVTT-Sequencer/releases/latest/download/manifest.json",
+        "compatibility": {
+          "verified": "3.2.11"
+        }
+      },
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
+        "compatibility": {
+          "verified": "1.1.0"
+        }
+      },
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/download/v1.12.14.0/module.json",
+        "compatibility": {
+          "verified": "1.12.14.0"
+        }
+      },
+      {
+        "id": "dae",
+        "type": "module",
+        "manifest": "https://gitlab.com/tposney/dae/raw/v11/package/module.json",
+        "compatibility": {
+          "minimum": "11.3.39",
+          "verified": "11.3.39"
+        }
+      },
+      {
+        "id": "region-attacher",
+        "type": "module",
+        "manifest": "https://github.com/roth-michael/region-attacher/releases/download/1.4.2/module.json",
+        "compatibility": {
+          "minimum": "1.4.2",
+          "verified": "1.4.2"
+        }
+      },
+      {
+        "id": "bugs",
+        "type": "module",
+        "manifest": "https://github.com/thatlonelybugbear/bugs/releases/download/v1.2.0/module.json",
+        "compatibility": {
+          "minimum": "1.2.0",
+          "verified": "1.2.0"
+        }
+      }
     ]
   },
-  "requires": [
-    {
-      "id": "midi-qol",
-      "type": "module",
-      "manifest": "https://gitlab.com/tposney/midi-qol/raw/v11/package/module.json",
-      "compatibility": {
-        "minimum": "11.4.42",
-        "verified": "11.4.42"
-      }
-    },
-    {
-      "id": "ActiveAuras",
-      "type": "module",
-      "manifest": "https://github.com/kandashi/Active-Auras/releases/latest/download/module.json",
-      "compatibility": {
-        "verified": "0.9.13"
-      }
-    },
-    {
-      "id": "sequencer",
-      "type": "module",
-      "manifest": "https://github.com/fantasycalendar/FoundryVTT-Sequencer/releases/latest/download/manifest.json",
-      "compatibility": {
-        "verified": "3.2.11"
-      }
-    },
-    {
-      "id": "socketlib",
-      "type": "module",
-      "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
-      "compatibility": {
-        "verified": "1.1.0"
-      }
-    },
-    {
-      "id": "lib-wrapper",
-      "type": "module",
-      "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/download/v1.12.14.0/module.json",
-      "compatibility": {
-        "verified": "1.12.14.0"
-      }
-    },
-    {
-      "id": "dae",
-      "type": "module",
-      "manifest": "https://gitlab.com/tposney/dae/raw/v11/package/module.json",
-      "compatibility": {
-        "minimum": "11.3.39",
-        "verified": "11.3.39"
-      }
-    },
-    {
-      "id": "region-attacher",
-      "type": "module",
-      "manifest": "https://github.com/roth-michael/region-attacher/releases/download/1.4.2/module.json",
-      "compatibility": {
-        "minimum": "1.4.2",
-        "verified": "1.4.2"
-      }
-    },
-    {
-      "id": "bugs",
-      "type": "module",
-      "manifest": "https://github.com/thatlonelybugbear/bugs/releases/download/v1.2.0/module.json",
-      "compatibility": {
-        "minimum": "1.2.0",
-        "verified": "1.2.0"
-      }
-    }
-  ],
   "url": "https://github.com/gambit07/gambits-premades",
   "manifest": "",
   "download": ""
