@@ -34,11 +34,15 @@ jobs:
         working-directory: ./
         run: zip -r ./module.zip ./*
 
-      - name: Get Version
+      - name: Get Version from Commit Message
         id: get-version
         run: |
-          version=$(node -pe "require('./module.json').version")
+          version=$(git log -1 --pretty=%B | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+')
           echo "version=$version" >> $GITHUB_OUTPUT
+          echo "Extracted version: $version"
+
+      - name: Update module.json with Version
+        run: node update-module.js ${{ steps.get-version.outputs.version }}
 
       - name: Create Release
         id: create-release
