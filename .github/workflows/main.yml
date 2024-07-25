@@ -18,8 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Resolve double dialog prompts. Add some additional flag cleanup when needed." >> release_notes.txt
+          echo "- General:" >> release_notes.txt
+          echo "  - Fully automated release versioning. Hooray!" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
