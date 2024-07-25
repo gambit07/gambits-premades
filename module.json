@@ -8,7 +8,7 @@
       "flags": {}
     }
   ],
-  "version": "#{VERSION}#",
+  "version": "",
   "compatibility": {
     "minimum": 12.328,
     "verified": 12,
@@ -288,8 +288,7 @@
       }
     }
   ],
-  "url": "#{URL}#",
-  "manifest": "#{MANIFEST}#",
-  "download": "#{DOWNLOAD}#",
-  "changelog": "#{CHANGELOG}#"
+  "url": "https://github.com/gambit07/gambits-premades",
+  "manifest": "",
+  "download": ""
 }

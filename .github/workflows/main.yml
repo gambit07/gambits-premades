@@ -1,11 +1,5 @@
 name: Module Builder
 
-env:
-  project_url: "https://github.com/${{github.repository}}"
-  latest_manifest_url: "https://github.com/${{github.repository}}/releases/latest/download/module.json"
-  release_module_url: "https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/module.zip"
-  changelog_url: "https://github.com/${{github.repository}}/releases/tag/${{github.event.release.tag_name}}"
-
 on:
   push:
     branches:
@@ -24,8 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Releases: More automated release?" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Opportunity Attack: Resolve double dialog prompts. Add some additional flag cleanup when needed." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -40,34 +34,23 @@ jobs:
         working-directory: ./
         run: zip -r ./module.zip ./*
 
-      - name: Extract Version From Tag
-        id: get_version
-        uses: battila7/get-version-action@v2
-
-      - name: Modify Module Manifest With Release-Specific Values
-        id: sub_manifest_link_version
-        uses: cschleiden/replace-tokens@v1
-        with:
-          files: 'module.json'
-        env:
-          VERSION: ${{steps.get_version.outputs.version-without-v}}
-          URL: ${{ env.project_url }}
-          MANIFEST: ${{ env.latest_manifest_url }}
-          DOWNLOAD: ${{ env.release_module_url }}
-          CHANGELOG: ${{ env.changelog_url }}
+      - name: Get Version
+        shell: bash
+        id: get-version
+        run: echo "version=$(node ./.github/workflows/get-version.js)" >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create-release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          name: Release ${{steps.get_version.outputs.version-without-v}}
+          name: Release ${{ steps.get-version.outputs.version }}
           draft: false
           prerelease: false
           body: ${{ env.release-notes-github }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
-          tag: ${{steps.get_version.outputs.version-without-v}}
+          tag: ${{ steps.get-version.outputs.version }}
 
       - name: Release Foundry Package
         run: |
@@ -77,9 +60,9 @@ jobs:
           -d '{
             "id": "'"gambits-premades"'",
             "release": {
-              "version": "'"${{steps.get_version.outputs.version-without-v}}"'",
-              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"'",
-              "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{steps.get_version.outputs.version-without-v}}"'",
+              "version": "'"${{ steps.get-version.outputs.version }}"'",
+              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
+              "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
               "compatibility": {
                 "minimum": "'"12.328"'",
                 "verified": "'"12"'",
@@ -95,8 +78,8 @@ jobs:
           curl -H "Content-Type: application/json" \
           -d '{
           "embeds": [{
-            "title": "Gambit'"'"'s Premades Release: ${{steps.get_version.outputs.version-without-v}}",
-            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/${{steps.get_version.outputs.version-without-v}}>",
+            "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
+            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
             "image": {
               "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
             }
