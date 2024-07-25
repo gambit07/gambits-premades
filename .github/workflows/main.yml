@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- General:" >> release_notes.txt
-          echo "  - Fully automated release versioning. Hooray!" >> release_notes.txt
+          echo "  - Fully automated release versioning. Hooray!-v2" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -30,10 +30,6 @@ jobs:
           DISCORD_NOTES=$(awk '{printf "%s\\n", $0}' release_notes.txt | sed 's/\\n$//')
           echo "::set-output name=release-notes-discord::$DISCORD_NOTES"
 
-      - name: Zip Files
-        working-directory: ./
-        run: zip -r ./module.zip ./*
-
       - name: Get Version from Commit Message
         id: get-version
         run: |
@@ -43,6 +39,10 @@ jobs:
 
       - name: Update module.json with Version
         run: node update-module.js ${{ steps.get-version.outputs.version }}
+
+      - name: Zip Files
+        working-directory: ./
+        run: zip -r ./module.zip ./*
 
       - name: Create Release
         id: create-release
