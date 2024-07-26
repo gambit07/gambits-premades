@@ -19,7 +19,9 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Hopefully fix package deployment to allow v11 installs again-v3" >> release_notes.txt
+          echo "- Bugfixes" >> release_notes.txt
+          echo "  - Reckless Attack: Add additional method for setting advantage on first attack when choosing to attack recklessly" >> release_notes.txt
+          echo "  - Enervation: Appropriately end effect and animation when saving throw is initially succeeded." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
