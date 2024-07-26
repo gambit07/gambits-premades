@@ -470,7 +470,7 @@ Hooks.on('updateToken', async (tokenDocument, updateData, options, userId) => {
 });
 
 //Handle lack of dfreds effects with midi native reaction handling
-Hooks.on('deleteActiveEffect', async (activeEffect, options, userId) => {
+/*Hooks.on('deleteActiveEffect', async (activeEffect, options, userId) => {
 	if (activeEffect.name === "Reaction") {
 		const actor = activeEffect.parent;
 
@@ -481,4 +481,4 @@ Hooks.on('deleteActiveEffect', async (activeEffect, options, userId) => {
 		}
 	}
 	return;
-  });
+  });*/

@@ -129,35 +129,60 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     }
 
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Opportunity Attack Timeout`));
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
 
-    if(MidiQOL.hasUsedReaction(effectOriginActor)) return;
+    // Check if origin token has already used reaction
+    if (MidiQOL.hasUsedReaction(effectOriginActor)) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at reaction available`);
+        return;
+    }
 
     // Check if origin token can see token moving
-    if(!MidiQOL.canSee(effectOriginToken, token)) return;
+    if(!MidiQOL.canSee(effectOriginToken, token)) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at sight check`);
+        return;
+    }
 
     // Check if same disposition token
-    if(token.disposition === effectOriginToken.disposition) return;
+    if(token.disposition === effectOriginToken.disposition) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at token disposition check`);
+        return;
+    }
 
     // Check if origin tokens reaction is already used or a spell effect is preventing reactions
-    const effectNamesOrigin = ["Reaction", "Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
+    const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
     let hasEffectOrigin = effectOriginActor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
-    if(hasEffectOrigin) return;
+    if(hasEffectOrigin) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at spell effect preventing reaction`);
+        return;
+    }
 
     // Check if origin token is incapacitated
-    let isIncapacitated = MidiQOL.checkIncapacitated(effectOriginToken);
-    if(isIncapacitated) return;
+    if(MidiQOL.checkIncapacitated(effectOriginToken)) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because origin token is incapacitated`);
+        return;
+    }
 
     //Check if token is disengaged and origin token does not have Sentinel
     let isDisengaged = token.actor.effects.some(e => e.name.toLowerCase() === "disengage");
-    if(isDisengaged && !hasSentinel) return;
+    if(isDisengaged && !hasSentinel) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using disengage`);
+        return;
+    }
 
     //Check if token activated mobile feat attack feature
     let isMobileFeat = token.actor.getFlag("midi-qol", "oaMobileFeatAttack");
-    if (isMobileFeat && isMobileFeat.includes(effectOriginToken.id)) return;
+    if (isMobileFeat && isMobileFeat.includes(effectOriginToken.id)) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using mobile feat`);
+        return;
+    }
 
     //Check if token activated fancy footwork attack feature
     let isFancyFootwork = token.actor.getFlag("midi-qol", "oaFancyFootworkAttack");
-    if (isFancyFootwork && isFancyFootwork.includes(effectOriginToken.id)) return;
+    if (isFancyFootwork && isFancyFootwork.includes(effectOriginToken.id)) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using fancy footwork`);
+        return;
+    }
 
     //Check if origin token is Charmed by initiating token
     let isCharmed = effectOriginActor.appliedEffects.find(e => e.name.toLowerCase() === "charmed");
@@ -165,16 +190,26 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         let charmerItem = fromUuidSync(isCharmed.origin);
         let charmer;
         if(charmerItem) charmer = charmerItem.parent.id;
-        if(charmer === token.actor.id) return;
+        if(charmer === token.actor.id) {
+            if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because origin token is charmed by token`);
+            return;
+        }
     }
 
     // Check if the token has cast Kinetic Jaunt, Zephyr Strike, or the generic immunity effect has been applied
     const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Opportunity Attack Immunity", "Rabbit Hop", "Ashardalon's Stride"];
     let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
-    if(hasEffectToken) return;
+    if(hasEffectToken) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using an immunity effect`);
+        return;
+    }
 
+    // Check if the token has used Flyby
     let hasFlyby = token.actor.items.find(i => i.name.toLowerCase().includes("flyby"));
-    if(hasFlyby) return;
+    if(hasFlyby) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using flyby`);
+        return;
+    }
 
     let originDisadvantage = token.actor.items.some(i => i.name.toLowerCase().includes("escape the hoard"));
     // Check valid weapons
@@ -408,10 +443,6 @@ export async function enableOpportunityAttack(combat, combatEvent) {
         const { token } = combatant;
         let browserUser = MidiQOL.playerForActor(actor);
     
-        // Perform cleanup
-        const existingOA = actor.items.find(item => item.name === 'Opportunity Attack');
-        if(existingOA) await existingOA.delete();
-    
         if (actor.type === 'npc' || actor.type === 'character') {
             let hasWarCaster = actor.items.find(i => i.name.toLowerCase() === "war caster");
             let overrideItems = ["Booming Blade"];
@@ -457,11 +488,11 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                 }, 0);
             }
         
-            if (token.width === 1 && maxRange === 10) maxRange += 1.7;
-            else if (token.width === 2 && maxRange === 5) maxRange += 0.7;
-            else if (token.width === 3 && maxRange === 5) maxRange += 1.7;
-            else if (token.width === 3 && maxRange === 10) maxRange += 0.7;
-            else if (token.width === 4 && maxRange === 10) maxRange += 1.6;
+            if (token.width === 1 && maxRange === 10) maxRange;
+            else if (token.width === 2 && maxRange === 5) maxRange;
+            else if (token.width === 3 && maxRange === 5) maxRange;
+            else if (token.width === 3 && maxRange === 10) maxRange;
+            else if (token.width === 4 && maxRange === 10) maxRange;
             
             const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * canvas.scene.dimensions.distance;
             maxRange = (maxRange * conversionFactor) + tokenSizeOffset;
@@ -515,6 +546,122 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         system: {
                             source: `let oaDisabled = await region.getFlag("gambits-premades", "opportunityAttackDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; if(event.data.teleport === true) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenPostMove", originX: event.data.segments[0].to.x, originY: event.data.segments[0].to.y});`,
                             events: ['tokenMove']
+                        }
+                    },
+                    {
+                        type: "executeScript",
+                        name: "onTurnEnd",
+                        disabled: false,
+                        system: {
+                            source: `let token = event.data.token;
+                                let actor = event.data.token.actor;
+
+                                let recalculate = false;
+                                let tokenSize = Math.max(token.width, token.height);
+                                let validWeapons = actor.items.filter(item => (item.system.actionType === "mwak" && item.system.equipped) || (item.system?.type?.value === "monster" && item?.type === "feat" && (item.system?.actionType === "mwak" || item.system?.actionType === "msak")) || (item?.type === "weapon" && item.system?.actionType === "msak"));
+
+                                recalculate = await checkAndSetFlag("opportunityAttackTemplateValidWeapons", validWeapons) || recalculate;
+                                recalculate = await checkAndSetFlag("opportunityAttackTemplateTokenSize", tokenSize) || recalculate;
+                                recalculate = await handleMWAKRange() || recalculate;
+
+                                if (!recalculate) return;
+
+                                const validSpells = actor.flags["midi-qol"].opportunityAttackTemplateValidSpells;
+                                let maxRange = calculateMaxRange(validWeapons, validSpells, tokenSize);
+                                if(maxRange === false) return;
+
+                                await actor.setFlag("midi-qol", "opportunityAttackTemplateValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
+
+                                const tokenCenterX = token.x + token.object.w / 2;
+                                const tokenCenterY = token.y + token.object.h / 2;
+
+                                region.update({
+                                    elevation: { bottom: -maxRange, top: maxRange },
+                                    shapes: region.shapes.map(shape => ({
+                                        ...shape,
+                                        radiusX: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
+                                        radiusY: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance
+                                    }))
+                                });
+                                
+                                async function checkAndSetFlag(property, newValue) {
+                                    const oldValue = JSON.stringify(actor.flags["midi-qol"][property]);
+                                    if (oldValue !== JSON.stringify(newValue)) {
+                                        await actor.setFlag("midi-qol", property, newValue);
+                                        return true;
+                                    }
+                                    return false;
+                                }
+
+                                async function handleMWAKRange() {
+                                    if (!actor.flags["midi-qol"]?.range?.mwak) return false;
+
+                                    let mwakExpire = actor.appliedEffects
+                                        .filter(effect => effect.duration.turns == 1)
+                                        .reduce((acc, effect) => {
+                                            const change = effect.changes.find(change => change.key == "flags.midi-qol.range.mwak");
+                                            return change ? acc + Number(change.value) : acc;
+                                        }, 0);
+
+                                    let mwakRange = actor.flags["midi-qol"].range.mwak - mwakExpire;
+                                    return await checkAndSetFlag("opportunityAttackTemplateMwakRange", mwakRange);
+                                }
+
+                                function calculateMaxRange(validWeapons, validSpells, tokenSize) {
+                                    const units = canvas.scene.grid.units;
+                                    let conversionFactor;
+                                    if (units === "meters" || units === "m" || units === "mt") {
+                                        conversionFactor = 0.3;
+                                    }
+                                    else conversionFactor = 1;
+
+                                    const tokenSizeOffset = tokenSize * 0.5 * canvas.scene.dimensions.distance;
+
+                                    if (!validWeapons?.length && !validSpells?.length) {
+                                        region.update({
+                                            elevation: { bottom: -1, top: 1 },
+                                            shapes: region.shapes.map(shape => ({
+                                                ...shape,
+                                                radiusX: 5,
+                                                radiusY: 5
+                                            }))
+                                        });
+                                        return false;
+                                    }
+
+                                    let onlyThrownWeapons = validWeapons?.length > 0 && validWeapons?.every(item => {
+                                        return item.system.properties.has('thr');
+                                    });
+
+                                    let maxRange;
+
+                                    if (onlyThrownWeapons || (validSpells?.length && !validWeapons?.length)) {
+                                        maxRange = 5;
+                                    } else {
+                                        maxRange = validWeapons?.reduce((max, item) => {
+                                            let rangeValue = item.system.range?.value;
+                                            let noThr = !item.system.properties?.has('thr');
+                                            if (rangeValue && !isNaN(rangeValue) && noThr) {
+                                                return Math.max(max, rangeValue);
+                                            }
+                                            return max;
+                                        }, 0);
+                                    }
+
+                                    if (token.width === 1 && maxRange === 10) maxRange;
+                                    else if (token.width === 2 && maxRange === 5) maxRange;
+                                    else if (token.width === 3 && maxRange === 5) maxRange;
+                                    else if (token.width === 3 && maxRange === 10) maxRange;
+                                    else if (token.width === 4 && maxRange === 10) maxRange;
+
+                                    maxRange = (maxRange * conversionFactor) + tokenSizeOffset;
+
+                                    if (actor.flags["midi-qol"]?.range?.mwak) {
+                                        maxRange += (actor.flags["midi-qol"].opportunityAttackTemplateMwakRange * conversionFactor);
+                                    }
+                                    return maxRange;
+                                }`,
+                            events: ['tokenTurnEnd']
                         }
                     }
                 ],
