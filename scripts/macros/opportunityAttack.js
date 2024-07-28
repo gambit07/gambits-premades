@@ -207,7 +207,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     // Check if the token has used Flyby
     let hasFlyby = token.actor.items.find(i => i.name.toLowerCase().includes("flyby"));
     if(hasFlyby) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using flyby`);
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token has flyby`);
         return;
     }
 

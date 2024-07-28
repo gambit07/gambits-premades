@@ -14,8 +14,8 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
-    let itemProperName = "Fey Glass Caltrops";
-    let chosenItem = effectOriginActor.items.find(i => i.name === itemProperName);
+    let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
+    let itemProperName = chosenItem.name;
     let dialogId = "feyglasscaltrops";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
     let browserUser = MidiQOL.playerForActor(token.actor);

@@ -15,6 +15,8 @@ import { cloudOfDaggers } from './macros/cloudOfDaggers.js';
 import { caltrops } from './macros/caltrops.js';
 import { caltropsFeyGlass } from './macros/caltropsFeyGlass.js';
 import { ballBearings } from './macros/ballBearings.js';
+import { runicShield } from './macros/runicShield.js';
+import { mageSlayer } from './macros/mageSlayer.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus } from './helpers.js';
 export let socket;
@@ -130,6 +132,8 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("caltrops", caltrops);
     socket.register("caltropsFeyGlass", caltropsFeyGlass);
     socket.register("ballBearings", ballBearings);
+    socket.register("runicShield", runicShield);
+    socket.register("mageSlayer", mageSlayer);
 })
 
 Hooks.once('ready', async function() {
@@ -194,6 +198,7 @@ Hooks.once('ready', async function() {
         if (game.gpsSettings.protectionEnabled && game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.powerWordReboundEnabled) await executeWorkflow({ workflowItem: "powerWordRebound", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.cloudRuneEnabled) await executeWorkflow({ workflowItem: "cloudRune", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.runicShieldEnabled) await executeWorkflow({ workflowItem: "runicShield", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
@@ -201,6 +206,13 @@ Hooks.once('ready', async function() {
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.riposteEnabled) await executeWorkflow({ workflowItem: "riposte", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+    });
+
+    Hooks.on("midi-qol.preWaitForSaves", async (workflow) => {
+        console.log(workflow)
+        if(!workflow.item.hasSave) return;
+        let workflowItemUuid = workflow.itemUuid;
+        if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
@@ -229,6 +241,12 @@ Hooks.once('ready', async function() {
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
         if (game.gpsSettings.interceptionEnabled) await executeWorkflow({ workflowItem: "interception", workflowData: workflowItemUuid, workflowType: "damage", workflowCombat: true });
+    });
+
+    Hooks.on("midi-qol.preCompleted", async (workflow) => {
+        if (!workflow.item.type === "spell") return;
+        let workflowItemUuid = workflow.itemUuid;
+        if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "spell", workflowCombat: true });
     });
 
     Hooks.on("dnd5e.rollAbilitySave", async (actor, roll, abilityId) => {
@@ -338,13 +356,16 @@ async function updateSettings(settingKey = null) {
         game.gpsSettings.debugEnabled = game.settings.get('gambits-premades', 'debugEnabled');
     }
     if (settingKey === null || settingKey === 'gambits-premades.Enable Identify Restrictions') {
-        game.gpsSettings.enableIdentifyRestrictions = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
+        game.gpsSettings.identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
     }
     if (settingKey === null || settingKey === 'gambits-premades.Identify Restriction Message') {
         game.gpsSettings.identifyRestrictionMessage = game.settings.get('gambits-premades', 'Identify Restriction Message');
     }
-    if (settingKey === null || settingKey === 'gambits-premades.enable3prNoCombat') {
-        game.gpsSettings.enable3prNoCombat = game.settings.get('gambits-premades', 'enable3prNoCombat');
+    if (settingKey === null || settingKey === 'gambits-premades.enableRunicShield') {
+        game.gpsSettings.runicShieldEnabled = game.settings.get('gambits-premades', 'enableRunicShield');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.enableMageSlayer') {
+        game.gpsSettings.mageSlayerEnabled = game.settings.get('gambits-premades', 'enableMageSlayer');
     }
 }
 

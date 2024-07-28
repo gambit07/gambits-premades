@@ -466,6 +466,56 @@ function registerSettings() {
         type: Boolean
     });
 
+    game.settings.register("gambits-premades", "enableRunicShield", {
+        name: "enableRunicShield",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Runic Shield Timeout', {
+        name: "Runic Shield Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
+    game.settings.register("gambits-premades", "enableMageSlayer", {
+        name: "enableMageSlayer",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Mage Slayer Timeout', {
+        name: "Mage Slayer Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.registerMenu('gambits-premades', 'generalSettings', {
         name: game.i18n.localize("General Settings"),
         label: game.i18n.localize("General Settings"),
@@ -674,7 +724,9 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             enableWitchesHex: game.settings.get("gambits-premades", "Enable Witches Hex"),
             witchesHexTimeout: game.settings.get("gambits-premades", "Witches Hex Timeout"),
             enableCloudRune: game.settings.get("gambits-premades", "Enable Cloud Rune"),
-            cloudRuneTimeout: game.settings.get("gambits-premades", "Cloud Rune Timeout")
+            cloudRuneTimeout: game.settings.get("gambits-premades", "Cloud Rune Timeout"),
+            enableRunicShield: game.settings.get("gambits-premades", "enableRunicShield"),
+            runicShieldTimeout: game.settings.get("gambits-premades", "Runic Shield Timeout")
         };
 
         return data;
@@ -702,6 +754,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Witches Hex Timeout", formData.witchesHexTimeout);
         await game.settings.set("gambits-premades", "Enable Cloud Rune", formData.enableCloudRune);
         await game.settings.set("gambits-premades", "Cloud Rune Timeout", formData.cloudRuneTimeout);
+        await game.settings.set("gambits-premades", "enableRunicShield", formData.enableRunicShield);
+        await game.settings.set("gambits-premades", "Runic Shield Timeout", formData.runicShieldTimeout);
     }
 }
 
@@ -719,7 +773,9 @@ class genericFeatureSettingsMenu extends BaseSettingsMenu {
             enableOpportunityAttack: game.settings.get("gambits-premades", "Enable Opportunity Attack"),
             opportunityAttackTimeout: game.settings.get("gambits-premades", "Opportunity Attack Timeout"),
             enableSentinel: game.settings.get("gambits-premades", "Enable Sentinel"),
-            sentinelTimeout: game.settings.get("gambits-premades", "Sentinel Timeout")
+            sentinelTimeout: game.settings.get("gambits-premades", "Sentinel Timeout"),
+            enableMageSlayer: game.settings.get("gambits-premades", "enableMageSlayer"),
+            mageSlayerTimeout: game.settings.get("gambits-premades", "Mage Slayer Timeout")
         };
     }
 
@@ -734,6 +790,8 @@ class genericFeatureSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Opportunity Attack Timeout", formData.opportunityAttackTimeout);
         await game.settings.set("gambits-premades", "Enable Sentinel", formData.enableSentinel);
         await game.settings.set("gambits-premades", "Sentinel Timeout", formData.sentinelTimeout);
+        await game.settings.set("gambits-premades", "enableMageSlayer", formData.enableMageSlayer);
+        await game.settings.set("gambits-premades", "Mage Slayer Timeout", formData.mageSlayerTimeout);
     }
 }
 

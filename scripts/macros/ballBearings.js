@@ -14,8 +14,8 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
-    let itemProperName = "Ball Bearings";
-    let chosenItem = effectOriginActor.items.find(i => i.name === itemProperName);
+    let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
+    let itemProperName = chosenItem.name;
     let dialogId = "ballbearings";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
     let browserUser = MidiQOL.playerForActor(token.actor);

@@ -1,4 +1,3 @@
-//done
 export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const socket = module.socket;
@@ -37,7 +36,10 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             if (workflow.token.document.disposition === validTokenPrimary.document.disposition) continue;
 
             let damageTypes = workflow.damageRolls.map(roll => roll.options.type);
+            let hasHealing = damageTypes.some(type => type === "healing");
+            if (hasHealing) return;
             let damageTotals = workflow.damageRolls.map(roll => roll.total);
+
             dialogContent = `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">

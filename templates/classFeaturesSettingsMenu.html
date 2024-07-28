@@ -247,6 +247,7 @@
                         <input type="text" id="riposteTimeout" name="riposteTimeout" value="{{riposteTimeout}}" data-dtype="String">
                     </td>
                 </tr>
+
                 <tr>
                     <td class="column-item">
                         <label for="enablePoetryInMisery">Poetry in Misery<br><span class="small-text">Presents a dialog to College of Tragedy Bards with Poetry in Misery.</span>
@@ -259,6 +260,21 @@
                     </td>
                     <td class="column-timeout">
                         <input type="text" id="poetryInMiseryTimeout" name="poetryInMiseryTimeout" value="{{poetryInMiseryTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="column-item">
+                        <label for="enableRunicShield">Runic Shield<br><span class="small-text">Presents a dialog to Rune Knight Fighters with Runic Shield.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableRunicShield" name="enableRunicShield" data-dtype="Boolean" {{checked enableRunicShield}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="runicShieldTimeout" name="runicShieldTimeout" value="{{runicShieldTimeout}}" data-dtype="String">
                     </td>
                 </tr>
 

@@ -208,7 +208,7 @@ export async function handleDialogPromises(userDialogPromise, gmDialogPromise) {
     });
 }
 
-export function findValidTokens({initiatingToken, targetedToken, itemName, itemType, itemChecked, reactionCheck, sightCheck, rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat}) {
+export function findValidTokens({initiatingToken, targetedToken, itemName, itemType, itemChecked, reactionCheck, sightCheck, sightCheckType = "enemy", rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat}) {
     let validTokens;
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
@@ -253,8 +253,16 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if token can see initiating token
-        if(sightCheck && !MidiQOL.canSee(t, initiatingToken)) {
+        if(sightCheck && ((sightCheckType === "ally" && !MidiQOL.canSee(t, targetedToken)) || (sightCheckType === "enemy" && !MidiQOL.canSee(t, initiatingToken)))) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at sight check`);
+            return;
+        }
+
+        // Check if token is under an effect preventing reactions
+        const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
+        let hasEffectOrigin = t.actor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
+        if(hasEffectOrigin) {
+            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at spell effect preventing reaction`);
             return;
         }
 

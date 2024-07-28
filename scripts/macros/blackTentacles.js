@@ -12,7 +12,8 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
 
-    let itemProperName = "Black Tentacles";
+    let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
+    let itemProperName = chosenItem.name;
     
     let dialogId = "blacktentacles";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
@@ -52,7 +53,6 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     }
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
-    let chosenItem = effectOriginActor.items.find(i => i.name === itemProperName);
 
     const damageType = "bludgeoning";
     const spellDC = effectOriginActor.system.attributes.spelldc;

@@ -13,8 +13,7 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario}) {
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
     const effectOriginToken = await MidiQOL.tokenForActor(region.flags["region-attacher"].actorUuid);
-    let itemProperName = "Cloud of Daggers";
-    let chosenItem = effectOriginActor.items.find(i => i.name === itemProperName);
+    let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
 
     if(regionScenario === "onExit") {
         const tokenState = regionTokenStates.get(region.id);

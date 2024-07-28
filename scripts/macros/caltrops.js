@@ -14,8 +14,8 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
-    let itemProperName = "Caltrops";
-    let chosenItem = effectOriginActor.items.find(i => i.name === itemProperName);
+    let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
+    let itemProperName = chosenItem.name;
     let dialogId = "caltrops";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
     let browserUser = MidiQOL.playerForActor(token.actor);

@@ -26,11 +26,6 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
-        let hasEffectOrigin = (gameVersion >= 3 ? validTokenPrimary.actor.appliedEffects : validTokenPrimary.actor.effects)
-            .some(effect => effectNamesOrigin.includes(effect.name));
-        if(hasEffectOrigin) continue;
-
         if(validTokenPrimary.id !== target.id) continue;
 
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;

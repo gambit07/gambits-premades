@@ -118,6 +118,21 @@
         <tbody>
             <tr>
                 <td class="column-item">
+                    <label for="enableMageSlayer">Mage Slayer<br><span class="small-text">Presents a dialog to players with Mage Slayer when an enemy casts a spell within range.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="enableMageSlayer" name="enableMageSlayer" data-dtype="Boolean" {{checked enableMageSlayer}}/>
+                    </div>
+                </td>
+                <td class="column-timeout">
+                    <input type="text" id="mageSlayerTimeout" name="mageSlayerTimeout" value="{{mageSlayerTimeout}}" data-dtype="String">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="column-item">
                     <label for="enableOpportunityAttack">Opportunity Attack<br><span class="small-text">Automatically enables Opportunity Attacks for combatants in combat.</span>
                     </label>
                 </td>
