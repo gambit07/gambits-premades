@@ -37,6 +37,9 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
         if(workflowType === "damage") {
             if (target.document.uuid === validTokenPrimary.document.uuid) return;
             let damageTypes = workflow.damageRolls.map(roll => roll.options.type);
+            let hasHealing = damageTypes.some(type => type === "healing");
+            if (hasHealing) return;
+
             let damageTotals = workflow.damageRolls.map(roll => roll.total);
 
             let result;

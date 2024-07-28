@@ -19,8 +19,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes" >> release_notes.txt
-          echo "  - Reckless Attack: Fix findNearby function somehow losing the MidiQOL identifier." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Entropic Ward: Automation for the Warlocks Entropic Ward feature" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Cutting Words: Prevent Healing from initiating the workflow." >> release_notes.txt
+          echo "  - Interception: Prevent Healing from initiating the workflow." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

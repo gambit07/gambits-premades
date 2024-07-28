@@ -36,6 +36,9 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
         if(workflowType === "damage") {
             if (workflow.token.document.disposition === validTokenPrimary.document.disposition) return;
             let damageTypes = workflow.damageRolls.map(roll => roll.options.type);
+            let hasHealing = damageTypes.some(type => type === "healing");
+            if (hasHealing) return;
+            
             let damageTotals = workflow.damageRolls.map(roll => roll.total);
 
             let result;
