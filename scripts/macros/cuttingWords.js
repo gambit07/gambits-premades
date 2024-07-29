@@ -407,10 +407,10 @@ export async function showCuttingWordsDialog({targetUuids, actorUuid, tokenUuid,
             close: () => {
                 clearInterval(timer);
                 if (dialog.dialogState.programmaticallyClosed) {
-                    resolve({ userDecision: false, damageChosen, programmaticallyClosed: true, source, type });
+                    resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: true, source, type });
                 }
                 else if (!dialog.dialogState.interacted) {
-                    resolve({ userDecision: false, damageChosen, programmaticallyClosed: false, source, type });
+                    resolve({ userDecision: false, damageChosen: false, programmaticallyClosed: false, source, type });
                 }
             }
         });
