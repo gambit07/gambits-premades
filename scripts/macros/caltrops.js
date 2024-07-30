@@ -48,13 +48,10 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
         const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
     
         if (entered || exited) {
-            // This move is part of an enter or exit event, do not trigger the move logic
             regionTokenStates.delete(`${region.id}-${token.id}-entered`);
             regionTokenStates.delete(`${region.id}-${token.id}-exited`);
             return;
         }
-
-        if (token?.regions?.has(region)) return;
     }
 
     let dialogContent = `
@@ -116,7 +113,7 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
             const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);
 
             if (saveResult.failedSaves.size !== 0) {
-                await token.document.update({ x: originX, y: originY }, { animate: false });
+                if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
     
                 let effectData = [
                     {

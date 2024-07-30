@@ -23,12 +23,12 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     
     let hasSentinel = effectOriginActor.items.find(i => i.name.toLowerCase() === "sentinel");
 
-    if(hasSentinel) {
+    /*if(hasSentinel) {
         let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
         if(sentinelUsed) return effectOriginActor.unsetFlag("gambits-premades", "sentinelUsed");
         let sentinelDeclined = effectOriginActor.getFlag("gambits-premades", "sentinelDeclined");
         if(sentinelDeclined) return effectOriginActor.unsetFlag("gambits-premades", "sentinelDeclined");
-    }
+    }*/
 
     let hasPolearmReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === "polearm master");
     let hasDeadlyReachReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === "deadly reach");
@@ -99,13 +99,13 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         const entered = regionTokenStates.get(`${region.id}-${token.id}-entered`);
         const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
 
-        let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
+        /*let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
         let sentinelDeclined = effectOriginActor.getFlag("gambits-premades", "sentinelDeclined");
         
         if(hasSentinel && !sentinelUsed && !sentinelDeclined && ((entered && (hasPolearmReaction || hasDeadlyReachReaction)) || exited)) {
             //await wait(450); //Prevent Active Auras from freaking out
             await token.update({ x: originX, y: originY }, { animate: false });
-        }
+        }*/
 
         if (entered || exited) {
             regionTokenStates.delete(`${region.id}-${token.id}-entered`);
@@ -115,7 +115,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
         if (token.regions.has(region)) return;
 
-        if(hasSentinel && (sentinelUsed || sentinelDeclined)) return;
+        //if(hasSentinel && (sentinelUsed || sentinelDeclined)) return;
 
         const effectNamesToken = ["Dissonant Whispers"];
         let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
@@ -331,7 +331,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     if (!userDecision) {
         if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
         await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
-        if(hasSentinel) await effectOriginActor.setFlag("gambits-premades", "sentinelDeclined", true);
+        //if(hasSentinel) await effectOriginActor.setFlag("gambits-premades", "sentinelDeclined", true);
         return;
     }
     else if (userDecision) {
@@ -407,7 +407,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         await helpers.addReaction({actorUuid: `${effectOriginActor.uuid}`});
 
         if(hasSentinel && checkHits) {
-            await effectOriginActor.setFlag("gambits-premades", "sentinelUsed", true);
+            //await effectOriginActor.setFlag("gambits-premades", "sentinelUsed", true);
 
             let effectData = [
                 {
@@ -432,7 +432,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
             await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: token.actor.uuid, effects: effectData });
         }
-        else if(hasSentinel && !checkHits) await effectOriginActor.setFlag("gambits-premades", "sentinelDeclined", true);
+        //else if(hasSentinel && !checkHits) await effectOriginActor.setFlag("gambits-premades", "sentinelDeclined", true);
     }
 }
 
@@ -716,8 +716,8 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         let templateFlag = await actor.getFlag("gambits-premades", "opportunityAttackTemplate");
         let templateAttachmentFlag = await actor.getFlag("gambits-premades", "templateAttachedToken");
         let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
-        let sentinelUsed = actor.getFlag("gambits-premades", "sentinelUsed");
-        let sentinelDeclined = actor.getFlag("gambits-premades", "sentinelDeclined");
+        //let sentinelUsed = actor.getFlag("gambits-premades", "sentinelUsed");
+        //let sentinelDeclined = actor.getFlag("gambits-premades", "sentinelDeclined");
         
         let templateData = templateFlag ? await fromUuid(templateFlag) : null;
 
@@ -734,8 +734,8 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         if (templateFlag) await actor.unsetFlag("gambits-premades", "opportunityAttackTemplate");
         if (templateAttachmentFlag) await actor.unsetFlag("gambits-premades", "templateAttachedToken");
         if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
-        if(sentinelUsed) await actor.unsetFlag("gambits-premades", "sentinelUsed");
-        if(sentinelDeclined) await actor.unsetFlag("gambits-premades", "sentinelDeclined");
+        //if(sentinelUsed) await actor.unsetFlag("gambits-premades", "sentinelUsed");
+        //if(sentinelDeclined) await actor.unsetFlag("gambits-premades", "sentinelDeclined");
     }
 
     if (combatEvent === "endCombat") {

@@ -21,7 +21,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     if (!browserUser.active) {
         browserUser = game.users?.activeGM;
     }
-
+    
     if(regionScenario === "onExit") {
         const tokenState = regionTokenStates.get(region.id);
         if (tokenState) {
@@ -39,7 +39,6 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     }
     else if(regionScenario === "onPostMove") {
         await wait(250);
-        
         const entered = regionTokenStates.get(`${region.id}-${token.id}-entered`);
         const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
     
@@ -48,8 +47,6 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
             regionTokenStates.delete(`${region.id}-${token.id}-exited`);
             return;
         }
-
-        if (token?.regions?.has(region)) return;
     }
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);

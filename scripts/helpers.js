@@ -221,6 +221,10 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     }
     
     function filterToken(t) {
+        let checkItem = t.actor.items.find(i => i.name.toLowerCase() === itemName);
+        const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
+        let hasEffectOrigin = t.actor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
+
         // Check if invalid token on the canvas
         if (!t.actor) {
             if (debugEnabled) console.error(`${itemName} for ${t.actor ? t.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
@@ -228,46 +232,43 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token has the actual item to use
-        let checkItem = t.actor.items.find(i => i.name.toLowerCase() === itemName);
-        if(!checkItem) {
+        else if(!checkItem) {
             if (debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
             return;
         }
 
         // Check if the tokens reaction already used
-        if (reactionCheck && MidiQOL.hasUsedReaction(t.actor)) {
+        else if (reactionCheck && MidiQOL.hasUsedReaction(t.actor)) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at reaction available`);
             return;
         }
 
         // Check if the token is incapacitated
-        if(MidiQOL.checkIncapacitated(t)) {
+        else if(MidiQOL.checkIncapacitated(t)) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at is incapacitated`);
             return;
         }
 
         // Check if the token is the initiating token or not a qualifying token disposition
-        if (dispositionCheck && ((t.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
+        else if (dispositionCheck && ((t.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at token disposition check`);
             return;
         }
 
         // Check if token can see initiating token
-        if(sightCheck && ((sightCheckType === "ally" && !MidiQOL.canSee(t, targetedToken)) || (sightCheckType === "enemy" && !MidiQOL.canSee(t, initiatingToken)))) {
+        else if(sightCheck && ((sightCheckType === "ally" && !MidiQOL.canSee(t, targetedToken)) || (sightCheckType === "enemy" && !MidiQOL.canSee(t, initiatingToken)))) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at sight check`);
             return;
         }
 
         // Check if token is under an effect preventing reactions
-        const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
-        let hasEffectOrigin = t.actor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
-        if(hasEffectOrigin) {
+        else if(hasEffectOrigin) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at spell effect preventing reaction`);
             return;
         }
 
         // Check if token is within range
-        if(rangeCheck) {
+        else if(rangeCheck) {
             let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
             let range = game.gps.convertFromFeet({range: rangeTotal});
             if (measuredDistance === -1 || (measuredDistance > range)) {
@@ -277,7 +278,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token has available spell slots/uses
-        if(itemType === "spell") {
+        else if(itemType === "spell") {
             const spells = t.actor.system.spells;
             let spellLevel = checkItem?.system?.level;
             let checkType = checkItem?.system?.preparation?.mode;
@@ -312,7 +313,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token has available resource or item uses
-        if(itemType === "feature") {
+        else if(itemType === "feature") {
             const itemNames = itemChecked.map(item => item.toLowerCase());
 
             let resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource =>
@@ -329,7 +330,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             }
         }
 
-        if(itemType === "item") {
+        else if(itemType === "item") {
             const itemNames = itemChecked.map(item => item.toLowerCase());
             let itemExists = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
 
@@ -339,7 +340,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             }
         }
 
-        if(debugEnabled) console.warn(`%c${itemName} for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
+        else if(debugEnabled) console.warn(`%c${itemName} for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
 
         return t;
     };
@@ -680,7 +681,7 @@ export async function moveTokenByOriginPoint({ originX, originY, target, distanc
     let newY = target.y + moveY;
 
     if (canvas.scene.grid.type === 1) {
-        const snapped = canvas.grid.getSnappedPosition(newX, newY, canvas.scene.grid.type);
+        const snapped = canvas.grid.getSnappedPoint(newX, newY, canvas.scene.grid.type);
         newX = snapped.x;
         newY = snapped.y;
     }
@@ -699,7 +700,7 @@ export async function moveTokenByOriginPoint({ originX, originY, target, distanc
             let nextX = target.x + vectorX * stepDistance * step;
             let nextY = target.y + vectorY * stepDistance * step;
             if (canvas.scene.grid.type === 1) {
-                const snapped = canvas.grid.getSnappedPosition(nextX, nextY, canvas.scene.grid.type);
+                const snapped = canvas.grid.getSnappedPoint(nextX, nextY, canvas.scene.grid.type);
                 nextX = snapped.x;
                 nextY = snapped.y;
             }
@@ -718,7 +719,7 @@ export async function moveTokenByOriginPoint({ originX, originY, target, distanc
 
         if (stepCounter > 0) {
             if (canvas.scene.grid.type === 1) {
-                const snapped = canvas.grid.getSnappedPosition(finalX, finalY, canvas.scene.grid.type);
+                const snapped = canvas.grid.getSnappedPoint(finalX, finalY, canvas.scene.grid.type);
                 finalX = snapped.x;
                 finalY = snapped.y;
             }
@@ -793,7 +794,7 @@ export async function moveTokenByCardinal({ target, distance, direction }) {
     let newY = target.y + moveY;
 
     if (canvas.scene.grid.type === 1) {
-        const snapped = canvas.grid.getSnappedPosition(newX, newY, canvas.scene.grid.type);
+        const snapped = canvas.grid.getSnappedPoint(newX, newY, canvas.scene.grid.type);
         newX = snapped.x;
         newY = snapped.y;
     }
@@ -816,7 +817,7 @@ export async function moveTokenByCardinal({ target, distance, direction }) {
             let nextX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * step;
             let nextY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * step;
             if (canvas.scene.grid.type === 1) {
-                const snapped = canvas.grid.getSnappedPosition(nextX, nextY, canvas.scene.grid.type);
+                const snapped = canvas.grid.getSnappedPoint(nextX, nextY, canvas.scene.grid.type);
                 nextX = snapped.x;
                 nextY = snapped.y;
             }
@@ -835,7 +836,7 @@ export async function moveTokenByCardinal({ target, distance, direction }) {
 
         if (stepCounter > 0) {
             if (canvas.scene.grid.type === 1) {
-                const snapped = canvas.grid.getSnappedPosition(finalX, finalY, canvas.scene.grid.type);
+                const snapped = canvas.grid.getSnappedPoint(finalX, finalY, canvas.scene.grid.type);
                 finalX = snapped.x;
                 finalY = snapped.y;
             }

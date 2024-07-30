@@ -37,13 +37,10 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario}) {
         const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
     
         if (entered || exited) {
-            // This move is part of an enter or exit event, do not trigger the move logic
             regionTokenStates.delete(`${region.id}-${token.id}-entered`);
             regionTokenStates.delete(`${region.id}-${token.id}-exited`);
             return;
         }
-
-        if (token?.regions?.has(region)) return;
     }
 
     let turn = game.combat.round + '-' + game.combat.turn;

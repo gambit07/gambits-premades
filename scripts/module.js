@@ -36,16 +36,17 @@ Hooks.once('init', async function() {
         const size = canvas.dimensions.size;
         const width = this.document.width;
         const height = this.document.height;
-
+        const reduction = 5;
+        
         const points = [
-            { x: this.document.x, y: this.document.y, elevation: this.document.elevation },
-            { x: this.document.x + (width * size), y: this.document.y, elevation: this.document.elevation },
-            { x: this.document.x, y: this.document.y + (height * size), elevation: this.document.elevation },
-            { x: this.document.x + (width * size), y: this.document.y + (height * size), elevation: this.document.elevation },
-            { x: this.document.x + (width * size / 2), y: this.document.y, elevation: this.document.elevation },
-            { x: this.document.x + (width * size / 2), y: this.document.y + (height * size), elevation: this.document.elevation },
-            { x: this.document.x, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
-            { x: this.document.x + (width * size), y: this.document.y + (height * size / 2), elevation: this.document.elevation },
+            { x: this.document.x + reduction, y: this.document.y + reduction, elevation: this.document.elevation },
+            { x: this.document.x + (width * size) - reduction, y: this.document.y + reduction, elevation: this.document.elevation },
+            { x: this.document.x + reduction, y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
+            { x: this.document.x + (width * size) - reduction, y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
+            { x: this.document.x + (width * size / 2), y: this.document.y + reduction, elevation: this.document.elevation },
+            { x: this.document.x + (width * size / 2), y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
+            { x: this.document.x + reduction, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
+            { x: this.document.x + (width * size) - reduction, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
             { x: this.document.x + (width * size / 2), y: this.document.y + (height * size / 2), elevation: this.document.elevation }
         ];
 
@@ -65,7 +66,7 @@ Hooks.once('init', async function() {
     libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
         const [region, waypoints, options] = args;
         if (!this || !this.document) {
-            return [];
+            return false;
         }
     
         const { teleport = false } = options || {};
@@ -73,16 +74,17 @@ Hooks.once('init', async function() {
         const size = canvas.dimensions.size;
         const width = this.document.width;
         const height = this.document.height;
+        const reduction = 5;
     
         const points = [
-            { x: 0, y: 0 },
-            { x: width * size, y: 0 },
-            { x: 0, y: height * size },
-            { x: width * size, y: height * size },
-            { x: width * size / 2, y: 0 },
-            { x: width * size / 2, y: height * size },
-            { x: 0, y: height * size / 2 },
-            { x: width * size, y: height * size / 2 }
+            { x: reduction, y: reduction, elevation: this.document.elevation },
+            { x: width * size - reduction, y: reduction, elevation: this.document.elevation },
+            { x: reduction, y: height * size - reduction, elevation: this.document.elevation },
+            { x: width * size - reduction, y: height * size - reduction, elevation: this.document.elevation },
+            { x: width * size / 2, y: reduction, elevation: this.document.elevation },
+            { x: width * size / 2, y: height * size - reduction, elevation: this.document.elevation },
+            { x: reduction, y: height * size / 2, elevation: this.document.elevation },
+            { x: width * size - reduction, y: height * size / 2, elevation: this.document.elevation }
         ];
     
         points.forEach(point => {
@@ -387,7 +389,7 @@ function hideTemplateElements(template) {
   }
 
   // Hide highlight
-  const hl = canvas.grid.getHighlightLayer(template.highlightId);
+  const hl = canvas.interface.grid.getHighlightLayer(template.highlightId);
   if (hl) {
     hl.alpha = 0;
   }
