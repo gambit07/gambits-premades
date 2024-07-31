@@ -504,22 +504,40 @@ export async function enableOpportunityAttack(combat, combatEvent) {
         
             const tokenCenterX = token.x + token.object.w / 2;
             const tokenCenterY = token.y + token.object.h / 2;
+            const gridSize = canvas.scene.grid.size;
+            const gridDistance = canvas.scene.grid.distance;
+            const sideLength = (maxRange / gridDistance) * 2 * gridSize;
+            const topLeftX = tokenCenterX - (sideLength / 2);
+            const topLeftY = tokenCenterY - (sideLength / 2);
+            let regionShape;
+
+            if (canvas.scene.grid.type === 0) {  // Gridless
+                regionShape = {
+                    type: "ellipse",
+                    x: tokenCenterX,
+                    y: tokenCenterY,
+                    radiusX: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
+                    radiusY: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
+                    rotation: 0,
+                    hole: false
+                };
+            } else {
+                regionShape = {
+                    type: "rectangle",
+                    x: topLeftX,
+                    y: topLeftY,
+                    width: sideLength,
+                    height: sideLength,
+                    rotation: 0,
+                    hole: false
+                };
+            }
     
             const regionData = {
                 name: `${actor.name} OA Region`,
                 color: browserUser.color,
                 elevation: { bottom: -maxRange, top: maxRange },
-                shapes: [
-                    {
-                        type: "ellipse",
-                        x: tokenCenterX,
-                        y: tokenCenterY,
-                        radiusX: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
-                        radiusY: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
-                        rotation: 0,
-                        hole: false
-                    }
-                ],
+                shapes: [regionShape],
                 behaviors: [
                     {
                         type: "executeScript",

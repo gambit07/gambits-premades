@@ -19,10 +19,13 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- General:" >> release_notes.txt
-          echo "  - Region Wrapper: Update to reduce the size of the token edge tested slightly to resolve gridded issues inadvertently triggering a region." >> release_notes.txt
+          echo "  - Region Wrapper: Update to reduce the size of the token edge tested slightly to resolve gridded issue inadvertently triggering a region outside the regions range." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Entropic Ward: Add mirrored dialog functionality when enabled." >> release_notes.txt
-          echo "  - Opportunity Attack: Removed Sentinel movement modification for now." >> release_notes.txt
+          echo "  - Opportunity Attack: On gridded scenes, regions are now deployed as a square." >> release_notes.txt
+          echo "  - Ball Bearings: Resolve effect triggering when region first placed." >> release_notes.txt
+          echo "  - Caltrops: Resolve effect triggering when region first placed." >> release_notes.txt
+          echo "  - Cloud of Daggers: Resolve effect triggering when region first placed." >> release_notes.txt
+          echo "  - Black Tentacles: Resolve effect triggering when region first placed." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

@@ -211,7 +211,6 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("midi-qol.preWaitForSaves", async (workflow) => {
-        console.log(workflow)
         if(!workflow.item.hasSave) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
@@ -443,7 +442,7 @@ async function updateRegionPosition(tokenDocument) {
     const region = fromUuidSync(tokenDocument.actor.getFlag('gambits-premades', 'templateAttachedToken'));
     if (!region || !tokenDocument) return;
     let oaDisabled = region.getFlag("gambits-premades", "opportunityAttackDisabled");
-    if(!oaDisabled) region.setFlag("gambits-premades", "opportunityAttackDisabled", true)
+    if (!oaDisabled) region.setFlag("gambits-premades", "opportunityAttackDisabled", true);
 
     let previousX1 = tokenDocument.object.center.x;
     let previousY1 = tokenDocument.object.center.y;
@@ -461,15 +460,32 @@ async function updateRegionPosition(tokenDocument) {
 
             setTimeout(checkPosition, 25);
         } else if (previousX1 === previousX2 && previousY1 === previousY2) {
-            region.update({
-                shapes: region.shapes.map(shape => ({
-                    ...shape,
-                    x: currentX,
-                    y: currentY
-                }))
+
+            const updatedShapes = region.shapes.map(shape => {
+                const sideLength = shape.width || (shape.radiusX * 2);
+                const topLeftX = currentX - (sideLength / 2);
+                const topLeftY = currentY - (sideLength / 2);
+
+                if (shape.type === "ellipse") {
+                    return {
+                        ...shape,
+                        x: currentX,
+                        y: currentY
+                    };
+                } else {
+                    return {
+                        ...shape,
+                        x: topLeftX,
+                        y: topLeftY
+                    };
+                }
             });
-            if(!oaDisabled) region.unsetFlag("gambits-premades", "opportunityAttackDisabled")
-            
+
+            region.update({
+                shapes: updatedShapes
+            });
+
+            if (!oaDisabled) region.unsetFlag("gambits-premades", "opportunityAttackDisabled");
             return;
         } else {
             previousX2 = previousX1;
@@ -478,7 +494,6 @@ async function updateRegionPosition(tokenDocument) {
         }
     };
 
-    // Start the initial check
     checkPosition();
 }
 

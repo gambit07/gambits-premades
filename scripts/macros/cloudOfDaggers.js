@@ -1,11 +1,20 @@
 const regionTokenStates = new Map();
 
-export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario}) {
+export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, regionStatus}) {
     async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     let region = await fromUuid(regionUuid);
+
+    if(regionScenario === "onStatusChanged" && regionStatus) {
+        const tokenState = regionTokenStates.get(region.id) || new Set();
+        regionTokenStates.set(region.id, tokenState);
+        regionTokenStates.set(`${region.id}-statuschanged`, true);
+        return;
+    }
+    else if(regionScenario === "onStatusChanged" && !regionStatus) return;
+
     let template = await fromUuid(region.flags["region-attacher"].attachedTemplate)
     let tokenDocument = await fromUuid(tokenUuid);
-    let token = tokenDocument.object;
+    let token = tokenDocument?.object;
     if(!token || !region || !regionScenario) return;
     if (!MidiQOL.isTargetable(token)) return;
 
@@ -25,6 +34,12 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario}) {
         return;
     }
     else if(regionScenario === "onEnter") {
+        const statusChanged = regionTokenStates.get(`${region.id}-statuschanged`);
+
+        if (statusChanged) {
+            regionTokenStates.delete(`${region.id}-statuschanged`);
+            return;
+        }
         const tokenState = regionTokenStates.get(region.id) || new Set();
         tokenState.add(token.id);
         regionTokenStates.set(region.id, tokenState);

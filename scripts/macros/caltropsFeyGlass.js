@@ -1,18 +1,25 @@
 const regionTokenStates = new Map();
 
-export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, originX, originY}) {
+export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus}) {
     async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     const module = await import('../module.js');
     const socket = module.socket;
     let region = await fromUuid(regionUuid);
+
+    if(regionScenario === "onStatusChanged" && regionStatus) {
+        const tokenState = regionTokenStates.get(region.id) || new Set();
+        regionTokenStates.set(region.id, tokenState);
+        regionTokenStates.set(`${region.id}-statuschanged`, true);
+        return;
+    }
+    else if(regionScenario === "onStatusChanged" && !regionStatus) return;
+
     let tokenDocument = await fromUuid(tokenUuid);
-    let token = tokenDocument.object;
+    let token = tokenDocument?.object;
     if(!token || !region || !regionScenario) return;
     if (!MidiQOL.isTargetable(token)) return;
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
-
-    const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem.name;
@@ -36,6 +43,12 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
         return;
     }
     else if(regionScenario === "onEnter") {
+        const statusChanged = regionTokenStates.get(`${region.id}-statuschanged`);
+
+        if (statusChanged) {
+            regionTokenStates.delete(`${region.id}-statuschanged`);
+            return;
+        }
         const tokenState = regionTokenStates.get(region.id) || new Set();
         tokenState.add(token.id);
         regionTokenStates.set(region.id, tokenState);
@@ -53,6 +66,8 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
             return;
         }
     }
+
+    const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
     let dialogContent = `
         <div class="gps-dialog-container">
