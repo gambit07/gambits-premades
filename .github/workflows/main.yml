@@ -20,10 +20,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Scatter: Updated and now uses Portal for token placement. Portal is not a requirement of the module but you will receive an error notifying you that Portal needs to be installed for this automation if you dont have it." >> release_notes.txt
-          echo "  - Infestation: Updated to fix token movement." >> release_notes.txt
-          echo "  - Confusion: Updated to fix token movement." >> release_notes.txt
-          echo "  - Indomitable: Remove reaction check and reaction usage, since... it doesnt use a reaction" >> release_notes.txt
+          echo "  - Scatter: Actually fix this one" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

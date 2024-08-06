@@ -588,7 +588,7 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
 }
 
 export async function updateTokenElevation({ targetUuid, elevation }) {
-    if(!targetUuid || !elevation) return;
+    if(!targetUuid || elevation === null || elevation === undefined) return;
 
     const targetDocument = await fromUuid(targetUuid);
     const target = targetDocument.object;
