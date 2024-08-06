@@ -19,7 +19,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
 
     let findValidTokens;
 
-    findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["indomitable"], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat});
+    findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["indomitable"], reactionCheck: false, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat});
     
     let browserUser;
     
@@ -180,14 +180,6 @@ export async function showIndomitableDialog({targetUuids, actorUuid, tokenUuid, 
                         };
 
                         const itemRoll = await MidiQOL.completeItemUse(chosenSpell, {}, options);
-
-                        if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
-
-                        const hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);
-
-                        if (!hasEffectApplied) {
-                            game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });
-                        }
 
                         if(itemRoll.aborted === true) return resolve({ userDecision: false, programmaticallyClosed: false, source, type });
                         

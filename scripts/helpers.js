@@ -580,3 +580,8 @@ export async function moveTokenByCardinal({ target, distance, direction }) {
         }
     }
 }
+
+export async function updateTokenElevation({ target, elevation }) {
+    if(!target || !elevation) return;
+    await target.document.update({ elevation: elevation });
+}
