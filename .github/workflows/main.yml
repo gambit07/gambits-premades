@@ -18,14 +18,18 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Region Wrapper: Update to reduce the size of the token edge tested slightly to resolve gridded issue inadvertently triggering a region outside the regions range." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: On gridded scenes, regions are now deployed as a square." >> release_notes.txt
-          echo "  - Ball Bearings: Resolve effect triggering when region first placed." >> release_notes.txt
-          echo "  - Caltrops: Resolve effect triggering when region first placed." >> release_notes.txt
-          echo "  - Cloud of Daggers: Resolve effect triggering when region first placed." >> release_notes.txt
-          echo "  - Black Tentacles: Resolve effect triggering when region first placed." >> release_notes.txt
+          echo "- General: Update wrapped region functionality to maintain grid snapping on gridded scene teleports" >> release_notes.txt
+          echo "- Additions (V12 Compatability):" >> release_notes.txt
+          echo "  - Scatter: Updated and now uses Portal for token placement. Portal is not a requirement of the module but you will receive an error notifying you that Portal needs to be installed for this automation if you dont have it." >> release_notes.txt
+          echo "  - Stroke of Luck: Updated and now compatible with v12." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Sentinel: Fix some invalidly placed code. Add appropriate workflowOptions." >> release_notes.txt
+          echo "  - Opportunity Attack: Add appropriate workflowOptions." >> release_notes.txt
+          echo "  - Mage Slayer: Add appropriate workflowOptions." >> release_notes.txt
+          echo "  - Riposte: Add appropriate workflowOptions." >> release_notes.txt
+          echo "  - Indomitable: Remove reaction check and reaction usage, since... it doesnt use a reaction" >> release_notes.txt
+          echo "  - Infestation: Updated function to fix token movement." >> release_notes.txt
+          echo "  - Confusion: Updated function to fix token movement." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

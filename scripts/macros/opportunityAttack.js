@@ -383,8 +383,9 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             configureDialog: hasWarCasterConfigDialog,
             targetUuids: [token.uuid],
             workflowOptions: {
-                autoRollDamage: 'onHit',
-                autoFastDamage: true,
+                autoRollDamage: 'always',
+                autoRollAttack: true,
+                autoFastDamage: true
             }
         };
         if (rsakCheck || originDisadvantage) {

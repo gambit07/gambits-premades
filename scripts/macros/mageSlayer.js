@@ -206,7 +206,12 @@ export async function mageSlayer({workflowData,workflowType,workflowCombat}) {
                     createWorkflow: true,
                     versatile: false,
                     configureDialog: false,
-                    targetUuids: [`${workflow.token.document.uuid}`]
+                    targetUuids: [`${workflow.token.document.uuid}`],
+                    workflowOptions: {
+                        autoRollDamage: 'always',
+                        autoRollAttack: true,
+                        autoFastDamage: true
+                    }
                 };
 
                 let checkHits;

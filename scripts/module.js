@@ -28,8 +28,9 @@ Hooks.once('init', async function() {
 
     libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
         const [region, position] = args;
+
         if (!this || !this.document) {
-            return false;
+            return wrapped(...args);
         }
         
         const pointsToTest = [];
@@ -60,13 +61,41 @@ Hooks.once('init', async function() {
         });
 
         const isInside = testResults.some(x => x);
-        return isInside;
+
+        if (isInside) {
+            const snappingMode = 0x3;
+            const snappedPosition = canvas.grid.getSnappedPoint({ x: this.document.x, y: this.document.y }, { mode: snappingMode });
+    
+            const adjustedPoints = pointsToTest.map(point => {
+                return {
+                    x: snappedPosition.x,
+                    y: snappedPosition.y,
+                    elevation: point.elevation
+                };
+            });
+    
+            const finalResults = adjustedPoints.map(point => {
+                return region.testPoint(point, position?.elevation ?? this.document.elevation);
+            });
+    
+            const finalInside = finalResults.some(x => x);
+    
+            if (finalInside) {
+                this.document.x = snappedPosition.x;
+                this.document.y = snappedPosition.y;
+            }
+    
+            return finalInside;
+        }
+    
+        return wrapped(...args);
     }, 'MIXED');
 
     libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
         const [region, waypoints, options] = args;
+
         if (!this || !this.document) {
-            return false;
+            return wrapped(...args);
         }
     
         const { teleport = false } = options || {};
@@ -92,7 +121,9 @@ Hooks.once('init', async function() {
         });
     
         const segments = region.segmentizeMovement(waypoints, samples, { teleport });
-        return segments;
+        if(segments) return segments;
+        
+        return wrapped(...args);
     }, 'MIXED');
 });
 
@@ -184,7 +215,7 @@ Hooks.once('ready', async function() {
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        if (game.gpsSettings.enableWitchesHex) await executeWorkflow({ workflowItem: "witchesHex", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.witchesHexEnabled) await executeWorkflow({ workflowItem: "witchesHex", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preAttackRoll", async (workflow) => {
@@ -221,7 +252,7 @@ Hooks.once('ready', async function() {
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.indomitableEnabled) await executeWorkflow({ workflowItem: "indomitable", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
-        if (game.gpsSettings.enableWitchesHex) await executeWorkflow({ workflowItem: "witchesHex", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        if (game.gpsSettings.witchesHexEnabled) await executeWorkflow({ workflowItem: "witchesHex", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
@@ -333,7 +364,7 @@ async function updateSettings(settingKey = null) {
         game.gpsSettings.riposteEnabled = game.settings.get('gambits-premades', 'Enable Riposte');
     }
     if (settingKey === null || settingKey === 'gambits-premades.Enable Witches Hex') {
-        game.gpsSettings.enableWitchesHex = game.settings.get('gambits-premades', 'Enable Witches Hex');
+        game.gpsSettings.witchesHexEnabled = game.settings.get('gambits-premades', 'Enable Witches Hex');
     }
     if (settingKey === null || settingKey === 'gambits-premades.Enable Power Word Rebound') {
         game.gpsSettings.powerWordReboundEnabled = game.settings.get('gambits-premades', 'Enable Power Word Rebound');

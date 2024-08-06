@@ -13,7 +13,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
     // Check if there is a save success
     if(workflowType === "save" && workflow.failedSaves.size === 0) return;
 
-    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["indomitable"], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["indomitable"], reactionCheck: false, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat});
     
     let browserUser;
     
@@ -57,7 +57,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
         `;
 
         let result;
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has an option available for a save triggering ${itemProperName}.</span>`
         let chatData = {
         user: game.users.find(u => u.isGM).id,
         content: content,
@@ -98,8 +98,6 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
             if(itemRoll.aborted === true) continue;
-
-            await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
             
             let indomitableHomebrew = MidiQOL.safeGetGameSetting('gambits-premades', 'enableAutoSucceedIndomitable');
             let saveDC = workflow.saveItem.system.save.dc;

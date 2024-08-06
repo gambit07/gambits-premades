@@ -11,7 +11,6 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
     let target = workflow.hitTargets.first();
-    let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
 
@@ -24,6 +23,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
 
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
         let browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
         if (!browserUser.active) {
             browserUser = game.users?.activeGM;
@@ -180,7 +180,12 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
                 createWorkflow: true,
                 versatile: false,
                 configureDialog: false,
-                targetUuids: [`${workflow.token.document.uuid}`]
+                targetUuids: [`${workflow.token.document.uuid}`],
+                workflowOptions: {
+                    autoRollDamage: 'always',
+                    autoRollAttack: true,
+                    autoFastDamage: true
+                }
             };
 
             let checkHits;

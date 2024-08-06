@@ -214,7 +214,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let workflowNonCombat = MidiQOL.safeGetGameSetting('gambits-premades', 'enable3prNoCombat');
 
-    if (workflowCombat === false || workflowNonCombat) {
+    if (!workflowCombat || workflowNonCombat) {
         validTokens = canvas.tokens.placeables.filter(t => filterToken(t));
     } else {
         validTokens = game.combat?.combatants?.map(combatant => canvas.tokens.get(combatant.tokenId)).filter(t => filterToken(t));
@@ -224,21 +224,23 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         let checkItem = t.actor.items.find(i => i.name.toLowerCase() === itemName);
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
         let hasEffectOrigin = t.actor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
+        let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
+        let range = game.gps.convertFromFeet({range: rangeTotal});
 
         // Check if invalid token on the canvas
         if (!t.actor) {
-            if (debugEnabled) console.error(`${itemName} for ${t.actor ? t.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
+            if(debugEnabled) console.error(`${itemName} for ${t.actor ? t.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
             return;
         }
 
         // Check if the token has the actual item to use
         else if(!checkItem) {
-            if (debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
+            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
             return;
         }
 
         // Check if the tokens reaction already used
-        else if (reactionCheck && MidiQOL.hasUsedReaction(t.actor)) {
+        else if(reactionCheck && MidiQOL.hasUsedReaction(t.actor)) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at reaction available`);
             return;
         }
@@ -250,7 +252,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token is the initiating token or not a qualifying token disposition
-        else if (dispositionCheck && ((t.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
+        else if(dispositionCheck && ((t.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at token disposition check`);
             return;
         }
@@ -268,13 +270,9 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if token is within range
-        else if(rangeCheck) {
-            let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
-            let range = game.gps.convertFromFeet({range: rangeTotal});
-            if (measuredDistance === -1 || (measuredDistance > range)) {
-                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at range check`);
-                return;
-            }
+        else if(rangeCheck && (measuredDistance === -1 || (measuredDistance > range))) {
+            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at range check`);
+            return;
         }
 
         // Check if the token has available spell slots/uses
@@ -340,7 +338,9 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             }
         }
 
-        else if(debugEnabled) console.warn(`%c${itemName} for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
+        else if(debugEnabled) {
+            console.warn(`%c${itemName} for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
+        }
 
         return t;
     };
@@ -626,11 +626,14 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
     return result;
 }
 
-export async function moveTokenByOriginPoint({ originX, originY, target, distance }) {
+export async function moveTokenByOriginPoint({ originX, originY, targetUuid, distance }) {
 
-    if (!target) return console.log("No valid target to move");
+    if (!targetUuid) return console.log("No valid target to move");
     if (!distance || isNaN(distance)) return console.log("No valid distance to move");
     if (!originX || !originY) return console.log("No valid origin x/y coordinate given, for a token object this value should be token.center.x/token.center.y");
+
+    const targetDocument = await fromUuid(targetUuid);
+    const target = targetDocument.object;
 
     const gridDistance = canvas.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
@@ -728,12 +731,15 @@ export async function moveTokenByOriginPoint({ originX, originY, target, distanc
     }
 }
 
-export async function moveTokenByCardinal({ target, distance, direction }) {
+export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
     const directions = ["North", "South", "East", "West", "Northwest", "Northeast", "Southwest", "Southeast"];
 
-    if (!target) return console.log("No valid target to move");
+    if (!targetUuid) return console.log("No valid target to move");
     if (!distance || isNaN(distance)) return console.log("No valid distance to move");
     if (!directions.includes(direction)) return console.log("No valid direction to move (Valid Options: 'North', 'South', 'East', 'West', 'Northwest', 'Northeast', 'Southwest', 'Southeast')");
+
+    const targetDocument = await fromUuid(targetUuid);
+    const target = targetDocument.object;
 
     const gridDistance = canvas.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
