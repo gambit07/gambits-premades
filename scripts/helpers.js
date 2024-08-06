@@ -362,11 +362,14 @@ export async function process3rdPartyReactionDialog({dialogTitle,dialogContent,d
     });
 }
 
-export async function moveTokenByOriginPoint({ originX, originY, target, distance }) {
+export async function moveTokenByOriginPoint({ originX, originY, targetUuid, distance }) {
 
-    if (!target) return console.log("No valid target to move");
+    if (!targetUuid) return console.log("No valid target to move");
     if (!distance || isNaN(distance)) return console.log("No valid distance to move");
     if (!originX || !originY) return console.log("No valid origin x/y coordinate given, for a token object this value should be token.center.x/token.center.y");
+
+    const targetDocument = await fromUuid(targetUuid);
+    const target = targetDocument.object;
 
     const gridDistance = canvas.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
@@ -464,13 +467,16 @@ export async function moveTokenByOriginPoint({ originX, originY, target, distanc
     }
 }
 
-export async function moveTokenByCardinal({ target, distance, direction }) {
+export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
     const directions = ["North", "South", "East", "West", "Northwest", "Northeast", "Southwest", "Southeast"];
 
-    if (!target) return console.log("No valid target to move");
+    if (!targetUuid) return console.log("No valid target to move");
     if (!distance || isNaN(distance)) return console.log("No valid distance to move");
     if (!directions.includes(direction)) return console.log("No valid direction to move (Valid Options: 'North', 'South', 'East', 'West', 'Northwest', 'Northeast', 'Southwest', 'Southeast')");
 
+    const targetDocument = await fromUuid(targetUuid);
+    const target = targetDocument.object;
+    
     const gridDistance = canvas.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
     const moveDistancePixels = distance * pixelsPerFoot;
@@ -581,7 +587,11 @@ export async function moveTokenByCardinal({ target, distance, direction }) {
     }
 }
 
-export async function updateTokenElevation({ target, elevation }) {
-    if(!target || !elevation) return;
+export async function updateTokenElevation({ targetUuid, elevation }) {
+    if(!targetUuid || !elevation) return;
+
+    const targetDocument = await fromUuid(targetUuid);
+    const target = targetDocument.object;
+
     await target.document.update({ elevation: elevation });
 }
