@@ -276,15 +276,6 @@
           "minimum": "1.4.2",
           "verified": "1.4.2"
         }
-      },
-      {
-        "id": "bugs",
-        "type": "module",
-        "manifest": "https://github.com/thatlonelybugbear/bugs/releases/download/v1.2.1.1/module.json",
-        "compatibility": {
-          "minimum": "1.2.1.1",
-          "verified": "1.2.1.1"
-        }
       }
     ]
   },

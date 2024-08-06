@@ -18,18 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Update wrapped region functionality to maintain grid snapping on gridded scene teleports" >> release_notes.txt
-          echo "- Additions (V12 Compatability):" >> release_notes.txt
-          echo "  - Scatter: Updated and now uses Portal for token placement. Portal is not a requirement of the module but you will receive an error notifying you that Portal needs to be installed for this automation if you dont have it." >> release_notes.txt
-          echo "  - Stroke of Luck: Updated and now compatible with v12." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Sentinel: Fix some invalidly placed code. Add appropriate workflowOptions." >> release_notes.txt
-          echo "  - Opportunity Attack: Add appropriate workflowOptions." >> release_notes.txt
-          echo "  - Mage Slayer: Add appropriate workflowOptions." >> release_notes.txt
-          echo "  - Riposte: Add appropriate workflowOptions." >> release_notes.txt
-          echo "  - Indomitable: Remove reaction check and reaction usage, since... it doesnt use a reaction" >> release_notes.txt
-          echo "  - Infestation: Updated function to fix token movement." >> release_notes.txt
-          echo "  - Confusion: Updated function to fix token movement." >> release_notes.txt
+          echo "- General: Remove Bugs as a required module. It is still necessary for most people to maintain midi flags on system statuses for v12, but Chris Premades and Dfreds CE are likely coming soon as additional options." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
