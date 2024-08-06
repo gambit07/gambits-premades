@@ -20,7 +20,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Scatter: Actually fix this one" >> release_notes.txt
+          echo "  - Scatter: Annnd still not done with it, updates to use the correct range for picking targets" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
