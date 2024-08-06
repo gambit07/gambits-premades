@@ -7,7 +7,7 @@
 		"name": "Gambit"
 		}
 	],
-  "version": "0.1.85",
+  "version": "0.1.86",
 	"compatibility": {
 	"minimum": "11",
 	"verified": "11",
@@ -216,7 +216,7 @@
     ]
 	},
   "url": "https://github.com/gambit07/gambits-premades",
-  "manifest": "https://github.com/gambit07/gambits-premades/releases/download/0.1.85/module.json",
-  "download": "https://github.com/gambit07/gambits-premades/releases/download/0.1.85/module.zip",
+  "manifest": "https://github.com/gambit07/gambits-premades/releases/download/0.1.86/module.json",
+  "download": "https://github.com/gambit07/gambits-premades/releases/download/0.1.86/module.zip",
   "icon": "https://github.com/gambit07/gambits-premades/blob/main/assets/images/gambit-hand.png?raw=true"
 }
