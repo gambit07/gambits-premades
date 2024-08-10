@@ -61,7 +61,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                             <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName} to try and reduce an enemies saving throw? Choose an enemy to target below.</p>
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <label for="enemy-token" class="gps-dialog-label"Target:</label>
+                                    <label for="enemy-token" class="gps-dialog-label">Target:</label>
                                     <select id="enemy-token" class="gps-dialog-select">
                                         ${targetNames.map((name, index) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${targetUuids[index]}">${name}</option>`).join('')}
                                     </select>

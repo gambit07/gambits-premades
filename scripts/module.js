@@ -17,6 +17,7 @@ import { caltropsFeyGlass } from './macros/caltropsFeyGlass.js';
 import { ballBearings } from './macros/ballBearings.js';
 import { runicShield } from './macros/runicShield.js';
 import { mageSlayer } from './macros/mageSlayer.js';
+import { instinctiveCharm } from './macros/instinctiveCharm.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus } from './helpers.js';
 export let socket;
@@ -167,6 +168,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("ballBearings", ballBearings);
     socket.register("runicShield", runicShield);
     socket.register("mageSlayer", mageSlayer);
+    socket.register("instinctiveCharm", instinctiveCharm);
 })
 
 Hooks.once('ready', async function() {
@@ -222,6 +224,7 @@ Hooks.once('ready', async function() {
         if(!workflow.item.hasAttack) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.protectionEnabled && !game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.instinctiveCharmEnabled) await executeWorkflow({ workflowItem: "instinctiveCharm", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
@@ -398,6 +401,9 @@ async function updateSettings(settingKey = null) {
     }
     if (settingKey === null || settingKey === 'gambits-premades.enableMageSlayer') {
         game.gpsSettings.mageSlayerEnabled = game.settings.get('gambits-premades', 'enableMageSlayer');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.enableInstinctiveCharm') {
+        game.gpsSettings.instinctiveCharmEnabled = game.settings.get('gambits-premades', 'enableInstinctiveCharm');
     }
 }
 

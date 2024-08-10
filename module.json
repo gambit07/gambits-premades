@@ -213,7 +213,8 @@
         "type": "system",
         "compatibility": {
           "minimum": "3.2.1",
-          "verified": "3.2.1"
+          "verified": "3.2.1",
+          "maximum": "3.3.9"
         }
       }
     ],

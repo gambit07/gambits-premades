@@ -44,7 +44,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                             <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName}? An enemy succeeded their saving throw. Choose an enemy to target and an ally to give advantage to below.</p>
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <label for="enemy-token" class="gps-dialog-label"Target:</label>
+                                    <label for="enemy-token" class="gps-dialog-label">Target:</label>
                                     ${validTokens.length >= 1 ? 
                                         `<select id="enemy-token" class="gps-dialog-select">
                                             ${targetNames.map((name, index) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${targetUuids[index]}">${name}</option>`).join('')}

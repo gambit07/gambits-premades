@@ -18,7 +18,9 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Remove Bugs as a required module. It is still necessary for most people to maintain midi flags on system statuses for v12, but Chris Premades and Dfreds CE are likely coming soon as additional options." >> release_notes.txt
+          echo "- General: Add 5e max version of 3.3.9 to prevent disruptions when 3.4 launches. Fix a missing html closing tag for multiple reaction dialog labels, would cause those dialogs to be less beautiful :')" >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Instinctive Charm: Automates the Wizards Instinctive Charm feature" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

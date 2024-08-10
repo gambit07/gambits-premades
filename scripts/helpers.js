@@ -529,7 +529,10 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                     dialogState.decision = "no";
                     if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
                     else if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
-                    result = ({ userDecision: false, programmaticallyClosed: false, source, type });
+
+                    let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
+
+                    result = ({ userDecision: false, enemyTokenUuid, programmaticallyClosed: false, source, type });
                 }
             },
         ],

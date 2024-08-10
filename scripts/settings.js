@@ -516,6 +516,31 @@ function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableInstinctiveCharm", {
+        name: "enableInstinctiveCharm",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Instinctive Charm Timeout', {
+        name: "Instinctive Charm Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.registerMenu('gambits-premades', 'generalSettings', {
         name: game.i18n.localize("General Settings"),
         label: game.i18n.localize("General Settings"),
@@ -726,7 +751,9 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             enableCloudRune: game.settings.get("gambits-premades", "Enable Cloud Rune"),
             cloudRuneTimeout: game.settings.get("gambits-premades", "Cloud Rune Timeout"),
             enableRunicShield: game.settings.get("gambits-premades", "enableRunicShield"),
-            runicShieldTimeout: game.settings.get("gambits-premades", "Runic Shield Timeout")
+            runicShieldTimeout: game.settings.get("gambits-premades", "Runic Shield Timeout"),
+            enableInstinctiveCharm: game.settings.get("gambits-premades", "enableInstinctiveCharm"),
+            instinctiveCharmTimeout: game.settings.get("gambits-premades", "Instinctive Charm Timeout")
         };
 
         return data;
@@ -756,6 +783,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Cloud Rune Timeout", formData.cloudRuneTimeout);
         await game.settings.set("gambits-premades", "enableRunicShield", formData.enableRunicShield);
         await game.settings.set("gambits-premades", "Runic Shield Timeout", formData.runicShieldTimeout);
+        await game.settings.set("gambits-premades", "enableInstinctiveCharm", formData.enableInstinctiveCharm);
+        await game.settings.set("gambits-premades", "Instinctive Charm Timeout", formData.instinctiveCharmTimeout);
     }
 }
 

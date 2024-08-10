@@ -233,6 +233,22 @@
                         <td></td>
                     </tr>
                 </tbody>
+
+                <tr>
+                    <td class="column-item">
+                        <label for="enableInstinctiveCharm">Instinctive Charm<br><span class="small-text">Presents a dialog to Wizards with Instinctive Charm.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableInstinctiveCharm" name="enableInstinctiveCharm" data-dtype="Boolean" {{checked enableInstinctiveCharm}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="instinctiveCharmTimeout" name="instinctiveCharmTimeout" value="{{instinctiveCharmTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+
                 <tr>
                     <td class="column-item">
                         <label for="enableRiposte">Maneuvers: Riposte<br><span class="small-text">Presents a dialog to Battle Master Fighters with Riposte.</span>

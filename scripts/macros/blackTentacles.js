@@ -77,7 +77,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
         const itemData = {
             name: `${itemProperName} - Turn Damage`,
             type: "feat",
-            img: "icons/creatures/tentacles/tentacles-octopus-black-pink.webp",
+            img: chosenItem.img,
             effects: [],
             flags: {
                 "midi-qol": {
