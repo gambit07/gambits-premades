@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Add 5e max version of 3.3.9 to prevent disruptions when 3.4 launches. Fix a missing html closing tag for multiple reaction dialog labels, would cause those dialogs to be less beautiful :')" >> release_notes.txt
+          echo "- General: Add 5e max version of 3.3.9 to prevent disruptions when 3.4 launches. Fix a missing html closing tag for multiple reaction dialog labels, would cause those dialogs to be mis-aligned" >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
           echo "  - Instinctive Charm: Automates the Wizards Instinctive Charm feature" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
