@@ -1,8 +1,15 @@
-2024/08/10-10:16:25.354 83f74 Recovering log #1048
-2024/08/10-10:16:25.359 83f74 Delete type=0 #1048
-2024/08/10-10:16:25.359 83f74 Delete type=3 #1046
-2024/08/10-14:48:55.597 53ef0 Level-0 table #1053: started
-2024/08/10-14:48:55.598 53ef0 Level-0 table #1053: 0 bytes OK
-2024/08/10-14:48:55.600 53ef0 Delete type=0 #1051
-2024/08/10-14:48:55.604 53ef0 Manual compaction at level-0 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at (end)
-2024/08/10-14:48:55.604 53ef0 Manual compaction at level-1 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at (end)
+2024/08/11-22:53:27.043 1bdbc Recovering log #1064
+2024/08/11-22:53:27.047 1bdbc Delete type=0 #1064
+2024/08/11-22:53:27.047 1bdbc Delete type=3 #1062
+2024/08/12-00:23:12.471 53ef0 Level-0 table #1069: started
+2024/08/12-00:23:12.473 53ef0 Level-0 table #1069: 97017 bytes OK
+2024/08/12-00:23:12.475 53ef0 Delete type=0 #1067
+2024/08/12-00:23:12.475 53ef0 Manual compaction at level-0 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at (end)
+2024/08/12-00:23:12.475 53ef0 Manual compaction at level-1 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at '!items.effects!F4WlBlrL1aHesheL.d9dBh3emP8HLgrMk' @ 47 : 1
+2024/08/12-00:23:12.475 53ef0 Compacting 1@1 + 1@2 files
+2024/08/12-00:23:12.477 53ef0 Generated table #1070@1: 8 keys, 19284 bytes
+2024/08/12-00:23:12.477 53ef0 Compacted 1@1 + 1@2 files => 19284 bytes
+2024/08/12-00:23:12.478 53ef0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/08/12-00:23:12.479 53ef0 Delete type=2 #703
+2024/08/12-00:23:12.479 53ef0 Delete type=2 #1069
+2024/08/12-00:23:12.485 53ef0 Manual compaction at level-1 from '!items.effects!F4WlBlrL1aHesheL.d9dBh3emP8HLgrMk' @ 47 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at (end)

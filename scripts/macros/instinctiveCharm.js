@@ -10,7 +10,6 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
     if(!workflow) return;
     if(workflow.item.name === itemProperName) return;
     let target = workflow.token;
-    if(target.actor.system.traits.ci.value.has("charmed")) return;
     if(target.actor.appliedEffects.some(e => e.name === `${itemProperName} - Immunity`)) return;
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat});
@@ -106,6 +105,8 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
 
             if(itemRoll.aborted === true) continue;
 
+            await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
+
             let dialogIdTarget = "instinctivecharmtarget";
             let browserUserTarget = MidiQOL.playerForActor(target.actor);
             if (!browserUserTarget.active) browserUserTarget = game.users?.activeGM;
@@ -143,7 +144,8 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
             const itemUpdateTarget = new CONFIG.Item.documentClass(itemData, {parent: validTokenPrimary.actor});
             const optionsTarget = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };
             const saveResult = await MidiQOL.completeItemUse(itemUpdateTarget, {}, optionsTarget);
-            if (saveResult.failedSaves.size !== 0) {
+            const hasCharmImmunity = target.actor.system.traits.ci.value.has("charmed");
+            if (saveResult.failedSaves.size !== 0 && !hasCharmImmunity) {
                 let dialogContentTarget = `
                     <div class="gps-dialog-container">
                         <div class="gps-dialog-section">
@@ -192,6 +194,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                 return;
             }
             else {
+                if(hasCharmImmunity) ui.notifications.warn("The creature is unaffected because they have Charm Immunity");
                 let effectData = [
                     {
                         "icon": `${chosenItem.img}`,

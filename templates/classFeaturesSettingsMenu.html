@@ -133,7 +133,7 @@
 
                 <tr>
                     <td class="column-item">
-                        <label for="enableCuttingWords">Cutting Words<br><span class="small-text">Presents a dialog to College of Lore Bard users with Cutting Words.</span>
+                        <label for="enableCuttingWords">Cutting Words<br><span class="small-text">Presents a dialog to College of Lore Bards with Cutting Words.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -236,7 +236,7 @@
 
                 <tr>
                     <td class="column-item">
-                        <label for="enableInstinctiveCharm">Instinctive Charm<br><span class="small-text">Presents a dialog to Wizards with Instinctive Charm.</span>
+                        <label for="enableInstinctiveCharm">Instinctive Charm<br><span class="small-text">Presents a dialog to Enchantment Wizards with Instinctive Charm.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -281,6 +281,21 @@
 
                 <tr>
                     <td class="column-item">
+                        <label for="enableRainOfCinders">Rain of Cinders<br><span class="small-text">Presents a dialog to Roiling Hearth Witches with Rain of Cinders.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableRainOfCinders" name="enableRainOfCinders" data-dtype="Boolean" {{checked enableRainOfCinders}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="rainOfCindersTimeout" name="rainOfCindersTimeout" value="{{rainOfCindersTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="column-item">
                         <label for="enableRunicShield">Runic Shield<br><span class="small-text">Presents a dialog to Rune Knight Fighters with Runic Shield.</span>
                         </label>
                     </td>
@@ -296,7 +311,7 @@
 
                 <tr>
                     <td class="column-item">
-                        <label for="enableWitchesHex">Witches Hex<br><span class="small-text">Presents a dialog to Witches with Hex. Hex item must be renamed to 'Witches Hex'.</span>
+                        <label for="enableWitchesHex">Witches Hex<br><span class="small-text">Presents a dialog to Roiling Hearth Witches with Hex. Hex item must be renamed to 'Witches Hex'.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">

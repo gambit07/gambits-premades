@@ -18,6 +18,7 @@ import { ballBearings } from './macros/ballBearings.js';
 import { runicShield } from './macros/runicShield.js';
 import { mageSlayer } from './macros/mageSlayer.js';
 import { instinctiveCharm } from './macros/instinctiveCharm.js';
+import { rainOfCinders } from './macros/rainOfCinders.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus } from './helpers.js';
 export let socket;
@@ -169,6 +170,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("runicShield", runicShield);
     socket.register("mageSlayer", mageSlayer);
     socket.register("instinctiveCharm", instinctiveCharm);
+    socket.register("rainOfCinders", rainOfCinders);
 })
 
 Hooks.once('ready', async function() {
@@ -191,6 +193,7 @@ Hooks.once('ready', async function() {
         ballBearings,
         caltrops,
         caltropsFeyGlass,
+        rainOfCinders,
         socket
     };
 
@@ -235,6 +238,7 @@ Hooks.once('ready', async function() {
         if (game.gpsSettings.powerWordReboundEnabled) await executeWorkflow({ workflowItem: "powerWordRebound", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.cloudRuneEnabled) await executeWorkflow({ workflowItem: "cloudRune", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.runicShieldEnabled) await executeWorkflow({ workflowItem: "runicShield", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.rainOfCindersEnabled) await executeWorkflow({ workflowItem: "rainOfCinders", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postAttackRollComplete", async (workflow) => {
@@ -404,6 +408,9 @@ async function updateSettings(settingKey = null) {
     }
     if (settingKey === null || settingKey === 'gambits-premades.enableInstinctiveCharm') {
         game.gpsSettings.instinctiveCharmEnabled = game.settings.get('gambits-premades', 'enableInstinctiveCharm');
+    }
+    if (settingKey === null || settingKey === 'gambits-premades.enableRainOfCinders') {
+        game.gpsSettings.rainOfCindersEnabled = game.settings.get('gambits-premades', 'enableRainOfCinders');
     }
 }
 

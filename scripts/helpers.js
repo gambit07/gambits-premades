@@ -321,7 +321,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             if (!resourceExistsWithValue) {
                 itemExistsWithValue = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.value !== 0);
             }
-
+console.log(resourceExistsWithValue, itemExistsWithValue, "resource/item check")
             if (!resourceExistsWithValue && !itemExistsWithValue) {
                 if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check valid feature item/resource uses`);
                 return;

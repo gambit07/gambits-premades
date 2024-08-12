@@ -18,9 +18,13 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Add 5e max version of 3.3.9 to prevent disruptions when 3.4 launches. Fix a missing html closing tag for multiple reaction dialog labels, would cause those dialogs to be mis-aligned" >> release_notes.txt
+          echo "- General: Updated manifest link to not prompt a new url each update... hopefully." >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Drawing the Hearth: V12 Compatability" >> release_notes.txt
+          echo "  - Witches Hex: V12 Compatability" >> release_notes.txt
+          echo "  - Instinctive Charm: Modify Charm Immunity interaction to follow RAW which uses the feature and presents a ui notification that failure occurred" >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
-          echo "  - Instinctive Charm: Automates the Wizards Instinctive Charm feature" >> release_notes.txt
+          echo "  - Rain of Cinders: Automates the Witches Roiling Hearth class Rain of Cinders feature" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -67,7 +71,8 @@ jobs:
             "id": "'"gambits-premades"'",
             "release": {
               "version": "'"${{ steps.get-version.outputs.version }}"'",
-              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
+              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"'",
+              "download": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.zip"'",
               "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
               "compatibility": {
                 "minimum": "'"12.328"'",
