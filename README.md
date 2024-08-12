@@ -23,7 +23,6 @@ Sequencer<br>
 socketlib<br>
 Dynamic effects using Active Effects<br>
 Region Attacher<br>
-Bugbears Scripts
 </p>
 
 <b>Instructions:</b>
