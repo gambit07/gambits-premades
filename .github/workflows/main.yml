@@ -18,13 +18,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Updated manifest link to not prompt a new url each update... hopefully." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Drawing the Hearth: V12 Compatability" >> release_notes.txt
-          echo "  - Witches Hex: V12 Compatability" >> release_notes.txt
-          echo "  - Instinctive Charm: Modify Charm Immunity interaction to follow RAW which uses the feature and presents a ui notification that failure occurred" >> release_notes.txt
+          echo "- General: Updated manifest link to not prompt a new url each update part 2." >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
-          echo "  - Rain of Cinders: Automates the Witches Roiling Hearth class Rain of Cinders feature" >> release_notes.txt
+          echo "  - Foresight: Automates the 9th level spell Foresight" >> release_notes.txt
+          echo "  - Thought Shield: Automates the Warlocks Thought Shield feature" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
