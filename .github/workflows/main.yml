@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Updated manifest link to not prompt a new url each update part 2." >> release_notes.txt
+          echo "- General: Updated manifest link to not prompt a new url each update part 2.x." >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
           echo "  - Foresight: Automates the 9th level spell Foresight" >> release_notes.txt
           echo "  - Thought Shield: Automates the Warlocks Thought Shield feature" >> release_notes.txt
