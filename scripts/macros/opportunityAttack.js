@@ -1,6 +1,6 @@
 const regionTokenStates = new Map();
 
-export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, originX, originY}) {
+export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, originX, originY, isTeleport}) {
     if(!game.user.isGM) return;
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
@@ -12,7 +12,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
 
-    let oaDisabled = await region.getFlag("gambits-premades", "opportunityAttackDisabled");
+    let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled");
     if(oaDisabled) return;
     
     let currentCombatant = canvas.tokens.get(game.combat?.current.tokenId);
@@ -52,15 +52,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         }
         regionTokenStates.set(`${region.id}-${token.id}-exited`, true);
 
-        const effectNamesToken = ["Dissonant Whispers"];
-        let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
-        if (currentCombatant.id !== token.id && !hasEffectToken) return;
-        
-        let dragonTurtleShield = effectOriginActor.items.getName("Dragon Turtle Dueling Shield");
-        if(dragonTurtleShield) await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
-        
-        dialogTitle = "Opportunity Attack";
-        dialogId = "opportunityattack";
+        return;
     }
     else if(regionScenario === "tokenEnter") {
         const tokenState = regionTokenStates.get(region.id) || new Set();
@@ -68,32 +60,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         regionTokenStates.set(region.id, tokenState);
         regionTokenStates.set(`${region.id}-${token.id}-entered`, true);
 
-        if (hasPolearmReaction) {
-            let weaponNames = ["glaive","halberd","pike","quarterstaff","spear"];
-            let hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.type?.baseItem && weaponNames.includes(item.system?.type?.baseItem.toLowerCase()) && item.system.equipped === true);
-            if(!hasPolearmWeapon) return;
-            dialogTitle = "Polearm Opportunity Attack";
-            dialogId = "polearmopportunityattack";
-        }
-        else if(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === "Battle Master") {
-            let braceItem = effectOriginActor.items.getName("Maneuvers: Brace");
-            if(!braceItem) return;
-            const superiorityNames = ["superiority dice", "superiority die"];
-            let resourceExistsWithValue = [effectOriginActor.system.resources.primary, effectOriginActor.system.resources.secondary, effectOriginActor.system.resources.tertiary].some(resource => superiorityNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
-            let itemExistsWithValue;
-            if (!resourceExistsWithValue) itemExistsWithValue = !!effectOriginActor.items.find(i => superiorityNames.includes(i.name.toLowerCase()) && i.system.uses.value !== 0);
-            if (!resourceExistsWithValue && !itemExistsWithValue) return;
-            braceItemUuid = braceItem.uuid;
-            dialogTitle = "Maneuvers: Brace Opportunity Attack";
-            dialogId = "maneuversbraceopportunityattack";
-        }
-        else if (hasDeadlyReachReaction) {
-            dialogTitle = "Deadly Reach Opportunity Attack";
-            dialogId = "deadlyreachopportunityattack";
-        }
-        else {
-            return;
-        }
+        return;
     }
     else if(regionScenario === "tokenPostMove") {
         const entered = regionTokenStates.get(`${region.id}-${token.id}-entered`);
@@ -107,25 +74,60 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             await token.update({ x: originX, y: originY }, { animate: false });
         }*/
 
-        if (entered || exited) {
+        /*if (entered || exited) {
             regionTokenStates.delete(`${region.id}-${token.id}-entered`);
             regionTokenStates.delete(`${region.id}-${token.id}-exited`);
             return;
-        }
+        }*/
 
+        regionTokenStates.delete(`${region.id}-${token.id}-exited`);
+        regionTokenStates.delete(`${region.id}-${token.id}-entered`);
         if (token.regions.has(region)) return;
 
         //if(hasSentinel && (sentinelUsed || sentinelDeclined)) return;
 
-        const effectNamesToken = ["Dissonant Whispers"];
-        let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
-        if (currentCombatant.id !== token.id && !hasEffectToken) return;
-        
-        let dragonTurtleShield = effectOriginActor.items.getName("Dragon Turtle Dueling Shield");
-        if(dragonTurtleShield) await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
-        
-        dialogTitle = "Opportunity Attack";
-        dialogId = "opportunityattack";
+        if((exited || (!exited && !entered)) && !isTeleport) {
+            const effectNamesToken = ["Dissonant Whispers"];
+            let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
+            if (currentCombatant.id !== token.id && !hasEffectToken) return;
+
+            let dragonTurtleShield = effectOriginActor.items.getName("Dragon Turtle Dueling Shield");
+            if(dragonTurtleShield) await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
+            
+            dialogTitle = "Opportunity Attack";
+            dialogId = "opportunityattack";
+        }
+        else if(entered && !isTeleport) {
+            if (hasPolearmReaction) {
+                let weaponNames = ["glaive","halberd","pike","quarterstaff","spear"];
+                let hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.type?.baseItem && weaponNames.includes(item.system?.type?.baseItem.toLowerCase()) && item.system.equipped === true);
+                if(!hasPolearmWeapon) return;
+                dialogTitle = "Polearm Opportunity Attack";
+                dialogId = "polearmopportunityattack";
+            }
+            else if(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === "Battle Master") {
+                let braceItem = effectOriginActor.items.getName("Maneuvers: Brace");
+                if(!braceItem) return;
+                const superiorityNames = ["superiority dice", "superiority die"];
+                let resourceExistsWithValue = [effectOriginActor.system.resources.primary, effectOriginActor.system.resources.secondary, effectOriginActor.system.resources.tertiary].some(resource => superiorityNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
+                let itemExistsWithValue;
+                if (!resourceExistsWithValue) itemExistsWithValue = !!effectOriginActor.items.find(i => superiorityNames.includes(i.name.toLowerCase()) && i.system.uses.value !== 0);
+                if (!resourceExistsWithValue && !itemExistsWithValue) return;
+                braceItemUuid = braceItem.uuid;
+                dialogTitle = "Maneuvers: Brace Opportunity Attack";
+                dialogId = "maneuversbraceopportunityattack";
+            }
+            else if (hasDeadlyReachReaction) {
+                dialogTitle = "Deadly Reach Opportunity Attack";
+                dialogId = "deadlyreachopportunityattack";
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            return;
+        }
     }
 
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Opportunity Attack Timeout`));
@@ -545,7 +547,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onExit",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "opportunityAttackDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; if(event.data.teleport === true) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenExit"});`,
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenExit", isTeleport: event.data.teleport});`,
                             events: ['tokenExit']
                         }
                     },
@@ -554,8 +556,8 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onEnter",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "opportunityAttackDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; if(event.data.teleport === true) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenEnter"});`,
-                            events: ['tokenEnter']
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenEnter", isTeleport: event.data.teleport});`,
+                            events: ['tokenMoveIn']
                         }
                     },
                     {
@@ -563,7 +565,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onPostMove",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "opportunityAttackDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; if(event.data.teleport === true) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenPostMove", originX: event.data.segments[0].to.x, originY: event.data.segments[0].to.y});`,
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenPostMove", originX: event.data.segments[0].to.x, originY: event.data.segments[0].to.y, isTeleport: event.data.teleport});`,
                             events: ['tokenMove']
                         }
                     },
@@ -579,27 +581,54 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                 let tokenSize = Math.max(token.width, token.height);
                                 let validWeapons = actor.items.filter(item => (item.system.actionType === "mwak" && item.system.equipped) || (item.system?.type?.value === "monster" && item?.type === "feat" && (item.system?.actionType === "mwak" || item.system?.actionType === "msak")) || (item?.type === "weapon" && item.system?.actionType === "msak"));
 
-                                recalculate = await checkAndSetFlag("opportunityAttackTemplateValidWeapons", validWeapons) || recalculate;
-                                recalculate = await checkAndSetFlag("opportunityAttackTemplateTokenSize", tokenSize) || recalculate;
+                                recalculate = await checkAndSetFlag("opportunityAttackRegionValidWeapons", validWeapons) || recalculate;
+                                recalculate = await checkAndSetFlag("opportunityAttackRegionTokenSize", tokenSize) || recalculate;
                                 recalculate = await handleMWAKRange() || recalculate;
 
                                 if (!recalculate) return;
 
-                                const validSpells = actor.flags["midi-qol"].opportunityAttackTemplateValidSpells;
+                                const validSpells = actor.flags["midi-qol"].opportunityAttackRegionValidSpells;
                                 let maxRange = calculateMaxRange(validWeapons, validSpells, tokenSize);
                                 if(maxRange === false) return;
 
-                                await actor.setFlag("midi-qol", "opportunityAttackTemplateValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
+                                await actor.setFlag("midi-qol", "opportunityAttackRegionValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
 
                                 const tokenCenterX = token.x + token.object.w / 2;
                                 const tokenCenterY = token.y + token.object.h / 2;
+                                const gridSize = canvas.scene.grid.size;
+                                const gridDistance = canvas.scene.grid.distance;
+                                const sideLength = (maxRange / gridDistance) * 2 * gridSize;
+                                const topLeftX = tokenCenterX - (sideLength / 2);
+                                const topLeftY = tokenCenterY - (sideLength / 2);
+                                let regionShape;
+
+                                if (canvas.scene.grid.type === 0) {  // Gridless
+                                    regionShape = {
+                                        type: "ellipse",
+                                        x: tokenCenterX,
+                                        y: tokenCenterY,
+                                        radiusX: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
+                                        radiusY: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
+                                        rotation: 0,
+                                        hole: false
+                                    };
+                                } else {
+                                    regionShape = {
+                                        type: "rectangle",
+                                        x: topLeftX,
+                                        y: topLeftY,
+                                        width: sideLength,
+                                        height: sideLength,
+                                        rotation: 0,
+                                        hole: false
+                                    };
+                                }
 
                                 region.update({
                                     elevation: { bottom: -maxRange, top: maxRange },
                                     shapes: region.shapes.map(shape => ({
                                         ...shape,
-                                        radiusX: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
-                                        radiusY: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance
+                                        ...regionShape,
                                     }))
                                 });
                                 
@@ -623,7 +652,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                         }, 0);
 
                                     let mwakRange = actor.flags["midi-qol"].range.mwak - mwakExpire;
-                                    return await checkAndSetFlag("opportunityAttackTemplateMwakRange", mwakRange);
+                                    return await checkAndSetFlag("opportunityAttackRegionMwakRange", mwakRange);
                                 }
 
                                 function calculateMaxRange(validWeapons, validSpells, tokenSize) {
@@ -676,7 +705,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                     maxRange = (maxRange * conversionFactor) + tokenSizeOffset;
 
                                     if (actor.flags["midi-qol"]?.range?.mwak) {
-                                        maxRange += (actor.flags["midi-qol"].opportunityAttackTemplateMwakRange * conversionFactor);
+                                        maxRange += (actor.flags["midi-qol"].opportunityAttackRegionMwakRange * conversionFactor);
                                     }
                                     return maxRange;
                                 }`,
@@ -686,15 +715,14 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                 ],
                 flags: {
                     "gambits-premades": {
-                        "templateHiddenOA": true,
                         'actorUuid': actor.uuid,
                         'tokenUuid': token.uuid,
                         'opportunityAttackSet': true,
-                        'opportunityAttackTemplateValidWeapons': validWeapons,
-                        'opportunityAttackTemplateValidSpells': validSpells,
-                        'opportunityAttackTemplateMwakRange': mwakRange,
-                        'opportunityAttackTemplateTokenSize': Math.max(token.width, token.height),
-                        'opportunityAttackTemplateConFac': conversionFactor
+                        'opportunityAttackRegionValidWeapons': validWeapons,
+                        'opportunityAttackRegionValidSpells': validSpells,
+                        'opportunityAttackRegionMwakRange': mwakRange,
+                        'opportunityAttackRegionTokenSize': Math.max(token.width, token.height),
+                        'opportunityAttackRegionConFac': conversionFactor
                     }
                 }
             };
@@ -703,11 +731,12 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const firstRegion = createdRegions[0];
     
             try {
-                await actor.setFlag("gambits-premades", "templateAttachedToken", firstRegion.uuid);
-                await actor.setFlag("gambits-premades", "tokenAttachedTemplate", token.id);
-                await actor.setFlag("gambits-premades", "opportunityAttackTemplate", firstRegion.uuid);
+                let attachedRegions = actor.getFlag('gambits-premades', 'attachedRegions') || [];
+                attachedRegions.push(firstRegion.uuid);
+                await actor.setFlag('gambits-premades', 'attachedRegions', attachedRegions);
+                await actor.setFlag("gambits-premades", "opportunityAttackRegion", firstRegion.uuid);
                 if (firstRegion.object && firstRegion.object.tooltip) firstRegion.object.tooltip.visible = false;
-                if (oaDisabled) await firstRegion.setFlag("gambits-premades", "opportunityAttackDisabled", true);
+                if (oaDisabled) await firstRegion.setFlag("gambits-premades", "regionDisabled", true);
             } catch (error) {
                 console.error('Error during region attachment:', error);
             }
@@ -732,13 +761,21 @@ export async function disableOpportunityAttack(combat, combatEvent) {
     async function processCombatant(combatant) {
         const { actor } = combatant;
 
-        let templateFlag = await actor.getFlag("gambits-premades", "opportunityAttackTemplate");
-        let templateAttachmentFlag = await actor.getFlag("gambits-premades", "templateAttachedToken");
+        let regionFlag = await actor.getFlag("gambits-premades", "opportunityAttackRegion");
+        let attachedRegions = actor.getFlag('gambits-premades', 'attachedRegions') || [];
+        if (attachedRegions.length !== 0) {
+            attachedRegions = attachedRegions.filter(uuid => uuid !== regionFlag);
+            await actor.setFlag('gambits-premades', 'attachedRegions', attachedRegions);
+        }
+        else {
+            await actor.unsetFlag('gambits-premades', 'attachedRegions');
+        }
+
         let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
         //let sentinelUsed = actor.getFlag("gambits-premades", "sentinelUsed");
         //let sentinelDeclined = actor.getFlag("gambits-premades", "sentinelDeclined");
         
-        let templateData = templateFlag ? await fromUuid(templateFlag) : null;
+        let regionData = regionFlag ? await fromUuid(regionFlag) : null;
 
         /*let effectNames = ["Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack"];
         let effectIdsToDelete = actor.effects
@@ -749,9 +786,8 @@ export async function disableOpportunityAttack(combat, combatEvent) {
             await actor.deleteEmbeddedDocuments("ActiveEffect", effectIdsToDelete);
         }*/
 
-        if (templateData) await templateData.delete();
-        if (templateFlag) await actor.unsetFlag("gambits-premades", "opportunityAttackTemplate");
-        if (templateAttachmentFlag) await actor.unsetFlag("gambits-premades", "templateAttachedToken");
+        if (regionData) await regionData.delete();
+        if (regionFlag) await actor.unsetFlag("gambits-premades", "opportunityAttackRegion");
         if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
         //if(sentinelUsed) await actor.unsetFlag("gambits-premades", "sentinelUsed");
         //if(sentinelDeclined) await actor.unsetFlag("gambits-premades", "sentinelDeclined");

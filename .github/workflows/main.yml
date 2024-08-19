@@ -20,8 +20,11 @@ jobs:
         run: |
           echo "- General: Updated manifest link to not prompt a new url each update part 2.x." >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
-          echo "  - Foresight: Automates the 9th level spell Foresight" >> release_notes.txt
-          echo "  - Thought Shield: Automates the Warlocks Thought Shield feature" >> release_notes.txt
+          echo "  - Electric Eels: V12 Compatability" >> release_notes.txt
+          echo "  - Dimension Door: Automates the Dimension Door spell, allowing selection of an ally within 5 feet to teleport as well" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Identify Restriction: Identify Restriction message fixed. Text is saved to the form field properly on save, and no longer requires a reload to apply." >> release_notes.txt
+          echo "  - Opportunity Attack: Fix issue causing dialog popup on token entry in some cases. Add proper teleport handling to prevent OA when a teleport occurs, dependent on proper teleport implementation in an upcoming Sequencer release" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

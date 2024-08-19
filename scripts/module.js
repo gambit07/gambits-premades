@@ -270,7 +270,7 @@ Hooks.once('ready', async function() {
 
     Hooks.on("preUpdateItem", (item, update) => {
         if (!game.user.isGM && ("identified" in (update.system ?? {})) && game.gpsSettings.identifyRestrictionEnabled) {
-            ui.notifications.error(`${game.settings.get('gambits-premades', 'Identify Restriction Message')}`);
+            ui.notifications.error(`${game.gpsSettings.identifyRestrictionMessage}`);
             return false;
         }
       });
@@ -479,14 +479,12 @@ function setupTemplateCreationUpdateHooks() {
     });
     }
 
-// Handle OA Movement Stuff
-async function updateRegionPosition(tokenDocument) {
+async function updateRegionPosition(region, tokenDocument) {
     if (!game.user.isGM) return;
-
-    const region = fromUuidSync(tokenDocument.actor.getFlag('gambits-premades', 'templateAttachedToken'));
     if (!region || !tokenDocument) return;
-    let oaDisabled = region.getFlag("gambits-premades", "opportunityAttackDisabled");
-    if (!oaDisabled) region.setFlag("gambits-premades", "opportunityAttackDisabled", true);
+
+    let regionDisabled = region.getFlag("gambits-premades", "regionDisabled");
+    if (!regionDisabled) region.setFlag("gambits-premades", "regionDisabled", true);
 
     let previousX1 = tokenDocument.object.center.x;
     let previousY1 = tokenDocument.object.center.y;
@@ -504,7 +502,6 @@ async function updateRegionPosition(tokenDocument) {
 
             setTimeout(checkPosition, 25);
         } else if (previousX1 === previousX2 && previousY1 === previousY2) {
-
             const updatedShapes = region.shapes.map(shape => {
                 const sideLength = shape.width || (shape.radiusX * 2);
                 const topLeftX = currentX - (sideLength / 2);
@@ -516,11 +513,17 @@ async function updateRegionPosition(tokenDocument) {
                         x: currentX,
                         y: currentY
                     };
-                } else {
+                } else if(shape.type === "rectangle") {
                     return {
                         ...shape,
                         x: topLeftX,
                         y: topLeftY
+                    };
+                } else {
+                    return {
+                        ...shape,
+                        x: currentX,
+                        y: currentY
                     };
                 }
             });
@@ -529,7 +532,7 @@ async function updateRegionPosition(tokenDocument) {
                 shapes: updatedShapes
             });
 
-            if (!oaDisabled) region.unsetFlag("gambits-premades", "opportunityAttackDisabled");
+            if (!regionDisabled) region.unsetFlag("gambits-premades", "regionDisabled");
             return;
         } else {
             previousX2 = previousX1;
@@ -542,25 +545,14 @@ async function updateRegionPosition(tokenDocument) {
 }
 
 Hooks.on('updateToken', async (tokenDocument, updateData, options, userId) => {
-    if (!game.combat) return;
     if (!game.user.isGM) return;
 
-    const tokenId = tokenDocument.actor.getFlag('gambits-premades', 'tokenAttachedTemplate');
-    if (tokenId && tokenDocument.id === tokenId) {
-        await updateRegionPosition(tokenDocument);
+    const regions = tokenDocument.actor.getFlag('gambits-premades', 'attachedRegions') || [];
+
+    for (const regionUuid of regions) {
+        const region = fromUuidSync(regionUuid);
+        if (region) {
+            await updateRegionPosition(region, tokenDocument);
+        }
     }
 });
-
-//Handle lack of dfreds effects with midi native reaction handling
-/*Hooks.on('deleteActiveEffect', async (activeEffect, options, userId) => {
-	if (activeEffect.name === "Reaction") {
-		const actor = activeEffect.parent;
-
-		const hasEffectApplied = MidiQOL.hasUsedReaction(actor);
-		if (hasEffectApplied) {
-			await actor?.unsetFlag("midi-qol", "actions.reactionCombatRound");
-			return actor?.setFlag("midi-qol", "actions.reaction", false);
-		}
-	}
-	return;
-  });*/
