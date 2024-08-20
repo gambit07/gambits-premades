@@ -199,7 +199,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     }
 
     // Check if the token has cast Kinetic Jaunt, Zephyr Strike, or the generic immunity effect has been applied
-    const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Opportunity Attack Immunity", "Rabbit Hop", "Ashardalon's Stride"];
+    const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Opportunity Attack Immunity", "Rabbit Hop", "Ashardalon's Stride", "Hurried Response"];
     let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
     if(hasEffectToken) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using an immunity effect`);
@@ -557,7 +557,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         disabled: false,
                         system: {
                             source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenEnter", isTeleport: event.data.teleport});`,
-                            events: ['tokenMoveIn']
+                            events: ['tokenEnter']
                         }
                     },
                     {
@@ -734,7 +734,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                 let attachedRegions = actor.getFlag('gambits-premades', 'attachedRegions') || [];
                 attachedRegions.push(firstRegion.uuid);
                 await actor.setFlag('gambits-premades', 'attachedRegions', attachedRegions);
-                await actor.setFlag("gambits-premades", "opportunityAttackRegion", firstRegion.uuid);
+                await combatant.setFlag("gambits-premades", "opportunityAttackRegion", firstRegion.uuid);
                 if (firstRegion.object && firstRegion.object.tooltip) firstRegion.object.tooltip.visible = false;
                 if (oaDisabled) await firstRegion.setFlag("gambits-premades", "regionDisabled", true);
             } catch (error) {
@@ -757,11 +757,12 @@ export async function enableOpportunityAttack(combat, combatEvent) {
 
 export async function disableOpportunityAttack(combat, combatEvent) {
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
+    regionTokenStates.clear();
 
     async function processCombatant(combatant) {
         const { actor } = combatant;
 
-        let regionFlag = await actor.getFlag("gambits-premades", "opportunityAttackRegion");
+        let regionFlag = await combatant.getFlag("gambits-premades", "opportunityAttackRegion");
         let attachedRegions = actor.getFlag('gambits-premades', 'attachedRegions') || [];
         if (attachedRegions.length !== 0) {
             attachedRegions = attachedRegions.filter(uuid => uuid !== regionFlag);
@@ -787,7 +788,6 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         }*/
 
         if (regionData) await regionData.delete();
-        if (regionFlag) await actor.unsetFlag("gambits-premades", "opportunityAttackRegion");
         if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
         //if(sentinelUsed) await actor.unsetFlag("gambits-premades", "sentinelUsed");
         //if(sentinelDeclined) await actor.unsetFlag("gambits-premades", "sentinelDeclined");

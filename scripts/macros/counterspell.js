@@ -12,6 +12,12 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     const lastMessage = game.messages.contents[game.messages.contents.length - 1]; // Use to hide initial spell message
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
 
+    const castProperties = ["vocal", "somatic", "material"];
+    let hasVSMProperty = castProperties.some(prop => workflow.item.system.properties.has(prop));
+    let isVocalOnly = workflow.item.system.properties.has("vocal") && !workflow.item.system.properties.has("somatic") && !workflow.item.system.properties.has("material");
+    let hasDeafenedStatus;
+    if (!hasVSMProperty) return;
+
     let selectedToken = workflow.token;
     let castLevel = false;
     let browserUser;
@@ -28,6 +34,10 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
             if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [game.users.find((u) => u.isGM && u.active).id] });
             let workflowStatus = workflow.aborted;
             if(workflowStatus === true) return;
+            if(!castLevel) {
+                hasDeafenedStatus = validTokenPrimary.document.hasStatusEffect("deafened");
+                if (isVocalOnly && hasDeafenedStatus) continue;
+            }
             const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
             const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
             let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
@@ -100,6 +110,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
 
                 let chosenSpell = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
+
+                hasVSMProperty = castProperties.some(prop => chosenSpell.system.properties.has(prop));
 
                 chosenSpell.prepareData();
 
@@ -182,7 +194,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 await chatMessage.update({ content: content });
 
                 if(csFailure === true) continue;
-
+                if(!hasVSMProperty) return;
                 castLevel = counterspellLevel;
                 await secondaryCounterspellProcess(workflow, lastMessage, castLevel, validTokenPrimary);
                 break;
@@ -269,6 +281,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 let chosenSpell = validTokenSecondary.actor.items.find(i => i.name === itemProperName);
 
+                hasVSMProperty = castProperties.some(prop => chosenSpell.system.properties.has(prop));
+
                 chosenSpell.prepareData();
 
                 const options = {
@@ -350,7 +364,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 await chatMessage.update({ content: content });
 
                 if(csFailure === true) continue;
-
+                if(!hasVSMProperty) return;
                 castLevel = counterspellLevel;
                 await initialCounterspellProcess(workflow, lastMessage, castLevel, validTokenSecondary);
                 break;

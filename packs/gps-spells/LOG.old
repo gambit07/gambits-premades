@@ -1,8 +1,15 @@
-2024/08/17-22:44:29.965 87034 Recovering log #2821
-2024/08/17-22:44:29.969 87034 Delete type=0 #2821
-2024/08/17-22:44:29.969 87034 Delete type=3 #2819
-2024/08/18-16:55:05.185 a8ba4 Level-0 table #2826: started
-2024/08/18-16:55:05.185 a8ba4 Level-0 table #2826: 0 bytes OK
-2024/08/18-16:55:05.187 a8ba4 Delete type=0 #2824
-2024/08/18-16:55:05.187 a8ba4 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
-2024/08/18-16:55:05.188 a8ba4 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
+2024/08/18-21:14:58.885 87024 Recovering log #2829
+2024/08/18-21:14:58.889 87024 Delete type=0 #2829
+2024/08/18-21:14:58.889 87024 Delete type=3 #2827
+2024/08/19-20:49:46.600 a8ba4 Level-0 table #2835: started
+2024/08/19-20:49:46.602 a8ba4 Level-0 table #2835: 8991 bytes OK
+2024/08/19-20:49:46.604 a8ba4 Delete type=0 #2833
+2024/08/19-20:49:46.608 a8ba4 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
+2024/08/19-20:49:46.608 a8ba4 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at '!items!4srAdZPiDJCuWcoG' @ 1638 : 1
+2024/08/19-20:49:46.608 a8ba4 Compacting 1@1 + 1@2 files
+2024/08/19-20:49:46.612 a8ba4 Generated table #2836@1: 53 keys, 154493 bytes
+2024/08/19-20:49:46.612 a8ba4 Compacted 1@1 + 1@2 files => 154493 bytes
+2024/08/19-20:49:46.613 a8ba4 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/08/19-20:49:46.613 a8ba4 Delete type=2 #2831
+2024/08/19-20:49:46.614 a8ba4 Delete type=2 #2835
+2024/08/19-20:49:46.614 a8ba4 Manual compaction at level-1 from '!items!4srAdZPiDJCuWcoG' @ 1638 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)

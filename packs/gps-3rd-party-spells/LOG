@@ -1,15 +1,8 @@
-2024/08/18-16:57:04.757 8701c Recovering log #1129
-2024/08/18-16:57:04.761 8701c Delete type=0 #1129
-2024/08/18-16:57:04.761 8701c Delete type=3 #1127
-2024/08/18-20:03:04.152 a8ba4 Level-0 table #1135: started
-2024/08/18-20:03:04.155 a8ba4 Level-0 table #1135: 20327 bytes OK
-2024/08/18-20:03:04.157 a8ba4 Delete type=0 #1133
-2024/08/18-20:03:04.161 a8ba4 Manual compaction at level-0 from '!items!2YNbYocBRdEDgO4Q' @ 72057594037927935 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at (end)
-2024/08/18-20:03:04.161 a8ba4 Manual compaction at level-1 from '!items!2YNbYocBRdEDgO4Q' @ 72057594037927935 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at '!items.effects!HbzrINiUD1Xrd7h5.1aZUiRZIU4tPRa8I' @ 359 : 1
-2024/08/18-20:03:04.161 a8ba4 Compacting 1@1 + 1@2 files
-2024/08/18-20:03:04.165 a8ba4 Generated table #1136@1: 28 keys, 63501 bytes
-2024/08/18-20:03:04.165 a8ba4 Compacted 1@1 + 1@2 files => 63501 bytes
-2024/08/18-20:03:04.167 a8ba4 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/08/18-20:03:04.167 a8ba4 Delete type=2 #1131
-2024/08/18-20:03:04.167 a8ba4 Delete type=2 #1135
-2024/08/18-20:03:04.170 a8ba4 Manual compaction at level-1 from '!items.effects!HbzrINiUD1Xrd7h5.1aZUiRZIU4tPRa8I' @ 359 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at (end)
+2024/08/19-20:51:44.191 87034 Recovering log #1139
+2024/08/19-20:51:44.195 87034 Delete type=0 #1139
+2024/08/19-20:51:44.195 87034 Delete type=3 #1137
+2024/08/20-13:22:06.235 a8ba4 Level-0 table #1144: started
+2024/08/20-13:22:06.235 a8ba4 Level-0 table #1144: 0 bytes OK
+2024/08/20-13:22:06.237 a8ba4 Delete type=0 #1142
+2024/08/20-13:22:06.237 a8ba4 Manual compaction at level-0 from '!items!2YNbYocBRdEDgO4Q' @ 72057594037927935 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at (end)
+2024/08/20-13:22:06.237 a8ba4 Manual compaction at level-1 from '!items!2YNbYocBRdEDgO4Q' @ 72057594037927935 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at (end)

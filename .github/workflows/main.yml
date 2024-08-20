@@ -18,13 +18,13 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Updated manifest link to not prompt a new url each update part 2.x." >> release_notes.txt
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Electric Eels: V12 Compatability" >> release_notes.txt
-          echo "  - Dimension Door: Automates the Dimension Door spell, allowing selection of an ally within 5 feet to teleport as well" >> release_notes.txt
+          echo "- General: " >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Dimension Door: Add range check to target token if selecting a target token to teleport along with the caster." >> release_notes.txt
+          echo "  - Counterspell: Added VSM check to align with RAW. This initial pass will prevent cs if the initial spell cast has no vsm, or v only and the token casting cs is deafened. It will also check cs for counter-counterspell situations to see if it has no vsm components. This will likely be expanded on when CPR releases Subtle Spell" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Identify Restriction: Identify Restriction message fixed. Text is saved to the form field properly on save, and no longer requires a reload to apply." >> release_notes.txt
-          echo "  - Opportunity Attack: Fix issue causing dialog popup on token entry in some cases. Add proper teleport handling to prevent OA when a teleport occurs, dependent on proper teleport implementation in an upcoming Sequencer release" >> release_notes.txt
+          echo "  - Entangle: Fix a couple logic issues with restrained application." >> release_notes.txt
+          echo "  - Opportunity Attack: Revert onEnter change, I dont think its actually an issue. Fix unlinked tokens not having their region removed if the token is deleted from the canvas." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
