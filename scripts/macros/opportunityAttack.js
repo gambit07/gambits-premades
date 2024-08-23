@@ -478,6 +478,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             else conversionFactor = 1;
         
             let maxRange;
+            let mwakRange = actor.flags["midi-qol"]?.range?.mwak;
             if (onlyThrownWeapons || (validSpells && !validWeapons)) {
                 maxRange = 5;
             } else {
@@ -490,20 +491,25 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                     return max;
                 }, 0);
             }
-        
-            if (token.width === 1 && maxRange === 10) maxRange;
-            else if (token.width === 2 && maxRange === 5) maxRange;
-            else if (token.width === 3 && maxRange === 5) maxRange;
-            else if (token.width === 3 && maxRange === 10) maxRange;
-            else if (token.width === 4 && maxRange === 10) maxRange;
+
+            if(maxRange === 0 || oaDisabled) {
+                const tokenSize = Math.max(token.width, token.height);
+                maxRange = 4 * tokenSize;
+            }
+            else {
+                if (token.width === 1 && maxRange === 10) maxRange;
+                else if (token.width === 2 && maxRange === 5) maxRange;
+                else if (token.width === 3 && maxRange === 5) maxRange;
+                else if (token.width === 3 && maxRange === 10) maxRange;
+                else if (token.width === 4 && maxRange === 10) maxRange;
+                
+                const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * canvas.scene.dimensions.distance;
+                maxRange = (maxRange * conversionFactor) + tokenSizeOffset;
             
-            const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * canvas.scene.dimensions.distance;
-            maxRange = (maxRange * conversionFactor) + tokenSizeOffset;
-        
-            let mwakRange = actor.flags["midi-qol"]?.range?.mwak;
-            if (mwakRange) maxRange += (mwakRange * conversionFactor);
+                if (mwakRange) maxRange += (mwakRange * conversionFactor);
+            }
     
-            if(oaDisabled) maxRange = 1;
+            //if(oaDisabled) maxRange = 1;
         
             const tokenCenterX = token.x + token.object.w / 2;
             const tokenCenterY = token.y + token.object.h / 2;
@@ -574,8 +580,9 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onTurnEnd",
                         disabled: false,
                         system: {
-                            source: `let token = event.data.token;
-                                let actor = event.data.token.actor;
+                            source: `
+                                let token = await fromUuid(region.flags["gambits-premades"].tokenUuid);
+                                let actor = await fromUuid(region.flags["gambits-premades"].actorUuid);
 
                                 let recalculate = false;
                                 let tokenSize = Math.max(token.width, token.height);
@@ -587,11 +594,11 @@ export async function enableOpportunityAttack(combat, combatEvent) {
 
                                 if (!recalculate) return;
 
-                                const validSpells = actor.flags["midi-qol"].opportunityAttackRegionValidSpells;
+                                const validSpells = region.flags["gambits-premades"].opportunityAttackRegionValidSpells;
                                 let maxRange = calculateMaxRange(validWeapons, validSpells, tokenSize);
                                 if(maxRange === false) return;
 
-                                await actor.setFlag("midi-qol", "opportunityAttackRegionValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
+                                await region.setFlag("gambits-premades", "opportunityAttackRegionValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
 
                                 const tokenCenterX = token.x + token.object.w / 2;
                                 const tokenCenterY = token.y + token.object.h / 2;
@@ -633,9 +640,9 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                 });
                                 
                                 async function checkAndSetFlag(property, newValue) {
-                                    const oldValue = JSON.stringify(actor.flags["midi-qol"][property]);
+                                    const oldValue = JSON.stringify(region.flags["gambits-premades"][property]);
                                     if (oldValue !== JSON.stringify(newValue)) {
-                                        await actor.setFlag("midi-qol", property, newValue);
+                                        await region.setFlag("gambits-premades", property, newValue);
                                         return true;
                                     }
                                     return false;
@@ -670,8 +677,8 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                             elevation: { bottom: -1, top: 1 },
                                             shapes: region.shapes.map(shape => ({
                                                 ...shape,
-                                                radiusX: 5,
-                                                radiusY: 5
+                                                radiusX: 100 * tokenSize,
+                                                radiusY: 100 * tokenSize
                                             }))
                                         });
                                         return false;
@@ -705,7 +712,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                     maxRange = (maxRange * conversionFactor) + tokenSizeOffset;
 
                                     if (actor.flags["midi-qol"]?.range?.mwak) {
-                                        maxRange += (actor.flags["midi-qol"].opportunityAttackRegionMwakRange * conversionFactor);
+                                        maxRange += (region.flags["gambits-premades"].opportunityAttackRegionMwakRange * conversionFactor);
                                     }
                                     return maxRange;
                                 }`,
