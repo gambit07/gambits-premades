@@ -19,8 +19,9 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix turn end region size recalculation not working as intended" >> release_notes.txt
-          echo "  - Enemies Abound: Socket chat message creation to fix user permissions error" >> release_notes.txt
+          echo "  - Torch: Fix torch icon not oriented properly and a few animation issues" >> release_notes.txt
+          echo "  - Hooded Lantern: Fix lantern icon not oriented properly and a few animation issues" >> release_notes.txt
+          echo "  - Bullseye Lantern: Fix lantern icon not oriented properly and a few animation issues" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
