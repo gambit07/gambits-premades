@@ -19,9 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Torch: Fix torch icon not oriented properly and a few animation issues" >> release_notes.txt
-          echo "  - Hooded Lantern: Fix lantern icon not oriented properly and a few animation issues" >> release_notes.txt
-          echo "  - Bullseye Lantern: Fix lantern icon not oriented properly and a few animation issues" >> release_notes.txt
+          echo "  - Opportunity Attack: Fix region wrapping causing Token Enter and Token Exit events to not fire correctly, subsequently causing Opportunity Attack dialogs to fire erroneously (and causing other region related issues Im sure)" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

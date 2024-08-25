@@ -30,7 +30,7 @@ Hooks.once('init', async function() {
 
     libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
         const [region, position] = args;
-
+    
         if (!this || !this.document) {
             return wrapped(...args);
         }
@@ -52,54 +52,28 @@ Hooks.once('init', async function() {
             { x: this.document.x + (width * size) - reduction, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
             { x: this.document.x + (width * size / 2), y: this.document.y + (height * size / 2), elevation: this.document.elevation }
         ];
-
+    
         points.forEach(point => {
             pointsToTest.push(point);
         });
-
+    
         const testResults = pointsToTest.map(point => {
             const result = region.testPoint(point, position?.elevation ?? this.document.elevation);
             return result;
         });
-
+    
         const isInside = testResults.some(x => x);
-
-        if (isInside) {
-            const snappingMode = 0x3;
-            const snappedPosition = canvas.grid.getSnappedPoint({ x: this.document.x, y: this.document.y }, { mode: snappingMode });
     
-            const adjustedPoints = pointsToTest.map(point => {
-                return {
-                    x: snappedPosition.x,
-                    y: snappedPosition.y,
-                    elevation: point.elevation
-                };
-            });
-    
-            const finalResults = adjustedPoints.map(point => {
-                return region.testPoint(point, position?.elevation ?? this.document.elevation);
-            });
-    
-            const finalInside = finalResults.some(x => x);
-    
-            if (finalInside) {
-                this.document.x = snappedPosition.x;
-                this.document.y = snappedPosition.y;
-            }
-    
-            return finalInside;
-        }
-    
-        return wrapped(...args);
+        return isInside || wrapped(...args);
     }, 'MIXED');
-
+    
     libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
         const [region, waypoints, options] = args;
-
+    
         if (!this || !this.document) {
             return wrapped(...args);
         }
-    
+        
         const { teleport = false } = options || {};
         const samples = [];
         const size = canvas.dimensions.size;
@@ -121,11 +95,10 @@ Hooks.once('init', async function() {
         points.forEach(point => {
             samples.push(point);
         });
-    
-        const segments = region.segmentizeMovement(waypoints, samples, { teleport });
-        if(segments) return segments;
         
-        return wrapped(...args);
+        const segments = region.segmentizeMovement(waypoints, samples, { teleport });
+        
+        return segments || wrapped(...args);
     }, 'MIXED');
 });
 
