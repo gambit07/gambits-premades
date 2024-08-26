@@ -18,8 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix region wrapping causing Token Enter and Token Exit events to not fire correctly, subsequently causing Opportunity Attack dialogs to fire erroneously (and causing other region related issues Im sure)" >> release_notes.txt
+          echo "- General: Updates for moveTokenByOriginPoint and moveTokenByCardinal helpers to account for cores distance setting" >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Celestial Resistance" >> release_notes.txt
+          echo "  - Divine Health" >> release_notes.txt
+          echo "  - Eldritch Mind" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
