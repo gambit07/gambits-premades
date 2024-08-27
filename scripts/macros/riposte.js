@@ -8,7 +8,6 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
     let itemName = "maneuvers: riposte";
     let itemProperName = "Riposte";
     let dialogId = "riposte";
-    let gameVersion = parseInt(game.system.version.split('.')[0], 10);
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
     const actionTypes = ["mwak"];
@@ -17,7 +16,7 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
     }
     let target = workflow.targets.first();
 
-    let targetAC = workflow.targets.first().actor.system.attributes.ac.value;
+    let targetAC = target.actor.system.attributes.ac.value;
     let attackTotal = workflow.attackTotal;
     if (attackTotal >= targetAC) return;
 
@@ -150,7 +149,17 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
         else if (userDecision) {
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
 
-            const riposteRoll = await chosenItem.use();
+            const riposteOptions = {
+                showFullCard: false,
+                createWorkflow: true,
+                versatile: false,
+                configureDialog: true,
+                targetUuids: [workflow.token.document.uuid],
+            };
+
+            let riposteRoll;
+            if(source && source === "user") riposteRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: riposteOptions });
+            else if(source && source === "gm") riposteRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: riposteOptions });
             if(riposteRoll.aborted === true) continue;
 
             if (!selectedItemUuid) {
