@@ -18,13 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Healing Hands" >> release_notes.txt
-          echo "  - Catalyst EI-03" >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Defile Ground: V12 Compatability" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Riposte: Update to correctly assign the Riposte item usage dialog to the GM or Player, depending on who initially used the reaction dialog" >> release_notes.txt
+          echo "  - Dissonant Whispers: Fix damage roll and forced movement failing" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
