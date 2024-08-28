@@ -30,10 +30,10 @@ Hooks.once('init', async function() {
 
     libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
         const [region, position] = args;
+
+        if (canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
     
-        if (!this || !this.document) {
-            return wrapped(...args);
-        }
+        if (!this || !this.document) return wrapped(...args);
         
         const pointsToTest = [];
         const size = canvas.dimensions.size;

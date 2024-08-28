@@ -18,8 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Dissonant Whispers: Fix damage roll and forced movement failing" >> release_notes.txt
+          echo "- General: Prevent wrapping scenes with Hexagonal grids for region testing. This means hexagonal grids will use foundrys default token center point testing for regions" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
