@@ -82,11 +82,11 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
         regionTokenStates.delete(`${region.id}-${token.id}-exited`);
         regionTokenStates.delete(`${region.id}-${token.id}-entered`);
-        if (token.regions.has(region)) return;
 
         //if(hasSentinel && (sentinelUsed || sentinelDeclined)) return;
 
         if((exited || (!exited && !entered)) && !isTeleport) {
+            if (token.regions.has(region)) return;
             const effectNamesToken = ["Dissonant Whispers"];
             let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
             if (currentCombatant.id !== token.id && !hasEffectToken) return;
