@@ -276,7 +276,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token has available spell slots/uses
-        else if(itemType === "spell") {
+        if(itemType === "spell") {
             const spells = t.actor.system.spells;
             let spellLevel = checkItem?.system?.level;
             let checkType = checkItem?.system?.preparation?.mode;
@@ -311,7 +311,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token has available resource or item uses
-        else if(itemType === "feature") {
+        if(itemType === "feature") {
             const itemNames = itemChecked.map(item => item.toLowerCase());
 
             let resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource => itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
@@ -327,7 +327,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             }
         }
 
-        else if(itemType === "item") {
+        if(itemType === "item") {
             const itemNames = itemChecked.map(item => item.toLowerCase());
             let itemExists = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
 
@@ -337,7 +337,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             }
         }
 
-        else if(debugEnabled) {
+        if(debugEnabled) {
             console.warn(`%c${itemName} for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
         }
 

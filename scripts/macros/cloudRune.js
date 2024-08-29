@@ -8,6 +8,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
     let itemProperName = "Cloud Rune";
     let dialogId = "cloudrune";
     if(!workflow) return;
+
     if(workflow.item.name.toLowerCase() === itemName) return;
     let target = workflow.hitTargets.first();
 
@@ -19,10 +20,15 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
 
     for (const validTokenPrimary of findValidTokens) {
         const nearbyTokens = MidiQOL.findNearby(null, validTokenPrimary, 30, { includeToken: false });
-        let targetNames = nearbyTokens.filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary.document.uuid,token.document.uuid) && token.document.uuid !== workflow.token.document.uuid);
-        if(targetNames.length === 0) continue;
+        let targets = nearbyTokens.filter(token => token.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary.document.uuid,token.document.uuid) && token.document.uuid !== workflow.token.document.uuid);
 
-        if(validTokenPrimary.id === target.id) continue;
+        const targetUuids = targets.map(t => t.document.uuid);
+        const targetNames = targets.map(t => t.actor.name);
+        if(targetUuids.length === 0) continue;
+        
+        targetUuids.map((uuid, index) => 
+            `<option value="${uuid}">${targetNames[index]}</option>`
+        ).join('');
 
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
@@ -41,11 +47,11 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName}? An enemy succeeded their saving throw. Choose an enemy to target and an ally to give advantage to below.</p>
+                            <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName} and re-direct this attack?</p>
                             <div>
                                 <div class="gps-dialog-flex">
                                     <label for="enemy-token" class="gps-dialog-label">Target:</label>
-                                    ${validTokens.length >= 1 ? 
+                                    ${targetNames.length >= 1 ? 
                                         `<select id="enemy-token" class="gps-dialog-select">
                                             ${targetNames.map((name, index) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${targetUuids[index]}">${name}</option>`).join('')}
                                         </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid enemies in range.</div>'
@@ -94,9 +100,11 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                     versatile: false,
                     configureDialog: true,
                     targetUuids: [validTokenPrimary.document.uuid]
-                };
-
-                const itemRoll = await MidiQOL.completeItemUse(chosenItem, {}, optionsChosenItem);
+                };                
+    
+                let itemRoll;
+                if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: optionsChosenItem });
+                else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: optionsChosenItem });
                 if(itemRoll.aborted === true) continue;
 
                 await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
@@ -116,7 +124,8 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
 
                 newItemData.prepareData();
                 newItemData.prepareFinalAttributes();
-
+                newItemData.applyActiveEffects();
+                
                 const options = {
                     showFullCard: false,
                     createWorkflow: true,
