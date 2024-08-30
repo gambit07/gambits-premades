@@ -18,15 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Inquisitors Eye: Adds the Channel Divinity feature for Paladins Oath of Zeal." >> release_notes.txt
-          echo "  - Mark of the Heretic: Adds the Channel Divinity feature for Paladins Oath of Zeal." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Portent: Fix for portent only rolling a single d20 on long rest." >> release_notes.txt
-          echo "  - Defile Ground: Actually include the updated item this release." >> release_notes.txt
-          echo "  - Nova: Some V12 Compat updates." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Cloud Rune: Tweak to some incorrect dialog language. Fixed a number of syntax and logic issues." >> release_notes.txt
+          echo "  - Zephyr Strike: Fully re-worked the implementation. Now fully implements the item including optional advantage, additional speed on a hit or miss, and opportunity attack avoidance" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

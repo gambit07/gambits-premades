@@ -1,8 +1,15 @@
-2024/08/28-23:16:52.004 1305c Recovering log #2900
-2024/08/28-23:16:52.008 1305c Delete type=0 #2900
-2024/08/28-23:16:52.008 1305c Delete type=3 #2898
-2024/08/29-17:48:46.027 8564 Level-0 table #2905: started
-2024/08/29-17:48:46.027 8564 Level-0 table #2905: 0 bytes OK
-2024/08/29-17:48:46.029 8564 Delete type=0 #2903
-2024/08/29-17:48:46.033 8564 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
-2024/08/29-17:48:46.034 8564 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
+2024/08/29-18:00:32.618 178ec Recovering log #2904
+2024/08/29-18:00:32.622 178ec Delete type=0 #2904
+2024/08/29-18:00:32.622 178ec Delete type=3 #2902
+2024/08/30-00:47:03.849 8564 Level-0 table #2909: started
+2024/08/30-00:47:03.851 8564 Level-0 table #2909: 79864 bytes OK
+2024/08/30-00:47:03.852 8564 Delete type=0 #2907
+2024/08/30-00:47:03.858 8564 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
+2024/08/30-00:47:03.858 8564 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at '!items.effects!plyiENlLFbv8rHYK.xe9ffdMQ6CSZh27m' @ 1671 : 1
+2024/08/30-00:47:03.858 8564 Compacting 1@1 + 1@2 files
+2024/08/30-00:47:03.862 8564 Generated table #2910@1: 53 keys, 155008 bytes
+2024/08/30-00:47:03.862 8564 Compacted 1@1 + 1@2 files => 155008 bytes
+2024/08/30-00:47:03.863 8564 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/08/30-00:47:03.863 8564 Delete type=2 #2889
+2024/08/30-00:47:03.863 8564 Delete type=2 #2909
+2024/08/30-00:47:03.867 8564 Manual compaction at level-1 from '!items.effects!plyiENlLFbv8rHYK.xe9ffdMQ6CSZh27m' @ 1671 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
