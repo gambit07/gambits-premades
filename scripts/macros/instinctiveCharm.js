@@ -90,6 +90,8 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
         else if (userDecision) {
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             chosenItem.prepareData();
+            chosenItem.prepareFinalAttributes();
+            chosenItem.applyActiveEffects();
 
             const options = {
                 showFullCard: false,

@@ -114,6 +114,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 hasVSMProperty = castProperties.some(prop => chosenSpell.system.properties.has(prop));
 
                 chosenSpell.prepareData();
+                chosenSpell.prepareFinalAttributes();
+                chosenSpell.applyActiveEffects();
 
                 const options = {
                     showFullCard: false,
@@ -186,7 +188,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 }, msgHistory);
                 let itemCard = msgHistory[msgHistory.length - 1];
                 let chatMessage = await game.messages.get(itemCard);
-                let content = await duplicate(chatMessage.content);
+                let content = await foundry.utils.duplicate(chatMessage.content);
                 let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
                 if (insertPosition !== -1) {
                     content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
@@ -284,6 +286,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 hasVSMProperty = castProperties.some(prop => chosenSpell.system.properties.has(prop));
 
                 chosenSpell.prepareData();
+                chosenSpell.prepareFinalAttributes();
+                chosenSpell.applyActiveEffects();
 
                 const options = {
                     showFullCard: false,
@@ -356,7 +360,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 }, msgHistory);
                 let itemCard = msgHistory[msgHistory.length - 1];
                 let chatMessage = await game.messages.get(itemCard);
-                let content = await duplicate(chatMessage.content);
+                let content = await foundry.utils.duplicate(chatMessage.content);
                 let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
                 if (insertPosition !== -1) {
                     content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);

@@ -152,6 +152,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             let advantageToken = await fromUuid(allyTokenUuid);
 
             chosenItem.prepareData();
+            chosenItem.prepareFinalAttributes();
+            chosenItem.applyActiveEffects();
 
             const options = {
                 showFullCard: false,

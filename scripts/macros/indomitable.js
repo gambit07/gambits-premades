@@ -83,7 +83,10 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
         }
         else if (userDecision) {
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
+            
             chosenItem.prepareData();
+            chosenItem.prepareFinalAttributes();
+            chosenItem.applyActiveEffects();
 
             const options = {
                 showFullCard: false,
@@ -121,7 +124,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
                 }, msgHistory);
                 let itemCard = msgHistory[msgHistory.length - 1];
                 let chatMessage = await game.messages.get(itemCard);
-                let content = await duplicate(chatMessage.content);
+                let content = await foundry.utils.duplicate(chatMessage.content);
                 let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
                 if (insertPosition !== -1) {
                     content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
@@ -141,7 +144,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
                 }, msgHistory);
                 let itemCard = msgHistory[msgHistory.length - 1];
                 let chatMessage = await game.messages.get(itemCard);
-                let content = await duplicate(chatMessage.content);
+                let content = await foundry.utils.duplicate(chatMessage.content);
                 let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
                 if (insertPosition !== -1) {
                     content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);

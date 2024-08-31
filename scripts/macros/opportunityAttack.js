@@ -377,6 +377,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
         chosenWeapon.prepareData();
         chosenWeapon.prepareFinalAttributes();
+        chosenWeapon.applyActiveEffects();
 
         const options = {
             showFullCard: false,

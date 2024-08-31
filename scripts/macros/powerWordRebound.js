@@ -82,6 +82,8 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
 
             chosenItem.prepareData();
+            chosenItem.prepareFinalAttributes();
+            chosenItem.applyActiveEffects();
 
             const options = {
                 showFullCard: false,
@@ -110,6 +112,8 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
             let newItemData = workflow.item;
 
             newItemData.prepareData();
+            newItemData.prepareFinalAttributes();
+            newItemData.applyActiveEffects();
 
             const optionsNew = {
                 showFullCard: false,

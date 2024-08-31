@@ -146,6 +146,8 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             }
 
             chosenItem.prepareData();
+            chosenItem.prepareFinalAttributes();
+            chosenItem.applyActiveEffects();
 
             const options = {
                 showFullCard: false,

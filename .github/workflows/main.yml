@@ -18,8 +18,13 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- General: Fix for multiple automations not properly implementing synthetic items enchantment initialization. Fix a few globalThis warnings." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Impetus Slasher" >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Zephyr Strike: Fully re-worked the implementation. Now fully implements the item including optional advantage, additional speed on a hit or miss, and opportunity attack avoidance" >> release_notes.txt
+          echo "  - Intellect Fortress: Add proper actor effect application" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Blood Frenzy: Fix for advantage not being attributed properly" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

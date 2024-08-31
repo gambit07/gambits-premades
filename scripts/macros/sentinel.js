@@ -172,8 +172,10 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
                     }
                 }
             }, { keepId: true });
+            
             chosenWeapon.prepareData();
             chosenWeapon.prepareFinalAttributes();
+            chosenWeapon.applyActiveEffects();
 
             const options = {
                 showFullCard: false,

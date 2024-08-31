@@ -93,6 +93,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
             else if (userDecision) {
                 chosenItem.prepareData();
                 chosenItem.prepareFinalAttributes();
+                chosenItem.applyActiveEffects();
 
                 const optionsChosenItem = {
                     showFullCard: false,
