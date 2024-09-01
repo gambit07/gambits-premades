@@ -645,7 +645,43 @@ https://github.com/gambit07/gambits-premades/assets/4236874/06649ff1-c5ea-4e3e-a
 <summary><b>Cloud Rune</b> (click to expand)</summary>
 <p>
 
-https://github.com/gambit07/gambits-premades/assets/4236874/6498722e-7f24-4371-ac08-113a7baf70a6
+https://github.com/user-attachments/assets/8606cc0e-0ad7-44a2-bf7b-7f6452caed25
+
+</p>
+</details>
+
+<details>
+<summary><b>Entropic Ward</b> (click to expand)</summary>
+<p>
+
+https://github.com/user-attachments/assets/8914a2a6-0f58-46ac-b71c-9baa136bd737
+
+</p>
+</details>
+
+<details>
+<summary><b>Dimension Door</b> (click to expand)</summary>
+<p>
+
+https://github.com/user-attachments/assets/d689ad12-f7b7-4353-b109-c9b9a60adb7e
+
+</p>
+</details>
+
+<details>
+<summary><b>Thought Shield</b> (click to expand)</summary>
+<p>
+
+https://github.com/user-attachments/assets/49c1d9d9-5040-4c55-915c-49a3c7ab4c18
+
+</p>
+</details>
+
+<details>
+<summary><b>Runic Shield</b> (click to expand)</summary>
+<p>
+
+https://github.com/user-attachments/assets/7b0d6987-594e-44ac-a877-c474835ef119
 
 </p>
 </details>
