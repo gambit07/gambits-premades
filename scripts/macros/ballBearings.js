@@ -108,7 +108,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
                     forceCEOff: true
                 },
                 "midiProperties": {
-                    nodam: true
+                    saveDamage: "nodam"
                 },
                 "autoanimations": {
                     killAnim: true

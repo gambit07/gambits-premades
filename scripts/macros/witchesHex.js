@@ -46,8 +46,8 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         if(workflowType === "save") {
             let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
 
-            const targetUuids = targets.map(t => t.actor.uuid);
-            const targetNames = targets.map(t => t.actor.name);
+            const targetUuids = targets.map(t => t.document.uuid);
+            const targetNames = targets.map(t => t.document.name);
             if(targetUuids.length === 0) continue;
 
             targetUuids.map((uuid, index) => 
@@ -138,11 +138,13 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
 
             let target;
+            let targetDocument;
             if(workflowType === "attack") {
                 target = workflow.token;
             }
             if(workflowType === "save") {
-                target = await fromUuid(enemyTokenUuid);
+                targetDocument = await fromUuid(enemyTokenUuid);
+                target = targetDocument.object;
             }
 
             chosenItem.prepareData();
@@ -181,7 +183,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                             forceCEOff: true
                         },
                         "midiProperties": {
-                            nodam: true,
+                            saveDamage: "nodam",
                             magiceffect: true
                         },
                         "autoanimations": {
@@ -245,7 +247,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                                 "img": "systems/dnd5e/icons/svg/items/feature.svg",
                                 "type": "script",
                                 "scope": "global",
-                                "command": `if(args[0].macroPass === \"isDamaged\") {\n    let damageTypes = [\"fire\"];\n    let rollFound = workflow.damageDetail.some(roll => damageTypes.includes(roll.type));\n\n    if(rollFound) {\n        let originActor = await fromUuid(\`${validTokenPrimary.actor.uuid}\`);\n        let spellDC = originActor.system.attributes.spelldc;\n        const itemData = {\n        name: \"Flame's Embrace Save\",\n        type: \"feat\",\n        img: \`${flamesEmbrace.img}\`,\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            },\n            \"midiProperties\": {\n                nodam: true, magiceffect: true\n            }, "autoanimations": {\n                killAnim: true\n }},\n        system: {\n            equipped: true,\n            actionType: \"save\",\n            save: { \"dc\": spellDC, \"ability\": 'con', \"scaling\": \"flat\" },\n            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n            duration: { units: \"inst\", value: undefined },\n            properties: {mgc: true}\n        },\n        };\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: originActor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [token.document.uuid] };\n        let saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n        if(saveResult.failedSaves.size === 0) {\n            await macroItem.delete();\n        }\n    }\n}`
+                                "command": `if(args[0].macroPass === \"isDamaged\") {\n    let damageTypes = [\"fire\"];\n    let rollFound = workflow.damageDetail.some(roll => damageTypes.includes(roll.type));\n\n    if(rollFound) {\n        let originActor = await fromUuid(\`${validTokenPrimary.actor.uuid}\`);\n        let spellDC = originActor.system.attributes.spelldc;\n        const itemData = {\n        name: \"Flame's Embrace Save\",\n        type: \"feat\",\n        img: \`${flamesEmbrace.img}\`,\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            },\n            \"midiProperties\": {\n                saveDamage: "nodam", magiceffect: true\n            }, "autoanimations": {\n                killAnim: true\n }},\n        system: {\n            equipped: true,\n            actionType: \"save\",\n            save: { \"dc\": spellDC, \"ability\": 'con', \"scaling\": \"flat\" },\n            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n            duration: { units: \"inst\", value: undefined },\n            properties: {mgc: true}\n        },\n        };\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: originActor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [token.document.uuid] };\n        let saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n        if(saveResult.failedSaves.size === 0) {\n            await macroItem.delete();\n        }\n    }\n}`
                                 }
                             }
                         }

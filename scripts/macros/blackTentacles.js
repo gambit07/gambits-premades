@@ -176,7 +176,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                           forceCEOff: true
                 },
                 "midiProperties": {
-                    nodam: true,
+                    saveDamage: "nodam",
                     magicdam: true,
                     magiceffect: true
                 },

@@ -19,7 +19,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
 
     for (const validTokenPrimary of findValidTokens) {
         if(!validTokenPrimary.actor.appliedEffects.some(e => e.name === "Drawing the Hearth")) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at parent effect active`);
+            if(debugEnabled) console.error(`${itemName} for ${validTokenPrimary.actor.name} failed at parent effect active`);
             continue;
         }
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;

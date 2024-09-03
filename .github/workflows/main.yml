@@ -18,13 +18,15 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Fix for multiple automations not properly implementing synthetic items enchantment initialization. Fix a few globalThis warnings." >> release_notes.txt
+          echo "- General: Update a number of spells with midis new saveDamage property replacing the old nodam/halfdam/fulldam properties." >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
-          echo "  - Impetus Slasher" >> release_notes.txt
+          echo "  - Biohazard: Add the Drakkenheim spell Biohazard" >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Intellect Fortress: Add proper actor effect application" >> release_notes.txt
+          echo "  - Dimension Door: Add return and notification if Portal is not installed since its not a requirement of the module" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Blood Frenzy: Fix for advantage not being attributed properly" >> release_notes.txt
+          echo "  - Silvery Barbs: Fix selected token uuid not using the correct uuid" >> release_notes.txt
+          echo "  - Witches Hex: Fix selected token uuid not using the correct uuid" >> release_notes.txt
+          echo "  - Instinctive Charm: Fix selected token uuid not using the correct uuid" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

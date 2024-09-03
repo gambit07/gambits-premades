@@ -112,7 +112,13 @@ export async function runicShield({workflowData,workflowType,workflowCombat}) {
                 targetUuids: [target.document.uuid],
             };
 
-            await MidiQOL.socket().executeAsUser("completeItemUse", browserUserEnemy?.id, { itemData: workflow.item, actorUuid: workflow.token.actor.uuid, options: optionsEnemy });
+            let newItemData = workflow.item;
+
+            newItemData.prepareData();
+            newItemData.prepareFinalAttributes();
+            newItemData.applyActiveEffects();
+
+            await MidiQOL.socket().executeAsUser("completeItemUse", browserUserEnemy?.id, { itemData: newItemData, actorUuid: workflow.token.actor.uuid, options: optionsEnemy });
         }
     }
 }

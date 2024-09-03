@@ -45,8 +45,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         if(workflowType === "save") {
             let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
 
-            const targetUuids = targets.map(t => t.actor.uuid);
-            const targetNames = targets.map(t => t.actor.name);
+            const targetUuids = targets.map(t => t.document.uuid);
+            const targetNames = targets.map(t => t.document.name);
             if(targetUuids.length === 0) continue;
             
             targetUuids.map((uuid, index) => 

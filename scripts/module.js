@@ -19,6 +19,7 @@ import { runicShield } from './macros/runicShield.js';
 import { mageSlayer } from './macros/mageSlayer.js';
 import { instinctiveCharm } from './macros/instinctiveCharm.js';
 import { rainOfCinders } from './macros/rainOfCinders.js';
+import { biohazard } from './macros/biohazard.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus } from './helpers.js';
 export let socket;
@@ -144,6 +145,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("mageSlayer", mageSlayer);
     socket.register("instinctiveCharm", instinctiveCharm);
     socket.register("rainOfCinders", rainOfCinders);
+    socket.register("biohazard", biohazard);
 })
 
 Hooks.once('ready', async function() {
@@ -167,6 +169,7 @@ Hooks.once('ready', async function() {
         caltrops,
         caltropsFeyGlass,
         rainOfCinders,
+        biohazard,
         socket
     };
 

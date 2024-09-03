@@ -108,7 +108,7 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
                     forceCEOff: true
                 },
                 "midiProperties": {
-                    nodam: true
+                    saveDamage: "nodam"
                 },
                 "autoanimations": {
                     killAnim: true

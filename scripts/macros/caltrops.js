@@ -108,7 +108,7 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
                     forceCEOff: true
                 },
                 "midiProperties": {
-                    nodam: true
+                    saveDamage: "nodam"
                 },
                 "autoanimations": {
                     killAnim: true
