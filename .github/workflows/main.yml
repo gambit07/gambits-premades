@@ -18,7 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Update a number of spells with midis new saveDamage property replacing the old nodam/halfdam/fulldam properties." >> release_notes.txt
+          echo "- General: Update a number of spells with midis new saveDamage property replacing the old nodam/halfdam/fulldam properties" >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
           echo "  - Biohazard: Add the Drakkenheim spell Biohazard" >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
