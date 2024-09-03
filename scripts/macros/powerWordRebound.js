@@ -9,9 +9,10 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
     let dialogId = "powerwordrebound";
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
-    let target = workflow.hitTargets.first();
+    let target = workflow.targets.first();
 
     if(target.actor.system.attributes.hp.value >= Math.floor(target.actor.system.attributes.hp.max / 2)) return;
+    if(workflow.attackTotal < target.actor.system.attributes.ac.value) return;
     if(workflow.targets.size > 1) return;
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});

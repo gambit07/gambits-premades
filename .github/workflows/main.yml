@@ -18,15 +18,13 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Update a number of spells with midis new saveDamage property replacing the old nodam/halfdam/fulldam properties" >> release_notes.txt
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Biohazard: Add the Drakkenheim spell Biohazard" >> release_notes.txt
+          echo "- General: Add return and notification for automations requiring Jinkers Animated Art Pack or Jack Kerouacs Animated Spell Effects if those modules are not present" >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Dimension Door: Add return and notification if Portal is not installed since its not a requirement of the module" >> release_notes.txt
+          echo "  - Torch/Lanterns: Add metric handling for lighting range" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Silvery Barbs: Fix selected token uuid not using the correct uuid" >> release_notes.txt
-          echo "  - Witches Hex: Fix selected token uuid not using the correct uuid" >> release_notes.txt
-          echo "  - Instinctive Charm: Fix selected token uuid not using the correct uuid" >> release_notes.txt
+          echo "  - Cloud Rune: Resolve not properly validating when a target is hit" >> release_notes.txt
+          echo "  - Runic Shield: Resolve not properly validating when a target is hit" >> release_notes.txt
+          echo "  - Power Word Rebound: Resolve not properly validating when a target is hit" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

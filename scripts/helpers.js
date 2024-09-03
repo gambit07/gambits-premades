@@ -169,7 +169,7 @@ export async function rollAsUser({ rollParams, type }) {
 export function convertFromFeet({ range }) {
     const units = canvas.scene.grid.units;
     let conversionFactor;
-    if (units === "meters" || units === "m" || units === "mt") conversionFactor = 0.3;
+    if (units === "meters" || units === "m" || units === "mt" || units === "metri") conversionFactor = 0.3;
     else conversionFactor = 1;
     return range * conversionFactor;
 }

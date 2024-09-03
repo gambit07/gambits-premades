@@ -10,8 +10,9 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
     if(!workflow) return;
 
     if(workflow.item.name.toLowerCase() === itemName) return;
-    let target = workflow.hitTargets.first();
+    let target = workflow.targets.first();
 
+    if(workflow.attackTotal < target.actor.system.attributes.ac.value) return;
     if(workflow.targets.size > 1) return;
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: [itemName], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
@@ -133,7 +134,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
                     versatile: false,
                     configureDialog: true,
                     targetUuids: [enemyTokenUuid],
-                    workflowOptions: {autoFastForward: "on", autoRollAttack: true}
+                    workflowOptions: {autoFastForward: "on", autoRollAttack: true, attackRollDSN: false}
                 };
 
                 workflow.aborted = true;

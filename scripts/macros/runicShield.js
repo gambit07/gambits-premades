@@ -10,9 +10,9 @@ export async function runicShield({workflowData,workflowType,workflowCombat}) {
     if(!workflow) return;
     if(workflow.item.name === itemProperName) return;
 
-    if(workflow.hitTargets.size === 0) return;
+    let target = workflow.targets.first();
 
-    let target = workflow.hitTargets.first();
+    if(workflow.attackTotal < target.actor.system.attributes.ac.value) return;
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: ["runic shield"], reactionCheck: true, sightCheck: true, sightCheckType: "ally", rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemyAlly", workflowType: workflowType, workflowCombat: workflowCombat});
     
