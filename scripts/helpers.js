@@ -221,7 +221,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     }
     
     function filterToken(t) {
-        let checkItem = t.actor.items.find(i => i.name.toLowerCase() === itemName);
+        let checkItem = t?.actor?.items?.find(i => i.name.toLowerCase() === itemName);
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
         let hasEffectOrigin = t.actor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
         let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
@@ -889,5 +889,62 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
             }
             await target.document.update({ x: finalX, y: finalY });
         }
+    }
+}
+
+export async function replaceChatCard({ actorUuid, itemUuid, chatContent, rollData }) {
+    if(!actorUuid || !itemUuid || !chatContent) return;
+    let actor = await fromUuid(actorUuid);
+    let token = await MidiQOL.tokenForActor(actor);
+    let item = await fromUuid(itemUuid);
+    if(rollData) rollData = Roll.fromJSON(JSON.stringify(rollData));
+    else rollData = null;
+    let rollContent = rollData ? await rollData.render() : '';
+
+    let msgHistory = [];
+    game.messages.reduce((list, message) => {
+        if (message.flags["midi-qol"]?.itemId === item._id && message.speaker.token === token.document.id) msgHistory.push(message.id);
+    }, msgHistory);
+    let itemCard = msgHistory[msgHistory.length - 1];
+    let chatMessage = false;
+    if(itemCard) chatMessage = await game.messages.get(itemCard);
+    if(chatMessage) {
+        let content = await foundry.utils.duplicate(chatMessage.content);
+        let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
+        if (insertPosition !== -1) {
+            content = content.slice(0, insertPosition) + rollContent + chatContent + content.slice(insertPosition);
+        }
+        await chatMessage.update({ content: content });
+    }
+    else {
+        let actorPlayer = MidiQOL.playerForActor(actor);
+        let chatData = await item.getChatData();
+
+        chatData.hasProperties = true;
+        chatData.subtitle = chatData.properties[0];
+
+        let itemCardData = {
+            actor: item.actor,
+            item: item,
+            data: chatData
+        };
+
+        let itemContent = await renderTemplate("modules/midi-qol/templates/item-card.hbs", itemCardData);
+
+        let combinedContent = `
+            <div class="custom-message">
+                ${itemContent}
+                ${rollContent}
+                <div style="margin-top: 10px; margin-bottom: 5px;">
+                    ${chatContent}
+                </div>
+            </div>
+        `;
+
+        ChatMessage.create({
+            user: actorPlayer.id,
+            content: combinedContent,
+            speaker: ChatMessage.getSpeaker({ token: token })
+        });
     }
 }

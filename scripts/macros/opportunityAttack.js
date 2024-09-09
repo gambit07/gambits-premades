@@ -5,7 +5,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
     const socket = module.socket;
-    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
+    //async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     let region = await fromUuid(regionUuid);
     let token = await fromUuid(tokenUuid);
     if(!token || !region || !regionScenario) return;
@@ -378,6 +378,10 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         chosenWeapon.prepareData();
         chosenWeapon.prepareFinalAttributes();
         chosenWeapon.applyActiveEffects();
+
+        let userSelect = undefined;
+        if(source && source === "user") userSelect = browserUser.id;
+        else if(source && source === "gm") userSelect = game.users?.activeGM.id;
 
         const options = {
             showFullCard: false,
@@ -780,11 +784,8 @@ export async function disableOpportunityAttack(combat, combatEvent) {
             await actor.unsetFlag('gambits-premades', 'attachedRegions');
         }
 
-        let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
         //let sentinelUsed = actor.getFlag("gambits-premades", "sentinelUsed");
         //let sentinelDeclined = actor.getFlag("gambits-premades", "sentinelDeclined");
-        
-        let regionData = regionFlag ? await fromUuid(regionFlag) : null;
 
         /*let effectNames = ["Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack"];
         let effectIdsToDelete = actor.effects
@@ -795,7 +796,18 @@ export async function disableOpportunityAttack(combat, combatEvent) {
             await actor.deleteEmbeddedDocuments("ActiveEffect", effectIdsToDelete);
         }*/
 
-        if (regionData) await regionData.delete();
+        let regionData = null;
+
+        try {
+            regionData = regionFlag ? await fromUuid(regionFlag) : null;
+
+            if (regionData) {
+                await regionData.delete();
+            }
+        } catch (error) {
+            console.warn(`Error deleting region data: ${error.message}`);
+        }
+        let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
         if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
         //if(sentinelUsed) await actor.unsetFlag("gambits-premades", "sentinelUsed");
         //if(sentinelDeclined) await actor.unsetFlag("gambits-premades", "sentinelDeclined");

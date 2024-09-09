@@ -101,7 +101,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
             if(itemRoll.aborted === true) continue;
-            
+            let chatContent;
             let indomitableHomebrew = MidiQOL.safeGetGameSetting('gambits-premades', 'enableAutoSucceedIndomitable');
             let saveDC = workflow.saveItem.system.save.dc;
             let saveAbility = workflow.saveItem.system.save.ability;
@@ -114,42 +114,16 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
                 workflow.saves.add(validTokenPrimary);
                 workflow.failedSaves.delete(validTokenPrimary);
 
-                let chatList = [];
+                chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable and succeeded their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                chatList = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable and succeeded their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                let msgHistory = [];
-                game.messages.reduce((list, message) => {
-                    if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                }, msgHistory);
-                let itemCard = msgHistory[msgHistory.length - 1];
-                let chatMessage = await game.messages.get(itemCard);
-                let content = await foundry.utils.duplicate(chatMessage.content);
-                let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                if (insertPosition !== -1) {
-                    content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                }
-                await chatMessage.update({ content: content });
+                await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                 return;
             }
 
             else {
-                let chatList = [];
+                chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable but still failed their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                chatList = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable but still failed their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                let msgHistory = [];
-                game.messages.reduce((list, message) => {
-                    if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                }, msgHistory);
-                let itemCard = msgHistory[msgHistory.length - 1];
-                let chatMessage = await game.messages.get(itemCard);
-                let content = await foundry.utils.duplicate(chatMessage.content);
-                let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                if (insertPosition !== -1) {
-                    content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                }
-                await chatMessage.update({ content: content });
+                await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                 return;
             }
         }

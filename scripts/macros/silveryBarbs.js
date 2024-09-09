@@ -58,23 +58,25 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
                             <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? An enemy succeeded their saving throw. Choose an enemy to target and an ally to give advantage to below.</p>
-                            <div>
-                                <div class="gps-dialog-flex">
+                            <div class="gps-dialog-flex-wrapper">
+                                <div class="gps-dialog-select-container">
+                                    <div class="gps-dialog-flex">
                                     <label for="enemy-token" class="gps-dialog-label">Target:</label>
                                     <select id="enemy-token" class="gps-dialog-select">
-                                        ${targetNames.map((name, index) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${targetUuids[index]}">${name}</option>`).join('')}
+                                        ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
                                     </select>
-                                    <div id="image-container" class="gps-dialog-image-container">
-                                        <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
-                                </div>
-                                <div class="gps-dialog-flex">
+                                    <div class="gps-dialog-flex">
                                     <label for="ally-token" class="gps-dialog-label">Advantage:</label>
                                     ${validFriendlies.length >= 1 ? 
                                     `<select id="ally-token" class="gps-dialog-select">
-                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
+                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
                                     </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
                                     }
+                                    </div>
+                                </div>
+                                <div id="image-container" class="gps-dialog-image-container">
+                                    <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
                             </div>
                         </div>
@@ -102,7 +104,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                                     <label for="ally-token" class="gps-dialog-label">Advantage:</label>
                                     ${validFriendlies.length >= 1 ? 
                                     `<select id="ally-token" class="gps-dialog-select">
-                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.actor.uuid}">${friendly.actor.name}</option>`).join('')}
+                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
                                     </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
                                     }
                                     <div id="image-container" class="gps-dialog-image-container">
@@ -150,6 +152,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         else if (userDecision) {
             await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             let advantageToken = await fromUuid(allyTokenUuid);
+            let chatContent;
 
             chosenItem.prepareData();
             chosenItem.prepareFinalAttributes();
@@ -213,57 +216,31 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                     }
                 }
             ];
-            if(advantageToken) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.uuid, effects: effectData });
+            if(advantageToken) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.actor.uuid, effects: effectData });
 
             if(workflowType === "save") {
                 let saveDC = workflow.saveItem.system.save.dc;
                 let saveAbility = workflow.saveItem.system.save.ability;
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === enemyTokenUuid);
+                let targetUser = MidiQOL.playerForActor(workflowTarget.actor);
+                if (!targetUser.active) targetUser = game.users?.activeGM;
                 let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
                 let reroll;
-                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d20 + ${targetSaveBonus}` });
-                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${targetSaveBonus}` });
+                if(workflowTarget.actor.type !== "npc") reroll = await socket.executeAsUser("rollAsUser", targetUser.id, { rollParams: `1d20 + ${targetSaveBonus}` });
+                else reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${targetSaveBonus}` });
 
                 if(reroll.total < saveDC) {
                     workflow.saves.delete(workflowTarget);
                     workflow.failedSaves.add(workflowTarget);
 
-                    let chatList = [];
-
-                    chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content });
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     return;
                 }
 
                 else {
-                    let chatList = [];
-
-                    chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content });
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     continue;
                 }
             }
@@ -280,42 +257,14 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 workflow.options.noOnUseMacro = saveSetting;
 
                 if(workflow.attackTotal < targetAC) {
-                    let chatList = [];
-
-                    chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content });
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     return;
                 }
 
                 else {
-                    let chatList = [];
-
-                    chatList = `<span style='text-wrap: wrap;'>The creature was silvery barbed, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content });
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     continue;
                 }
             }

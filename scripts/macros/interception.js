@@ -54,7 +54,7 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
                                 <ul id="damage-list" class="sortable" style="padding: 0; margin: 0; list-style-type: none;">
                                     ${damageTypes.map((name, index) => `
                                     <li draggable="true" style="padding: 6px; margin-bottom: 4px; cursor: grab; border: 1px solid #ccc;">
-                                        <span class="damage-type">${name}</span>${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? ` - ${damageTotals[index]} pts` : ""}
+                                        ${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? `${damageTotals[index]} pts of ` : ""}<span class="damage-type">${name}</span>
                                     </li>`).join('')}
                                 </ul>
                                 <div id="image-container" class="gps-dialog-image-container">
@@ -137,14 +137,14 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
                     processedRolls.add(rollFound);
                     let rollTotal = rollFound.total;
                     if (rollTotal >= remainingReduction) {
-                        let modifiedRoll = await new Roll(`${rollTotal} - ${remainingReduction}`).evaluate({async: true});
+                        let modifiedRoll = await new Roll(`${rollTotal} - ${remainingReduction}`).evaluate();
                         modifiedRoll.options = rollFound.options;
                         updatedRolls.push(modifiedRoll);
                         remainingReduction = 0;
                         break;
                     } else {
                         remainingReduction -= rollTotal;
-                        let zeroRoll = await new Roll(`${rollTotal} - ${rollTotal}`).evaluate({async: true});
+                        let zeroRoll = await new Roll(`${rollTotal} - ${rollTotal}`).evaluate();
                         zeroRoll.options = rollFound.options;
                         updatedRolls.push(zeroRoll);
                     }

@@ -157,43 +157,33 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 }
 
                 let csFailure = false;
-                let chatList = [];
+                let chatContent = [];
 
                 const spellThreshold = castLevel + 10;
+                let skillCheck;
 
                 if(itemRollCastLevel < castLevel) {
-                    const skillCheck = await validTokenPrimary.actor.rollAbilityTest(validTokenPrimary.actor.system.attributes.spellcasting);
+                    skillCheck = await validTokenPrimary.actor.rollAbilityTest(validTokenPrimary.actor.system.attributes.spellcasting);
                     let skillCheckTotal;
                     let abjurationCheck = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "improved abjuration");
                     abjurationCheck ? skillCheckTotal = skillCheck.total + validTokenPrimary.actor.system?.attributes?.prof : skillCheckTotal = skillCheck.total;
                     if (skillCheckTotal >= spellThreshold) {
-                        chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         counterspellLevel = itemRollCastLevel;
                     }
                     else {
-                        chatList = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         csFailure = true;
                     }
                 }
                 else {
-                    chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled because you cast ${itemProperName} at an equal or higher level.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled because you cast ${itemProperName} at an equal or higher level.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     counterspellLevel = itemRollCastLevel;
                 }
 
                 await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                let msgHistory = [];
-                game.messages.reduce((list, message) => {
-                    if (message.flags["midi-qol"]?.itemId === chosenSpell._id && message.speaker.token === validTokenPrimary.document.id) msgHistory.push(message.id);
-                }, msgHistory);
-                let itemCard = msgHistory[msgHistory.length - 1];
-                let chatMessage = await game.messages.get(itemCard);
-                let content = await foundry.utils.duplicate(chatMessage.content);
-                let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                if (insertPosition !== -1) {
-                    content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                }
-                await chatMessage.update({ content: content });
+                await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck});
 
                 if(csFailure === true) continue;
                 if(!hasVSMProperty) return;
@@ -329,43 +319,33 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 }
 
                 let csFailure = false;
-                let chatList = [];
+                let chatContent;
 
                 const spellThreshold = castLevel + 10;
+                let skillCheck;
 
                 if(itemRollCastLevel < castLevel) {
-                    const skillCheck = await validTokenSecondary.actor.rollAbilityTest(validTokenSecondary.actor.system.attributes.spellcasting);
+                    skillCheck = await validTokenSecondary.actor.rollAbilityTest(validTokenSecondary.actor.system.attributes.spellcasting);
                     let skillCheckTotal;
                     let abjurationCheck = validTokenSecondary.actor.items.find(i => i.name.toLowerCase() === "improved abjuration");
                     abjurationCheck ? skillCheckTotal = skillCheck.total + validTokenSecondary.actor.system?.attributes?.prof : skillCheckTotal = skillCheck.total;
                     if (skillCheckTotal >= spellThreshold) {
-                        chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         counterspellLevel = itemRollCastLevel;
                     }
                     else {
-                        chatList = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         csFailure = true;
                     }
                 }
                 else {
-                    chatList = `<span style='text-wrap: wrap;'>The creature was counterspelled because you cast ${itemProperName} at an equal or higher level.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled because you cast ${itemProperName} at an equal or higher level.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     counterspellLevel = itemRollCastLevel;
                 }
 
                 await helpers.addReaction({actorUuid: `${validTokenSecondary.actor.uuid}`});
 
-                let msgHistory = [];
-                game.messages.reduce((list, message) => {
-                    if (message.flags["midi-qol"]?.itemId === chosenSpell._id && message.speaker.token === validTokenSecondary.document.id) msgHistory.push(message.id);
-                }, msgHistory);
-                let itemCard = msgHistory[msgHistory.length - 1];
-                let chatMessage = await game.messages.get(itemCard);
-                let content = await foundry.utils.duplicate(chatMessage.content);
-                let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                if (insertPosition !== -1) {
-                    content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                }
-                await chatMessage.update({ content: content });
+                await helpers.replaceChatCard({actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck});
 
                 if(csFailure === true) continue;
                 if(!hasVSMProperty) return;

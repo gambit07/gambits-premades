@@ -10,6 +10,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
     let target = workflow.targets.first();
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
 
     if(workflow.targets.size > 1) return;
 

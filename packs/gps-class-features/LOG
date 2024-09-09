@@ -1,15 +1,8 @@
-2024/09/03-09:53:27.673 f830 Recovering log #2900
-2024/09/03-09:53:27.677 f830 Delete type=0 #2900
-2024/09/03-09:53:27.677 f830 Delete type=3 #2898
-2024/09/03-11:17:40.092 15b74 Level-0 table #2905: started
-2024/09/03-11:17:40.094 15b74 Level-0 table #2905: 14633 bytes OK
-2024/09/03-11:17:40.095 15b74 Delete type=0 #2903
-2024/09/03-11:17:40.095 15b74 Manual compaction at level-0 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
-2024/09/03-11:17:40.101 15b74 Manual compaction at level-1 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at '!items!h7OV4ZFaVVHFam5t' @ 954 : 1
-2024/09/03-11:17:40.101 15b74 Compacting 1@1 + 1@2 files
-2024/09/03-11:17:40.104 15b74 Generated table #2906@1: 68 keys, 109674 bytes
-2024/09/03-11:17:40.104 15b74 Compacted 1@1 + 1@2 files => 109674 bytes
-2024/09/03-11:17:40.106 15b74 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/09/03-11:17:40.106 15b74 Delete type=2 #2869
-2024/09/03-11:17:40.106 15b74 Delete type=2 #2905
-2024/09/03-11:17:40.112 15b74 Manual compaction at level-1 from '!items!h7OV4ZFaVVHFam5t' @ 954 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
+2024/09/08-11:56:06.454 3f64 Recovering log #2937
+2024/09/08-11:56:06.457 3f64 Delete type=0 #2937
+2024/09/08-11:56:06.457 3f64 Delete type=3 #2935
+2024/09/09-02:21:01.851 15b74 Level-0 table #2942: started
+2024/09/09-02:21:01.851 15b74 Level-0 table #2942: 0 bytes OK
+2024/09/09-02:21:01.853 15b74 Delete type=0 #2940
+2024/09/09-02:21:01.853 15b74 Manual compaction at level-0 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
+2024/09/09-02:21:01.853 15b74 Manual compaction at level-1 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)

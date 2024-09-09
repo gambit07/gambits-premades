@@ -21,7 +21,7 @@ import { instinctiveCharm } from './macros/instinctiveCharm.js';
 import { rainOfCinders } from './macros/rainOfCinders.js';
 import { biohazard } from './macros/biohazard.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -146,6 +146,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("instinctiveCharm", instinctiveCharm);
     socket.register("rainOfCinders", rainOfCinders);
     socket.register("biohazard", biohazard);
+    socket.register("replaceChatCard", replaceChatCard);
 })
 
 Hooks.once('ready', async function() {
@@ -288,7 +289,7 @@ Hooks.on("updateCombat", async (combat, update, options) => {
     if(!game.user.isGM) return;
     const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
     const hasProcessedStart = await combat.getFlag('gambits-premades', `startProcessed-${combat.id}`);
-    if(combatStarted && !hasProcessedStart && game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) {
+    if(combatStarted && !hasProcessedStart && game.gpsSettings.opportunityAttackEnabled) {
         await combat.setFlag('gambits-premades', `startProcessed-${combat.id}`, true);
         await enableOpportunityAttack(combat, "startCombat");
     }
@@ -297,102 +298,69 @@ Hooks.on("updateCombat", async (combat, update, options) => {
 Hooks.on("createCombatant", async (combatant, options, userId) => {
     if(!game.user.isGM) return;
     let combat = game.combat;
-    if (combat && combat.started && game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) {
+    if (combat && combat.started && game.gpsSettings.opportunityAttackEnabled) {
         await enableOpportunityAttack(combatant, "enterCombat");
     }
 });
 
 Hooks.on('deleteCombat', async (combat) => {
     if(!game.user.isGM) return;
-    if(game.settings.get('gambits-premades', 'Enable Opportunity Attack') === true) await disableOpportunityAttack(combat, "endCombat");
+    if(game.gpsSettings.opportunityAttackEnabled) await disableOpportunityAttack(combat, "endCombat");
 });
 
 Hooks.on("deleteCombatant", async (combatant, options, userId) => {
     if(!game.user.isGM) return;
     let combat = game.combat;
-    if (combat && combat.started && game.settings.get('gambits-premades', 'Enable Opportunity Attack')) {
+    if (combat && combat.started && game.gpsSettings.opportunityAttackEnabled) {
         await disableOpportunityAttack(combatant, "exitCombat");
     }
 });
 
 async function updateSettings(settingKey = null) {
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Counterspell') {
-        game.gpsSettings.counterspellEnabled = game.settings.get('gambits-premades', 'Enable Counterspell');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Silvery Barbs') {
-        game.gpsSettings.silveryBarbsEnabled = game.settings.get('gambits-premades', 'Enable Silvery Barbs');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Cutting Words') {
-        game.gpsSettings.cuttingWordsEnabled = game.settings.get('gambits-premades', 'Enable Cutting Words');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Poetry in Misery') {
-        game.gpsSettings.poetryInMiseryEnabled = game.settings.get('gambits-premades', 'Enable Poetry in Misery');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Interception') {
-        game.gpsSettings.interceptionEnabled = game.settings.get('gambits-premades', 'Enable Interception');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Indomitable') {
-        game.gpsSettings.indomitableEnabled = game.settings.get('gambits-premades', 'Enable Indomitable');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Protection') {
-        game.gpsSettings.protectionEnabled = game.settings.get('gambits-premades', 'Enable Protection');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.enableProtectionOnSuccess') {
-        game.gpsSettings.enableProtectionOnSuccess = game.settings.get('gambits-premades', 'enableProtectionOnSuccess');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Sentinel') {
-        game.gpsSettings.sentinelEnabled = game.settings.get('gambits-premades', 'Enable Sentinel');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Riposte') {
-        game.gpsSettings.riposteEnabled = game.settings.get('gambits-premades', 'Enable Riposte');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Witches Hex') {
-        game.gpsSettings.witchesHexEnabled = game.settings.get('gambits-premades', 'Enable Witches Hex');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Power Word Rebound') {
-        game.gpsSettings.powerWordReboundEnabled = game.settings.get('gambits-premades', 'Enable Power Word Rebound');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Cloud Rune') {
-        game.gpsSettings.cloudRuneEnabled = game.settings.get('gambits-premades', 'Enable Cloud Rune');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Mirror 3rd Party Dialog for GMs') {
-        game.gpsSettings.enableMirrorDialog = game.settings.get('gambits-premades', 'Mirror 3rd Party Dialog for GMs');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.enable3prNoCombat') {
-        game.gpsSettings.enable3prNoCombat = game.settings.get('gambits-premades', 'enable3prNoCombat');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.enableTimerFullAnim') {
-        game.gpsSettings.enableTimerFullAnim = game.settings.get('gambits-premades', 'enableTimerFullAnim');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.hideTemplates') {
-        game.gpsSettings.hideTemplates = game.settings.get('gambits-premades', 'hideTemplates');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.debugEnabled') {
-        game.gpsSettings.debugEnabled = game.settings.get('gambits-premades', 'debugEnabled');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Enable Identify Restrictions') {
-        game.gpsSettings.identifyRestrictionEnabled = game.settings.get('gambits-premades', 'Enable Identify Restrictions');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.Identify Restriction Message') {
-        game.gpsSettings.identifyRestrictionMessage = game.settings.get('gambits-premades', 'Identify Restriction Message');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.enableRunicShield') {
-        game.gpsSettings.runicShieldEnabled = game.settings.get('gambits-premades', 'enableRunicShield');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.enableMageSlayer') {
-        game.gpsSettings.mageSlayerEnabled = game.settings.get('gambits-premades', 'enableMageSlayer');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.enableInstinctiveCharm') {
-        game.gpsSettings.instinctiveCharmEnabled = game.settings.get('gambits-premades', 'enableInstinctiveCharm');
-    }
-    if (settingKey === null || settingKey === 'gambits-premades.enableRainOfCinders') {
-        game.gpsSettings.rainOfCindersEnabled = game.settings.get('gambits-premades', 'enableRainOfCinders');
+    const settingsMap = {
+        'Enable Counterspell': 'counterspellEnabled',
+        'Enable Silvery Barbs': 'silveryBarbsEnabled',
+        'Enable Cutting Words': 'cuttingWordsEnabled',
+        'Enable Poetry in Misery': 'poetryInMiseryEnabled',
+        'Enable Interception': 'interceptionEnabled',
+        'Enable Indomitable': 'indomitableEnabled',
+        'Enable Protection': 'protectionEnabled',
+        'enableProtectionOnSuccess': 'enableProtectionOnSuccess',
+        'Enable Sentinel': 'sentinelEnabled',
+        'Enable Riposte': 'riposteEnabled',
+        'Enable Witches Hex': 'witchesHexEnabled',
+        'Enable Power Word Rebound': 'powerWordReboundEnabled',
+        'Enable Cloud Rune': 'cloudRuneEnabled',
+        'Mirror 3rd Party Dialog for GMs': 'enableMirrorDialog',
+        'enable3prNoCombat': 'enable3prNoCombat',
+        'enableTimerFullAnim': 'enableTimerFullAnim',
+        'hideTemplates': 'hideTemplates',
+        'debugEnabled': 'debugEnabled',
+        'Enable Identify Restrictions': 'identifyRestrictionEnabled',
+        'Identify Restriction Message': 'identifyRestrictionMessage',
+        'enableRunicShield': 'runicShieldEnabled',
+        'enableMageSlayer': 'mageSlayerEnabled',
+        'enableInstinctiveCharm': 'instinctiveCharmEnabled',
+        'enableRainOfCinders': 'rainOfCindersEnabled',
+        'Enable Opportunity Attack': 'opportunityAttackEnabled'
+    };
+
+    if (settingKey === null) {
+        for (const [key, gpsSetting] of Object.entries(settingsMap)) {
+            game.gpsSettings[gpsSetting] = game.settings.get('gambits-premades', key);
+        }
+    } else {
+        const gpsSetting = settingsMap[settingKey];
+        if (gpsSetting) {
+            game.gpsSettings[gpsSetting] = game.settings.get('gambits-premades', settingKey);
+        }
     }
 }
 
 Hooks.on('updateSetting', (setting) => {
-    if (setting.key.startsWith('gambits-premades.')) {
-        updateSettings(setting.key);
+    if (!game.user.isGM) return;
+    if (setting.config.namespace === "gambits-premades") {
+        updateSettings(setting.config.key);
     }
 });
 
@@ -522,6 +490,8 @@ async function updateRegionPosition(region, tokenDocument) {
 
 Hooks.on('updateToken', async (tokenDocument, updateData, options, userId) => {
     if (!game.user.isGM) return;
+    if(!game.gpsSettings.opportunityAttackEnabled) return;
+    if(!game.combat) return;
 
     const regions = tokenDocument.actor.getFlag('gambits-premades', 'attachedRegions') || [];
 

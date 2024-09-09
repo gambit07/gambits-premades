@@ -258,6 +258,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             }
 
             if(workflowType === "save") {
+                let chatContent;
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let saveDC = workflow.saveItem.system.save.dc;
@@ -274,41 +275,14 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                     workflow.saves.delete(target);
                     workflow.failedSaves.add(target);
 
-                    let chatList = [];
-
-                    chatList = `<span style='text-wrap: wrap;'>The creature was hexed and failed their save. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content });
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was hexed and failed their save. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: modifiedRoll});
+                    return;
                 }
-
                 else {
-                    let chatList = [];
-
-                    chatList = `<span style='text-wrap: wrap;'>The creature was hexed but still succeeded their save. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content });
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was hexed but still succeeded their save. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: modifiedRoll});
+                    continue;
                 }
             }
             else if(workflowType === "attack") {
@@ -324,41 +298,14 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 workflow.options.noOnUseMacro = saveSetting;
 
                 if(rerollNew.total < targetAC) {
-                    let chatList = [];
-
-                    chatList = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content });
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
+                    return;
                 }
-
                 else {
-                    let chatList = [];
-
-                    chatList = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content });
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
+                    continue;
                 }
             }
         }

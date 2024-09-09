@@ -142,6 +142,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
             if(itemRoll.aborted === true) continue;
+            let chatContent;
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
@@ -149,22 +150,15 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             let charmImmunity = workflow.actor.system.traits.ci.value.has("charmed");
             
             if (charmImmunity || hasDeafened) {
-                let chatList = [];
+                chatContent = `<span style='text-wrap: wrap;'>The creature seems to not be effected by your ${itemProperName}.<img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                chatList = `<span style='text-wrap: wrap;'>The creature seems to not be effected by your ${itemProperName}.<img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-
-                let msgHistory = [];
-                game.messages.reduce((list, message) => {
-                    if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                }, msgHistory);
-                let itemCard = msgHistory[msgHistory.length - 1];
-                let chatMessage = await game.messages.get(itemCard);
-                let content = await foundry.utils.duplicate(chatMessage.content);
-                let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                if (insertPosition !== -1) {
-                    content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                }
-                await chatMessage.update({ content: content, roll: false });
+                let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
+                let chatData = {
+                    user: actorPlayer.id,
+                    speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
+                    content: chatContent
+                };
+                ChatMessage.create(chatData);
 
                 continue;
             }
@@ -211,22 +205,10 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
         
                 workflow.options.noOnUseMacro = saveSetting;
 
-                let chatList = [];
+                chatContent = `<span style='text-wrap: wrap;'>The creature takes a cutting word, and their damage is reduced by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word, and their damage is reduced by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
 
-                let msgHistory = [];
-                game.messages.reduce((list, message) => {
-                    if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                }, msgHistory);
-                let itemCard = msgHistory[msgHistory.length - 1];
-                let chatMessage = await game.messages.get(itemCard);
-                let content = await foundry.utils.duplicate(chatMessage.content);
-                let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                if (insertPosition !== -1) {
-                    content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                }
-                await chatMessage.update({ content: content, roll: updatedRolls });
                 continue;
             }
 
@@ -243,42 +225,18 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
                 workflow.options.noOnUseMacro = saveSetting;
 
                 if((workflow.attackTotal - reroll.total) < targetAC) {
-                    let chatList = [];
+                    chatContent = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                    chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
 
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content, roll: rerollNew });
                     return;
                 }
 
                 else {
-                    let chatList = [];
+                    chatContent = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                    chatList = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
 
-                    let msgHistory = [];
-                    game.messages.reduce((list, message) => {
-                        if (message.flags["midi-qol"]?.itemId === chosenItem._id && message.speaker.token === validTokenPrimary.id) msgHistory.push(message.id);
-                    }, msgHistory);
-                    let itemCard = msgHistory[msgHistory.length - 1];
-                    let chatMessage = await game.messages.get(itemCard);
-                    let content = await foundry.utils.duplicate(chatMessage.content);
-                    let insertPosition = content.indexOf('<div class="end-midi-qol-attack-roll"></div>');
-                    if (insertPosition !== -1) {
-                        content = content.slice(0, insertPosition) + chatList + content.slice(insertPosition);
-                    }
-                    await chatMessage.update({ content: content, roll: rerollNew });
                     continue;
                 }
             }
