@@ -7,6 +7,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
 
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
+
     if(!token || !region || !regionScenario) return;
     if (!MidiQOL.isTargetable(token)) return;
 
@@ -40,7 +41,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkBlackTentacleRound");
     if(damagedThisTurn && damagedThisTurn === `${token.id}_${game.combat.round}`) return;
 
-    if (hasEffectApplied && regionScenario === "onTurnStart") {
+    if (hasEffectApplied && regionScenario === "tokenTurnStart") {
         const itemData = {
             name: `${itemProperName} - Turn Damage`,
             type: "feat",
@@ -72,7 +73,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
         const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [token.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };
         const dealDamage = await MidiQOL.completeItemUse(itemUpdate, {}, options);
         
-        if(dealDamage){
+        if(dealDamage) {
             let dialogContent = `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
@@ -101,6 +102,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
     
             if (!userDecision) {
+                await region.setFlag("gambits-premades", "checkBlackTentacleRound", `${token.id}_${game.combat.round}`);
                 return;
             }
             else if (userDecision) {
@@ -201,6 +203,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     
                     if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
                 }
+
                 return;
             }
             else if (userDecision) {
