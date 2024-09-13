@@ -18,11 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Consolidated, cleaned up, and improved Region Movement validation for automations like Black Tentacles, Caltrops, etc. Added a helper dialog for Ritual Spellcasting. Some other small bugfixes I cant remember" >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Dimension Door: Added token size check, fixed animation not clearing when cancelling placement." >> release_notes.txt
-          echo "  - Torch: Fix torch being re-lightable when no uses are remaining." >> release_notes.txt
-          echo "  - Ball Bearings: Fix errant token movement on save failure." >> release_notes.txt
+          echo "- General: Fix a few region movement validation bugs left in from the previous release" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
