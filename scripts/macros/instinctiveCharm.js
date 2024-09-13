@@ -11,6 +11,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
     if(workflow.item.name === itemProperName) return;
     let target = workflow.token;
     if(target.actor.appliedEffects.some(e => e.name === `${itemProperName} - Immunity`)) return;
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat});
     

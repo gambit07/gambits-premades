@@ -1,18 +1,9 @@
-const regionTokenStates = new Map();
-
 export async function ballBearings({tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus}) {
-    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
+    //async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     const module = await import('../module.js');
     const socket = module.socket;
+    const helpers = await import('../helpers.js');
     let region = await fromUuid(regionUuid);
-
-    if(regionScenario === "onStatusChanged" && regionStatus) {
-        const tokenState = regionTokenStates.get(region.id) || new Set();
-        regionTokenStates.set(region.id, tokenState);
-        regionTokenStates.set(`${region.id}-statuschanged`, true);
-        return;
-    }
-    else if(regionScenario === "onStatusChanged" && !regionStatus) return;
 
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
@@ -21,6 +12,10 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
 
+    let validatedRegionMovement = helpers.validateRegionMovement({ regionScenario: regionScenario, regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
+    const { validRegionMovement, validReroute } = validatedRegionMovement;
+    if(!validRegionMovement) return;
+
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem.name;
     let dialogId = "ballbearings";
@@ -28,43 +23,6 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
     let browserUser = MidiQOL.playerForActor(token.actor);
     if (!browserUser.active) {
         browserUser = game.users?.activeGM;
-    }
-
-    if(regionScenario === "onExit") {
-        const tokenState = regionTokenStates.get(region.id);
-        if (tokenState) {
-            tokenState.delete(token.id);
-            regionTokenStates.set(region.id, tokenState);
-        }
-        regionTokenStates.set(`${region.id}-${token.id}-exited`, true);
-
-        const isRestrained = await token.actor.appliedEffects(e => e.name === "Restrained");
-        if (isRestrained) await isRestrained.delete();
-        return;
-    }
-    else if(regionScenario === "onEnter") {
-        const statusChanged = regionTokenStates.get(`${region.id}-statuschanged`);
-
-        if (statusChanged) {
-            regionTokenStates.delete(`${region.id}-statuschanged`);
-            return;
-        }
-        const tokenState = regionTokenStates.get(region.id) || new Set();
-        tokenState.add(token.id);
-        regionTokenStates.set(region.id, tokenState);
-        regionTokenStates.set(`${region.id}-${token.id}-entered`, true);
-    }
-    else if(regionScenario === "onPostMove") {
-        await wait(250);
-        
-        const entered = regionTokenStates.get(`${region.id}-${token.id}-entered`);
-        const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
-    
-        if (entered || exited) {
-            regionTokenStates.delete(`${region.id}-${token.id}-entered`);
-            regionTokenStates.delete(`${region.id}-${token.id}-exited`);
-            return;
-        }
     }
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
@@ -128,21 +86,17 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
         const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);
 
         if (saveResult.failedSaves.size !== 0) {
-            await token.document.update({ x: originX, y: originY }, { animate: false });
+            if(validReroute) {
+                helpers.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
+
+                await token.document.update({ x: originX, y: originY }, { animate: false });
+            }
 
             const hasEffectApplied = tokenDocument.hasStatusEffect("prone");
 
             if (!hasEffectApplied) {
                 await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${token.document.uuid}`, status: "prone", active: true });
             }
-
-            let actorPlayer = MidiQOL.playerForActor(token.actor);
-            let chatData = {
-                user: actorPlayer.id,
-                speaker: ChatMessage.getSpeaker({ token: token }),
-                content: `${token.actor.name} takes 1 point of piercing damage. <div><img src="${token.actor.img}" width="30" height="30" style="border:0px"></div></div>`
-            };
-            ChatMessage.create(chatData);
         }
     }
     else if (userDecision) {

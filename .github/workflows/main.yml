@@ -18,16 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Resolve a couple module settings issues. Add missing ternary operator for token lookups. Revamp 3rd party reaction chat cards. If the originating chat card is no longer found, a new chat card will be created. Chat cards now include the roll details where relevant." >> release_notes.txt
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Spirit Balm: Automates the Spirit Balm spell from Deep Magic Volume 2" >> release_notes.txt
-          echo "  - Emotional Gamut: Automates the Emotional Gamut spell from Deep Magic Volume 2" >> release_notes.txt
-          echo "  - Ominous Shadow: Automates the Ominous Shadow spell from Deep Magic Volume 2" >> release_notes.txt
-          echo "  - Sacrificial Shield: Add a homebrew shield that can prevent a critical hit" >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Add some additional error handling to try and prevent erroneous invalid region removal errors." >> release_notes.txt
+          echo "- General: Consolidated, cleaned up, and improved Region Movement validation for automations like Black Tentacles, Caltrops, etc. Added a helper dialog for Ritual Spellcasting. Some other small bugfixes I cant remember" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Storm Mote: Couple small logic fixes" >> release_notes.txt
+          echo "  - Dimension Door: Added token size check, fixed animation not clearing when cancelling placement." >> release_notes.txt
+          echo "  - Torch: Fix torch being re-lightable when no uses are remaining." >> release_notes.txt
+          echo "  - Ball Bearings: Fix errant token movement on save failure." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

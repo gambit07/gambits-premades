@@ -1,18 +1,9 @@
-const regionTokenStates = new Map();
-
 export async function blackTentacles({tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus}) {
-    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
+    if(!game.combat) return ui.notifications.warn("Black Tentacles requires an active combat.")
     const module = await import('../module.js');
     const socket = module.socket;
+    const helpers = await import('../helpers.js');
     let region = await fromUuid(regionUuid);
-
-    if(regionScenario === "onStatusChanged" && regionStatus) {
-        const tokenState = regionTokenStates.get(region.id) || new Set();
-        regionTokenStates.set(region.id, tokenState);
-        regionTokenStates.set(`${region.id}-statuschanged`, true);
-        return;
-    }
-    else if(regionScenario === "onStatusChanged" && !regionStatus) return;
 
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
@@ -20,6 +11,15 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     if (!MidiQOL.isTargetable(token)) return;
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
+
+    if(regionScenario === "tokenExit") {
+        const isRestrained = await token.actor.appliedEffects.find(e => e.name === "Restrained");
+        if (isRestrained) await isRestrained.delete();
+    }
+
+    let validatedRegionMovement = helpers.validateRegionMovement({ regionScenario: regionScenario, regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid, validExit: false });
+    const { validRegionMovement, validReroute } = validatedRegionMovement;
+    if(!validRegionMovement) return;
 
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem?.name;
@@ -29,39 +29,6 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     let browserUser = MidiQOL.playerForActor(token.actor);
     if (!browserUser.active) {
         browserUser = game.users?.activeGM;
-    }
-
-    if(regionScenario === "onExit") {
-        const tokenState = regionTokenStates.get(region.id);
-        if (tokenState) {
-            tokenState.delete(token.id);
-            regionTokenStates.set(region.id, tokenState);
-        }
-        regionTokenStates.set(`${region.id}-${token.id}-exited`, true);
-        return;
-    }
-    else if(regionScenario === "onEnter") {
-        const statusChanged = regionTokenStates.get(`${region.id}-statuschanged`);
-
-        if (statusChanged) {
-            regionTokenStates.delete(`${region.id}-statuschanged`);
-            return;
-        }
-        const tokenState = regionTokenStates.get(region.id) || new Set();
-        tokenState.add(token.id);
-        regionTokenStates.set(region.id, tokenState);
-        regionTokenStates.set(`${region.id}-${token.id}-entered`, true);
-    }
-    else if(regionScenario === "onPostMove") {
-        await wait(250);
-        const entered = regionTokenStates.get(`${region.id}-${token.id}-entered`);
-        const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
-    
-        if (entered || exited) {
-            regionTokenStates.delete(`${region.id}-${token.id}-entered`);
-            regionTokenStates.delete(`${region.id}-${token.id}-exited`);
-            return;
-        }
     }
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
@@ -229,7 +196,11 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
     
             if (!userDecision) {
-                if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
+                if(validReroute) {
+                    helpers.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
+    
+                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
+                }
                 return;
             }
             else if (userDecision) {
@@ -245,7 +216,11 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                         ChatMessage.create(chatData);
                     }
                     else {
-                        if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
+                        if(validReroute) {
+                            helpers.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
+            
+                            if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
+                        }
                         let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),

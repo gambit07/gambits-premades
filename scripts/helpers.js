@@ -948,3 +948,114 @@ export async function replaceChatCard({ actorUuid, itemUuid, chatContent, rollDa
         });
     }
 }
+
+let regionTokenStates = new Map();
+export function validateRegionMovement({regionScenario, regionStatus, regionUuid, tokenUuid, isTeleport = false, validExit = true}) {
+    let region = fromUuidSync(regionUuid);
+    let token = fromUuidSync(tokenUuid);
+    let regionId = region.id;
+    let tokenId = token.id;
+    let validatedRegionMovement;
+
+    if(regionScenario === "tokenStatusChanged" && regionStatus) {
+        regionTokenStates.set(`${regionId}-${tokenId}-statuschanged`, true);
+        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+    }
+    else if(regionScenario === "tokenStatusChanged" && !regionStatus) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+
+    if(regionScenario === "tokenExit") {
+        regionTokenStates.set(`${regionId}-${tokenId}-exited`, true);
+        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+    }
+    else if(regionScenario === "tokenEnter") {
+        regionTokenStates.set(`${regionId}-${tokenId}-entered`, true);
+        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+    }
+    else if(regionScenario === "tokenForcedMovement") {
+        regionTokenStates.set(`${regionId}-${tokenId}-forcedMovement`, true);
+        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+    }
+    else if(regionScenario === "tokenPostMove") {
+        const entered = regionTokenStates.get(`${regionId}-${tokenId}-entered`);
+        const exited = regionTokenStates.get(`${regionId}-${tokenId}-exited`);
+        const forcedMovement = regionTokenStates.get(`${regionId}-${tokenId}-forcedMovement`);
+        const statusChanged = regionTokenStates.get(`${regionId}-statuschanged`);
+
+        if(exited) regionTokenStates.delete(`${regionId}-${tokenId}-exited`);
+        if(entered) regionTokenStates.delete(`${regionId}-${tokenId}-entered`);
+        if(forcedMovement) regionTokenStates.delete(`${regionId}-${tokenId}-forcedMovement`);
+        if(statusChanged) regionTokenStates.delete(`${regionId}-${tokenId}-statuschanged`);
+
+        if(forcedMovement || statusChanged) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+
+        if (!exited && !entered && !isTeleport) {
+            if (token.regions.has(region)) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+            else return validatedRegionMovement = ({ validRegionMovement: true, validReroute: true });
+        }
+        else if(exited && validExit && !isTeleport) {
+            return validatedRegionMovement = ({ validRegionMovement: true, validReroute: true });
+        }
+        else if (entered && !isTeleport) {
+            return validatedRegionMovement = ({ validRegionMovement: true, validReroute: false });
+        }
+    }
+    else if(regionScenario === "tokenTurnStart") {
+        return validatedRegionMovement = ({ validRegionMovement: true, validReroute: false });
+    }
+    else return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+}
+
+export async function ritualSpellUse({ workflowUuid }) {
+    if(!workflowUuid) return;
+
+    const workflow = await MidiQOL.Workflow.getWorkflow(`${workflowUuid}`);
+    if(workflow.macroPass !== "preItemRoll") return;
+    if(!workflow.item.system.properties.has("ritual")) return;
+
+    await foundry.applications.api.DialogV2.wait({
+        window: { title: `Ritual ${workflow.item.name} Use` },
+        content: `
+            <div class="gps-dialog-container">
+                <div class="gps-dialog-section">
+                    <div class="gps-dialog-content">
+                        <div>
+                            <div class="gps-dialog-flex">
+                                <p class="gps-dialog-paragraph">Would you like to cast ${workflow.item.name} ritually? This will increase its cast time (${workflow.item.system.activation.cost} ${workflow.item.system.activation.type}) by 10 minutes.</p>
+                                <div id="image-container" class="gps-dialog-image-container">
+                                    <img src="${workflow.item.img}" class="gps-dialog-image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `,
+        buttons: [{
+            action: "Yes",
+            label: "Yes",
+            callback: async (event, button, dialog) => {
+                workflow.config.consumeSpellSlot = false;
+                workflow.config.consumeSpellLevel = false;
+                workflow.config.needsConfiguration = false;
+                workflow.options.configureDialog = false;
+
+                let content = `<span style='text-wrap: wrap;'><img src="${workflow.actor.img}" style="width: 25px; height: auto;" /> ${workflow.actor.name} cast ${workflow.item.name} ritually.</span>`
+                let chatData = {
+                user: game.users.find(u => u.isGM).id,
+                content: content,
+                whisper: game.users.find(u => u.isGM).id
+                };
+                await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+                return;
+            }
+        },
+        {
+            action: "No",
+            label: "No",
+            callback: async () => false
+        }],
+        close: async (event, dialog) => {
+            return;
+        }, rejectClose:false
+    });
+}
