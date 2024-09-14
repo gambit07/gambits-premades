@@ -11,7 +11,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     if(!workflow) return;
     if(workflow.item.name.toLowerCase() === itemName) return;
     let enableProtectionOnSuccess = MidiQOL.safeGetGameSetting('gambits-premades', 'enableProtectionOnSuccess');
-    if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kh")) || (!enableProtectionOnSuccess && workflow.disadvantage === true)) return;
+    if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kl")) || (!enableProtectionOnSuccess && workflow.disadvantage === true)) return;
 
     if(enableProtectionOnSuccess && (workflow.attackTotal < target.actor.system.attributes.ac.value)) return;
 

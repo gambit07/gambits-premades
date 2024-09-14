@@ -249,7 +249,7 @@ Hooks.once('ready', async function() {
     });
 
     Hooks.on("preUpdateItem", (item, update) => {
-        if (!game.user.isGM && ("identified" in (update.system ?? {})) && game.gpsSettings.identifyRestrictionEnabled) {
+        if (!game.user.isGM && !item.system?.identified && "identified" in (update.system ?? {}) && game.gpsSettings.identifyRestrictionEnabled) {
             ui.notifications.error(`${game.gpsSettings.identifyRestrictionMessage}`);
             return false;
         }
