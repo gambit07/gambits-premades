@@ -174,37 +174,41 @@ export function convertFromFeet({ range }) {
     return range * conversionFactor;
 }
 
-export async function handleDialogPromises(userDialogPromise, gmDialogPromise) {
+export async function handleDialogPromises(userDialogArgs, gmDialogArgs) {
+    if(!userDialogArgs || !gmDialogArgs) return;
+    const module = await import('./module.js');
+    const socket = module.socket;
+    let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", userDialogArgs.browserUser, userDialogArgs);
+    let gmDialogPromise = process3rdPartyReactionDialog(gmDialogArgs);
+
     return new Promise((resolve, reject) => {
         let userResolved = false;
         let gmResolved = false;
         let anyDialogInteracted = false;
-  
+
         const checkAndResolve = () => {
             if (anyDialogInteracted) {
                 resolve(anyDialogInteracted);
-            }
-  
-            else if (userResolved && gmResolved) {
-                resolve({programmaticallyClosed: true});
+            } else if (userResolved && gmResolved) {
+                resolve({ programmaticallyClosed: true });
             }
         };
-  
+
         userDialogPromise.then(result => {
             userResolved = true;
             if (result && !result.programmaticallyClosed) {
                 anyDialogInteracted = result;
             }
             checkAndResolve();
-        });
-  
+        }).catch(reject);
+
         gmDialogPromise.then(result => {
             gmResolved = true;
             if (result && !result.programmaticallyClosed) {
                 anyDialogInteracted = result;
             }
             checkAndResolve();
-        });
+        }).catch(reject);
     });
 }
 
@@ -496,7 +500,9 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                     else if (source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
 
                     let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
+                    console.log(enemyTokenUuid, "enemyTokenUuid")
                     let allyTokenUuid = button.form?.elements["ally-token"]?.value ?? false;
+                    console.log(allyTokenUuid, "allyTokenUuid")
                     let abilityCheck = button.form?.elements["ability-check"] ?? false;
                     if(abilityCheck) {
                         for (let i = 0; i < abilityCheck.length; i++) {
@@ -506,6 +512,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                             }
                         }
                     }
+                    console.log(abilityCheck, "abilityCheck")
                     
                     let damageChosen = [];
                     let damageListItems = document.querySelectorAll(`#damage-list li .damage-type`);
@@ -514,9 +521,11 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                     }
 
                     let selectedItemUuid = button.form?.elements[`item-select_${dialogId}`]?.value ?? false;
+                    console.log(selectedItemUuid, "selectedItemUuid")
                     let favoriteCheck = button.form?.elements["gps-favorite-checkbox"]?.checked ?? false;
 
                     result = ({ userDecision: true, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, abilityCheck, programmaticallyClosed: false, source, type });
+                    console.log(result, "result")
                 }
             },
             {
