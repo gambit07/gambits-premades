@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Mirrored 3rd Party Dialog: Fix a socket logic issue when the caster of a spell was also the user of the corresponding reaction." >> release_notes.txt
+          echo "  - General: Added some additional handling for invalid tokens on a scene for 3rd party reactions." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
