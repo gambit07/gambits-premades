@@ -18,10 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Ring Of Invisibility (Damaged Homebrew)" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix turn end error popping up for users due to a missing check to make sure only a regions origin token tries to update it." >> release_notes.txt
+          echo "  - Opportunity Attack: Additional turn end bugfix causing permissions errors" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

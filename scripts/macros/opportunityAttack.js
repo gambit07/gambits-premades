@@ -586,6 +586,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         disabled: false,
                         system: {
                             source: `
+                                if(!game.user.isGM) return;
                                 if(event.data.token.uuid !== region.flags["gambits-premades"].tokenUuid) return;
                                 let token = await fromUuid(region.flags["gambits-premades"].tokenUuid);
                                 let actor = await fromUuid(region.flags["gambits-premades"].actorUuid);
