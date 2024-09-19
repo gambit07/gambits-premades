@@ -212,7 +212,7 @@ export async function handleDialogPromises(userDialogArgs, gmDialogArgs) {
     });
 }
 
-export function findValidTokens({initiatingToken, targetedToken, itemName, itemType, itemChecked, reactionCheck, sightCheck, sightCheckType = "enemy", rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat}) {
+export function findValidTokens({initiatingToken, targetedToken, itemName, itemType, itemChecked, reactionCheck, sightCheck, sightCheckType = "enemy", rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat, gpsUuid}) {
     let validTokens;
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
@@ -230,8 +230,9 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             if(debugEnabled) console.error(`${itemName} for ${t.actor ? t.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
             return;
         }
-
-        let checkItem = t?.actor?.items?.find(i => i.name.toLowerCase() === itemName);
+        let checkItem;
+        if(gpsUuid) checkItem = t?.actor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        else checkItem = t?.actor?.items?.find(i => i.name.toLowerCase() === itemName);
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
         let hasEffectOrigin = t?.actor?.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
         let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
@@ -500,9 +501,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                     else if (source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
 
                     let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
-                    console.log(enemyTokenUuid, "enemyTokenUuid")
                     let allyTokenUuid = button.form?.elements["ally-token"]?.value ?? false;
-                    console.log(allyTokenUuid, "allyTokenUuid")
                     let abilityCheck = button.form?.elements["ability-check"] ?? false;
                     if(abilityCheck) {
                         for (let i = 0; i < abilityCheck.length; i++) {
@@ -512,7 +511,6 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                             }
                         }
                     }
-                    console.log(abilityCheck, "abilityCheck")
                     
                     let damageChosen = [];
                     let damageListItems = document.querySelectorAll(`#damage-list li .damage-type`);
@@ -521,11 +519,9 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                     }
 
                     let selectedItemUuid = button.form?.elements[`item-select_${dialogId}`]?.value ?? false;
-                    console.log(selectedItemUuid, "selectedItemUuid")
                     let favoriteCheck = button.form?.elements["gps-favorite-checkbox"]?.checked ?? false;
 
                     result = ({ userDecision: true, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, abilityCheck, programmaticallyClosed: false, source, type });
-                    console.log(result, "result")
                 }
             },
             {
@@ -805,7 +801,6 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
 
             switch (gridDiagonals) {
                 case 0: // Equidistant
-                    console.log("this should be our case right")
                     moveX = moveDistancePixels * dx;
                     moveY = moveDistancePixels * dy;
                     break;

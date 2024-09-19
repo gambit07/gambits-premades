@@ -145,8 +145,6 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
 
-        console.log(result,"result SB")
-
         if (!userDecision) {
             if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
