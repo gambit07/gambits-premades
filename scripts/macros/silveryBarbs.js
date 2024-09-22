@@ -3,13 +3,13 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const socket = module.socket;
     const helpers = await import('../helpers.js');
-    const workflowUuid = workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
-    let itemName = "silvery barbs";
-    let itemProperName = "Silvery Barbs";
-    let dialogId = "silverybarbs";
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    if(workflow.item.name === itemProperName) return;
+    const gpsUuid = "548b5cab-f870-47b6-828a-8de7549debeb";
+    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    let itemName = "Silvery Barbs";
+    let dialogId = gpsUuid;
+    let gmUser = helpers.getPrimaryGM();
 
     // Check if attack hits
     if(workflowType === "attack" && workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) return;
@@ -19,22 +19,22 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     let findValidTokens;
     
     if(workflowType === "attack") {
-        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
+        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     }
     else if(workflowType === "save") {
-        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
+        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     }
     
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
-        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemName}`;
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
         
-        browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
-        if (!browserUser.active) browserUser = game.users?.activeGM;
+        browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent;
         const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
@@ -124,33 +124,27 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         }
 
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
-        let chatData = {
-        user: game.users.find(u => u.isGM).id,
-        content: content,
-        whisper: game.users.find(u => u.isGM).id
-        };
-        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
         
         let result;
 
-        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogArgs = { dialogTitle: dialogTitlePrimary, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser.id };
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle: dialogTitlePrimary, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle: dialogTitleGM, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "gm", type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle: dialogTitleGM, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "gm", type: "multiDialog", notificationId: notificationMessage._id };
             
-            result = await socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
+            result = await socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
         } else {
-            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
 
         if (!userDecision) {
-            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         else if (userDecision) {
-            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             let advantageToken = await fromUuid(allyTokenUuid);
             let chatContent;
 
@@ -167,8 +161,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             };
             
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
             if(itemRoll.aborted === true) continue;
 
@@ -216,18 +210,17 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                     }
                 }
             ];
-            if(advantageToken) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.actor.uuid, effects: effectData });
+            if(advantageToken) await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: advantageToken.actor.uuid, effects: effectData });
 
             if(workflowType === "save") {
                 let saveDC = workflow.saveItem.system.save.dc;
                 let saveAbility = workflow.saveItem.system.save.ability;
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === enemyTokenUuid);
-                let targetUser = MidiQOL.playerForActor(workflowTarget.actor);
-                if (!targetUser.active) targetUser = game.users?.activeGM;
+                let browserUserTarget = helpers.getBrowserUser({ actorUuid: workflowTarget.actor.uuid });
                 let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
                 let reroll;
-                if(workflowTarget.actor.type !== "npc") reroll = await socket.executeAsUser("rollAsUser", targetUser.id, { rollParams: `1d20 + ${targetSaveBonus}` });
-                else reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${targetSaveBonus}` });
+                if(workflowTarget.actor.type !== "npc") reroll = await socket.executeAsUser("rollAsUser", browserUserTarget, { rollParams: `1d20 + ${targetSaveBonus}` });
+                else reroll = await socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${targetSaveBonus}` });
 
                 if(reroll.total < saveDC) {
                     workflow.saves.delete(workflowTarget);
@@ -250,8 +243,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let reroll;
-                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d20 + ${rerollAddition}` });
-                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${rerollAddition}` });
+                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1d20 + ${rerollAddition}` });
+                if(source && source === "gm") reroll = await socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${rerollAddition}` });
                 if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
 
                 workflow.options.noOnUseMacro = saveSetting;

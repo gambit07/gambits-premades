@@ -1,9 +1,10 @@
 const regionTokenStates = new Map();
 
 export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, originX, originY, isTeleport}) {
-    if(!game.user.isGM) return;
-    const module = await import('../module.js');
     const helpers = await import('../helpers.js');
+    let gmUser = helpers.getPrimaryGM();
+    if(game.user.id !== gmUser) return;
+    const module = await import('../module.js');
     const socket = module.socket;
     //async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     let region = await fromUuid(regionUuid);
@@ -33,10 +34,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let hasPolearmReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === "polearm master");
     let hasDeadlyReachReaction = effectOriginActor.items.find(i => i.name.toLowerCase() === "deadly reach");
 
-    let browserUser = MidiQOL.playerForActor(effectOriginActor);
-    if (!browserUser.active) {
-        browserUser = game.users?.activeGM;
-    }
+    let browserUser = helpers.getBrowserUser({ actorUuid: effectOriginActor.uuid });
 
     let result;
     let dialogTitle;
@@ -311,34 +309,27 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let dialogTitleGM = `Waiting for ${effectOriginActor.name}'s selection | ${dialogTitle}`;
 
     let content = `<span style='text-wrap: wrap;'><img src="${effectOriginToken.actor.img}" style="width: 25px; height: auto;" /> ${effectOriginToken.actor.name} has a reaction available for an Opportunity Attack.</span>`
-    let chatData = {
-    user: game.users.find(u => u.isGM).id,
-    content: content,
-    whisper: game.users.find(u => u.isGM).id
-    };
-    let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+    let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+    let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
-    if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-        let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source: "user",type: "multiDialog", browserUser: browserUser.id };
+    if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+        let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
         
-        let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source: "gm",type: "multiDialog" };
+        let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
     
-        result = await socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
+        result = await socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
     } else {
-        result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+        result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
     }
             
     const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, source, type } = result;
 
     if (!userDecision) {
-        if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
         await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
         //if(hasSentinel) await effectOriginActor.setFlag("gambits-premades", "sentinelDeclined", true);
         return;
     }
     else if (userDecision) {
-        if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
-
         if (braceItemUuid) {
             let braceItem = await fromUuid(braceItemUuid);
             const braceRoll = await braceItem.use();
@@ -380,8 +371,8 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         chosenWeapon.applyActiveEffects();
 
         let userSelect = undefined;
-        if(source && source === "user") userSelect = browserUser.id;
-        else if(source && source === "gm") userSelect = game.users?.activeGM.id;
+        if(source && source === "user") userSelect = browserUser;
+        else if(source && source === "gm") userSelect = gmUser;
 
         const options = {
             showFullCard: false,
@@ -405,8 +396,8 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         });
 
         let itemRoll;
-        if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenWeapon, actorUuid: effectOriginActor.uuid, options: options });
-        else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenWeapon, actorUuid: effectOriginActor.uuid, options: options });
+        if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenWeapon, actorUuid: effectOriginActor.uuid, options: options });
+        else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenWeapon, actorUuid: effectOriginActor.uuid, options: options });
 
         await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
 
@@ -438,7 +429,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
                 }
             ];
 
-            await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: token.actor.uuid, effects: effectData });
+            await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: token.actor.uuid, effects: effectData });
         }
         //else if(hasSentinel && !checkHits) await effectOriginActor.setFlag("gambits-premades", "sentinelDeclined", true);
     }
@@ -586,7 +577,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         disabled: false,
                         system: {
                             source: `
-                                if(!game.user.isGM) return;
+                                if(game.user.id !== game.gps.getPrimaryGM()) return;
                                 if(event.data.token.uuid !== region.flags["gambits-premades"].tokenUuid) return;
                                 let token = await fromUuid(region.flags["gambits-premades"].tokenUuid);
                                 let actor = await fromUuid(region.flags["gambits-premades"].actorUuid);
@@ -758,14 +749,24 @@ export async function enableOpportunityAttack(combat, combatEvent) {
     }
 
     if(combatEvent === "startCombat") {
+        let levelsUI = CONFIG.Levels?.UI?.stairEnabled;
+        if(levelsUI) CONFIG.Levels.UI.stairEnabled = false;
+
         for (let combatant of combat.combatants.values()) {
             await processCombatant(combatant);
         }
+
+        if(levelsUI) CONFIG.Levels.UI.stairEnabled = true;
     }
 
     if(combatEvent === "enterCombat") {
+        let levelsUI = CONFIG.Levels?.UI?.stairEnabled;
+        if(levelsUI) CONFIG.Levels.UI.stairEnabled = false;
+
         let combatant = combat;
         await processCombatant(combatant);
+
+        if(levelsUI) CONFIG.Levels.UI.stairEnabled = true;
     }
 };
 

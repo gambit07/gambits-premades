@@ -3,16 +3,16 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
     const socket = module.socket;
-    const workflowUuid = workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
-    let itemName = "sentinel";
-    let itemProperName = "Sentinel";
-    let dialogId = "sentinel";
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    if(workflow.item.name.toLowerCase() === itemName) return;
+    const gpsUuid = "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c";
+    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    let itemName = "Sentinel";
+    let dialogId = gpsUuid;
     let target = workflow.hitTargets.first();
+    let gmUser = helpers.getPrimaryGM();
 
-    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
     for (const validTokenPrimary of findValidTokens) {
         if (target.document.uuid === validTokenPrimary.document.uuid || workflow.token.document.disposition === target.document.disposition) continue;
@@ -21,16 +21,14 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
 
         if(target.actor.items.find(i => i.name === itemProperName)) return;
 
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
-        let browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
-        if (!browserUser.active) {
-            browserUser = game.users?.activeGM;
-        }
+        let browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         // Check valid weapons
         let validWeapons = validTokenPrimary.actor.items.filter(item => {
@@ -116,34 +114,27 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
         `;
 
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
-        let chatData = {
-        user: game.users.find(u => u.isGM).id,
-        content: content,
-        whisper: game.users.find(u => u.isGM).id
-        };
-        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         let result;
 
-        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog",browserUser: browserUser.id };
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog",browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
+            result = await socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
         } else {
-            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, source, type } = result;
 
         if (!userDecision) {
-            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         else if (userDecision) {
-            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
-            
             if (!selectedItemUuid) {
                 console.log("No weapon selected");
                 continue;
@@ -196,8 +187,8 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
             });
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
             if(itemRoll.aborted === true) continue;
 
             if(checkHits) {
@@ -222,7 +213,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
                     }
                 ];
 
-                await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: target.actor.uuid, effects: effectData });
+                await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: target.actor.uuid, effects: effectData });
             }
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});

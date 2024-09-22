@@ -2,18 +2,17 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
     const module = await import('../module.js');
     const socket = module.socket;
     const helpers = await import('../helpers.js');
-    const workflowUuid = workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
-    let itemName = "instinctive charm";
-    let itemProperName = "Instinctive Charm";
-    let dialogId = "instinctivecharm";
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    if(workflow.item.name === itemProperName) return;
+    const gpsUuid = "b9a797f2-3262-4a89-9b32-d8482a0c5f29";
+    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    let itemName = "Instinctive Charm";
+    let dialogId = gpsUuid;
     let target = workflow.token;
-    if(target.actor.appliedEffects.some(e => e.name === `${itemProperName} - Immunity`)) return;
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
+    let gmUser = helpers.getPrimaryGM();
 
-    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
     let browserUser;
     
@@ -32,14 +31,15 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
             `<option value="${uuid}">${targetNames[index]}</option>`
         ).join('');
         
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        let itemProperName = chosenItem?.name;
+        if(target.actor.appliedEffects.some(e => e.name === `${itemProperName} - Immunity`)) return;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
-        browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
-        if (!browserUser.active) browserUser = game.users?.activeGM;
+        browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         let dialogContent = `
             <div class="gps-dialog-container">
@@ -63,33 +63,28 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
             </div>
         `;
 
-        let result;
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has an option available for an attack triggering ${itemProperName}.</span>`
-        let chatData = {
-        user: game.users.find(u => u.isGM).id,
-        content: content,
-        whisper: game.users.find(u => u.isGM).id
-        };
-        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
-        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser.id };
+        let result;
+
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser.id, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
             result = await socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
         } else {
-            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
 
         if (!userDecision) {
-            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         else if (userDecision) {
-            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             chosenItem.prepareData();
             chosenItem.prepareFinalAttributes();
             chosenItem.applyActiveEffects();
@@ -103,16 +98,15 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
             };
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
             if(itemRoll.aborted === true) continue;
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
             let dialogIdTarget = "instinctivecharmtarget";
-            let browserUserTarget = MidiQOL.playerForActor(target.actor);
-            if (!browserUserTarget.active) browserUserTarget = game.users?.activeGM;
+            let browserUserTarget = helpers.getBrowserUser({ actorUuid: target.actor.uuid });
 
             const spellDC = validTokenPrimary.actor.system.attributes.spelldc;
             let saveAbility = "wis";
@@ -179,14 +173,14 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
 
                 let resultTarget;
         
-                if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUserTarget.id !== game.users?.activeGM.id) {
-                    let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", browserUserTarget.id, {dialogTitle:dialogTitlePrimary,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source: "user",type: "multiDialog"});
+                if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUserTarget !== gmUser) {
+                    let userDialogArgsTarget = { dialogTitle:dialogTitlePrimary,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUserTarget, notificationId: notificationMessage._id };
                     
-                    let gmDialogPromise = socket.executeAsGM("process3rdPartyReactionDialog", {dialogTitle:dialogTitleGM,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source: "gm",type: "multiDialog"});
+                    let gmDialogArgsTarget = { dialogTitle:dialogTitleGM,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
                 
-                    resultTarget = await socket.executeAsGM("handleDialogPromises", userDialogPromise, gmDialogPromise);
+                    resultTarget = await socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgsTarget, gmDialogArgsTarget});
                 } else {
-                    resultTarget = await socket.executeAsUser("process3rdPartyReactionDialog", browserUserTarget.id, {dialogTitle:dialogTitlePrimary,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source:browserUserTarget.isGM ? "gm" : "user",type:"singleDialog"});
+                    resultTarget = await socket.executeAsUser("process3rdPartyReactionDialog", browserUserTarget.id, {dialogTitle:dialogTitlePrimary,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source: gmUser === browserUserTarget ? "gm" : "user",type:"singleDialog"});
                 }
         
                 const { enemyTokenUuid } = resultTarget;
@@ -214,7 +208,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                         }
                     }
                 ];
-                await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: target.actor.uuid, effects: effectData });
+                await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: target.actor.uuid, effects: effectData });
 
                 continue;
             }

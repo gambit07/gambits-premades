@@ -2,17 +2,17 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
     const socket = module.socket;
-    const workflowUuid = workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid) ?? null;
-    let itemName = "poetry in misery";
-    let itemProperName = "Poetry in Misery";
-    let dialogId = "poetryinmisery";
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData) ?? null;
     if(!workflow && workflowCombat === true) return;
-    if(workflow?.item?.name.toLowerCase() === itemName) return;
+    const gpsUuid = "f4b6923a-eda4-4c29-a6fb-a1728f6e71e3";
+    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    let itemName = "Poetry in Misery";
+    let dialogId = gpsUuid;
     let initiatingToken;
     (workflow) ? initiatingToken = workflow.token : initiatingToken = await MidiQOL.tokenForActor(workflowData.actor.uuid);
+    let gmUser = helpers.getPrimaryGM();
 
-    let findValidTokens = helpers.findValidTokens({initiatingToken: initiatingToken, targetedToken: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: initiatingToken, targetedToken: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
     let browserUser;
 
@@ -32,15 +32,13 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         }
         else continue;
 
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
-        browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
+        browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
         let chatActor;
-        if (!browserUser.active) {
-            browserUser = game.users?.activeGM;
-        }
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         if (workflowType === "attack") {
             if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) continue;
@@ -88,32 +86,25 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
 
         let result;
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a roll triggering ${itemProperName}.</span>`
-        let chatData = {
-        user: game.users.find(u => u.isGM).id,
-        content: content,
-        whisper: game.users.find(u => u.isGM).id
-        };
-        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
-        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser.id };
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
+            result = await socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
         } else {
-            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
 
         if (!userDecision) {
-            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         else if (userDecision) {
-            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
-
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
             if (resourceKey) {

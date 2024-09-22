@@ -3,13 +3,13 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const socket = module.socket;
     const helpers = await import('../helpers.js');
-    const workflowUuid = workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
-    let itemName = "witches hex";
-    let itemProperName = "Witches Hex";
-    let dialogId = "witcheshex";
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    if(workflow.item.name === itemProperName) return;
+    const gpsUuid = "02fc5000-7f5d-462e-94ac-42a27f453a8f";
+    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    let itemName = "Witches Hex";
+    let dialogId = gpsUuid;
+    let gmUser = helpers.getPrimaryGM();
     
     if(workflowType === "save" && workflow.saveResults.length === 0) return;
     if(workflowType === "attack" && (workflow.isCritical === true || workflow.isFumble === true)) return;
@@ -17,28 +17,26 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
     let findValidTokens;
 
     if(workflowType === "attack") {
-        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: [itemName], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat});
+        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: [itemName], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     }
     else if(workflowType === "save") {
-        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: [itemName], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat});
+        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: [itemName], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     }
     
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
         let hexDie = validTokenPrimary.actor.system.scale["kp-witch"]["hex-die"]?.die;
         if(!hexDie) {
             ui.notifications.error("You must have a Witch scale for this actor named 'kp-witch'")
             continue;
         }
-        let chosenItem = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
-        browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
-        if (!browserUser.active) {
-            browserUser = game.users?.activeGM;
-        }
+        browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
         let content;
         let dialogContent;
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
@@ -109,34 +107,27 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
         }
             
-        let chatData = {
-        user: game.users.find(u => u.isGM).id,
-        content: content,
-        whisper: game.users.find(u => u.isGM).id
-        };
-        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         let result;
         
-        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser.id };
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
             result = await socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
         } else {
-            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, source, type } = result;
 
         if (!userDecision) {
-            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         else if (userDecision) {
-            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
-
             let target;
             let targetDocument;
             if(workflowType === "attack") {
@@ -160,8 +151,8 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             };
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
             if(itemRoll.aborted === true) continue;
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
@@ -263,8 +254,8 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 workflow.options.noOnUseMacro = true;
                 let saveDC = workflow.saveItem.system.save.dc;
 
-                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1${hexDie}`, type: workflowType });
-                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1${hexDie}`, type: workflowType });
+                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });
+                if(source && source === "gm") reroll = await socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${hexDie}`, type: workflowType });
                 let rollFound = workflow.saveRolls.find(roll => roll.data.tokenUuid === returnedTokenUuid);
                 let rollTotal = rollFound.total;
                 let modifiedRoll = await new Roll(`${rollTotal} - ${reroll.total}`).evaluate();
@@ -290,8 +281,8 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let reroll;
-                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1${hexDie}`, type: workflowType });
-                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1${hexDie}`, type: workflowType });
+                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });
+                if(source && source === "gm") reroll = await socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${hexDie}`, type: workflowType });
                 let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).roll();
 
                 await workflow.setAttackRoll(rerollNew);

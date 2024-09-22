@@ -118,12 +118,12 @@
         <tbody>
             <tr>
                 <td class="column-item">
-                    <label for="enableMirrorDialog">Mirror 3rd Party Dialog for GMs<br><span class="small-text">3rd party dialog's will be sent to the GM and the player so that either party can interact with the dialog to use/dismiss/pause it.</span>
+                    <label for="enable3prNoCombat">Enable 3rd Party Reactions Outside Combat<br><span class="small-text">Allows 3rd party reactions to function while combat is not active.</span>
                     </label>
                 </td>
                 <td class="column-enable-td">
                     <div>
-                        <input type="checkbox" id="enableMirrorDialog" name="enableMirrorDialog" data-dtype="Boolean" {{checked enableMirrorDialog}}/>
+                        <input type="checkbox" id="enable3prNoCombat" name="enable3prNoCombat" data-dtype="Boolean" {{checked enable3prNoCombat}}/>
                     </div>
                 </td>
             </tr>
@@ -149,15 +149,15 @@
                     </td>
                 </tr>
             </tbody>
-            
+
             <tr>
                 <td class="column-item">
-                    <label for="enable3prNoCombat">Enable 3rd Party Reactions Outside Combat<br><span class="small-text">Allows 3rd party reactions to function while combat is not active.</span>
+                    <label for="enableRegionWrapping">Enable Region Wrapping<br><span class="small-text"> Replaces Foundry default region behavior testing token center points only with multi-point tests to better match the 5e ruleset <b>(Requires Reload)</b>.</span>
                     </label>
                 </td>
                 <td class="column-enable-td">
                     <div>
-                        <input type="checkbox" id="enable3prNoCombat" name="enable3prNoCombat" data-dtype="Boolean" {{checked enable3prNoCombat}}/>
+                        <input type="checkbox" id="enableRegionWrapping" name="enableRegionWrapping" data-dtype="Boolean" {{checked enableRegionWrapping}}/>
                     </div>
                 </td>
             </tr>
@@ -182,6 +182,30 @@
                 <td class="column-enable-td">
                     <div>
                         <input type="checkbox" id="hideTemplates" name="hideTemplates" data-dtype="Boolean" {{checked hideTemplates}}/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="column-item">
+                    <label for="enableMirrorDialog">Mirror 3rd Party Dialog for GMs<br><span class="small-text">3rd party dialog's will be sent to the GM and the player so that either party can interact with the dialog to use/dismiss/pause it.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="enableMirrorDialog" name="enableMirrorDialog" data-dtype="Boolean" {{checked enableMirrorDialog}}/>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="column-item">
+                    <label for="primaryGM">Set Primary GM<br><span class="small-text"> The primary GM will receive 3rd party dialogs for this module.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <select id="primaryGM" name="primaryGM" data-dtype="String"></select>
                     </div>
                 </td>
             </tr>

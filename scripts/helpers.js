@@ -174,12 +174,14 @@ export function convertFromFeet({ range }) {
     return range * conversionFactor;
 }
 
-export async function handleDialogPromises(userDialogArgs, gmDialogArgs) {
+export async function handleDialogPromises({userDialogArgs, gmDialogArgs}) {
     if(!userDialogArgs || !gmDialogArgs) return;
+    console.log(userDialogArgs)
+    console.log(gmDialogArgs)
     const module = await import('./module.js');
     const socket = module.socket;
     let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", userDialogArgs.browserUser, userDialogArgs);
-    let gmDialogPromise = process3rdPartyReactionDialog(gmDialogArgs);
+    let gmDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", getPrimaryGM(), gmDialogArgs);
 
     return new Promise((resolve, reject) => {
         let userResolved = false;
@@ -232,7 +234,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
         let checkItem;
         if(gpsUuid) checkItem = t?.actor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
-        else checkItem = t?.actor?.items?.find(i => i.name.toLowerCase() === itemName);
+        else checkItem = t?.actor?.items?.find(i => i.name.toLowerCase() === itemName.toLowerCase());
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
         let hasEffectOrigin = t?.actor?.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
         let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
@@ -352,12 +354,13 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     return validTokens;
 }
 
-export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid, source, type }) {
+export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid, source, type, notificationId }) {
+    console.log("made it to 3rd party dialog")
     const module = await import('./module.js');
     const socket = module.socket;
     let validTokenPrimary = await fromUuid(validTokenPrimaryUuid);
-    let browserUser = MidiQOL.playerForActor(validTokenPrimary?.actor);
-    if (!browserUser.active) browserUser = game.users?.activeGM;
+    let browserUser = getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
+    console.log(browserUser, "3rd party dialog browseruser")
 
     let dialogState = { interacted: false, decision: null, programmaticallyClosed: false, dialogId: dialogId };
     let result = null;
@@ -396,9 +399,9 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
         
             const pauseState = { dialogId: dialogId, timeLeft: dialog.timeLeft, isPaused: dialog.isPaused };
             if (source === "user" && type === "multiDialog") {
-                socket.executeAsGM("pauseDialogById", pauseState);
+                socket.executeAsUser("pauseDialogById", getPrimaryGM(), pauseState);
             } else if (source === "gm" && type === "multiDialog") {
-                socket.executeAsUser("pauseDialogById", browserUser.id, pauseState);
+                socket.executeAsUser("pauseDialogById", browserUser, pauseState);
             }
         }
 
@@ -495,10 +498,11 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 action: "yes",
                 label: "<i class='fas fa-check' style='margin-right: 5px;'></i>Yes",
                 callback: async (event, button, dialog) => {
+                    await socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
                     dialogState.interacted = true;
                     dialogState.decision = "yes";
-                    if (source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                    else if (source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+                    if (source && source === "user" && type === "multiDialog") await socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
+                    else if (source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
 
                     let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
                     let allyTokenUuid = button.form?.elements["ally-token"]?.value ?? false;
@@ -529,10 +533,11 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 label: `<i class='fas fa-times' style='margin-right: 5px;'></i>No`,
                 default: true,
                 callback: async (event, button, dialog) => {
+                    await socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
                     dialogState.interacted = true;
                     dialogState.decision = "no";
-                    if(source && source === "user" && type === "multiDialog") await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-                    else if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+                    if(source && source === "user" && type === "multiDialog") await socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
+                    else if(source && source === "gm" && type === "multiDialog") await socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
 
                     let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
 
@@ -626,8 +631,8 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             if (dialog.dialogState.programmaticallyClosed) result = ({ userDecision: false, programmaticallyClosed: true, source, type });
             else if (!dialog.dialogState.interacted) result = ({ userDecision: false, programmaticallyClosed: false, source, type });
 
-            if(source && source === "user" && type === "multiDialog" && !dialog.dialogState.programmaticallyClosed) await socket.executeAsGM("closeDialogById", { dialogId: dialogId });
-            else if(source && source === "gm" && type === "multiDialog" && !dialog.dialogState.programmaticallyClosed) await socket.executeAsUser("closeDialogById", browserUser.id, { dialogId: dialogId });
+            if(source && source === "user" && type === "multiDialog" && !dialog.dialogState.programmaticallyClosed) await socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
+            else if(source && source === "gm" && type === "multiDialog" && !dialog.dialogState.programmaticallyClosed) await socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
         }, rejectClose:false
     });
     return result;
@@ -774,6 +779,9 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
     let moveX = 0;
     let moveY = 0;
 
+    const initialX = target.x;
+    const initialY = target.y;
+
     switch (direction) {
         case "North":
             moveY = -moveDistancePixels;
@@ -841,20 +849,20 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
             break;
     }
 
-    let newX = target.x + moveX;
-    let newY = target.y + moveY;
+    let finalX = target.x + moveX;
+    let finalY = target.y + moveY;
 
     if (canvas.scene.grid.type === 1) {
-        const snapped = canvas.scene.grid.getSnappedPoint({ x: newX, y: newY }, { mode: 0xFF0, resolution: 1 });
-        newX = snapped.x;
-        newY = snapped.y;
+        const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
+        finalX = snapped.x;
+        finalY = snapped.y;
     }
 
-    let endPoint = new PIXI.Point(newX, newY);
+    let endPoint = new PIXI.Point(finalX, finalY);
     let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, endPoint, { type: "move", mode: "any" });
 
     if (!collisionDetected) {
-        await target.document.update({ x: newX, y: newY });
+        await target.document.update({ x: finalX, y: finalY });
     } else {
         let directionVector = { x: moveX, y: moveY };
         let magnitude = Math.hypot(directionVector.x, directionVector.y);
@@ -882,8 +890,8 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
             stepCounter = step;
         }
 
-        let finalX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * stepCounter;
-        let finalY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * stepCounter;
+        finalX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * stepCounter;
+        finalY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * stepCounter;
 
         if (stepCounter > 0) {
             if (canvas.scene.grid.type === 1) {
@@ -894,6 +902,38 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
             await target.document.update({ x: finalX, y: finalY });
         }
     }
+
+    let totalDistanceMoved;
+
+        const dx = Math.abs(finalX - initialX) / canvas.grid.size;
+        const dy = Math.abs(finalY - initialY) / canvas.grid.size;
+        const diagonalSteps = Math.min(dx, dy);
+        const straightSteps = Math.abs(dx - dy);
+
+        switch (gridDiagonals) {
+            case 0: // Equidistant
+                totalDistanceMoved = (diagonalSteps + straightSteps) * gridDistance;
+                break;
+            case 1: // Exact
+                totalDistanceMoved = Math.hypot(finalX - initialX, finalY - initialY) / pixelsPerFoot;
+                break;
+            case 2: // 1.5x cost for diagonals
+                totalDistanceMoved = (diagonalSteps * 1.5 + straightSteps) * gridDistance;
+                break;
+            case 3: // 2x cost for diagonals
+                totalDistanceMoved = (diagonalSteps * 2 + straightSteps) * gridDistance;
+                break;
+            case 4: // Alternating (1/2/1)
+                totalDistanceMoved = ((diagonalSteps % 2 === 0 ? diagonalSteps * 1 : diagonalSteps * 2) + straightSteps) * gridDistance;
+                break;
+            case 5: // Alternating (2/1/2)
+                totalDistanceMoved = ((diagonalSteps % 2 === 0 ? diagonalSteps * 2 : diagonalSteps * 1) + straightSteps) * gridDistance;
+                break;
+            default:
+                totalDistanceMoved = (diagonalSteps + straightSteps) * gridDistance;
+        }
+
+    return totalDistanceMoved;
 }
 
 export async function replaceChatCard({ actorUuid, itemUuid, chatContent, rollData }) {
@@ -1045,11 +1085,11 @@ export async function ritualSpellUse({ workflowUuid }) {
 
                 let content = `<span style='text-wrap: wrap;'><img src="${workflow.actor.img}" style="width: 25px; height: auto;" /> ${workflow.actor.name} cast ${workflow.item.name} ritually.</span>`
                 let chatData = {
-                user: game.users.find(u => u.isGM).id,
+                user: getPrimaryGM(),
                 content: content,
-                whisper: game.users.find(u => u.isGM).id
+                whisper: getPrimaryGM()
                 };
-                await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+                await MidiQOL.socket().executeAsUser("createChatMessage", getPrimaryGM(), { chatData });
                 return;
             }
         },
@@ -1063,3 +1103,33 @@ export async function ritualSpellUse({ workflowUuid }) {
         }, rejectClose:false
     });
 }
+
+export function getBrowserUser({ actorUuid }) {
+    if(!actorUuid) return;
+
+    let actor = fromUuidSync(actorUuid);
+    let player = MidiQOL.playerForActor(actor);
+    let playerId;
+    
+    if(!player.active) playerId = getPrimaryGM();
+    else playerId = player.id;
+    return playerId;
+}
+
+export function getPrimaryGM() {
+    const primaryGMId = game.settings.get("gambits-premades", "primaryGM");
+    const primaryGM = game.users.find(user => user.id === primaryGMId && user.active && user.isGM);
+    
+    if (!primaryGM) {
+      const activeGM = game.users.activeGM;
+      
+      if (!activeGM) {
+        console.warn("No active GM found.");
+        return false;
+      }
+      
+      return activeGM.id;
+    }
+
+    return primaryGMId;
+  }

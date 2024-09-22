@@ -1,6 +1,7 @@
 export async function biohazard({tokenUuid, regionUuid, regionScenario, regionStatus}) {
     const helpers = await import('../helpers.js');
     let region = await fromUuid(regionUuid);
+    let gmUser = helpers.getPrimaryGM();
 
     let template;
     if(region?.flags["region-attacher"]?.attachedTemplate) {
@@ -21,11 +22,6 @@ export async function biohazard({tokenUuid, regionUuid, regionScenario, regionSt
 
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem?.name;
-    
-    let browserUser = MidiQOL.playerForActor(token.actor);
-    if (!browserUser.active) {
-        browserUser = game.users?.activeGM;
-    }
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
@@ -89,7 +85,7 @@ export async function biohazard({tokenUuid, regionUuid, regionScenario, regionSt
             }
         }];
 
-        await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: token.actor.uuid, effects: effectData });
+        await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: token.actor.uuid, effects: effectData });
     }
     
     if(saveResult) {

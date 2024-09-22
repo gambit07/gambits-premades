@@ -3,6 +3,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     const module = await import('../module.js');
     const socket = module.socket;
     const helpers = await import('../helpers.js');
+    let gmUser = helpers.getPrimaryGM();
     let region = await fromUuid(regionUuid);
 
     let tokenDocument = await fromUuid(tokenUuid);
@@ -27,10 +28,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     
     let dialogId = "blacktentacles";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
-    let browserUser = MidiQOL.playerForActor(token.actor);
-    if (!browserUser.active) {
-        browserUser = game.users?.activeGM;
-    }
+    let browserUser = helpers.getBrowserUser({ actorUuid: token.actor.uuid });
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
@@ -97,7 +95,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                 </div>
             `;
             
-            let result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            let result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
                     
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
     
@@ -109,7 +107,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                 if (abilityCheck) {
                     const skillCheck = await token.actor.rollAbilityTest(abilityCheck);
                     if (skillCheck.total >= spellDC) {
-                        await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
+                        await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
                         let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),
@@ -167,7 +165,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
             const hasEffectApplied = token.document.hasStatusEffect("restrained");
 
             if (!hasEffectApplied) {
-                await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${token.document.uuid}`, status: "restrained", active: true });
+                await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: true });
             }
             
             let dialogContent = `
@@ -193,7 +191,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                 </div>
             `;
             
-            let result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            let result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
                     
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
     
@@ -210,7 +208,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                 if (abilityCheck) {
                     const skillCheck = await token.actor.rollAbilityTest(abilityCheck);
                     if (skillCheck.total >= spellDC) {
-                        await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
+                        await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
                         let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),

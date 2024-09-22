@@ -21,7 +21,7 @@ import { instinctiveCharm } from './macros/instinctiveCharm.js';
 import { rainOfCinders } from './macros/rainOfCinders.js';
 import { biohazard } from './macros/biohazard.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -29,78 +29,81 @@ Hooks.once('init', async function() {
     game.gpsSettings = game.gpsSettings || {};
     await updateSettings();
 
-    libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
-        const [region, position] = args;
+    let wrappingEnabled = game.settings.get("gambits-premades", "enableRegionWrapping");
+    if(wrappingEnabled) {
+        libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
+            const [region, position] = args;
 
-        if (canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
-    
-        if (!this || !this.document) return wrapped(...args);
+            if (canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
         
-        const pointsToTest = [];
-        const size = canvas.dimensions.size;
-        const width = this.document.width;
-        const height = this.document.height;
-        const reduction = 5;
+            if (!this || !this.document) return wrapped(...args);
+            
+            const pointsToTest = [];
+            const size = canvas.dimensions.size;
+            const width = this.document.width;
+            const height = this.document.height;
+            const reduction = 5;
+            
+            const points = [
+                { x: this.document.x + reduction, y: this.document.y + reduction, elevation: this.document.elevation },
+                { x: this.document.x + (width * size) - reduction, y: this.document.y + reduction, elevation: this.document.elevation },
+                { x: this.document.x + reduction, y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
+                { x: this.document.x + (width * size) - reduction, y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
+                { x: this.document.x + (width * size / 2), y: this.document.y + reduction, elevation: this.document.elevation },
+                { x: this.document.x + (width * size / 2), y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
+                { x: this.document.x + reduction, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
+                { x: this.document.x + (width * size) - reduction, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
+                { x: this.document.x + (width * size / 2), y: this.document.y + (height * size / 2), elevation: this.document.elevation }
+            ];
         
-        const points = [
-            { x: this.document.x + reduction, y: this.document.y + reduction, elevation: this.document.elevation },
-            { x: this.document.x + (width * size) - reduction, y: this.document.y + reduction, elevation: this.document.elevation },
-            { x: this.document.x + reduction, y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
-            { x: this.document.x + (width * size) - reduction, y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
-            { x: this.document.x + (width * size / 2), y: this.document.y + reduction, elevation: this.document.elevation },
-            { x: this.document.x + (width * size / 2), y: this.document.y + (height * size) - reduction, elevation: this.document.elevation },
-            { x: this.document.x + reduction, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
-            { x: this.document.x + (width * size) - reduction, y: this.document.y + (height * size / 2), elevation: this.document.elevation },
-            { x: this.document.x + (width * size / 2), y: this.document.y + (height * size / 2), elevation: this.document.elevation }
-        ];
-    
-        points.forEach(point => {
-            pointsToTest.push(point);
-        });
-    
-        const testResults = pointsToTest.map(point => {
-            const result = region.testPoint(point, position?.elevation ?? this.document.elevation);
-            return result;
-        });
-    
-        const isInside = testResults.some(x => x);
-    
-        return isInside || wrapped(...args);
-    }, 'MIXED');
-    
-    libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
-        const [region, waypoints, options] = args;
-    
-        if (!this || !this.document) {
-            return wrapped(...args);
-        }
+            points.forEach(point => {
+                pointsToTest.push(point);
+            });
         
-        const { teleport = false } = options || {};
-        const samples = [];
-        const size = canvas.dimensions.size;
-        const width = this.document.width;
-        const height = this.document.height;
-        const reduction = 5;
-    
-        const points = [
-            { x: reduction, y: reduction, elevation: this.document.elevation },
-            { x: width * size - reduction, y: reduction, elevation: this.document.elevation },
-            { x: reduction, y: height * size - reduction, elevation: this.document.elevation },
-            { x: width * size - reduction, y: height * size - reduction, elevation: this.document.elevation },
-            { x: width * size / 2, y: reduction, elevation: this.document.elevation },
-            { x: width * size / 2, y: height * size - reduction, elevation: this.document.elevation },
-            { x: reduction, y: height * size / 2, elevation: this.document.elevation },
-            { x: width * size - reduction, y: height * size / 2, elevation: this.document.elevation }
-        ];
-    
-        points.forEach(point => {
-            samples.push(point);
-        });
+            const testResults = pointsToTest.map(point => {
+                const result = region.testPoint(point, position?.elevation ?? this.document.elevation);
+                return result;
+            });
         
-        const segments = region.segmentizeMovement(waypoints, samples, { teleport });
+            const isInside = testResults.some(x => x);
         
-        return segments || wrapped(...args);
-    }, 'MIXED');
+            return isInside || wrapped(...args);
+        }, 'MIXED');
+        
+        libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
+            const [region, waypoints, options] = args;
+        
+            if (!this || !this.document) {
+                return wrapped(...args);
+            }
+            
+            const { teleport = false } = options || {};
+            const samples = [];
+            const size = canvas.dimensions.size;
+            const width = this.document.width;
+            const height = this.document.height;
+            const reduction = 5;
+        
+            const points = [
+                { x: reduction, y: reduction, elevation: this.document.elevation },
+                { x: width * size - reduction, y: reduction, elevation: this.document.elevation },
+                { x: reduction, y: height * size - reduction, elevation: this.document.elevation },
+                { x: width * size - reduction, y: height * size - reduction, elevation: this.document.elevation },
+                { x: width * size / 2, y: reduction, elevation: this.document.elevation },
+                { x: width * size / 2, y: height * size - reduction, elevation: this.document.elevation },
+                { x: reduction, y: height * size / 2, elevation: this.document.elevation },
+                { x: width * size - reduction, y: height * size / 2, elevation: this.document.elevation }
+            ];
+        
+            points.forEach(point => {
+                samples.push(point);
+            });
+            
+            const segments = region.segmentizeMovement(waypoints, samples, { teleport });
+            
+            return segments || wrapped(...args);
+        }, 'MIXED');
+    }
 });
 
 Hooks.once('socketlib.ready', async function() {
@@ -149,6 +152,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("replaceChatCard", replaceChatCard);
     socket.register("validateRegionMovement", validateRegionMovement);
     socket.register("ritualSpellUse", ritualSpellUse);
+    socket.register("getBrowserUser", getBrowserUser);
 })
 
 Hooks.once('ready', async function() {
@@ -157,6 +161,8 @@ Hooks.once('ready', async function() {
     }).catch(error => {
         console.error("Error loading compendium data:", error);
     });
+
+    if(!game.gpsSettings.primaryGM) game.settings.set("gambits-premades", "primaryGM", game.users.activeGM.id);
     
     game.gps = {
         gmIdentifyItem,
@@ -174,6 +180,7 @@ Hooks.once('ready', async function() {
         rainOfCinders,
         biohazard,
         ritualSpellUse,
+        getPrimaryGM,
         socket
     };
 
@@ -183,11 +190,7 @@ Hooks.once('ready', async function() {
     async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
         if(!game.gpsSettings.enable3prNoCombat && !game.combat && workflowCombat) return;
 
-        if (game.user.isGM) {
-            await socket.executeAsGM( workflowItem, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
-        } else {
-            await socket.executeAsUser( workflowItem, game.user.id, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
-        }
+        await socket.executeAsUser( workflowItem, game.user.id, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
     }
 
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
@@ -282,14 +285,14 @@ Hooks.once('ready', async function() {
 });
 
 Hooks.on("preUpdateCombat", (combat, update, options) => {
-    if(!game.user.isGM) return;
+    if (game.user.id !== getPrimaryGM()) return;
     const startedPath = `gambits-premades.started`;
     const prevStarted = combat.started;
     foundry.utils.setProperty(options, startedPath, prevStarted);
 })
 
 Hooks.on("updateCombat", async (combat, update, options) => {
-    if(!game.user.isGM) return;
+    if(game.user.id !== getPrimaryGM()) return;
     const combatStarted = combat.started && !foundry.utils.getProperty(options, `gambits-premades.started`);
     const hasProcessedStart = await combat.getFlag('gambits-premades', `startProcessed-${combat.id}`);
     if(combatStarted && !hasProcessedStart && game.gpsSettings.opportunityAttackEnabled) {
@@ -299,7 +302,7 @@ Hooks.on("updateCombat", async (combat, update, options) => {
 })
 
 Hooks.on("createCombatant", async (combatant, options, userId) => {
-    if(!game.user.isGM) return;
+    if(game.user.id !== getPrimaryGM()) return;
     let combat = game.combat;
     if (combat && combat.started && game.gpsSettings.opportunityAttackEnabled) {
         await enableOpportunityAttack(combatant, "enterCombat");
@@ -307,12 +310,12 @@ Hooks.on("createCombatant", async (combatant, options, userId) => {
 });
 
 Hooks.on('deleteCombat', async (combat) => {
-    if(!game.user.isGM) return;
+    if(game.user.id !== getPrimaryGM()) return;
     if(game.gpsSettings.opportunityAttackEnabled) await disableOpportunityAttack(combat, "endCombat");
 });
 
 Hooks.on("deleteCombatant", async (combatant, options, userId) => {
-    if(!game.user.isGM) return;
+    if(game.user.id !== getPrimaryGM()) return;
     let combat = game.combat;
     if (combat && combat.started && game.gpsSettings.opportunityAttackEnabled) {
         await disableOpportunityAttack(combatant, "exitCombat");
@@ -345,7 +348,8 @@ async function updateSettings(settingKey = null) {
         'enableMageSlayer': 'mageSlayerEnabled',
         'enableInstinctiveCharm': 'instinctiveCharmEnabled',
         'enableRainOfCinders': 'rainOfCindersEnabled',
-        'Enable Opportunity Attack': 'opportunityAttackEnabled'
+        'Enable Opportunity Attack': 'opportunityAttackEnabled',
+        'primaryGM': 'primaryGM'
     };
 
     if (settingKey === null) {
@@ -361,7 +365,7 @@ async function updateSettings(settingKey = null) {
 }
 
 Hooks.on('updateSetting', (setting) => {
-    if (!game.user.isGM) return;
+    if (game.user.id !== getPrimaryGM()) return;
     if (setting.config.namespace === "gambits-premades") {
         updateSettings(setting.config.key);
     }
@@ -402,7 +406,7 @@ function setupTemplateVisibilityHook() {
   });
 
   canvas.templates.placeables.forEach(template => {
-    if(!game.user.isGM) return;
+    if(game.user.id !== getPrimaryGM()) return;
     if (game.gpsSettings.hideTemplates || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
       hideTemplateElements(template);
     }
@@ -427,7 +431,7 @@ function setupTemplateCreationUpdateHooks() {
     }
 
 async function updateRegionPosition(region, tokenDocument) {
-    if (!game.user.isGM) return;
+    if (game.user.id !== getPrimaryGM()) return;
     if (!region || !tokenDocument) return;
 
     let regionDisabled = region.getFlag("gambits-premades", "regionDisabled");
@@ -492,7 +496,7 @@ async function updateRegionPosition(region, tokenDocument) {
 }
 
 Hooks.on('updateToken', async (tokenDocument, updateData, options, userId) => {
-    if (!game.user.isGM) return;
+    if (game.user.id !== getPrimaryGM()) return;
     if(!game.gpsSettings.opportunityAttackEnabled) return;
     if(!game.combat) return;
 

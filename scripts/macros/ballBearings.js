@@ -4,6 +4,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
     const socket = module.socket;
     const helpers = await import('../helpers.js');
     let region = await fromUuid(regionUuid);
+    let gmUser = helpers.getPrimaryGM();
 
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
@@ -20,10 +21,6 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
     let itemProperName = chosenItem.name;
     let dialogId = "ballbearings";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
-    let browserUser = MidiQOL.playerForActor(token.actor);
-    if (!browserUser.active) {
-        browserUser = game.users?.activeGM;
-    }
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
@@ -49,7 +46,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
         </div>
     `;
     
-    let result = await socket.executeAsGM("process3rdPartyReactionDialog", {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source: "gm",type: "singleDialog"});
+    let result = await socket.executeAsUser("process3rdPartyReactionDialog", gmUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source: "gm",type: "singleDialog"});
             
     const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
 
@@ -95,7 +92,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
             const hasEffectApplied = tokenDocument.hasStatusEffect("prone");
 
             if (!hasEffectApplied) {
-                await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${token.document.uuid}`, status: "prone", active: true });
+                await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "prone", active: true });
             }
         }
     }

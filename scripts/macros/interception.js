@@ -2,44 +2,38 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const helpers = await import('../helpers.js');
     const socket = module.socket;
-    const workflowUuid = workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
-    let itemName = "fighting style: interception";
-    let itemProperName = "Interception";
-    let dialogId = "interception";
-    let target = workflow.hitTargets.first();
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    if(workflow.item.name.toLowerCase() === itemName) return;
+    const gpsUuid = "411b0d88-a483-4d85-97d9-2bd8dbd4ef70";
+    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    let itemName = "Fighting Style: Interception";
+    let dialogId = gpsUuid;
+    let target = workflow.hitTargets.first();
     const actionTypes = ["mwak", "rwak", "msak", "rsak"];
     if (!actionTypes.some(type => workflow.item.system.actionType?.includes(type))) return;
+    let gmUser = helpers.getPrimaryGM();
 
-    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "item", itemChecked: ["mwak", "shield"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemyAlly", workflowType: workflowType, workflowCombat: workflowCombat});
+    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "item", itemChecked: ["mwak", "shield"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemyAlly", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
         if (target.document.uuid === validTokenPrimary.document.uuid) continue;
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let chosenItem = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === itemName);
-        browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
-        if (!browserUser.active) {
-            browserUser = game.users?.activeGM;
-        }
+        browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let damageTypes = workflow.damageRolls.map(roll => roll.options.type);
         let hasHealing = damageTypes.some(type => type === "healing");
         if (hasHealing) return;
         let damageTotals = workflow.damageRolls.map(roll => roll.total);
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Interception Timeout`));
 
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a roll triggering ${itemProperName}.</span>`
-        let chatData = {
-        user: game.users.find(u => u.isGM).id,
-        content: content,
-        whisper: game.users.find(u => u.isGM).id
-        };
-        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
     
@@ -74,25 +68,22 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
 
         let result;
 
-        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser.id };
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
+            result = await socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
         } else {
-            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
 
         if (!userDecision) {
-            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         else if (userDecision) {
-            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
-
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
             let primaryFile = "jb2a.spiritual_weapon.sword.spectral.orange";
@@ -123,8 +114,8 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
                 numDice = `${dieNumber}d${dieFace}`;
             }
 
-            if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
-            if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
+            if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
+            if(source && source === "gm") reroll = await socket.executeAsUser("rollAsUser", gmUser, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
 
             let remainingReduction = reroll.total;
             let updatedRolls = [];

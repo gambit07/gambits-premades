@@ -2,6 +2,7 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
     const module = await import('../module.js');
     const socket = module.socket;
     const helpers = await import('../helpers.js');
+    let gmUser = helpers.getPrimaryGM();
     let region = await fromUuid(regionUuid);
 
     let tokenDocument = await fromUuid(tokenUuid);
@@ -19,10 +20,6 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
     let itemProperName = chosenItem.name;
     let dialogId = "feyglasscaltrops";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
-    let browserUser = MidiQOL.playerForActor(token.actor);
-    if (!browserUser.active) {
-        browserUser = game.users?.activeGM;
-    }
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
@@ -48,7 +45,7 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
         </div>
     `;
     
-    let result = await socket.executeAsGM("process3rdPartyReactionDialog", {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source: "gm",type: "singleDialog"});
+    let result = await socket.executeAsUser("process3rdPartyReactionDialog", gmUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source: "gm",type: "singleDialog"});
             
     const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
 
@@ -117,7 +114,7 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
                     }
                 ];
 
-                await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: token.actor.uuid, effects: effectData });
+                await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: token.actor.uuid, effects: effectData });
 
                 let actorPlayer = MidiQOL.playerForActor(token.actor);
                 let chatData = {

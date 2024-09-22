@@ -566,6 +566,24 @@ function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableRegionWrapping", {
+        name: "enableRegionWrapping",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: true,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'primaryGM', {
+        name: "primaryGM",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: ""
+    });
+
     game.settings.registerMenu('gambits-premades', 'generalSettings', {
         name: game.i18n.localize("General Settings"),
         label: game.i18n.localize("General Settings"),
@@ -716,6 +734,7 @@ class BaseSettingsMenu extends FormApplication {
         const settings = {
             enableInterceptionCustomDiceNumber: Number(game.settings.get("gambits-premades", "enableInterceptionCustomDiceNumber")),
             enableInterceptionCustomDiceFace: Number(game.settings.get("gambits-premades", "enableInterceptionCustomDiceFace")),
+            primaryGM: game.settings.get("gambits-premades", "primaryGM")
         };
 
         const numberSelect = html.find('#enableInterceptionCustomDiceNumber');
@@ -727,7 +746,7 @@ class BaseSettingsMenu extends FormApplication {
                 option.selected = true;
             }
             numberSelect.append(option);
-        }
+        };
 
         const faceSelect = html.find('#enableInterceptionCustomDiceFace');
         const faces = [4, 6, 8, 10, 12, 20];
@@ -740,6 +759,18 @@ class BaseSettingsMenu extends FormApplication {
             }
             faceSelect.append(option);
         });
+
+        const primaryGM = html.find('#primaryGM');
+        for (const user of game.users.contents) {
+            if(!user.isGM) continue;
+            const option = document.createElement('option');
+            option.value = user.id;
+            option.textContent = user.name;
+            if (user.id === settings.primaryGM) {
+                option.selected = true;
+            }
+            primaryGM.append(option);
+        };
     }
 }
 
@@ -906,7 +937,9 @@ class generalSettingsMenu extends BaseSettingsMenu {
             hideTemplates: game.settings.get("gambits-premades", "hideTemplates"),
             debugEnabled: game.settings.get("gambits-premades", "debugEnabled"),
             enableIdentifyRestrictions: game.settings.get("gambits-premades", "Enable Identify Restrictions"),
-            identifyRestrictionMessage: game.settings.get("gambits-premades", "Identify Restriction Message")
+            identifyRestrictionMessage: game.settings.get("gambits-premades", "Identify Restriction Message"),
+            enableRegionWrapping: game.settings.get("gambits-premades", "enableRegionWrapping"),
+            primaryGM: game.settings.get("gambits-premades", "primaryGM")
         };
     }
 
@@ -918,5 +951,7 @@ class generalSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "debugEnabled", formData.debugEnabled);
         await game.settings.set("gambits-premades", "Enable Identify Restrictions", formData.enableIdentifyRestrictions);
         await game.settings.set("gambits-premades", "Identify Restriction Message", formData.identifyRestrictionMessage);
+        await game.settings.set("gambits-premades", "enableRegionWrapping", formData.enableRegionWrapping);
+        await game.settings.set("gambits-premades", "primaryGM", formData.primaryGM);
     }
 }
