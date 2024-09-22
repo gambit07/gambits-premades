@@ -19,14 +19,10 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- General:" >> release_notes.txt
-          echo "  - 3rd Party Reactions: 3rd Party Reactions now support multiple GMs in the same world at the same time. After updating, the first active GM will be set as your Primary GM. This can then be modified in GPS Settings, which will give a list of GMs to choose from if more than one is present in a world. If this primary gm logs out or is no longer present in the world, the gm will fallback to the first active gm." >> release_notes.txt
-          echo "  - 3rd Party Reactions: Item renaming is now possible as matching is done based on an ID stored on the item. This does mean the item needs to either be pulled from my compendiums or medkitted via cpr in order to work properly moving forward." >> release_notes.txt
-          echo "  - Region Wrapping: Added setting (default true) for Region Wrapping. This wrapping is done to test additional points on a token when moving in/through a region (Foundry only tests the token center point). This was previously always on with my module in v12, you now have the ability to turn it off but I would not recommend it if trying to stay close to 5e rules." >> release_notes.txt
-          echo "  - Cardinal Movement Helper: Added a return that will give the total movement that occurred." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Opportunity Attack: Add handling to temporarily disable Levels UI Picker on region deployment because it overrides default region handling" >> release_notes.txt
+          echo "  - Origin Movement Helper: Added a return that will give the total movement that occurred." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Vicious Mockery: Fix dialog not submitting with enter key correctly" >> release_notes.txt
+          echo "  - Gift of the Gem Dragon: Resolve token movement not occurring on a failed save" >> release_notes.txt
+          echo "  - Intellect Fortress: Resolve effect only applying to the casting actor, and add handling to remove concentration when selecting an invalid number of targets" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
