@@ -18,13 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Jump: Added the Jump spell. This does nothing other than add an ae to work with Rabbit Hop for distance calculations." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Rabbit Hop: Fully implements the Rabbit Hop Harengon feature, previously was only present to account for OA. Credit to sage25 for this one!" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Sentinel: Fix invalid variable lookup after refactor last update" >> release_notes.txt
-          echo "  - Poetry in Misery: Fix missing ternary check after refactor last update" >> release_notes.txt
+          echo "  - Sentinel: Fix movement effect not applying to correct target" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

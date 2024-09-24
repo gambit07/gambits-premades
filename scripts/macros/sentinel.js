@@ -213,7 +213,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
                     }
                 ];
 
-                await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: target.actor.uuid, effects: effectData });
+                await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: workflow.token.actor.uuid, effects: effectData });
             }
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
