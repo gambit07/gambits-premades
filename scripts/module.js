@@ -365,7 +365,7 @@ async function updateSettings(settingKey = null) {
 }
 
 Hooks.on('updateSetting', (setting) => {
-    if (game.user.id !== getPrimaryGM()) return;
+    if (!game.user.isGM) return;
     if (setting.config.namespace === "gambits-premades") {
         updateSettings(setting.config.key);
     }

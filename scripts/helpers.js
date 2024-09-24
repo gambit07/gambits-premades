@@ -1152,7 +1152,7 @@ export function getBrowserUser({ actorUuid }) {
 }
 
 export function getPrimaryGM() {
-    const primaryGMId = game.settings.get("gambits-premades", "primaryGM");
+    const primaryGMId = MidiQOL.safeGetGameSetting('gambits-premades', `primaryGM`);
     const primaryGM = game.users.find(user => user.id === primaryGMId && user.active && user.isGM);
     
     if (!primaryGM) {
