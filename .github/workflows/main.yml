@@ -18,11 +18,13 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Origin Movement Helper: Added a return that will give the total movement that occurred." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Jump: Added the Jump spell. This does nothing other than add an ae to work with Rabbit Hop for distance calculations." >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Rabbit Hop: Fully implements the Rabbit Hop Harengon feature, previously was only present to account for OA. Credit to sage25 for this one!" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Gift of the Gem Dragon: Resolve token movement not occurring on a failed save" >> release_notes.txt
-          echo "  - Intellect Fortress: Resolve effect only applying to the casting actor, and add handling to remove concentration when selecting an invalid number of targets" >> release_notes.txt
+          echo "  - Sentinel: Fix invalid variable lookup after refactor last update" >> release_notes.txt
+          echo "  - Poetry in Misery: Fix missing ternary check after refactor last update" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

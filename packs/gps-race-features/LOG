@@ -1,8 +1,15 @@
-2024/09/21-21:31:35.940 13058 Recovering log #661
-2024/09/21-21:31:35.945 13058 Delete type=0 #661
-2024/09/21-21:31:35.945 13058 Delete type=3 #659
-2024/09/22-14:15:15.055 1147c Level-0 table #666: started
-2024/09/22-14:15:15.055 1147c Level-0 table #666: 0 bytes OK
-2024/09/22-14:15:15.057 1147c Delete type=0 #664
-2024/09/22-14:15:15.059 1147c Manual compaction at level-0 from '!folders!62e2gLQ8cttarHZ8' @ 72057594037927935 : 1 .. '!items.effects!wNuwXPqCsshIcO2V.nGhKXGlzLbZGIsKu' @ 0 : 0; will stop at (end)
-2024/09/22-14:15:15.059 1147c Manual compaction at level-1 from '!folders!62e2gLQ8cttarHZ8' @ 72057594037927935 : 1 .. '!items.effects!wNuwXPqCsshIcO2V.nGhKXGlzLbZGIsKu' @ 0 : 0; will stop at (end)
+2024/09/23-12:48:35.093 1304c Recovering log #673
+2024/09/23-12:48:35.098 1304c Delete type=0 #673
+2024/09/23-12:48:35.098 1304c Delete type=3 #671
+2024/09/24-12:47:19.869 1147c Level-0 table #678: started
+2024/09/24-12:47:19.871 1147c Level-0 table #678: 47555 bytes OK
+2024/09/24-12:47:19.873 1147c Delete type=0 #676
+2024/09/24-12:47:19.874 1147c Manual compaction at level-0 from '!folders!62e2gLQ8cttarHZ8' @ 72057594037927935 : 1 .. '!items.effects!wNuwXPqCsshIcO2V.nGhKXGlzLbZGIsKu' @ 0 : 0; will stop at (end)
+2024/09/24-12:47:19.874 1147c Manual compaction at level-1 from '!folders!62e2gLQ8cttarHZ8' @ 72057594037927935 : 1 .. '!items.effects!wNuwXPqCsshIcO2V.nGhKXGlzLbZGIsKu' @ 0 : 0; will stop at '!items.effects!q6X0joVOtZNM2cRO.5ZnPYNdlzPTAmN6J' @ 31 : 0
+2024/09/24-12:47:19.874 1147c Compacting 1@1 + 1@2 files
+2024/09/24-12:47:19.878 1147c Generated table #679@1: 6 keys, 11948 bytes
+2024/09/24-12:47:19.878 1147c Compacted 1@1 + 1@2 files => 11948 bytes
+2024/09/24-12:47:19.879 1147c compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/09/24-12:47:19.880 1147c Delete type=2 #496
+2024/09/24-12:47:19.880 1147c Delete type=2 #678
+2024/09/24-12:47:19.886 1147c Manual compaction at level-1 from '!items.effects!q6X0joVOtZNM2cRO.5ZnPYNdlzPTAmN6J' @ 31 : 0 .. '!items.effects!wNuwXPqCsshIcO2V.nGhKXGlzLbZGIsKu' @ 0 : 0; will stop at (end)

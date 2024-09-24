@@ -19,7 +19,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
 
         if(validTokenPrimary.id === target.id) continue;
 
-        if(target.actor.items.find(i => i.name === itemProperName)) return;
+        if(target.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid)) return;
 
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;

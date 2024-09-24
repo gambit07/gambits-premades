@@ -5,7 +5,7 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData) ?? null;
     if(!workflow && workflowCombat === true) return;
     const gpsUuid = "f4b6923a-eda4-4c29-a6fb-a1728f6e71e3";
-    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    if(workflow?.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Poetry in Misery";
     let dialogId = gpsUuid;
     let initiatingToken;
