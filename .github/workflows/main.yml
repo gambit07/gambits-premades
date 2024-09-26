@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Primary GM: Fix bug trying to access primaryGM setting before init" >> release_notes.txt
+          echo "  - Primary GM: Couple additional tweaks" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

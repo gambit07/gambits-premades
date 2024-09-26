@@ -1,15 +1,15 @@
-/*export async function restoreBalance({workflowData,workflowType,workflowCombat}) {
+export async function restoreBalance({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const socket = module.socket;
     const helpers = await import('../helpers.js');
     const workflowUuid = workflowData;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
-    let gpsUuid = "gps_d7274115-5734-4b08-a15c-23ebf02b77f7"
-    let itemName = "restore balance";
-    let itemProperName = "Restore Balance";
-    let dialogId = "restorebalance";
     if(!workflow) return;
-    if(workflow.item.name === itemProperName) return;
+    const gpsUuid = "d7274115-5734-4b08-a15c-23ebf02b77f7"
+    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    let itemName = "Restore Balance";
+    let dialogId = gpsUuid;
+    let gmUser = helpers.getPrimaryGM();
 
     // Check if attack hits
     if(workflowType === "attack" && workflow.token.document.disposition === workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) return;
@@ -22,21 +22,21 @@
         findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     }
     else if(workflowType === "save") {
-        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
+        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     }
     
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        if(workflowType === "attack" && workflow.token.document.disposition === validTokenPrimary.document.disposition && workflow.advantage === true && workflow.disadvantage === false) return;
+        if(workflowType === "attack" && workflow.token.document.disposition === validTokenPrimary.document.disposition && workflow.advantage === true) return;
         if(workflowType === "attack" && workflow.token.document.disposition !== validTokenPrimary.document.disposition && workflow.advantage === false) return;
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
         
-        browserUser = MidiQOL.playerForActor(validTokenPrimary.actor);
-        if (!browserUser.active) browserUser = game.users?.activeGM;
+        browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent;
         const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
@@ -100,7 +100,7 @@
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? ${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `An enemy successfully hit your ally with a ${workflow.attackTotal}.` : "An enemy successfully hit your ally."} Choose an ally to give advantage to below.</p>
+                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? An enemy successfully hit your ally with a ${workflow.attackTotal}.
                             <div>
                                 <div class="gps-dialog-flex">
                                     <label for="ally-token" class="gps-dialog-label">Advantage:</label>
@@ -272,4 +272,4 @@
             }
         }
     }
-}*/
+}

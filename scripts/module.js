@@ -162,7 +162,7 @@ Hooks.once('ready', async function() {
         console.error("Error loading compendium data:", error);
     });
 
-    if(!game.gpsSettings.primaryGM) game.settings.set("gambits-premades", "primaryGM", game.users.activeGM.id);
+    if(game.user.isGM && !game.settings.get("gambits-premades", "primaryGM")) game.settings.set("gambits-premades", "primaryGM", game.users.activeGM?.id);
     
     game.gps = {
         gmIdentifyItem,
@@ -348,8 +348,7 @@ async function updateSettings(settingKey = null) {
         'enableMageSlayer': 'mageSlayerEnabled',
         'enableInstinctiveCharm': 'instinctiveCharmEnabled',
         'enableRainOfCinders': 'rainOfCindersEnabled',
-        'Enable Opportunity Attack': 'opportunityAttackEnabled',
-        'primaryGM': 'primaryGM'
+        'Enable Opportunity Attack': 'opportunityAttackEnabled'
     };
 
     if (settingKey === null) {
