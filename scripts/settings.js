@@ -566,6 +566,31 @@ function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableRestoreBalance", {
+        name: "enableRestoreBalance",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Restore Balance Timeout', {
+        name: "Restore Balance Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register("gambits-premades", "enableRegionWrapping", {
         name: "enableRegionWrapping",
         scope: "world",
@@ -811,7 +836,9 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             enableInstinctiveCharm: game.settings.get("gambits-premades", "enableInstinctiveCharm"),
             instinctiveCharmTimeout: game.settings.get("gambits-premades", "Instinctive Charm Timeout"),
             enableRainOfCinders: game.settings.get("gambits-premades", "enableRainOfCinders"),
-            rainOfCindersTimeout: game.settings.get("gambits-premades", "Rain of Cinders Timeout")
+            rainOfCindersTimeout: game.settings.get("gambits-premades", "Rain of Cinders Timeout"),
+            enableRestoreBalance: game.settings.get("gambits-premades", "enableRestoreBalance"),
+            restoreBalanceTimeout: game.settings.get("gambits-premades", "Restore Balance Timeout")
         };
 
         return data;
@@ -845,6 +872,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Instinctive Charm Timeout", formData.instinctiveCharmTimeout);
         await game.settings.set("gambits-premades", "enableRainOfCinders", formData.enableRainOfCinders);
         await game.settings.set("gambits-premades", "Rain of Cinders Timeout", formData.rainOfCindersTimeout);
+        await game.settings.set("gambits-premades", "enableRestoreBalance", formData.enableRestoreBalance);
+        await game.settings.set("gambits-premades", "Restore Balance Timeout", formData.restoreBalanceTimeout);
     }
 }
 

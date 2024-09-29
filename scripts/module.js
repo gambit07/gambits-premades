@@ -20,6 +20,7 @@ import { mageSlayer } from './macros/mageSlayer.js';
 import { instinctiveCharm } from './macros/instinctiveCharm.js';
 import { rainOfCinders } from './macros/rainOfCinders.js';
 import { biohazard } from './macros/biohazard.js';
+import { restoreBalance } from './macros/restoreBalance.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM } from './helpers.js';
 export let socket;
@@ -153,6 +154,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("validateRegionMovement", validateRegionMovement);
     socket.register("ritualSpellUse", ritualSpellUse);
     socket.register("getBrowserUser", getBrowserUser);
+    socket.register("restoreBalance", restoreBalance);
 })
 
 Hooks.once('ready', async function() {
@@ -229,6 +231,7 @@ Hooks.once('ready', async function() {
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.riposteEnabled) await executeWorkflow({ workflowItem: "riposte", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preWaitForSaves", async (workflow) => {
@@ -249,6 +252,7 @@ Hooks.once('ready', async function() {
         if(!workflow.item.hasSave) return;
         let workflowItemUuid = workflow.itemUuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("preUpdateItem", (item, update) => {
@@ -348,7 +352,8 @@ async function updateSettings(settingKey = null) {
         'enableMageSlayer': 'mageSlayerEnabled',
         'enableInstinctiveCharm': 'instinctiveCharmEnabled',
         'enableRainOfCinders': 'rainOfCindersEnabled',
-        'Enable Opportunity Attack': 'opportunityAttackEnabled'
+        'Enable Opportunity Attack': 'opportunityAttackEnabled',
+        'enableRestoreBalance': 'restoreBalanceEnabled'
     };
 
     if (settingKey === null) {

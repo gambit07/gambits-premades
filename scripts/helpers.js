@@ -319,7 +319,9 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
 
         // Check if the token has available resource or item uses
         if(itemType === "feature") {
-            const itemNames = itemChecked.map(item => item.toLowerCase());
+            let itemNames;
+            if(itemChecked) itemNames = itemChecked.map(item => item.toLowerCase());
+            else itemNames = [checkItem.name.toLowerCase()];
 
             let resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource => itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
             let itemExistsWithValue;
@@ -355,12 +357,10 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
 }
 
 export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid, source, type, notificationId }) {
-    console.log("made it to 3rd party dialog")
     const module = await import('./module.js');
     const socket = module.socket;
     let validTokenPrimary = await fromUuid(validTokenPrimaryUuid);
     let browserUser = getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
-    console.log(browserUser, "3rd party dialog browseruser")
 
     let dialogState = { interacted: false, decision: null, programmaticallyClosed: false, dialogId: dialogId };
     let result = null;
@@ -553,6 +553,20 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             dialog.pausedTime = 0;
             const startTime = Date.now();
             dialog.endTime = startTime + initialTimeLeft * 1000;
+            const enemySelect = dialog?.element.querySelector(`#enemy-token`);
+            const allySelect = dialog?.element.querySelector(`#ally-token`);
+
+            function resetEnemySelect() {
+                if (enemySelect) {
+                    enemySelect.selectedIndex = 0;
+                }
+            }
+            
+            function resetAllySelect() {
+                if (allySelect) {
+                    allySelect.selectedIndex = 0;
+                }
+            }
 
             dialog.timer = setInterval(() => {
                 if (!dialog.isPaused) {

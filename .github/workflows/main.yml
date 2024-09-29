@@ -18,8 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Primary GM: Couple additional tweaks" >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Restore Balance: Automates the Clockwork Soul Sorcerers first level feature Restore Balance" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Portal: Started the process of moving Portal automations over to Sequencer to no longer make Portal a soft requirement of the module." >> release_notes.txt
+          echo "  - CPR Flags: Started the process of adding custom configs for CPRs medkit when enabled to allow turning animations on and off. I may add additional customization in the future, but for now this will be the simple on/off toggle." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

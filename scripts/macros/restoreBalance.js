@@ -2,80 +2,88 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
     const module = await import('../module.js');
     const socket = module.socket;
     const helpers = await import('../helpers.js');
-    const workflowUuid = workflowData;
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowUuid);
+    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    const gpsUuid = "d7274115-5734-4b08-a15c-23ebf02b77f7"
+    const gpsUuid = "6a8cd8d0-7a6b-42b1-9da7-d9d4aa54a7c1"
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Restore Balance";
     let dialogId = gpsUuid;
     let gmUser = helpers.getPrimaryGM();
-
-    // Check if attack hits
-    if(workflowType === "attack" && workflow.token.document.disposition === workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) return;
-    // Check if there is a save success
-    if(workflowType === "save" && workflow.saves.size === 0) return;
-
-    let findValidTokens;
     
-    if(workflowType === "attack") {
-        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
-    }
-    else if(workflowType === "save") {
-        findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
-    }
+    let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: false, dispositionCheckType: "", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        if(workflowType === "attack" && workflow.token.document.disposition === validTokenPrimary.document.disposition && workflow.advantage === true) return;
-        if(workflowType === "attack" && workflow.token.document.disposition !== validTokenPrimary.document.disposition && workflow.advantage === false) return;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
+        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
         
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent;
-        const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
-        const nearbyFriendlies = MidiQOL.findNearby(null, validTokenPrimary, 60, { includeToken: true });
-        let validFriendlies = nearbyFriendlies.filter(token => token.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary.document.uuid,token.document.uuid) && !token.actor.effects.getName(`${itemProperName} - Advantage`));
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         if(workflowType === "save") {
-            let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
-
-            const targetUuids = targets.map(t => t.document.uuid);
-            const targetNames = targets.map(t => t.document.name);
-            if(targetUuids.length === 0) continue;
+            let targetAllies = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
+            let targetEnemies = Array.from(workflow.targets).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
             
-            targetUuids.map((uuid, index) => 
-                `<option value="${uuid}">${targetNames[index]}</option>`
+            targetAllies = targetAllies.filter(t => workflow.saveRolls.find(roll => roll.data.actorId === t.actor.id && roll.formula.includes("kl") && !roll.formula.includes("kh")) !== undefined);
+            targetEnemies = targetEnemies.filter(t => workflow.saveRolls.find(roll => roll.data.actorId === t.actor.id && !roll.formula.includes("kl") && roll.formula.includes("kh")) !== undefined);
+
+            if(targetAllies.length === 0 && targetEnemies.length === 0) continue;
+
+            const targetAllyUuids = targetAllies.map(t => t.document.uuid);
+            const targetAllyNames = targetAllies.map(t => t.document.name);
+            const targetEnemyUuids = targetEnemies.map(t => t.document.uuid);
+            const targetEnemyNames = targetEnemies.map(t => t.document.name);
+            
+            targetAllyUuids.map((uuid, index) => 
+                `<option value="${uuid}">${targetAllyNames[index]}</option>`
+            ).join('');
+            targetEnemyUuids.map((uuid, index) => 
+                `<option value="${uuid}">${targetEnemyNames[index]}</option>`
             ).join('');
         
             dialogContent = `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? An enemy succeeded their saving throw. Choose an enemy to target and an ally to give advantage to below.</p>
+                            <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName}? ${targetAllyUuids.length >= 1 && targetEnemyUuids.length === 0 ? 'Choose an ally to remove disadvantage from below.' : targetAllyUuids.length === 0 && targetEnemyUuids.length >= 1 ? 'Choose an enemy to remove advantage from below.' : targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? 'Choose an ally to remove disadvantage from, or an enemy to remove advantage from below.' : ""}</p>
                             <div class="gps-dialog-flex-wrapper">
                                 <div class="gps-dialog-select-container">
-                                    <div class="gps-dialog-flex">
-                                    <label for="enemy-token" class="gps-dialog-label">Target:</label>
-                                    <select id="enemy-token" class="gps-dialog-select">
-                                        ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
-                                    </select>
-                                    </div>
-                                    <div class="gps-dialog-flex">
-                                    <label for="ally-token" class="gps-dialog-label">Advantage:</label>
-                                    ${validFriendlies.length >= 1 ? 
-                                    `<select id="ally-token" class="gps-dialog-select">
-                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
-                                    </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
+                                    ${targetAllyUuids.length >= 1 ? 
+                                        `<div class="gps-dialog-flex">
+                                            <label for="ally-token" class="gps-dialog-label">Ally:</label>
+                                            <select id="ally-token" class="gps-dialog-select"
+                                                ${targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? 
+                                                    `onchange="resetEnemySelect()"> <option style="background-color: ${optionBackground};" class="gps-dialog-option" value="" selected>Select Ally:</option>` : 
+                                                    '>'
+                                                }
+                                                ${targetAllyNames.map((name, index) => 
+                                                    `<option style="background-color: ${optionBackground};" class="gps-dialog-option" value="${targetAllyUuids[index]}">${name}</option>`
+                                                ).join('')}
+                                            </select>
+                                        </div>` 
+                                        : ''
                                     }
-                                    </div>
+                                    ${targetEnemyUuids.length >= 1 ? 
+                                        `<div class="gps-dialog-flex">
+                                            <label for="enemy-token" class="gps-dialog-label">Enemy:</label>
+                                            <select id="enemy-token" class="gps-dialog-select"
+                                                ${targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? 
+                                                    `onchange="resetAllySelect()"> <option style="background-color: ${optionBackground};" class="gps-dialog-option" value="" selected>Select Enemy:</option>` : 
+                                                    '>'
+                                                }
+                                                ${targetEnemyNames.map((name, index) => 
+                                                    `<option style="background-color: ${optionBackground};" class="gps-dialog-option" value="${targetEnemyUuids[index]}">${name}</option>`
+                                                ).join('')}
+                                            </select>
+                                        </div>`
+                                        : ''
+                                    }
                                 </div>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
@@ -92,26 +100,16 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             `;
         }
         else if(workflowType === "attack") {
-            if (workflow.token.document.disposition === validTokenPrimary.document.disposition) continue;
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return;
+            if(workflow.token.document.disposition === validTokenPrimary.document.disposition && (!workflow.disadvantage && !workflow.attackRoll.formula.includes("kl") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) continue;
+            if(workflow.token.document.disposition !== validTokenPrimary.document.disposition && (!workflow.advantage && !workflow.attackRoll.formula.includes("kh") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) continue;
 
             dialogContent = `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? An enemy successfully hit your ally with a ${workflow.attackTotal}.
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <label for="ally-token" class="gps-dialog-label">Advantage:</label>
-                                    ${validFriendlies.length >= 1 ? 
-                                    `<select id="ally-token" class="gps-dialog-select">
-                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
-                                    </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
-                                    }
-                                    <div id="image-container" class="gps-dialog-image-container">
-                                        <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
-                                    </div>
+                                    <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName} ${workflow.token.document.disposition === validTokenPrimary.document.disposition ? 'to remove disadvantage from your Ally?' : workflow.token.document.disposition !== validTokenPrimary.document.disposition ? 'to remove advantage from your Enemy?' : ""}</p>
                                 </div>
                             </div>
                         </div>
@@ -126,35 +124,43 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
         }
 
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
-        let chatData = {
-        user: game.users.find(u => u.isGM).id,
-        content: content,
-        whisper: game.users.find(u => u.isGM).id
-        };
-        let notificationMessage = await MidiQOL.socket().executeAsGM("createChatMessage", { chatData });
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
         
         let result;
 
-        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser.id !== game.users?.activeGM.id) {
-            let userDialogArgs = { dialogTitle: dialogTitlePrimary, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser.id };
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle: dialogTitlePrimary, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle: dialogTitleGM, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "gm", type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle: dialogTitleGM, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "gm", type: "multiDialog", notificationId: notificationMessage._id };
             
-            result = await socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
+            result = await socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
         } else {
-            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source:browserUser.isGM ? "gm" : "user",type:"singleDialog"});
+            result = await socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
 
         if (!userDecision) {
-            if(source === "gm" || type === "singleDialog") await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
             continue;
         }
         else if (userDecision) {
-            await socket.executeAsGM("deleteChatMessage", { chatId: notificationMessage._id });
-            let advantageToken = await fromUuid(allyTokenUuid);
             let chatContent;
+
+            let target;
+            if(workflowType === "attack") target = await workflow.targets.first();
+            else if(workflowType === "save") {
+                if(allyTokenUuid) target = await fromUuid(allyTokenUuid);
+                else if(enemyTokenUuid) target = await fromUuid(enemyTokenUuid);
+
+                target = target.object;
+            }
+
+            let targetAC = target?.actor.system.attributes.ac.value;
+            let saveDC = workflow.saveItem?.system.save.dc;
+            let saveDice = workflow.saveRolls?.find(dice => dice.data.actorId === target.actor.id)
+            let saveResult = saveDice?.dice[0].results[0].result + (saveDice?.total - saveDice?.dice[0].total);
+            let attackResult = workflow.attackRoll?.dice[0].results[0].result + (workflow.attackRoll?.total - workflow.attackRoll?.dice[0].total);
 
             chosenItem.prepareData();
             chosenItem.prepareFinalAttributes();
@@ -165,109 +171,71 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                 createWorkflow: true,
                 versatile: false,
                 configureDialog: true,
-                targetUuids: [(enemyTokenUuid) ? enemyTokenUuid : workflow.token.document.uuid],
+                targetUuids: [(enemyTokenUuid) ? enemyTokenUuid : (allyTokenUuid) ? allyTokenUuid : workflow.token.document.uuid],
             };
             
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser?.id, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsGM("completeItemUse", { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
             if(itemRoll.aborted === true) continue;
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            let effectData = [
-                {
-                    "icon": `${chosenItem.img}`,
-                    "origin": `${validTokenPrimary.actor.uuid}`,
-                    "duration": {
-                    "seconds": 60
-                    },
-                    "disabled": false,
-                    "name": "Silvery Barbs - Advantage",
-                    "changes": [
-                    {
-                        "key": "flags.midi-qol.advantage.attack.all",
-                        "mode": 0,
-                        "value": "1",
-                        "priority": 20
-                    },
-                    {
-                        "key": "flags.midi-qol.advantage.ability.check.all",
-                        "mode": 0,
-                        "value": "1",
-                        "priority": 20
-                    },
-                    {
-                        "key": "flags.midi-qol.advantage.ability.save.all",
-                        "mode": 0,
-                        "value": "1",
-                        "priority": 20
-                    }
-                    ],
-                    "transfer": false,
-                    "flags": {
-                    "dae": {
-                        "specialDuration": [
-                            "1Attack",
-                            "isCheck",
-                            "isSave",
-                            "isSkill"
-                        ]
-                    }
-                    }
-                }
-            ];
-            if(advantageToken) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: advantageToken.actor.uuid, effects: effectData });
+            if(workflowType === "attack" && workflow.token.document.uuid === validTokenPrimary.document.uuid) {
+                if((attackResult >= targetAC && !workflow.hitTargets.first()) || workflow.hitTargets.first()) {
+                    if (attackResult >= targetAC && !workflow.hitTargets.first()) workflow.hitTargets.add(target);
 
-            if(workflowType === "save") {
-                let saveDC = workflow.saveItem.system.save.dc;
-                let saveAbility = workflow.saveItem.system.save.ability;
-                let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === enemyTokenUuid);
-                let targetUser = MidiQOL.playerForActor(workflowTarget.actor);
-                if (!targetUser.active) targetUser = game.users?.activeGM;
-                let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
-                let reroll;
-                if(workflowTarget.actor.type !== "npc") reroll = await socket.executeAsUser("rollAsUser", targetUser.id, { rollParams: `1d20 + ${targetSaveBonus}` });
-                else reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${targetSaveBonus}` });
-
-                if(reroll.total < saveDC) {
-                    workflow.saves.delete(workflowTarget);
-                    workflow.failedSaves.add(workflowTarget);
-
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
                     return;
                 }
-
-                else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
-                    continue;
+                else if(!workflow.hitTargets.first()) {
+                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                    return;
                 }
             }
-            else if(workflowType === "attack") {
-                let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
-                let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
-                const saveSetting = workflow.options.noOnUseMacro;
-                workflow.options.noOnUseMacro = true;
-                let reroll;
-                if(source && source === "user") reroll = await socket.executeAsUser("rollAsUser", browserUser.id, { rollParams: `1d20 + ${rerollAddition}` });
-                if(source && source === "gm") reroll = await socket.executeAsGM("rollAsUser", { rollParams: `1d20 + ${rerollAddition}` });
-                if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
+            else if(workflowType === "attack" && workflow.token.document.uuid !== validTokenPrimary.document.uuid) {
+                if((attackResult < targetAC && workflow.hitTargets.first()) || !workflow.hitTargets.first()) {
+                    if(attackResult < targetAC && workflow.hitTargets.first()) workflow.hitTargets.delete(target);
 
-                workflow.options.noOnUseMacro = saveSetting;
-
-                if(workflow.attackTotal < targetAC) {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
                     return;
                 }
+                else if(workflow.hitTargets.first()) {
+                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                    return;
+                }
+            }
+            else if(workflowType === "save" && allyTokenUuid) {
+                if((saveResult >= saveDC && workflow.failedSaves.has(target)) || !workflow.failedSaves.has(target)) {
+                    if (saveResult >= saveDC && workflow.failedSaves.has(target)) workflow.failedSaves.delete(target);
 
-                else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
-                    continue;
+                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                    return;
+                }
+                else if(workflow.failedSaves.has(target)) {
+                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                    return;
+                }
+            }
+            else if(workflowType === "save" && enemyTokenUuid) {
+                if((saveResult < saveDC && !workflow.failedSaves.has(target)) || workflow.failedSaves.has(target)) {
+                    if (saveResult < saveDC && !workflow.failedSaves.has(target)) workflow.failedSaves.add(target);
+
+                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of disadvantage removed and were unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                    return;
+                }
+                else if(!workflow.failedSaves.has(target)) {
+                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of disadvantage removed but were still able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                    return;
                 }
             }
         }

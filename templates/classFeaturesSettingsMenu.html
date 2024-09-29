@@ -296,6 +296,21 @@
 
                 <tr>
                     <td class="column-item">
+                        <label for="enableRestoreBalance">Restore Balance<br><span class="small-text">Presents a dialog to Clockwork Soul Sorcerers with Restore Balance.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableRestoreBalance" name="enableRestoreBalance" data-dtype="Boolean" {{checked enableRestoreBalance}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="restoreBalanceTimeout" name="restoreBalanceTimeout" value="{{restoreBalanceTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="column-item">
                         <label for="enableRunicShield">Runic Shield<br><span class="small-text">Presents a dialog to Rune Knight Fighters with Runic Shield.</span>
                         </label>
                     </td>
