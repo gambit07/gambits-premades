@@ -11,6 +11,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     let dialogId = gpsUuid;
     let gmUser = helpers.getPrimaryGM();
 
+    if(workflow.legendaryResistanceUsed) return;
+
     // Check if attack hits
     if(workflowType === "attack" && workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) return;
     // Check if there is a save success

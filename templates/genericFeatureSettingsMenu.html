@@ -118,6 +118,21 @@
         <tbody>
             <tr>
                 <td class="column-item">
+                    <label for="enableLegendaryResistance">Legendary Resistance<br><span class="small-text">Presents a dialog for monsters Legendary Resistance feature.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="enableLegendaryResistance" name="enableLegendaryResistance" data-dtype="Boolean" {{checked enableLegendaryResistance}}/>
+                    </div>
+                </td>
+                <td class="column-timeout">
+                    <input type="text" id="legendaryResistanceTimeout" name="legendaryResistanceTimeout" value="{{legendaryResistanceTimeout}}" data-dtype="String">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="column-item">
                     <label for="enableMageSlayer">Mage Slayer<br><span class="small-text">Presents a dialog to players with the Mage Slayer feat.</span>
                     </label>
                 </td>

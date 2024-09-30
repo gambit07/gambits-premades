@@ -591,6 +591,31 @@ function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableLegendaryResistance", {
+        name: "enableLegendaryResistance",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Legendary Resistance Timeout', {
+        name: "Legendary Resistance Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register("gambits-premades", "enableRegionWrapping", {
         name: "enableRegionWrapping",
         scope: "world",
@@ -893,7 +918,9 @@ class genericFeatureSettingsMenu extends BaseSettingsMenu {
             enableSentinel: game.settings.get("gambits-premades", "Enable Sentinel"),
             sentinelTimeout: game.settings.get("gambits-premades", "Sentinel Timeout"),
             enableMageSlayer: game.settings.get("gambits-premades", "enableMageSlayer"),
-            mageSlayerTimeout: game.settings.get("gambits-premades", "Mage Slayer Timeout")
+            mageSlayerTimeout: game.settings.get("gambits-premades", "Mage Slayer Timeout"),
+            enableLegendaryResistance: game.settings.get("gambits-premades", "enableLegendaryResistance"),
+            legendaryResistanceTimeout: game.settings.get("gambits-premades", "Legendary Resistance Timeout")
         };
     }
 
@@ -910,6 +937,8 @@ class genericFeatureSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Sentinel Timeout", formData.sentinelTimeout);
         await game.settings.set("gambits-premades", "enableMageSlayer", formData.enableMageSlayer);
         await game.settings.set("gambits-premades", "Mage Slayer Timeout", formData.mageSlayerTimeout);
+        await game.settings.set("gambits-premades", "enableLegendaryResistance", formData.enableLegendaryResistance);
+        await game.settings.set("gambits-premades", "Legendary Resistance Timeout", formData.legendaryResistanceTimeout);
     }
 }
 

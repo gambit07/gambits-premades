@@ -4,7 +4,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
     const socket = module.socket;
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    const gspUuid = "a95f3926-ba77-45ab-90d9-c0cf3cca10aa";
+    const gpsUuid = "a95f3926-ba77-45ab-90d9-c0cf3cca10aa";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Rain of Cinders";
     let dialogId = gspUuid;

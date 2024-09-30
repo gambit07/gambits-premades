@@ -9,6 +9,8 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
     let itemName = "Restore Balance";
     let dialogId = gpsUuid;
     let gmUser = helpers.getPrimaryGM();
+
+    if(workflow.legendaryResistanceUsed) return;
     
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: false, dispositionCheckType: "", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     

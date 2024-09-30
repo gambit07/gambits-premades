@@ -176,8 +176,6 @@ export function convertFromFeet({ range }) {
 
 export async function handleDialogPromises({userDialogArgs, gmDialogArgs}) {
     if(!userDialogArgs || !gmDialogArgs) return;
-    console.log(userDialogArgs)
-    console.log(gmDialogArgs)
     const module = await import('./module.js');
     const socket = module.socket;
     let userDialogPromise = socket.executeAsUser("process3rdPartyReactionDialog", userDialogArgs.browserUser, userDialogArgs);
@@ -271,7 +269,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if token is under an effect preventing reactions
-        else if(hasEffectOrigin) {
+        else if(reactionCheck && hasEffectOrigin) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at spell effect preventing reaction`);
             return;
         }
@@ -322,12 +320,17 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             let itemNames;
             if(itemChecked) itemNames = itemChecked.map(item => item.toLowerCase());
             else itemNames = [checkItem.name.toLowerCase()];
-
-            let resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource => itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
+            let resourceExistsWithValue;
             let itemExistsWithValue;
 
-            if (!resourceExistsWithValue) {
-                itemExistsWithValue = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.value !== 0);
+            if(itemNames.includes("legres")) resourceExistsWithValue = t.actor.system.resources.legres.value !== 0 ? true : false;
+
+            else {
+                resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource => itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
+
+                if (!resourceExistsWithValue) {
+                    itemExistsWithValue = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.value !== 0);
+                }
             }
 
             if (!resourceExistsWithValue && !itemExistsWithValue) {
