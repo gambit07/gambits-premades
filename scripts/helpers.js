@@ -501,7 +501,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 action: "yes",
                 label: "<i class='fas fa-check' style='margin-right: 5px;'></i>Yes",
                 callback: async (event, button, dialog) => {
-                    await socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
+                    if(notificationId) await socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
                     dialogState.interacted = true;
                     dialogState.decision = "yes";
                     if (source && source === "user" && type === "multiDialog") await socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
@@ -536,7 +536,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 label: `<i class='fas fa-times' style='margin-right: 5px;'></i>No`,
                 default: true,
                 callback: async (event, button, dialog) => {
-                    await socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
+                    if(notificationId) await socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
                     dialogState.interacted = true;
                     dialogState.decision = "no";
                     if(source && source === "user" && type === "multiDialog") await socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
@@ -1001,7 +1001,7 @@ export async function replaceChatCard({ actorUuid, itemUuid, chatContent, rollDa
     game.messages.reduce((list, message) => {
         if (message.flags["midi-qol"]?.itemId === item._id && message.speaker.token === token.document.id) msgHistory.push(message.id);
     }, msgHistory);
-    let itemCard = msgHistory[msgHistory.length - 1];
+    let itemCard = msgHistory[msgHistory?.length - 1];
     let chatMessage = false;
     if(itemCard) chatMessage = await game.messages.get(itemCard);
     if(chatMessage) {

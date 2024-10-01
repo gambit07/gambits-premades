@@ -7,7 +7,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
     const gpsUuid = "a95f3926-ba77-45ab-90d9-c0cf3cca10aa";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Rain of Cinders";
-    let dialogId = gspUuid;
+    let dialogId = gpsUuid;
     let target = workflow.targets.first();
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let gmUser = helpers.getPrimaryGM();

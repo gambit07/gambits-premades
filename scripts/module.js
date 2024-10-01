@@ -185,6 +185,8 @@ Hooks.once('ready', async function() {
         biohazard,
         ritualSpellUse,
         getPrimaryGM,
+        replaceChatCard,
+        getBrowserUser,
         socket
     };
 

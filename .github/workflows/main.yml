@@ -18,11 +18,12 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Cleanup some console logs not meant to be left in" >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
-          echo "  - Legendary Resistance: Adds generic monster feature Legendary Resistance" >> release_notes.txt
+          echo "  - Reel: Automates the Asteroid Spiders Reel feature" >> release_notes.txt
+          echo "  - Web Strand: Automates the Asteroid Spiders Web Strand feature. Beyond the animation and effects, this will allow allies to attack another ally to damage their web. This will not work for saving throws, only attack rolls." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Rain of Cinders: Fix typo in items uuid match" >> release_notes.txt
+          echo "  - Rain of Cinders: Fix typo in items uuid match... again" >> release_notes.txt
+          echo "  - Buncha Various Dialog and Misc Fixes: Entangle, Enervation, Reckless Attack, Reckless, Fizbans Platinum Shield, Rod of the Pact Keeper, Amulet of the Devout, Staff of Withering, Gift of the Gem Dragon, Beguiling Arrow, Stroke of Luck, Armor of Hexes, Entropic Ward, Roksjas Husk" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
