@@ -172,7 +172,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                await helpers.replaceChatCard({actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck});
+                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck});
 
                 if(csFailure === true) continue;
                 if(!hasVSMProperty) return;
@@ -324,7 +324,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await helpers.addReaction({actorUuid: `${validTokenSecondary.actor.uuid}`});
 
-                await helpers.replaceChatCard({actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck});
+                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck});
+                
 
                 if(csFailure === true) continue;
                 if(!hasVSMProperty) return;

@@ -813,7 +813,8 @@ export async function moveTokenByOriginPoint({ originX, originY, targetUuid, dis
 }
 
 export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
-    const directions = ["North", "South", "East", "West", "Northwest", "Northeast", "Southwest", "Southeast"];
+    const directions = ["north", "south", "east", "west", "northwest", "northeast", "southwest", "southeast"];
+    direction = direction.toLowerCase();
 
     if (!targetUuid) return console.log("No valid target to move");
     if (!distance || isNaN(distance)) return console.log("No valid distance to move");
@@ -835,29 +836,29 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
     const initialY = target.y;
 
     switch (direction) {
-        case "North":
+        case "north":
             moveY = -moveDistancePixels;
             break;
-        case "South":
+        case "south":
             moveY = moveDistancePixels;
             break;
-        case "East":
+        case "east":
             moveX = moveDistancePixels;
             break;
-        case "West":
+        case "west":
             moveX = -moveDistancePixels;
             break;
-        case "Northwest":
-        case "Northeast":
-        case "Southwest":
-        case "Southeast":
+        case "northwest":
+        case "northeast":
+        case "southwest":
+        case "southeast":
             let dx = 1;
             let dy = 1;
 
-            if (direction.includes("North")) dy = -1;
-            if (direction.includes("South")) dy = 1;
-            if (direction.includes("East")) dx = 1;
-            if (direction.includes("West")) dx = -1;
+            if (direction.includes("north")) dy = -1;
+            if (direction.includes("south")) dy = 1;
+            if (direction.includes("east")) dx = 1;
+            if (direction.includes("west")) dx = -1;
 
             switch (gridDiagonals) {
                 case 0: // Equidistant
@@ -1094,11 +1095,16 @@ export function validateRegionMovement({regionScenario, regionStatus, regionUuid
         else if (entered && !isTeleport) {
             return validatedRegionMovement = ({ validRegionMovement: true, validReroute: false });
         }
+        else {
+            return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+        }
     }
     else if(regionScenario === "tokenTurnStart") {
         return validatedRegionMovement = ({ validRegionMovement: true, validReroute: false });
     }
-    else return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+    else {
+        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+    }
 }
 
 export async function ritualSpellUse({ workflowUuid }) {

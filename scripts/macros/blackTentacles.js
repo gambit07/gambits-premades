@@ -4,12 +4,13 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
     const socket = module.socket;
     const helpers = await import('../helpers.js');
     let gmUser = helpers.getPrimaryGM();
-    let region = await fromUuid(regionUuid);
 
+    if(!tokenUuid || !regionUuid || !regionScenario) return;
+
+    let region = await fromUuid(regionUuid);
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
-
-    if(!token || !region || !regionScenario) return;
+    
     if (!MidiQOL.isTargetable(token)) return;
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;

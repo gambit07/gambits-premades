@@ -1,18 +1,20 @@
 export async function biohazard({tokenUuid, regionUuid, regionScenario, regionStatus}) {
     const helpers = await import('../helpers.js');
-    let region = await fromUuid(regionUuid);
     let gmUser = helpers.getPrimaryGM();
 
+    if(!tokenUuid || !regionUuid || !regionScenario) return;
+
+    let region = await fromUuid(regionUuid);
     let template;
     if(region?.flags["region-attacher"]?.attachedTemplate) {
         template = await fromUuid(region.flags["region-attacher"].attachedTemplate);
     }
     else return;
     
+    if (!MidiQOL.isTargetable(token)) return;
+    
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
-    if(!token || !region || !regionScenario) return;
-    if (!MidiQOL.isTargetable(token)) return;
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
 
