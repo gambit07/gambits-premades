@@ -18,11 +18,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Star Map: Adds the Circle of Stars Druid Star Map feature, specifically the option for users to use free uses of Guiding Bolt based on Prof level" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Witches Hex: Resolve a couple bugs" >> release_notes.txt
-          echo "  - Cloud of Daggers: Cleaned up a couple parts of the movement validation causing issues" >> release_notes.txt
-          echo "  - General Chat: Fix issues with users lacking permissions to update chat cards for various automations" >> release_notes.txt
-          echo "  - General: Caught a few general function bugs" >> release_notes.txt
+          echo "  - Storm Mote: Resolve bugs where the player characters lacked permissions" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
