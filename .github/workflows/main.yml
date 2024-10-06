@@ -19,9 +19,10 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Star Map: Adds the Circle of Stars Druid Star Map feature, specifically the option for users to use free uses of Guiding Bolt based on Prof level" >> release_notes.txt
+          echo "  - Toxic Shield: Adds the 3rd party Drakkenheim spell Toxic Shield" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Storm Mote: Resolve bugs where the player characters lacked permissions" >> release_notes.txt
+          echo "  - Confusion: Resolve bug not using the correct save DC on turn end. Clean up effect application" >> release_notes.txt
+          echo "  - Cloud of Daggers: Resolve not correctly attributing number of dice on upcast" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
