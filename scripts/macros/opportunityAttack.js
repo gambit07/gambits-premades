@@ -85,10 +85,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
         if((exited || (!exited && !entered)) && !isTeleport) {
             if (token.regions.has(region)) return;
-            const effectNamesToken = ["Dissonant Whispers"];
-            let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
-            if (currentCombatant.id !== token.id && !hasEffectToken) return;
-
             let dragonTurtleShield = effectOriginActor.items.getName("Dragon Turtle Dueling Shield");
             if(dragonTurtleShield) await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
             
@@ -140,6 +136,11 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     // Check if origin token can see token moving
     if(!MidiQOL.canSee(effectOriginToken, token)) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at sight check`);
+        return;
+    }
+
+    if(!MidiQOL.isTargetable(token)) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at token is targetable`);
         return;
     }
 

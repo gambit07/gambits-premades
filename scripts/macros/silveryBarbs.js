@@ -10,6 +10,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     let itemName = "Silvery Barbs";
     let dialogId = gpsUuid;
     let gmUser = helpers.getPrimaryGM();
+    let homebrewDisableNat20 = MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20');
+    let homebrewEnableNat20 = MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20');
 
     if(workflow.legendaryResistanceUsed) return;
 
@@ -45,11 +47,15 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         if(workflowType === "save") {
+            console.log(workflow, "silverybarbs workflow")
             let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
+            if(homebrewDisableNat20) targets = targets.filter(t => workflow.saveRolls.find(roll => roll.data.actorUuid === t.actor.uuid && !roll.isCritical));
+            if(homebrewEnableNat20) targets = targets.filter(t => workflow.saveRolls.find(roll => roll.data.actorUuid === t.actor.uuid && roll.isCritical));
+
+            if(targets.length === 0) return;
 
             const targetUuids = targets.map(t => t.document.uuid);
             const targetNames = targets.map(t => t.document.name);
-            if(targetUuids.length === 0) continue;
             
             targetUuids.map((uuid, index) => 
                 `<option value="${uuid}">${targetNames[index]}</option>`

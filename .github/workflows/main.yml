@@ -19,10 +19,21 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Toxic Shield: Adds the 3rd party Drakkenheim spell Toxic Shield" >> release_notes.txt
+          echo "  - Rebuke the Damned: V12 compatability" >> release_notes.txt
+          echo "  - Bloodied but Unbowed: V12 compatability" >> release_notes.txt
+          echo "  - Jims Magic Missiles: Partial V12 compatability, may take a look at it again in the future" >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Infestation: Made it better. Add in support for cprs new-ish twinned spell automation" >> release_notes.txt
+          echo "  - Silvery Barbs: Add in the logic to support both homebrew settings for saving throws. Previously was only enabled for attack rolls (because I forgot)" >> release_notes.txt
+          echo "  - Dissonant Whispers: Add in support for cprs new-ish twinned spell automation" >> release_notes.txt
+          echo "  - Enemies Abound: Add in support for cprs new-ish twinned spell automation" >> release_notes.txt
+          echo "  - Enervation: Add in support for cprs new-ish twinned spell automation" >> release_notes.txt
+          echo "  - Fizbans Platinum Shield: Add in support for cprs new-ish twinned spell automation" >> release_notes.txt
+          echo "  - Hideous Laughter: Add in support for cprs new-ish twinned spell automation" >> release_notes.txt
+          echo "  - Vicious Mockery: Add in support for cprs new-ish twinned spell automation" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Confusion: Resolve bug not using the correct save DC on turn end. Clean up effect application" >> release_notes.txt
-          echo "  - Cloud of Daggers: Resolve not correctly attributing number of dice on upcast" >> release_notes.txt
+          echo "  - Opportunity Attack: Resolve dead tokens still generating OA with some settings" >> release_notes.txt
+          echo "  - Origin and Cardinal Movement Helpers: Fixed 1/2/1 and 2/1/2 distances not being calculated correctly" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

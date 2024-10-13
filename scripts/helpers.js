@@ -11,29 +11,7 @@ export async function addReaction({ actorUuid }) {
         const hasEffectApplied = MidiQOL.hasUsedReaction(actor);
         if (!hasEffectApplied) {
             await MidiQOL.setReactionUsed(actor);
-            //await actor.setFlag("midi-qol", "actions.reactionCombatRound", game.combat?.round);
-            //await actor.setFlag("midi-qol", "actions.reaction", true);
         }
-        /*let effectData = [
-            {
-                "icon": "modules/gambits-premades/assets/images/reaction.svg",
-                "origin": `${actorUuid}`,
-                "disabled": false,
-                "name": "Reaction",
-                "transfer": true,
-                "duration": {
-                    "seconds": 6
-                },
-                "flags": {
-                    "dae": {
-                        "specialDuration": [
-                        "turnStart"
-                        ]
-                    }
-                }
-            }
-        ];
-        await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: actor.uuid, effects: effectData });*/
     }
 }
 
@@ -656,7 +634,6 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
 }
 
 export async function moveTokenByOriginPoint({ originX, originY, targetUuid, distance }) {
-
     if (!targetUuid) return console.log("No valid target to move");
     if (!distance || isNaN(distance)) return console.log("No valid distance to move");
     if (!originX || !originY) return console.log("No valid origin x/y coordinate given, for a token object this value should be token.center.x/token.center.y");
@@ -666,91 +643,71 @@ export async function moveTokenByOriginPoint({ originX, originY, targetUuid, dis
 
     const gridDistance = canvas.scene.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
-    const moveDistancePixels = distance * pixelsPerFoot;
-
-    let vectorX = target.center.x - originX;
-    let vectorY = target.center.y - originY;
-    let magnitude;
-
     const gridDiagonals = game.settings.get("core", "gridDiagonals");
 
-    const initialX = target.x;
-    const initialY = target.y;
+    const ray = new Ray({ x: originX, y: originY }, { x: target.center.x, y: target.center.y });
+    const rayAngle = ray.angle;
 
-    switch (gridDiagonals) {
-        case 0:  // Equidistant
-        magnitude = Math.max(Math.abs(vectorX), Math.abs(vectorY));
-            break;
-        case 1:  // Exact
-            magnitude = Math.sqrt(vectorX ** 2 + vectorY ** 2);
-            break;
-        case 2:  // Approximate (1.5x cost for diagonals)
-            magnitude = Math.abs(vectorX) + Math.abs(vectorY);
-            let diagonals = Math.min(Math.abs(vectorX), Math.abs(vectorY));
-            magnitude += (diagonals * 0.5) - diagonals;
-            break;
-        case 3:  // Rectilinear (2x cost for diagonals)
-            magnitude = Math.abs(vectorX) + Math.abs(vectorY);
-            break;
-        case 4:  // Alternating (1/2/1)
-            magnitude = Math.max(Math.abs(vectorX), Math.abs(vectorY));
-            break;
-        case 5:  // Alternating (2/1/2)
-            let steps = 0;
-            let dx = Math.abs(vectorX);
-            let dy = Math.abs(vectorY);
+    let allowedDistance = distance;
+    let totalDistance = distance;
+    let measuredCost;
+    let finalX = target.center.x + Math.cos(rayAngle) * (allowedDistance * pixelsPerFoot);
+    let finalY = target.center.y + Math.sin(rayAngle) * (allowedDistance * pixelsPerFoot);
 
-            while (dx > 0 || dy > 0) {
-                if (dx > 0 && dy > 0) {
-                    steps += (steps % 2 === 0) ? 2 : 1;
-                    dx -= 1;
-                    dy -= 1;
-                } else if (dx > 0) {
-                    steps += 1;
-                    dx -= 1;
-                } else if (dy > 0) {
-                    steps += 1;
-                    dy -= 1;
-                }
-            }
-            magnitude = steps;
-            break;
-        case 6:  // Illegal
-            magnitude = Infinity;
-            break;
-        default:  // Default to Equidistant
-            console.error("Unknown gridDiagonals setting:", gridDiagonals);
-            magnitude = Math.max(Math.abs(vectorX), Math.abs(vectorY));
-            break;
-    }
-
-    vectorX /= magnitude;
-    vectorY /= magnitude;
-
-    let moveX = vectorX * moveDistancePixels;
-    let moveY = vectorY * moveDistancePixels;
-    let finalX = target.x + moveX;
-    let finalY = target.y + moveY;
-
-    if (canvas.scene.grid.type === 1) {
-        const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
-        finalX = snapped.x;
-        finalY = snapped.y;
-    }
-
-    let endPoint = new PIXI.Point(finalX, finalY);
-    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, endPoint, { type: "move", mode: "any" });
+    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, new PIXI.Point(finalX, finalY), { type: "move", mode: "any" });
 
     if (!collisionDetected) {
-        await target.document.update({ x: finalX, y: finalY });
-    } else {
+        if (canvas.scene.grid.type === 1) {
+            while (true) {
+                let intendedX = target.center.x + Math.cos(rayAngle) * (allowedDistance * pixelsPerFoot);
+                let intendedY = target.center.y + Math.sin(rayAngle) * (allowedDistance * pixelsPerFoot);
+        
+                if (canvas.scene.grid.type === 1) {
+                    const snapped = canvas.scene.grid.getSnappedPoint({ x: intendedX, y: intendedY }, { mode: 0xFF0, resolution: 1 });
+                    intendedX = snapped.x;
+                    intendedY = snapped.y;
+                }
+        
+                const path = [
+                    { x: target.center.x, y: target.center.y },
+                    { x: intendedX, y: intendedY }
+                ];
+        
+                const measuredSegments = canvas.grid.measurePath(path);
+                measuredCost = measuredSegments.cost;
+        
+                if (measuredCost < totalDistance && gridDiagonals === 0) {
+                    allowedDistance += gridDistance;
+                    continue;
+                }
+        
+                else if (measuredCost <= totalDistance) {
+                    break;
+                }
+        
+                allowedDistance -= gridDistance;
+                if (allowedDistance <= 0) {
+                    allowedDistance = 0;
+                    break;
+                }
+            }
+        
+            finalX = target.center.x + Math.cos(rayAngle) * (allowedDistance * pixelsPerFoot);
+            finalY = target.center.y + Math.sin(rayAngle) * (allowedDistance * pixelsPerFoot);
+
+            const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
+            finalX = snapped.x;
+            finalY = snapped.y;
+        }
+    }
+    else {
         let stepDistance = canvas.scene.grid.size / 10;
-        let totalSteps = moveDistancePixels / stepDistance;
+        let totalSteps = (distance * pixelsPerFoot) / stepDistance;
         let stepCounter = 0;
 
         for (let step = 1; step <= totalSteps; step++) {
-            let nextX = target.x + vectorX * stepDistance * step;
-            let nextY = target.y + vectorY * stepDistance * step;
+            let nextX = target.x + Math.cos(rayAngle) * (stepDistance * step);
+            let nextY = target.y + Math.sin(rayAngle) * (stepDistance * step);
             if (canvas.scene.grid.type === 1) {
                 const snapped = canvas.scene.grid.getSnappedPoint({ x: nextX, y: nextY }, { mode: 0xFF0, resolution: 1 });
                 nextX = snapped.x;
@@ -766,8 +723,8 @@ export async function moveTokenByOriginPoint({ originX, originY, targetUuid, dis
             stepCounter = step;
         }
 
-        finalX = target.x + vectorX * stepDistance * stepCounter;
-        finalY = target.y + vectorY * stepDistance * stepCounter;
+        finalX = target.x + Math.cos(rayAngle) * (stepDistance * stepCounter);
+        finalY = target.y + Math.sin(rayAngle) * (stepDistance * stepCounter);
 
         if (stepCounter > 0) {
             if (canvas.scene.grid.type === 1) {
@@ -775,41 +732,16 @@ export async function moveTokenByOriginPoint({ originX, originY, targetUuid, dis
                 finalX = snapped.x;
                 finalY = snapped.y;
             }
-            await target.document.update({ x: finalX, y: finalY });
         }
     }
 
-    let totalDistanceMoved;
-
-    const dx = Math.abs(finalX - initialX) / canvas.grid.size;
-    const dy = Math.abs(finalY - initialY) / canvas.grid.size;
-    const diagonalSteps = Math.min(dx, dy);
-    const straightSteps = Math.abs(dx - dy);
-
-    switch (gridDiagonals) {
-        case 0: // Equidistant
-            totalDistanceMoved = (diagonalSteps + straightSteps) * gridDistance;
-            break;
-        case 1: // Exact
-            totalDistanceMoved = Math.hypot(finalX - initialX, finalY - initialY) / pixelsPerFoot;
-            break;
-        case 2: // 1.5x cost for diagonals
-            totalDistanceMoved = (diagonalSteps * 1.5 + straightSteps) * gridDistance;
-            break;
-        case 3: // 2x cost for diagonals
-            totalDistanceMoved = (diagonalSteps * 2 + straightSteps) * gridDistance;
-            break;
-        case 4: // Alternating (1/2/1)
-            totalDistanceMoved = ((diagonalSteps % 2 === 0 ? diagonalSteps * 1 : diagonalSteps * 2) + straightSteps) * gridDistance;
-            break;
-        case 5: // Alternating (2/1/2)
-            totalDistanceMoved = ((diagonalSteps % 2 === 0 ? diagonalSteps * 2 : diagonalSteps * 1) + straightSteps) * gridDistance;
-            break;
-        default:
-            totalDistanceMoved = (diagonalSteps + straightSteps) * gridDistance;
-    }
-
-    return totalDistanceMoved;
+    const path = [
+        { x: target.center.x, y: target.center.y },
+        { x: finalX, y: finalY }
+    ];
+    let finalDistance = canvas.grid.measurePath(path).cost;
+    await target.document.update({ x: finalX, y: finalY });
+    return finalDistance;
 }
 
 export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
@@ -825,109 +757,95 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
 
     const gridDistance = canvas.scene.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
-    const moveDistancePixels = distance * pixelsPerFoot;
-
     const gridDiagonals = game.settings.get("core", "gridDiagonals");
 
-    let moveX = 0;
-    let moveY = 0;
-
-    const initialX = target.x;
-    const initialY = target.y;
-
+    let angle = 0;
     switch (direction) {
         case "north":
-            moveY = -moveDistancePixels;
+            angle = -Math.PI / 2;
             break;
         case "south":
-            moveY = moveDistancePixels;
+            angle = Math.PI / 2;
             break;
         case "east":
-            moveX = moveDistancePixels;
+            angle = 0;
             break;
         case "west":
-            moveX = -moveDistancePixels;
+            angle = Math.PI;
             break;
         case "northwest":
+            angle = -3 * Math.PI / 4;
+            break;
         case "northeast":
+            angle = -Math.PI / 4;
+            break;
         case "southwest":
+            angle = 3 * Math.PI / 4;
+            break;
         case "southeast":
-            let dx = 1;
-            let dy = 1;
-
-            if (direction.includes("north")) dy = -1;
-            if (direction.includes("south")) dy = 1;
-            if (direction.includes("east")) dx = 1;
-            if (direction.includes("west")) dx = -1;
-
-            switch (gridDiagonals) {
-                case 0: // Equidistant
-                    moveX = moveDistancePixels * dx;
-                    moveY = moveDistancePixels * dy;
-                    break;
-                case 1: // Exact
-                    moveX = (moveDistancePixels / Math.hypot(dx, dy)) * dx;
-                    moveY = (moveDistancePixels / Math.hypot(dx, dy)) * dy;
-                    break;
-                case 2: // Approximate (1.5x cost for diagonals)
-                    const diagonalSteps = Math.min(Math.abs(dx), Math.abs(dy));
-                    const straightSteps = Math.abs(dx - dy);
-                    const magnitude = diagonalSteps * 1.5 + straightSteps;
-                    moveX = (moveDistancePixels / magnitude) * dx;
-                    moveY = (moveDistancePixels / magnitude) * dy;
-                    break;
-                case 3: // Rectilinear (2x cost for diagonals)
-                    moveX = moveDistancePixels * dx * 2;
-                    moveY = moveDistancePixels * dy * 2;
-                    break;
-                case 4: // Alternating (1/2/1)
-                    const alternatingMagnitude1 = ((Math.abs(dx) + Math.abs(dy)) % 2 === 0) ? 1 : 2;
-                    moveX = (moveDistancePixels / alternatingMagnitude1) * dx;
-                    moveY = (moveDistancePixels / alternatingMagnitude1) * dy;
-                    break;
-                case 5: // Alternating (2/1/2)
-                    const alternatingMagnitude2 = ((Math.abs(dx) + Math.abs(dy)) % 2 === 0) ? 2 : 1;
-                    moveX = (moveDistancePixels / alternatingMagnitude2) * dx;
-                    moveY = (moveDistancePixels / alternatingMagnitude2) * dy;
-                    break;
-                case 6: // Illegal
-                    moveX = moveY = 0;
-                    break;
-                default: // Default to Equidistant
-                    console.error("Unknown gridDiagonals setting:", gridDiagonals);
-                    moveX = moveDistancePixels * dx;
-                    moveY = moveDistancePixels * dy;
-                    break;
-            }
+            angle = Math.PI / 4;
             break;
     }
 
-    let finalX = target.x + moveX;
-    let finalY = target.y + moveY;
+    let allowedDistance = distance;
+    let totalDistance = distance;
+    let measuredCost;
+    let finalX = target.center.x + Math.cos(angle) * (allowedDistance * pixelsPerFoot);
+    let finalY = target.center.y + Math.sin(angle) * (allowedDistance * pixelsPerFoot);
 
-    if (canvas.scene.grid.type === 1) {
-        const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
-        finalX = snapped.x;
-        finalY = snapped.y;
-    }
-
-    let endPoint = new PIXI.Point(finalX, finalY);
-    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, endPoint, { type: "move", mode: "any" });
+    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, new PIXI.Point(finalX, finalY), { type: "move", mode: "any" });
 
     if (!collisionDetected) {
-        await target.document.update({ x: finalX, y: finalY });
-    } else {
-        let directionVector = { x: moveX, y: moveY };
-        let magnitude = Math.hypot(directionVector.x, directionVector.y);
-        directionVector.x /= magnitude;
-        directionVector.y /= magnitude;
+        if (canvas.scene.grid.type === 1) {
+            while (true) {
+                let intendedX = target.center.x + Math.cos(angle) * (allowedDistance * pixelsPerFoot);
+                let intendedY = target.center.y + Math.sin(angle) * (allowedDistance * pixelsPerFoot);
+        
+                if (canvas.scene.grid.type === 1) {
+                    const snapped = canvas.scene.grid.getSnappedPoint({ x: intendedX, y: intendedY }, { mode: 0xFF0, resolution: 1 });
+                    intendedX = snapped.x;
+                    intendedY = snapped.y;
+                }
+        
+                const path = [
+                    { x: target.center.x, y: target.center.y },
+                    { x: intendedX, y: intendedY }
+                ];
+        
+                const measuredSegments = canvas.grid.measurePath(path);
+                measuredCost = measuredSegments.cost;
+        
+                if (measuredCost < totalDistance && gridDiagonals === 0) {
+                    allowedDistance += gridDistance;
+                    continue;
+                }
+        
+                else if (measuredCost <= totalDistance) {
+                    break;
+                }
+        
+                allowedDistance -= gridDistance;
+                if (allowedDistance <= 0) {
+                    allowedDistance = 0;
+                    break;
+                }
+            }
+        
+            finalX = target.center.x + Math.cos(angle) * (allowedDistance * pixelsPerFoot);
+            finalY = target.center.y + Math.sin(angle) * (allowedDistance * pixelsPerFoot);
 
-        let totalSteps = moveDistancePixels / (canvas.scene.grid.size / 10);
+            const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
+            finalX = snapped.x;
+            finalY = snapped.y;
+        }
+    } else {
+        let stepDistance = canvas.scene.grid.size / 10;
+        let totalSteps = (distance * pixelsPerFoot) / stepDistance;
         let stepCounter = 0;
 
         for (let step = 1; step <= totalSteps; step++) {
-            let nextX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * step;
-            let nextY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * step;
+            let nextX = target.x + Math.cos(angle) * (stepDistance * step);
+            let nextY = target.y + Math.sin(angle) * (stepDistance * step);
             if (canvas.scene.grid.type === 1) {
                 const snapped = canvas.scene.grid.getSnappedPoint({ x: nextX, y: nextY }, { mode: 0xFF0, resolution: 1 });
                 nextX = snapped.x;
@@ -943,8 +861,8 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
             stepCounter = step;
         }
 
-        finalX = target.x + directionVector.x * (canvas.scene.grid.size / 10) * stepCounter;
-        finalY = target.y + directionVector.y * (canvas.scene.grid.size / 10) * stepCounter;
+        finalX = target.x + Math.cos(angle) * (stepDistance * stepCounter);
+        finalY = target.y + Math.sin(angle) * (stepDistance * stepCounter);
 
         if (stepCounter > 0) {
             if (canvas.scene.grid.type === 1) {
@@ -952,41 +870,16 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
                 finalX = snapped.x;
                 finalY = snapped.y;
             }
-            await target.document.update({ x: finalX, y: finalY });
         }
     }
 
-    let totalDistanceMoved;
-
-        const dx = Math.abs(finalX - initialX) / canvas.grid.size;
-        const dy = Math.abs(finalY - initialY) / canvas.grid.size;
-        const diagonalSteps = Math.min(dx, dy);
-        const straightSteps = Math.abs(dx - dy);
-
-        switch (gridDiagonals) {
-            case 0: // Equidistant
-                totalDistanceMoved = (diagonalSteps + straightSteps) * gridDistance;
-                break;
-            case 1: // Exact
-                totalDistanceMoved = Math.hypot(finalX - initialX, finalY - initialY) / pixelsPerFoot;
-                break;
-            case 2: // 1.5x cost for diagonals
-                totalDistanceMoved = (diagonalSteps * 1.5 + straightSteps) * gridDistance;
-                break;
-            case 3: // 2x cost for diagonals
-                totalDistanceMoved = (diagonalSteps * 2 + straightSteps) * gridDistance;
-                break;
-            case 4: // Alternating (1/2/1)
-                totalDistanceMoved = ((diagonalSteps % 2 === 0 ? diagonalSteps * 1 : diagonalSteps * 2) + straightSteps) * gridDistance;
-                break;
-            case 5: // Alternating (2/1/2)
-                totalDistanceMoved = ((diagonalSteps % 2 === 0 ? diagonalSteps * 2 : diagonalSteps * 1) + straightSteps) * gridDistance;
-                break;
-            default:
-                totalDistanceMoved = (diagonalSteps + straightSteps) * gridDistance;
-        }
-
-    return totalDistanceMoved;
+    const path = [
+        { x: target.center.x, y: target.center.y },
+        { x: finalX, y: finalY }
+    ];
+    let finalDistance = canvas.grid.measurePath(path).cost;
+    await target.document.update({ x: finalX, y: finalY });
+    return finalDistance;
 }
 
 export async function replaceChatCard({ actorUuid, itemUuid, chatContent, rollData }) {
@@ -1191,3 +1084,9 @@ export function getPrimaryGM() {
 
     return primaryGMId;
   }
+
+export async function gmDeleteItem({itemUuid}) {
+    if(!itemUuid) return;
+    let itemData = await fromUuid(itemUuid);
+    await itemData.delete();
+}

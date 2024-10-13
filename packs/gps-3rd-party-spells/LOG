@@ -1,15 +1,8 @@
-2024/10/03-19:07:58.995 8c7c Recovering log #1418
-2024/10/03-19:07:59.001 8c7c Delete type=0 #1418
-2024/10/03-19:07:59.002 8c7c Delete type=3 #1416
-2024/10/06-01:26:36.099 9264 Level-0 table #1423: started
-2024/10/06-01:26:36.102 9264 Level-0 table #1423: 8385 bytes OK
-2024/10/06-01:26:36.105 9264 Delete type=0 #1421
-2024/10/06-01:26:36.108 9264 Manual compaction at level-0 from '!items!2YNbYocBRdEDgO4Q' @ 72057594037927935 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at (end)
-2024/10/06-01:26:36.108 9264 Manual compaction at level-1 from '!items!2YNbYocBRdEDgO4Q' @ 72057594037927935 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at '!items.effects!SGSmveHI70IMirss.1qXUy5XyTuXH4e3T' @ 425 : 1
-2024/10/06-01:26:36.108 9264 Compacting 1@1 + 1@2 files
-2024/10/06-01:26:36.112 9264 Generated table #1424@1: 36 keys, 83739 bytes
-2024/10/06-01:26:36.112 9264 Compacted 1@1 + 1@2 files => 83739 bytes
-2024/10/06-01:26:36.115 9264 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/10/06-01:26:36.115 9264 Delete type=2 #1415
-2024/10/06-01:26:36.115 9264 Delete type=2 #1423
-2024/10/06-01:26:36.119 9264 Manual compaction at level-1 from '!items.effects!SGSmveHI70IMirss.1qXUy5XyTuXH4e3T' @ 425 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at (end)
+2024/10/11-14:37:22.858 71d4 Recovering log #1443
+2024/10/11-14:37:22.862 71d4 Delete type=0 #1443
+2024/10/11-14:37:22.862 71d4 Delete type=3 #1441
+2024/10/12-22:58:46.926 9264 Level-0 table #1448: started
+2024/10/12-22:58:46.926 9264 Level-0 table #1448: 0 bytes OK
+2024/10/12-22:58:46.928 9264 Delete type=0 #1446
+2024/10/12-22:58:46.931 9264 Manual compaction at level-0 from '!items!2YNbYocBRdEDgO4Q' @ 72057594037927935 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at (end)
+2024/10/12-22:58:46.931 9264 Manual compaction at level-1 from '!items!2YNbYocBRdEDgO4Q' @ 72057594037927935 : 1 .. '!items.effects!qBnx0VU4WBSLrGeK.zhzkM83QyjS4pBGp' @ 0 : 0; will stop at (end)
