@@ -144,6 +144,11 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         return;
     }
 
+    if(MidiQOL.checkIncapacitated(effectOriginActor) !== false) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at origin token is incapacitated`);
+        return;
+    }
+
     // Check if same disposition token
     if(token.disposition === effectOriginToken.disposition) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at token disposition check`);
