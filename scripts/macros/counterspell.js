@@ -29,6 +29,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     let csFailure = false;
     let chatContent = [];
     let skillCheck;
+    let skillRoll;
     let browserUser;
 
     await initialCounterspellProcess(workflow, lastMessage, castLevel, selectedToken);
@@ -144,7 +145,10 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 if(itemRollCastLevel < castLevel) {
                     if(source && source === "user") skillCheck = await socket.executeAsUser("remoteAbilityTest", browserUser, { spellcasting: validTokenPrimary.actor.system.attributes.spellcasting, actorUuid: validTokenPrimary.actor.uuid });
                     if(source && source === "gm") skillCheck = await socket.executeAsUser("remoteAbilityTest", gmUser, { spellcasting: validTokenPrimary.actor.system.attributes.spellcasting, actorUuid: validTokenPrimary.actor.uuid });
-                    let { skillTotal = skillCheck.skillRoll.total, skillFlavor = skillCheck.skillRoll.options.flavor } = skillCheck;
+                    skillRoll = game.messages.get(skillCheck.skillRoll)?.rolls[0];
+                    let skillTotal = skillRoll.total;
+                    let skillFlavor = skillRoll.options.flavor;
+                    
                     let abjurationCheck = validTokenPrimary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
                     abjurationCheck ? skillTotal = skillTotal + validTokenPrimary.actor.system?.attributes?.prof : skillTotal = skillTotal;
                     if (skillTotal >= spellThreshold) {
@@ -163,7 +167,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck.skillRoll});
+                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillRoll});
 
                 if(csFailure === true) continue;
 
@@ -294,9 +298,10 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 if(itemRollCastLevel < castLevel) {
                     if(source && source === "user") skillCheck = await socket.executeAsUser("remoteAbilityTest", browserUser, { spellcasting: validTokenSecondary.actor.system.attributes.spellcasting, actorUuid: validTokenSecondary.actor.uuid });
                     if(source && source === "gm") skillCheck = await socket.executeAsUser("remoteAbilityTest", gmUser, { spellcasting: validTokenSecondary.actor.system.attributes.spellcasting, actorUuid: validTokenSecondary.actor.uuid });
-                    let { skillTotal = skillCheck.skillRoll.total, skillFlavor = skillCheck.skillRoll.options.flavor } = skillCheck;
+                    skillRoll = game.messages.get(skillCheck.skillRoll)?.rolls[0];
+                    let skillTotal = skillRoll.total;
+                    let skillFlavor = skillRoll.options.flavor;
 
-                    skillCheck = await validTokenSecondary.actor.rollAbilityTest(validTokenSecondary.actor.system.attributes.spellcasting);
                     let abjurationCheck = validTokenSecondary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
                     abjurationCheck ? skillTotal = skillTotal + validTokenSecondary.actor.system?.attributes?.prof : skillTotal = skillTotal;
                     if (skillTotal >= spellThreshold) {
@@ -315,7 +320,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await helpers.addReaction({actorUuid: `${validTokenSecondary.actor.uuid}`});
 
-                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck.skillRoll});
+                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillRoll});
                 
 
                 if(csFailure === true) continue;

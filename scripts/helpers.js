@@ -1121,7 +1121,12 @@ export async function remoteAbilityTest({spellcasting, actorUuid}) {
 
     let actor = await fromUuid(actorUuid)
 
-    let skillCheck = await actor.rollAbilityTest(spellcasting)
+    let rollId;
+    Hooks.once("createChatMessage", async (chatMessage, options, userId) => {
+        rollId = chatMessage.id;
+    });
 
-    return {skillRoll: skillCheck};
+    await actor.rollAbilityTest(spellcasting);
+
+    return {skillRoll: rollId};
 }
