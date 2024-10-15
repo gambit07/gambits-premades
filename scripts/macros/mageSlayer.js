@@ -189,9 +189,6 @@ export async function mageSlayer({workflowData,workflowType,workflowCombat}) {
                         }
                     }
                 }, { keepId: true });
-                chosenWeapon.prepareData();
-                chosenWeapon.prepareFinalAttributes();
-                chosenWeapon.applyActiveEffects();
 
                 const options = {
                     showFullCard: false,
@@ -206,15 +203,10 @@ export async function mageSlayer({workflowData,workflowType,workflowCombat}) {
                     }
                 };
 
-                let checkHits;
-                Hooks.once("midi-qol.postActiveEffects", async (workflow) => {
-                    checkHits = workflow.hitTargets.first();
-                });
-
                 let itemRoll;
                 if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
                 else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
-                if(itemRoll.aborted === true) continue;
+                if(!itemRoll) continue;
 
                 await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
             }

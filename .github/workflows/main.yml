@@ -18,8 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Counterspell: Added animation, if cpr installed can also be enabled/disabled via the medkit" >> release_notes.txt
+          echo "  - Silvery Barbs: Added animation, if cpr installed can also be enabled/disabled via the medkit" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: Resolve dead tokens still generating OA with some settings, again" >> release_notes.txt
+          echo "  - Counterspell: Resolve issue with socketed rolls not accounting for the cast level correctly" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

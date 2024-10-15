@@ -372,10 +372,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             }
         }, { keepId: true });
 
-        chosenWeapon.prepareData();
-        chosenWeapon.prepareFinalAttributes();
-        chosenWeapon.applyActiveEffects();
-
         let userSelect = undefined;
         if(source && source === "user") userSelect = browserUser;
         else if(source && source === "gm") userSelect = gmUser;
@@ -396,18 +392,15 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             options.workflowOptions.disadvantage = true;
         }
 
-        let checkHits;
-        Hooks.once("midi-qol.postActiveEffects", async (workflow) => {
-            checkHits = workflow.hitTargets.first();
-        });
-
         let itemRoll;
-        if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenWeapon, actorUuid: effectOriginActor.uuid, options: options });
-        else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenWeapon, actorUuid: effectOriginActor.uuid, options: options });
+        if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options });
+        else if(source && source === "gm") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options });
+
+        let checkHits = itemRoll.checkHits;
 
         await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
 
-        if(itemRoll.aborted === true) return;
+        if(!itemRoll) return;
 
         await helpers.addReaction({actorUuid: `${effectOriginActor.uuid}`});
 

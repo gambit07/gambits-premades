@@ -164,10 +164,6 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             let saveResult = saveDice?.dice[0].results[0].result + (saveDice?.total - saveDice?.dice[0].total);
             let attackResult = workflow.attackRoll?.dice[0].results[0].result + (workflow.attackRoll?.total - workflow.attackRoll?.dice[0].total);
 
-            chosenItem.prepareData();
-            chosenItem.prepareFinalAttributes();
-            chosenItem.applyActiveEffects();
-
             const options = {
                 showFullCard: false,
                 createWorkflow: true,
@@ -180,7 +176,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
-            if(itemRoll.aborted === true) continue;
+            if(!itemRoll) continue;
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 

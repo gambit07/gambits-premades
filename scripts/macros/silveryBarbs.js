@@ -153,12 +153,11 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             continue;
         }
         else if (userDecision) {
-            let advantageToken = await fromUuid(allyTokenUuid);
+            let advantageToken;
+            let enemyToken;
+            if(allyTokenUuid) advantageToken = await fromUuid(allyTokenUuid);
+            if(enemyTokenUuid) enemyToken = await fromUuid(enemyTokenUuid);
             let chatContent;
-
-            chosenItem.prepareData();
-            chosenItem.prepareFinalAttributes();
-            chosenItem.applyActiveEffects();
 
             const options = {
                 showFullCard: false,
@@ -172,7 +171,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
-            if(itemRoll.aborted === true) continue;
+            if(!itemRoll) continue;
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
@@ -220,6 +219,30 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             ];
             if(advantageToken) await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: advantageToken.actor.uuid, effects: effectData });
 
+            let cprConfig = helpers.getCprConfig({itemUuid: chosenItem.uuid});
+            const { animEnabled } = cprConfig;
+            if(animEnabled) {
+                new Sequence()
+                .effect()
+                    .file("animated-spell-effects-cartoon.misc.music.01")
+                    .fadeIn(500)
+                    .fadeOut(500)
+                    .atLocation(validTokenPrimary, {offset:{x: -550, y: 180}, local: true})
+                    .stretchTo((enemyTokenUuid) ? enemyToken.object : workflow.token, {offset:{x: 200, y: -150}, local: true})
+                    .playbackRate(1)
+                .play()
+
+                new Sequence()
+                .effect()
+                    .file("jb2a.cast_generic.sound.side01.pinkteal")
+                    .fadeIn(500)
+                    .fadeOut(500)
+                    .atLocation((enemyTokenUuid) ? enemyToken.object : workflow.token)
+                    .scaleToObject(4)
+                    .playbackRate(1)
+                .play()
+            }
+
             if(workflowType === "save") {
                 let saveDC = workflow.saveItem.system.save.dc;
                 let saveAbility = workflow.saveItem.system.save.ability;
@@ -257,7 +280,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
 
                 workflow.options.noOnUseMacro = saveSetting;
 
-                if(workflow.attackTotal < targetAC) {
+                if(workflow.attackTotal < targetAC) {                    
                     chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     return;

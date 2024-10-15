@@ -1,15 +1,15 @@
-2024/10/11-14:37:22.772 708c Recovering log #3153
-2024/10/11-14:37:22.775 708c Delete type=0 #3153
-2024/10/11-14:37:22.776 708c Delete type=3 #3151
-2024/10/12-22:58:46.891 9264 Level-0 table #3158: started
-2024/10/12-22:58:46.896 9264 Level-0 table #3158: 248346 bytes OK
-2024/10/12-22:58:46.896 9264 Delete type=0 #3156
-2024/10/12-22:58:46.900 9264 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
-2024/10/12-22:58:46.900 9264 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at '!items.effects!MPscy2rdOlSVVepd.m2ELujtfE92t39Xl' @ 1821 : 1
-2024/10/12-22:58:46.900 9264 Compacting 1@1 + 1@2 files
-2024/10/12-22:58:46.904 9264 Generated table #3159@1: 55 keys, 165320 bytes
-2024/10/12-22:58:46.904 9264 Compacted 1@1 + 1@2 files => 165320 bytes
-2024/10/12-22:58:46.905 9264 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/10/12-22:58:46.905 9264 Delete type=2 #3142
-2024/10/12-22:58:46.905 9264 Delete type=2 #3158
-2024/10/12-22:58:46.908 9264 Manual compaction at level-1 from '!items.effects!MPscy2rdOlSVVepd.m2ELujtfE92t39Xl' @ 1821 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
+2024/10/14-21:36:39.909 27c0 Recovering log #3168
+2024/10/14-21:36:39.918 27c0 Delete type=0 #3168
+2024/10/14-21:36:39.918 27c0 Delete type=3 #3166
+2024/10/15-01:37:25.713 2e38 Level-0 table #3174: started
+2024/10/15-01:37:25.716 2e38 Level-0 table #3174: 13292 bytes OK
+2024/10/15-01:37:25.720 2e38 Delete type=0 #3172
+2024/10/15-01:37:25.720 2e38 Manual compaction at level-0 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)
+2024/10/15-01:37:25.720 2e38 Manual compaction at level-1 from '!items!0gEfNrgZuAxvnL5H' @ 72057594037927935 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at '!items!48jgMDu3yyO73wfR' @ 1854 : 1
+2024/10/15-01:37:25.720 2e38 Compacting 1@1 + 1@2 files
+2024/10/15-01:37:25.733 2e38 Generated table #3175@1: 55 keys, 167656 bytes
+2024/10/15-01:37:25.733 2e38 Compacted 1@1 + 1@2 files => 167656 bytes
+2024/10/15-01:37:25.735 2e38 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/10/15-01:37:25.735 2e38 Delete type=2 #3170
+2024/10/15-01:37:25.735 2e38 Delete type=2 #3174
+2024/10/15-01:37:25.743 2e38 Manual compaction at level-1 from '!items!48jgMDu3yyO73wfR' @ 1854 : 1 .. '!items.effects!zb0bHX95fRFILazJ.2TVoFB98ZtniR8Z7' @ 0 : 0; will stop at (end)

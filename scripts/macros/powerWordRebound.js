@@ -72,10 +72,6 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
             continue;
         }
         else if (userDecision) {
-            chosenItem.prepareData();
-            chosenItem.prepareFinalAttributes();
-            chosenItem.applyActiveEffects();
-
             const options = {
                 showFullCard: false,
                 createWorkflow: true,
@@ -87,7 +83,7 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
             let itemRoll;
             if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            if(itemRoll.aborted === true) continue;
+            if(!itemRoll) continue;
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 

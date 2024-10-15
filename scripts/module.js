@@ -23,7 +23,7 @@ import { biohazard } from './macros/biohazard.js';
 import { restoreBalance } from './macros/restoreBalance.js';
 import { legendaryResistance } from './macros/legendaryResistance.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -158,6 +158,8 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("restoreBalance", restoreBalance);
     socket.register("legendaryResistance", legendaryResistance);
     socket.register("gmDeleteItem", gmDeleteItem);
+    socket.register("remoteCompleteItemUse", remoteCompleteItemUse);
+    socket.register("remoteAbilityTest", remoteAbilityTest);
 })
 
 Hooks.once('ready', async function() {
@@ -189,6 +191,7 @@ Hooks.once('ready', async function() {
         replaceChatCard,
         getBrowserUser,
         gmDeleteItem,
+        getCprConfig,
         socket
     };
 

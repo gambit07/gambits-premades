@@ -1090,3 +1090,38 @@ export async function gmDeleteItem({itemUuid}) {
     let itemData = await fromUuid(itemUuid);
     await itemData.delete();
 }
+
+export function getCprConfig({itemUuid}) {
+    if(!game.modules.get("chris-premades")?.active) return {animEnabled: true};
+    let itemData = fromUuidSync(itemUuid);
+    if(!itemData) return {animEnabled: true};
+    let cprConfig = itemData.getFlag("chris-premades", "config");
+    if(!cprConfig) return {animEnabled: true};
+    let animEnabled = cprConfig?.playAnimation;
+    if(animEnabled) return {animEnabled: true};
+    else return {animEnabled: false};
+}
+
+export async function remoteCompleteItemUse({itemUuid, actorUuid, options}) {
+    if(!itemUuid || !actorUuid || !options) return;
+
+    let itemData = await fromUuid(itemUuid);
+    itemData.prepareData();
+    itemData.prepareFinalAttributes();
+    itemData.applyActiveEffects();
+    
+    let remoteCIU = await MidiQOL.completeItemUse(itemData, {actorUuid}, options);
+    let checkHits = remoteCIU.hitTargets.first() ? true : false;
+
+    return {castLevel: remoteCIU.castData.castLevel, checkHits: checkHits};
+}
+
+export async function remoteAbilityTest({spellcasting, actorUuid}) {
+    if(!spellcasting || !actorUuid) return;
+
+    let actor = await fromUuid(actorUuid)
+
+    let skillCheck = await actor.rollAbilityTest(spellcasting)
+
+    return {skillRoll: skillCheck};
+}

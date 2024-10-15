@@ -18,8 +18,17 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     if (!hasVSMProperty) return;
 
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
+    let spellPenetrationEnabled = MidiQOL.safeGetGameSetting('gambits-premades', `enableCounterspellSpellPenetration`);
     let selectedToken = workflow.token;
     let castLevel = false;
+    let itemRoll = false;
+    let counterspellLevel = false;
+    let spellPenetration;
+    let spellPenetrationGreater;
+    let spellPenetrationChat = "";
+    let csFailure = false;
+    let chatContent = [];
+    let skillCheck;
     let browserUser;
 
     await initialCounterspellProcess(workflow, lastMessage, castLevel, selectedToken);
@@ -102,39 +111,24 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 hasVSMProperty = castProperties.some(prop => chosenSpell.system.properties.has(prop));
 
-                chosenSpell.prepareData();
-                chosenSpell.prepareFinalAttributes();
-                chosenSpell.applyActiveEffects();
-
                 const options = {
                     showFullCard: false,
                     createWorkflow: true,
                     versatile: false,
                     configureDialog: true,
-                    targetUuids: [selectedToken.document.uuid],
+                    targetUuids: [selectedToken.document.uuid]
                 };
 
-                let itemRollCastLevel;
-                Hooks.once("midi-qol.postActiveEffects", async (workflow) => {
-                    itemRollCastLevel = workflow.castData.castLevel;
-                });
-
-                let itemRoll = false;
-                if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenSpell, actorUuid: validTokenPrimary.actor.uuid, options: options });
-                else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenSpell, actorUuid: validTokenPrimary.actor.uuid, options: options });
+                if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenSpell.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+                else if(source && source === "gm") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenSpell.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
     
                 if(!itemRoll) continue;
 
-                let counterspellLevel = false;
-
-                let spellPenetrationEnabled = MidiQOL.safeGetGameSetting('gambits-premades', `enableCounterspellSpellPenetration`);
-                let spellPenetration;
-                let spellPenetrationGreater;
-                let spellPenetrationChat;
+                let itemRollCastLevel = itemRoll.castLevel;
                 
                 if(spellPenetrationEnabled) {
-                    spellPenetration = selectedToken.actor.items.find(i => i.name === "Spell Penetration");
-                    spellPenetrationGreater = selectedToken.actor.items.find(i => i.name === "Greater Spell Penetration");
+                    spellPenetration = selectedToken.actor.items.some(i => i.name === "Spell Penetration");
+                    spellPenetrationGreater = selectedToken.actor.items.some(i => i.name === "Greater Spell Penetration");
                     if(spellPenetration) {
                         castLevel = castLevel + 3;
                         spellPenetrationChat = "<br><br>The spell being countered was considered 3 levels higher due to the caster's <b>Spell Penetration</b> feature.";
@@ -145,23 +139,20 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     }
                 }
 
-                let csFailure = false;
-                let chatContent = [];
-
                 const spellThreshold = castLevel + 10;
-                let skillCheck;
 
                 if(itemRollCastLevel < castLevel) {
-                    skillCheck = await validTokenPrimary.actor.rollAbilityTest(validTokenPrimary.actor.system.attributes.spellcasting);
-                    let skillCheckTotal;
-                    let abjurationCheck = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "improved abjuration");
-                    abjurationCheck ? skillCheckTotal = skillCheck.total + validTokenPrimary.actor.system?.attributes?.prof : skillCheckTotal = skillCheck.total;
-                    if (skillCheckTotal >= spellThreshold) {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    if(source && source === "user") skillCheck = await socket.executeAsUser("remoteAbilityTest", browserUser, { spellcasting: validTokenPrimary.actor.system.attributes.spellcasting, actorUuid: validTokenPrimary.actor.uuid });
+                    if(source && source === "gm") skillCheck = await socket.executeAsUser("remoteAbilityTest", gmUser, { spellcasting: validTokenPrimary.actor.system.attributes.spellcasting, actorUuid: validTokenPrimary.actor.uuid });
+                    let { skillTotal = skillCheck.skillRoll.total, skillFlavor = skillCheck.skillRoll.options.flavor } = skillCheck;
+                    let abjurationCheck = validTokenPrimary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
+                    abjurationCheck ? skillTotal = skillTotal + validTokenPrimary.actor.system?.attributes?.prof : skillTotal = skillTotal;
+                    if (skillTotal >= spellThreshold) {
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillTotal} ${skillFlavor}.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         counterspellLevel = itemRollCastLevel;
                     }
                     else {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillTotal} ${skillFlavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         csFailure = true;
                     }
                 }
@@ -172,9 +163,25 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck});
+                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck.skillRoll});
 
                 if(csFailure === true) continue;
+
+                let cprConfig = helpers.getCprConfig({itemUuid: chosenSpell.uuid});
+                const { animEnabled } = cprConfig;
+                if(animEnabled) {
+                    new Sequence()
+                    .effect()
+                        .file("animated-spell-effects-cartoon.energy.beam.01")
+                        .fadeIn(500)
+                        .fadeOut(500)
+                        .atLocation(validTokenPrimary)
+                        .stretchTo(selectedToken, {offset:{x: 100, y: 0}, local: true})
+                        .filter("ColorMatrix", { brightness: 0, contrast: 1 })
+                        .playbackRate(0.8)
+                    .play()
+                }
+
                 if(!hasVSMProperty) return;
                 castLevel = counterspellLevel;
                 await secondaryCounterspellProcess(workflow, lastMessage, castLevel, validTokenPrimary);
@@ -254,39 +261,24 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 hasVSMProperty = castProperties.some(prop => chosenSpell.system.properties.has(prop));
 
-                chosenSpell.prepareData();
-                chosenSpell.prepareFinalAttributes();
-                chosenSpell.applyActiveEffects();
-
                 const options = {
                     showFullCard: false,
                     createWorkflow: true,
                     versatile: false,
                     configureDialog: true,
-                    targetUuids: [validTokenPrimary.document.uuid],
+                    targetUuids: [validTokenPrimary.document.uuid]
                 };
 
-                let itemRollCastLevel;
-                Hooks.once("midi-qol.postActiveEffects", async (workflow) => {
-                    itemRollCastLevel = workflow.castData.castLevel;
-                });
-
-                let itemRoll;
-                if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenSpell, actorUuid: validTokenSecondary.actor.uuid, options: options });
-                else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenSpell, actorUuid: validTokenSecondary.actor.uuid, options: options });
+                if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenSpell.uuid, actorUuid: validTokenSecondary.actor.uuid, options: options });
+                else if(source && source === "gm") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenSpell.uuid, actorUuid: validTokenSecondary.actor.uuid, options: options });
     
-                if(itemRoll.aborted === true) continue;
+                if(!itemRoll) continue;
 
-                let counterspellLevel = false;
-
-                let spellPenetrationEnabled = MidiQOL.safeGetGameSetting('gambits-premades', `enableCounterspellSpellPenetration`);
-                let spellPenetration;
-                let spellPenetrationGreater;
-                let spellPenetrationChat;
+                let itemRollCastLevel = itemRoll.castLevel;
                 
                 if(spellPenetrationEnabled) {
-                    spellPenetration = validTokenPrimary.actor.items.find(i => i.name === "Spell Penetration");
-                    spellPenetrationGreater = validTokenPrimary.actor.items.find(i => i.name === "Greater Spell Penetration");
+                    spellPenetration = validTokenPrimary.actor.items.some(i => i.name === "Spell Penetration");
+                    spellPenetrationGreater = validTokenPrimary.actor.items.some(i => i.name === "Greater Spell Penetration");
                     if(spellPenetration) {
                         castLevel = castLevel + 3;
                         spellPenetrationChat = "<br><br>The spell being countered was considered 3 levels higher due to the caster's <b>Spell Penetration</b> feature.";
@@ -297,23 +289,22 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     }
                 }
 
-                let csFailure = false;
-                let chatContent;
-
                 const spellThreshold = castLevel + 10;
-                let skillCheck;
 
                 if(itemRollCastLevel < castLevel) {
+                    if(source && source === "user") skillCheck = await socket.executeAsUser("remoteAbilityTest", browserUser, { spellcasting: validTokenSecondary.actor.system.attributes.spellcasting, actorUuid: validTokenSecondary.actor.uuid });
+                    if(source && source === "gm") skillCheck = await socket.executeAsUser("remoteAbilityTest", gmUser, { spellcasting: validTokenSecondary.actor.system.attributes.spellcasting, actorUuid: validTokenSecondary.actor.uuid });
+                    let { skillTotal = skillCheck.skillRoll.total, skillFlavor = skillCheck.skillRoll.options.flavor } = skillCheck;
+
                     skillCheck = await validTokenSecondary.actor.rollAbilityTest(validTokenSecondary.actor.system.attributes.spellcasting);
-                    let skillCheckTotal;
-                    let abjurationCheck = validTokenSecondary.actor.items.find(i => i.name.toLowerCase() === "improved abjuration");
-                    abjurationCheck ? skillCheckTotal = skillCheck.total + validTokenSecondary.actor.system?.attributes?.prof : skillCheckTotal = skillCheck.total;
-                    if (skillCheckTotal >= spellThreshold) {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor}.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    let abjurationCheck = validTokenSecondary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
+                    abjurationCheck ? skillTotal = skillTotal + validTokenSecondary.actor.system?.attributes?.prof : skillTotal = skillTotal;
+                    if (skillTotal >= spellThreshold) {
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillTotal} ${skillFlavor}.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         counterspellLevel = itemRollCastLevel;
                     }
                     else {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillCheckTotal} ${skillCheck.options.flavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillTotal} ${skillFlavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         csFailure = true;
                     }
                 }
@@ -324,10 +315,26 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await helpers.addReaction({actorUuid: `${validTokenSecondary.actor.uuid}`});
 
-                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck});
+                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillCheck.skillRoll});
                 
 
                 if(csFailure === true) continue;
+
+                let cprConfig = helpers.getCprConfig({itemUuid: chosenSpell.uuid});
+                const { animEnabled } = cprConfig;
+                if(animEnabled) {
+                    new Sequence()
+                    .effect()
+                        .file("animated-spell-effects-cartoon.energy.beam.01")
+                        .fadeIn(500)
+                        .fadeOut(500)
+                        .atLocation(validTokenSecondary)
+                        .stretchTo(validTokenPrimary, {offset:{x: 100, y: 0}, local: true})
+                        .filter("ColorMatrix", { brightness: 0, contrast: 1 })
+                        .playbackRate(0.8)
+                    .play()
+                }
+
                 if(!hasVSMProperty) return;
                 castLevel = counterspellLevel;
                 await initialCounterspellProcess(workflow, lastMessage, castLevel, validTokenSecondary);
