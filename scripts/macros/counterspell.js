@@ -5,7 +5,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     const workflow = await MidiQOL.Workflow.getWorkflow(`${workflowData}`);
     if(!workflow) return;
     const gpsUuid = "a3992a10-f36a-4416-a995-f83d444c3c0a";
-    if(workflow.item.type !== "spell" || workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Counterspell";
     let dialogId = gpsUuid;
     const lastMessage = game.messages.contents[game.messages.contents.length - 1]; // Use to hide initial spell message
@@ -108,9 +108,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
             else if (userDecision) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
 
-                let chosenSpell = validTokenPrimary.actor.items.find(i => i.name === itemProperName);
-
-                hasVSMProperty = castProperties.some(prop => chosenSpell.system.properties.has(prop));
+                hasVSMProperty = castProperties.some(prop => chosenItem.system.properties.has(prop));
 
                 const options = {
                     showFullCard: false,
@@ -120,8 +118,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     targetUuids: [selectedToken.document.uuid]
                 };
 
-                if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenSpell.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
-                else if(source && source === "gm") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenSpell.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+                if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+                else if(source && source === "gm") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
     
                 if(!itemRoll) continue;
 
@@ -167,11 +165,11 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillRoll});
+                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: skillRoll});
 
                 if(csFailure === true) continue;
 
-                let cprConfig = helpers.getCprConfig({itemUuid: chosenSpell.uuid});
+                let cprConfig = helpers.getCprConfig({itemUuid: chosenItem.uuid});
                 const { animEnabled } = cprConfig;
                 if(animEnabled) {
                     new Sequence()
@@ -261,9 +259,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
             else if (userDecision) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
 
-                let chosenSpell = validTokenSecondary.actor.items.find(i => i.name === itemProperName);
-
-                hasVSMProperty = castProperties.some(prop => chosenSpell.system.properties.has(prop));
+                hasVSMProperty = castProperties.some(prop => chosenItem.system.properties.has(prop));
 
                 const options = {
                     showFullCard: false,
@@ -273,8 +269,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     targetUuids: [validTokenPrimary.document.uuid]
                 };
 
-                if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenSpell.uuid, actorUuid: validTokenSecondary.actor.uuid, options: options });
-                else if(source && source === "gm") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenSpell.uuid, actorUuid: validTokenSecondary.actor.uuid, options: options });
+                if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenSecondary.actor.uuid, options: options });
+                else if(source && source === "gm") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenSecondary.actor.uuid, options: options });
     
                 if(!itemRoll) continue;
 
@@ -320,12 +316,12 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await helpers.addReaction({actorUuid: `${validTokenSecondary.actor.uuid}`});
 
-                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenSpell.uuid, chatContent: chatContent, rollData: skillRoll});
+                await socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: skillRoll});
                 
 
                 if(csFailure === true) continue;
 
-                let cprConfig = helpers.getCprConfig({itemUuid: chosenSpell.uuid});
+                let cprConfig = helpers.getCprConfig({itemUuid: chosenItem.uuid});
                 const { animEnabled } = cprConfig;
                 if(animEnabled) {
                     new Sequence()

@@ -9,21 +9,24 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     let itemName = "Cutting Words";
     let dialogId = gpsUuid;
     let gmUser = helpers.getPrimaryGM();
+    let homebrewDisableMaxMiss = MidiQOL.safeGetGameSetting('gambits-premades', 'disableCuttingWordsMaxMiss');
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["bardic inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
-        let itemProperName = chosenItem?.name;
-        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let bardicDie = validTokenPrimary.actor.system.scale?.bard["bardic-inspiration"]?.die;
         if(!bardicDie) {
             ui.notifications.error("You must have a Bard scale for this actor named 'bardic-inspiration'")
             continue;
         }
+        let bardicNum = validTokenPrimary.actor.system.scale?.bard["bardic-inspiration"]?.faces;
+        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        let itemProperName = chosenItem?.name;
+        const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
+        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent;
@@ -68,7 +71,14 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             `;
         }
         else if(workflowType === "attack") {
-            if(workflow.token.document.disposition === validTokenPrimary.document.disposition) continue;
+            if(workflow.token.document.disposition === validTokenPrimary.document.disposition) {
+                if(debugEnabled) console.error(`${itemName} for ${validTokenPrimary.actor.name} failed at failed at token disposition check`);
+                continue;
+            }
+            if(((workflow.attackTotal - bardicNum) >= workflow.targets.first()?.actor.system.attributes.ac.value) && homebrewDisableMaxMiss) {
+                if(debugEnabled) console.error(`${itemName} for ${validTokenPrimary.actor.name} failed at homebrew max bardic die would not effect hit`);
+                continue;
+            }
 
             dialogContent = `
                 <div class="gps-dialog-container">
@@ -93,7 +103,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             `;
         }
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`;
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a ${workflowType} triggering ${itemProperName}.</span>`;
         let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -199,7 +209,8 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             }
 
             else if(workflowType === "attack") {
-                let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
+                
+                let targetAC = workflow.targets.first()?.actor.system.attributes.ac.value;
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let reroll;

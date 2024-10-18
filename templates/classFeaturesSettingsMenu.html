@@ -131,9 +131,9 @@
                     </td>
                 </tr>
 
-                <tr>
+                <tr class="clickable" data-content-id="collapsible-content-cuttingwords">
                     <td class="column-item">
-                        <label for="enableCuttingWords">Cutting Words<br><span class="small-text">Presents a dialog to College of Lore Bards with Cutting Words.</span>
+                        <label>Cutting Words<br><span class="small-text">Presents a dialog to College of Lore Bards with Cutting Words.</span>
                         </label>
                     </td>
                     <td class="column-enable-td">
@@ -145,6 +145,19 @@
                         <input type="text" id="cuttingWordsTimeout" name="cuttingWordsTimeout" value="{{cuttingWordsTimeout}}" data-dtype="String">
                     </td>
                 </tr>
+                <tbody class="collapsible-content" id="collapsible-content-cuttingwords">
+                    <tr>
+                        <td class="column-item">
+                            <label for="disableCuttingWordsMaxMiss">Disable prompt if max bardic die would not effect hit.</label>
+                        </td>
+                        <td class="column-enable-td">
+                            <div>
+                                <input type="checkbox" id="disableCuttingWordsMaxMiss" name="disableCuttingWordsMaxMiss" data-dtype="Boolean" {{checked disableCuttingWordsMaxMiss}}/>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
 
                 <tr class="clickable" data-content-id="collapsible-content-interception">
                     <td class="column-item">

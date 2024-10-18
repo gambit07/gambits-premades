@@ -22,6 +22,8 @@ import { rainOfCinders } from './macros/rainOfCinders.js';
 import { biohazard } from './macros/biohazard.js';
 import { restoreBalance } from './macros/restoreBalance.js';
 import { legendaryResistance } from './macros/legendaryResistance.js';
+import { burstOfIngenuity } from './macros/burstOfIngenuity.js';
+import { temporalShunt } from './macros/temporalShunt.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest } from './helpers.js';
 export let socket;
@@ -160,6 +162,8 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("gmDeleteItem", gmDeleteItem);
     socket.register("remoteCompleteItemUse", remoteCompleteItemUse);
     socket.register("remoteAbilityTest", remoteAbilityTest);
+    socket.register("burstOfIngenuity", burstOfIngenuity);
+    socket.register("temporalShunt", temporalShunt);
 })
 
 Hooks.once('ready', async function() {
@@ -206,7 +210,9 @@ Hooks.once('ready', async function() {
 
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemUuid;
-        if (game.gpsSettings.counterspellEnabled) await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        let workflowType = (workflow.item.hasSave) ? "save" : (workflow.item.hasAttack) ? "attack" : "item";
+        if (game.gpsSettings.counterspellEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
+        if (game.gpsSettings.temporalShuntEnabled && (workflow.item.type === "spell" || workflow.item.hasAttack)) await executeWorkflow({ workflowItem: "temporalShunt", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
@@ -256,6 +262,7 @@ Hooks.once('ready', async function() {
         if (game.gpsSettings.indomitableEnabled) await executeWorkflow({ workflowItem: "indomitable", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.witchesHexEnabled) await executeWorkflow({ workflowItem: "witchesHex", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.legendaryResistanceEnabled) await executeWorkflow({ workflowItem: "legendaryResistance", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        if (game.gpsSettings.burstOfIngenuityEnabled) await executeWorkflow({ workflowItem: "burstOfIngenuity", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
@@ -364,7 +371,10 @@ async function updateSettings(settingKey = null) {
         'enableRainOfCinders': 'rainOfCindersEnabled',
         'Enable Opportunity Attack': 'opportunityAttackEnabled',
         'enableRestoreBalance': 'restoreBalanceEnabled',
-        'enableLegendaryResistance': 'legendaryResistanceEnabled'
+        'enableLegendaryResistance': 'legendaryResistanceEnabled',
+        'enableBurstOfIngenuity': 'burstOfIngenuityEnabled',
+        'enableTemporalShunt': 'temporalShuntEnabled',
+        'disableCuttingWordsMaxMiss': 'disableCuttingWordsMaxMiss'
     };
 
     if (settingKey === null) {

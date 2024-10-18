@@ -616,6 +616,65 @@ function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableBurstOfIngenuity", {
+        name: "enableBurstOfIngenuity",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Burst of Ingenuity Timeout', {
+        name: "Burst of Ingenuity Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
+    game.settings.register("gambits-premades", "enableTemporalShunt", {
+        name: "enableTemporalShunt",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Temporal Shunt Timeout', {
+        name: "Temporal Shunt Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
+    game.settings.register("gambits-premades", "disableCuttingWordsMaxMiss", {
+        name: "disableCuttingWordsMaxMiss",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
     game.settings.register("gambits-premades", "enableRegionWrapping", {
         name: "enableRegionWrapping",
         scope: "world",
@@ -675,6 +734,18 @@ function registerSettings() {
         scope: 'world',
         config: true,
         type: genericFeatureSettingsMenu,
+        restricted: true
+    });
+
+    
+    game.settings.registerMenu('gambits-premades', 'monsterFeatures', {
+        name: game.i18n.localize("Monster Features"),
+        label: game.i18n.localize("Enable Monster Features"),
+        hint: game.i18n.localize("Monster Features"),
+        icon: 'fas fa-dragon',
+        scope: 'world',
+        config: true,
+        type: monsterFeaturesSettingsMenu,
         restricted: true
     });
 }
@@ -750,6 +821,13 @@ class BaseSettingsMenu extends FormApplication {
             const counterspellContent = html.find('#collapsible-content-counterspell');
             if (counterspellContent.length) {
                 counterspellContent.addClass('show');
+            }
+        }
+
+        if (data.enableCuttingWords && data.disableCuttingWordsMaxMiss) {
+            const cuttingWordsContent = html.find('#collapsible-content-cuttingwords');
+            if (cuttingWordsContent.length) {
+                cuttingWordsContent.addClass('show');
             }
         }
     }
@@ -837,6 +915,7 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         const data = {
             enableCuttingWords: game.settings.get("gambits-premades", "Enable Cutting Words"),
             cuttingWordsTimeout: game.settings.get("gambits-premades", "Cutting Words Timeout"),
+            disableCuttingWordsMaxMiss: game.settings.get("gambits-premades", "disableCuttingWordsMaxMiss"),
             enableInterception: game.settings.get("gambits-premades", "Enable Interception"),
             interceptionTimeout: game.settings.get("gambits-premades", "Interception Timeout"),
             enableInterceptionCustomDice: game.settings.get("gambits-premades", "enableInterceptionCustomDice"),
@@ -872,6 +951,7 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
     async _updateObject(event, formData) {
         await game.settings.set("gambits-premades", "Enable Cutting Words", formData.enableCuttingWords);
         await game.settings.set("gambits-premades", "Cutting Words Timeout", formData.cuttingWordsTimeout);
+        await game.settings.set("gambits-premades", "disableCuttingWordsMaxMiss", formData.disableCuttingWordsMaxMiss);
         await game.settings.set("gambits-premades", "Enable Interception", formData.enableInterception);
         await game.settings.set("gambits-premades", "Interception Timeout", formData.interceptionTimeout);
         await game.settings.set("gambits-premades", "enableInterceptionCustomDice", formData.enableInterceptionCustomDice);
@@ -961,7 +1041,9 @@ class spellSettingsMenu extends BaseSettingsMenu {
             disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
             enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20"),
             enablePowerWordRebound: game.settings.get("gambits-premades", "Enable Power Word Rebound"),
-            powerWordReboundTimeout: game.settings.get("gambits-premades", "Power Word Rebound Timeout")
+            powerWordReboundTimeout: game.settings.get("gambits-premades", "Power Word Rebound Timeout"),
+            enableTemporalShunt: game.settings.get("gambits-premades", "enableTemporalShunt"),
+            temporalShuntTimeout: game.settings.get("gambits-premades", "Temporal Shunt Timeout")
         };
     }
 
@@ -975,6 +1057,8 @@ class spellSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "enableSilveryBarbsOnNat20", formData.enableSilveryBarbsOnNat20);
         await game.settings.set("gambits-premades", "Enable Power Word Rebound", formData.enablePowerWordRebound);
         await game.settings.set("gambits-premades", "Power Word Rebound Timeout", formData.powerWordReboundTimeout);
+        await game.settings.set("gambits-premades", "enableTemporalShunt", formData.enableTemporalShunt);
+        await game.settings.set("gambits-premades", "Temporal Shunt Timeout", formData.temporalShuntTimeout);
     }
 }
 
@@ -1011,5 +1095,27 @@ class generalSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Identify Restriction Message", formData.identifyRestrictionMessage);
         await game.settings.set("gambits-premades", "enableRegionWrapping", formData.enableRegionWrapping);
         await game.settings.set("gambits-premades", "primaryGM", formData.primaryGM);
+    }
+}
+
+class monsterFeaturesSettingsMenu extends BaseSettingsMenu {
+    static get defaultOptions() {
+        return foundry.utils.mergeObject(super.defaultOptions, {
+            id: "monsterFeatureSettingsMenu",
+            title: "Enable Monster Features",
+            template: "modules/gambits-premades/templates/monsterFeaturesSettingsMenu.html",
+        });
+    }
+
+    getData() {
+        return {
+            enableBurstOfIngenuity: game.settings.get("gambits-premades", "enableBurstOfIngenuity"),
+            burstOfIngenuityTimeout: game.settings.get("gambits-premades", "Burst of Ingenuity Timeout")
+        };
+    }
+
+    async _updateObject(event, formData) {
+        await game.settings.set("gambits-premades", "enableBurstOfIngenuity", formData.enableBurstOfIngenuity);
+        await game.settings.set("gambits-premades", "Burst of Ingenuity Timeout", formData.burstOfIngenuityTimeout);
     }
 }

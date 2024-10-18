@@ -197,6 +197,21 @@
                     <td></td>
                 </tr>
             </tbody>
+
+            <tr>
+                <td class="column-item">
+                    <label for="enableTemporalShunt">Temporal Shunt<br><span class="small-text">Presents a dialog to players with Temporal Shunt.</span>
+                    </label>
+                </td>
+                <td class="column-enable-td">
+                    <div>
+                        <input type="checkbox" id="enableTemporalShunt" name="enableTemporalShunt" data-dtype="Boolean" {{checked enableTemporalShunt}}/>
+                    </div>
+                </td>
+                <td class="column-timeout">
+                    <input type="text" id="temporalShuntTimeout" name="temporalShuntTimeout" value="{{temporalShuntTimeout}}" data-dtype="String">
+                </td>
+            </tr>
         </tbody>
     </table>
     <footer class="sheet-footer flexrow">

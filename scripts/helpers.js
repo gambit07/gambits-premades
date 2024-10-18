@@ -337,7 +337,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     return validTokens;
 }
 
-export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid, source, type, notificationId }) {
+export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid, source, type, notificationId, numTargets }) {
     const module = await import('./module.js');
     const socket = module.socket;
     let validTokenPrimary = await fromUuid(validTokenPrimaryUuid);
@@ -353,21 +353,22 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
         const itemSelect = dialogElement?.querySelector(`#item-select_${dialogId}`);
         const weaponImg = dialogElement?.querySelector(`#weapon-img_${dialogId}`);
         const damageList = dialogElement?.querySelector(`#damage-list`);
+        const enemyTokens = dialogElement?.querySelectorAll('input.enemy-tokens');
         let draggedItem = null;
-
+    
         function handleFocusIn(event) {
             validTokenPrimary.object.control({ releaseOthers: true });
         }
-
+    
         function handleFocusOut(event) {
             validTokenPrimary.object.release();
         }
-
+    
         function handleMouseDown(event) {
             setTimeout(() => dialogElement.focus(), 0);
             validTokenPrimary.object.control({ releaseOthers: true });
         }
-
+    
         function handlePauseButtonClick() {
             dialog.isPaused = !dialog.isPaused;
             if (dialog.isPaused) {
@@ -377,7 +378,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 requestAnimationFrame(animate);
             }
             dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
-        
+    
             const pauseState = { dialogId: dialogId, timeLeft: dialog.timeLeft, isPaused: dialog.isPaused };
             if (source === "user" && type === "multiDialog") {
                 socket.executeAsUser("pauseDialogById", getPrimaryGM(), pauseState);
@@ -385,18 +386,18 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 socket.executeAsUser("pauseDialogById", browserUser, pauseState);
             }
         }
-
+    
         function handleItemSelectChange(event) {
             const selectedOption = event.target.options[event.target.selectedIndex];
             weaponImg.src = selectedOption.getAttribute('name');
         }
-
+    
         function handleDragStart(event) {
             event.dataTransfer.setData('text/plain', event.target.innerText);
             event.dataTransfer.effectAllowed = 'move';
             draggedItem = event.target;
         }
-
+    
         function handleDragOver(event) {
             event.preventDefault();
             event.dataTransfer.dropEffect = 'move';
@@ -407,31 +408,40 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 damageList.insertBefore(draggedItem, next && target.nextSibling || target);
             }
         }
-
+    
         function handleDragEnd() {
             draggedItem = null;
         }
-
+    
+        function handleCheckboxChange(event) {
+            const checkedBoxes = dialogElement.querySelectorAll('input.enemy-tokens:checked');
+    
+            if (checkedBoxes.length > numTargets) {
+                event.target.checked = false;
+                ui.notifications.warn(`You can only select up to ${numTargets} targets.`);
+            }
+        }
+    
         if (windowTitle) {
             windowTitle.addEventListener('focusin', handleFocusIn);
             windowTitle.addEventListener('focusout', handleFocusOut);
             windowTitle.addEventListener('mousedown', handleMouseDown);
         }
-
+    
         if (pauseButton) {
             pauseButton.addEventListener('click', handlePauseButtonClick);
-
+    
             if (source === "gm" && type === "multiDialog") {
                 pauseButton.setAttribute("autofocus", "true");
                 pauseButton.focus();
             }
         }
-
+    
         if (itemSelect && itemSelect.options.length > 0 && weaponImg) {
             weaponImg.src = itemSelect.options[0].getAttribute('name');
             itemSelect.addEventListener('change', handleItemSelectChange);
         }
-
+    
         if (damageList) {
             const damageListItems = damageList.querySelectorAll('li');
             damageListItems.forEach(item => {
@@ -440,12 +450,32 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             damageList.addEventListener('dragover', handleDragOver);
             damageList.addEventListener('dragend', handleDragEnd);
         }
-
-        return { windowTitle, pauseButton, itemSelect, damageList, handleFocusIn, handleFocusOut, handleMouseDown, handlePauseButtonClick, handleItemSelectChange, handleDragStart, handleDragOver, handleDragEnd };
+    
+        if (enemyTokens && enemyTokens.length > 0) {
+            enemyTokens.forEach(checkbox => {
+                checkbox.addEventListener('change', handleCheckboxChange);
+            });
+        }
+    
+        return {
+            windowTitle,
+            pauseButton,
+            itemSelect,
+            damageList,
+            handleFocusIn,
+            handleFocusOut,
+            handleMouseDown,
+            handlePauseButtonClick,
+            handleItemSelectChange,
+            handleDragStart,
+            handleDragOver,
+            handleDragEnd,
+            handleCheckboxChange
+        };
     }
 
     function cleanupEventListeners(listeners) {
-        const { windowTitle, pauseButton, itemSelect, damageList, handleFocusIn, handleFocusOut, handleMouseDown, handlePauseButtonClick, handleItemSelectChange, handleDragStart, handleDragOver, handleDragEnd } = listeners;
+        const { windowTitle, pauseButton, itemSelect, damageList, enemyTokens, handleFocusIn, handleFocusOut, handleMouseDown, handlePauseButtonClick, handleItemSelectChange, handleDragStart, handleDragOver, handleDragEnd, handleCheckboxChange } = listeners;
         
         if (windowTitle) {
             windowTitle.removeEventListener('focusin', handleFocusIn);
@@ -468,6 +498,12 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             });
             damageList.removeEventListener('dragover', handleDragOver);
             damageList.removeEventListener('dragend', handleDragEnd);
+        }
+
+        if (enemyTokens && enemyTokens.length > 0) {
+            enemyTokens.forEach(checkbox => {
+                checkbox.removeEventListener('change', handleCheckboxChange);
+            });
         }
     }
 
@@ -498,7 +534,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                     }
                     
                     let damageChosen = [];
-                    let damageListItems = document.querySelectorAll(`#damage-list li .damage-type`);
+                    let damageListItems = document?.querySelectorAll(`#damage-list li .damage-type`);
                     if (damageListItems?.length > 0) {
                         damageListItems.forEach(item => damageChosen.push(item.textContent.trim()));
                     }
@@ -506,7 +542,10 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                     let selectedItemUuid = button.form?.elements[`item-select_${dialogId}`]?.value ?? false;
                     let favoriteCheck = button.form?.elements["gps-favorite-checkbox"]?.checked ?? false;
 
-                    result = ({ userDecision: true, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, abilityCheck, programmaticallyClosed: false, source, type });
+                    let enemyTokenUuids = document?.querySelectorAll('input.enemy-tokens:checked') ?? false;
+                    if(enemyTokenUuids) enemyTokenUuids = Array.from(enemyTokenUuids).map(checkbox => checkbox.value);
+
+                    result = ({ userDecision: true, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, abilityCheck, enemyTokenUuids, programmaticallyClosed: false, source, type });
                 }
             },
             {
@@ -1111,9 +1150,9 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options}) {
     itemData.applyActiveEffects();
     
     let remoteCIU = await MidiQOL.completeItemUse(itemData, {actorUuid}, options);
-    let checkHits = remoteCIU.hitTargets.first() ? true : false;
+    let checkHits = remoteCIU?.hitTargets?.first() ? true : false;
 
-    return {castLevel: remoteCIU.castData.castLevel, checkHits: checkHits};
+    return {castLevel: remoteCIU?.castData?.castLevel, checkHits: checkHits};
 }
 
 export async function remoteAbilityTest({spellcasting, actorUuid}) {
