@@ -18,11 +18,16 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Burst of Ingenuity: Adds the 2024 Sphinx of Wonder familiars reaction" >> release_notes.txt
-          echo "  - Temporal Shunt: Adds the Wildemount spell Temporal Shunt. Animation is configurable if used with CPRs medkit." >> release_notes.txt
+          echo "- General:" >> release_notes.txt
+          echo "  - Region Wrapper: Added handling for a gps boolean flag excludeRegionHandling. If used this will prevent gps custom region wrapping of token point testing for a given region." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Cutting Words: Add homebrew option to only allow attack dialog if max bardic die is able to successfully influence the roll." >> release_notes.txt
+          echo "  - Fireball: Completely revamped animation and sounds. Added cpr medkit options for enabling/disabling the animation and picking a color." >> release_notes.txt
+          echo "  - Ashardalons Stride: Added animation. Added cpr medkit option for enabling/disabling the animation." >> release_notes.txt
+          echo "  - Dimension Door: Added cpr medkit options for picking a color." >> release_notes.txt
+          echo "  - Witches Hex: Added animation. Added cpr medkit option for enabling/disabling the animation." >> release_notes.txt
+          echo "  - Drawing the Hearth: Added cpr medkit option for enabling/disabling the animation." >> release_notes.txt
+          echo "  - Rain of Cinders: Added cpr medkit option for enabling/disabling the animation." >> release_notes.txt
+          echo "  - Cutting Words: Added animation. Added cpr medkit option for enabling/disabling the animation and picking a color." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

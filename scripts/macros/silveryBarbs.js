@@ -1,4 +1,3 @@
-//done
 export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     const module = await import('../module.js');
     const socket = module.socket;

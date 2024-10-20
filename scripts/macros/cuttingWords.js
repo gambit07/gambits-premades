@@ -25,6 +25,30 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
         let bardicNum = validTokenPrimary.actor.system.scale?.bard["bardic-inspiration"]?.faces;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
+        let cprConfig = helpers.getCprConfig({itemUuid: chosenItem.uuid});
+        const { animEnabled, animColor } = cprConfig;
+        let hue;
+        switch (animColor) {
+            case "blue":
+                hue = 180;
+                break;
+            case "green":
+                hue = 70;
+                break;
+            case "purple":
+                hue = 220;
+                break;
+            case "pink":
+                hue = 300;
+                break;
+            case "yellow":
+                hue = 0;
+                break;
+            case "orange":
+                hue = 330;
+                break;
+            default: hue = 0;
+        }
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
@@ -157,6 +181,26 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
                 ChatMessage.create(chatData);
 
                 continue;
+            }
+
+            if(animEnabled) {
+                new Sequence()
+                    .effect()
+                        .atLocation(workflow.token)
+                        .file("jb2a.melee_generic.slashing.two_handed")
+                        .scaleToObject(2.5)
+                        .spriteRotation(135)
+                        .filter("ColorMatrix", { saturate: 1.5, hue: hue })
+                    .play()
+
+                    new Sequence()
+                    .effect()
+                        .atLocation(workflow.token)
+                        .file("jb2a.melee_generic.slashing.two_handed")
+                        .scaleToObject(2.5)
+                        .spriteRotation(40)
+                        .filter("ColorMatrix", { saturate: 1.5, hue: hue })
+                    .play()
             }
 
             if(workflowType === "damage") {

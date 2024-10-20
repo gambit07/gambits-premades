@@ -1131,14 +1131,15 @@ export async function gmDeleteItem({itemUuid}) {
 }
 
 export function getCprConfig({itemUuid}) {
-    if(!game.modules.get("chris-premades")?.active) return {animEnabled: true};
+    if(!game.modules.get("chris-premades")?.active) return {animEnabled: true, animColor: null};
     let itemData = fromUuidSync(itemUuid);
-    if(!itemData) return {animEnabled: true};
+    if(!itemData) return {animEnabled: true, animColor: null};
     let cprConfig = itemData.getFlag("chris-premades", "config");
-    if(!cprConfig) return {animEnabled: true};
+    if(!cprConfig) return {animEnabled: true, animColor: null};
     let animEnabled = cprConfig?.playAnimation;
-    if(animEnabled) return {animEnabled: true};
-    else return {animEnabled: false};
+    let animColor = cprConfig?.color ?? null;
+    if(animEnabled) return {animEnabled: true, animColor: animColor};
+    else return {animEnabled: false, animColor: null};
 }
 
 export async function remoteCompleteItemUse({itemUuid, actorUuid, options}) {

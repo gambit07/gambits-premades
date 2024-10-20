@@ -38,8 +38,8 @@ Hooks.once('init', async function() {
         libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
             const [region, position] = args;
 
+            if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
             if (canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
-        
             if (!this || !this.document) return wrapped(...args);
             
             const pointsToTest = [];
@@ -76,17 +76,17 @@ Hooks.once('init', async function() {
         
         libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
             const [region, waypoints, options] = args;
-        
-            if (!this || !this.document) {
-                return wrapped(...args);
-            }
+
+            if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
+            if (canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
+            if (!this || !this.document) return wrapped(...args);
             
-            const { teleport = false } = options || {};
-            const samples = [];
+            const pointsToTest = [];
             const size = canvas.dimensions.size;
             const width = this.document.width;
             const height = this.document.height;
             const reduction = 5;
+            const { teleport = false } = options || {};
         
             const points = [
                 { x: reduction, y: reduction, elevation: this.document.elevation },
@@ -100,10 +100,10 @@ Hooks.once('init', async function() {
             ];
         
             points.forEach(point => {
-                samples.push(point);
+                pointsToTest.push(point);
             });
             
-            const segments = region.segmentizeMovement(waypoints, samples, { teleport });
+            const segments = region.segmentizeMovement(waypoints, pointsToTest, { teleport });
             
             return segments || wrapped(...args);
         }, 'MIXED');

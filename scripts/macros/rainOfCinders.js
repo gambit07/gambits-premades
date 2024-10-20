@@ -25,6 +25,8 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
         }
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
+        let cprConfig = helpers.getCprConfig({itemUuid: chosenItem.uuid});
+        const { animEnabled } = cprConfig;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let baseItem = validTokenPrimary.actor.items.find(i => i.name === "Drawing the Hearth");
@@ -88,6 +90,20 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
             if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
             if(!itemRoll) continue;
+
+            if(animEnabled) {
+                for (let i = 0; i < 5; i++) {
+                    new Sequence()
+                        .effect()
+                            .file("jaamod.fire.fuse_new")
+                            .fadeIn(250)
+                            .fadeOut(250)
+                            .atLocation(workflow.token, { randomOffset: 0.3 })
+                            .scaleToObject(1.1)
+                            .spriteRotation(90)
+                        .play();
+                }
+            }
 
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 

@@ -28,6 +28,8 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
     for (const validTokenPrimary of findValidTokens) {
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
+        let cprConfig = helpers.getCprConfig({itemUuid: chosenItem.uuid});
+        const { animEnabled } = cprConfig;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
@@ -152,6 +154,17 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
             if(!itemRoll) continue;
 
+            if(animEnabled) {
+                new Sequence()
+                .effect()
+                    .file("animated-spell-effects-cartoon.misc.all seeing eye")
+                    .fadeIn(250)
+                    .fadeOut(250)
+                    .atLocation(target)
+                    .playbackRate(0.9)
+                .play()
+            }
+
             await helpers.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
             let actorLevel = validTokenPrimary.actor.system.details.level;
@@ -206,7 +219,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                         {
                             "icon": `${flamesEmbrace.img}`,
                             "duration": {
-                            "seconds": 60
+                                "seconds": 60
                             },
                             "disabled": false,
                             "name": "Flame's Embrace",
@@ -241,7 +254,19 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                         }
                     }
 
-                    await target.actor.createEmbeddedDocuments("Item", [itemData]);
+                    let newItem = await target.actor.createEmbeddedDocuments("Item", [itemData]);
+
+                    if(animEnabled) {
+                        new Sequence()
+                        .effect()
+                            .file("animated-spell-effects-cartoon.fire.18")
+                            .attachTo(target, { align: "bottom-left", edge: "inner" })
+                            .persist()
+                            .scaleToObject(0.5)
+                            .filter("ColorMatrix", { hue: 70 })
+                            .tieToDocuments(newItem[0])
+                        .play()
+                    }
                 }
             }
 
