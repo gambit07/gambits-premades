@@ -25,7 +25,7 @@ import { legendaryResistance } from './macros/legendaryResistance.js';
 import { burstOfIngenuity } from './macros/burstOfIngenuity.js';
 import { temporalShunt } from './macros/temporalShunt.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest, findValidToken } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -196,6 +196,7 @@ Hooks.once('ready', async function() {
         getBrowserUser,
         gmDeleteItem,
         getCprConfig,
+        findValidToken,
         socket
     };
 

@@ -337,6 +337,163 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     return validTokens;
 }
 
+export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName, itemType, itemChecked, reactionCheck, sightCheck, sightCheckType = "enemy", rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat, gpsUuid}) {
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
+    let workflowNonCombat = MidiQOL.safeGetGameSetting('gambits-premades', 'enable3prNoCombat');
+
+    if (workflowCombat && !workflowNonCombat) {
+        let combat = game.combat;
+        if (!combat) {
+            if(debugEnabled) console.error(`${itemName} failed at check if combat active`);
+            return false;
+        }
+    }
+
+    let targetedToken = fromUuidSync(targetedTokenUuid);
+    targetedToken = targetedToken?.object;
+    if(!targetedToken) {
+        if(debugEnabled) console.error(`${itemName} failed no targetedToken found`);
+        return false;
+    }
+
+    let initiatingToken = fromUuidSync(initiatingTokenUuid);
+    initiatingToken = initiatingToken?.object;
+    if(!initiatingToken) {
+        if(debugEnabled) console.error(`${itemName} failed no initiatingToken found`);
+        return false;
+    }
+
+    // Check if invalid token on the canvas
+    if (!targetedToken.actor) {
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor ? targetedToken.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
+        return false;
+    }
+    let checkItem;
+    if(gpsUuid) checkItem = targetedToken?.actor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+    else checkItem = targetedToken?.actor?.items?.find(i => i.name.toLowerCase() === itemName.toLowerCase());
+    const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
+    let hasEffectOrigin = targetedToken?.actor?.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
+    let measuredDistance = MidiQOL.computeDistance(initiatingToken,targetedToken,true);
+    let range = game.gps.convertFromFeet({range: rangeTotal});
+
+    // Check if the token has the actual item to use
+    if(!checkItem) {
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check if reaction item exists`);
+        return false;
+    }
+
+    // Check if the tokens reaction already used
+    else if(reactionCheck && MidiQOL.hasUsedReaction(targetedToken.actor)) {
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at reaction available`);
+        return false;
+    }
+
+    // Check if the token is incapacitated
+    else if(MidiQOL.checkIncapacitatedtargetedToken) {
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at is incapacitated`);
+        return false;
+    }
+
+    // Check if the token is the initiating token or not a qualifying token disposition
+    else if(dispositionCheck && ((targetedToken.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && targetedToken.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && targetedToken.document.disposition !== initiatingToken.document.disposition))) {
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at token disposition check`);
+        return false;
+    }
+
+    // Check if token can see initiating token
+    else if(sightCheck && ((sightCheckType === "ally" && !MidiQOL.canSee(initiatingToken, targetedToken)) || (sightCheckType === "enemy" && !MidiQOL.canSee(targetedToken, initiatingToken)))) {
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at sight check`);
+        return false;
+    }
+
+    // Check if token is under an effect preventing reactions
+    else if(reactionCheck && hasEffectOrigin) {
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at spell effect preventing reaction`);
+        return false;
+    }
+
+    // Check if token is within range
+    else if(rangeCheck && (measuredDistance === -1 || (measuredDistance > range))) {
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at range check`);
+        return false;
+    }
+
+    // Check if the token has available spell slots/uses
+    if(itemType === "spell") {
+        const spells = targetedToken.actor.system.spells;
+        let spellLevel = checkItem?.system?.level;
+        let checkType = checkItem?.system?.preparation?.mode;
+        let hasSpellSlots = false;
+        if(checkType === "prepared" && checkItem?.system?.preparation?.prepared === false) return false;
+        if(checkType === "prepared" || checkType === "always")
+        {
+            for (let level = spellLevel; level <= 9; level++) {
+                let spellSlot = targetedToken.actor.system.spells[`spell${level}`].value;
+                if (spellSlot > 0) {
+                    hasSpellSlots = true;
+                    break;
+                }
+            }
+        }
+        else if(checkType === "pact")
+        {
+            let spellSlotValue = spells.pact.value;
+            if (spellSlotValue > 0) hasSpellSlots = true;
+        }
+        else if(checkType === "innate" || checkType === "atwill")
+        {
+            let slotValue = checkItem.system.uses.value;
+            let slotEnabled = checkItem.system.uses.per;
+            if (slotValue > 0 || slotEnabled === null) hasSpellSlots = true;
+        }
+
+        if (!hasSpellSlots) {
+            if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check valid spell slots/preparation`);
+            return false;
+        }
+    }
+
+    // Check if the token has available resource or item uses
+    if(itemType === "feature") {
+        let itemNames;
+        if(itemChecked) itemNames = itemChecked.map(item => item.toLowerCase());
+        else itemNames = [checkItem.name.toLowerCase()];
+        let resourceExistsWithValue;
+        let itemExistsWithValue;
+
+        if(itemNames.includes("legres")) resourceExistsWithValue = targetedToken.actor.system.resources.legres.value !== 0 ? true : false;
+
+        else {
+            resourceExistsWithValue = [targetedToken.actor.system.resources.primary, targetedToken.actor.system.resources.secondary, targetedToken.actor.system.resources.tertiary].some(resource => itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
+
+            if (!resourceExistsWithValue) {
+                itemExistsWithValue = targetedToken.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.value !== 0);
+            }
+        }
+
+        if (!resourceExistsWithValue && !itemExistsWithValue) {
+            if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check valid feature item/resource uses`);
+            return false;
+        }
+    }
+
+    if(itemType === "item") {
+        const itemNames = itemChecked.map(item => item.toLowerCase());
+        let itemExists = targetedToken.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
+
+        if (!itemExists) {
+            if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at valid item supporting feature`);
+            return false;
+        }
+    }
+
+    if(debugEnabled) {
+        console.warn(`%c${itemName} for ${targetedToken.actor.name} Reaction Validation Passed`, 'font-weight: bold');
+    }
+
+    return true;
+}
+
 export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid, source, type, notificationId, numTargets }) {
     const module = await import('./module.js');
     const socket = module.socket;
