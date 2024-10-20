@@ -1138,8 +1138,8 @@ export function getCprConfig({itemUuid}) {
     if(!cprConfig) return {animEnabled: true, animColor: null};
     let animEnabled = cprConfig?.playAnimation;
     let animColor = cprConfig?.color ?? null;
-    if(animEnabled) return {animEnabled: true, animColor: animColor};
-    else return {animEnabled: false, animColor: null};
+    if(animEnabled === true || animEnabled === false) return {animEnabled: animEnabled, animColor: animColor};
+    else return {animEnabled: true, animColor: animColor};
 }
 
 export async function remoteCompleteItemUse({itemUuid, actorUuid, options}) {
