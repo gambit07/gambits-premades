@@ -25,11 +25,11 @@ Dynamic effects using Active Effects<br>
 Region Attacher<br>
 </p>
 
-<b>Animation Modules</b>
+<b>Animation Modules</b><br>
 <p>
-<a href="https://foundryvtt.com/packages/jaamod/" target="_blank">Jinkers Animated Art</a>
-<a href="https://foundryvtt.com/packages/animated-spell-effects/" target="_blank">Animated Spell Effects (Jack Kerouac)</a>
-<a href="https://github.com/chrisk123999/animated-spell-effects-cartoon" target="_blank">Animated Spell Effects: Cartoon (Jack Kerouac)</a>
+<a href="https://foundryvtt.com/packages/jaamod/" target="_blank">Jinkers Animated Art</a><br>
+<a href="https://foundryvtt.com/packages/animated-spell-effects/" target="_blank">Animated Spell Effects (Jack Kerouac)</a><br>
+<a href="https://github.com/chrisk123999/animated-spell-effects-cartoon" target="_blank">Animated Spell Effects: Cartoon (Jack Kerouac)</a><br>
 <a href="https://www.patreon.com/c/JB2A/posts" target="_blank">JB2A Patreon</a>
 </p>
 
