@@ -19,10 +19,9 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Hellish Rebuke: Automates the Hellish Rebuke spell. Includes medkit configurable animation." >> release_notes.txt
-          echo "  - Improved Divine Smite: Small automation for Paladins improved divine smite." >> release_notes.txt
+          echo "  - Cloak of Displacement: Automates the Cloak of Displacement item. Includes medkit configurable animation." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Rebuke the Damned: Update to properly use reaction and channel divinity resources. Added medkit configurable animation" >> release_notes.txt
+          echo "  - Confusion: Added configurable medkit animation. Couple small bugfixes" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
