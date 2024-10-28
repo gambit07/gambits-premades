@@ -18,10 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions:" >> release_notes.txt
-          echo "  - Cloak of Displacement: Automates the Cloak of Displacement item. Includes medkit configurable animation." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Confusion: Added configurable medkit animation. Couple small bugfixes" >> release_notes.txt
+          echo "- General:" >> release_notes.txt
+          echo "  - Region Wrapping: Disable wrapping for the Opportunity Attack automation if using a gridded scene." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

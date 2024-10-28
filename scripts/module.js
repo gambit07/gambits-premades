@@ -39,7 +39,8 @@ Hooks.once('init', async function() {
             const [region, position] = args;
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
-            if (canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
+            if(canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
+            if(canvas.scene.grid.type === 1 && region?.document.flags["gambits-premades"]?.opportunityAttackSet === true) return wrapped(...args); //Don't wrap OA regions on gridded
             if (!this || !this.document) return wrapped(...args);
             
             const pointsToTest = [];
@@ -78,8 +79,9 @@ Hooks.once('init', async function() {
             const [region, waypoints, options] = args;
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
-            if (canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
-            if (!this || !this.document) return wrapped(...args);
+            if(canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
+            if(canvas.scene.grid.type === 1 && region?.document.flags["gambits-premades"]?.opportunityAttackSet === true) return wrapped(...args); //Don't wrap OA regions on gridded
+            if(!this || !this.document) return wrapped(...args);
             
             const pointsToTest = [];
             const size = canvas.dimensions.size;
