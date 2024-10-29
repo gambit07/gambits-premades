@@ -25,7 +25,7 @@ import { legendaryResistance } from './macros/legendaryResistance.js';
 import { burstOfIngenuity } from './macros/burstOfIngenuity.js';
 import { temporalShunt } from './macros/temporalShunt.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest, findValidToken } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest, findValidToken, generateTemplate } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -40,7 +40,7 @@ Hooks.once('init', async function() {
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
             if(canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
-            if(canvas.scene.grid.type === 1 && region?.document.flags["gambits-premades"]?.opportunityAttackSet === true) return wrapped(...args); //Don't wrap OA regions on gridded
+            if(canvas.scene.grid.type === 1 && region?.document.flags["gambits-premades"]?.opportunityAttackSet) return wrapped(...args); //Don't wrap OA regions on gridded
             if (!this || !this.document) return wrapped(...args);
             
             const pointsToTest = [];
@@ -80,7 +80,7 @@ Hooks.once('init', async function() {
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
             if(canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
-            if(canvas.scene.grid.type === 1 && region?.document.flags["gambits-premades"]?.opportunityAttackSet === true) return wrapped(...args); //Don't wrap OA regions on gridded
+            if(canvas.scene.grid.type === 1 && region?.document.flags["gambits-premades"]?.opportunityAttackSet) return wrapped(...args); //Don't wrap OA regions on gridded
             if(!this || !this.document) return wrapped(...args);
             
             const pointsToTest = [];
@@ -109,6 +109,24 @@ Hooks.once('init', async function() {
             
             return segments || wrapped(...args);
         }, 'MIXED');
+    }
+
+    if(game.settings.get("gambits-premades", "enableTemplatePreview")) {
+        Hooks.on('getSceneControlButtons', (controls) => {
+        const sidebarControls = controls.find(control => control.name === "token");
+    
+        if (sidebarControls) {
+            sidebarControls.tools.push({
+            name: "template-preview",
+            title: "Template Preview Tool",
+            icon: "fas fa-drafting-compass",
+            onClick: async () => {
+                await generateTemplate();
+            },
+            button: true
+            });
+        }
+        });
     }
 });
 

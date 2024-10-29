@@ -1,15 +1,8 @@
-2024/10/26-00:35:45.711 61e4 Recovering log #3178
-2024/10/26-00:35:45.716 61e4 Delete type=0 #3178
-2024/10/26-00:35:45.716 61e4 Delete type=3 #3176
-2024/10/26-12:17:12.835 500c Level-0 table #3183: started
-2024/10/26-12:17:12.838 500c Level-0 table #3183: 25947 bytes OK
-2024/10/26-12:17:12.841 500c Delete type=0 #3181
-2024/10/26-12:17:12.841 500c Manual compaction at level-0 from '!items!0qTQDQ2Cipf15JGW' @ 72057594037927935 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at (end)
-2024/10/26-12:17:12.841 500c Manual compaction at level-1 from '!items!0qTQDQ2Cipf15JGW' @ 72057594037927935 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at '!items.effects!EU01knV1iWL0qUwq.ldOYJlb9eTpZAfJj' @ 490 : 1
-2024/10/26-12:17:12.841 500c Compacting 1@1 + 1@2 files
-2024/10/26-12:17:12.849 500c Generated table #3184@1: 30 keys, 75891 bytes
-2024/10/26-12:17:12.849 500c Compacted 1@1 + 1@2 files => 75891 bytes
-2024/10/26-12:17:12.851 500c compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/10/26-12:17:12.851 500c Delete type=2 #3027
-2024/10/26-12:17:12.852 500c Delete type=2 #3183
-2024/10/26-12:17:12.862 500c Manual compaction at level-1 from '!items.effects!EU01knV1iWL0qUwq.ldOYJlb9eTpZAfJj' @ 490 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at (end)
+2024/10/26-12:19:11.904 4238 Recovering log #3182
+2024/10/26-12:19:11.910 4238 Delete type=0 #3182
+2024/10/26-12:19:11.910 4238 Delete type=3 #3180
+2024/10/26-13:54:50.049 500c Level-0 table #3188: started
+2024/10/26-13:54:50.049 500c Level-0 table #3188: 0 bytes OK
+2024/10/26-13:54:50.051 500c Delete type=0 #3186
+2024/10/26-13:54:50.054 500c Manual compaction at level-0 from '!items!0qTQDQ2Cipf15JGW' @ 72057594037927935 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at (end)
+2024/10/26-13:54:50.054 500c Manual compaction at level-1 from '!items!0qTQDQ2Cipf15JGW' @ 72057594037927935 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at (end)

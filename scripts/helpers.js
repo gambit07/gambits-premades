@@ -1327,3 +1327,292 @@ export async function remoteAbilityTest({spellcasting, actorUuid}) {
 
     return {skillRoll: rollId};
 }
+
+export async function generateTemplate() {
+    let pickedTokens;
+
+    if (canvas.tokens.controlled.length === 1) {
+        const selectedToken = canvas.tokens.controlled[0];
+        
+        if (selectedToken.document.testUserPermission(game.user, "OWNER") || game.user.isGM) {
+            pickedTokens = [selectedToken];
+        } else {
+            ui.notifications.warn("You do not have permission to use the template tool on the selected token.");
+            return;
+        }
+    } else {
+        pickedTokens = canvas.tokens.controlled.length > 1 ? canvas.tokens.controlled : canvas.tokens.placeables.filter(token => (token.actor?.hasPlayerOwner && token.document.testUserPermission(game.user, "OWNER")) || game.user.isGM);
+
+        pickedTokens = pickedTokens.filter(token => {
+            return token?.actor?.items.some(i => {
+                const targetType = i.system.target?.type;
+                const targetValue = i.system.target?.value;
+
+                if (!targetValue || !["cone", "cube", "cylinder", "line", "radius", "sphere", "square", "wall"].includes(targetType)) {
+                    return false;
+                }
+
+                if (i.type === "spell" && (i.system.level > 0 && i.system.preparation?.mode === "prepared" && !i.system.preparation.prepared)) {
+                    return false;
+                }
+
+                return true;
+            });
+        });
+
+        if (pickedTokens.length === 0) {
+            ui.notifications.warn("No selectable tokens with valid items are available.");
+            return;
+        }
+    }
+
+    const tokenOptions = pickedTokens.map(token => `<option value="${token.id}">${token.name}</option>`).join("");
+
+    let items = pickedTokens[0].actor.items.filter(i => {
+        const targetType = i.system.target?.type;
+        const targetValue = i.system.target?.value;
+
+        // Exclude non-template type items
+        if (!targetValue || !["cone", "cube", "cylinder", "line", "radius", "sphere", "square", "wall"].includes(targetType)) {
+            return false;
+        }
+
+        // Only include prepared spells
+        if (i.type === "spell" && (i.system.level > 0 && i.system.preparation?.mode === "prepared" && !i.system.preparation.prepared)) {
+            return false;
+        }
+
+        return true;
+    }).sort((a, b) => a.name.localeCompare(b.name));
+
+    let itemOptions = items.map(item => {
+        const targetType = item.system.target.type;
+        const targetSize = item.system.target.value;
+        return `<option value="${item.id}" data-type="${targetType}" data-size="${targetSize}">${item.name} (${targetSize} ft ${targetType})</option>`;
+    }).join("");
+
+    let previewInProgress = false;
+
+    await foundry.applications.api.DialogV2.wait({
+        window: { title: `Template Preview` },
+        content: `
+            <form>
+            <div style="width: 450px;">
+            ${pickedTokens.length > 1 ? `
+                <div class="form-group">
+                <label for="token-select">Select Token:</label>
+                <select id="token-select" name="token-select">
+                    ${tokenOptions}
+                </select>
+                </div>
+                <hr/>
+            ` : ''}
+            ${items.length > 0 ? `
+                <div class="form-group">
+                <label for="item-select">Select Item AoE:</label>
+                <select id="item-select" name="item-select" ${previewInProgress ? 'disabled' : ''}>
+                    <option value="" selected>-- Select an Item --</option>
+                    ${itemOptions}
+                </select>
+                </div>
+                <hr/>
+            ` : ''}
+                <div class="form-group">
+                <label>Select Generic AoE:</label>
+                <div class="template-buttons" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <button type="button" id="circle-template" class="template-btn" ${previewInProgress ? 'disabled' : ''} style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-circle"></i> Circle
+                    </button>
+                    <button type="button" id="rect-template" class="template-btn" ${previewInProgress ? 'disabled' : ''} style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-square"></i> Square
+                    </button>
+                    <button type="button" id="cone-template" class="template-btn" ${previewInProgress ? 'disabled' : ''} style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-triangle"></i> Cone
+                    </button>
+                    <button type="button" id="ray-template" class="template-btn" ${previewInProgress ? 'disabled' : ''} style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-arrows-alt-h"></i> Line
+                    </button>
+                </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                <label for="template-size">Generic AoE Size (ft):</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="range" id="template-size" name="template-size" value="20" min="5" max="120" step="5" style="flex: 1;" ${previewInProgress ? 'disabled' : ''}>
+                    <input type="number" id="template-size-display" name="template-size-display" value="20" min="5" max="120" step="5" style="width: 50px; margin-left: 10px;" ${previewInProgress ? 'disabled' : ''}>
+                </div>
+                </div>
+            </div>
+            </form>
+        `,
+        buttons: [{
+            action: "close",
+            label: `<i class='fas fa-times' style='margin-right: 5px;'></i>Close`,
+            default: true
+        }],
+        render: (event) => {
+        const dialog = event.target.element;
+
+        function setControlsDisabled(disabled) {
+            if(disabled) {
+                dialog.querySelector('#token-select')?.setAttribute('disabled', disabled);
+                dialog.querySelector('#item-select')?.setAttribute('disabled', disabled);
+                dialog.querySelectorAll('.template-btn').forEach(button => button.setAttribute('disabled', disabled));
+                dialog.querySelector('#template-size')?.setAttribute('disabled', disabled);
+                dialog.querySelector('#template-size-display')?.setAttribute('disabled', disabled);
+            }
+            else {
+                dialog.querySelector('#token-select')?.removeAttribute('disabled');
+                dialog.querySelector('#item-select')?.removeAttribute('disabled');
+                dialog.querySelectorAll('.template-btn').forEach(button => button.removeAttribute('disabled'));
+                dialog.querySelector('#template-size')?.removeAttribute('disabled');
+                dialog.querySelector('#template-size-display')?.removeAttribute('disabled');
+            }
+        }
+
+        const tokenSelect = dialog.querySelector('#token-select');
+        if (tokenSelect) {
+            tokenSelect.addEventListener('change', function () {
+            const selectedTokenId = this.value;
+            const selectedToken = pickedTokens.find(token => token.id === selectedTokenId);
+            if (selectedToken) {
+                items = selectedToken.actor.items.filter(i => {
+                    const targetType = i.system.target?.type;
+                    const targetValue = i.system.target?.value;
+
+                    if (!targetValue || !["cone", "cube", "cylinder", "line", "radius", "sphere", "square", "wall"].includes(targetType)) {
+                        return false;
+                    }
+
+                    if (i.type === "spell" && (i.system.level > 0 && i.system.preparation?.mode === "prepared" && !i.system.preparation.prepared)) {
+                        return false;
+                    }
+
+                    return true;
+                }).sort((a, b) => a.name.localeCompare(b.name));
+
+                itemOptions = items.map(item => {
+                    const targetType = item.system.target.type;
+                    const targetSize = item.system.target.value;
+                    return `<option value="${item.id}" data-type="${targetType}" data-size="${targetSize}">${item.name} (${targetSize} ft ${targetType})</option>`;
+                }).join("");
+
+                const itemSelect = dialog.querySelector('#item-select');
+                if (itemSelect) {
+                    itemSelect.innerHTML = `<option value="" selected>-- Select an Item --</option>${itemOptions}`;
+                }
+            }
+            });
+        }
+
+        const itemSelect = dialog.querySelector('#item-select');
+        if (itemSelect) {
+            itemSelect.addEventListener('change', function () {
+                if (previewInProgress) return;
+
+                const selectedItem = items.find(item => item.id === this.value);
+                if (selectedItem) {
+                    const targetSize = selectedItem.system.target.value;
+                    const targetType = selectedItem.system.target.type;
+
+                    dialog.querySelector('#template-size').value = targetSize;
+                    dialog.querySelector('#template-size-display').value = targetSize;
+
+                    switch (targetType) {
+                        case "sphere":
+                        case "radius":
+                        case "cylinder":
+                            dialog.querySelector('#circle-template').click();
+                            break;
+                        case "cube":
+                        case "square":
+                            dialog.querySelector('#rect-template').click();
+                            break;
+                        case "cone":
+                            dialog.querySelector('#cone-template').click();
+                            break;
+                        case "wall":
+                        case "line":
+                            dialog.querySelector('#ray-template').click();
+                            break;
+                    }
+                }
+            });
+        }
+
+        async function handleTemplateClick(templateType) {
+            if (previewInProgress) return;
+            previewInProgress = true;
+            setControlsDisabled(true);
+
+            await previewTemplate(templateType, dialog);
+
+            previewInProgress = false;
+            setControlsDisabled(false);
+        }
+
+        const circleButton = dialog.querySelector('#circle-template');
+        const rectButton = dialog.querySelector('#rect-template');
+        const coneButton = dialog.querySelector('#cone-template');
+        const rayButton = dialog.querySelector('#ray-template');
+
+        if (circleButton) circleButton.addEventListener('click', () => handleTemplateClick('circle'));
+        if (rectButton) rectButton.addEventListener('click', () => handleTemplateClick('rect'));
+        if (coneButton) coneButton.addEventListener('click', () => handleTemplateClick('cone'));
+        if (rayButton) rayButton.addEventListener('click', () => handleTemplateClick('ray'));
+
+        const templateSizeRange = dialog.querySelector('#template-size');
+        const templateSizeDisplay = dialog.querySelector('#template-size-display');
+
+        if (templateSizeRange && templateSizeDisplay) {
+            templateSizeRange.addEventListener('input', () => {
+                templateSizeDisplay.value = templateSizeRange.value;
+            });
+
+            templateSizeDisplay.addEventListener('input', () => {
+                templateSizeRange.value = templateSizeDisplay.value;
+            });
+        }
+        },
+        close: () => {
+            return;
+        }, rejectClose:false
+    });
+}
+  
+async function previewTemplate(templateType, dialog) {
+    let size = dialog.querySelector('#template-size')?.value;
+    let distance = parseInt(size);
+    let actualTemplateType = (templateType === "rect") ? "ray" : templateType;
+  
+    const templateData = {
+        t: actualTemplateType,
+        user: game.user.id,
+        direction: 0,
+        angle: templateType === "cone" ? 53.13 : templateType === "rect" ? 90 : 0,
+        distance: distance,
+        borderColor: "#FF0000",
+        fillAlpha: 0.5,
+        fillColor: game.user.color,
+        hidden: false,
+        width: templateType === 'rect' ? distance : undefined
+    };
+  
+    const templateDoc = new CONFIG.MeasuredTemplate.documentClass(templateData, { parent: canvas.scene });
+    const template = new game.dnd5e.canvas.AbilityTemplate(templateDoc);
+  
+    try {
+        const createdTemplates = await template.drawPreview();
+    
+        if (createdTemplates.length > 0) {
+            const firstTemplate = createdTemplates[0];
+            await firstTemplate.delete();
+        }
+    
+        game.user.targets.forEach(token => {
+            token.setTarget(false, { user: game.user });
+        });
+    } catch (error) {
+        console.error('Error during template preview:', error);
+    }
+}
