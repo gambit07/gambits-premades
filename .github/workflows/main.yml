@@ -18,10 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Template Preview Tool: Adds a template preview button in the token controls lefthand menu. This preview will open a dialog where a user can test their spells or features that are templates. This is primarily meant to be used outside of a users turn, so that if theyre curious how many tokens they could hit with fireball they can check that, for example. The templates are temporary and not actually placed on the canvas while testing. GMs can also use this tool, and if they do not have a token selected they will be presented with a dropdown of available tokens with valid templates to test on that scene. This tool can be enabled/disabled in my General Settings." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Divine Sense: Resolve old resource reference left on the compendium item." >> release_notes.txt
+          echo "- Update:" >> release_notes.txt
+          echo "  - Opportunity Attack: Revise region size on gridded scenes to account for off-axis diagonal movement triggering invalid opportunity attacks on corners in certain cases" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

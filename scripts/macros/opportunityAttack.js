@@ -510,7 +510,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const tokenCenterY = token.y + token.object.h / 2;
             const gridSize = canvas.scene.grid.size;
             const gridDistance = canvas.scene.grid.distance;
-            const sideLength = (maxRange / gridDistance) * 2 * gridSize;
+            const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize) * .90;
             const topLeftX = tokenCenterX - (sideLength / 2);
             const topLeftY = tokenCenterY - (sideLength / 2);
             let regionShape;
@@ -601,7 +601,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                 const tokenCenterY = token.y + token.object.h / 2;
                                 const gridSize = canvas.scene.grid.size;
                                 const gridDistance = canvas.scene.grid.distance;
-                                const sideLength = (maxRange / gridDistance) * 2 * gridSize;
+                                const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize) * .90;
                                 const topLeftX = tokenCenterX - (sideLength / 2);
                                 const topLeftY = tokenCenterY - (sideLength / 2);
                                 let regionShape;
