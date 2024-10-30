@@ -24,6 +24,7 @@ import { restoreBalance } from './macros/restoreBalance.js';
 import { legendaryResistance } from './macros/legendaryResistance.js';
 import { burstOfIngenuity } from './macros/burstOfIngenuity.js';
 import { temporalShunt } from './macros/temporalShunt.js';
+import { web } from './macros/web.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
 import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest, findValidToken, generateTemplate } from './helpers.js';
 export let socket;
@@ -184,6 +185,7 @@ Hooks.once('socketlib.ready', async function() {
     socket.register("remoteAbilityTest", remoteAbilityTest);
     socket.register("burstOfIngenuity", burstOfIngenuity);
     socket.register("temporalShunt", temporalShunt);
+    socket.register("web", web);
 })
 
 Hooks.once('ready', async function() {
@@ -217,6 +219,7 @@ Hooks.once('ready', async function() {
         gmDeleteItem,
         getCprConfig,
         findValidToken,
+        web,
         socket
     };
 

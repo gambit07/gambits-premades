@@ -209,26 +209,26 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 const isLastToken = currentIndex === findValidTokens.length - 1;
 
                 let dialogContent = `
-                <div class="gps-dialog-container">
-                    <div class="gps-dialog-section">
-                        <div class="gps-dialog-content">
-                            <div>
-                                <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use your reaction to ${itemProperName}?</p>
-                                    <div id="image-container" class="gps-dialog-image-container">
-                                        <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
+                    <div class="gps-dialog-container">
+                        <div class="gps-dialog-section">
+                            <div class="gps-dialog-content">
+                                <div>
+                                    <div class="gps-dialog-flex">
+                                        <p class="gps-dialog-paragraph">Would you like to use your reaction to ${itemProperName}?</p>
+                                        <div id="image-container" class="gps-dialog-image-container">
+                                            <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="gps-dialog-button-container">
+                            <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                                <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            </button>
+                        </div>
                     </div>
-                    <div class="gps-dialog-button-container">
-                        <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
-                        </button>
-                    </div>
-                </div>
-            `;
+                `;
     
             let content = `<span style='text-wrap: wrap;'><img src="${validTokenSecondary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenSecondary.actor.name} has a reaction available for a spell triggering ${itemProperName}.</span>`;
             let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };

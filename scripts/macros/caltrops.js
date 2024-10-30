@@ -87,7 +87,7 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
                 if(validReroute) {
                     helpers.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
     
-                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
+                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { teleport: true });
                 }
                 
                 let effectData = [

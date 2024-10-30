@@ -88,7 +88,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
             if(validReroute) {
                 helpers.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
 
-                await token.document.update({ x: originX, y: originY }, { animate: false });
+                await token.document.update({ x: originX, y: originY }, { teleport: true });
             }
 
             const hasEffectApplied = tokenDocument.hasStatusEffect("prone");

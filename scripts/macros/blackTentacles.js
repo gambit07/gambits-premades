@@ -148,6 +148,9 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                     magicdam: true,
                     magiceffect: true
                 },
+                "autoanimations": {
+                    killAnim: true
+                }
             },
             system: {
                 equipped: true,
@@ -200,7 +203,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                 if(validReroute) {
                     helpers.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
     
-                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
+                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { teleport: true });
                 }
 
                 return;
@@ -221,7 +224,7 @@ export async function blackTentacles({tokenUuid, regionUuid, regionScenario, ori
                         if(validReroute) {
                             helpers.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
             
-                            if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
+                            if(originX && originY) await token.document.update({ x: originX, y: originY }, { teleport: true });
                         }
                         let chatData = {
                         user: browserUser.id,

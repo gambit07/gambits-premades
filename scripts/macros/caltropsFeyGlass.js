@@ -87,7 +87,7 @@ export async function caltropsFeyGlass({tokenUuid, regionUuid, regionScenario, o
                 if(validReroute) {
                     helpers.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
     
-                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { animate: false });
+                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { teleport: true });
                 }
     
                 let effectData = [

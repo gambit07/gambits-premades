@@ -1388,7 +1388,8 @@ export async function generateTemplate() {
     let itemOptions = items.map(item => {
         const targetType = item.system.target.type;
         const targetSize = item.system.target.value;
-        return `<option value="${item.id}" data-type="${targetType}" data-size="${targetSize}">${item.name} (${targetSize} ft ${targetType})</option>`;
+        const targetWidth = item.system.target?.width || undefined;
+        return `<option value="${item.id}" data-type="${targetType}" data-size="${targetSize}" data-width="${targetWidth}">${item.name} (${targetSize} ft ${targetType}${targetWidth ? `, ${targetWidth} ft width` : ""})</option>`;
     }).join("");
 
     let previewInProgress = false;
@@ -1442,6 +1443,13 @@ export async function generateTemplate() {
                     <input type="number" id="template-size-display" name="template-size-display" value="20" min="5" max="120" step="5" style="width: 50px; margin-left: 10px;" ${previewInProgress ? 'disabled' : ''}>
                 </div>
                 </div>
+                <div class="form-group" id="width-group" style="margin-top: 5px;">
+                <label for="template-width">Generic AoE Width (ft):</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="range" id="template-width" name="template-width" value="5" min="5" max="60" step="5" style="flex: 1;" ${previewInProgress ? 'disabled' : ''}>
+                    <input type="number" id="template-width-display" name="template-width-display" value="5" min="5" max="60" step="5" style="width: 50px; margin-left: 10px;" ${previewInProgress ? 'disabled' : ''}>
+                </div>
+                </div>
             </div>
             </form>
         `,
@@ -1460,6 +1468,8 @@ export async function generateTemplate() {
                 dialog.querySelectorAll('.template-btn').forEach(button => button.setAttribute('disabled', disabled));
                 dialog.querySelector('#template-size')?.setAttribute('disabled', disabled);
                 dialog.querySelector('#template-size-display')?.setAttribute('disabled', disabled);
+                dialog.querySelector('#template-width')?.setAttribute('disabled', disabled);
+                dialog.querySelector('#template-width-display')?.setAttribute('disabled', disabled);
             }
             else {
                 dialog.querySelector('#token-select')?.removeAttribute('disabled');
@@ -1467,6 +1477,8 @@ export async function generateTemplate() {
                 dialog.querySelectorAll('.template-btn').forEach(button => button.removeAttribute('disabled'));
                 dialog.querySelector('#template-size')?.removeAttribute('disabled');
                 dialog.querySelector('#template-size-display')?.removeAttribute('disabled');
+                dialog.querySelector('#template-width')?.removeAttribute('disabled');
+                dialog.querySelector('#template-width-display')?.removeAttribute('disabled');
             }
         }
 
@@ -1494,7 +1506,8 @@ export async function generateTemplate() {
                 itemOptions = items.map(item => {
                     const targetType = item.system.target.type;
                     const targetSize = item.system.target.value;
-                    return `<option value="${item.id}" data-type="${targetType}" data-size="${targetSize}">${item.name} (${targetSize} ft ${targetType})</option>`;
+                    const targetWidth = item.system.target?.width || undefined;
+                    return `<option value="${item.id}" data-type="${targetType}" data-size="${targetSize}" data-width="${targetWidth}">${item.name} (${targetSize} ft ${targetType}${targetWidth ? `, ${targetWidth} ft width` : ""})</option>`;
                 }).join("");
 
                 const itemSelect = dialog.querySelector('#item-select');
@@ -1514,9 +1527,12 @@ export async function generateTemplate() {
                 if (selectedItem) {
                     const targetSize = selectedItem.system.target.value;
                     const targetType = selectedItem.system.target.type;
+                    const targetWidth = selectedItem.system.target?.width || 5;
 
                     dialog.querySelector('#template-size').value = targetSize;
                     dialog.querySelector('#template-size-display').value = targetSize;
+                    dialog.querySelector('#template-width').value = targetWidth;
+                    dialog.querySelector('#template-width-display').value = targetWidth;
 
                     switch (targetType) {
                         case "sphere":
@@ -1563,6 +1579,8 @@ export async function generateTemplate() {
 
         const templateSizeRange = dialog.querySelector('#template-size');
         const templateSizeDisplay = dialog.querySelector('#template-size-display');
+        const templateWidthRange = dialog.querySelector('#template-width');
+        const templateWidthDisplay = dialog.querySelector('#template-width-display');
 
         if (templateSizeRange && templateSizeDisplay) {
             templateSizeRange.addEventListener('input', () => {
@@ -1571,6 +1589,16 @@ export async function generateTemplate() {
 
             templateSizeDisplay.addEventListener('input', () => {
                 templateSizeRange.value = templateSizeDisplay.value;
+            });
+        }
+
+        if (templateWidthRange && templateWidthDisplay) {
+            templateWidthRange.addEventListener('input', () => {
+                templateWidthDisplay.value = templateWidthRange.value;
+            });
+
+            templateWidthDisplay.addEventListener('input', () => {
+                templateWidthRange.value = templateWidthDisplay.value;
             });
         }
         },
@@ -1582,6 +1610,7 @@ export async function generateTemplate() {
   
 async function previewTemplate(templateType, dialog) {
     let size = dialog.querySelector('#template-size')?.value;
+    let width = templateType === 'ray' ? dialog.querySelector('#template-width')?.value : undefined;
     let distance = parseInt(size);
     let actualTemplateType = (templateType === "rect") ? "ray" : templateType;
   
@@ -1595,7 +1624,7 @@ async function previewTemplate(templateType, dialog) {
         fillAlpha: 0.5,
         fillColor: game.user.color,
         hidden: false,
-        width: templateType === 'rect' ? distance : undefined
+        width: templateType === "ray" ? parseInt(width) : templateType === 'rect' ? distance : undefined
     };
   
     const templateDoc = new CONFIG.MeasuredTemplate.documentClass(templateData, { parent: canvas.scene });

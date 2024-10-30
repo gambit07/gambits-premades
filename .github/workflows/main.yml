@@ -18,8 +18,14 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Update:" >> release_notes.txt
-          echo "  - Opportunity Attack: Revise region size on gridded scenes to account for off-axis diagonal movement triggering invalid opportunity attacks on corners in certain cases" >> release_notes.txt
+          echo "- General:" >> release_notes.txt
+          echo "  - Template Preview Tool: Update to add in width property to properly account for line type templates. Added width total in spell dropdown for relevant spells, and a width slider that will effect generic line templates." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Web: Added the Web spell. Thanks to Eskiemoh for his great web animation. This will not handle the web being set on fire and dealing damage, theres not a good way to handle that programmatically" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Storm Mote: Change to postPreambleComplete to let Midi do its thing if a target is out of range without breaking things" >> release_notes.txt
+          echo "  - Drawing The Hearth: Resolve bug in medkit animation check. Fix number of remaining soot spirits output in chat card when one is hit." >> release_notes.txt
+          echo "  - Region Automations: Resolve various regions using the old animate property instead of teleport for movement stuff." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
