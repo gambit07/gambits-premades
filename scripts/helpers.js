@@ -789,14 +789,32 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 const progressPercentage = (this.timeLeft / initialTimeLeft) * 100;
                 const transitionStart = 75;
                 const transitionPercentage = Math.max((transitionStart - progressPercentage) / transitionStart, 0) * 100;
-    
-                const redValue = Math.floor(181 + (transitionPercentage / 100) * (255 - 181));
-                const greenValue = Math.floor(99 - (transitionPercentage / 100) * 99);
-                const blueValue = Math.floor(69 - (transitionPercentage / 100) * 69);
-                const borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
-    
-                const colorStop1 = Math.max(progressPercentage - 5, 0);
-                const borderColor = `linear-gradient(to right, ${borderColorStop}, ${borderColorStop} ${colorStop1}%, rgba(0, 0, 0, 0.5) ${progressPercentage}%, rgba(0, 0, 0, 0.5))`;
+
+                let redValue;
+                let greenValue;
+                let blueValue;
+                let borderColorStop;
+                let colorStop1;
+                let borderColor;
+
+                if(type === "multiDialog" && source === "gm") {
+                    redValue = Math.floor(0 + (transitionPercentage / 100) * (75 - 0));
+                    greenValue = Math.floor(51 - (transitionPercentage / 100) * 51);
+                    blueValue = Math.floor(153 - (transitionPercentage / 100) * (153 - 130));
+                    borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
+
+                    colorStop1 = Math.max(progressPercentage - 5, 0);
+                    borderColor = `linear-gradient(to right, ${borderColorStop}, ${borderColorStop} ${colorStop1}%, rgba(0, 0, 0, 0.5) ${progressPercentage}%, rgba(0, 0, 0, 0.5))`;
+                }
+                else {
+                    redValue = Math.floor(181 + (transitionPercentage / 100) * (255 - 181));
+                    greenValue = Math.floor(99 - (transitionPercentage / 100) * 99);
+                    blueValue = Math.floor(69 - (transitionPercentage / 100) * 69);
+                    borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
+        
+                    colorStop1 = Math.max(progressPercentage - 5, 0);
+                    borderColor = `linear-gradient(to right, ${borderColorStop}, ${borderColorStop} ${colorStop1}%, rgba(0, 0, 0, 0.5) ${progressPercentage}%, rgba(0, 0, 0, 0.5))`;
+                }
     
                 if (useFullTitleBar && titleBackground) {
                     titleBackground.style.background = borderColor;
