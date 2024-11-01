@@ -1,8 +1,15 @@
-2024/10/31-13:45:01.983 188c Recovering log #3258
-2024/10/31-13:45:01.989 188c Delete type=0 #3258
-2024/10/31-13:45:01.989 188c Delete type=3 #3256
-2024/11/01-01:45:16.027 500c Level-0 table #3263: started
-2024/11/01-01:45:16.027 500c Level-0 table #3263: 0 bytes OK
-2024/11/01-01:45:16.031 500c Delete type=0 #3261
-2024/11/01-01:45:16.047 500c Manual compaction at level-0 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
-2024/11/01-01:45:16.047 500c Manual compaction at level-1 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
+2024/11/01-16:47:08.536 188c Recovering log #3270
+2024/11/01-16:47:08.545 188c Delete type=0 #3270
+2024/11/01-16:47:08.545 188c Delete type=3 #3268
+2024/11/01-16:55:19.285 500c Level-0 table #3275: started
+2024/11/01-16:55:19.318 500c Level-0 table #3275: 237 bytes OK
+2024/11/01-16:55:19.329 500c Delete type=0 #3273
+2024/11/01-16:55:19.339 500c Manual compaction at level-0 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
+2024/11/01-16:55:19.340 500c Manual compaction at level-1 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at '!items.effects!7Bhtyk8uP0tKKroL.tNSewKdlzP5iKEBo' @ 1034 : 0
+2024/11/01-16:55:19.340 500c Compacting 1@1 + 1@2 files
+2024/11/01-16:55:19.346 500c Generated table #3276@1: 73 keys, 116489 bytes
+2024/11/01-16:55:19.346 500c Compacted 1@1 + 1@2 files => 116489 bytes
+2024/11/01-16:55:19.349 500c compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/11/01-16:55:19.350 500c Delete type=2 #3239
+2024/11/01-16:55:19.350 500c Delete type=2 #3275
+2024/11/01-16:55:19.350 500c Manual compaction at level-1 from '!items.effects!7Bhtyk8uP0tKKroL.tNSewKdlzP5iKEBo' @ 1034 : 0 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
