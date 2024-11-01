@@ -260,11 +260,18 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
 
         // Check if the token has available spell slots/uses
         if(itemType === "spell") {
+            let multiClass;
+            if (t.actor.classes?.warlock) {
+                const classKeys = Object.keys(t.actor.classes);
+                multiClass = classKeys.some(className => className !== 'warlock');
+            }
+    
+    
             const spells = t.actor.system.spells;
             let spellLevel = checkItem?.system?.level;
             let checkType = checkItem?.system?.preparation?.mode;
             let hasSpellSlots = false;
-            if(checkType === "prepared" && checkItem?.system?.preparation?.prepared === false) return;
+            if(checkType === "prepared" && checkItem?.system?.preparation?.prepared === false) return false;
             if(checkType === "prepared" || checkType === "always")
             {
                 for (let level = spellLevel; level <= 9; level++) {
@@ -272,6 +279,20 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
                     if (spellSlot > 0) {
                         hasSpellSlots = true;
                         break;
+                    }
+                }
+            }
+            else if(checkType === "pact" && multiClass)
+            {
+                let spellSlotValue = spells.pact.value;
+                if (spellSlotValue > 0) hasSpellSlots = true;
+                else {
+                    for (let level = spellLevel; level <= 9; level++) {
+                        let spellSlot = t.actor.system?.spells[`spell${level}`]?.value;
+                        if (spellSlot > 0) {
+                            hasSpellSlots = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -286,10 +307,10 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
                 let slotEnabled = checkItem.system.uses.per;
                 if (slotValue > 0 || slotEnabled === null) hasSpellSlots = true;
             }
-
+    
             if (!hasSpellSlots) {
                 if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check valid spell slots/preparation`);
-                return;
+                return false;
             }
         }
 
@@ -420,6 +441,13 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
 
     // Check if the token has available spell slots/uses
     if(itemType === "spell") {
+        let multiClass;
+        if (targetedToken.actor.classes?.warlock) {
+            const classKeys = Object.keys(targetedToken.actor.classes);
+            multiClass = classKeys.some(className => className !== 'warlock');
+        }
+
+
         const spells = targetedToken.actor.system.spells;
         let spellLevel = checkItem?.system?.level;
         let checkType = checkItem?.system?.preparation?.mode;
@@ -432,6 +460,20 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
                 if (spellSlot > 0) {
                     hasSpellSlots = true;
                     break;
+                }
+            }
+        }
+        else if(checkType === "pact" && multiClass)
+        {
+            let spellSlotValue = spells.pact.value;
+            if (spellSlotValue > 0) hasSpellSlots = true;
+            else {
+                for (let level = spellLevel; level <= 9; level++) {
+                    let spellSlot = targetedToken.actor.system?.spells[`spell${level}`]?.value;
+                    if (spellSlot > 0) {
+                        hasSpellSlots = true;
+                        break;
+                    }
                 }
             }
         }

@@ -18,8 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Dialog Countdown Timer: I realized that theres not a good visual distinction between a dialog the GM is receiving for an NPC, and a dialog the GM is receiving from a PC due to Mirror Dialog being enabled. In order to create a better visual distinction between the two, Ive modified the countdown timer colors for a GM. When a GM receives a reaction dialog for an NPC (or PC not logged in) it will be the standard orange to red countdown timer color. When a GM receives a mirrored dialog interaction, the countdown timer color will be a blue to purple fade. This should give a much clearer visual distinction between mirrored dialogs the GM doesnt have to interact with as often, and regular dialogs for reactions the GM is the owner of" >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Touch: Automates the Fire Elementals Touch feature" >> release_notes.txt
+          echo "  - Fire Form: Automates the Fire Elementals Fire Form feature" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - findValidTokens: Resolve issue with multi-classed warlocks potentially not passing reaction validation due to not checking for valid non-pact slots" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
