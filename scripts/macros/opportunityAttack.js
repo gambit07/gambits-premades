@@ -211,7 +211,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     }
 
     // Check if the token has used Flyby
-    let hasFlyby = token.actor.items.find(i => i.name.toLowerCase().includes("flyby"));
+    let hasFlyby = token.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "54bf1c5f-09d2-4ca9-8465-c9d5b3a72798");
     if(hasFlyby) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token has flyby`);
         return;
@@ -510,7 +510,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const tokenCenterY = token.y + token.object.h / 2;
             const gridSize = canvas.scene.grid.size;
             const gridDistance = canvas.scene.grid.distance;
-            const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize) * .90;
+            const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize);
             const topLeftX = tokenCenterX - (sideLength / 2);
             const topLeftY = tokenCenterY - (sideLength / 2);
             let regionShape;
@@ -601,7 +601,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                 const tokenCenterY = token.y + token.object.h / 2;
                                 const gridSize = canvas.scene.grid.size;
                                 const gridDistance = canvas.scene.grid.distance;
-                                const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize) * .90;
+                                const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize);
                                 const topLeftX = tokenCenterX - (sideLength / 2);
                                 const topLeftY = tokenCenterY - (sideLength / 2);
                                 let regionShape;

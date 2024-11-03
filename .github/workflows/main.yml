@@ -18,11 +18,13 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Removals:" >> release_notes.txt
-          echo "  - Disengage: Removed this generic feature, CPRs version now contains the active effect that OA takes into account" >> release_notes.txt
-          echo "  - Aura of Conquest: Removed this Paladin feature, CPR now has a more performant aura system than AA which handles this and all the other paladin auras as well" >> release_notes.txt
+          echo "- General:" >> release_notes.txt
+          echo "  - Region Wrapping: Reverted disabling wrapping on gridded scenes for OA. Modified wrapping to test token points inset further per token to better handle diagonal and off axis movement in general." >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Power Word Heal: Added the Power Word Heal spell." >> release_notes.txt
+          echo "  - Power Word Stun: Added the Power Word Stun spell." >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Storm Mote: Add medkit configurable animation colors and on/off switch. Fix special duration on the ae that should not have been there" >> release_notes.txt
+          echo "  - Flyby: Allow the flyby feature to be renamed and still respect OA" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
