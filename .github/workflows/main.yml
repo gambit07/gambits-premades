@@ -18,13 +18,12 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General:" >> release_notes.txt
-          echo "  - Region Wrapping: Reverted disabling wrapping on gridded scenes for OA. Modified wrapping to test token points inset further per token to better handle diagonal and off axis movement in general." >> release_notes.txt
           echo "- Additions:" >> release_notes.txt
-          echo "  - Power Word Heal: Added the Power Word Heal spell." >> release_notes.txt
-          echo "  - Power Word Stun: Added the Power Word Stun spell." >> release_notes.txt
+          echo "  - Whirlwind: Automates the air elementals whirlwind feature, covers everything except bludgeoning damage when hitting a wall or other token after failed save" >> release_notes.txt
+          echo "  - Freeze: Automates the water elementals freeze feature" >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Flyby: Allow the flyby feature to be renamed and still respect OA" >> release_notes.txt
+          echo "  - Fireball: Switch fireball blast animations to play atLocation instead of being set with attachTo to better respect Midi settings" >> release_notes.txt
+          echo "  - Torch: Added the ability to throw the torch up to 60 feet. This will automatically add a Throw option to the dialog if Item Piles is installed." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
