@@ -11,6 +11,7 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
     let target = workflow.hitTargets.first();
     const actionTypes = ["mwak", "rwak", "msak", "rsak"];
     if (!actionTypes.some(type => workflow.item.system.actionType?.includes(type))) return;
+    if (!target) return;
     let gmUser = helpers.getPrimaryGM();
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "item", itemChecked: ["mwak", "shield"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemyAlly", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});

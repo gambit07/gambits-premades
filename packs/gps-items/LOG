@@ -1,24 +1,24 @@
-2024/11/04-10:37:52.642 3c7c Recovering log #3251
-2024/11/04-10:37:52.642 3c7c Level-0 table #3253: started
-2024/11/04-10:37:52.644 3c7c Level-0 table #3253: 9477 bytes OK
-2024/11/04-10:37:52.650 3c7c Delete type=0 #3251
-2024/11/04-10:37:52.650 3c7c Delete type=3 #3250
-2024/11/04-22:59:54.576 13c4 Level-0 table #3256: started
-2024/11/04-22:59:54.580 13c4 Level-0 table #3256: 26203 bytes OK
-2024/11/04-22:59:54.581 13c4 Delete type=0 #3254
-2024/11/04-22:59:54.584 13c4 Manual compaction at level-0 from '!items!0qTQDQ2Cipf15JGW' @ 72057594037927935 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at '!items.effects!QxECGQ55GxcvTYhO.mFaZzeDRCdJjfZCE' @ 501 : 0
-2024/11/04-22:59:54.585 13c4 Compacting 2@0 + 0@1 files
-2024/11/04-22:59:54.588 13c4 Generated table #3257@0: 6 keys, 9466 bytes
-2024/11/04-22:59:54.588 13c4 Compacted 2@0 + 0@1 files => 9466 bytes
-2024/11/04-22:59:54.591 13c4 compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/11/04-22:59:54.591 13c4 Delete type=2 #3253
-2024/11/04-22:59:54.591 13c4 Delete type=2 #3256
-2024/11/04-22:59:54.591 13c4 Manual compaction at level-0 from '!items.effects!QxECGQ55GxcvTYhO.mFaZzeDRCdJjfZCE' @ 501 : 0 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at (end)
-2024/11/04-22:59:54.591 13c4 Manual compaction at level-1 from '!items!0qTQDQ2Cipf15JGW' @ 72057594037927935 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at '!items.effects!QxECGQ55GxcvTYhO.mFaZzeDRCdJjfZCE' @ 501 : 0
-2024/11/04-22:59:54.591 13c4 Compacting 1@1 + 1@2 files
-2024/11/04-22:59:54.599 13c4 Generated table #3258@1: 30 keys, 77381 bytes
-2024/11/04-22:59:54.599 13c4 Compacted 1@1 + 1@2 files => 77381 bytes
-2024/11/04-22:59:54.601 13c4 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/11/04-22:59:54.601 13c4 Delete type=2 #3245
-2024/11/04-22:59:54.601 13c4 Delete type=2 #3257
-2024/11/04-22:59:54.609 13c4 Manual compaction at level-1 from '!items.effects!QxECGQ55GxcvTYhO.mFaZzeDRCdJjfZCE' @ 501 : 0 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at (end)
+2024/11/06-20:05:42.702 e33b4 Recovering log #3272
+2024/11/06-20:05:42.703 e33b4 Level-0 table #3274: started
+2024/11/06-20:05:42.711 e33b4 Level-0 table #3274: 31671 bytes OK
+2024/11/06-20:05:42.725 e33b4 Delete type=0 #3272
+2024/11/06-20:05:42.726 e33b4 Delete type=3 #3271
+2024/11/07-09:54:31.452 e36d0 Level-0 table #3277: started
+2024/11/07-09:54:31.458 e36d0 Level-0 table #3277: 74978 bytes OK
+2024/11/07-09:54:31.460 e36d0 Delete type=0 #3275
+2024/11/07-09:54:31.460 e36d0 Manual compaction at level-0 from '!items!0SWKUhmFwY72oBOd' @ 72057594037927935 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at '!items.effects!1VRXixnrNyMABrm2.mFaZzeDRCdJjfZCE' @ 513 : 1
+2024/11/07-09:54:31.460 e36d0 Compacting 2@0 + 0@1 files
+2024/11/07-09:54:31.465 e36d0 Generated table #3278@0: 8 keys, 31825 bytes
+2024/11/07-09:54:31.465 e36d0 Compacted 2@0 + 0@1 files => 31825 bytes
+2024/11/07-09:54:31.465 e36d0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/11/07-09:54:31.465 e36d0 Delete type=2 #3274
+2024/11/07-09:54:31.465 e36d0 Delete type=2 #3277
+2024/11/07-09:54:31.487 e36d0 Manual compaction at level-0 from '!items.effects!1VRXixnrNyMABrm2.mFaZzeDRCdJjfZCE' @ 513 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at (end)
+2024/11/07-09:54:31.491 e36d0 Manual compaction at level-1 from '!items!0SWKUhmFwY72oBOd' @ 72057594037927935 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at '!items.effects!1VRXixnrNyMABrm2.mFaZzeDRCdJjfZCE' @ 513 : 1
+2024/11/07-09:54:31.491 e36d0 Compacting 1@1 + 1@2 files
+2024/11/07-09:54:31.496 e36d0 Generated table #3279@1: 34 keys, 91247 bytes
+2024/11/07-09:54:31.496 e36d0 Compacted 1@1 + 1@2 files => 91247 bytes
+2024/11/07-09:54:31.498 e36d0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/11/07-09:54:31.498 e36d0 Delete type=2 #3258
+2024/11/07-09:54:31.498 e36d0 Delete type=2 #3278
+2024/11/07-09:54:31.500 e36d0 Manual compaction at level-1 from '!items.effects!1VRXixnrNyMABrm2.mFaZzeDRCdJjfZCE' @ 513 : 1 .. '!items.effects!wds22ulA8PSTvYWP.ZrTNMwai89gqFKJo' @ 0 : 0; will stop at (end)

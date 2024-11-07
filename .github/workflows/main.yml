@@ -19,11 +19,17 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Whirlwind: Automates the air elementals whirlwind feature, covers everything except bludgeoning damage when hitting a wall or other token after failed save" >> release_notes.txt
-          echo "  - Freeze: Automates the water elementals freeze feature" >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Fireball: Switch fireball blast animations to play atLocation instead of being set with attachTo to better respect Midi settings" >> release_notes.txt
-          echo "  - Torch: Added the ability to throw the torch up to 60 feet. This will automatically add a Throw option to the dialog if Item Piles is installed." >> release_notes.txt
+          echo "  - Candle: Automates a.. candle" >> release_notes.txt
+          echo "  - Lamp: Automates a.. lamp" >> release_notes.txt
+          echo "  - Dead Mist Lash: Automates Dead Mist Lash from Valdas Spire of Secrets" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Cutting Words: Fix invalid dialog presentation in certain scenarios." >> release_notes.txt
+          echo "  - Interception: Fix invalid dialog presentation in certain scenarios." >> release_notes.txt
+          echo "  - Web: Fix dialog popping multiple times for turn start event. Fix compendium item set at level 4 instead of level 2." >> release_notes.txt
+          echo "  - Black Tentacles: Fix dialog popping multiple times for turn start event." >> release_notes.txt
+          echo "  - Biohazard: Fix dialog popping multiple times for turn start event." >> release_notes.txt
+          echo "  - Cloud of Daggers: Fix dialog popping multiple times for turn start event." >> release_notes.txt
+          echo "  - Torch: Small bugfix for something." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
