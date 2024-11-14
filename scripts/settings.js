@@ -693,15 +693,6 @@ function registerSettings() {
         default: ""
     });
 
-    game.settings.register("gambits-premades", "enableTemplatePreview", {
-        name: "enableTemplatePreview",
-        scope: "world",
-        config: false,
-        type: Boolean,
-        default: true,
-        type: Boolean
-    });
-
     game.settings.registerMenu('gambits-premades', 'generalSettings', {
         name: game.i18n.localize("General Settings"),
         label: game.i18n.localize("General Settings"),
@@ -1090,8 +1081,7 @@ class generalSettingsMenu extends BaseSettingsMenu {
             enableIdentifyRestrictions: game.settings.get("gambits-premades", "Enable Identify Restrictions"),
             identifyRestrictionMessage: game.settings.get("gambits-premades", "Identify Restriction Message"),
             enableRegionWrapping: game.settings.get("gambits-premades", "enableRegionWrapping"),
-            primaryGM: game.settings.get("gambits-premades", "primaryGM"),
-            enableTemplatePreview: game.settings.get("gambits-premades", "enableTemplatePreview")
+            primaryGM: game.settings.get("gambits-premades", "primaryGM")
         };
     }
 
@@ -1105,7 +1095,6 @@ class generalSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Identify Restriction Message", formData.identifyRestrictionMessage);
         await game.settings.set("gambits-premades", "enableRegionWrapping", formData.enableRegionWrapping);
         await game.settings.set("gambits-premades", "primaryGM", formData.primaryGM);
-        await game.settings.set("gambits-premades", "enableTemplatePreview", formData.enableTemplatePreview);
     }
 }
 
