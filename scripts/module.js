@@ -26,7 +26,7 @@ import { burstOfIngenuity } from './macros/burstOfIngenuity.js';
 import { temporalShunt } from './macros/temporalShunt.js';
 import { web } from './macros/web.js';
 import { enableOpportunityAttack, disableOpportunityAttack, opportunityAttackScenarios } from './macros/opportunityAttack.js';
-import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest, findValidToken, generateTemplate } from './helpers.js';
+import { deleteChatMessage, gmIdentifyItem, closeDialogById, handleDialogPromises, rollAsUser, convertFromFeet, gmUpdateTemplateSize, findValidTokens, pauseDialogById, freeSpellUse, process3rdPartyReactionDialog, moveTokenByCardinal, moveTokenByOriginPoint, addReaction, gmUpdateDisposition, gmToggleStatus, replaceChatCard, validateRegionMovement, ritualSpellUse, getBrowserUser, getPrimaryGM, gmDeleteItem, getCprConfig, remoteCompleteItemUse, remoteAbilityTest, findValidToken } from './helpers.js';
 export let socket;
 
 Hooks.once('init', async function() {
@@ -108,24 +108,6 @@ Hooks.once('init', async function() {
             
             return segments || wrapped(...args);
         }, 'MIXED');
-    }
-
-    if(game.settings.get("gambits-premades", "enableTemplatePreview")) {
-        Hooks.on('getSceneControlButtons', (controls) => {
-        const sidebarControls = controls.find(control => control.name === "token");
-    
-        if (sidebarControls) {
-            sidebarControls.tools.push({
-            name: "template-preview",
-            title: "Template Preview Tool",
-            icon: "fas fa-drafting-compass",
-            onClick: async () => {
-                await generateTemplate();
-            },
-            button: true
-            });
-        }
-        });
     }
 });
 

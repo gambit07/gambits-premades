@@ -9,6 +9,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
     let itemName = "Indomitable";
     let dialogId = gpsUuid;
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     // Check if there is a save success
     if(workflowType === "save" && workflow.failedSaves.size === 0) return;
@@ -25,8 +26,6 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
-
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
         
         let indomitableHomebrew = MidiQOL.safeGetGameSetting('gambits-premades', 'enableAutoSucceedIndomitable');
         let contentQuestion;

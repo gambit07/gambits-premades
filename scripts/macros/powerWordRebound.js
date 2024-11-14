@@ -10,6 +10,7 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
     let dialogId = gpsUuid;
     let target = workflow.targets.first();
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(target.actor.system.attributes.hp.value >= Math.floor(target.actor.system.attributes.hp.max / 2)) return;
     if(workflow.attackTotal < target.actor.system.attributes.ac.value) return;
@@ -25,8 +26,6 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
-
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         let dialogContent = `
             <div class="gps-dialog-container">

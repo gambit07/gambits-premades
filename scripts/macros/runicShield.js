@@ -9,6 +9,7 @@ export async function runicShield({workflowData,workflowType,workflowCombat}) {
     let itemName = "Runic Shield";
     let dialogId = gpsUuid;
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     let target = workflow.targets.first();
 
@@ -27,8 +28,6 @@ export async function runicShield({workflowData,workflowType,workflowCombat}) {
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
         browserUserEnemy = helpers.getBrowserUser({ actorUuid: workflow.token.actor.uuid });
-
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         let dialogContent = `
             <div class="gps-dialog-container">

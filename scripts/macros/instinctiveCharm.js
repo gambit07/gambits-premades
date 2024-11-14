@@ -11,6 +11,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
     let target = workflow.token;
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
@@ -39,7 +40,6 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         let dialogContent = `
             <div class="gps-dialog-container">

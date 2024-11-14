@@ -14,6 +14,7 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
     }
     let target = workflow.targets.first();
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Riposte Timeout`));
 
     let targetAC = target.actor.system.attributes.ac.value;
     let attackTotal = workflow.attackTotal;
@@ -31,8 +32,6 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
-
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Riposte Timeout`));
 
         // Check valid weapons
         let validWeapons = validTokenPrimary.actor.items.filter(item => {

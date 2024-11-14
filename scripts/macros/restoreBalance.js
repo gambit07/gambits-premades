@@ -9,6 +9,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
     let itemName = "Restore Balance";
     let dialogId = gpsUuid;
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(workflow.legendaryResistanceUsed) return;
     
@@ -21,7 +22,6 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
         
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 

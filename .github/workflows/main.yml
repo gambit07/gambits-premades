@@ -18,12 +18,11 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- General: Removed Template Preview Tool from the module. The tool has been improved and moved into its own module which you can access here: https://github.com/gambit07/gambitsTemplatePreviewer" >> release_notes.txt
           echo "- Updates:" >> release_notes.txt
-          echo "  - Images: Improved quality of the torch, hooded lantern, and bullseye lantern images to make them more crispy at high zoom" >> release_notes.txt
+          echo "  - Cutting Words: Add handling for a custom scifi conversion class" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Dead Mist Lash: Fix for some unneeded code left in" >> release_notes.txt
-          echo "  - Ball Bearings: Fix incorrect path to image" >> release_notes.txt
-          echo "  - Torch: Add some handling for forge shenanigans to get the correct item piles image in place" >> release_notes.txt
+          echo "  - Silvery Barbs: Fix renaming the spell causing dialog to close immediately" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

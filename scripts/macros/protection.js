@@ -12,6 +12,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     let enableProtectionOnSuccess = MidiQOL.safeGetGameSetting('gambits-premades', 'enableProtectionOnSuccess');
     if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kl")) || (!enableProtectionOnSuccess && workflow.disadvantage === true)) return;
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Protection Timeout`));
 
     if(enableProtectionOnSuccess && (workflow.attackTotal < target.actor.system.attributes.ac.value)) return;
 
@@ -27,8 +28,6 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         if (target.document.uuid === validTokenPrimary.document.uuid) continue;
-
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Protection Timeout`));
 
         let dialogContent = `
             <div class="gps-dialog-container">

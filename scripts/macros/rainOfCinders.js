@@ -11,6 +11,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
     let target = workflow.targets.first();
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(workflow.targets.size > 1) return;
 
@@ -31,8 +32,6 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let baseItem = validTokenPrimary.actor.items.find(i => i.name === "Drawing the Hearth");
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
-
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         let dialogContent = `
             <div class="gps-dialog-container">

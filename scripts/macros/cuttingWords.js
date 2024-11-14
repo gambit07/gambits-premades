@@ -11,6 +11,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     let gmUser = helpers.getPrimaryGM();
     let homebrewDisableMaxMiss = MidiQOL.safeGetGameSetting('gambits-premades', 'disableCuttingWordsMaxMiss');
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(workflowType === "damage" && workflow.hitTargets.size === 0) return;
 
@@ -21,8 +22,11 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     for (const validTokenPrimary of findValidTokens) {
         let bardicDie = validTokenPrimary.actor.system.scale?.bard["bardic-inspiration"]?.die;
         if(!bardicDie) {
-            ui.notifications.error("You must have a Bard scale for this actor named 'bardic-inspiration'")
-            continue;
+            bardicDie = validTokenPrimary.actor.system.scale?.ambassador["bardic-inspiration"]?.die; // Homebrew for SciFi 5e Conversion
+            if(!bardicDie) {
+                ui.notifications.error("You must have a Bard scale for this actor named 'bardic-inspiration'")
+                continue;
+            }
         }
         let bardicNum = validTokenPrimary.actor.system.scale?.bard["bardic-inspiration"]?.faces;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
@@ -57,7 +61,6 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
 
         let dialogContent;
         const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         if(workflowType === "damage") {
             if (workflow.token.document.disposition === validTokenPrimary.document.disposition) continue;

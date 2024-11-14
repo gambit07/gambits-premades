@@ -10,6 +10,7 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
     let dialogId = gpsUuid;
     let target = workflow.targets.first();
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(workflow.attackTotal < target.actor.system.attributes.ac.value) return;
     if(workflow.targets.size > 1) return;
@@ -34,8 +35,6 @@ export async function cloudRune({workflowData,workflowType,workflowCombat}) {
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
-
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 

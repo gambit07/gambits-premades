@@ -11,6 +11,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     let gmUser = helpers.getPrimaryGM();
     let homebrewDisableNat20 = MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20');
     let homebrewEnableNat20 = MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20');
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(workflow.legendaryResistanceUsed) return;
 
@@ -35,7 +36,6 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemName}`;
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemProperName} Timeout`));
         
         browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 

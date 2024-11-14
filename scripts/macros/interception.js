@@ -13,6 +13,7 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
     if (!actionTypes.some(type => workflow.item.system.actionType?.includes(type))) return;
     if (!target) return;
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Interception Timeout`));
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "item", itemChecked: ["mwak", "shield"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemyAlly", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
@@ -30,7 +31,6 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
         let hasHealing = damageTypes.some(type => type === "healing");
         if (hasHealing) return;
         let damageTotals = workflow.damageRolls.map(roll => roll.total);
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Interception Timeout`));
 
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a roll triggering ${itemProperName}.</span>`
         let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };

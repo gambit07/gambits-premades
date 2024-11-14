@@ -11,6 +11,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     let dialogId = gpsUuid;
     let target = workflow.hitTargets.first();
     let gmUser = helpers.getPrimaryGM();
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     let findValidTokens = helpers.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
@@ -27,8 +28,6 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let browserUser = helpers.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
-
-        const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
         // Check valid weapons
         let validWeapons = validTokenPrimary.actor.items.filter(item => {
