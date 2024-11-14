@@ -18,11 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Removed Template Preview Tool from the module. The tool has been improved and moved into its own module which you can access here: https://github.com/gambit07/gambitsTemplatePreviewer" >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Cutting Words: Add handling for a custom scifi conversion class" >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Silvery Barbs: Fix renaming the spell causing dialog to close immediately" >> release_notes.txt
+          echo "- General: Removed Template Preview Tool from the module. The tool has been improved and moved into its own module which you can access here: https://github.com/gambit07/gambitsTemplatePreviewer (Now also removed the setting)" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
