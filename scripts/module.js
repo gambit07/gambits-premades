@@ -170,12 +170,6 @@ Hooks.once('socketlib.ready', async function() {
 })
 
 Hooks.once('ready', async function() {
-    loadCompendiumData().then(() => {
-        game.modules.get('gambits-premades').medkitApi = medkitApi;
-    }).catch(error => {
-        console.error("Error loading compendium data:", error);
-    });
-    
     game.gps = {
         gmIdentifyItem,
         convertFromFeet,

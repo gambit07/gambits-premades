@@ -18,9 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Remove global settings init to avoid module conflicts" >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Confusion: Fix Concentration not being applied properly due to early template removal" >> release_notes.txt
+          echo "- General: Remove missed piece from old cpr integration file" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
