@@ -1,4 +1,4 @@
-function registerSettings() {
+export function registerSettings() {
     game.settings.register('gambits-premades', 'Mirror 3rd Party Dialog for GMs', {
         name: "Mirror 3rd Party Dialog for GMs",
         hint: "If enabled, 3rd party dialog's will be sent to the GM as well as the player. Either party can interact with the dialog to use/dismiss/pause it.",

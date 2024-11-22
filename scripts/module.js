@@ -1,3 +1,4 @@
+import {registerSettings} from './settings.js';
 import { counterspell } from './macros/counterspell.js';
 import { silveryBarbs } from './macros/silveryBarbs.js';
 import { cuttingWords } from './macros/cuttingWords.js';
@@ -174,8 +175,6 @@ Hooks.once('ready', async function() {
     }).catch(error => {
         console.error("Error loading compendium data:", error);
     });
-
-    if(game.user.isGM && !game.settings.get("gambits-premades", "primaryGM")) game.settings.set("gambits-premades", "primaryGM", game.users.activeGM?.id);
     
     game.gps = {
         gmIdentifyItem,
@@ -205,6 +204,8 @@ Hooks.once('ready', async function() {
 
     setupTemplateVisibilityHook();
     setupTemplateCreationUpdateHooks();
+
+    if(game.user.isGM && !game.settings.get("gambits-premades", "primaryGM")) game.settings.set("gambits-premades", "primaryGM", game.users.activeGM?.id);
 
     async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
         if(!game.gpsSettings.enable3prNoCombat && !game.combat && workflowCombat) return;

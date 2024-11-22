@@ -202,10 +202,6 @@
   "styles": [
     "styles/styles.css"
   ],
-  "scripts": [
-    "scripts/integrations/cpr.js",
-    "scripts/settings.js"
-  ],
   "relationships": {
     "systems": [
       {
