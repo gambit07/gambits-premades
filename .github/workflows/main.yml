@@ -18,7 +18,16 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- General: Remove missed piece from old cpr integration file" >> release_notes.txt
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Doom: Added homebrew shortsword Doom" >> release_notes.txt
+          echo "  - Gloom: Added homebrew shortsword Gloom" >> release_notes.txt
+          echo "  - Boots of Speed: Enhanced the ddbi automation to allow turning the item on and off for time tracking purposes. Waiting on a midi update for special durations to fully finish the handling." >> release_notes.txt
+          echo "- Updates:" >> release_notes.txt
+          echo "  - computeDistance: Updates for buncha automations to account for new midi dep warnings" >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - Confusion: Add missing template size increase on upcast. Fix some pieces of template removal after cast" >> release_notes.txt
+          echo "  - Biohazard: Fix bug trying to access token before its defined" >> release_notes.txt
+          echo "  - Reckless Attack/Reckless: Fix bug where item would try to activate outside combat" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

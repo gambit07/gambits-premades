@@ -44,7 +44,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         if(workflowType === "save") {
-            let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
+            let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
 
             const targetUuids = targets.map(t => t.document.uuid);
             const targetNames = targets.map(t => t.document.name);

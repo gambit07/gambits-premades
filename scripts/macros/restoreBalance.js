@@ -29,8 +29,8 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         if(workflowType === "save") {
-            let targetAllies = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
-            let targetEnemies = Array.from(workflow.targets).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
+            let targetAllies = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
+            let targetEnemies = Array.from(workflow.targets).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
             
             targetAllies = targetAllies.filter(t => workflow.saveRolls.find(roll => roll.data.actorId === t.actor.id && roll.formula.includes("kl") && !roll.formula.includes("kh")) !== undefined);
             targetEnemies = targetEnemies.filter(t => workflow.saveRolls.find(roll => roll.data.actorId === t.actor.id && !roll.formula.includes("kl") && roll.formula.includes("kh")) !== undefined);

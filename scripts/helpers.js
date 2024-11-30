@@ -213,7 +213,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         else checkItem = t?.actor?.items?.find(i => i.name.toLowerCase() === itemName.toLowerCase());
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
         let hasEffectOrigin = t?.actor?.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
-        let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t,true) : MidiQOL.computeDistance(initiatingToken,t,true);
+        let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t, {wallsBlock: true, includeCover: true}) : MidiQOL.computeDistance(initiatingToken,t, {wallsBlock: true, includeCover: true});
         let range = game.gps.convertFromFeet({range: rangeTotal});
 
         // Check if the token has the actual item to use
@@ -394,7 +394,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
     else checkItem = targetedToken?.actor?.items?.find(i => i.name.toLowerCase() === itemName.toLowerCase());
     const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
     let hasEffectOrigin = targetedToken?.actor?.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
-    let measuredDistance = MidiQOL.computeDistance(initiatingToken,targetedToken,true);
+    let measuredDistance = MidiQOL.computeDistance(initiatingToken,targetedToken, {wallsBlock: true, includeCover: true});
     let range = game.gps.convertFromFeet({range: rangeTotal});
 
     // Check if the token has the actual item to use

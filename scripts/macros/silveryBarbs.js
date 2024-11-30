@@ -46,7 +46,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         if(workflowType === "save") {
-            let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 60);
+            let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
             if(homebrewDisableNat20) targets = targets.filter(t => workflow.saveRolls.find(roll => roll.data.actorUuid === t.actor.uuid && !roll.isCritical));
             if(homebrewEnableNat20) targets = targets.filter(t => workflow.saveRolls.find(roll => roll.data.actorUuid === t.actor.uuid && roll.isCritical));
 

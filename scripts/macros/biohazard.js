@@ -11,10 +11,10 @@ export async function biohazard({tokenUuid, regionUuid, regionScenario, regionSt
     }
     else return;
     
-    if (!MidiQOL.isTargetable(token)) return;
-    
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
+
+    if (!MidiQOL.isTargetable(token)) return;
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
 

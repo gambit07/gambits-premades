@@ -21,7 +21,7 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
     if(findValidTokens.length === 0 || !findValidTokens) return;
 
     for (const validTokenPrimary of findValidTokens) {
-        let targets = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.computeDistance(validTokenPrimary, t, true) <= 30);
+        let targets = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 30);
 
         if(targets.length === 0) continue;
 

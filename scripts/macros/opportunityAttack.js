@@ -217,7 +217,10 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         return;
     }
 
-    let originDisadvantage = token.actor.items.some(i => i.name.toLowerCase().includes("escape the hoard"));
+    let hasItemDis = token.actor.items.some(i => i.name.toLowerCase().includes("escape the hoard"));
+    let hasEffectDis = token.actor.appliedEffects.some(e => e.name.toLowerCase().includes("boots of speed"));
+    const originDisadvantage = hasItemDis || hasEffectDis;
+    
     // Check valid weapons
     let hasWarCaster = effectOriginActor.items.find(i => i.name.toLowerCase() === "war caster");
     let hasWarCasterConfigDialog = effectOriginActor.items.some(i => i.name.toLowerCase() === "war caster");
