@@ -396,29 +396,27 @@ Hooks.on('updateSetting', (setting) => {
 });
 
 function hideTemplateElements(template) {
-  if (!template) return;
+    if (!template) return;
 
-  // Check if we're on the template layer, in which case I still want template visibility
-  if(canvas?.activeLayer?.constructor?.name === "TemplateLayer") return;
+    // Check if we're on the template layer, in which case I still want template visibility
+    if(canvas?.activeLayer?.constructor?.name === "TemplateLayer") return;
 
-  // Hide primary template
-  if (template.template) {
-    template.template.alpha = 0;
-  }
+    // Hide primary template
+    template.alpha = 0;
 
-  // Hide highlight
-  const hl = canvas.interface.grid.getHighlightLayer(template.highlightId);
-  if (hl) {
-    hl.alpha = 0;
-  }
+    // Hide highlight
+    const hl = canvas.interface.grid.getHighlightLayer(template.highlightId);
+    if (hl) {
+        hl.alpha = 0;
+    }
 
-  // Hide border
-  if (template.ruler) {
-    template.ruler.visible = false;
-  }
+    // Hide border
+    if (template.ruler) {
+        template.ruler.visible = false;
+    }
 
-  //Reduce unneeded (I think?) refresh activity
-  template.hitArea = null;
+    //Reduce unneeded (I think?) refresh activity
+    template.hitArea = null;
 }
 
 // Make sure we re-apply invisibility, may need more stuff here?
