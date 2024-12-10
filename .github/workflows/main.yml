@@ -19,9 +19,11 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Updates:" >> release_notes.txt
-          echo "  - Sequencer: Updates for many automations to resolve dep warnings for .from to .copySprite" >> release_notes.txt
+          echo "  - Web: Allow configuring the spell dc from the item for more flexibility." >> release_notes.txt
+          echo "  - Opportunity Attack: Add handling for the Speedy feat from 5e 24." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Biohazard: Fix issue with initialization of template flag with some midi settings" >> release_notes.txt
+          echo "  - Hellish Rebuke: Update to send spell consumption dialog to appropriate entity (user or GM), instead of defaulting to GM at all times." >> release_notes.txt
+          echo "  - Torch: Fix issue with item pile torch image assignment." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

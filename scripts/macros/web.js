@@ -32,8 +32,8 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
-    const spellDC = effectOriginActor.system.attributes.spelldc;
-    let saveAbility = "dex";
+    const spellDC = chosenItem.system.save.dc ? chosenItem.system.save.dc : effectOriginActor.system.attributes.spelldc;
+    let saveAbility = chosenItem.system.save.ability ? chosenItem.system.save.ability : "dex";
     const hasEffectApplied = token.document.hasStatusEffect("restrained");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkWebRound");
     if(damagedThisTurn && damagedThisTurn === `${token.id}_${game.combat.round}`) return;
@@ -137,7 +137,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use your action to make an athletics skill check to escape the ${chosenItem.name}?</p>
+                                    <p class="gps-dialog-paragraph">Would you like to use your action to make an strength ability check to escape the ${chosenItem.name}?</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
@@ -167,7 +167,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                 return;
             }
             else if (userDecision) {
-                const skillCheck = await token.actor.rollSkill("ath");
+                const skillCheck = await token.actor.rollAbilityTest("str");
                 if (skillCheck.total >= spellDC) {
                     await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
                         let chatData = {

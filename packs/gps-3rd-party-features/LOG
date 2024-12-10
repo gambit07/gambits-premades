@@ -1,15 +1,8 @@
-2024/12/02-13:37:12.664 1bdc14 Recovering log #1825
-2024/12/02-13:37:12.674 1bdc14 Delete type=0 #1825
-2024/12/02-13:37:12.674 1bdc14 Delete type=3 #1823
-2024/12/02-14:26:55.785 1beb20 Level-0 table #1830: started
-2024/12/02-14:26:55.791 1beb20 Level-0 table #1830: 54614 bytes OK
-2024/12/02-14:26:55.793 1beb20 Delete type=0 #1828
-2024/12/02-14:26:55.799 1beb20 Manual compaction at level-0 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at (end)
-2024/12/02-14:26:55.799 1beb20 Manual compaction at level-1 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at '!items!y6y7B3DSHbduxFDF' @ 86 : 1
-2024/12/02-14:26:55.799 1beb20 Compacting 1@1 + 1@2 files
-2024/12/02-14:26:55.805 1beb20 Generated table #1831@1: 8 keys, 20089 bytes
-2024/12/02-14:26:55.805 1beb20 Compacted 1@1 + 1@2 files => 20089 bytes
-2024/12/02-14:26:55.809 1beb20 compacted to: files[ 0 0 1 0 0 0 0 ]
-2024/12/02-14:26:55.809 1beb20 Delete type=2 #1562
-2024/12/02-14:26:55.809 1beb20 Delete type=2 #1830
-2024/12/02-14:26:55.828 1beb20 Manual compaction at level-1 from '!items!y6y7B3DSHbduxFDF' @ 86 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at (end)
+2024/12/08-14:57:16.225 1bc1f0 Recovering log #1859
+2024/12/08-14:57:16.243 1bc1f0 Delete type=0 #1859
+2024/12/08-14:57:16.244 1bc1f0 Delete type=3 #1857
+2024/12/09-19:35:07.704 1beb20 Level-0 table #1864: started
+2024/12/09-19:35:07.704 1beb20 Level-0 table #1864: 0 bytes OK
+2024/12/09-19:35:07.708 1beb20 Delete type=0 #1862
+2024/12/09-19:35:07.717 1beb20 Manual compaction at level-0 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!TXZSwiqyvaH8cbMP.J6MED16bxw1itlS1' @ 0 : 0; will stop at (end)
+2024/12/09-19:35:07.717 1beb20 Manual compaction at level-1 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!TXZSwiqyvaH8cbMP.J6MED16bxw1itlS1' @ 0 : 0; will stop at (end)
