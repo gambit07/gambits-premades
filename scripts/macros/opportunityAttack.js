@@ -367,15 +367,19 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
            await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
         }
 
-        chosenWeapon = chosenWeapon.clone({
-            system: {
-                "range": {
-                    "value": null,
-                    "long": null,
-                    "units": ""
-                }
+        let clonedWeapon = foundry.utils.deepClone(chosenWeapon);
+
+        foundry.utils.mergeObject(clonedWeapon, {
+        system: {
+            range: {
+                value: null,
+                long: null,
+                units: ""
             }
-        }, { keepId: true });
+        }
+        }, { inplace: true });
+
+        chosenWeapon = clonedWeapon;
 
         let userSelect = undefined;
         if(source && source === "user") userSelect = browserUser;
@@ -396,6 +400,10 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         if (rsakCheck || originDisadvantage) {
             options.workflowOptions.disadvantage = true;
         }
+
+        chosenWeapon.prepareData();
+        chosenWeapon.prepareFinalAttributes();
+        chosenWeapon.applyActiveEffects();
 
         let itemRoll;
         if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options });

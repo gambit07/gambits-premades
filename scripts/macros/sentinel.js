@@ -153,15 +153,19 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
                await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
             }
 
-            chosenWeapon = chosenWeapon.clone({
-                system: {
-                    "range": {
-                        "value": null,
-                        "long": null,
-                        "units": ""
-                    }
+            let clonedWeapon = foundry.utils.deepClone(chosenWeapon);
+
+            foundry.utils.mergeObject(clonedWeapon, {
+            system: {
+                range: {
+                    value: null,
+                    long: null,
+                    units: ""
                 }
-            }, { keepId: true });
+            }
+            }, { inplace: true });
+    
+            chosenWeapon = clonedWeapon;
 
             const options = {
                 showFullCard: false,
