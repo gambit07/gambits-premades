@@ -4,7 +4,7 @@ async function postDamageRoll() {
     let { animEnabled, damageColor } = game.gps.getCprConfig({itemUuid: macroItem.uuid});
     if(!animEnabled) return; 
 
-    const damageType = workflow.damageDetail?.type ?? "fire";
+    const damageType = workflow.damageDetail[0]?.type ?? "fire";
     damageColor = damageColor ?? "orange";
     if (["radiant", "lightning", "cold"].includes(damageType)) damageColor = "blue";
     else if (["necrotic", "poison", "acid"].includes(damageType)) damageColor = "green";
@@ -16,7 +16,7 @@ async function postDamageRoll() {
     let explosion = game.gps.animation.fireball.explosion(token, templateData, {color: damageColor});
 
     await cast.play();
-    explosion.play();
+    await explosion.play();
 }
 
 try {
