@@ -1,10 +1,10 @@
 /* DIME entry only -- not integrated into game.gps */
 
-async function postActiveEffects() {
+async function postDamageRoll() {
     let { animEnabled, damageColor } = game.gps.getCprConfig({itemUuid: macroItem.uuid});
     if(!animEnabled) return; 
 
-    const damageType = workflow.damageItem.damageDetail[0]?.type ?? "fire";
+    const damageType = workflow.damageDetail?.type ?? "fire";
     damageColor = damageColor ?? "orange";
     if (["radiant", "lightning", "cold"].includes(damageType)) damageColor = "blue";
     else if (["necrotic", "poison", "acid"].includes(damageType)) damageColor = "green";
@@ -20,7 +20,7 @@ async function postActiveEffects() {
 }
 
 try {
-    let states = {postActiveEffects};
+    let states = {postDamageRoll};
     if (typeof workflow != "undefined") await states[workflow.macroPass]();
     else await states[args[0]]();
 } catch(e) { console.error(e); }
