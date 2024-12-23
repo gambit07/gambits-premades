@@ -1,6 +1,6 @@
 /* DIME entry only -- not integrated into game.gps */
 
-async function preDamageApplication() {
+async function postActiveEffects() {
     let { animEnabled, damageColor } = game.gps.getCprConfig({itemUuid: macroItem.uuid});
     if(!animEnabled) return; 
 
@@ -20,7 +20,7 @@ async function preDamageApplication() {
 }
 
 try {
-    let states = {preDamageApplication};
+    let states = {postActiveEffects};
     if (typeof workflow != "undefined") await states[workflow.macroPass]();
     else await states[args[0]]();
 } catch(e) { console.error(e); }
