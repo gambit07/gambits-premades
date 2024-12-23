@@ -9,7 +9,7 @@ async function preDamageApplication() {
     if (["radiant", "lightning", "cold"].includes(damageType)) damageColor = "blue";
     else if (["necrotic", "poison", "acid"].includes(damageType)) damageColor = "green";
     else if (["thunder", "force", "psychic"].includes(damageType)) damageColor = "purple";
-    else if (["slashing", "bludgeoning", "piercing"].includes(damageType)) damageColor = "purple";
+    else if (["slashing", "bludgeoning", "piercing"].includes(damageType)) damageColor = "red";
 
     const templateData = fromUuidSync(workflow.templateUuid);
     let cast = game.gps.animation.fireball.cast(token, templateData, {color: damageColor});
