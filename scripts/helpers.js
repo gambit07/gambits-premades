@@ -1363,9 +1363,6 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options}) {
     if(!itemUuid || !actorUuid || !options) return;
 
     let itemData = await fromUuid(itemUuid);
-    itemData.prepareData();
-    itemData.prepareFinalAttributes();
-    itemData.applyActiveEffects();
     
     let remoteCIU = await MidiQOL.completeItemUse(itemData, {actorUuid}, options);
     let checkHits = remoteCIU?.hitTargets?.first() ? true : false;

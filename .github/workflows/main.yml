@@ -19,11 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Dimension Door: Add elevation to sequencer teleport to maintain the tokens elevation after teleport" >> release_notes.txt
-          echo "  - Opportunity Attack: Update to address midi issue popping out of range message if range check enabled" >> release_notes.txt
-          echo "  - Mage Slayer: Update to address midi issue popping out of range message if range check enabled" >> release_notes.txt
-          echo "  - Riposte: Update to address midi issue popping out of range message if range check enabled" >> release_notes.txt
-          echo "  - Sentinel: Update to address midi issue popping out of range message if range check enabled" >> release_notes.txt
+          echo "  - Cant even remember to be honest, but a few things got small fixes" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

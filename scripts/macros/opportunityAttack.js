@@ -401,10 +401,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             options.workflowOptions.disadvantage = true;
         }
 
-        chosenWeapon.prepareData();
-        chosenWeapon.prepareFinalAttributes();
-        chosenWeapon.applyActiveEffects();
-
         let itemRoll;
         if(source && source === "user") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options });
         else if(source && source === "gm") itemRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options });
@@ -528,7 +524,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const topLeftY = tokenCenterY - (sideLength / 2);
             let regionShape;
 
-            if (canvas.scene.grid.type === 0) {  // Gridless
+            if (canvas.scene.grid.type !== 1) {  // Gridless or Hex
                 regionShape = {
                     type: "ellipse",
                     x: tokenCenterX,
