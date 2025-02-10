@@ -3,7 +3,7 @@ name: Module Builder
 on:
   push:
     branches:
-      - main
+      - v12-4x
     paths-ignore:
       - 'README.md'
 
@@ -18,12 +18,7 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Dimension Door: Add elevation to sequencer teleport to maintain the tokens elevation after teleport" >> release_notes.txt
-          echo "  - Opportunity Attack: Update to address midi issue popping out of range message if range check enabled" >> release_notes.txt
-          echo "  - Mage Slayer: Update to address midi issue popping out of range message if range check enabled" >> release_notes.txt
-          echo "  - Riposte: Update to address midi issue popping out of range message if range check enabled" >> release_notes.txt
-          echo "  - Sentinel: Update to address midi issue popping out of range message if range check enabled" >> release_notes.txt
+          echo "- Beta stealth release?" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -60,38 +55,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
-
-      - name: Release Foundry Package
-        run: |
-          curl -X POST "https://api.foundryvtt.com/_api/packages/release_version" \
-          -H "Content-Type: application/json" \
-          -H "Authorization: ${{ secrets.FOUNDRY_API_TOKEN }}" \
-          -d '{
-            "id": "'"gambits-premades"'",
-            "release": {
-              "version": "'"${{ steps.get-version.outputs.version }}"'",
-              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"'",
-              "download": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.zip"'",
-              "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
-              "compatibility": {
-                "minimum": "'"12.328"'",
-                "verified": "'"12"'",
-                "maximum": "'"12"'"
-              }
-            }
-          }'
-
-      - name: Post to Discord
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
-        run: |
-          curl -H "Content-Type: application/json" \
-          -d '{
-          "embeds": [{
-            "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
-            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
-            "image": {
-              "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
-            }
-          }]
-          }' $DISCORD_WEBHOOK
