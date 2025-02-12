@@ -1,7 +1,7 @@
 export async function recklessAttack({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preAttackRoll") {
         if(!game.combat) return;
-        let meleeAttack = ((workflow.item.system?.actionType == 'mwak' && !workflow.item.system?.properties.has('thr')) || (workflow.item.system?.actionType == 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(),6).length > 0 && workflow.item.system?.properties.has('thr'))) ? true : false;
+        let meleeAttack = ((workflow.activity?.actionType == 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType == 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(),6).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
         if (!meleeAttack) return;
         let recklessCheck = await actor.getFlag("midi-qol", "checkRecklessAttack");
         if(recklessCheck === false || recklessCheck === true) return;
@@ -40,12 +40,12 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
         `;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-        let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
-        
-        let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: "gm",type: "multiDialog" };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
+            
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: "gm",type: "multiDialog" };
 
-        result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
-    } else {
+            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+        } else {
         result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
         }
                 
@@ -110,8 +110,6 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
 
     if(args[0] === "each" && args[2].turn === "startTurn") {
         await actor.unsetFlag("midi-qol", "checkRecklessAttack");
-        let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "872c2cfd-5f58-4e64-a804-2b0db2c65900");
-        if(effectData) await MidiQOL.socket().executeAsGM("removeEffects", { actorUuid: actor.uuid, effects: [effectData.id] });
     }
 
     if(args[0] === "each" && args[2].turn === "endTurn") {

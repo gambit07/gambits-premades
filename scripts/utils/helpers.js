@@ -235,7 +235,8 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token is the initiating token or not a qualifying token disposition
-        else if(dispositionCheck && ((t.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
+        else if(dispositionCheck && (((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
+            console.log(t.document.disposition, initiatingToken.document.disposition, "tokencheck")
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at token disposition check`);
             return;
         }

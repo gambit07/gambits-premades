@@ -50,7 +50,7 @@ jobs:
           allowUpdates: true
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
-          prerelease: false
+          prerelease: true
           body: ${{ env.release-notes-github }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'

@@ -94,7 +94,7 @@ export async function defileGround({ speaker, actor, token, character, item, arg
             }
         }];
 
-        let itemCheck = actor.items.some(i => i.flags["gambits-premades"].gpsUuid === "f3bca81e-885d-4f45-aac4-c817eba4efc2");
+        let itemCheck = actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "f3bca81e-885d-4f45-aac4-c817eba4efc2");
         if (!itemCheck) await actor.createEmbeddedDocuments("Item", itemData);
 
         let effectCheck = actor.effects.find(e => e.name === "Defile Ground Template");
@@ -150,9 +150,10 @@ export async function defileGround({ speaker, actor, token, character, item, arg
         async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
         await wait(250);
         const originActor = item.parent;
-        let itemCheck = originActor.items.find(i => i.flags["gambits-premades"].gpsUuid === "f3bca81e-885d-4f45-aac4-c817eba4efc2");
+        console.log(item, "item")
+        let itemCheck = originActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "f3bca81e-885d-4f45-aac4-c817eba4efc2");
         
-        let effectCheck = originActor.effects.getName("Defile Ground Template");
+        let effectCheck = originActor.appliedEffects.find(e => e.name === `${item.name} Template`);
         if(!effectCheck)
         {
             await originActor.deleteEmbeddedDocuments("Item", [itemCheck.id]);

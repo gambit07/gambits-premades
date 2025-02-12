@@ -22,11 +22,11 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
             return resource?.label?.toLowerCase() === "bardic inspiration";
         });
 
-        if(resourceKey) {
-            if(validTokenPrimary.actor.system.resources[resourceKey].value === validTokenPrimary.actor.system.resources[resourceKey].max) continue;
+        if(itemData) {
+            if(itemData.system.uses.spent >= itemData.system.uses.max) continue;
         }
-        else if(itemData) {
-            if(itemData.system.uses.value === itemData.system.uses.max) continue;
+        else if(resourceKey) {
+            if(validTokenPrimary.actor.system.resources[resourceKey].value === validTokenPrimary.actor.system.resources[resourceKey].max) continue;
         }
         else continue;
 
@@ -104,13 +104,13 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         else if (userDecision) {
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            if (resourceKey) {
-                let updatePath = `system.resources.${resourceKey}.value`;
-                await validTokenPrimary.actor.update({ [updatePath]: validTokenPrimary.actor.system.resources[resourceKey].value + 1 });
+            if(itemData) {
+                await itemData.update({ 'system.uses.spent' : itemData.system.uses.spent - 1 })
             }
 
-            else if(itemData) {
-                await itemData.update({ 'system.uses.value' : itemData.system.uses.value + 1 })
+            else if (resourceKey) {
+                let updatePath = `system.resources.${resourceKey}.value`;
+                await validTokenPrimary.actor.update({ [updatePath]: validTokenPrimary.actor.system.resources[resourceKey].value + 1 });
             }
 
             let typeText = (workflowType === "attack") ? `${initiatingToken.actor.name}'s nat 1 attack roll` : (workflowType === "ability") ? `${initiatingToken.actor.name}'s nat 1 ability check` : (workflowType === "skill") ? `${initiatingToken.actor.name}'s nat 1 skill check` : `${chatActor.name}'s nat 1 saving throw`;
