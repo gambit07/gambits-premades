@@ -35,7 +35,6 @@ export async function torch({ speaker, actor, token, character, item, args, scop
         const light = { dim: 0, bright: 0 };
         await token.document.update({ light });
         await Sequencer.EffectManager.endEffects({ name: `${token.document.id} ${LIGHT_SOURCE}`, object: token });
-        console.log(args, "this is args")
         let effectData = await actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "31ef3b37-2ae3-4057-8335-63f690d1ae8d");
         if (effectData) await effectData.delete(); 
     }

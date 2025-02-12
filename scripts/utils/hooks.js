@@ -4,12 +4,11 @@ export function registerHooks() {
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         let workflowItemUuid = workflow.uuid;
         let workflowType = (workflow.activity.hasSave) ? "save" : (workflow.activity.hasAttack) ? "attack" : "item";
-        if (game.gpsSettings.counterspellEnabled && workflow.activity.type === "spell") await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
-        if (game.gpsSettings.temporalShuntEnabled && (workflow.activity.type === "spell" || workflow.activity.hasAttack)) await executeWorkflow({ workflowItem: "temporalShunt", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
+        if (game.gpsSettings.counterspellEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
+        if (game.gpsSettings.temporalShuntEnabled && (workflow.item.type === "spell" || workflow.activity.hasAttack)) await executeWorkflow({ workflowItem: "temporalShunt", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
-        console.log(workflow)
         if(!workflow.activity.hasAttack) return;
         let workflowItemUuid = workflow.uuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
@@ -79,7 +78,7 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.preCompleted", async (workflow) => {
-        if (!workflow.activity.type === "spell") return;
+        if (!workflow.item.type === "spell") return;
         let workflowItemUuid = workflow.uuid;
         if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "spell", workflowCombat: true });
     });

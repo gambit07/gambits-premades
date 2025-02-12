@@ -89,7 +89,6 @@ export async function freeSpellUse({ workflowUuid }) {
                 return;
             }, rejectClose:false
         });
-        console.log(workflow, "workflow")
     }
 }
 

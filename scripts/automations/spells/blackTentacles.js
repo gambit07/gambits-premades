@@ -1,9 +1,6 @@
 export async function blackTentacles({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus}) {
     if(!game.combat) return ui.notifications.warn("Black Tentacles requires an active combat.");
     let gmUser = game.gps.getPrimaryGM();
-    console.log(args, "args")
-    console.log(actor, "actor")
-    console.log(workflow, "workflow")
 
     if (args?.[0]?.macroPass === "templatePlaced") {
         let cprConfig = game.gps.getCprConfig({itemUuid: workflow.item.uuid});

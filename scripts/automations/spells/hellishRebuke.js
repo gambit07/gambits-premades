@@ -1,6 +1,5 @@
 export async function hellishRebuke({ speaker, actor, token, character, item, args, scope, workflow, options, rolledItem, rolledActivity, macroItem }) {
     if(args[0].macroPass === "isDamaged") {
-        console.log(item, macroItem, scope)
         let gpsUuid = "999b21b1-cd4a-45b3-b9e9-c9406a74b3fd";
         item = await actor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemName = item.name;

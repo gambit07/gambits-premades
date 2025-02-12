@@ -1,8 +1,6 @@
 export async function command({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "postSavesComplete" && workflow.failedSaves) {
         let targets = workflow.failedSaves;
-        console.log(workflow, "this ran workflow")
-        console.log(args[0], "args0")
 
         await foundry.applications.api.DialogV2.wait({
             window: { title: '🗣Command🗣' },

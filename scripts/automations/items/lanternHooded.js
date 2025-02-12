@@ -78,6 +78,8 @@ export async function lanternHooded({ speaker, actor, token, character, item, ar
                 .loopProperty("sprite", "rotation", { from: 3, to: -3, duration: 1500, ease: "easeOutQuad", pingPong: true })
                 .persist()
                 .zeroSpriteRotation()
+                .rotate(tokenData.document.flags?.autorotate?.offset ?? 0)
+                .spriteScale({ x: 1.0 / tokenData.document.texture.scaleX, y: 1.0 / tokenData.document.texture.scaleY })
                 .waitUntilFinished(-500)
                 .play()
                 var light = {dim: game.gps.convertFromFeet({ range: 5 }), bright: 0, alpha:0.25, luminosity: 0.5, angle:360, color: "#ffb433", animation: {type: "torch", speed: 4, intensity: 4},attenuation: 0.75, contrast:0.15, shadows:0.2};

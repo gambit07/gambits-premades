@@ -1,6 +1,5 @@
 export async function holyAura({ speaker, actor, token, character, item, args, scope, workflow, options, rolledItem, rolledActivity, macroItem }) {
     if(args[0].macroPass === "isDamaged") {
-        console.log(item, macroItem, scope)
         let gpsUuid = "5f7adec6-3c0f-4654-8516-a4a38260ed85";
         let effect = await actor?.appliedEffects?.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         item = await fromUuid(effect.flags["midi-qol"].castData.itemUuid);

@@ -48,6 +48,8 @@ export async function lamp({ speaker, actor, token, character, item, args, scope
                 .persist()
                 .zeroSpriteRotation()
                 .waitUntilFinished(-500)
+                .rotate(tokenData.document.flags?.autorotate?.offset ?? 0)
+                .spriteScale({ x: 1.0 / tokenData.document.texture.scaleX, y: 1.0 / tokenData.document.texture.scaleY })
                 .play()
 
                 //Define token light options

@@ -1,7 +1,6 @@
 export async function dimensionDoor({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error("You must install the Jack Kerouac's Animated Spell Effects - Cartoon module to use this automation.");
     if (args[0].macroPass === "preActiveEffects") {
-        console.log(workflow, "workflowtest")
         if (workflow.targets.size > 1) return ui.notifications.warn("You can only select one creature to teleport along with yourself");
         let target = workflow.targets.first() ?? null;
         if(target) {

@@ -120,6 +120,8 @@ export async function lanternBullseye({ speaker, actor, token, character, item, 
         .loopProperty("sprite", "rotation", { from: 3, to: -3, duration: 1500, ease: "easeOutQuad", pingPong: true })
         .persist()
         .zeroSpriteRotation()
+        .rotate(tokenData.document.flags?.autorotate?.offset ?? 0)
+        .spriteScale({ x: 1.0 / tokenData.document.texture.scaleX, y: 1.0 / tokenData.document.texture.scaleY })
         .waitUntilFinished(-500)
         .play()
 

@@ -6,7 +6,6 @@ export async function entangle({ speaker, actor, token, character, item, args, s
     if(args[0].macroPass === "postSave")
     {
         const template = await fromUuid(workflow.templateUuid);
-        console.log(template, "template")
         const gridDecision = true;
         let edgeDecision = "inner";
         let alignmentDecision;

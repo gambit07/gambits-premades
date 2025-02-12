@@ -7,7 +7,6 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     let dialogId = gpsUuid;
     const lastMessage = game.messages.contents[game.messages.contents.length - 1]; // Use to hide initial spell message
     let gmUser = game.gps.getPrimaryGM();
-    if(workflow.config.midiOptions.noProvokeReaction) return;
 
     const castProperties = ["vocal", "somatic", "material"];
     let hasVSMProperty = castProperties.some(prop => workflow.item.system.properties.has(prop));

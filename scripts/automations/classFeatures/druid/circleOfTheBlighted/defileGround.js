@@ -150,7 +150,6 @@ export async function defileGround({ speaker, actor, token, character, item, arg
         async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
         await wait(250);
         const originActor = item.parent;
-        console.log(item, "item")
         let itemCheck = originActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "f3bca81e-885d-4f45-aac4-c817eba4efc2");
         
         let effectCheck = originActor.appliedEffects.find(e => e.name === `${item.name} Template`);

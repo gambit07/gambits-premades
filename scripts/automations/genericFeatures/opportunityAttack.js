@@ -406,8 +406,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             });
         }
 
-        console.log(clonedWeapon, "clonedWeapon")
-
         chosenWeapon = clonedWeapon;
 
         let userSelect = undefined;
