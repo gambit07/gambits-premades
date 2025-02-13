@@ -93,7 +93,7 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
             let indomitableHomebrew = MidiQOL.safeGetGameSetting('gambits-premades', 'enableAutoSucceedIndomitable');
             let saveDC = workflow.saveItem.system.save.dc;
             let saveAbility = workflow.saveItem.system.save.ability;
-            let targetSaveBonus =  validTokenPrimary.actor.system.abilities[`${saveAbility}`].save + validTokenPrimary.actor.system.abilities[`${saveAbility}`].saveBonus;
+            let targetSaveBonus =  validTokenPrimary.actor.system.abilities[`${saveAbility}`].save;
             let reroll;
             if(source && source === "user" && !indomitableHomebrew) reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1d20 + ${targetSaveBonus}` });
             if(source && source === "gm" && !indomitableHomebrew) reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${targetSaveBonus}` });

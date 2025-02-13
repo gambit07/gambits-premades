@@ -1,4 +1,4 @@
-export async function command({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
+export async function cecilysStormshot({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
     if(args[0].macroPass === "postAttackRoll") {
         let target = workflow.hitTargets.first();
         let missTarget = workflow.targets.first();

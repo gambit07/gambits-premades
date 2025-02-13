@@ -7,9 +7,10 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
         let measuredDistance = MidiQOL.computeDistance(token, workflow.token, {wallsBlock: true, includeCover: true});
         let range = game.gps.convertFromFeet({range: rangeTotal});
         if (measuredDistance === -1 || (measuredDistance > range)) return;
+        item = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "74c49d3c-dfcd-49d3-9070-0c663167cb51");
         let activity = item.system.activities.find(a => a.identifier === "syntheticSave");
 
-        if(!activity.save.dc.calculation && !activity.save.dc.formula) {
+        if(!activity.save?.dc?.calculation && !activity.save?.dc?.formula) {
             await foundry.applications.api.DialogV2.wait({
                 window: { title: 'Gift of the Gem Dragon Ability' },
                 content: `
