@@ -27,7 +27,7 @@ export async function biohazard({tokenUuid, regionUuid, regionScenario, regionSt
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
     const damageType = "poison";
-    const spellDC = effectOriginActor.system.attributes.spelldc;
+    const spellDC = effectOriginActor.system.attributes.spell.dc;
     let saveAbility = "con";
     let castLevel = template.getFlag("gambits-premades", "biohazardCastLevel");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkBiohazardRound");

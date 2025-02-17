@@ -156,7 +156,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                 system: {
                     equipped: true,
                     actionType: "save",
-                    save: { dc: validTokenPrimary.actor.system.attributes.spelldc, ability: "wis", scaling: "flat" },
+                    save: { dc: validTokenPrimary.actor.system.attributes.spell.dc, ability: "wis", scaling: "flat" },
                     components: { concentration: false, material: false, ritual: false, somatic: false, value: "", vocal: false },
                     duration: { units: "inst", value: undefined },
                 }

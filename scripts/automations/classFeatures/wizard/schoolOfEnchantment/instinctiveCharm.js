@@ -101,7 +101,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
             let dialogIdTarget = "instinctivecharmtarget";
             let browserUserTarget = game.gps.getBrowserUser({ actorUuid: target.actor.uuid });
 
-            const spellDC = validTokenPrimary.actor.system.attributes.spelldc;
+            const spellDC = validTokenPrimary.actor.system.attributes.spell.dc;
             let saveAbility = "wis";
 
             const itemData = {

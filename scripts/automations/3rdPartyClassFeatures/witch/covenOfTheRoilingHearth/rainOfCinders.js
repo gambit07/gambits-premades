@@ -103,7 +103,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
 
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            const spellDC = validTokenPrimary.actor.system.attributes.spelldc;
+            const spellDC = validTokenPrimary.actor.system.attributes.spell.dc;
             let saveAbility = "cha";
 
             const itemData = {

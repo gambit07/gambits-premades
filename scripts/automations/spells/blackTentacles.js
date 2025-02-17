@@ -57,7 +57,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
     const damageType = "bludgeoning";
-    const spellDC = effectOriginActor.system.attributes.spelldc;
+    const spellDC = effectOriginActor.system.attributes.spell.dc;
     let saveAbility = "dex";
     const hasEffectApplied = token.document.hasStatusEffect("restrained");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkBlackTentacleRound");

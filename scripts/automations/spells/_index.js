@@ -29,6 +29,7 @@ import { temporalShunt } from "./temporalShunt.js";
 import { viciousMockery } from "./viciousMockery.js";
 import { web } from "./web.js";
 import { zephyrStrike } from "./zephyrStrike.js";
+import { mentalPrison } from "./mentalPrison.js";
 
 export const spellsMacros = {
   ashardalonsStride,
@@ -61,5 +62,6 @@ export const spellsMacros = {
   temporalShunt,
   viciousMockery,
   web,
-  zephyrStrike
+  zephyrStrike,
+  mentalPrison
 };

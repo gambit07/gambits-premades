@@ -160,7 +160,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
 
-    const spellDC = chosenItem.system.save.dc ? chosenItem.system.save.dc : effectOriginActor.system.attributes.spelldc;
+    const spellDC = chosenItem.system.save.dc ? chosenItem.system.save.dc : effectOriginActor.system.attributes.spell.dc;
     let saveAbility = chosenItem.system.save.ability ? chosenItem.system.save.ability : "dex";
     const hasEffectApplied = token.document.hasStatusEffect("restrained");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkWebRound");

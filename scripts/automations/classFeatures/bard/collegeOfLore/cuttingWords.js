@@ -17,15 +17,23 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        let bardicDie = validTokenPrimary.actor.system.scale?.bard["bardic-inspiration"]?.die;
-        if(!bardicDie) {
-            bardicDie = validTokenPrimary.actor.system.scale?.ambassador["bardic-inspiration"]?.die; // Homebrew for SciFi 5e Conversion
-            if(!bardicDie) {
-                ui.notifications.error("You must have a Bard scale for this actor named 'bardic-inspiration'")
-                continue;
-            }
+        const scales = validTokenPrimary.actor.system.scale;
+        const possibleScales = [
+          scales?.bard?.["bardic-inspiration"],
+          scales?.bard?.["inspiration"],
+          scales?.ambassador?.["bardic-inspiration"] // Homebrew for SciFi 5e
+        ];
+        
+        const foundScale = possibleScales.find(e => e?.die && e?.faces);
+        if (!foundScale) {
+          ui.notifications.error(
+            "You must have a Bard or Ambassador scale for this actor named 'bardic-inspiration' or 'inspiration'"
+          );
+          continue;
         }
-        let bardicNum = validTokenPrimary.actor.system.scale?.bard["bardic-inspiration"]?.faces;
+        
+        const bardicDie = foundScale.die;
+        const bardicNum = foundScale.faces;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});

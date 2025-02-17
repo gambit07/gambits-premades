@@ -193,10 +193,8 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
                 .play()
             }
             else if (intScore <= 4) {
-                ui.notifications.warn("This creature is not effected, its Intelligence score is too low.")
-                workflow.failedSaves.delete(target)
-                const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid)
-                if (hasConcApplied)	await hasConcApplied.delete();
+                ui.notifications.warn("This creature is not effected, its Intelligence score is too low.");
+                workflow.failedSaves.delete(target);
             }
         }
 

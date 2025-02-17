@@ -4,7 +4,6 @@ export async function fireball({ speaker, actor, token, character, item, args, s
         const { animEnabled, animColor } = cprConfig;
     
         if(!animEnabled) return;
-        console.log(token, "token?")
         let scorchedEarth = true
         let persistEffect = true
     
