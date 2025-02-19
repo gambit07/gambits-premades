@@ -19,7 +19,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     const effectOriginActor = await fromUuid(region.flags["gambits-premades"].actorUuid);
     const effectOriginToken = await fromUuid(region.flags["gambits-premades"].tokenUuid);
     
-    let hasSentinel = effectOriginActor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c");
+    let hasSentinel = effectOriginActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c");
 
     /*if(hasSentinel) {
         let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
@@ -200,7 +200,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     }
 
     // Check if the token has cast Kinetic Jaunt, Zephyr Strike, or the generic immunity effect has been applied
-    const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Opportunity Attack Immunity", "Rabbit Hop", "Ashardalon's Stride", "Hurried Response"];
+    const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Opportunity Attack Immunity", "Rabbit Hop", "Ashardalon's Stride", "Hurried Response", "Sudden Rush"];
     let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
     if(hasEffectToken) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using an immunity effect`);
@@ -624,7 +624,9 @@ export async function enableOpportunityAttack(combat, combatEvent) {
 
                                 let recalculate = false;
                                 let tokenSize = Math.max(token.width, token.height);
-                                let validWeapons = actor.items.filter(item => item.system.equipped && item.system.activities && (item.system?.type?.value === "monster" && item.type === "feat" ? item.system.activities.some(activity => activity?.actionType === "mwak" || activity?.actionType === "msak") : item.type === "weapon" ? item.system.activities.some(activity => activity?.actionType === "msak") : item.system.activities.some(activity => activity?.actionType === "mwak")));
+                                let validWeapons = actor.items.filter(item =>
+                                    (item.type === "weapon" && item.system.equipped === true && item.system.activities?.some(a => a.actionType === "msak" || a.actionType === "mwak")) || ((item.system?.type?.value === "monster" && item.type === "feat") && item.system.activities?.some(a => a.actionType === "mwak" || a.actionType === "msak"))
+                                );
 
                                 recalculate = await checkAndSetFlag("opportunityAttackRegionValidWeapons", validWeapons) || recalculate;
                                 recalculate = await checkAndSetFlag("opportunityAttackRegionTokenSize", tokenSize) || recalculate;

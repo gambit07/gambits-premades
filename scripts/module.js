@@ -3,6 +3,7 @@ import { registerHooks } from "./utils/hooks.js";
 import { automationRegistry } from "./automations/index.js";
 import { refreshTemplateVisibility, registerWrapping, updateSettings } from "./utils/hookUtils.js";
 import * as helpers from "./utils/helpers.js";
+import { weaponAnimations } from "./utils/animationUtils.js";
 
 Hooks.once('init', async function() {
     registerSettings();
@@ -68,7 +69,8 @@ Hooks.once('ready', async function() {
     game.gps = {
         ...game.gps,
         ...helpers,
-        ...automationRegistry
+        ...automationRegistry,
+        weaponAnimations
     };
 
     refreshTemplateVisibility();
