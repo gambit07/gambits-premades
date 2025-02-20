@@ -1,3 +1,4 @@
+import { animation } from './animations/animation.js';
 import {registerSettings} from './settings.js';
 import { counterspell } from './macros/counterspell.js';
 import { silveryBarbs } from './macros/silveryBarbs.js';
@@ -171,6 +172,7 @@ Hooks.once('socketlib.ready', async function() {
 
 Hooks.once('ready', async function() {
     game.gps = {
+        animation,
         gmIdentifyItem,
         convertFromFeet,
         gmUpdateTemplateSize,
