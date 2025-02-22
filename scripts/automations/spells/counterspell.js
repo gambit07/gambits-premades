@@ -3,7 +3,12 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     if(!workflow) return;
     const gpsUuid = "a3992a10-f36a-4416-a995-f83d444c3c0a";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let itemName = "Counterspell";
+    if(!workflow.activity.consumption.spellSlot) {
+        if(debugEnabled) console.error(`${itemName} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
+        return;
+    }
     let dialogId = gpsUuid;
     const lastMessage = game.messages.contents[game.messages.contents.length - 1]; // Use to hide initial spell message
     let gmUser = game.gps.getPrimaryGM();
@@ -48,7 +53,10 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
             let itemProperName = chosenItem?.name;
             const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
             const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-            castLevel = !castLevel ? workflow.castData.castLevel : castLevel;
+            
+            let castType = workflow.item?.system?.preparation?.mode;
+            if(castType === "innate" || castType === "atwill") castLevel = !castLevel ? workflow.castData.baseLevel : castLevel;
+            else castLevel = !castLevel ? workflow.castData.castLevel : castLevel;
             browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
             const currentIndex = findValidTokens.indexOf(validTokenPrimary);
@@ -120,7 +128,9 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     
                 if(!itemRoll) continue;
 
+                let itemRollCastType = itemRoll.itemType;
                 let itemRollCastLevel = itemRoll.castLevel;
+                if ((itemRollCastType === "innate" || itemRollCastType === "atwill") && itemRollCastLevel === 0) itemRollCastLevel = itemRoll.baseLevel;
                 
                 if(spellPenetrationEnabled) {
                     spellPenetration = selectedToken.actor.items.some(i => i.name === "Spell Penetration");
@@ -138,20 +148,27 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 const spellThreshold = castLevel + 10;
 
                 if(itemRollCastLevel < castLevel) {
-                    if(source && source === "user") skillCheck = await game.gps.socket.executeAsUser("remoteAbilityTest", browserUser, { spellcasting: validTokenPrimary.actor.system.attributes.spellcasting, actorUuid: validTokenPrimary.actor.uuid });
-                    if(source && source === "gm") skillCheck = await game.gps.socket.executeAsUser("remoteAbilityTest", gmUser, { spellcasting: validTokenPrimary.actor.system.attributes.spellcasting, actorUuid: validTokenPrimary.actor.uuid });
-                    skillRoll = game.messages.get(skillCheck.skillRoll)?.rolls[0];
+                    let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticCheck");
+                    await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"check.dc.calculation": "", "check.dc.formula": spellThreshold, "check.dc.value": spellThreshold} });
+                    skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
+                    if(!skillCheck) continue;
+                    let skillRoll = skillCheck.saveRolls[0];
                     let skillTotal = skillRoll.total;
-                    let skillFlavor = skillRoll.options.flavor;
-                    
+                    let skillFlavor = validTokenPrimary.actor.system.attributes.spell.abilityLabel;
                     let abjurationCheck = validTokenPrimary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
-                    abjurationCheck ? skillTotal = skillTotal + validTokenPrimary.actor.system?.attributes?.prof : skillTotal = skillTotal;
+                    let abjurationChat = "";
+                    if (abjurationCheck) {
+                        const prof = validTokenPrimary.actor.system?.attributes?.prof ?? 0;
+                        skillTotal += prof;
+                        abjurationChat = ` (+${prof} from Improved Abjuration)`;
+                    }
+                    
                     if (skillTotal >= spellThreshold) {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillTotal} ${skillFlavor}.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillTotal} on your ${skillFlavor} ability check${abjurationChat}.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         counterspellLevel = itemRollCastLevel;
                     }
                     else {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillTotal} ${skillFlavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillTotal} on your ${skillFlavor} ability check${abjurationChat} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         csFailure = true;
                     }
                 }
@@ -271,7 +288,9 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     
                 if(!itemRoll) continue;
 
+                let itemRollCastType = itemRoll.itemType;
                 let itemRollCastLevel = itemRoll.castLevel;
+                if ((itemRollCastType === "innate" || itemRollCastType === "atwill") && itemRollCastLevel === 0) itemRollCastLevel = itemRoll.baseLevel;
                 
                 if(spellPenetrationEnabled) {
                     spellPenetration = validTokenPrimary.actor.items.some(i => i.name === "Spell Penetration");
@@ -289,20 +308,27 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 const spellThreshold = castLevel + 10;
 
                 if(itemRollCastLevel < castLevel) {
-                    if(source && source === "user") skillCheck = await game.gps.socket.executeAsUser("remoteAbilityTest", browserUser, { spellcasting: validTokenSecondary.actor.system.attributes.spellcasting, actorUuid: validTokenSecondary.actor.uuid });
-                    if(source && source === "gm") skillCheck = await game.gps.socket.executeAsUser("remoteAbilityTest", gmUser, { spellcasting: validTokenSecondary.actor.system.attributes.spellcasting, actorUuid: validTokenSecondary.actor.uuid });
-                    skillRoll = game.messages.get(skillCheck.skillRoll)?.rolls[0];
+                    let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticCheck");
+                    await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"check.dc.calculation": "", "check.dc.formula": spellThreshold, "check.dc.value": spellThreshold} });
+                    skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenSecondary.document.uuid});
+                    if(!skillCheck) continue;
+                    let skillRoll = skillCheck.saveRolls[0];
                     let skillTotal = skillRoll.total;
-                    let skillFlavor = skillRoll.options.flavor;
-
+                    let skillFlavor = validTokenSecondary.actor.system.attributes.spell.abilityLabel;
                     let abjurationCheck = validTokenSecondary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
-                    abjurationCheck ? skillTotal = skillTotal + validTokenSecondary.actor.system?.attributes?.prof : skillTotal = skillTotal;
+                    let abjurationChat = "";
+                    if (abjurationCheck) {
+                        const prof = validTokenSecondary.actor.system?.attributes?.prof ?? 0;
+                        skillTotal += prof;
+                        abjurationChat = ` (+${prof} from Improved Abjuration)`;
+                    }
+                    
                     if (skillTotal >= spellThreshold) {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillTotal} ${skillFlavor}.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was counterspelled, you rolled a ${skillTotal} on your ${skillFlavor} ability check${abjurationChat}.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         counterspellLevel = itemRollCastLevel;
                     }
                     else {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillTotal} ${skillFlavor} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>The creature was not counterspelled, you rolled a ${skillTotal} on your ${skillFlavor} ability check${abjurationChat} and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         csFailure = true;
                     }
                 }

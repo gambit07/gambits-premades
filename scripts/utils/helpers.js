@@ -235,7 +235,6 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
 
         // Check if the token is the initiating token or not a qualifying token disposition
         else if(dispositionCheck && (((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
-            console.log(t.document.disposition, initiatingToken.document.disposition, "tokencheck")
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at token disposition check`);
             return;
         }
@@ -1196,7 +1195,9 @@ export async function replaceChatCard({ actorUuid, itemUuid, chatContent, rollDa
 let regionTokenStates = new Map();
 export function validateRegionMovement({regionScenario, regionStatus, regionUuid, tokenUuid, isTeleport = false, validExit = true}) {
     let region = fromUuidSync(regionUuid);
+    if(!region) return;
     let token = fromUuidSync(tokenUuid);
+    if(!token) return;
     let regionId = region.id;
     let tokenId = token.id;
     let validatedRegionMovement;
@@ -1366,7 +1367,7 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options}) {
     let remoteCIU = await MidiQOL.completeItemUse(itemData, {actorUuid}, options);
     let checkHits = remoteCIU?.hitTargets?.first() ? true : false;
 
-    return {castLevel: remoteCIU?.castData?.castLevel, checkHits: checkHits};
+    return {castLevel: remoteCIU?.castData?.castLevel, baseLevel: remoteCIU?.castData?.baseLevel, itemType: remoteCIU?.item?.system?.preparation?.mode, checkHits: checkHits};
 }
 
 export async function remoteAbilityTest({spellcasting, actorUuid}) {
@@ -1386,7 +1387,14 @@ export async function remoteAbilityTest({spellcasting, actorUuid}) {
 
 export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
     const item = await fromUuid(itemUuid);
+    if(!item) return console.error(`Shame you didn't pass me an itemUuid`)
     const activity = item.system.activities.find(a => a.identifier === identifier);
+    if(!activity) return console.error(`Naughty Naughty: You've likely removed the identifier name from a ${item.name} automation activity and now it's nowhere to be found ¯\_(ツ)_/¯`)
     const options = { midiOptions: { targetUuids: [targetUuid], noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMStatus: true } };
     return await MidiQOL.completeActivityUse(activity.uuid, options, {}, {});
+}
+
+export async function gpsActivityUpdate({activityUuid, updates}) {
+    let activity = await fromUuid(activityUuid);
+    await activity.update(updates);
 }

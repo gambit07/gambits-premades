@@ -18,7 +18,14 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Beta: Initial updates to torch as I rework stuff there, added Mental Prison, bunch of various tweaks" >> release_notes.txt
+          echo "- Official 5e V4.x+ Release!" >> release_notes.txt
+          echo "  - This has been a large re-work of items from GPS to better support Foundrys new activities system. Most automations that synthetically created items/features/etc now use an on item activity which can be more easily modified by users to adjust things such as the saving throw, dc, damage type, etc. All item code has now been built into the module and is no longer located on each item in the compendium to allow easier updates in the future. Any kofi support is appreciated." >> release_notes.txt
+          echo "  - NOTE: All automations are still built for 2014. Ive opted to wait on 2024 as CPR has opted to build most of those automations on their end, and I do not want to duplicate work on my end. There will likely be some exceptions for more complex automations such as Counterspell where I also have a lot of unique handling for various interactions and homebrew requests." >> release_notes.txt
+          echo "  - NOTE: This release covers all 5e automations, and a handful of 3rd party content automations. I will continue to build out 3rd party content automations, but homebrow items have not been updated. Just because it has not been updated specifically for 4.x does not mean it doesnt work, but homebrew items see minimal use, so I will accept requests to update specific homebrew automations in my Posneys Foundry Automation discord thread if you have one you are using on 4.x+ that does not work." >> release_notes.txt
+          echo "  - NOTE: There will likely be some bugs in this release as its a large re-work, you can report any bugs you find on my github or posneys foundry automation discord thread" >> release_notes.txt
+          echo "- Item Callouts:" >> release_notes.txt
+          echo "  - Counterspell: Now uses activities for ability checks. Multitude of small tweaks for better functionality surrounding that, should be better than ever." >> release_notes.txt
+          echo "  - Torch/Lamp/Candle/Lanterns: Large rework of these automations. All now have a throwable option if Item Piles is enabled. All now will not consume a quantity use unless the item is thrown. Quantity now comes down to a gm determination of when the item is empty/burned out, in which case a quantity use can be done on the item itself. Extinguishing and relighting an item will simply reset its effect timer. Since all items can be thrown, Im leaving it in the hands of gms to determine whether something is thrown successfully. Ex. Setting a candle down next to you, probably fine. Hurling a candle 60 feet, its likely not staying lit (or is it? #nat20)." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

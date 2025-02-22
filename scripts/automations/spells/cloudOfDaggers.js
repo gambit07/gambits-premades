@@ -1,28 +1,25 @@
 export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, regionStatus, speaker, actor, character, item, args, scope, workflow, options}) {
     if(!game.combat) return ui.notifications.warn("Cloud of Daggers requires an active combat.")
 
-    if(args[0].macroPass === "templatePlaced") {
+    if(args?.[0]?.macroPass === "templatePlaced") {
         const template = await fromUuid(workflow.templateUuid);
         await template.setFlag("gambits-premades", "codCastLevel", workflow.castData.castLevel);
         let cprConfig = game.gps.getCprConfig({itemUuid: workflow.item.uuid});
         const { animEnabled } = cprConfig;
         if(animEnabled) {
-            let alignmentDecision;
-            (MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates') === true) ? alignmentDecision = "center" : alignmentDecision = "right";
-        
             new Sequence()
                 .effect()
-                    .attachTo(template, { align: alignmentDecision, edge: "on" })
+                    .attachTo(template)
+                    .stretchTo(template)
                     .file("jb2a.cloud_of_daggers.kunai.orange")
-                .scaleToObject(1.5)
-                .tieToDocuments(template)
-                .scaleIn(0, 500, {ease: "easeOutCubic"})
-                .fadeIn(500)
-                .fadeOut(500)
-                .mask()
-                .persist()
-                .belowTokens()
-                .play()
+                    .tieToDocuments(template)
+                    .scaleIn(0, 500, {ease: "easeOutCubic"})
+                    .fadeIn(500)
+                    .fadeOut(500)
+                    .mask()
+                    .persist()
+                    .belowTokens()
+            .play()
         }
     }
 

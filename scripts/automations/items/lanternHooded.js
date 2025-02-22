@@ -1,106 +1,116 @@
-export async function lanternHooded({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    let lightSource = "lantern";
-    let fileHoodUp = "modules/gambits-premades/assets/images/hoodUpLantern.webp"
-    let fileHoodDown = "modules/gambits-premades/assets/images/hoodDownLantern.webp"
+import {
+    showLightDialog,
+    lightExtinguish
+} from "../../utils/lightActions.js";
+  
+export async function lanternHooded({ speaker, actor, token, item, args, workflow }) {
+  const effectName = `${token.document.id} Hooded Lantern`;
+  const gpsUuid = "4d035518-5171-42fb-94e0-2f68f1208e55";
+  const gpsUuidDim = "16b82105-df43-4489-89ac-d20b4915e601";
+  let filePath = "modules/gambits-premades/assets/images/hoodUpLantern.webp"
+  let filePathDim = "modules/gambits-premades/assets/images/hoodDownLantern.webp"
+  const animType = "lanternHooded";
+  
+  if (args[0] === "off") {
+    await lightExtinguish({ token, actor, effectName, gpsUuid, scenario: "off" });
+    return;
+  }
+  else if(args[0] === "on") return;
 
-    if (args[0] === "off" && args[2]["expiry-reason"] && (args[2]["expiry-reason"].includes("times-up") || args[2]["expiry-reason"].includes("effect-deleted")) && args[2]?.existing !== "effect-stacking") {
-        const light = { dim: 0, bright: 0 };
-        await token.document.update({ light });
-        await Sequencer.EffectManager.endEffects({ name: `${token.document.id} ${lightSource}`, object: token });
-    }
-
-    if (args[0].macroPass === "preApplyDynamicEffects") {
-    foundry.applications.api.DialogV2.wait({
-        window: { title: 'Lantern' },
-        content: `
-            <div class="gps-dialog-container">
-                <div class="gps-dialog-section">
-                    <div class="gps-dialog-content">
-                        <div>
-                            <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">What would you like to do with your lantern?</p>
-                                <div id="image-container" class="gps-dialog-image-container">
-                                    <img src="${macroItem.img}" class="gps-dialog-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `,
-        buttons: [{
-            action: "Light",
-            label: "Light",
-            callback: async (event, button, dialog) => {
-                new Sequence()
-
-                .effect()
-                .name(`${token.document.id} ${lightSource}`)
-                .file(fileHoodUp)
-                .atLocation(token)
-                .attachTo(token, {followRotation: true, local: true})
-                .scaleToObject(1, {considerTokenScale: true})
-                .scaleIn(0, 500, {ease: "easeOutElastic"})
-                .scaleOut(0, 250, {ease: "easeOutCubic"})
-                .spriteOffset({x:0.35*token.document.width, y:0.1*token.document.width}, {gridUnits:true})
-                .animateProperty("sprite", "rotation", { from: 60, to: -60, duration: 300, ease: "easeInOutBack"})
-                .animateProperty("sprite", "rotation", { from: 0, to: 30, duration: 250, delay: 200, ease: "easeOutBack"})
-                .loopProperty("sprite", "rotation", { from: 3, to: -3, duration: 1500, ease: "easeOutQuad", pingPong: true })
-                .persist()
-                .zeroSpriteRotation()
-                .waitUntilFinished(-500)
-                .play()
-
-                //Define token light options
-                var light = {dim: game.gps.convertFromFeet({ range: 60 }), bright: game.gps.convertFromFeet({ range: 30 }), alpha:0.25, angle:360, luminosity: 0.5, color: "#ffb433", animation: {type: "torch", speed: 4, intensity: 4},attenuation: 0.75, contrast:0.15, shadows:0.2};
-
-                await token.document.update({light});
-            }
-        },
+  const lightEffect = [
+    {
+      origin: item.uuid,
+      duration: { seconds: 21600 },
+      disabled: false,
+      name: item.name,
+      img: item.img,
+      type: "base",
+      changes: [
+        { key: "ATL.light.dim", mode: 0, value: "60", priority: 20 },
+        { key: "ATL.light.bright", mode: 0, value: "30", priority: 20 },
+        { key: "ATL.light.alpha", mode: 0, value: "0.25", priority: 20 },
+        { key: "ATL.light.angle", mode: 0, value: "360", priority: 20 },
+        { key: "ATL.light.luminosity", mode: 0, value: "0.5", priority: 20 },
+        { key: "ATL.light.color", mode: 0, value: "#ffb433", priority: 20 },
+        { key: "ATL.light.animation", mode: 0, value: "{ type: \"torch\", speed: 4, intensity: 4 }", priority: 20 },
+        { key: "ATL.light.attenuation", mode: 0, value: "0.75", priority: 20 },
+        { key: "ATL.light.contrast", mode: 0, value: "0.15", priority: 20 },
+        { key: "ATL.light.shadows", mode: 0, value: "0.2", priority: 20 },
         {
-            action: "Dim",
-            label: "Dim",
-            callback: async (event, button, dialog) => {
-                await Sequencer.EffectManager.endEffects({ name: `${token.document.id} ${lightSource}`, object: token });
-                new Sequence()
-
-                .effect()
-                .name(`${token.document.id} ${lightSource}`)
-                .file(fileHoodDown)
-                .atLocation(token)
-                .attachTo(token, {followRotation: true, local: true})
-                .scaleToObject(1, {considerTokenScale: true})
-                .scaleIn(0, 500, {ease: "easeOutElastic"})
-                .scaleOut(0, 250, {ease: "easeOutCubic"})
-                .spriteOffset({x:0.35*token.document.width, y:0.1*token.document.width}, {gridUnits:true})
-                .animateProperty("sprite", "rotation", { from: 60, to: -60, duration: 300, ease: "easeInOutBack"})
-                .animateProperty("sprite", "rotation", { from: 0, to: 30, duration: 250, delay: 200, ease: "easeOutBack"})
-                .loopProperty("sprite", "rotation", { from: 3, to: -3, duration: 1500, ease: "easeOutQuad", pingPong: true })
-                .persist()
-                .zeroSpriteRotation()
-                .rotate(tokenData.document.flags?.autorotate?.offset ?? 0)
-                .spriteScale({ x: 1.0 / tokenData.document.texture.scaleX, y: 1.0 / tokenData.document.texture.scaleY })
-                .waitUntilFinished(-500)
-                .play()
-                var light = {dim: game.gps.convertFromFeet({ range: 5 }), bright: 0, alpha:0.25, luminosity: 0.5, angle:360, color: "#ffb433", animation: {type: "torch", speed: 4, intensity: 4},attenuation: 0.75, contrast:0.15, shadows:0.2};
-                await token.document.update({light});
-            }
-        },
-        {
-            action: "Extinguish",
-            label: "Extinguish",
-            callback: async (event, button, dialog) => {
-                var light = {dim: 0, bright: 0};
-                await token.document.update({light});
-                await Sequencer.EffectManager.endEffects({ name: `${token.document.id} ${lightSource}`, object: token });
-                const effectData = await actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "517ab516-3a1f-4df0-ae1c-1cebbd9ee1d0");
-                if(effectData) await effectData.delete();
-            }
+          key: "macro.itemMacro",
+          mode: 0,
+          value: "function.game.gps.lanternHooded",
+          priority: 20
         }
-        ],
-        close: async (event, dialog) => {
-            return;
-        }, rejectClose:false
-    });
+      ],
+      transfer: false,
+      flags: {
+        "gambits-premades": { gpsUuid: gpsUuid }
+      }
     }
+  ];
+
+  const lightEffectDim = [
+    {
+      origin: item.uuid,
+      duration: { seconds: 21600 },
+      disabled: false,
+      name: item.name,
+      img: item.img,
+      type: "base",
+      changes: [
+        { key: "ATL.light.dim", mode: 0, value: "5", priority: 20 },
+        { key: "ATL.light.bright", mode: 0, value: "0", priority: 20 },
+        { key: "ATL.light.alpha", mode: 0, value: "0.25", priority: 20 },
+        { key: "ATL.light.angle", mode: 0, value: "360", priority: 20 },
+        { key: "ATL.light.luminosity", mode: 0, value: "0.5", priority: 20 },
+        { key: "ATL.light.color", mode: 0, value: "#ffb433", priority: 20 },
+        { key: "ATL.light.animation", mode: 0, value: "{ type: \"torch\", speed: 4, intensity: 4 }", priority: 20 },
+        { key: "ATL.light.attenuation", mode: 0, value: "0.75", priority: 20 },
+        { key: "ATL.light.contrast", mode: 0, value: "0.15", priority: 20 },
+        { key: "ATL.light.shadows", mode: 0, value: "0.2", priority: 20 },
+        {
+          key: "macro.itemMacro",
+          mode: 0,
+          value: "function.game.gps.lanternHooded",
+          priority: 20
+        }
+      ],
+      transfer: false,
+      flags: {
+        "gambits-premades": { gpsUuid: gpsUuidDim }
+      }
+    }
+  ];
+
+  const activeLight = actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+  const activeLightDim = actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+  const canThrow = game.modules.get("item-piles")?.active === true;
+  const hasRemaining = (item.system.quantity !== 0);
+
+  if (!activeLight && !activeLightDim) {
+    if (!hasRemaining) {
+      ui.notifications.warn(`You do not have any ${animType}s remaining.`);
+      workflow.aborted = true;
+      return;
+    }
+    else if (canThrow) {
+      await showLightDialog({ actions: ["light", "dim", "throw"], token, actor, item, effectName, filePath, lightEffect, animType, gpsUuid, filePathDim, lightEffectDim, gpsUuidDim });
+    } else {
+      await showLightDialog({ actions: ["light", "dim"], token, actor, item, effectName, filePath, lightEffect, animType, gpsUuid, filePathDim, lightEffectDim , gpsUuidDim});
+    }
+  } else if (activeLight) {
+    if (canThrow) {
+      await showLightDialog({ actions: ["dim", "extinguish", "throw"], token, actor, item, effectName, filePath, lightEffect, animType, gpsUuid, filePathDim, lightEffectDim, gpsUuidDim });
+    } else {
+      await showLightDialog({ actions: ["dim", "extinguish"], token, actor, item, effectName, filePath, lightEffect, animType, gpsUuid, filePathDim, lightEffectDim, gpsUuidDim });
+    }
+  }
+  else if (activeLightDim) {
+    if (canThrow) {
+      await showLightDialog({ actions: ["light", "extinguish", "throw"], token, actor, item, effectName, filePath, lightEffect, animType, gpsUuid, lightEffectDim, gpsUuidDim });
+    } else {
+      await showLightDialog({ actions: ["light", "extinguish"], token, actor, item, effectName, filePath, lightEffect, animType, gpsUuid, lightEffectDim, gpsUuidDim });
+    }
+  }
 }
