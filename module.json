@@ -219,28 +219,31 @@
         "id": "midi-qol",
         "type": "module",
         "compatibility": {
-          "minimum": "11.4.42",
-          "verified": "11.4.42"
+          "minimum": "12.4.27",
+          "verified": "12.4.27"
         }
       },
       {
         "id": "ActiveAuras",
         "type": "module",
         "compatibility": {
-          "verified": "0.9.13"
+          "minimum": "0.11.2",
+          "verified": "0.11.3"
         }
       },
       {
         "id": "sequencer",
         "type": "module",
         "compatibility": {
-          "verified": "3.2.11"
+          "minimum": "3.4.8",
+          "verified": "3.4.9"
         }
       },
       {
         "id": "socketlib",
         "type": "module",
         "compatibility": {
+          "minimum": "1.1.0",
           "verified": "1.1.0"
         }
       },
@@ -248,31 +251,32 @@
         "id": "lib-wrapper",
         "type": "module",
         "compatibility": {
-          "verified": "1.12.14.0"
+          "minimum": "1.13.2.0",
+          "verified": "1.13.2.0"
         }
       },
       {
         "id": "dae",
         "type": "module",
         "compatibility": {
-          "minimum": "11.3.39",
-          "verified": "11.3.39"
+          "minimum": "12.0.15",
+          "verified": "12.0.15"
         }
       },
       {
         "id": "region-attacher",
         "type": "module",
         "compatibility": {
-          "minimum": "1.4.2",
-          "verified": "1.4.2"
+          "minimum": "1.6.2",
+          "verified": "1.7.0"
         }
       },
       {
         "id": "times-up",
         "type": "module",
         "compatibility": {
-          "minimum": "11.3.17",
-          "verified": "11.3.17"
+          "minimum": "11.3.20",
+          "verified": "11.3.20"
         }
       }
     ],
@@ -281,7 +285,7 @@
         "id": "tidy5e-sheet",
         "type": "module",
         "compatibility": {
-          "verified": "5.5.2"
+          "verified": "9.1.0"
         }
       },
       {

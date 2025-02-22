@@ -3,7 +3,7 @@ name: Module Builder
 on:
   push:
     branches:
-      - v12-4x
+      - main
     paths-ignore:
       - 'README.md'
 
@@ -57,8 +57,43 @@ jobs:
           allowUpdates: true
           name: Release ${{ steps.get-version.outputs.version }}
           draft: false
-          prerelease: true
+          prerelease: false
           body: ${{ env.release-notes-github }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module.zip, ./module.json'
           tag: ${{ steps.get-version.outputs.version }}
+
+      - name: Release Foundry Package
+        run: |
+          curl -X POST "https://api.foundryvtt.com/_api/packages/release_version" \
+          -H "Content-Type: application/json" \
+          -H "Authorization: ${{ secrets.FOUNDRY_API_TOKEN }}" \
+          -d '{
+            "id": "'"gambits-premades"'",
+            "release": {
+              "version": "'"${{ steps.get-version.outputs.version }}"'",
+              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
+              "download": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.zip"'",
+              "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
+              "compatibility": {
+                "minimum": "'"12.328"'",
+                "verified": "'"12"'",
+                "maximum": "'"12"'"
+              }
+            }
+          }'
+
+      - name: Post to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+          "embeds": [{
+            "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
+            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
+            "image": {
+              "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
+            }
+          }]
+          }' $DISCORD_WEBHOOK
