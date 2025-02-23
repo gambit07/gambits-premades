@@ -1,8 +1,8 @@
-2025/02/22-00:34:38.300 a748 Recovering log #2507
-2025/02/22-00:34:38.304 a748 Delete type=0 #2507
-2025/02/22-00:34:38.304 a748 Delete type=3 #2505
-2025/02/22-11:32:50.695 a880 Level-0 table #2512: started
-2025/02/22-11:32:50.695 a880 Level-0 table #2512: 0 bytes OK
-2025/02/22-11:32:50.699 a880 Delete type=0 #2510
-2025/02/22-11:32:50.705 a880 Manual compaction at level-0 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
-2025/02/22-11:32:50.705 a880 Manual compaction at level-1 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
+2025/02/22-15:07:13.930 a720 Recovering log #2515
+2025/02/22-15:07:13.935 a720 Delete type=0 #2515
+2025/02/22-15:07:13.935 a720 Delete type=3 #2513
+2025/02/22-16:15:11.137 a880 Level-0 table #2520: started
+2025/02/22-16:15:11.137 a880 Level-0 table #2520: 0 bytes OK
+2025/02/22-16:15:11.139 a880 Delete type=0 #2518
+2025/02/22-16:15:11.140 a880 Manual compaction at level-0 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
+2025/02/22-16:15:11.140 a880 Manual compaction at level-1 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
