@@ -19,7 +19,12 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes" >> release_notes.txt
-          echo "  - Opportunity Attack: Fixed a few issues with the War Caster integration not recognizing spells correctly. Added a CPR config option to War Caster to allow disabling melee or ranged spell attacks. Disabling ranged will disable rsak and save actionTypes. Disabling melee will disable msak actionTypes." >> release_notes.txt
+          echo "  - Opportunity Attack: Fix issue with attacks displaying out of range. Fix issue with some accidental code left in during the war caster re-work." >> release_notes.txt
+          echo "- Additions" >> release_notes.txt
+          echo "  - Billy The Club: Reminder to visit Abyssal Brews Patreon. V4.x compatability" >> release_notes.txt
+          echo "  - Roksjas Husk: Reminder to visit Abyssal Brews Patreon. V4.x compatability" >> release_notes.txt
+          echo "  - Triumph: Reminder to visit Abyssal Brews Patreon. V4.x compatability" >> release_notes.txt
+          echo "  - Weavers Hoop: Reminder to visit Abyssal Brews Patreon. V4.x compatability" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

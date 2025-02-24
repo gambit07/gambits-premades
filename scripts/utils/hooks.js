@@ -3,7 +3,7 @@ import { executeWorkflow, updateRegionPosition, hideTemplateElements, updateSett
 export function registerHooks() {
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         let workflowItemUuid = workflow.uuid;
-        let workflowType = (workflow.activity.hasSave) ? "save" : (workflow.activity.hasAttack) ? "attack" : "item";
+        let workflowType = (workflow.activity?.hasSave || workflow.activity?.type === "save") ? "save" : (workflow.activity?.hasAttack) ? "attack" : "item";
         if (game.gpsSettings.counterspellEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
         if (game.gpsSettings.temporalShuntEnabled && (workflow.item.type === "spell" || workflow.activity.hasAttack)) await executeWorkflow({ workflowItem: "temporalShunt", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
     });
@@ -41,13 +41,13 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.preWaitForSaves", async (workflow) => {
-        if(!workflow.activity.hasSave) return;
+        if(!workflow.activity?.hasSave && !workflow.activity?.type === "save") return;
         let workflowItemUuid = workflow.uuid;
         if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
-        if(!workflow.activity.hasSave) return;
+        if(!workflow.activity?.hasSave && !workflow.activity?.type === "save") return;
         let workflowItemUuid = workflow.uuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.indomitableEnabled) await executeWorkflow({ workflowItem: "indomitable", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
@@ -57,7 +57,7 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
-        if(!workflow.activity.hasSave) return;
+        if(!workflow.activity?.hasSave && !workflow.activity?.type === "save") return;
         let workflowItemUuid = workflow.uuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });

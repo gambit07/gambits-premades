@@ -385,31 +385,18 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
            await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
         }
 
-        let clonedWeapon = foundry.utils.deepClone(chosenWeapon);
-
-        foundry.utils.mergeObject(clonedWeapon, {
-        system: {
-            range: {
+        let clonedWeapon = chosenWeapon.clone({
+            system: {
+              range: {
                 value: 1000,
                 long: null,
                 units: "ft",
                 reach: 1000
+              }
             }
-        }
-        }, { inplace: true });
-
-        if (clonedWeapon.system.activities && Array.isArray(clonedWeapon.system.activities)) {
-            clonedWeapon.system.activities.forEach(activity => {
-              foundry.utils.mergeObject(activity, {
-                  range: {
-                    value: 1000,
-                    long: null,
-                    units: "ft",
-                    reach: 1000
-                  }
-              }, { inplace: true });
-            });
-        }
+          }, {keepId: true});
+          clonedWeapon.prepareData();
+          clonedWeapon.applyActiveEffects();
 
         chosenWeapon = clonedWeapon;
 
@@ -641,9 +628,6 @@ export async function enableOpportunityAttack(combat, combatEvent) {
 
                                 let recalculate = false;
                                 let tokenSize = Math.max(token.width, token.height);
-                                let validWeapons = actor.items.filter(item =>
-                                    (item.type === "weapon" && item.system.equipped === true && item.system.activities?.some(a => a.actionType === "msak" || a.actionType === "mwak")) || ((item.system?.type?.value === "monster" && item.type === "feat") && item.system.activities?.some(a => a.actionType === "mwak" || a.actionType === "msak"))
-                                );
 
                                 let validWeapons = effectOriginActor.items.filter(item => {
                                     const acts = item.system?.activities ?? [];

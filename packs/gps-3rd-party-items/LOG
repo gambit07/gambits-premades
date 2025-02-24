@@ -1,8 +1,15 @@
-2025/02/22-16:15:33.250 a748 Recovering log #2055
-2025/02/22-16:15:33.254 a748 Delete type=0 #2055
-2025/02/22-16:15:33.255 a748 Delete type=3 #2053
-2025/02/23-13:34:45.575 a880 Level-0 table #2060: started
-2025/02/23-13:34:45.575 a880 Level-0 table #2060: 0 bytes OK
-2025/02/23-13:34:45.577 a880 Delete type=0 #2058
-2025/02/23-13:34:45.579 a880 Manual compaction at level-0 from '!items!A4JIbc14vM5IKbuT' @ 72057594037927935 : 1 .. '!items.effects!qHY9RXV48OmvCrw1.UNiU6zoPTpbrxoIA' @ 0 : 0; will stop at (end)
-2025/02/23-13:34:45.579 a880 Manual compaction at level-1 from '!items!A4JIbc14vM5IKbuT' @ 72057594037927935 : 1 .. '!items.effects!qHY9RXV48OmvCrw1.UNiU6zoPTpbrxoIA' @ 0 : 0; will stop at (end)
+2025/02/23-20:19:38.024 a80c Recovering log #2059
+2025/02/23-20:19:38.028 a80c Delete type=0 #2059
+2025/02/23-20:19:38.028 a80c Delete type=3 #2057
+2025/02/24-09:52:12.963 a880 Level-0 table #2064: started
+2025/02/24-09:52:12.968 a880 Level-0 table #2064: 132426 bytes OK
+2025/02/24-09:52:12.970 a880 Delete type=0 #2062
+2025/02/24-09:52:12.972 a880 Manual compaction at level-0 from '!items!A4JIbc14vM5IKbuT' @ 72057594037927935 : 1 .. '!items.effects!qHY9RXV48OmvCrw1.UNiU6zoPTpbrxoIA' @ 0 : 0; will stop at (end)
+2025/02/24-09:52:12.972 a880 Manual compaction at level-1 from '!items!A4JIbc14vM5IKbuT' @ 72057594037927935 : 1 .. '!items.effects!qHY9RXV48OmvCrw1.UNiU6zoPTpbrxoIA' @ 0 : 0; will stop at '!items.effects!ZUK1zyK6kHxB4xIl.lOqfCqmeXLE4oS9c' @ 124 : 0
+2025/02/24-09:52:12.972 a880 Compacting 1@1 + 1@2 files
+2025/02/24-09:52:12.976 a880 Generated table #2065@1: 12 keys, 32666 bytes
+2025/02/24-09:52:12.976 a880 Compacted 1@1 + 1@2 files => 32666 bytes
+2025/02/24-09:52:12.977 a880 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/02/24-09:52:12.977 a880 Delete type=2 #1824
+2025/02/24-09:52:12.978 a880 Delete type=2 #2064
+2025/02/24-09:52:12.982 a880 Manual compaction at level-1 from '!items.effects!ZUK1zyK6kHxB4xIl.lOqfCqmeXLE4oS9c' @ 124 : 0 .. '!items.effects!qHY9RXV48OmvCrw1.UNiU6zoPTpbrxoIA' @ 0 : 0; will stop at (end)
