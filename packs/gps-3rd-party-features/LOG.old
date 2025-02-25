@@ -1,8 +1,3 @@
-2025/02/22-16:15:33.243 a80c Recovering log #2054
-2025/02/22-16:15:33.247 a80c Delete type=0 #2054
-2025/02/22-16:15:33.248 a80c Delete type=3 #2052
-2025/02/23-13:34:45.573 a880 Level-0 table #2059: started
-2025/02/23-13:34:45.573 a880 Level-0 table #2059: 0 bytes OK
-2025/02/23-13:34:45.575 a880 Delete type=0 #2057
-2025/02/23-13:34:45.579 a880 Manual compaction at level-0 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at (end)
-2025/02/23-13:34:45.579 a880 Manual compaction at level-1 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr' @ 0 : 0; will stop at (end)
+2025/02/24-22:13:42.644 3b58 Recovering log #2069
+2025/02/24-22:13:42.652 3b58 Delete type=0 #2069
+2025/02/24-22:13:42.652 3b58 Delete type=3 #2068

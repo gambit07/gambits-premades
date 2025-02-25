@@ -68,7 +68,7 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
     let castLevel = template.getFlag("gambits-premades", "codCastLevel");
 
     let damageDice =  (2*(castLevel - 2)) + 4;
-    let damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}d4`).evaluate();
+    let damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}d4`, {}, {type: "slashing", properties: ["mgc"]}).evaluate();
     await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 
     const itemData = {

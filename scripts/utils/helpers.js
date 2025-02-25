@@ -1359,10 +1359,39 @@ export function getCprConfig({itemUuid}) {
     else return {animEnabled: true, animColor: animColor};
 }
 
-export async function remoteCompleteItemUse({itemUuid, actorUuid, options}) {
+export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWeapon = false}) {
     if(!itemUuid || !actorUuid || !options) return;
 
     let itemData = await fromUuid(itemUuid);
+
+    if(isWeapon) {
+        itemData = itemData.clone({
+            system: {
+              range: {
+                value: 1000,
+                long: null,
+                units: "ft",
+                reach: 1000
+              }
+            }
+          }, {keepId: true});
+          
+          if (itemData.system.activities) {
+            itemData.system.activities.forEach(activity => {
+              foundry.utils.mergeObject(activity, {
+                  range: {
+                    value: 1000,
+                    long: null,
+                    units: "ft",
+                    reach: 1000
+                  }
+              }, { inplace: true });
+            });
+        }
+
+        itemData.prepareData();
+        itemData.applyActiveEffects();
+    }
     
     let remoteCIU = await MidiQOL.completeItemUse(itemData, {actorUuid}, options);
     let checkHits = remoteCIU?.hitTargets?.first() ? true : false;

@@ -77,11 +77,31 @@ export async function dimensionDoor({ speaker, actor, token, character, item, ar
 
         let config = {
             gridHighlight: true,
-            icon: {texture: token.document.texture.src, borderVisible: true},
-            location: {obj: token, limitMaxRange: item.system.range.value, showRange: true}
-        }
-
-        let position = await Sequencer.Crosshair.show(config);
+            icon: {
+                texture: token.document.texture.src,
+                borderVisible: true
+            },
+            location: {
+                obj: token,
+                limitMaxRange: item.system.range.value,
+                showRange: true
+            }
+        };
+          
+        let callbacks = {
+            [Sequencer.Crosshair.CALLBACKS.MOUSE_MOVE]: (crosshair) => {
+                new Sequence()
+                    .effect()
+                        .file(`animated-spell-effects-cartoon.magic.portal.${animColor}`)
+                        .atLocation({ x: crosshair.x, y: crosshair.y })
+                        .scale(0.25)
+                        .duration(500)
+                        .fadeOut(500)
+                .play();
+            }
+        };
+          
+        let position = await Sequencer.Crosshair.show(config, callbacks);
 
         if(animEnabled) {
             Sequencer.EffectManager.endEffects({ name: `${token.document.name}_DimensionDoor1` });

@@ -18,13 +18,13 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Bugfixes" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix issue with attacks displaying out of range. Fix issue with some accidental code left in during the war caster re-work." >> release_notes.txt
           echo "- Additions" >> release_notes.txt
-          echo "  - Billy The Club: Reminder to visit Abyssal Brews Patreon. V4.x compatability" >> release_notes.txt
-          echo "  - Roksjas Husk: Reminder to visit Abyssal Brews Patreon. V4.x compatability" >> release_notes.txt
-          echo "  - Triumph: Reminder to visit Abyssal Brews Patreon. V4.x compatability" >> release_notes.txt
-          echo "  - Weavers Hoop: Reminder to visit Abyssal Brews Patreon. V4.x compatability" >> release_notes.txt
+          echo "  - Grim Siphon: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability" >> release_notes.txt
+          echo "- Updates" >> release_notes.txt
+          echo "  - Dimension Door: Added a fun animation to crosshair move while selecting teleport location. Playing around with it has inspired a future update to Template Previewer I think" >> release_notes.txt
+          echo "- Bugfixes" >> release_notes.txt
+          echo "  - Opportunity Attack: Resolve an additional issue with War Caster medkit options causing issues due to a config flag not being output unless the customConfig value had been changed. Resolve issues with midi-qol outputting a range error message in certain instances. This cannot be a complete fix as other automations sometimes modify weapons/spells after use, but should fix most instances especially for weapons. My suggestion is to just turn off MidiQOLs out of range checking if you want to avoid any issues entirely." >> release_notes.txt
+          echo "  - Cloud of Daggers: Resolve appropriate damage type not being assigned in DamageOnlyWorkflow" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

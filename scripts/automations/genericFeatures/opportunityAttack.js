@@ -227,10 +227,13 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     if (hasWarCaster) {
         if (game.modules.get("chris-premades")?.active) {
             let cprConfig = hasWarCaster.getFlag("chris-premades", "config");
-            if (cprConfig) {
-                warCasterRange = cprConfig?.warCasterRange;
-                warCasterMelee = cprConfig?.warCasterMelee;
-            }
+            if (cprConfig && 'warCasterRange' in cprConfig) {
+                warCasterRange = cprConfig.warCasterRange;
+              }
+              
+              if (cprConfig && 'warCasterMelee' in cprConfig) {
+                warCasterMelee = cprConfig.warCasterMelee;
+              }
         }
     }
     if(!warCasterMelee && !warCasterRange) hasWarCaster = false;
@@ -247,7 +250,8 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             if (warCasterMelee) allowedActionTypes.push("msak");
             if (warCasterRange) allowedActionTypes.push("rsak", "save");
         
-            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.preparation?.prepared || item.system?.preparation?.mode !== "prepared" || !item.system?.preparation ) && (["creature", "enemy"].includes(item.system?.target?.type))) || (warCasterMelee && overrideItems.includes(item.name))
+            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.preparation?.prepared || item.system?.preparation?.mode !== "prepared" || !item.system?.preparation ) && acts.some(a => ["creature", "enemy"].includes(a.target?.affects?.type))) || (warCasterMelee && overrideItems.includes(item.name))
+            console.log(warCasterSpell, "warCasterSpell")
         }
       
         return qualifiesWeaponOrFeat || warCasterSpell;
@@ -385,21 +389,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
            await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
         }
 
-        let clonedWeapon = chosenWeapon.clone({
-            system: {
-              range: {
-                value: 1000,
-                long: null,
-                units: "ft",
-                reach: 1000
-              }
-            }
-          }, {keepId: true});
-          clonedWeapon.prepareData();
-          clonedWeapon.applyActiveEffects();
-
-        chosenWeapon = clonedWeapon;
-
         let userSelect = undefined;
         if(source && source === "user") userSelect = browserUser;
         else if(source && source === "gm") userSelect = gmUser;
@@ -421,8 +410,8 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         }
 
         let itemRoll;
-        if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options });
-        else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options });
+        if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options, isWeapon: true });
+        else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options, isWeapon: true });
 
         let checkHits = itemRoll.checkHits;
 
@@ -490,11 +479,9 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             );
 
             let validSpells = actor.items.filter(item =>
-                (
-                    hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.actionType === "save")) && (item.system.preparation?.prepared === true || item.system.preparation?.mode !== "prepared" || !item.system.preparation) && (item.system.target?.type === "creature" || item.system.target?.type === "enemy")
-                ) || overrideItems.includes(item.name)
+                (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.actionType === "save")) && (item.system.preparation?.prepared === true || item.system.preparation?.mode !== "prepared" || !item.system.preparation) && item.system.activities?.some(a => ["creature", "enemy"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
             );
-            
+
             let oaDisabled;
             if (!validWeapons.length && !validSpells.length) {
                 ui.notifications.warn(`No Valid Melee options found, cancelling Opportunity Attack options for ${actor.name}`);
