@@ -226,7 +226,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let warCasterRange = true;
     if (hasWarCaster) {
         if (game.modules.get("chris-premades")?.active) {
-            let cprConfig = hasWarCaster.getFlag("chris-premades", "config");
+            let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
             if (cprConfig && 'warCasterRange' in cprConfig) {
                 warCasterRange = cprConfig.warCasterRange;
               }
@@ -464,7 +464,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             let warCasterRange = true;
             if (hasWarCaster) {
                 if (game.modules.get("chris-premades")?.active) {
-                    let cprConfig = hasWarCaster.getFlag("chris-premades", "config");
+                    let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
                     if (cprConfig && 'warCasterRange' in cprConfig) {
                         warCasterRange = cprConfig.warCasterRange;
                     }

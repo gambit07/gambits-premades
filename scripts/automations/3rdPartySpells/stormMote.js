@@ -5,6 +5,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
 
         if(workflow.targets.size === 1) {
             await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:workflow.targets.first().actor.uuid, base :"gambits-premades", key: "stormMotesGiven", value: numMotes});
+            await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:workflow.targets.first().actor.uuid, base :"gambits-premades", key: "stormMoteOrigin", value: token.document.uuid});
             return;
         }
 
@@ -47,6 +48,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                     for (const target of workflow.targets) {
                         let assignedCount = parseInt(document.querySelector(`#moteDisplay-${target.id}`).textContent, 10);
                         await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:target.actor.uuid, base :"gambits-premades", key: "stormMotesGiven", value: assignedCount});
+                        await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:target.actor.uuid, base :"gambits-premades", key: "stormMoteOrigin", value: token.document.uuid});
                     }
                 }
             }, {
@@ -181,6 +183,8 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
     }
 
     if(args[0].macroPass === "postAttackRollComplete") {
+        let effectOriginActorUuid = actor.getFlag("gambits-premades", "stormMoteOrigin");
+        if(workflow.targets.first()?.document.uuid !== effectOriginActorUuid) return;
         let cprConfig = game.gps.getCprConfig({itemUuid: macroItem.uuid});
         const { animEnabled, animColor } = cprConfig;
         let givenMotes = await actor.getFlag("gambits-premades", "stormMotesGiven");

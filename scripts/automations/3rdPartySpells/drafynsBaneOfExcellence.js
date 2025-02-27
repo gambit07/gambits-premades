@@ -41,7 +41,7 @@ export async function drafynsBaneOfExcellence({ speaker, actor, token, character
     }
 
     //Check target Saving Throw
-    if(args[0].macroPass === "preSaveTarget" || args[0].macroPass === "isSave") {
+    if(workflow.macroPass === "preSavesComplete") {
         console.log(workflow)
         let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === token.document.uuid);
         let save20 = workflow.saveResults[0].dice[0].total === 20;

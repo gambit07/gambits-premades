@@ -38,6 +38,7 @@ Hooks.once('socketlib.ready', async function() {
     game.gps.socket.register("legendaryResistance", automationRegistry.legendaryResistance);
     game.gps.socket.register("burstOfIngenuity", automationRegistry.burstOfIngenuity);
     game.gps.socket.register("temporalShunt", automationRegistry.temporalShunt);
+    game.gps.socket.register("drafynsBaneOfExcellence", automationRegistry.drafynsBaneOfExcellence);
 
     //Helpers
     game.gps.socket.register("deleteChatMessage", helpers.deleteChatMessage);

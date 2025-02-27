@@ -54,6 +54,8 @@ export function registerHooks() {
         if (game.gpsSettings.witchesHexEnabled) await executeWorkflow({ workflowItem: "witchesHex", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.legendaryResistanceEnabled) await executeWorkflow({ workflowItem: "legendaryResistance", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.burstOfIngenuityEnabled) await executeWorkflow({ workflowItem: "burstOfIngenuity", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
+        //const hasDrafynsBaneOfExcellence = Array.from(workflow.saves).some(t => t.document.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === "someUuid"));
+        //if (hasDrafynsBaneOfExcellence) await executeWorkflow({ workflowItem: "drafynsBaneOfExcellence", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {

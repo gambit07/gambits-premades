@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix some unresolved bugs with the new war caster stuff due to les incompetents" >> release_notes.txt
+          echo "  - Opportunity Attack: Fix another war caster issue due to cpr config missing issue" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
