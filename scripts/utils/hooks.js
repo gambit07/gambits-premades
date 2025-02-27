@@ -170,7 +170,7 @@ export function registerHooks() {
 
     Hooks.on('updateSetting', (setting) => {
         if (!game.user.isGM) return;
-        if (setting.config.namespace === "gambits-premades") {
+        if (setting.config?.namespace === "gambits-premades") {
             updateSettings(setting.config.key);
         }
     });

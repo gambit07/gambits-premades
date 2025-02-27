@@ -459,15 +459,18 @@ export async function enableOpportunityAttack(combat, combatEvent) {
         let browserUser = MidiQOL.playerForActor(actor);
     
         if (actor.type === 'npc' || actor.type === 'character') {
-            let hasWarCaster = actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
+            let hasWarCaster = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
             let warCasterMelee = true;
             let warCasterRange = true;
             if (hasWarCaster) {
                 if (game.modules.get("chris-premades")?.active) {
                     let cprConfig = hasWarCaster.getFlag("chris-premades", "config");
-                    if (cprConfig) {
-                        warCasterRange = cprConfig?.warCasterRange;
-                        warCasterMelee = cprConfig?.warCasterMelee;
+                    if (cprConfig && 'warCasterRange' in cprConfig) {
+                        warCasterRange = cprConfig.warCasterRange;
+                    }
+                    
+                    if (cprConfig && 'warCasterMelee' in cprConfig) {
+                        warCasterMelee = cprConfig.warCasterMelee;
                     }
                 }
             }
@@ -616,7 +619,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                 let recalculate = false;
                                 let tokenSize = Math.max(token.width, token.height);
 
-                                let validWeapons = effectOriginActor.items.filter(item => {
+                                let validWeapons = actor.items.filter(item => {
                                     const acts = item.system?.activities ?? [];
                                 
                                     const qualifiesWeaponOrFeat = (acts.some(a => a.actionType === "mwak") && item.system?.equipped === true) || (item.system?.type?.value === "monster" && item.type === "feat" && acts.some(a => a.actionType === "mwak" || a.actionType === "msak"));
