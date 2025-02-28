@@ -18,8 +18,12 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Additions" >> release_notes.txt
+          echo "  - Drafyns Bane of Excellence: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability plus expansion to fully cover the saving throw aspect of this item." >> release_notes.txt
           echo "- Bugfixes" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix another war caster issue due to cpr config missing issue" >> release_notes.txt
+          echo "  - Opportunity Attack: Updated the Brace integration in OA to target the creature the attack is against and removed some unneeded code. Should now properly integrate with CPRs Brace feature." >> release_notes.txt
+          echo "  - Lighting Throw Action: Updated to remove the need for users to give explicit permissions to the Default Item Piles actor for the Throw action. The Torch/Candle/Lantern/etc automations will now assign the appropriate permissions for the user when the throw occurs." >> release_notes.txt
+          echo "  - Vicious Mockery: Fix bug preventing effect from being applied and incorrect macroPass provided on item." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

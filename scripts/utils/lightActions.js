@@ -110,7 +110,7 @@ export async function lightThrow({ token, actor, item, filePath, filePathDim, li
     position: { x: token.center.x, y: token.center.y },
     sceneId: game.scenes.current.id,
     tokenOverrides: { name: itemData.name, img: filePath },
-    actorOverrides: { effects: lightEffect },
+    actorOverrides: { effects: lightEffect, ownership: { [game.user.id]: 3 } },
     items: [itemData],
     createActor: false,
     pileActorName: itemData.name,

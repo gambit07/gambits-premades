@@ -99,11 +99,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             else if(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === "Battle Master") {
                 let braceItem = effectOriginActor.items.getName("Maneuvers: Brace");
                 if(!braceItem) return;
-                const superiorityNames = ["superiority dice", "superiority die"];
-                let resourceExistsWithValue = [effectOriginActor.system.resources.primary, effectOriginActor.system.resources.secondary, effectOriginActor.system.resources.tertiary].some(resource => superiorityNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
-                let itemExistsWithValue;
-                if (!resourceExistsWithValue) itemExistsWithValue = !!effectOriginActor.items.find(i => superiorityNames.includes(i.name.toLowerCase()) && i.system.uses.value !== 0);
-                if (!resourceExistsWithValue && !itemExistsWithValue) return;
                 braceItemUuid = braceItem.uuid;
                 dialogTitle = "Maneuvers: Brace Opportunity Attack";
                 dialogId = "maneuversbraceopportunityattack";
@@ -364,9 +359,23 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     }
     else if (userDecision) {
         if (braceItemUuid) {
-            let braceItem = await fromUuid(braceItemUuid);
-            const braceRoll = await braceItem.use();
-            if (braceRoll.aborted === true) return;
+            let braceRoll;
+            const options = {
+                showFullCard: false,
+                createWorkflow: true,
+                versatile: false,
+                configureDialog: false,
+                targetUuids: [token.uuid],
+                workflowOptions: {
+                    autoRollDamage: 'always',
+                    autoRollAttack: true,
+                    autoFastDamage: true
+                }
+            };
+
+            if(source && source === "user") braceRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
+            else if(source && source === "gm") braceRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
+            if (!braceRoll) return;
         }
 
         if (!selectedItemUuid) {

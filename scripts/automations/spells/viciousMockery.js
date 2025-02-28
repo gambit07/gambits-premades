@@ -8,6 +8,7 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
                 ui.notifications.warn("A creature is not effected because it cannot hear you.");
             }
         }
+
         if(workflow.targets.size === 0) return workflow.aborted = true;
     }
 
@@ -15,7 +16,6 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
         if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error("You must install the Jack Kerouac's Animated Spell Effects - Cartoon module to use this automation.");
         let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
         const { animEnabled } = cprConfig;
-        if(!animEnabled) return;
 
         const gmInputType = "freeform";
 
@@ -41,6 +41,7 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
             if(!checkEffect) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: uuid, effects: effectDisadv });
 
             if((gmInputType !== "dropdown" && gmInputType !== "freeform") || !gmInputType) return;
+            if(!animEnabled) return;
 
             new Sequence()
 
