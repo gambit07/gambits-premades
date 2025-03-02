@@ -16,19 +16,10 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
 
     for (const validTokenPrimary of findValidTokens) {
         const itemData = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "bardic inspiration");
-        const resources = ['primary', 'secondary', 'tertiary'];
-        let resourceKey = resources.find(key => {
-            let resource = validTokenPrimary.actor.system.resources[key];
-            return resource?.label?.toLowerCase() === "bardic inspiration";
-        });
 
         if(itemData) {
-            if(itemData.system.uses.spent >= itemData.system.uses.max) continue;
+            if(itemData.system.uses.spent === 0) continue;
         }
-        else if(resourceKey) {
-            if(validTokenPrimary.actor.system.resources[resourceKey].value === validTokenPrimary.actor.system.resources[resourceKey].max) continue;
-        }
-        else continue;
 
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
@@ -106,11 +97,6 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
 
             if(itemData) {
                 await itemData.update({ 'system.uses.spent' : itemData.system.uses.spent - 1 })
-            }
-
-            else if (resourceKey) {
-                let updatePath = `system.resources.${resourceKey}.value`;
-                await validTokenPrimary.actor.update({ [updatePath]: validTokenPrimary.actor.system.resources[resourceKey].value + 1 });
             }
 
             let typeText = (workflowType === "attack") ? `${initiatingToken.actor.name}'s nat 1 attack roll` : (workflowType === "ability") ? `${initiatingToken.actor.name}'s nat 1 ability check` : (workflowType === "skill") ? `${initiatingToken.actor.name}'s nat 1 skill check` : `${chatActor.name}'s nat 1 saving throw`;

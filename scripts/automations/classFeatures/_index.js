@@ -1,6 +1,7 @@
 import { recklessAttack } from "./barbarian/recklessAttack.js";
 import { cuttingWords } from "./bard/collegeOfLore/cuttingWords.js";
 import { poetryInMisery } from "./bard/collegeOfTragedy/poetryInMisery.js";
+import { taleOfHubris } from "./bard/collegeOfTragedy/taleOfHubris.js";
 import { starMap } from "./druid/circleOfStars/starMap.js";
 import { defileGround } from "./druid/circleOfTheBlighted/defileGround.js";
 import { arcaneShot } from "./fighter/arcaneArcher/arcaneShot.js";
@@ -29,6 +30,7 @@ export const classFeaturesMacros = {
   recklessAttack,
   cuttingWords,
   poetryInMisery,
+  taleOfHubris,
   starMap,
   defileGround,
   arcaneShot,

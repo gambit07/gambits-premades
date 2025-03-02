@@ -616,6 +616,31 @@ export function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableTaleOfHubris", {
+        name: "enableTaleOfHubris",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Tale of Hubris Timeout', {
+        name: "Tale of Hubris Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register("gambits-premades", "disableCuttingWordsMaxMiss", {
         name: "disableCuttingWordsMaxMiss",
         scope: "world",
@@ -888,7 +913,9 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             enableRainOfCinders: game.settings.get("gambits-premades", "enableRainOfCinders"),
             rainOfCindersTimeout: game.settings.get("gambits-premades", "Rain of Cinders Timeout"),
             enableRestoreBalance: game.settings.get("gambits-premades", "enableRestoreBalance"),
-            restoreBalanceTimeout: game.settings.get("gambits-premades", "Restore Balance Timeout")
+            restoreBalanceTimeout: game.settings.get("gambits-premades", "Restore Balance Timeout"),
+            enableTaleOfHubris: game.settings.get("gambits-premades", "enableTaleOfHubris"),
+            taleOfHubrisTimeout: game.settings.get("gambits-premades", "Tale of Hubris Timeout")
         };
 
         return data;
@@ -921,6 +948,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Rain of Cinders Timeout", formData.rainOfCindersTimeout);
         await game.settings.set("gambits-premades", "enableRestoreBalance", formData.enableRestoreBalance);
         await game.settings.set("gambits-premades", "Restore Balance Timeout", formData.restoreBalanceTimeout);
+        await game.settings.set("gambits-premades", "enableTaleOfHubris", formData.enableTaleOfHubris);
+        await game.settings.set("gambits-premades", "Tale of Hubris Timeout", formData.taleOfHubrisTimeout);
     }
 }
 

@@ -19,11 +19,15 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions" >> release_notes.txt
-          echo "  - Drafyns Bane of Excellence: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability plus expansion to fully cover the saving throw aspect of this item." >> release_notes.txt
-          echo "- Bugfixes" >> release_notes.txt
-          echo "  - Opportunity Attack: Updated the Brace integration in OA to target the creature the attack is against and removed some unneeded code. Should now properly integrate with CPRs Brace feature." >> release_notes.txt
-          echo "  - Lighting Throw Action: Updated to remove the need for users to give explicit permissions to the Default Item Piles actor for the Throw action. The Torch/Candle/Lantern/etc automations will now assign the appropriate permissions for the user when the throw occurs." >> release_notes.txt
-          echo "  - Vicious Mockery: Fix bug preventing effect from being applied and incorrect macroPass provided on item." >> release_notes.txt
+          echo "  - Tale of Hubris: Adds the Bards College of Tragedy feature." >> release_notes.txt
+          echo "  - Contagious Healing: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
+          echo "  - Shroom of Doom: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
+          echo "  - Electric Eels: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
+          echo "  - Cloak of Vermin: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
+          echo "  - Healing Glyph: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
+          echo "  - Biohazard: Reminder to checkout Sebastian Crowes Guide to Drakkenheim. V4.x compatability." >> release_notes.txt
+          echo "- Updates" >> release_notes.txt
+          echo "  - Opportunity Attack: Update to modify midis check range property to none when making an opportunity attack to make sure all range warning cases are resolved, it will be reverted to its original settings after attack" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -70,8 +74,7 @@ jobs:
             "id": "'"gambits-premades"'",
             "release": {
               "version": "'"${{ steps.get-version.outputs.version }}"'",
-              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
-              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
+              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"'",
               "download": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.zip"'",
               "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
               "compatibility": {

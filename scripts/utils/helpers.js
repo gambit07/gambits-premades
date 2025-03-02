@@ -322,16 +322,9 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             let itemExistsWithValue;
 
             if(itemNames.includes("legres")) resourceExistsWithValue = t.actor.system.resources.legres.value !== 0 ? true : false;
+            else itemExistsWithValue = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.spent < i.system.uses?.max);
 
-            else {
-                resourceExistsWithValue = [t.actor.system.resources.primary, t.actor.system.resources.secondary, t.actor.system.resources.tertiary].some(resource => itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
-
-                if (!resourceExistsWithValue) {
-                    itemExistsWithValue = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.value !== 0);
-                }
-            }
-
-            if (!resourceExistsWithValue && !itemExistsWithValue) {
+            if (!itemExistsWithValue && !resourceExistsWithValue) {
                 if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check valid feature item/resource uses`);
                 return;
             }
@@ -503,16 +496,9 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
         let itemExistsWithValue;
 
         if(itemNames.includes("legres")) resourceExistsWithValue = targetedToken.actor.system.resources.legres.value !== 0 ? true : false;
+        else itemExistsWithValue = targetedToken.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.spent < i.system.uses?.max);
 
-        else {
-            resourceExistsWithValue = [targetedToken.actor.system.resources.primary, targetedToken.actor.system.resources.secondary, targetedToken.actor.system.resources.tertiary].some(resource => itemNames.includes(resource?.label.toLowerCase()) && resource.value !== 0);
-
-            if (!resourceExistsWithValue) {
-                itemExistsWithValue = targetedToken.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.value !== 0);
-            }
-        }
-
-        if (!resourceExistsWithValue && !itemExistsWithValue) {
+        if (!itemExistsWithValue && !resourceExistsWithValue) {
             if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check valid feature item/resource uses`);
             return false;
         }
@@ -1363,9 +1349,11 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
     if(!itemUuid || !actorUuid || !options) return;
 
     let itemData = await fromUuid(itemUuid);
+    let originalCheckRange = "none";
+    let configSettings = null;
 
     if(isWeapon) {
-        itemData = itemData.clone({
+        /*itemData = itemData.clone({
             system: {
               range: {
                 value: 1000,
@@ -1391,10 +1379,25 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
 
         itemData.prepareData();
         itemData.applyActiveEffects();
+        */
+
+        configSettings = foundry.utils.duplicate(game.settings.get("midi-qol", "ConfigSettings"));
+        originalCheckRange = configSettings.optionalRules.checkRange;
+
+        if (originalCheckRange !== "none") {
+            configSettings.optionalRules.checkRange = "none";
+            await game.settings.set("midi-qol", "ConfigSettings", configSettings);
+        }
     }
     
     let remoteCIU = await MidiQOL.completeItemUse(itemData, {actorUuid}, options);
     let checkHits = remoteCIU?.hitTargets?.first() ? true : false;
+
+    if (originalCheckRange !== "none") {
+        configSettings = foundry.utils.duplicate(game.settings.get("midi-qol", "ConfigSettings"));
+        configSettings.optionalRules.checkRange = originalCheckRange;
+        await game.settings.set("midi-qol", "ConfigSettings", configSettings);
+    }
 
     return {castLevel: remoteCIU?.castData?.castLevel, baseLevel: remoteCIU?.castData?.baseLevel, itemType: remoteCIU?.item?.system?.preparation?.mode, checkHits: checkHits};
 }

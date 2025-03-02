@@ -19,7 +19,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     const effectOriginActor = await fromUuid(region.flags["gambits-premades"].actorUuid);
     const effectOriginToken = await fromUuid(region.flags["gambits-premades"].tokenUuid);
     
-    let hasSentinel = effectOriginActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c");
+    let hasSentinel = effectOriginActor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c");
 
     /*if(hasSentinel) {
         let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
@@ -245,8 +245,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             if (warCasterMelee) allowedActionTypes.push("msak");
             if (warCasterRange) allowedActionTypes.push("rsak", "save");
         
-            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.preparation?.prepared || item.system?.preparation?.mode !== "prepared" || !item.system?.preparation ) && acts.some(a => ["creature", "enemy"].includes(a.target?.affects?.type))) || (warCasterMelee && overrideItems.includes(item.name))
-            console.log(warCasterSpell, "warCasterSpell")
+            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.preparation?.prepared || item.system?.preparation?.mode !== "prepared" || !item.system?.preparation ) && acts.some(a => ["creature", "enemy"].includes(a.target?.affects?.type))) || (warCasterMelee && overrideItems.includes(item.name));
         }
       
         return qualifiesWeaponOrFeat || warCasterSpell;

@@ -210,7 +210,8 @@ export function updateSettings(settingKey = null) {
         'enableLegendaryResistance': 'legendaryResistanceEnabled',
         'enableBurstOfIngenuity': 'burstOfIngenuityEnabled',
         'enableTemporalShunt': 'temporalShuntEnabled',
-        'disableCuttingWordsMaxMiss': 'disableCuttingWordsMaxMiss'
+        'disableCuttingWordsMaxMiss': 'disableCuttingWordsMaxMiss',
+        'enableTaleOfHubris': 'taleOfHubrisEnabled'
     };
 
     if (settingKey === null) {
