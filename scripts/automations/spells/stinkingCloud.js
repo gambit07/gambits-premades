@@ -9,7 +9,7 @@ export async function stinkingCloud({ speaker, actor, token, character, item, ar
         new Sequence()
             .effect()
             .atLocation(template)
-            .file("jb2a.fog_cloud.02.green") //Change animation you'd like to use here
+            .file("jb2a.fog_cloud.02.green")
             .scaleToObject()
             .tieToDocuments(template)
             .belowTokens()

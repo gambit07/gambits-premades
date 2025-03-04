@@ -5,7 +5,7 @@ export async function rodOfThePactKeeper({ speaker, actor, token, character, ite
 
     if (spellLevel === spellMax) {
     ui.notifications.warn("You have no appropriate spell slot to recover");
-    await item.update({ "system.uses.value": 1 });
+    await item.update({ "system.uses.spent": 0 });
     return;
     }
 

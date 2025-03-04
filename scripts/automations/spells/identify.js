@@ -42,8 +42,8 @@ export async function identify({ speaker, actor, token, character, item, args, s
                     }
                     else if(checkType === "innate" || checkType === "atwill")
                     {
-                        let slotValue = item.system.uses.value;
-                        let slotEnabled = item.system.uses.per;
+                        let slotValue = checkItem.system.uses.max - checkItem.system.uses.spent;
+                        let slotEnabled = checkItem.system.uses.max;
                         if (slotValue > 0 || slotEnabled === null) hasSpellSlots = true;
                     }
 

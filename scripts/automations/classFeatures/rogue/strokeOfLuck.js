@@ -7,6 +7,7 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let gmUser = game.gps.getPrimaryGM();
+        let initialTimeLeft = 30;
 
         let dialogContent = `
             <div class="gps-dialog-container">
@@ -30,7 +31,21 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
             </div>
         `;
         
-        let result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+        let content = `<span style='text-wrap: wrap;'><img src="${token.actor.img}" style="width: 25px; height: auto;" /> ${token.actor.name} has a reaction available for a save triggering ${macroItem.name}.</span>`
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
+
+        let result;
+
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle: dialogTitlePrimary, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: token.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            
+            let gmDialogArgs = { dialogTitle: dialogTitleGM, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: token.document.uuid, source: "gm", type: "multiDialog", notificationId: notificationMessage._id };
+            
+            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+        } else {
+            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+        }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
 
@@ -67,6 +82,7 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let gmUser = game.gps.getPrimaryGM();
+        let initialTimeLeft = 30;
 
         let dialogContent = `
             <div class="gps-dialog-container">
@@ -89,8 +105,22 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
                 </div>
             </div>
         `;
-        
-        let result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+
+        let content = `<span style='text-wrap: wrap;'><img src="${token.actor.img}" style="width: 25px; height: auto;" /> ${token.actor.name} has a reaction available for a save triggering ${macroItem.name}.</span>`
+        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
+
+        let result;
+
+        if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
+            let userDialogArgs = { dialogTitle: dialogTitlePrimary, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: token.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            
+            let gmDialogArgs = { dialogTitle: dialogTitleGM, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: token.document.uuid, source: "gm", type: "multiDialog", notificationId: notificationMessage._id };
+            
+            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+        } else {
+            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+        }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;
 

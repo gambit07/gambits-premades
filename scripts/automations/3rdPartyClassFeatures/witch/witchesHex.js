@@ -2,6 +2,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
     const gpsUuid = "02fc5000-7f5d-462e-94ac-42a27f453a8f";
+    const gpsUuidFlamesEmbrace = "ac1b7150-bf0c-4a83-a815-607031ee9e07"
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Witches Hex";
     let dialogId = gpsUuid;
@@ -164,103 +165,22 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
             let actorLevel = validTokenPrimary.actor.system.details.level;
-            let flamesEmbrace = validTokenPrimary.actor.items.getName("Flame's Embrace");
+            let flamesEmbrace = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuidFlamesEmbrace);
             
             if(actorLevel >= 6 && flamesEmbrace) {
-                let spellDC = validTokenPrimary.actor.system.attributes.spell.dc;
-                let saveData = {
-                    name: "Flame's Embrace Save",
-                    type: "feat",
-                    img: `${flamesEmbrace.img}`,
-                    effects: [],
-                    flags: {
-                        "midi-qol": {
-                            noProvokeReaction: true,
-                            onUseMacroName: null,
-                            forceCEOff: true
-                        },
-                        "midiProperties": {
-                            saveDamage: "nodam",
-                            magiceffect: true
-                        },
-                        "autoanimations": {
-                            killAnim: true
-                        }
-                    },
-                    system: {
-                        equipped: true,
-                        actionType: "save",
-                        save: { "dc": `${spellDC}`, "ability": 'con', "scaling": "flat" },
-                        components: { concentration: false, material: false, ritual: false, somatic: false, value: "", vocal: false },
-                        duration: { units: "inst", value: undefined },
-                        properties: {mgc: true}
-                    }
-                };
-                const itemUpdate = new CONFIG.Item.documentClass(saveData, {parent: validTokenPrimary.actor});
-                const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [`${target.document.uuid}`] };
-                let saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);
+                const saveResult = await game.gps.gpsActivityUse({itemUuid: flamesEmbrace.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
                 if(saveResult.aborted === true) continue;
 
                 if(saveResult.failedSaves.size !== 0) {
-                    let itemData = {
-                        "name": "Flame's Embrace",
-                        "type": "feat",
-                        "img": `${flamesEmbrace.img}`,
-                        "system": {
-                        "description": {
-                            "value": "<p>You have been hexed and are under the effect of Flame's Embrace.</p>"
-                        },
-                        },
-                        "effects": [
-                        {
-                            "icon": `${flamesEmbrace.img}`,
-                            "duration": {
-                                "seconds": 60
-                            },
-                            "disabled": false,
-                            "name": "Flame's Embrace",
-                            "changes": [
-                            {
-                                "key": "system.traits.dv.value",
-                                "mode": 0,
-                                "value": "fire",
-                                "priority": 20
-                            },
-                            {
-                                "key": "flags.midi-qol.onUseMacroName",
-                                "mode": 0,
-                                "value": "ItemMacro, isDamaged",
-                                "priority": 20
-                            }
-                            ],
-                            "transfer": true,
-                            "tint": null
-                        }
-                        ],
-                        "flags": {
-                            "dae": {
-                                "macro": {
-                                "name": "Hexed",
-                                "img": "systems/dnd5e/icons/svg/items/feature.svg",
-                                "type": "script",
-                                "scope": "global",
-                                "command": `if(args[0].macroPass === \"isDamaged\") {\n    let damageTypes = [\"fire\"];\n    let rollFound = workflow.damageDetail.some(roll => damageTypes.includes(roll.type));\n\n    if(rollFound) {\n        let originActor = await fromUuid(\`${validTokenPrimary.actor.uuid}\`);\n        let spellDC = originActor.system.attributes.spell.dc;\n        const itemData = {\n        name: \"Flame's Embrace Save\",\n        type: \"feat\",\n        img: \`${flamesEmbrace.img}\`,\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            },\n            \"midiProperties\": {\n                saveDamage: "nodam", magiceffect: true\n            }, "autoanimations": {\n                killAnim: true\n }},\n        system: {\n            equipped: true,\n            actionType: \"save\",\n            save: { \"dc\": spellDC, \"ability\": 'con', \"scaling\": \"flat\" },\n            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n            duration: { units: \"inst\", value: undefined },\n            properties: {mgc: true}\n        },\n        };\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: originActor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [token.document.uuid] };\n        let saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n        if(saveResult.failedSaves.size === 0) {\n            await macroItem.delete();\n        }\n    }\n}`
-                                }
-                            }
-                        }
-                    }
-
-                    let newItem = await target.actor.createEmbeddedDocuments("Item", [itemData]);
-
                     if(animEnabled) {
                         new Sequence()
                         .effect()
+                            .name(`${target.id}.FlamesEmbrace`)
                             .file("animated-spell-effects-cartoon.fire.18")
-                            .attachTo(target, { align: "bottom-left", edge: "inner" })
+                            .attachTo(target, { align: "top", edge: "on" })
                             .persist()
                             .scaleToObject(0.5)
                             .filter("ColorMatrix", { hue: 70 })
-                            .tieToDocuments(newItem[0])
                         .play()
                     }
                 }
@@ -300,7 +220,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 let reroll;
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });
                 if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${hexDie}`, type: workflowType });
-                let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).roll();
+                let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).evaluate();
 
                 await workflow.setAttackRoll(rerollNew);
                 workflow.options.noOnUseMacro = saveSetting;

@@ -5,16 +5,10 @@ export async function amuletOfTheDevout({ speaker, actor, token, character, item
     }
     const itemNames = ["channel divinity"];
 
-    let resourceKey = ['primary', 'secondary', 'tertiary'].find(key =>
-        itemNames.includes(actor.system.resources[key]?.label.toLowerCase()) && actor.system.resources[key].value !== actor.system.resources[key].max);
-    let resourceExistsWithValue = resourceKey !== undefined;
-    let itemExistsWithValue;
+    let itemExistsWithValue = actor.items.find(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses.spent !== 0);
 
-    if (!resourceExistsWithValue) {
-        itemExistsWithValue = actor.items.find(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses.spent !== 0);
-    }
 
-    if (!resourceExistsWithValue && !itemExistsWithValue) {
+    if (!itemExistsWithValue) {
         workflow.aborted = true;
         return ui.notifications.warn("You have no Channel Divinity charges to recover.");
     }
@@ -54,14 +48,8 @@ export async function amuletOfTheDevout({ speaker, actor, token, character, item
         return;
     }
     else if (userDecision) {
-        if(resourceExistsWithValue) {
-            const updatePath = `system.resources.${resourceKey}.value`;
-            let currentValue = actor.system.resources[resourceKey].value;
-            await actor.update({ [updatePath]: currentValue + 1 });
-            await item.update({ "system.uses.spent": item.system.uses.spent + 1 });
-        }
-        else if(itemExistsWithValue) {
-            let currentValue = itemExistsWithValue.system.uses.value;
+        if(itemExistsWithValue) {
+            let currentValue = itemExistsWithValue.system.uses.spent;
             await itemExistsWithValue.update({ "system.uses.spent": currentValue - 1 });
             await item.update({ "system.uses.spent": item.system.uses.spent + 1 });
         }

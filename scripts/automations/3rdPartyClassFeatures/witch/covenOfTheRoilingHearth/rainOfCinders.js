@@ -17,7 +17,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        if(!validTokenPrimary.actor.appliedEffects.some(e => e.name === "Drawing the Hearth")) {
+        if(!validTokenPrimary.actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa")) {
             if(debugEnabled) console.error(`${itemName} for ${validTokenPrimary.actor.name} failed at parent effect active`);
             continue;
         }
@@ -27,7 +27,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
         const { animEnabled } = cprConfig;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
-        let baseItem = validTokenPrimary.actor.items.find(i => i.name === "Drawing the Hearth");
+        let baseItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa");
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent = `
@@ -82,11 +82,6 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                 targetUuids: [workflow.token.document.uuid]
             };
 
-            let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            if(!itemRoll) continue;
-
             if(animEnabled) {
                 for (let i = 0; i < 5; i++) {
                     new Sequence()
@@ -101,50 +96,17 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                 }
             }
 
-            await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
-
-            const spellDC = validTokenPrimary.actor.system.attributes.spell.dc;
-            let saveAbility = "cha";
-
-            const itemData = {
-                name: `${itemProperName} Save`,
-                type: "feat",
-                img: chosenItem.img,
-                effects: [],
-                flags: {
-                    "midi-qol": {
-                        noProvokeReaction: true,
-                        onUseMacroName: null,
-                        forceCEOff: true
-                    },
-                    "midiProperties": {
-                        magiceffect: true
-                    },
-                    "autoanimations": {
-                        killAnim: true
-                    }
-
-                },
-                system: {
-                    equipped: true,
-                    actionType: "save",
-                    save: { dc: spellDC, ability: saveAbility, scaling: "flat" },
-                    components: { concentration: false, material: false, ritual: false, somatic: false, value: "", vocal: false },
-                    duration: { units: "inst", value: undefined }
-                },
-            };
-            const itemUpdateTarget = new CONFIG.Item.documentClass(itemData, {parent: validTokenPrimary.actor});
-            const optionsTarget = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [workflow.token.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };
-            const saveResult = await MidiQOL.completeItemUse(itemUpdateTarget, {}, optionsTarget);
+            const saveResult = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
 
             if (saveResult.failedSaves.size !== 0) {
-                let itemUses = baseItem.system.uses.value;
+                let itemUses = baseItem.system.uses.spent;
+                let itemUsesRemaining = baseItem.system.uses.max - itemUses;
                 let attackTotal = workflow.attackTotal;
                 let spiritAC = 10 + validTokenPrimary.actor.system.attributes.prof;
                 if(attackTotal >= spiritAC) {
                     let highestIndex = -1;
 
-                    for (let i = 0; i < itemUses; i++) {
+                    for (let i = 0; i < itemUsesRemaining; i++) {
                         const effects = Sequencer.EffectManager.getEffects({name: `DrawingTheHearth_${validTokenPrimary.actor.id}_${i}`, source: validTokenPrimary});
                         if (effects.length > 0) {
                             highestIndex = i;
@@ -174,8 +136,8 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                         .play();
                     }
 
-                    await baseItem.update({"system.uses.value" : itemUses - 1})
-                    let content = `The creature attacks one of your soot spirits and hits! You have ${itemUses - 1} soot spirits remaining.`
+                    await baseItem.update({"system.uses.spent" : itemUses + 1})
+                    let content = `The creature attacks one of your soot spirits and hits! You have ${itemUsesRemaining - 1} soot spirits remaining.`
                     let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
                     let chatData = {
                         user: actorPlayer.id,
@@ -185,8 +147,8 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                     ChatMessage.create(chatData);
                     workflow.aborted = true;
 
-                    if((itemUses - 1) === 0) {
-                        let effectData = actor.appliedEffects.find(e => e.name === "Drawing the Hearth");
+                    if((itemUsesRemaining - 1) === 0) {
+                        let effectData = validTokenPrimary.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa");
                         if(effectData) {
                             await effectData.delete();
                         }
@@ -215,7 +177,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                     .play();
 
 
-                    let content = `The creature attacks one of your soot spirits and misses! You have ${itemUses} soot spirits remaining.`
+                    let content = `The creature attacks one of your soot spirits and misses! You have ${itemUsesRemaining} soot spirits remaining.`
                     let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
                     let chatData = {
                         user: actorPlayer.id,

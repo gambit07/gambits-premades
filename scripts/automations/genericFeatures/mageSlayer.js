@@ -165,13 +165,13 @@ export async function mageSlayer({workflowData,workflowType,workflowCombat}) {
                 let favoriteWeapon;
                 if(favoriteWeaponCheck !== "null") favoriteWeapon = await fromUuid(favoriteWeaponCheck);
                 if(favoriteCheck && favoriteWeaponCheck) {
-                await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
-                if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
-                await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
-                }
+                    await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
+                    if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
+                        await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
+                    }
                 }
                 else if(favoriteCheck) {
-                await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
+                    await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
                 }
 
                 let clonedWeapon = foundry.utils.deepClone(chosenWeapon);

@@ -21,7 +21,6 @@ export async function taleOfHubris({workflowData,workflowType,workflowCombat}) {
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
-        let chatActor;
 
         let dialogContent = `
             <div class="gps-dialog-container">
@@ -74,10 +73,11 @@ export async function taleOfHubris({workflowData,workflowType,workflowCombat}) {
 
             let contentOutcome = `<span style='text-wrap: wrap;'>You use ${itemProperName} to increase the critical threshold on the creature due to its nat 20.<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
+
             let chatDataOutcome = {
-            user: actorPlayer.id,
-            speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
-            content: contentOutcome
+                user: actorPlayer.id,
+                speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
+                content: contentOutcome
             };
             ChatMessage.create(chatDataOutcome);
 

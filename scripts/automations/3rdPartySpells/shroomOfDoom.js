@@ -3,7 +3,6 @@ export async function shroomOfDoom({ speaker, actor, token, character, item, arg
         let target = workflow.failedSaves.first();
         if (!target) return;
         let shroomRoll = await new CONFIG.Dice.DamageRoll(`1d8`).evaluate();
-        //let shroomRoll = await new CONFIG.Dice.DamageRoll(`1d8`, {}, {type: "healing", properties: ["mgc"]}).evaluate();
         await MidiQOL.displayDSNForRoll(shroomRoll, 'damageRoll');
         let shroomTotal = shroomRoll.total;
         let content = `The creature has ${shroomTotal} mushroom${shroomTotal > 1 ? "s" : ""} created on their body with Shroom of Doom.`

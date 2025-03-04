@@ -1,7 +1,7 @@
 export async function rabbitHop({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     async function HaltAndRefund(workflow) {
         if (workflow.dnd5eConsumptionConfig?.consumeUsage) {
-            await item.update({'system.uses.value': item.system.uses.value + 1});
+            await item.update({'system.uses.spent': item.system.uses.spent - 1});
             console.log('Resource refunded because user cancelled input.');
         }
         return;

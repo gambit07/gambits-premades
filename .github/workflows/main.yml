@@ -19,15 +19,12 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions" >> release_notes.txt
-          echo "  - Tale of Hubris: Adds the Bards College of Tragedy feature." >> release_notes.txt
-          echo "  - Contagious Healing: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
-          echo "  - Shroom of Doom: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
-          echo "  - Electric Eels: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
-          echo "  - Cloak of Vermin: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
-          echo "  - Healing Glyph: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
-          echo "  - Biohazard: Reminder to checkout Sebastian Crowes Guide to Drakkenheim. V4.x compatability." >> release_notes.txt
-          echo "- Updates" >> release_notes.txt
-          echo "  - Opportunity Attack: Update to modify midis check range property to none when making an opportunity attack to make sure all range warning cases are resolved, it will be reverted to its original settings after attack" >> release_notes.txt
+          echo "  - Flames Embrace: Adds the Deep Magic 2 Witch feature, previously was built into Drawing the Hearth." >> release_notes.txt
+          echo "  - Drawing the Hearth: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
+          echo "  - Rain of Cinders: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
+          echo "  - Witches Hex: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
+          echo "- Bugfixes" >> release_notes.txt
+          echo "  - Bunch of small stuff" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
