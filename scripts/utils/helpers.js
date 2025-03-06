@@ -1385,8 +1385,7 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
         originalCheckRange = configSettings.optionalRules.checkRange;
 
         if (originalCheckRange !== "none") {
-            configSettings.optionalRules.checkRange = "none";
-            await game.settings.set("midi-qol", "ConfigSettings", configSettings);
+            await socket.executeAsUser("gpsUpdateMidiRange", game.gps.getPrimaryGM(), { configSettings: configSettings, turnOff: true, originalCheckRange: originalCheckRange });
         }
     }
     
@@ -1394,9 +1393,7 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
     let checkHits = remoteCIU?.hitTargets?.first() ? true : false;
 
     if (originalCheckRange !== "none") {
-        configSettings = foundry.utils.duplicate(game.settings.get("midi-qol", "ConfigSettings"));
-        configSettings.optionalRules.checkRange = originalCheckRange;
-        await game.settings.set("midi-qol", "ConfigSettings", configSettings);
+        await socket.executeAsUser("gpsUpdateMidiRange", game.gps.getPrimaryGM(), { configSettings: configSettings, turnOff: false, originalCheckRange: originalCheckRange });
     }
 
     return {castLevel: remoteCIU?.castData?.castLevel, baseLevel: remoteCIU?.castData?.baseLevel, itemType: remoteCIU?.item?.system?.preparation?.mode, checkHits: checkHits};
@@ -1429,4 +1426,16 @@ export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
 export async function gpsActivityUpdate({activityUuid, updates}) {
     let activity = await fromUuid(activityUuid);
     await activity.update(updates);
+}
+
+export async function gpsUpdateMidiRange({configSettings, turnOff, originalCheckRange}) {
+    if (turnOff) {
+        configSettings.optionalRules.checkRange = "none";
+        await game.settings.set("midi-qol", "ConfigSettings", configSettings);
+    }
+    else if (!turnOff) {
+        configSettings = foundry.utils.duplicate(game.settings.get("midi-qol", "ConfigSettings"));
+        configSettings.optionalRules.checkRange = originalCheckRange;
+        await game.settings.set("midi-qol", "ConfigSettings", configSettings);
+    }
 }

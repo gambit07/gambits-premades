@@ -67,6 +67,7 @@ Hooks.once('socketlib.ready', async function() {
     game.gps.socket.register("remoteAbilityTest", helpers.remoteAbilityTest);
     game.gps.socket.register("gpsActivityUse", helpers.gpsActivityUse);
     game.gps.socket.register("gpsActivityUpdate", helpers.gpsActivityUpdate);
+    game.gps.socket.register("gpsUpdateMidiRange", helpers.gpsUpdateMidiRange);
 })
 
 Hooks.once('ready', async function() {

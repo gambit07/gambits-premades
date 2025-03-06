@@ -18,13 +18,9 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions" >> release_notes.txt
-          echo "  - Flames Embrace: Adds the Deep Magic 2 Witch feature, previously was built into Drawing the Hearth." >> release_notes.txt
-          echo "  - Drawing the Hearth: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
-          echo "  - Rain of Cinders: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
-          echo "  - Witches Hex: Reminder to checkout Kobold Press Deep Magic 2. V4.x compatability." >> release_notes.txt
           echo "- Bugfixes" >> release_notes.txt
-          echo "  - Bunch of small stuff" >> release_notes.txt
+          echo "  - Opportunity Attack: Update the new midi setFlag range override to properly gm socket" >> release_notes.txt
+          echo "  - Silvery Barbs: Hopefully quick fix for saves not having the correct DC. Next update will be addressing 3rd party reactions in general to better use activities where needed." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -71,7 +67,7 @@ jobs:
             "id": "'"gambits-premades"'",
             "release": {
               "version": "'"${{ steps.get-version.outputs.version }}"'",
-              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/latest/download/module.json"'",
+              "manifest": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.json"'",
               "download": "'"https://github.com/gambit07/gambits-premades/releases/download/${{ steps.get-version.outputs.version }}/module.zip"'",
               "notes": "'"https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}"'",
               "compatibility": {
