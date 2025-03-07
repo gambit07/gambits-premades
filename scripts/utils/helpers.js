@@ -1385,7 +1385,7 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
         originalCheckRange = configSettings.optionalRules.checkRange;
 
         if (originalCheckRange !== "none") {
-            await socket.executeAsUser("gpsUpdateMidiRange", game.gps.getPrimaryGM(), { configSettings: configSettings, turnOff: true, originalCheckRange: originalCheckRange });
+            await game.gps.socket.executeAsUser("gpsUpdateMidiRange", game.gps.getPrimaryGM(), { configSettings: configSettings, turnOff: true, originalCheckRange: originalCheckRange });
         }
     }
     
@@ -1393,7 +1393,7 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
     let checkHits = remoteCIU?.hitTargets?.first() ? true : false;
 
     if (originalCheckRange !== "none") {
-        await socket.executeAsUser("gpsUpdateMidiRange", game.gps.getPrimaryGM(), { configSettings: configSettings, turnOff: false, originalCheckRange: originalCheckRange });
+        await game.gps.socket.executeAsUser("gpsUpdateMidiRange", game.gps.getPrimaryGM(), { configSettings: configSettings, turnOff: false, originalCheckRange: originalCheckRange });
     }
 
     return {castLevel: remoteCIU?.castData?.castLevel, baseLevel: remoteCIU?.castData?.baseLevel, itemType: remoteCIU?.item?.system?.preparation?.mode, checkHits: checkHits};

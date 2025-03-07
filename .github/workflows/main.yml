@@ -19,8 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes" >> release_notes.txt
-          echo "  - Opportunity Attack: Update the new midi setFlag range override to properly gm socket" >> release_notes.txt
-          echo "  - Silvery Barbs: Hopefully quick fix for saves not having the correct DC. Next update will be addressing 3rd party reactions in general to better use activities where needed." >> release_notes.txt
+          echo "  - Opportunity Attack: Fix gm flag socket not using the correct ref" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

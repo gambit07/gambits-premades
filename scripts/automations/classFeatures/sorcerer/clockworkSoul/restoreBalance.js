@@ -29,10 +29,10 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             let targetAllies = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
             let targetEnemies = Array.from(workflow.targets).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
             
-            targetAllies = targetAllies.filter(t => workflow.saveRolls.find(roll => roll.data.actorId === t.actor.id && roll.formula.includes("kl") && !roll.formula.includes("kh")) !== undefined);
-            targetEnemies = targetEnemies.filter(t => workflow.saveRolls.find(roll => roll.data.actorId === t.actor.id && !roll.formula.includes("kl") && roll.formula.includes("kh")) !== undefined);
+            targetAllies = targetAllies.filter(t => workflow.saveRolls?.find(roll => roll.data.actorId === t.actor.id && roll.formula.includes("kl") && !roll.formula.includes("kh")) !== undefined);
+            targetEnemies = targetEnemies.filter(t => workflow.saveRolls?.find(roll => roll.data.actorId === t.actor.id && !roll.formula.includes("kl") && roll.formula.includes("kh")) !== undefined);
 
-            if(targetAllies.length === 0 && targetEnemies.length === 0) continue;
+            if((!targetAllies || targetAllies?.length === 0) && (!targetEnemies || targetEnemies?.length === 0)) continue;
 
             const targetAllyUuids = targetAllies.map(t => t.document.uuid);
             const targetAllyNames = targetAllies.map(t => t.document.name);
