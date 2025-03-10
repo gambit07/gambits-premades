@@ -72,10 +72,6 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
             continue;
         }
         else if (userDecision) {
-            chosenItem.prepareData();
-            chosenItem.prepareFinalAttributes();
-            chosenItem.applyActiveEffects();
-
             const options = {
                 showFullCard: false,
                 createWorkflow: true,

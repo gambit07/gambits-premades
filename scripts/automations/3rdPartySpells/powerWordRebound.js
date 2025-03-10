@@ -94,13 +94,9 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
 
             let newItemData = workflow.item;
 
-            newItemData.prepareData();
-            newItemData.prepareFinalAttributes();
-            newItemData.applyActiveEffects();
-
             const optionsNew = {
                 showFullCard: false,
-                createWorkflow: true,
+                createWorkflow: false,
                 versatile: false,
                 configureDialog: true,
                 targetUuids: [workflow.token.document.uuid],

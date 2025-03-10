@@ -81,7 +81,7 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.preCompleted", async (workflow) => {
-        if (!workflow.item.type === "spell") return;
+        if (!workflow.activity.type === "spell") return;
         let workflowItemUuid = workflow.uuid;
         if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "spell", workflowCombat: true });
     });

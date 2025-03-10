@@ -19,7 +19,11 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes" >> release_notes.txt
-          echo "  - Opportunity Attack: Fix gm flag socket not using the correct ref" >> release_notes.txt
+          echo "  - Fix incorrect manifest location" >> release_notes.txt
+          echo "  - Silvery Barbs: Fix incorrect reference to save values on v4" >> release_notes.txt
+          echo "  - Mage Slayer: Fix non-spells being included in hook" >> release_notes.txt
+          echo "  - Protection: Fixed something" >> release_notes.txt
+          echo "  - Power Word Rebound: Fixed something" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

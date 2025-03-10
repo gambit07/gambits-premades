@@ -239,7 +239,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 let saveAbility = workflow.activity.save.ability.first();
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === enemyTokenUuid);
                 let browserUserTarget = game.gps.getBrowserUser({ actorUuid: workflowTarget.actor.uuid });
-                let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
+                let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save.value + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
                 let reroll;
                 if(workflowTarget.actor.type !== "npc") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUserTarget, { rollParams: `1d20 + ${targetSaveBonus}` });
                 else reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${targetSaveBonus}` });
