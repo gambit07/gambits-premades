@@ -372,8 +372,8 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
                 }
             };
 
-            if(source && source === "user") braceRoll = await socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
-            else if(source && source === "gm") braceRoll = await socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
+            if(source && source === "user") braceRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
+            else if(source && source === "gm") braceRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
             if (!braceRoll) return;
         }
 
