@@ -1,6 +1,6 @@
 export async function graspingArrow({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(!game.modules.get("jaamod")?.active) return ui.notifications.error("You must install the Jinkers Animated Art Pack module to use this automation.");
-    if(args[0].macroPass === "preActiveEffects") {
+    if(args?.[0].macroPass === "postPreambleComplete") {
         let target = workflow.targets.first();
 
         let seq0 = new Sequence()
@@ -114,21 +114,6 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
         }
     }
 
-    if(args[0].macroPass === "prePreambleComplete") {
-        let itemUses = actor.items.find(i => i.flags["gambits-premades"].gpsUuid === "62e57050-5c6e-4fb1-82d2-ea9a289e7cf9");
-        if(itemUses.system.uses?.spent >= itemUses.system.uses?.max) {
-            ui.notifications.warn("You have no Arcane Shot uses remaining");
-            workflow.aborted = true;
-            return;
-        }
-        let itemValid = await actor.getFlag('gambits-premades', `arcaneShotValid`);
-        if(!itemValid) {
-            ui.notifications.warn("You must have hit with a bow prior to using this feature.");
-            workflow.aborted = true;
-            return;
-        }
-    }
-
     if(args[0] === "off" && args[3]["expiry-reason"] !== "midi-qol:isMoved") {
         Sequencer.EffectManager.endEffects({ name: `${token.id}.GraspingArrow` });
 
@@ -168,7 +153,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
                 {
                 "key": "macro.itemMacro",
                 "mode": 0,
-                "value": `${effectOriginActor.uuid}`,
+                "value": `function.game.gps.graspingArrow ${effectOriginActor.uuid}`,
                 "priority": 20
                 }
             ],
@@ -210,7 +195,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
                 {
                 "key": "macro.itemMacro",
                 "mode": 0,
-                "value": `${effectOriginActor.uuid}`,
+                "value": `function.game.gps.graspingArrow ${effectOriginActor.uuid}`,
                 "priority": 20
                 }
             ],

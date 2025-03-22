@@ -70,9 +70,7 @@ export async function biohazard({speaker, actor, character, item, args, scope, w
     damageParts[0].number = castLevel;
 
     await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
-    const saveResult = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
+    await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
     
-    if(saveResult) {
-        await region.setFlag("gambits-premades", "checkBiohazardRound", `${token.id}_${game.combat.round}`);
-    }
+    await region.setFlag("gambits-premades", "checkBiohazardRound", `${token.id}_${game.combat.round}`);
 }

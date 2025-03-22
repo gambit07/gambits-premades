@@ -63,7 +63,6 @@
     width: 100%;
     box-sizing: border-box;
     line-height: normal;
-    background-color: rgba(181, 99, 69, 0.2);
 }
 
 .gps-dialog-select {
@@ -71,7 +70,6 @@
     width: 100%;
     box-sizing: border-box;
     line-height: normal;
-    background-color: rgba(181, 99, 69, 0.2);
 }
 
 .gps-dialog-select-container {

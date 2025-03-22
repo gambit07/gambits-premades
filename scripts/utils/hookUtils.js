@@ -28,21 +28,42 @@ export function updateRegionPosition(region, tokenDocument) {
             setTimeout(checkPosition, 25);
         } else if (previousX1 === previousX2 && previousY1 === previousY2) {
             const updatedShapes = region.shapes.map(shape => {
-                const sideLength = shape.width || (shape.radiusX * 2);
-                const topLeftX = currentX - (sideLength / 2);
-                const topLeftY = currentY - (sideLength / 2);
-
                 if (shape.type === "ellipse") {
                     return {
                         ...shape,
                         x: currentX,
                         y: currentY
                     };
-                } else if(shape.type === "rectangle") {
+                } else if (shape.type === "rectangle") {
+                    const sideLength = shape.width || (shape.radiusX * 2);
+                    const topLeftX = currentX - (sideLength / 2);
+                    const topLeftY = currentY - (sideLength / 2);
                     return {
                         ...shape,
                         x: topLeftX,
                         y: topLeftY
+                    };
+                } else if (shape.type === "polygon") {
+                    const pts = [];
+                    for (let j = 0; j < shape.points.length; j += 2) {
+                        pts.push({ x: shape.points[j], y: shape.points[j+1] });
+                    }
+                    const centroid = pts.reduce((sum, pt) => ({
+                        x: sum.x + pt.x,
+                        y: sum.y + pt.y
+                    }), { x: 0, y: 0 });
+                    centroid.x /= pts.length;
+                    centroid.y /= pts.length;
+            
+                    const dx = currentX - centroid.x;
+                    const dy = currentY - centroid.y;
+            
+                    const updatedPoints = shape.points.map((coord, idx) => {
+                        return (idx % 2 === 0) ? coord + dx : coord + dy;
+                    });
+                    return {
+                        ...shape,
+                        points: updatedPoints
                     };
                 } else {
                     return {
@@ -110,7 +131,7 @@ export function registerWrapping() {
             const [region, position] = args;
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
-            if(canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
+            if(canvas.scene.grid.type >= 1) return wrapped(...args); //Don't wrap hex or square grid types
             if (!this || !this.document) return wrapped(...args);
             
             const pointsToTest = [];
@@ -222,6 +243,80 @@ export function updateSettings(settingKey = null) {
         const gpsSetting = settingsMap[settingKey];
         if (gpsSetting) {
             game.gpsSettings[gpsSetting] = game.settings.get('gambits-premades', settingKey);
+        }
+    }
+}
+
+const daeFieldBrowserFields = [];
+
+export function daeInitFlags() {
+    let browserFields = [
+        'flags.gambits-premades.oaImmunity',
+        'flags.gambits-premades.oaSuppression'
+    ];
+
+    daeFieldBrowserFields.push(...Array.from(new Set(browserFields)).sort());
+}
+
+export function daeAddFlags(fieldData) {
+    fieldData['GPS'] = daeFieldBrowserFields;
+}
+
+export function daeInjectFlags() {
+    foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.oaImmunity', {
+        name: "Opportunity Attack Immunity",
+        description: "Prevents token from receiving any Opportunity Attacks"
+    });
+    foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.oaSuppression', {
+        name: "Opportunity Attack Suppression",
+        description: "Prevents token from making any Opportunity Attacks"
+    });
+    
+    DAE.addAutoFields(daeFieldBrowserFields);
+}
+
+export async function arcaneShotValidActivities({item, actor}) {
+    const arcaneArcherLevel = actor.classes?.fighter.system.levels;
+    if(!actor) return;
+    let arcaneShotItem = actor.items.some(i => i.name === "Arcane Shot" || i.flags["gambits-premades"]?.gpsUuid === "f9a050c1-e755-4428-b523-90969df6c799");
+    if(!arcaneShotItem) return;
+    
+    const arcaneShotTypes = [
+        { identifier: `banishingArrow`, itemName: "Banishing Arrow", gpsUuid: "227991d1-e640-4f94-9a8b-9873ad694f15" },
+        { identifier: `banishingArrow18`, itemName: "Banishing Arrow", gpsUuid: "227991d1-e640-4f94-9a8b-9873ad694f15" },
+        { identifier: "beguilingArrow", itemName: "Beguiling Arrow", gpsUuid: "90456c7c-d138-41bd-9e69-a642720e4edd" },
+        { identifier: "burstingArrow", itemName: "Bursting Arrow", gpsUuid: "7303fad3-f581-4645-be73-dd54025ebf3d" },
+        { identifier: "enfeeblingArrow", itemName: "Enfeebling Arrow", gpsUuid: "cde79d00-3828-4cef-821e-8936f605d8cb" },
+        { identifier: "graspingArrow", itemName: "Grasping Arrow", gpsUuid: "cf259a10-6f48-4145-a185-bad35f8cd3df" },
+        { identifier: `piercingArrow`, itemName: "Piercing Arrow", gpsUuid: "7478d1f7-24dc-44c5-aa5e-035128bf94e9" },
+        { identifier: `piercingArrow18`, itemName: "Piercing Arrow", gpsUuid: "7478d1f7-24dc-44c5-aa5e-035128bf94e9" },
+        { identifier: `seekingArrow`, itemName: "Seeking Arrow", gpsUuid: "21216197-2c8f-492e-ac5a-1ea44281fd79" },
+        { identifier: `seekingArrow18`, itemName: "Seeking Arrow", gpsUuid: "21216197-2c8f-492e-ac5a-1ea44281fd79" },
+        { identifier: "shadowArrow", itemName: "Shadow Arrow", gpsUuid: "ff16436c-47eb-450a-8d55-84b81e45a9a2" }
+    ];
+    
+    for (const shot of arcaneShotTypes) {
+        const activity = item.system.activities.find(a => a.identifier === shot.identifier);
+        if (!activity) continue;
+        
+        const hasArrowItem = actor.items.some(i => 
+        i.name === shot.itemName || i.flags["gambits-premades"]?.gpsUuid === shot.gpsUuid
+        );
+        
+        const baseId = shot.identifier.replace(/18$/, '');
+        
+        const pairVariants = arcaneShotTypes.filter(s => s.identifier.replace(/18$/, '') === baseId);
+        
+        if (pairVariants.length > 1) {
+            if (shot.identifier.endsWith("18")) {
+                const automationOnly = !(arcaneArcherLevel >= 18 && hasArrowItem);
+                await activity.update({ "midiProperties.automationOnly": automationOnly });
+            } else {
+                const automationOnly = !(arcaneArcherLevel < 18 && hasArrowItem);
+                await activity.update({ "midiProperties.automationOnly": automationOnly });
+            }
+        } else {
+            await activity.update({ "midiProperties.automationOnly": !hasArrowItem });
         }
     }
 }

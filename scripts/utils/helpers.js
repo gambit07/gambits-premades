@@ -1,6 +1,7 @@
 export async function deleteChatMessage({ chatId }) {
     if(!chatId) return;
     let chatMessage = game.messages.get(chatId);
+    if(!chatMessage) return;
     await chatMessage.delete();
 }
 
@@ -696,8 +697,8 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             {
                 action: "yes",
                 label: "<i class='fas fa-check' style='margin-right: 5px;'></i>Yes",
+                classes: ["default"],
                 callback: async (event, button, dialog) => {
-                    if(notificationId) await game.gps.socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
                     dialogState.interacted = true;
                     dialogState.decision = "yes";
                     if (source && source === "user" && type === "multiDialog") await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
@@ -723,19 +724,20 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
 
                     let selectedItemUuid = button.form?.elements[`item-select_${dialogId}`]?.value ?? false;
                     let favoriteCheck = button.form?.elements["gps-favorite-checkbox"]?.checked ?? false;
+                    let genericCheck = button.form?.elements["gps-checkbox"]?.checked ?? false;
 
                     let enemyTokenUuids = document?.querySelectorAll('input.enemy-tokens:checked') ?? false;
                     if(enemyTokenUuids) enemyTokenUuids = Array.from(enemyTokenUuids).map(checkbox => checkbox.value);
 
-                    result = ({ userDecision: true, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, abilityCheck, enemyTokenUuids, programmaticallyClosed: false, source, type });
+                    result = ({ userDecision: true, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, genericCheck, abilityCheck, enemyTokenUuids, programmaticallyClosed: false, source, type });
                 }
             },
             {
                 action: "no",
                 label: `<i class='fas fa-times' style='margin-right: 5px;'></i>No`,
+                classes: ["default"],
                 default: true,
                 callback: async (event, button, dialog) => {
-                    if(notificationId) await game.gps.socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
                     dialogState.interacted = true;
                     dialogState.decision = "no";
                     if(source && source === "user" && type === "multiDialog") await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
@@ -812,34 +814,23 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 }
     
                 const progressPercentage = (this.timeLeft / initialTimeLeft) * 100;
-                const transitionStart = 75;
-                const transitionPercentage = Math.max((transitionStart - progressPercentage) / transitionStart, 0) * 100;
-
-                let redValue;
-                let greenValue;
-                let blueValue;
-                let borderColorStop;
                 let colorStop1;
                 let borderColor;
 
-                if(type === "multiDialog" && source === "gm") {
-                    redValue = Math.floor(0 + (transitionPercentage / 100) * (75 - 0));
-                    greenValue = Math.floor(51 - (transitionPercentage / 100) * 51);
-                    blueValue = Math.floor(153 - (transitionPercentage / 100) * (153 - 130));
-                    borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
-
-                    colorStop1 = Math.max(progressPercentage - 5, 0);
-                    borderColor = `linear-gradient(to right, ${borderColorStop}, ${borderColorStop} ${colorStop1}%, rgba(0, 0, 0, 0.5) ${progressPercentage}%, rgba(0, 0, 0, 0.5))`;
-                }
-                else {
-                    redValue = Math.floor(181 + (transitionPercentage / 100) * (255 - 181));
-                    greenValue = Math.floor(99 - (transitionPercentage / 100) * 99);
-                    blueValue = Math.floor(69 - (transitionPercentage / 100) * 69);
-                    borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
+                let dialogColors = getDialogColors({type, source, timeLeft: this.timeLeft, initialTimeLeft});
         
-                    colorStop1 = Math.max(progressPercentage - 5, 0);
-                    borderColor = `linear-gradient(to right, ${borderColorStop}, ${borderColorStop} ${colorStop1}%, rgba(0, 0, 0, 0.5) ${progressPercentage}%, rgba(0, 0, 0, 0.5))`;
-                }
+                colorStop1 = Math.max(progressPercentage - 5, 0);
+                borderColor = `linear-gradient(to right, ${dialogColors.borderColorStop}, ${dialogColors.borderColorStop} ${colorStop1}%, rgba(0, 0, 0, 0.5) ${progressPercentage}%, rgba(0, 0, 0, 0.5))`;
+
+                const selectElements = dialogElement?.querySelectorAll('.gps-dialog-select') || [];
+                selectElements.forEach(el => {
+                    el.style.backgroundColor = dialogColors.selectColor;
+                });
+                
+                const optionElements = dialogElement?.querySelectorAll('.gps-dialog-option') || [];
+                optionElements.forEach(el => {
+                    el.style.backgroundColor = dialogColors.optionColor;
+                });
     
                 if (useFullTitleBar && titleBackground) {
                     titleBackground.style.background = borderColor;
@@ -852,7 +843,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 if (pauseIcon && pauseButton) {
                     pauseIcon.classList.toggle("fa-play", this.isPaused);
                     pauseIcon.classList.toggle("fa-pause", !this.isPaused);
-                    pauseButton.style.backgroundColor = this.isPaused ? "rgba(181, 99, 69, 0.80)" : "";
+                    pauseButton.style.backgroundColor = this.isPaused ? dialogColors.pauseColor : "";
                 }
             };
             requestAnimationFrame(dialog.animate);
@@ -861,6 +852,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
         close: async (event, dialog) => {
             clearInterval(dialog.timer);
             cleanupEventListeners(dialog.listeners);
+            if(notificationId && ((type === "multiDialog" && source === "gm") || type === "singleDialog")) await game.gps.socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
             
             if (dialog.dialogState.programmaticallyClosed) result = ({ userDecision: false, programmaticallyClosed: true, source, type });
             else if (!dialog.dialogState.interacted) result = ({ userDecision: false, programmaticallyClosed: false, source, type });
@@ -1419,9 +1411,12 @@ export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
     if(!item) return console.error(`Shame you didn't pass me an itemUuid`);
     const activity = item.system.activities.find(a => a.identifier === identifier);
     if(!activity) return console.error(`Naughty Naughty: You've likely removed the identifier name from a ${item.name} automation activity and now it's nowhere to be found ¯\_(ツ)_/¯`);
+    let targetUuids = (Array.isArray(targetUuid)) ? targetUuid : [targetUuid]
 
-    const options = { midiOptions: { targetUuids: [targetUuid], noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMStatus: true } };
-    return await MidiQOL.completeActivityUse(activity.uuid, options, {}, {});
+    const options = { midiOptions: { targetUuids: targetUuids, noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMStatus: true, autoRollAttack: true, autoRollDamage: "always", fastForwardAttack: true, fastForwardDamage: true, workflowData: true } };
+    let activityUse = await MidiQOL.completeActivityUse(activity.uuid, options, {}, {});
+
+    return { saveRolls: activityUse?.saveRolls?.[0], failedSaves: { size: activityUse?.failedSaves?.size }, failedSavesObject: activityUse?.failedSaves };
 }
 
 export async function gpsActivityUpdate({activityUuid, updates}) {
@@ -1439,4 +1434,87 @@ export async function gpsUpdateMidiRange({configSettings, turnOff, originalCheck
         configSettings.optionalRules.checkRange = originalCheckRange;
         await game.settings.set("midi-qol", "ConfigSettings", configSettings);
     }
+}
+
+export function getDialogColors({ type, source, timeLeft, initialTimeLeft }) {
+    const hasCarolingianUI = game.modules.get("crlngn-ui")?.active;
+    const progressPercentage = (timeLeft / initialTimeLeft) * 100;
+    const transitionStart = 75;
+    const transitionPercentage = Math.max((transitionStart - progressPercentage) / transitionStart, 0) * 100;
+    const rgbColor = getCssVarValue("--color-warm-2");
+    const rgbColorSelect = getCssVarValue("--color-warm-3");
+    let pauseColor = addAlphaToRgb(rgbColor, 0.60);
+    let selectColor = addAlphaToRgb(rgbColorSelect, 0.20);
+    let optionColor = addAlphaToRgb(rgbColorSelect, 1.0);
+    let borderColorStop;
+    let redValue;
+    let greenValue;
+    let blueValue;
+
+    if (type === "multiDialog" && source === "gm") {
+        redValue = Math.floor(0 + (transitionPercentage / 100) * (75 - 0));
+        greenValue = Math.floor(51 - (transitionPercentage / 100) * 51);
+        blueValue = Math.floor(153 - (transitionPercentage / 100) * (153 - 130));
+        borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
+
+        return { pauseColor, borderColorStop, selectColor, optionColor };
+    }
+  
+    if (hasCarolingianUI) {
+      const match = rgbColor.match(/(\d+),\s*(\d+),\s*(\d+)/);
+      if (match) {
+        const baseR = parseInt(match[1]);
+        const baseG = parseInt(match[2]);
+        const baseB = parseInt(match[3]);
+  
+        const targetFactor = 0.5;
+        redValue = Math.floor(baseR - (baseR - baseR * targetFactor) * (transitionPercentage / 100));
+        greenValue = Math.floor(baseG - (baseG - baseG * targetFactor) * (transitionPercentage / 100));
+        blueValue = Math.floor(baseB - (baseB - baseB * targetFactor) * (transitionPercentage / 100));
+
+        borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
+      } else {
+        redValue = Math.floor(181 + (transitionPercentage / 100) * (255 - 181));
+        greenValue = Math.floor(99 - (transitionPercentage / 100) * 99);
+        blueValue = Math.floor(69 - (transitionPercentage / 100) * 69);
+        borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
+      }
+    } else {
+        redValue = Math.floor(181 + (transitionPercentage / 100) * (255 - 181));
+        greenValue = Math.floor(99 - (transitionPercentage / 100) * 99);
+        blueValue = Math.floor(69 - (transitionPercentage / 100) * 69);
+        borderColorStop = `rgb(${redValue}, ${greenValue}, ${blueValue})`;
+    }
+    return { pauseColor, borderColorStop, selectColor, optionColor };
+}
+  
+function getCssVarValue(varName) {
+    const tempEl = document.createElement("div");
+    tempEl.style.color = `var(${varName})`;
+    tempEl.style.display = "none";
+    document.body.appendChild(tempEl);
+
+    const computedColor = getComputedStyle(tempEl).color;
+    document.body.removeChild(tempEl);
+    return computedColor;
+}
+
+function addAlphaToRgb(rgbString, alpha) {
+    const match = rgbString.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    if (match) {
+      return `rgba(${match[1]}, ${match[2]}, ${match[3]}, ${alpha})`;
+    }
+    return rgbString;
+}
+
+export async function halfWeaponDamage({workflow}) {
+    if (workflow.isFumble || workflow.item.type !== 'weapon') return;
+    if (workflow.item.system.properties.has('fin')) {
+        let {str, dex} = workflow.actor.system.abilities;
+        if (str.value < dex.value) return;
+    }
+    workflow.damageRolls = await Promise.all(workflow.damageRolls.map(async damageRoll => {
+        return await new CONFIG.Dice.DamageRoll('floor((' + damageRoll.formula + ') / 2)', workflow.item.getRollData(), damageRoll.options);
+    }));
+    await workflow.setDamageRolls(workflow.damageRolls);
 }

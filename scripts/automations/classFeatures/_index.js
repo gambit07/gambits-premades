@@ -8,7 +8,7 @@ import { arcaneShot } from "./fighter/arcaneArcher/arcaneShot.js";
 import { beguilingArrow } from "./fighter/arcaneArcher/beguilingArrow.js";
 import { burstingArrow } from "./fighter/arcaneArcher/burstingArrow.js";
 import { graspingArrow } from "./fighter/arcaneArcher/graspingArrow.js";
-import { shadowArrow } from "./fighter/arcaneArcher/shadowArrow.js";
+import { enfeeblingArrow } from "./fighter/arcaneArcher/enfeeblingArrow.js";
 import { riposte } from "./fighter/battleMaster/riposte.js";
 import { indomitable } from "./fighter/indomitable.js";
 import { perfectSelf } from "./monk/perfectSelf.js";
@@ -37,7 +37,7 @@ export const classFeaturesMacros = {
   beguilingArrow,
   burstingArrow,
   graspingArrow,
-  shadowArrow,
+  enfeeblingArrow,
   riposte,
   indomitable,
   perfectSelf,

@@ -19,7 +19,7 @@ export async function beguilingArrow({ speaker, actor, token, character, item, a
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Select which ally you would like the target to be Charmed by.</p>
+                        <p class="gps-dialog-paragraph">Select which ally you would like the target to be Charmed by:</p>
                         <div>
                             <div class="gps-dialog-flex">
                                 <label for="ally-token" class="gps-dialog-label"Ally:</label>
@@ -88,19 +88,6 @@ export async function beguilingArrow({ speaker, actor, token, character, item, a
                 content: contentAlly
             };
             ChatMessage.create(chatDataAlly);
-        }
-    }
-
-    if(args[0].macroPass === "prePreambleComplete") {
-        let itemUses = actor.items.find(i => i.flags["gambits-premades"].gpsUuid === "62e57050-5c6e-4fb1-82d2-ea9a289e7cf9");
-        if(itemUses.system.uses?.spent >= itemUses.system.uses?.max) {
-            ui.notifications.warn("You have no Arcane Shot uses remaining");
-            return workflow.aborted = true;
-        }
-        let itemValid = await actor.getFlag('gambits-premades', `arcaneShotValid`);
-        if(!itemValid) {
-            ui.notifications.warn("You must have hit with a bow prior to using this feature.");
-            return workflow.aborted = true;
         }
     }
 }

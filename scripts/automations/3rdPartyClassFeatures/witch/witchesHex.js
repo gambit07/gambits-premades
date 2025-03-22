@@ -168,8 +168,10 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             let flamesEmbrace = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuidFlamesEmbrace);
             
             if(actorLevel >= 6 && flamesEmbrace) {
-                const saveResult = await game.gps.gpsActivityUse({itemUuid: flamesEmbrace.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
-                if(saveResult.aborted === true) continue;
+                let saveResult;
+                if(source && source === "user") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: flamesEmbrace.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+                else if(source && source === "gm") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: flamesEmbrace.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+                if(!saveResult) continue;
 
                 if(saveResult.failedSaves.size !== 0) {
                     if(animEnabled) {

@@ -62,7 +62,40 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
             const currentIndex = findValidTokens.indexOf(validTokenPrimary);
             const isLastToken = currentIndex === findValidTokens.length - 1;
 
+            let getSubtleSpell = getSubtleSpell({validToken: validTokenPrimary});
+            const { dialogSubtle = "", itemSorcery = false } = getSubtleSpell;
+
             let dialogContent = `
+                <style>
+                #gps-checkbox {
+                    position: absolute;
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+                }
+
+                #gps-checkbox + label {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+
+                #gps-checkbox + label::before {
+                    content: "\\f6a9";
+                    font-family: "Font Awesome 5 Free";
+                    font-weight: 400; /* Regular (outlined) style */
+                    font-size: 20px;
+                    margin-right: 5px;
+                    line-height: 1;
+                    vertical-align: middle;
+                }
+
+                #gps-checkbox:checked + label::before {
+                    content: "\\f6a9";
+                    font-family: "Font Awesome 5 Free";
+                    font-weight: 900; /* Solid (filled) style */
+                }
+                </style>
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
@@ -73,6 +106,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
                                 </div>
+                                ${dialogSubtle}
                             </div>
                         </div>
                     </div>
@@ -100,7 +134,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
             }
                     
-            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
+            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result;
 
             if (!userDecision && isLastToken) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
@@ -114,6 +148,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
 
                 hasVSMProperty = castProperties.some(prop => chosenItem.system.properties.has(prop));
+
+                if(genericCheck) await itemSorcery?.update({"system.uses.spent" : itemSorcery.system.uses.spent + 1})
 
                 const options = {
                     showFullCard: false,
@@ -150,9 +186,10 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 if(itemRollCastLevel < castLevel) {
                     let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticCheck");
                     await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"check.dc.calculation": "", "check.dc.formula": spellThreshold, "check.dc.value": spellThreshold} });
-                    skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
+                    if(source && source === "user") skillCheck = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
+                    else if(source && source === "gm") skillCheck = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
                     if(!skillCheck) continue;
-                    let skillRoll = skillCheck.saveRolls[0];
+                    let skillRoll = skillCheck.saveRolls;
                     let skillTotal = skillRoll.total;
                     let skillFlavor = validTokenPrimary.actor.system.attributes.spell.abilityLabel;
                     let abjurationCheck = validTokenPrimary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
@@ -198,7 +235,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     .play()
                 }
 
-                if(!hasVSMProperty) return;
+                if(!hasVSMProperty || genericCheck) return;
                 castLevel = counterspellLevel;
                 await secondaryCounterspellProcess(workflow, lastMessage, castLevel, validTokenPrimary);
                 break;
@@ -222,7 +259,40 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 const currentIndex = findValidTokens.indexOf(validTokenSecondary);
                 const isLastToken = currentIndex === findValidTokens.length - 1;
 
+                let getSubtleSpell = getSubtleSpell({validToken: validTokenSecondary});
+                const { dialogSubtle = "", itemSorcery = false } = getSubtleSpell;
+
                 let dialogContent = `
+                    <style>
+                    #gps-checkbox {
+                        position: absolute;
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+                    }
+
+                    #gps-checkbox + label {
+                        display: flex;
+                        align-items: center;
+                        cursor: pointer;
+                    }
+
+                    #gps-checkbox + label::before {
+                        content: "\\f6a9";
+                        font-family: "Font Awesome 5 Free";
+                        font-weight: 400; /* Regular (outlined) style */
+                        font-size: 20px;
+                        margin-right: 5px;
+                        line-height: 1;
+                        vertical-align: middle;
+                    }
+
+                    #gps-checkbox:checked + label::before {
+                        content: "\\f6a9";
+                        font-family: "Font Awesome 5 Free";
+                        font-weight: 900; /* Solid (filled) style */
+                    }
+                    </style>
                     <div class="gps-dialog-container">
                         <div class="gps-dialog-section">
                             <div class="gps-dialog-content">
@@ -233,6 +303,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                                             <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                         </div>
                                     </div>
+                                    ${dialogSubtle}
                                 </div>
                             </div>
                         </div>
@@ -260,7 +331,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenSecondary.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessageSecondary._id});
             }
                     
-            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
+            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result;
 
             if (!userDecision && isLastToken) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
@@ -274,6 +345,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
 
                 hasVSMProperty = castProperties.some(prop => chosenItem.system.properties.has(prop));
+
+                if(genericCheck) await itemSorcery?.update({"system.uses.spent" : itemSorcery.system.uses.spent + 1})
 
                 const options = {
                     showFullCard: false,
@@ -310,9 +383,10 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 if(itemRollCastLevel < castLevel) {
                     let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticCheck");
                     await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"check.dc.calculation": "", "check.dc.formula": spellThreshold, "check.dc.value": spellThreshold} });
-                    skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenSecondary.document.uuid});
+                    if(source && source === "user") skillCheck = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenSecondary.document.uuid});
+                    else if(source && source === "gm") skillCheck = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenSecondary.document.uuid});
                     if(!skillCheck) continue;
-                    let skillRoll = skillCheck.saveRolls[0];
+                    let skillRoll = skillCheck.saveRolls;
                     let skillTotal = skillRoll.total;
                     let skillFlavor = validTokenSecondary.actor.system.attributes.spell.abilityLabel;
                     let abjurationCheck = validTokenSecondary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
@@ -359,11 +433,31 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     .play()
                 }
 
-                if(!hasVSMProperty) return;
+                if(!hasVSMProperty || genericCheck) return;
                 castLevel = counterspellLevel;
                 await initialCounterspellProcess(workflow, lastMessage, castLevel, validTokenSecondary);
                 break;
             }
         }
     }
+}
+
+function getSubtleSpell({validToken}) {
+    let subtleSpell = validToken.actor.items.some(i => i.flags["chris-premades"]?.info.identifier === "subtleSpell" || i.name === "Subtle Spell");
+    let itemSorcery;
+    let dialogSubtle = "";
+    if(subtleSpell) itemSorcery = validToken.actor.items.find(i => (i.flags["chris-premades"]?.info.identifier === "sorceryPoints" || i.name === "Sorcery Points" || i.name === "Font of Magic" || i.name === "Metamagic Adept") && i.system.uses?.max && i.system.uses?.spent < i.system.uses?.max);
+
+    if(itemSorcery) {
+        dialogSubtle = `
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="gps-checkbox" style="vertical-align: middle;"/>
+                <label for="gps-checkbox">
+                    Use Subtle Spell? | ${ itemSorcery.system.uses.max - itemSorcery.system.uses.spent } ${ itemSorcery.system.uses.max - itemSorcery.system.uses.spent > 1 ? "Points" : "Point" } Remaining
+                </label>
+            </div>
+        `;
+    }
+
+    return {dialogSubtle, itemSorcery};
 }

@@ -13,7 +13,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     if(workflow.legendaryResistanceUsed) return;
 
     // Check if attack hits
-    if(workflowType === "attack" && workflow.attackTotal < workflow.targets.first().actor.system.attributes.ac.value) return;
+    if(workflowType === "attack" && workflow.attackTotal < workflow.targets?.first().actor.system.attributes.ac.value) return;
     // Check if there is a save success
     if(workflowType === "save" && workflow.saves.size === 0) return;
 
@@ -69,7 +69,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                                     <label for="ally-token" class="gps-dialog-label">Advantage:</label>
                                     ${validFriendlies.length >= 1 ? 
                                     `<select id="ally-token" class="gps-dialog-select">
-                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
+                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
                                     </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
                                     }
                                     </div>
@@ -103,7 +103,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                                     <label for="ally-token" class="gps-dialog-label">Advantage:</label>
                                     ${validFriendlies.length >= 1 ? 
                                     `<select id="ally-token" class="gps-dialog-select">
-                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
+                                        ${validFriendlies.map(friendly => `<option class="gps-dialog-option" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
                                     </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
                                     }
                                     <div id="image-container" class="gps-dialog-image-container">
@@ -235,27 +235,28 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             }
 
             if(workflowType === "save") {
-                let saveDC = workflow.activity.save.dc.value;
-                let saveAbility = workflow.activity.save.ability.first();
+                let saveDC = workflow.activityHasSave.dc.value;
+                let saveAbility = workflow.activityHasSave.ability.first();
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === enemyTokenUuid);
-                let browserUserTarget = game.gps.getBrowserUser({ actorUuid: workflowTarget.actor.uuid });
-                let targetSaveBonus =  workflowTarget.actor.system.abilities[`${saveAbility}`].save.value + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
-                let reroll;
-                if(workflowTarget.actor.type !== "npc") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUserTarget, { rollParams: `1d20 + ${targetSaveBonus}` });
-                else reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${targetSaveBonus}` });
 
-                if(reroll.total < saveDC) {
+                let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
+                await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"save.dc.calculation": "", "save.dc.formula": saveDC, "save.dc.value": saveDC, "save.ability": [saveAbility]} });
+                let reroll;
+                if(source && source === "user") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
+                else if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
+
+                if(reroll.failedSaves.size !== 0) {
                     workflow.saves.delete(workflowTarget);
                     workflow.failedSaves.add(workflowTarget);
 
                     chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
                     return;
                 }
 
                 else {
                     chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
                     continue;
                 }
             }

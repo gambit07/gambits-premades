@@ -137,67 +137,15 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                 const { userDecision, enemyTokenUuid, enemyTokenUuids, allyTokenUuid, damageChosen, source, type } = result;
                 
                 targets.push(...enemyTokenUuids);
-
             }
 
-            const itemData = {
-                name: `${itemProperName}`,
-                img: chosenItem.img,
-                type: "feat",
-                effects: [],
-                flags: {
-                    "midiProperties": {
-                        magiceffect: true
-                    },
-                    "autoanimations": {
-                        killAnim: true
-                    }
-                },
-                system: {
-                    equipped: true,
-                    actionType: "save",
-                    save: { dc: validTokenPrimary.actor.system.attributes.spell.dc, ability: "wis", scaling: "flat" },
-                    components: { concentration: false, material: false, ritual: false, somatic: false, value: "", vocal: false },
-                    duration: { units: "inst", value: undefined },
-                }
-            };
-
             let chatContent;
+            const saveResult = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: targets});
 
-            const itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: validTokenPrimary.actor });
-            const optionsSave = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: targets };
-            const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, optionsSave);
-
-            for(let failedTarget of saveResult.failedSaves) {
+            for(let failedTarget of saveResult.failedSavesObject) {
                 failedTarget = await fromUuid(failedTarget.document.uuid);
                 failedTarget = failedTarget.object;
 
-                let effectData = [{
-                    "icon": `${chosenItem.img}`,
-                    "origin": `${validTokenPrimary.actor.uuid}`,
-                    "duration": {
-                        "seconds": 12
-                    },
-                    "disabled": false,
-                    "name": `${itemProperName}: Vanish`,
-                    "type": "base",
-                    "changes": [{
-                        "key": "ATL.hidden",
-                        "mode": 0,
-                        "value": "true",
-                        "priority": 20
-                    }],
-                    "transfer": false,
-                    "flags": {
-                        "dae": {
-                            "specialDuration": [
-                                "turnStart"
-                            ]
-                        }
-                    }
-                }];
-
-                await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: failedTarget.actor.uuid, effects: effectData });
                 chatContent = `<span style='text-wrap: wrap;'>The targets ${workflowType} roll was successfully interrupted and they disappear.<br><img src="${failedTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                 await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});

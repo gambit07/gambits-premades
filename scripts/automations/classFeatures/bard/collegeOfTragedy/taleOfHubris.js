@@ -15,7 +15,7 @@ export async function taleOfHubris({workflowData,workflowType,workflowCombat}) {
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        const itemData = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "bardic inspiration");
+        const itemData = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "bardic inspiration" || i.flags["chris-premades"]?.info.identifier === "bardicInspiration");
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
@@ -65,7 +65,10 @@ export async function taleOfHubris({workflowData,workflowType,workflowCombat}) {
             continue;
         }
         else if (userDecision) {
-            await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticUse", targetUuid: initiatingToken.document.uuid});
+            let activityUse;
+            if(source && source === "user") activityUse = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticUse", targetUuid: initiatingToken.document.uuid});
+            else if(source && source === "gm") activityUse = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticUse", targetUuid: initiatingToken.document.uuid});
+            if(!activityUse) continue;
 
             if(itemData) {
                 await itemData.update({ 'system.uses.spent' : itemData.system.uses.spent + 1 })

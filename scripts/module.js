@@ -1,5 +1,6 @@
 import {registerSettings} from './utils/settings.js';
 import { registerHooks } from "./utils/hooks.js";
+import { daeInitFlags, daeInjectFlags } from "./utils/hookUtils.js"
 import { automationRegistry } from "./automations/index.js";
 import { refreshTemplateVisibility, registerWrapping, updateSettings } from "./utils/hookUtils.js";
 import * as helpers from "./utils/helpers.js";
@@ -9,6 +10,12 @@ Hooks.once('init', async function() {
     registerSettings();
     game.gpsSettings = game.gpsSettings || {};
     updateSettings();
+    daeInitFlags();
+
+    Hooks.on("dae.modifySpecials", (specKey, specials) => {
+        specials["flags.gambits-premades.oaImmunity"] = [new foundry.data.fields.StringField(), 5];
+        specials["flags.gambits-premades.oaSuppression"] = [new foundry.data.fields.StringField(), 5];
+    });
 
     registerWrapping();
 });
@@ -83,4 +90,5 @@ Hooks.once('ready', async function() {
     if(game.user.isGM && !game.settings.get("gambits-premades", "primaryGM")) game.settings.set("gambits-premades", "primaryGM", game.users.activeGM?.id);
 
     registerHooks();
+    daeInjectFlags();
 });

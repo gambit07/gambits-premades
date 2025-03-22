@@ -55,7 +55,7 @@ export async function rabbitHop({ speaker, actor, token, character, item, args, 
 
         .effect()
         .copySprite(token)
-        .atLocation(token)   
+        .atLocation(token)
         .opacity(1)
         .duration(1000)
         .anchor({ x: 0.5, y: 1 })
@@ -65,7 +65,7 @@ export async function rabbitHop({ speaker, actor, token, character, item, args, 
 
         .effect()
         .copySprite(token)
-        .atLocation(token)   
+        .atLocation(token)
         .opacity(0.5)
         .scale(0.9)
         .belowTokens()

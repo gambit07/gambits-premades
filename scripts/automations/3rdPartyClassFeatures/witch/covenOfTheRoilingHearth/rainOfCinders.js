@@ -74,14 +74,6 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
             continue;
         }
         else if (userDecision) {
-            const options = {
-                showFullCard: false,
-                createWorkflow: true,
-                versatile: false,
-                configureDialog: true,
-                targetUuids: [workflow.token.document.uuid]
-            };
-
             if(animEnabled) {
                 for (let i = 0; i < 5; i++) {
                     new Sequence()
@@ -96,7 +88,10 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                 }
             }
 
-            const saveResult = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
+            let saveResult;
+            if(source && source === "user") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
+            else if(source && source === "gm") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
+            if(!saveResult) continue;
 
             if (saveResult.failedSaves.size !== 0) {
                 let itemUses = baseItem.system.uses.spent;

@@ -136,11 +136,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         return;
     }
 
-    if(MidiQOL.checkIncapacitated(effectOriginActor) !== false) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at origin token is incapacitated`);
-        return;
-    }
-
     // Check if same disposition token
     if(token.disposition === effectOriginToken.disposition) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at token disposition check`);
@@ -152,6 +147,18 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let hasEffectOrigin = effectOriginActor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
     if(hasEffectOrigin) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at spell effect preventing reaction`);
+        return;
+    }
+
+    let oaSuppression = effectOriginActor.flags["gambits-premades"]?.oaSuppression;
+    if(oaSuppression) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at oaSuppression effect preventing reactions`);
+        return;
+    }
+
+    let oaImmunity = token.actor.flags["gambits-premades"]?.oaImmunity;
+    if(oaImmunity) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at oaImmunity effect preventing reactions against the target`);
         return;
     }
 
@@ -556,19 +563,30 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize);
             const topLeftX = tokenCenterX - (sideLength / 2);
             const topLeftY = tokenCenterY - (sideLength / 2);
+            const radius = maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance;
+            const points = [];
             let regionShape;
 
-            if (canvas.scene.grid.type !== 1) {  // Gridless or Hex
+            if (canvas.scene.grid.type === 0) {  // Gridless
+                const exponent = 4;
+                const numVertices = 40; // Adjust curve smoothness
+
+                for (let i = 0; i < numVertices; i++) {
+                    const theta = (i / numVertices) * 2 * Math.PI;
+                    const cosTheta = Math.cos(theta);
+                    const sinTheta = Math.sin(theta);
+                    
+                    const x = tokenCenterX + radius * Math.sign(cosTheta) * Math.pow(Math.abs(cosTheta), 2/exponent);
+                    const y = tokenCenterY + radius * Math.sign(sinTheta) * Math.pow(Math.abs(sinTheta), 2/exponent);
+                    points.push(x, y);
+                }
+
                 regionShape = {
-                    type: "ellipse",
-                    x: tokenCenterX,
-                    y: tokenCenterY,
-                    radiusX: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
-                    radiusY: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
-                    rotation: 0,
+                    type: "polygon",
+                    points: points,
                     hole: false
                 };
-            } else {
+            } else if(canvas.scene.grid.type === 1) {   // Square
                 regionShape = {
                     type: "rectangle",
                     x: topLeftX,
@@ -576,6 +594,25 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                     width: sideLength,
                     height: sideLength,
                     rotation: 0,
+                    hole: false
+                };
+            } else if(canvas.scene.grid.type > 1) {     // Hex
+                const R_max = (canvas.scene.grid.type === 4 || canvas.scene.grid.type === 5) ? radius * 0.75 : radius * 1.0;
+                const R_min = (canvas.scene.grid.type === 4 || canvas.scene.grid.type === 5) ? radius * 1.0 : radius * 0.75;
+
+                const numVertices = 60; // Adjust curve smoothness
+
+                for (let i = 0; i < numVertices; i++) {
+                    const theta = (i / numVertices) * 2 * Math.PI;
+                    const r_current = (R_max + R_min) / 2 + ((R_max - R_min) / 2) * Math.cos(6 * theta);
+                    const x = tokenCenterX + r_current * Math.cos(theta);
+                    const y = tokenCenterY + r_current * Math.sin(theta);
+                    points.push(x, y);
+                }
+
+                regionShape = {
+                    type: "polygon",
+                    points: points,
                     hole: false
                 };
             }

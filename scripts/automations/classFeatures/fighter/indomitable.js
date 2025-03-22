@@ -87,27 +87,31 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
             if(itemRoll.aborted === true) continue;
             let chatContent;
             let indomitableHomebrew = MidiQOL.safeGetGameSetting('gambits-premades', 'enableAutoSucceedIndomitable');
-            let saveDC = workflow.saveItem.system.save.dc;
-            let saveAbility = workflow.saveItem.system.save.ability;
-            let targetSaveBonus =  validTokenPrimary.actor.system.abilities[`${saveAbility}`].save;
+            let saveDC = workflow.activityHasSave.dc.value;
+            let saveAbility = workflow.activityHasSave.ability.first();
             let reroll;
-            if(source && source === "user" && !indomitableHomebrew) reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1d20 + ${targetSaveBonus}` });
-            if(source && source === "gm" && !indomitableHomebrew) reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${targetSaveBonus}` });
 
-            if((reroll?.total >= saveDC) || indomitableHomebrew) {
+            if(!indomitableHomebrew) {
+                let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
+                await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"save.dc.calculation": "", "save.dc.formula": saveDC, "save.dc.value": saveDC, "save.ability": new Set([`${saveAbility}`])} });
+                if(source && source === "user") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: validTokenPrimary.document.uuid});
+                else if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: validTokenPrimary.document.uuid});
+            }
+
+            if(reroll?.failedSaves?.size === 0 || indomitableHomebrew) {
                 workflow.saves.add(validTokenPrimary);
                 workflow.failedSaves.delete(validTokenPrimary);
 
                 chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable and succeeded their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll ? reroll : reroll.saveRolls});
                 return;
             }
 
             else {
                 chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable but still failed their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll ? reroll : reroll.saveRolls});
                 return;
             }
         }

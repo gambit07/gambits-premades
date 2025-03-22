@@ -33,7 +33,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
 
     await wait(300);
     let the_message = `<table border="1" style="text-align:center;"><thead><tr><th>Type</th><th>Found</th></tr></thead><tbody><tr><td>Undead</td><td>${is_undead.length}</td></tr><tr><td>Fiends</td><td>${is_fiend.length}</td></tr><tr><td>Celestials</td><td>${is_celestial.length}</td></tr></tbody><tbody style="background: rgba(0, 0, 0, 0.5);color: #f0f0e0;text-shadow: 1px 1px #000;border-bottom: 1px solid #000;"><tr><td>Total Sensed</td><td>${totalCount.length}</td></tr></tbody></table>`;
-    let chatMessage = game.messages.get(args[0].itemCardId);
+    let chatMessage = await fromUuid(workflow.itemCardUuid);
     let content = foundry.utils.duplicate(chatMessage.content);
     let searchString = /<div class="midi-qol-saves-display">[\s\S]*<div class="end-midi-qol-saves-display">/g;
     let replaceString = `<div class="midi-qol-saves-display"><div class="end-midi-qol-saves-display">${the_message}`;

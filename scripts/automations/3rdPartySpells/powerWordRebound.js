@@ -6,6 +6,7 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
     let itemName = "Power Word Rebound";
     let dialogId = gpsUuid;
     let target = workflow.targets.first();
+    if(!target) return;
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 

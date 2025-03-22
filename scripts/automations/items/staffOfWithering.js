@@ -44,9 +44,12 @@ export async function staffOfWithering({ speaker, actor, token, character, item,
             await item.update({ "system.uses.spent": item.system.uses.spent + 1 });
             let target = workflow.hitTargets.first();
 
-            const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            let saveResult;
+            if(source && source === "user") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            else if(source && source === "gm") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            if(!saveResult) return;
 
-            if (saveResult.failedSaves.size === 1) {
+            if (saveResult.failedSaves.size !== 0) {
                 let effectData = [
                 {
                     "icon": item.img,
