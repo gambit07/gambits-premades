@@ -218,7 +218,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 
                 await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: skillRoll});
 
-                if(csFailure === true) continue;
+                if(csFailure) continue;
 
                 let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
                 const { animEnabled } = cprConfig;
@@ -235,7 +235,9 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     .play()
                 }
 
-                if(!hasVSMProperty || genericCheck) return;
+                if((!hasVSMProperty || genericCheck) && !csFailure) return workflow.aborted = true;
+                else if((!hasVSMProperty || genericCheck) && csFailure) continue;
+
                 castLevel = counterspellLevel;
                 await secondaryCounterspellProcess(workflow, lastMessage, castLevel, validTokenPrimary);
                 break;
@@ -433,7 +435,9 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     .play()
                 }
 
-                if(!hasVSMProperty || genericCheck) return;
+                if((!hasVSMProperty || genericCheck) && !csFailure) return workflow.aborted = true;
+                else if((!hasVSMProperty || genericCheck) && csFailure) continue;
+                
                 castLevel = counterspellLevel;
                 await initialCounterspellProcess(workflow, lastMessage, castLevel, validTokenSecondary);
                 break;
@@ -443,10 +447,10 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
 }
 
 function getSubtleSpell({validToken}) {
-    let subtleSpell = validToken.actor.items.some(i => i.flags["chris-premades"]?.info.identifier === "subtleSpell" || i.name === "Subtle Spell");
+    let subtleSpell = validToken.actor.items.some(i => i.flags["chris-premades"]?.info?.identifier === "subtleSpell" || i.name === "Subtle Spell");
     let itemSorcery;
     let dialogSubtle = "";
-    if(subtleSpell) itemSorcery = validToken.actor.items.find(i => (i.flags["chris-premades"]?.info.identifier === "sorceryPoints" || i.name === "Sorcery Points" || i.name === "Font of Magic" || i.name === "Metamagic Adept") && i.system.uses?.max && i.system.uses?.spent < i.system.uses?.max);
+    if(subtleSpell) itemSorcery = validToken.actor.items.find(i => (i.flags["chris-premades"]?.info?.identifier === "sorceryPoints" || i.name === "Sorcery Points" || i.name === "Font of Magic" || i.name === "Metamagic Adept") && i.system.uses?.max && i.system.uses?.spent < i.system.uses?.max);
 
     if(itemSorcery) {
         dialogSubtle = `
