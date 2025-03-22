@@ -18,19 +18,8 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Additions: Arcane Archer: Updated to add all Arcane Archer shot types. These are now housed as activities on the Arcane Shot item, you will still need the individual Arrow types (Bursting, Shadow, etc) from my compendium/medkit so that appropriate arrow activities are displayed." >> release_notes.txt
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Multiple Items: Updated synthetic activity handling to socket the use to the appropriate user where relevant. NOTE: Module now requires Midi 12.4.34 minimum as there were some important bugfixes for socketing activities" >> release_notes.txt
-          echo "  - Silvery Barbs: Added activity handling for Save events. Should make them more resilient in the future." >> release_notes.txt
-          echo "  - Indomitable: Added activity handling for Save reroll. Should make this more resilient in the future." >> release_notes.txt
-          echo "  - Region Wrapping: Update Region Wrapping to use default behavior on square gridded scenes to resolve some intermittent issues with region teleporting." >> release_notes.txt
-          echo "  - Opportunity Attack: Added updated region shapes for OA. Gridless now uses a squircle shape, and Hex grids use a hex shape. Added new DAE flags oaImmunity and oaSuppression. oaImmunity can be added to an effect on a token to prevent any opportunity attacks against it. oaSuppression can be added to an effect on a token to prevent it from being able to make any opportunity attacks. NOTE: The old method of looking for a named effect ex. Opportunity Attack Immunity for general immunity or a specific item effect ex. Shocking Grasp will be deprecated in the future, premades or individual automations should use these dae flags moving forward." >> release_notes.txt
-          echo "  - Counterspell: Added Subtle Spell casting support. Counterspell will now present a checkbox to the user to use Subtle Spell when present and sorcery points available. If checked, the spell will become un-counterspellable and the appropriate sorcery point will be used." >> release_notes.txt
-          echo "  - GPS Dialogs: Added support for Carolingian UI. GPS Dialogs colors will now match color theming from Carolingian if present." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Temporal Shunt: Fixed a couple issues and re-worked to use an activity on the roll." >> release_notes.txt
-          echo "  - Divine Sense: Fix args itemCardId no longer being found, for some reason." >> release_notes.txt
-          echo "  - process3rdPartyReactionDialog: Fixed awaiting reaction generic chat messages not being removed when dialog closed via the top right x button." >> release_notes.txt
+          echo "  - Counterspell: Fixed function naming issue." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

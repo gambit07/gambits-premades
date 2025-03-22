@@ -62,8 +62,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
             const currentIndex = findValidTokens.indexOf(validTokenPrimary);
             const isLastToken = currentIndex === findValidTokens.length - 1;
 
-            let getSubtleSpell = getSubtleSpell({validToken: validTokenPrimary});
-            const { dialogSubtle = "", itemSorcery = false } = getSubtleSpell;
+            let subtleSpell = getSubtleSpell({validToken: validTokenPrimary});
+            const { dialogSubtle = "", itemSorcery = false } = subtleSpell;
 
             let dialogContent = `
                 <style>
@@ -259,8 +259,8 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 const currentIndex = findValidTokens.indexOf(validTokenSecondary);
                 const isLastToken = currentIndex === findValidTokens.length - 1;
 
-                let getSubtleSpell = getSubtleSpell({validToken: validTokenSecondary});
-                const { dialogSubtle = "", itemSorcery = false } = getSubtleSpell;
+                let subtleSpell = getSubtleSpell({validToken: validTokenSecondary});
+                const { dialogSubtle = "", itemSorcery = false } = subtleSpell;
 
                 let dialogContent = `
                     <style>
