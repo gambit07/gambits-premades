@@ -190,7 +190,7 @@ export async function handleDialogPromises({userDialogArgs, gmDialogArgs}) {
     });
 }
 
-export function findValidTokens({initiatingToken, targetedToken, itemName, itemType, itemChecked, reactionCheck, sightCheck, sightCheckType = "enemy", rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat, gpsUuid}) {
+export function findValidTokens({initiatingToken, targetedToken, itemName, itemType, itemChecked, reactionCheck, sightCheck, sightCheckType = "enemy", rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat, gpsUuid, sourceRules = "2014"}) {
     let validTokens;
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
@@ -216,8 +216,13 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t, {wallsBlock: true, includeCover: true}) : MidiQOL.computeDistance(initiatingToken,t, {wallsBlock: true, includeCover: true});
         let range = game.gps.convertFromFeet({range: rangeTotal});
 
-        // Check if the token has the actual item to use
-        if(!checkItem) {
+        // Check if the token has the actual item to use (With some checking for 2014/2024)
+        if(!checkItem && sourceRules === "2024") {
+            if(debugEnabled) console.error(`${itemName} 2024 for ${t.actor.name} failed at check if reaction item exists`);
+            return;
+        }
+
+        else if(!checkItem) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
             return;
         }
@@ -351,7 +356,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     return validTokens;
 }
 
-export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName, itemType, itemChecked, reactionCheck, sightCheck, sightCheckType = "enemy", rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat, gpsUuid}) {
+export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName, itemType, itemChecked, reactionCheck, sightCheck, sightCheckType = "enemy", rangeCheck, rangeTotal, dispositionCheck, dispositionCheckType, workflowType, workflowCombat, gpsUuid, sourceRules = "2014"}) {
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let workflowNonCombat = MidiQOL.safeGetGameSetting('gambits-premades', 'enable3prNoCombat');
 
@@ -391,9 +396,14 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
     let range = game.gps.convertFromFeet({range: rangeTotal});
 
     // Check if the token has the actual item to use
-    if(!checkItem) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check if reaction item exists`);
-        return false;
+    if(!checkItem && sourceRules === "2024") {
+        if(debugEnabled) console.error(`${itemName} 2024 for ${t.actor.name} failed at check if reaction item exists`);
+        return;
+    }
+
+    else if(!checkItem) {
+        if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
+        return;
     }
 
     // Check if the tokens reaction already used

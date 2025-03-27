@@ -2,6 +2,7 @@ import {registerSettings} from './utils/settings.js';
 import { registerHooks } from "./utils/hooks.js";
 import { daeInitFlags, daeInjectFlags } from "./utils/hookUtils.js"
 import { automationRegistry } from "./automations/index.js";
+import { automationRegistry2024 } from "./automations2024/index.js";
 import { refreshTemplateVisibility, registerWrapping, updateSettings } from "./utils/hookUtils.js";
 import * as helpers from "./utils/helpers.js";
 import { weaponAnimations } from "./utils/animationUtils.js";
@@ -47,6 +48,7 @@ Hooks.once('socketlib.ready', async function() {
     game.gps.socket.register("temporalShunt", automationRegistry.temporalShunt);
     game.gps.socket.register("drafynsBaneOfExcellence", automationRegistry.drafynsBaneOfExcellence);
     game.gps.socket.register("taleOfHubris", automationRegistry.taleOfHubris);
+    game.gps.socket.register("counterspell2024", automationRegistry2024.counterspell2024);
 
     //Helpers
     game.gps.socket.register("deleteChatMessage", helpers.deleteChatMessage);
@@ -82,6 +84,7 @@ Hooks.once('ready', async function() {
         ...game.gps,
         ...helpers,
         ...automationRegistry,
+        ...automationRegistry2024,
         weaponAnimations
     };
 

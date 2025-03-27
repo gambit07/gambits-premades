@@ -1,6 +1,12 @@
 import { executeWorkflow, updateRegionPosition, hideTemplateElements, updateSettings, daeAddFlags, arcaneShotValidActivities } from "./hookUtils.js";
 
 export function registerHooks() {
+    Hooks.on("midi-qol.preItemRoll", async (workflow) => {
+        workflow = workflow.config.workflow;
+        let workflowType = (workflow.saveActivity || workflow.activity?.type === "save") ? "save" : (workflow.activity?.hasAttack) ? "attack" : "item";
+        if (game.gpsSettings.counterspellEnabled && workflow?.item?.type === "spell") await executeWorkflow({ workflowItem: "counterspell2024", workflowData: workflow, workflowType: workflowType, workflowCombat: true });
+    });
+
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemCardUuid;
         let workflowType = (workflow.saveActivity || workflow.activity?.type === "save") ? "save" : (workflow.activity?.hasAttack) ? "attack" : "item";

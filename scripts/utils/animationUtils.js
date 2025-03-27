@@ -290,6 +290,7 @@ export async function weaponAnimations({enableTrail = true, enableImpact = true,
   try {
       async function meleeAttack({target, randMelee, randTrail, impact, isMirrored, targetScale, within5ft}) {
           const sourceScale = { x: source?.document?.texture?.scaleX ?? 1, y: source?.document?.texture?.scaleY ?? 1 }
+          const gridSize = canvas.grid.size;
           
           const amplitude = Sequencer.Helpers.random_float_between(0.0, 0.2);
           let hitRay = new Ray(source, target);

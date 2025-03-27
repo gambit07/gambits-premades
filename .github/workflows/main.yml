@@ -18,8 +18,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Karma: Added homebrew feature Karma" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Counterspell: Few additional fixes for subtle spell." >> release_notes.txt
+          echo "  - Couple small fixes for animationUtils and an arcane archer hook error." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

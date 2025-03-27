@@ -1,7 +1,7 @@
 export async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
     if(!game.gpsSettings.enable3prNoCombat && !game.combat && workflowCombat) return;
 
-    await game.gps.socket.executeAsUser( workflowItem, game.user.id, { workflowData: workflowData, workflowType: workflowType, workflowCombat: workflowCombat });
+    await game.gps[workflowItem]({ workflowData, workflowType, workflowCombat });
 }
 
 export function updateRegionPosition(region, tokenDocument) {
@@ -276,10 +276,11 @@ export function daeInjectFlags() {
 }
 
 export async function arcaneShotValidActivities({item, actor}) {
-    const arcaneArcherLevel = actor.classes?.fighter.system.levels;
     if(!actor) return;
     let arcaneShotItem = actor.items.some(i => i.name === "Arcane Shot" || i.flags["gambits-premades"]?.gpsUuid === "f9a050c1-e755-4428-b523-90969df6c799");
     if(!arcaneShotItem) return;
+
+    const arcaneArcherLevel = actor.classes?.fighter?.system?.levels;
     
     const arcaneShotTypes = [
         { identifier: `banishingArrow`, itemName: "Banishing Arrow", gpsUuid: "227991d1-e640-4f94-9a8b-9873ad694f15" },
