@@ -25,6 +25,7 @@
       "name": "gps-spells",
       "path": "packs/gps-spells",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -37,6 +38,7 @@
       "name": "gps-class-features",
       "path": "packs/gps-class-features",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -49,6 +51,7 @@
       "name": "gps-items",
       "path": "packs/gps-items",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -61,6 +64,7 @@
       "name": "gps-monster-features",
       "path": "packs/gps-monster-features",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -73,6 +77,7 @@
       "name": "gps-generic-features",
       "path": "packs/gps-generic-features",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -85,6 +90,7 @@
       "name": "gps-homebrew-features",
       "path": "packs/gps-homebrew-features",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -97,6 +103,7 @@
       "name": "gps-homebrew-items",
       "path": "packs/gps-homebrew-items",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -109,6 +116,7 @@
       "name": "gps-homebrew-spells",
       "path": "packs/gps-homebrew-spells",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -121,6 +129,7 @@
       "name": "gps-actors",
       "path": "packs/gps-actors",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -133,6 +142,7 @@
       "name": "gps-3rd-party-features",
       "path": "packs/gps-3rd-party-features",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -145,6 +155,7 @@
       "name": "gps-3rd-party-items",
       "path": "packs/gps-3rd-party-items",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -157,6 +168,7 @@
       "name": "gps-3rd-party-spells",
       "path": "packs/gps-3rd-party-spells",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -169,6 +181,20 @@
       "name": "gps-race-features",
       "path": "packs/gps-race-features",
       "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
+    },
+    {
+      "label": "GPS Spells 2024",
+      "type": "Item",
+      "name": "gps-spells-2024",
+      "path": "packs/gps-spells-2024",
+      "system": "dnd5e",
+      "banner": "modules/gambits-premades/assets/images/gambit.webp",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
@@ -180,25 +206,41 @@
     {
       "name": "Gambit's Premades",
       "sorting": "m",
-      "color": "#1c8ad9",
-      "packs": [
-        "gps-spells",
-        "gps-class-features",
-        "gps-items",
-        "gps-monster-features",
-        "gps-generic-features",
-        "gps-race-features",
-        "gps-homebrew-features",
-        "gps-homebrew-items",
-        "gps-homebrew-spells",
-        "gps-3rd-party-features",
-        "gps-3rd-party-items",
-        "gps-3rd-party-spells",
-        "gps-actors"
-      ],
-      "folders": []
+      "color": "#c78bbe",
+      "packs": [],
+      "folders": [
+        {
+          "name": "2014",
+          "sorting": "m",
+          "color": "#93678d",
+          "packs": [
+            "gps-spells",
+            "gps-3rd-party-spells",
+            "gps-homebrew-spells",
+            "gps-items",
+            "gps-3rd-party-items",
+            "gps-homebrew-items",
+            "gps-class-features",
+            "gps-generic-features",
+            "gps-race-features",
+            "gps-monster-features",
+            "gps-3rd-party-features",
+            "gps-homebrew-features",
+            "gps-actors"
+          ]
+        },
+        {
+          "name": "2024",
+          "sorting": "m",
+          "color": "#93678d",
+          "packs": [
+            "gps-spells-2024"
+          ]
+        }
+      ]
     }
   ],
+  
   "styles": [
     "styles/styles.css"
   ],
