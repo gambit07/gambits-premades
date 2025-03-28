@@ -19,9 +19,9 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Karma: Added homebrew feature Karma" >> release_notes.txt
+          echo "  - Counterspell: But 2024 this time! This is the first gps 2024 item, you can find it in a new GPS Spells 2024 compendium. CPR should have medkit functionality updated before too long as well if its not done already" >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Couple small fixes for animationUtils and an arcane archer hook error." >> release_notes.txt
+          echo "  - Fixed a bug causing chat updates for specific items to create a new chat card instead of updating the existing chat card for the spell." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

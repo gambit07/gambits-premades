@@ -236,7 +236,6 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 }
 
                 if((!hasVSMProperty || genericCheck) && !csFailure) return workflow.aborted = true;
-                else if((!hasVSMProperty || genericCheck) && csFailure) continue;
 
                 castLevel = counterspellLevel;
                 await secondaryCounterspellProcess(workflow, lastMessage, castLevel, validTokenPrimary);
@@ -435,8 +434,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     .play()
                 }
 
-                if((!hasVSMProperty || genericCheck) && !csFailure) return workflow.aborted = true;
-                else if((!hasVSMProperty || genericCheck) && csFailure) continue;
+                if((!hasVSMProperty || genericCheck) && !csFailure) return;
                 
                 castLevel = counterspellLevel;
                 await initialCounterspellProcess(workflow, lastMessage, castLevel, validTokenSecondary);

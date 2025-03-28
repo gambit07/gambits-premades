@@ -1,11 +1,11 @@
 export async function counterspell2024({ workflowData,workflowType,workflowCombat }) {
-    const workflow = workflowData;
+    const workflow = await MidiQOL.Workflow.getWorkflow(`${workflowData}`);
     if(!workflow) return;
     const gpsUuid = "fb401e12-b875-47bd-9acd-8a09639c6852";
-    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    if(workflow.item?.flags?.["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let itemName = "Counterspell";
-    if(!workflow.activity.consumption.spellSlot) {
+    if(!workflow.activity?.consumption.spellSlot) {
         if(debugEnabled) console.error(`${itemName} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
         return;
     }
@@ -17,21 +17,22 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
     let hasVSMProperty = castProperties.some(prop => workflow.item.system.properties.has(prop));
     let isVocalOnly = workflow.item.system.properties.has("vocal") && !workflow.item.system.properties.has("somatic") && !workflow.item.system.properties.has("material");
     let hasDeafenedStatus;
-    console.log(hasVSMProperty, "hasVSMProperty")
     if (!hasVSMProperty) return;
 
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
     let selectedToken = workflow.token;
-    let castLevel = false;
+    let notInitialCast = false;
     let itemRoll = false;
     let csFailure = false;
     let chatContent = [];
     let saveCheck;
     let browserUser;
+    let castType = workflow.item?.system?.preparation?.mode;
+    let itemCardUuid = workflow.itemCardUuid;
 
-    await initialCounterspellProcess(workflow, lastMessage, castLevel, selectedToken);
+    await initialCounterspellProcess(workflow, lastMessage, notInitialCast, selectedToken);
     
-    async function initialCounterspellProcess(workflow, lastMessage, castLevel, selectedToken) {
+    async function initialCounterspellProcess(workflow, lastMessage, notInitialCast, selectedToken) {
 
         let findValidTokens = game.gps.findValidTokens({initiatingToken: selectedToken, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid, sourceRules: "2024"});
 
@@ -40,16 +41,16 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
         for (const validTokenPrimary of findValidTokens) {
             if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: gmUser });
             if(workflow.aborted === true) return;
-            if(!castLevel) {
+            if(!notInitialCast) {
                 hasDeafenedStatus = validTokenPrimary.document.hasStatusEffect("deafened");
                 if (isVocalOnly && hasDeafenedStatus) continue;
             }
+            notInitialCast = true;
             let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
             let itemProperName = chosenItem?.name;
             const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
             const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
             
-            castLevel = true;
             browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
             const currentIndex = findValidTokens.indexOf(validTokenPrimary);
@@ -171,8 +172,8 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
 
                 await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
-
+                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: saveCheck.saveRolls});
+                
                 if(csFailure) continue;
 
                 let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
@@ -190,20 +191,25 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
                     .play()
                 }
 
-                if((!hasVSMProperty || genericCheck) && !csFailure) return workflow.aborted = true;
-                else if((!hasVSMProperty || genericCheck) && csFailure) continue;
+                if((!hasVSMProperty || genericCheck) && !csFailure) {
+                    if(castType !== "innate" && castType !== "atwill") await refundSpellSlot({itemCardUuid, selectedToken});
+                    return workflow.aborted = true;
+                }
 
-                await secondaryCounterspellProcess(workflow, lastMessage, castLevel, validTokenPrimary);
+                await secondaryCounterspellProcess(workflow, lastMessage, notInitialCast, validTokenPrimary);
                 break;
             }
         }
     }
 
-    async function secondaryCounterspellProcess(workflow, lastMessage, castLevel, validTokenPrimary) {
+    async function secondaryCounterspellProcess(workflow, lastMessage, notInitialCast, validTokenPrimary) {
 
             let findValidTokens = game.gps.findValidTokens({initiatingToken: validTokenPrimary, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
-            if(findValidTokens.length === 0 || !findValidTokens) return workflow.aborted = true;
+            if(findValidTokens.length === 0 || !findValidTokens) {
+                if(castType !== "innate" && castType !== "atwill") await refundSpellSlot({itemCardUuid, selectedToken});
+                return workflow.aborted = true;
+            }
 
             for (const validTokenSecondary of findValidTokens) {
                 let chosenItem = validTokenSecondary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
@@ -291,6 +297,7 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
 
             if (!userDecision && isLastToken) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
+                if(castType !== "innate" && castType !== "atwill") await refundSpellSlot({itemCardUuid, selectedToken});
                 return workflow.aborted = true;
             }
             else if (!userDecision) {
@@ -331,7 +338,7 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
 
                 await game.gps.addReaction({actorUuid: `${validTokenSecondary.actor.uuid}`});
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenSecondary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: saveCheck.saveRolls});
                 
 
                 if(csFailure === true) continue;
@@ -351,10 +358,9 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
                     .play()
                 }
 
-                if((!hasVSMProperty || genericCheck) && !csFailure) return workflow.aborted = true;
-                else if((!hasVSMProperty || genericCheck) && csFailure) continue;
+                if((!hasVSMProperty || genericCheck) && !csFailure) return;
                 
-                await initialCounterspellProcess(workflow, lastMessage, castLevel, validTokenSecondary);
+                await initialCounterspellProcess(workflow, lastMessage, notInitialCast, validTokenSecondary);
                 break;
             }
         }
@@ -379,4 +385,19 @@ function getSubtleSpell({validToken}) {
     }
 
     return {dialogSubtle, itemSorcery};
+}
+
+async function refundSpellSlot({itemCardUuid, selectedToken}) {
+    const useFlag = MidiQOL.getCachedChatMessage(itemCardUuid)?.getFlag("dnd5e", "use") ?? {};
+    const consumed = useFlag.consumed;
+
+    if (consumed && Array.isArray(consumed.actor)) {
+        for (const usage of consumed.actor) {
+            const path = usage.keyPath;
+            if (path?.startsWith("system.spells.")) {
+                const current = foundry.utils.getProperty(selectedToken.actor, path) ?? 0;
+                await selectedToken.actor.update({ [path]: current + 1 });
+            }
+        }
+    }
 }
