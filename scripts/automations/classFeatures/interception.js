@@ -153,9 +153,9 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
             let content = `<span style='text-wrap: wrap;'>You use ${itemProperName} and reduce damage taken for ${target.actor.name} by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
             let chatData = {
-            user: actorPlayer.id,
-            speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
-            content: content
+                user: actorPlayer.id,
+                speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
+                content: content
             };
             ChatMessage.create(chatData);
             continue;

@@ -328,7 +328,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             let itemExistsWithValue;
 
             if(itemNames.includes("legres")) resourceExistsWithValue = t.actor.system.resources.legres.value !== 0 ? true : false;
-            else itemExistsWithValue = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.spent < i.system.uses?.max);
+            else itemExistsWithValue = t.actor.items.some(i => (itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.identifier.toLowerCase())) && i.system.uses?.spent < i.system.uses?.max);
 
             if (!itemExistsWithValue && !resourceExistsWithValue) {
                 if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check valid feature item/resource uses`);
@@ -338,7 +338,8 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
 
         if(itemType === "item") {
             const itemNames = itemChecked.map(item => item.toLowerCase());
-            let itemExists = t.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
+            let itemExists = t.actor.items.some(i => itemNames.includes(i.identifier.toLowerCase()) || itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
+            if(!itemExists)
 
             if (!itemExists) {
                 if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at valid item supporting feature`);
@@ -507,7 +508,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
         let itemExistsWithValue;
 
         if(itemNames.includes("legres")) resourceExistsWithValue = targetedToken.actor.system.resources.legres.value !== 0 ? true : false;
-        else itemExistsWithValue = targetedToken.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses?.spent < i.system.uses?.max);
+        else itemExistsWithValue = targetedToken.actor.items.some(i => (itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.identifier.toLowerCase())) && i.system.uses?.spent < i.system.uses?.max);
 
         if (!itemExistsWithValue && !resourceExistsWithValue) {
             if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check valid feature item/resource uses`);
@@ -517,7 +518,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
 
     if(itemType === "item") {
         const itemNames = itemChecked.map(item => item.toLowerCase());
-        let itemExists = targetedToken.actor.items.some(i => itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
+        let itemExists = targetedToken.actor.items.some(i => itemNames.includes(i.identifier.toLowerCase()) || itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
 
         if (!itemExists) {
             if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at valid item supporting feature`);

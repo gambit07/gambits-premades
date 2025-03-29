@@ -90,11 +90,12 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     
             if(!enableProtectionOnSuccess) workflow.disadvantage = true;
             else if(enableProtectionOnSuccess) {
-                let straightRoll = workflow.attackRoll.dice[0].results[0].result + (workflow.attackRoll.total - workflow.attackRoll.dice[0].total);
+                let straightRoll = workflow.attackRoll.dice[0].results[0].result;
+                let straightRollBonus = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
                 if(workflow.attackRoll.formula.includes("kh")) {
                     const saveSetting = workflow.options.noOnUseMacro;
                     workflow.options.noOnUseMacro = true;
-                    let reroll = await new CONFIG.Dice.D20Roll(`${straightRoll}`).evaluate();
+                    let reroll = await new Roll(`${straightRoll} + ${straightRollBonus}`).evaluate();
                     await workflow.setAttackRoll(reroll);
                     workflow.options.noOnUseMacro = saveSetting;
     

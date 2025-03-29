@@ -1,8 +1,3 @@
-2025/03/28-16:40:21.789 2ff4 Recovering log #2307
-2025/03/28-16:40:21.795 2ff4 Delete type=0 #2307
-2025/03/28-16:40:21.796 2ff4 Delete type=3 #2305
-2025/03/28-16:42:01.243 12a10 Level-0 table #2312: started
-2025/03/28-16:42:01.243 12a10 Level-0 table #2312: 0 bytes OK
-2025/03/28-16:42:01.246 12a10 Delete type=0 #2310
-2025/03/28-16:42:01.252 12a10 Manual compaction at level-0 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!Og8JVlVmMGomOSkp.bqZNMz63jS3CJsgl' @ 0 : 0; will stop at (end)
-2025/03/28-16:42:01.252 12a10 Manual compaction at level-1 from '!folders!4Ecsdk7k1FvMs9OF' @ 72057594037927935 : 1 .. '!items.effects!Og8JVlVmMGomOSkp.bqZNMz63jS3CJsgl' @ 0 : 0; will stop at (end)
+2025/03/29-02:05:42.227 fdec Recovering log #2355
+2025/03/29-02:05:42.237 fdec Delete type=0 #2355
+2025/03/29-02:05:42.237 fdec Delete type=3 #2353

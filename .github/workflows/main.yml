@@ -19,7 +19,9 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Fix the new pack banner missing in assets." >> release_notes.txt
+          echo "  - Protection: Cleaned up a couple small things." >> release_notes.txt
+          echo "  - Indomitable: Cleaned up a couple small things." >> release_notes.txt
+          echo "  - replaceChatCard: Bugfixes to address some changes in the chat data returned in 4.x. Items using this function will now only create a new chat card when necessary, otherwise the original will be updated like in 3.x." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

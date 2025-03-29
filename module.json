@@ -5,14 +5,16 @@
   "authors": [
     {
       "name": "Gambit",
-      "flags": {}
+      "url": "https://github.com/gambit07",
+      "discord": "gambit",
+      "ko-fi": "https://ko-fi.com/gambit07"
     }
   ],
   "version": "",
   "compatibility": {
     "minimum": 12.328,
-    "verified": 12,
-    "maximum": 12
+    "verified": 12.331,
+    "maximum": 12.331
   },
   "socket": true,
   "esmodules": [
@@ -24,182 +26,112 @@
       "type": "Item",
       "name": "gps-spells",
       "path": "packs/gps-spells",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Class Features",
       "type": "Item",
       "name": "gps-class-features",
       "path": "packs/gps-class-features",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Items",
       "type": "Item",
       "name": "gps-items",
       "path": "packs/gps-items",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Monster Features",
       "type": "Item",
       "name": "gps-monster-features",
       "path": "packs/gps-monster-features",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Generic Features",
       "type": "Item",
       "name": "gps-generic-features",
       "path": "packs/gps-generic-features",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Homebrew Features",
       "type": "Item",
       "name": "gps-homebrew-features",
       "path": "packs/gps-homebrew-features",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Homebrew Items",
       "type": "Item",
       "name": "gps-homebrew-items",
       "path": "packs/gps-homebrew-items",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Homebrew Spells",
       "type": "Item",
       "name": "gps-homebrew-spells",
       "path": "packs/gps-homebrew-spells",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Actors",
       "type": "Actor",
       "name": "gps-actors",
       "path": "packs/gps-actors",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS 3rd Party Features",
       "type": "Item",
       "name": "gps-3rd-party-features",
       "path": "packs/gps-3rd-party-features",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS 3rd Party Items",
       "type": "Item",
       "name": "gps-3rd-party-items",
       "path": "packs/gps-3rd-party-items",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS 3rd Party Spells",
       "type": "Item",
       "name": "gps-3rd-party-spells",
       "path": "packs/gps-3rd-party-spells",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Race Features",
       "type": "Item",
       "name": "gps-race-features",
       "path": "packs/gps-race-features",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     },
     {
       "label": "GPS Spells 2024",
       "type": "Item",
       "name": "gps-spells-2024",
       "path": "packs/gps-spells-2024",
-      "system": "dnd5e",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      },
-      "flags": {}
+      "module": "gambits-premades"
     }
   ],
   "packFolders": [
@@ -249,7 +181,7 @@
         "type": "system",
         "compatibility": {
           "minimum": "4.3.1",
-          "verified": "4.3.1",
+          "verified": "4.3.7",
           "maximum": "4.9.9"
         }
       }
@@ -259,8 +191,8 @@
         "id": "midi-qol",
         "type": "module",
         "compatibility": {
-          "minimum": "12.4.34",
-          "verified": "12.4.34"
+          "minimum": "12.4.37",
+          "verified": "12.4.37"
         }
       },
       {
