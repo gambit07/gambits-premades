@@ -368,10 +368,10 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
 }
 
 function getSubtleSpell({validToken}) {
-    let subtleSpell = validToken.actor.items.some(i => i.flags["chris-premades"]?.info?.identifier === "subtleSpell" || i.name === "Subtle Spell");
+    let subtleSpell = validToken.actor.items.some(i => i.flags["chris-premades"]?.info?.identifier === "subtleSpell" || i.identifier === "subtle-spell");
     let itemSorcery;
     let dialogSubtle = "";
-    if(subtleSpell) itemSorcery = validToken.actor.items.find(i => (i.flags["chris-premades"]?.info?.identifier === "sorceryPoints" || i.name === "Sorcery Points" || i.name === "Font of Magic" || i.name === "Metamagic Adept") && i.system.uses?.max && i.system.uses?.spent < i.system.uses?.max);
+    if(subtleSpell) itemSorcery = validToken.actor.items.find(i => (i.identifier === "sorcery-points" || i.identifier === "font-of-magic" || i.identifier === "metamagic-adept") && i.system.uses?.max && i.system.uses?.spent < i.system.uses?.max);
 
     if(itemSorcery) {
         dialogSubtle = `

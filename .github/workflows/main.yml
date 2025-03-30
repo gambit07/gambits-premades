@@ -18,10 +18,10 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Updates:" >> release_notes.txt
+          echo "  - Light Automations (Torch/Lamps/etc): Added handling for metric vs imperial for light distances." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Protection: Cleaned up a couple small things." >> release_notes.txt
-          echo "  - Indomitable: Cleaned up a couple small things." >> release_notes.txt
-          echo "  - replaceChatCard: Bugfixes to address some changes in the chat data returned in 4.x. Items using this function will now only create a new chat card when necessary, otherwise the original will be updated like in 3.x." >> release_notes.txt
+          echo "  - Cleaned up a bunch of automations using partial or explicit item name lookups to use identifier lookups instead. This mostly applies to automations that were looking for a qualifying sub-item" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

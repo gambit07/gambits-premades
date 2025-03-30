@@ -15,7 +15,7 @@ export async function taleOfHubris({workflowData,workflowType,workflowCombat}) {
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        const itemData = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "bardic inspiration" || i.flags["chris-premades"]?.info.identifier === "bardicInspiration");
+        const itemData = validTokenPrimary.actor.items.find(i => i.identifier.includes("bardic-inspiration"));
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;

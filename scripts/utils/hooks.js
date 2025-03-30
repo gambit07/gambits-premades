@@ -180,13 +180,6 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.itemUseActivitySelect", async (itemData) => {
-        let item = itemData.item;
-        let burstingArrowActivity = item.system.activities.find(a => a.identifier === "burstingArrow");
-        let burstingArrowItem = item.parent.items.some(i => i.name === "Bursting Arrow" || i.flags["gambits-premades"]?.gpsUuid === "someGUID")
-        if(burstingArrowItem) await burstingArrowActivity.update({"midiProperties.automationOnly": false})
-    });
-
-    Hooks.on("midi-qol.itemUseActivitySelect", async (itemData) => {
         const item = itemData.item;
         const actor = itemData.item.parent;
         await arcaneShotValidActivities({item, actor});

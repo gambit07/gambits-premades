@@ -12,7 +12,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
 
     if(workflowType === "damage" && workflow.hitTargets.size === 0) return;
 
-    let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["bardic inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
+    let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["bardic-inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
     let browserUser;
 
@@ -176,7 +176,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
 
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            let hasDeafened = workflow.actor.appliedEffects.find(i => i.name.toLowerCase() === "deafened");
+            let hasDeafened = workflow.token.document.hasStatusEffect("deafened");
             let charmImmunity = workflow.actor.system.traits.ci.value.has("charmed");
             
             if (charmImmunity || hasDeafened) {

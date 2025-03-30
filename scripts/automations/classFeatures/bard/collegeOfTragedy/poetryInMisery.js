@@ -15,7 +15,7 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
-        const itemData = validTokenPrimary.actor.items.find(i => i.name.toLowerCase() === "bardic inspiration");
+        const itemData = validTokenPrimary.actor.items.find(i => i.identifier.includes("bardic-inspiration"));
 
         if(itemData) {
             if(itemData.system.uses.spent === 0) continue;

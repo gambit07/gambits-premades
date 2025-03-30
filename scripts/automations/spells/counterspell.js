@@ -192,7 +192,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     let skillRoll = skillCheck.saveRolls;
                     let skillTotal = skillRoll.total;
                     let skillFlavor = validTokenPrimary.actor.system.attributes.spell.abilityLabel;
-                    let abjurationCheck = validTokenPrimary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
+                    let abjurationCheck = validTokenPrimary.actor.items.some(i => i.identifier === "improved-abjuration");
                     let abjurationChat = "";
                     if (abjurationCheck) {
                         const prof = validTokenPrimary.actor.system?.attributes?.prof ?? 0;
@@ -390,7 +390,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                     let skillRoll = skillCheck.saveRolls;
                     let skillTotal = skillRoll.total;
                     let skillFlavor = validTokenSecondary.actor.system.attributes.spell.abilityLabel;
-                    let abjurationCheck = validTokenSecondary.actor.items.some(i => i.name.toLowerCase() === "improved abjuration");
+                    let abjurationCheck = validTokenSecondary.actor.items.some(i => i.identifier === "improved-abjuration");
                     let abjurationChat = "";
                     if (abjurationCheck) {
                         const prof = validTokenSecondary.actor.system?.attributes?.prof ?? 0;

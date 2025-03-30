@@ -3,9 +3,8 @@ export async function amuletOfTheDevout({ speaker, actor, token, character, item
         workflow.aborted = true;
         return ui.notifications.warn("You have no Amulet of the Devout charges to use.");
     }
-    const itemNames = ["channel divinity"];
 
-    let itemExistsWithValue = actor.items.find(i => itemNames.includes(i.name.toLowerCase()) && i.system.uses.spent !== 0);
+    let itemExistsWithValue = actor.items.find(i => i.identifier === "channel-divinity" && i.system.uses.spent !== 0);
 
 
     if (!itemExistsWithValue) {

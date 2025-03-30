@@ -15,6 +15,9 @@ export async function lamp({ speaker, actor, token, item, args, workflow }) {
   }
   else if(args[0] === "on") return;
 
+  let rangeDim = game.gps.convertFromFeet({range: 30});
+  let rangeBright = game.gps.convertFromFeet({range: 15});
+
   const lightEffect = [
     {
       origin: item.uuid,
@@ -24,8 +27,8 @@ export async function lamp({ speaker, actor, token, item, args, workflow }) {
       img: item.img,
       type: "base",
       changes: [
-        { key: "ATL.light.dim", mode: 0, value: "30", priority: 20 },
-        { key: "ATL.light.bright", mode: 0, value: "15", priority: 20 },
+        { key: "ATL.light.dim", mode: 0, value: `${rangeDim}`, priority: 20 },
+        { key: "ATL.light.bright", mode: 0, value: `${rangeBright}`, priority: 20 },
         { key: "ATL.light.alpha", mode: 0, value: "0.25", priority: 20 },
         { key: "ATL.light.angle", mode: 0, value: "360", priority: 20 },
         { key: "ATL.light.luminosity", mode: 0, value: "0.5", priority: 20 },

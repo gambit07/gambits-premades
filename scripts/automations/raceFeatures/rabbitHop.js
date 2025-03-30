@@ -9,7 +9,7 @@ export async function rabbitHop({ speaker, actor, token, character, item, args, 
     let rabbitHop = 0 + (5 * (actor.system.attributes.prof));
 
     // Check if the 'Boots of Striding and Springing' are equipped and attuned
-    let bootsEquipped = actor.items.find(i => i.name === "Boots of Striding and Springing" && i.system.equipped && i.system.attuned);
+    let bootsEquipped = actor.items.find(i => i.identifier === "boots-of-striding-and-springing" && i.system.equipped && i.system.attuned);
 
     // Check if actor has the 'Jump' spell active
     let jumpActive = actor.effects.some(eff => eff.name === "Jump");  
