@@ -286,7 +286,7 @@ export async function animateLight({ tokenData, effectName, filePath, offsets = 
   return;
 }
 
-export async function weaponAnimations({enableTrail = true, enableImpact = true, enableSound = false, enableSwitchDistance = false, enableReturn = false, enableBlood = true, enableShake = true, weaponGroup, weapon, trail, color, impact, impactScale, soundFileMelee, soundFileRange, delaySound, switchDistanceFt, range, returnFile, delayBetweenAttacks, source, targets}) {
+export async function weaponAnimations({enableTrail = true, enableImpact = true, enableSound = false, enableSwitchDistance = false, enableReturn = false, enableBlood = true, enableShake = true, weapon, trail, impact, impactScale, soundFileMelee, soundFileRange, delaySound, switchDistanceFt, range, returnFile, delayBetweenAttacks, source, targets}) {
   try {
       async function meleeAttack({target, randMelee, randTrail, impact, isMirrored, targetScale, within5ft}) {
           const sourceScale = { x: source?.document?.texture?.scaleX ?? 1, y: source?.document?.texture?.scaleY ?? 1 }
@@ -526,7 +526,7 @@ export async function weaponAnimations({enableTrail = true, enableImpact = true,
        * ANIMATION CALL AND LOOP*
        **************************/
 
-      const dbPath = `jb2a.${weaponGroup}.${weapon}`;
+      const dbPath = weapon;
       const entries = Sequencer.Database.getEntry(dbPath) ?? null;
       const entriesLength = entries.length;
       const gridSize = canvas.grid.size;
@@ -537,7 +537,7 @@ export async function weaponAnimations({enableTrail = true, enableImpact = true,
 
           let randMelee = `${dbPath}.${rand}`;
           let randTrail;
-          enableTrail ? randTrail =`jb2a.${weaponGroup}.${trail}.${color}.${rand}` : randTrail = 'jb2a.antilife_shell.blue_no_circle'
+          enableTrail ? randTrail =`${trail}.${rand}` : randTrail = ''
           
           // Let's add to the randomisation by mirroring the animation half the time, on top of the random attack variation.
           let isMirrored = Math.random() < 0.5; // 50% probability. 0.1 would make it 10%, 0.2 20%...etc

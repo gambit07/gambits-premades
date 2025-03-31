@@ -19,9 +19,10 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Updates:" >> release_notes.txt
-          echo "  - Light Automations (Torch/Lamps/etc): Added handling for metric vs imperial for light distances." >> release_notes.txt
+          echo "  - Weapon Animations: Cleaned up the arguments that get passed to make them more straightforward for custom implementations. Couple small sequencer bugfixes." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Cleaned up a bunch of automations using partial or explicit item name lookups to use identifier lookups instead. This mostly applies to automations that were looking for a qualifying sub-item" >> release_notes.txt
+          echo "  - Circle of Stars: Fixed the free spell uses for guiding bolt not working in v4" >> release_notes.txt
+          echo "  - freeSpellUse: Fixed the freeSpellUse function not working in v4. No longer requires an onUse macroPass, simply add gpsFreeSpellUse in a given spell activities Chat Flavor" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

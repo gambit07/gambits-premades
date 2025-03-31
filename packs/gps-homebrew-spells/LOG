@@ -1,3 +1,8 @@
-2025/03/29-02:05:42.125 fdec Recovering log #3652
-2025/03/29-02:05:42.135 fdec Delete type=0 #3652
-2025/03/29-02:05:42.135 fdec Delete type=3 #3650
+2025/03/30-20:37:17.251 e050 Recovering log #3671
+2025/03/30-20:37:17.257 e050 Delete type=0 #3671
+2025/03/30-20:37:17.258 e050 Delete type=3 #3670
+2025/03/31-02:02:51.922 7910 Level-0 table #3675: started
+2025/03/31-02:02:51.922 7910 Level-0 table #3675: 0 bytes OK
+2025/03/31-02:02:51.930 7910 Delete type=0 #3673
+2025/03/31-02:02:51.945 7910 Manual compaction at level-0 from '!items!iVqgFn89rGOnPTK4' @ 72057594037927935 : 1 .. '!items.effects!iVqgFn89rGOnPTK4.Ka4crf96KPf0p7Uc' @ 0 : 0; will stop at (end)
+2025/03/31-02:02:51.945 7910 Manual compaction at level-1 from '!items!iVqgFn89rGOnPTK4' @ 72057594037927935 : 1 .. '!items.effects!iVqgFn89rGOnPTK4.Ka4crf96KPf0p7Uc' @ 0 : 0; will stop at (end)

@@ -34,26 +34,21 @@ export async function gmToggleStatus({ tokenUuid, status, active }) {
     if(token) await token.actor.toggleStatusEffect(status, { active: active, overlay: false });
 }
 
-export async function freeSpellUse({ workflowUuid }) {
-    if(!workflowUuid) return;
+export async function freeSpellUse({ item, actor }) {
+    const effectName = `${item.name}: Long Rest Charge Used`;
 
-    const workflow = await MidiQOL.Workflow.getWorkflow(`${workflowUuid}`);
-    if(workflow.macroPass !== "preItemRoll") return;
-
-    const effectName = `${workflow.item.name}: Long Rest Charge Used`;
-
-    if (!workflow.actor.appliedEffects.some(e => e.name === effectName)) {
-        await foundry.applications.api.DialogV2.wait({
-            window: { title: `Free ${workflow.item.name} Use` },
+    if (!actor.appliedEffects.some(e => e.name === effectName)) {
+        let result = await foundry.applications.api.DialogV2.wait({
+            window: { title: `Free ${item.name} Use` },
             content: `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to activate your free use of ${workflow.item.name}? It will be cast at its base level.</p>
+                                    <p class="gps-dialog-paragraph">Would you like to activate your free use of ${item.name}? It will be cast at its base level.</p>
                                     <div id="image-container" class="gps-dialog-image-container">
-                                        <img src="${workflow.item.img}" class="gps-dialog-image">
+                                        <img src="${item.img}" class="gps-dialog-image">
                                     </div>
                                 </div>
                             </div>
@@ -65,32 +60,31 @@ export async function freeSpellUse({ workflowUuid }) {
                 action: "Yes",
                 label: "Yes",
                 callback: async (event, button, dialog) => {
-                    //workflow.config.spell = workflow.config.spell || {};
-                    workflow.config.consume = workflow.config.consume || {};
-                    //workflow.config.spell.slot = false;
-                    workflow.config.consume.spellSlot = false;
-                    workflow.config.midiOptions.configureDialog = false;
                     const effectData = {
                         name: effectName,
-                        icon: workflow.item.img,
+                        icon: item.img,
                         duration: {},
-                        origin: workflow.actor.uuid,
+                        origin: actor.uuid,
                         flags: {dae:{specialDuration:['longRest']}}
                     }
-                    ui.notifications.info(`You used your once per long rest option to initiate ${workflow.item.name} and did not use a spell slot`)
-                    return await workflow.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+                    ui.notifications.info(`You used your once per long rest option to initiate ${item.name} and did not use a spell slot`)
+                    await actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+                    return true;
                 }
             },
             {
                 action: "No",
                 label: "No",
-                callback: async () => false
+                callback: async () => {return false;}
             }],
             close: async (event, dialog) => {
-                return;
+                return false;
             }, rejectClose:false
         });
+
+        return result;
     }
+    else return false;
 }
 
 export async function gmUpdateTemplateSize({ templateUuid, templateSize }) {

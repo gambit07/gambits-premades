@@ -7,10 +7,8 @@ export async function matalotok({ speaker, actor, token, character, item, args, 
             return ui.notifications.warn("Please target at least one token")
         }
                 
-        const weaponGroup = 'melee_attack.03';
-        const weapon = 'maul.01';
-        const trail = 'trail.04';
-        const color = 'blue';
+        const weapon = 'jb2a.melee_attack.03.maul.01';
+        const trail = 'jb2a.melee_attack.04.trail.04.blue';
         const impact = 'jb2a.impact.004.blue';
         const impactScale = 1.5;
         const soundFileMelee = "";
@@ -21,7 +19,7 @@ export async function matalotok({ speaker, actor, token, character, item, args, 
         const returnFile = "";
         const delayBetweenAttacks = 1000;
 
-        await game.gps.weaponAnimations({weaponGroup, weapon, trail, color, impact, impactScale, soundFileMelee, soundFileRange, delaySound, switchDistanceFt, range, returnFile, delayBetweenAttacks, source, targets});
+        await game.gps.weaponAnimations({weapon, trail, impact, impactScale, soundFileMelee, soundFileRange, delaySound, switchDistanceFt, range, returnFile, delayBetweenAttacks, source, targets});
     
         let initialTarget = workflow.hitTargets.first();
 
