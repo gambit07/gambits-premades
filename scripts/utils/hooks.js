@@ -2,11 +2,12 @@ import { executeWorkflow, updateRegionPosition, hideTemplateElements, updateSett
 
 export function registerHooks() {
     Hooks.on("midi-qol.preItemRollV2", async ({workflow, usage, dialog, message}) => {
-        if (!((workflow.item.type === "spell" && workflow.activity.description.chatFlavor.contains("gpsFreeSpellUse")) || (workflow.item.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")))) return;
+        if (!((workflow.item.type === "spell" && workflow.activity.description.chatFlavor.includes("gpsFreeSpellUse")) || (workflow.item.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")))) return;
         let freeSpellUsed;
 
-        if(workflow.item.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66") {
-            freeSpellUsed = await game.gps.starMap({item: workflow.item});
+        if(workflow.item.identifier === "guiding-bolt") {
+            let item = workflow.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66");
+            freeSpellUsed = await game.gps.starMap({item});
 
             if(freeSpellUsed) {
                 dialog.configure = false;
