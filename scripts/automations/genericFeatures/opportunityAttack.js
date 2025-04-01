@@ -38,6 +38,12 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let dialogId;
     let braceItemUuid;
 
+    // Check if origin token can see token moving
+    if(!MidiQOL.canSee(effectOriginToken, token)) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at sight check`);
+        return;
+    }
+
     if(regionScenario === "tokenExit") {
         const tokenState = regionTokenStates.get(region.id);
 
@@ -45,6 +51,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             tokenState.delete(token.id);
             regionTokenStates.set(region.id, tokenState);
         }
+
         regionTokenStates.set(`${region.id}-${token.id}-exited`, true);
 
         return;
@@ -122,12 +129,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     // Check if origin token has already used reaction
     if (MidiQOL.hasUsedReaction(effectOriginActor)) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at reaction available`);
-        return;
-    }
-
-    // Check if origin token can see token moving
-    if(!MidiQOL.canSee(effectOriginToken, token)) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at sight check`);
         return;
     }
 

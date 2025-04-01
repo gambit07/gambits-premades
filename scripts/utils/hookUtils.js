@@ -131,8 +131,12 @@ export function registerWrapping() {
             const [region, position] = args;
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
-            if(canvas.scene.grid.type >= 1) return wrapped(...args); //Don't wrap hex or square grid types
             if (!this || !this.document) return wrapped(...args);
+            for (const behavior of region.document.behaviors.values()) {
+                if (behavior.type !== "executeScript") {
+                    return wrapped(...args);
+                }
+            };
             
             const pointsToTest = [];
             const size = canvas.dimensions.size;
@@ -170,8 +174,12 @@ export function registerWrapping() {
             const [region, waypoints, options] = args;
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
-            if(canvas.scene.grid.type >= 2) return wrapped(...args); //Don't wrap hex grid types for now
             if(!this || !this.document) return wrapped(...args);
+            for (const behavior of region.document.behaviors.values()) {
+                if (behavior.type !== "executeScript") {
+                    return wrapped(...args);
+                }
+            };
             
             const pointsToTest = [];
             const size = canvas.dimensions.size;

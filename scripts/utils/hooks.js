@@ -111,16 +111,22 @@ export function registerHooks() {
         if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "spell", workflowCombat: true });
     });
 
-    Hooks.on("dnd5e.rollAbilitySave", async (actor, roll, abilityId) => {
-        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "save", workflowCombat: false });
+    Hooks.on("dnd5e.rollSavingThrow", async (rolls, data) => {
+        let actor = data.subject;
+        let abilityId = data.ability;
+        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "save", workflowCombat: false });
     });
 
-    Hooks.on("dnd5e.rollAbilityTest", async (actor, roll, abilityId) => {
-        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "ability", workflowCombat: false });
+    Hooks.on("dnd5e.rollAbilityCheck", async (rolls, data) => {
+        let actor = data.subject;
+        let abilityId = data.ability;
+        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "ability", workflowCombat: false });
     });
 
-    Hooks.on("dnd5e.rollSkill", async (actor, roll, abilityId) => {
-        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: roll, abilityId: abilityId }, workflowType: "skill", workflowCombat: false });
+    Hooks.on("dnd5e.rollSkillV2", async (rolls, data) => {
+        let actor = data.subject;
+        let abilityId = data.skill;
+        if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "skill", workflowCombat: false });
     });
 
     Hooks.on("preUpdateCombat", (combat, update, options) => {
