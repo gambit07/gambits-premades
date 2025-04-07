@@ -18,10 +18,9 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Region Wrapping: Removed the removal of wrapping on gridded scenes. This causes.... unforeseen issues that were assuredly foreseen when originally implemented. The new method will ignore any non-executeScript type region behaviors so that wrapping will not mess with things like region teleport functionality." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Opportunity Attack: See above" >> release_notes.txt
+          echo "  - Identify: Fixes for midi's new preItemRoll functionality." >> release_notes.txt
+          echo "  - A couple small v13 pre-release fixes" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

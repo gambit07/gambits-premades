@@ -701,7 +701,8 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
         buttons: [
             {
                 action: "yes",
-                label: "<i class='fas fa-check' style='margin-right: 5px;'></i>Yes",
+                label: "Yes",
+                icon: "fas fa-check",
                 classes: ["default"],
                 callback: async (event, button, dialog) => {
                     dialogState.interacted = true;
@@ -739,7 +740,8 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             },
             {
                 action: "no",
-                label: `<i class='fas fa-times' style='margin-right: 5px;'></i>No`,
+                label: `No`,
+                icon: "fas fa-times",
                 classes: ["default"],
                 default: true,
                 callback: async (event, button, dialog) => {

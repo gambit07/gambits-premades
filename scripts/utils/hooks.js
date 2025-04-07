@@ -2,24 +2,27 @@ import { executeWorkflow, updateRegionPosition, hideTemplateElements, updateSett
 
 export function registerHooks() {
     Hooks.on("midi-qol.preItemRollV2", async ({workflow, usage, dialog, message}) => {
-        if (!((workflow.item.type === "spell" && workflow.activity.description.chatFlavor.includes("gpsFreeSpellUse")) || (workflow.item.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")))) return;
+        if (!((workflow.item.type === "spell" && workflow.activity.description.chatFlavor.includes("gpsFreeSpellUse")) || (workflow.item.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")) || (workflow.item.identifier === "identify" && workflow.item.flags["gambits-premades"]?.gpsUuid === "2cc1f50d-cdb8-4f17-a532-2532f74440ae"))) return;
         let freeSpellUsed;
 
         if(workflow.item.identifier === "guiding-bolt") {
             let item = workflow.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66");
-            freeSpellUsed = await game.gps.starMap({item});
+            freeSpellUsed = await game.gps.starMap({ item });
 
             if(freeSpellUsed) {
                 dialog.configure = false;
-                if (!usage.consume) usage.consume = {};
+                usage.consume = usage.consume || {};
                 usage.consume.spellSlot = false;
             }
+        }
+        else if(workflow.item.identifier === "identify") {
+            await game.gps.identify({ item: workflow.item, actor: workflow.actor, workflow, dialog, usage });
         }
         else {
             freeSpellUsed = await game.gps.freeSpellUse({item: workflow.item, actor: workflow.actor});
             if(freeSpellUsed) {
                 dialog.configure = false;
-                if (!usage.consume) usage.consume = {};
+                usage.consume = usage.consume || {};
                 usage.consume.spellSlot = false;
             }
         }
