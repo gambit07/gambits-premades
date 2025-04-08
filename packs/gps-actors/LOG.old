@@ -1,3 +1,8 @@
-2025/04/07-01:35:10.545 5028 Recovering log #2913
-2025/04/07-01:35:10.552 5028 Delete type=0 #2913
-2025/04/07-01:35:10.552 5028 Delete type=3 #2911
+2025/04/07-12:45:58.729 feec Recovering log #2916
+2025/04/07-12:45:58.736 feec Delete type=0 #2916
+2025/04/07-12:45:58.736 feec Delete type=3 #2915
+2025/04/07-13:42:31.738 289bc Level-0 table #2920: started
+2025/04/07-13:42:31.738 289bc Level-0 table #2920: 0 bytes OK
+2025/04/07-13:42:31.741 289bc Delete type=0 #2918
+2025/04/07-13:42:31.745 289bc Manual compaction at level-0 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
+2025/04/07-13:42:31.745 289bc Manual compaction at level-1 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
