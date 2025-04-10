@@ -12,7 +12,6 @@ export async function beguilingArrow({ speaker, actor, token, character, item, a
         let dialogId = "beguilingarrow";
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
         let gmUser = game.gps.getPrimaryGM();
 
         let dialogContent = `
@@ -24,7 +23,7 @@ export async function beguilingArrow({ speaker, actor, token, character, item, a
                             <div class="gps-dialog-flex">
                                 <label for="ally-token" class="gps-dialog-label"Ally:</label>
                                 <select id="ally-token" class="gps-dialog-select">
-                                    ${allyNames.map((name, index) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${allyUuids[index]}">${name}</option>`).join('')}
+                                    ${allyNames.map((name, index) => `<option class="gps-dialog-option" value="${allyUuids[index]}">${name}</option>`).join('')}
                                 </select>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">

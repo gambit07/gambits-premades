@@ -18,8 +18,12 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
+          echo "- Additions:" >> release_notes.txt
+          echo "  - Chronal Shift: Added Chronurgist Wizards Chronal Shift feature. Covers enemy attacks and saves, along with allied saves." >> release_notes.txt
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Stinking Cloud: Updated implementation to use a region and fixed some bugs." >> release_notes.txt
+          echo "  - Fixed a midi deprecation warning." >> release_notes.txt
+          echo "  - Added additional handling for chat card update/creation function to avoid failures." >> release_notes.txt
+          echo "  - Removed some unnecessary html for dialogs." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -77,9 +81,24 @@ jobs:
             }
           }'
 
-      - name: Post to Discord
+      - name: Post to Midi Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+          "embeds": [{
+            "title": "Gambit'"'"'s Premades Release: ${{ steps.get-version.outputs.version }}",
+            "description": "**To support my continued work on this module!\n<https://ko-fi.com/gambit07> ❤️**\n\n${{ steps.format-release-notes-discord.outputs.release-notes-discord }}\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/${{ steps.get-version.outputs.version }}>",
+            "image": {
+              "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
+            }
+          }]
+          }' $DISCORD_WEBHOOK
+
+      - name: Post to GPS Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_GPS_WEBHOOK }}
         run: |
           curl -H "Content-Type: application/json" \
           -d '{

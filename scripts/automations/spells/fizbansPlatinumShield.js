@@ -18,8 +18,6 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
                 let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
                 let gmUser = game.gps.getPrimaryGM();
                 
-                const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
-                
                 let dialogContent = \`
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
@@ -30,7 +28,7 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
                             <label for="ally-token" class="gps-dialog-label">Advantage:</label>
                             \${withinRange.length >= 1
                             ? \`<select id="ally-token" class="gps-dialog-select">
-                                \${withinRange.map(friendly => \`<option class="gps-dialog-option" style="background-color: \${optionBackground};" value="\${friendly.document.uuid}">\${friendly.actor.name}</option>\`).join('')}
+                                \${withinRange.map(friendly => \`<option class="gps-dialog-option" value="\${friendly.document.uuid}">\${friendly.actor.name}</option>\`).join('')}
                                 </select>\`
                             : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
                             }

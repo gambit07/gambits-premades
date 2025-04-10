@@ -38,7 +38,6 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
         let content;
         let dialogContent;
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         if(workflowType === "save") {
             let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
@@ -60,7 +59,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                                 <div class="gps-dialog-flex">
                                     <label for="enemy-token" class="gps-dialog-label">Target:</label>
                                     <select id="enemy-token" class="gps-dialog-select">
-                                        ${targetNames.map((name, index) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${targetUuids[index]}">${name}</option>`).join('')}
+                                        ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
                                     </select>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
@@ -189,8 +188,8 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             }
 
             if(workflowType === "save") {
-                const saveSetting = workflow.options.noOnUseMacro;
-                workflow.options.noOnUseMacro = true;
+                const saveSetting = workflow.workflowOptions.noOnUseMacro;
+                workflow.workflowOptions.noOnUseMacro = true;
                 let saveDC = workflow.saveItem.system.save.dc;
 
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });
@@ -199,7 +198,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 let rollTotal = rollFound.total;
                 let modifiedRoll = await new Roll(`${rollTotal} - ${reroll.total}`).evaluate();
 
-                workflow.options.noOnUseMacro = saveSetting;
+                workflow.workflowOptions.noOnUseMacro = saveSetting;
 
                 if(modifiedRoll < saveDC) {
                     workflow.saves.delete(target);
@@ -217,15 +216,15 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             }
             else if(workflowType === "attack") {
                 let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
-                const saveSetting = workflow.options.noOnUseMacro;
-                workflow.options.noOnUseMacro = true;
+                const saveSetting = workflow.workflowOptions.noOnUseMacro;
+                workflow.workflowOptions.noOnUseMacro = true;
                 let reroll;
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });
                 if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${hexDie}`, type: workflowType });
                 let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).evaluate();
 
                 await workflow.setAttackRoll(rerollNew);
-                workflow.options.noOnUseMacro = saveSetting;
+                workflow.workflowOptions.noOnUseMacro = saveSetting;
 
                 if(rerollNew.total < targetAC) {
                     chatContent = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;

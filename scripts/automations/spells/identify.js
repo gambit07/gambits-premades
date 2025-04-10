@@ -69,13 +69,12 @@ export async function identify({ speaker, actor, token, character, item, args, s
 
     async function listUnidentifiedItems(ritual) {
         let dropdownOptions = "";
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
         if (!ritual) {
             for (let level = 1; level <= 9; level++) {
                 let spellSlot = actor.system.spells[`spell${level}`].value;
                 if (spellSlot > 0) {
                     let levelWithOrdinal = getOrdinalNumber(level);
-                    dropdownOptions += `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${level}">${levelWithOrdinal} Level (${spellSlot})</option>`;
+                    dropdownOptions += `<option class="gps-dialog-option" value="${level}">${levelWithOrdinal} Level (${spellSlot})</option>`;
                 }
             }
         }
@@ -186,14 +185,13 @@ export async function identify({ speaker, actor, token, character, item, args, s
 
     async function refreshSpellLevelDropdown(dialogElement, actor) {
         const items = actor.items.contents.filter(i => i.system.identified === false);
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         let dropdownOptions = '';
         for (let level = 1; level <= 9; level++) {
             let spellSlot = actor.system.spells[`spell${level}`]?.value;
             if (spellSlot > 0) {
                 let levelWithOrdinal = getOrdinalNumber(level);
-                dropdownOptions += `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${level}">${levelWithOrdinal} Level (${spellSlot})</option>`;
+                dropdownOptions += `<option class="gps-dialog-option" value="${level}">${levelWithOrdinal} Level (${spellSlot})</option>`;
             }
         }
 

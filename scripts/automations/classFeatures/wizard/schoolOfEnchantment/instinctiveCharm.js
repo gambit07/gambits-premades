@@ -36,8 +36,6 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
-
         let dialogContent = `
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
@@ -145,7 +143,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                                     <div class="gps-dialog-flex">
                                         <label for="enemy-token" class="gps-dialog-label">Target:</label>
                                         <select id="enemy-token" class="gps-dialog-select">
-                                            ${targetNames.map((name, index) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${targetUuids[index]}">${name}</option>`).join('')}
+                                            ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
                                         </select>
                                         <div id="image-container" class="gps-dialog-image-container">
                                             <img id="img_${dialogIdTarget}" src="${chosenItem.img}" class="gps-dialog-image">

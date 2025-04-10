@@ -180,8 +180,8 @@
         "id": "dnd5e",
         "type": "system",
         "compatibility": {
-          "minimum": "4.3.1",
-          "verified": "4.3.7",
+          "minimum": "4.3.6",
+          "verified": "4.3.8",
           "maximum": "4.9.9"
         }
       }

@@ -94,7 +94,6 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
             let word = [];
             let content;
             if(gmInputType === "dropdown") {
-                const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
                 content = `
                     <div class="gps-dialog-container">
                         <div class="gps-dialog-section">
@@ -103,7 +102,7 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
                                 <div>
                                     <div class="gps-dialog-flex">
                                         <select id="wordSelect" class="gps-dialog-select" style="background-color: rgba(181, 99, 69, 0.2);">
-                                            ${gmInputText.map((name) => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${name}">${name}</option>`).join('')}
+                                            ${gmInputText.map((name) => `<option class="gps-dialog-option" value="${name}">${name}</option>`).join('')}
                                         </select>
                                         <div id="image-container" class="gps-dialog-image-container">
                                             <img src="${item.img}" class="gps-dialog-image">

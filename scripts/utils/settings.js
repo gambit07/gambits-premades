@@ -616,6 +616,31 @@ export function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableChronalShift", {
+        name: "enableChronalShift",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Chronal Shift Timeout', {
+        name: "Chronal Shift Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register("gambits-premades", "enableTaleOfHubris", {
         name: "enableTaleOfHubris",
         scope: "world",
@@ -915,7 +940,9 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             enableRestoreBalance: game.settings.get("gambits-premades", "enableRestoreBalance"),
             restoreBalanceTimeout: game.settings.get("gambits-premades", "Restore Balance Timeout"),
             enableTaleOfHubris: game.settings.get("gambits-premades", "enableTaleOfHubris"),
-            taleOfHubrisTimeout: game.settings.get("gambits-premades", "Tale of Hubris Timeout")
+            taleOfHubrisTimeout: game.settings.get("gambits-premades", "Tale of Hubris Timeout"),
+            enableChronalShift: game.settings.get("gambits-premades", "enableChronalShift"),
+            chronalShiftTimeout: game.settings.get("gambits-premades", "Chronal Shift Timeout")
         };
 
         return data;
@@ -950,6 +977,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Restore Balance Timeout", formData.restoreBalanceTimeout);
         await game.settings.set("gambits-premades", "enableTaleOfHubris", formData.enableTaleOfHubris);
         await game.settings.set("gambits-premades", "Tale of Hubris Timeout", formData.taleOfHubrisTimeout);
+        await game.settings.set("gambits-premades", "enableChronalShift", formData.enableChronalShift);
+        await game.settings.set("gambits-premades", "Chronal Shift Timeout", formData.chronalShiftTimeout);
     }
 }
 

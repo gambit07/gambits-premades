@@ -5,7 +5,6 @@ export async function grimSiphon({ speaker, actor, token, character, item, args,
         const nearbyFriendlies = MidiQOL.findNearby(null, target, 5, { includeToken: false });
         let validFriendlies = nearbyFriendlies.filter(t => t.document.disposition === token.document.disposition);
         if(validFriendlies.length === 0) return;
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
         let damageTotal = workflow.damageTotal;
     
         await foundry.applications.api.DialogV2.wait({
@@ -20,7 +19,7 @@ export async function grimSiphon({ speaker, actor, token, character, item, args,
                                 <label for="ally-token" class="gps-dialog-label">Heal:</label>
                                 ${validFriendlies.length >= 1 ? 
                                 `<select id="ally-token" class="gps-dialog-select">
-                                    ${validFriendlies.map(friendly => `<option class="gps-dialog-option" style="background-color: ${optionBackground};" value="${friendly.document.uuid}">${friendly.actor.name}</option>`).join('')}
+                                    ${validFriendlies.map(friendly => `<option class="gps-dialog-option" value="${friendly.document.uuid}">${friendly.actor.name}</option>`).join('')}
                                 </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
                                 }
                                 <div id="image-container" class="gps-dialog-image-container">

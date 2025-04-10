@@ -214,8 +214,8 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             }
 
             if(workflowType === "damage") {
-                const saveSetting = workflow.options.noOnUseMacro;
-                workflow.options.noOnUseMacro = true;
+                const saveSetting = workflow.workflowOptions.noOnUseMacro;
+                workflow.workflowOptions.noOnUseMacro = true;
                 let reroll;
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${bardicDie}`, type: workflowType });
                 if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${bardicDie}`, type: workflowType });
@@ -253,7 +253,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
 
                 await workflow.setDamageRolls(updatedRolls);
         
-                workflow.options.noOnUseMacro = saveSetting;
+                workflow.workflowOptions.noOnUseMacro = saveSetting;
 
                 chatContent = `<span style='text-wrap: wrap;'>The creature takes a cutting word, and their damage is reduced by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
@@ -265,15 +265,15 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             else if(workflowType === "attack") {
                 
                 let targetAC = workflow.targets.first()?.actor.system.attributes.ac.value;
-                const saveSetting = workflow.options.noOnUseMacro;
-                workflow.options.noOnUseMacro = true;
+                const saveSetting = workflow.workflowOptions.noOnUseMacro;
+                workflow.workflowOptions.noOnUseMacro = true;
                 let reroll;
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${bardicDie}`, type: workflowType });
                 if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${bardicDie}`, type: workflowType });
                 let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).evaluate();
 
                 await workflow.setAttackRoll(rerollNew);
-                workflow.options.noOnUseMacro = saveSetting;
+                workflow.workflowOptions.noOnUseMacro = saveSetting;
 
                 if((workflow.attackTotal - reroll.total) < targetAC) {
                     chatContent = `<span style='text-wrap: wrap;'>The creature takes a cutting word reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;

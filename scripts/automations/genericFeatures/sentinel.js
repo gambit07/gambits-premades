@@ -24,7 +24,6 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         // Check valid weapons
         let validWeapons = validTokenPrimary.actor.items.filter(item => item.system.equipped === true && item.system.activities?.some(activity => activity?.actionType === "mwak"));
@@ -86,7 +85,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
                             <div class="gps-dialog-flex">
                                 <label for="item-select_${dialogId}" class="gps-dialog-label">Weapon:</label>
                                 <select id="item-select_${dialogId}" class="gps-dialog-select">
-                                    ${validWeapons.map(item => `<option name="${item.img}" value="${item.uuid}" class="gps-dialog-option" style="background-color: ${optionBackground};">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""}</option>`).join('')}
+                                    ${validWeapons.map(item => `<option name="${item.img}" value="${item.uuid}" class="gps-dialog-option">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""}</option>`).join('')}
                                 </select>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="weapon-img_${dialogId}" class="gps-dialog-image">

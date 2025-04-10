@@ -240,7 +240,8 @@ export function updateSettings(settingKey = null) {
         'enableBurstOfIngenuity': 'burstOfIngenuityEnabled',
         'enableTemporalShunt': 'temporalShuntEnabled',
         'disableCuttingWordsMaxMiss': 'disableCuttingWordsMaxMiss',
-        'enableTaleOfHubris': 'taleOfHubrisEnabled'
+        'enableTaleOfHubris': 'taleOfHubrisEnabled',
+        'enableChronalShift': 'chronalShiftEnabled'
     };
 
     if (settingKey === null) {

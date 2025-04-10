@@ -93,11 +93,11 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
                 let straightRoll = workflow.attackRoll.dice[0].results[0].result;
                 let straightRollBonus = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
                 if(workflow.attackRoll.formula.includes("kh")) {
-                    const saveSetting = workflow.options.noOnUseMacro;
-                    workflow.options.noOnUseMacro = true;
+                    const saveSetting = workflow.workflowOptions.noOnUseMacro;
+                    workflow.workflowOptions.noOnUseMacro = true;
                     let reroll = await new Roll(`${straightRoll} + ${straightRollBonus}`).evaluate();
                     await workflow.setAttackRoll(reroll);
-                    workflow.options.noOnUseMacro = saveSetting;
+                    workflow.workflowOptions.noOnUseMacro = saveSetting;
     
                     if(target.actor.system.attributes.ac.value > reroll.total) content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection to turn the advantage roll into a straight roll, and cause the target to miss ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     else content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection to turn the advantage roll into a straight roll, but the target still hits ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
@@ -111,13 +111,13 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
                     ChatMessage.create(chatData);
                 }
                 else {
-                    const saveSetting = workflow.options.noOnUseMacro;
+                    const saveSetting = workflow.workflowOptions.noOnUseMacro;
                     let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
-                    workflow.options.noOnUseMacro = true;
+                    workflow.workflowOptions.noOnUseMacro = true;
                     let reroll = await new CONFIG.Dice.D20Roll(`1d20 + ${rerollAddition}`).evaluate();
                     if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
                     await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
-                    workflow.options.noOnUseMacro = saveSetting;
+                    workflow.workflowOptions.noOnUseMacro = saveSetting;
             
                     let content;
             

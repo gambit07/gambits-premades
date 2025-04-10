@@ -116,6 +116,20 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td class="column-item">
+                        <label for="enableChronalShift">Chronal Shift<br><span class="small-text">Presents a dialog to Chronurgy Wizards with Chronal Shift.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableChronalShift" name="enableChronalShift" data-dtype="Boolean" {{checked enableChronalShift}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="chronalShiftTimeout" name="chronalShiftTimeout" value="{{chronalShiftTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
                 <tr class="clickable" data-content-id="collapsible-content-cuttingwords">
                     <td class="column-item">
                         <label>Cutting Words<br><span class="small-text">Presents a dialog to College of Lore Bards with Cutting Words.</span>

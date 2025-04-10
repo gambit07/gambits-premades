@@ -101,8 +101,8 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
                 .fadeOut(250)
                 .play();
 
-            const saveSetting = workflow.options.noOnUseMacro;
-            workflow.options.noOnUseMacro = true;
+            const saveSetting = workflow.workflowOptions.noOnUseMacro;
+            workflow.workflowOptions.noOnUseMacro = true;
             let actorProf = validTokenPrimary.actor.system.attributes.prof;
             let reroll;
             let numDice = '1d10';
@@ -148,7 +148,7 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
 
             await workflow.setDamageRolls(updatedRolls);
     
-            workflow.options.noOnUseMacro = saveSetting;
+            workflow.workflowOptions.noOnUseMacro = saveSetting;
 
             let content = `<span style='text-wrap: wrap;'>You use ${itemProperName} and reduce damage taken for ${target.actor.name} by ${reroll.total}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);

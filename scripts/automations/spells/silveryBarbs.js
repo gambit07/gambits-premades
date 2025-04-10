@@ -40,7 +40,6 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
         const nearbyFriendlies = MidiQOL.findNearby(null, validTokenPrimary, 60, { includeToken: true });
         let validFriendlies = nearbyFriendlies.filter(token => token.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary.document.uuid,token.document.uuid) && !token.actor.effects.getName(`${itemProperName} - Advantage`));
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         if(workflowType === "save") {
             let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
@@ -56,7 +55,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? An enemy succeeded their saving throw. Choose an enemy to target and an ally to give advantage to below.</p>
+                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? ${targets.length > 1 ? "An enemy succeeded their saving throw. Choose" : "Enemies succeeded their saving throw. Choose an enemy to target and"} an ally to give advantage to below.</p>
                             <div class="gps-dialog-flex-wrapper">
                                 <div class="gps-dialog-select-container">
                                     <div class="gps-dialog-flex">
@@ -263,14 +262,14 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             else if(workflowType === "attack") {
                 let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
                 let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
-                const saveSetting = workflow.options.noOnUseMacro;
-                workflow.options.noOnUseMacro = true;
+                const saveSetting = workflow.workflowOptions.noOnUseMacro;
+                workflow.workflowOptions.noOnUseMacro = true;
                 let reroll;
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1d20 + ${rerollAddition}` });
                 if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${rerollAddition}` });
                 if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
 
-                workflow.options.noOnUseMacro = saveSetting;
+                workflow.workflowOptions.noOnUseMacro = saveSetting;
 
                 if(workflow.attackTotal < targetAC) {                    
                     chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;

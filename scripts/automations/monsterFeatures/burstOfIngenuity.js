@@ -9,7 +9,6 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
     let itemRoll;
 
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
-    const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
     let target = workflow.token;
     let browserUser;
 
@@ -26,7 +25,7 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
         const targetNames = targets.map(t => t.document.name);
         
         let targetOptions = targetUuids.map((uuid, index) => 
-            `<option class="gps-dialog-option" value="${uuid}" style="background-color: ${optionBackground};">${targetNames[index]}</option>`
+            `<option class="gps-dialog-option" value="${uuid}">${targetNames[index]}</option>`
         ).join('');
 
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);

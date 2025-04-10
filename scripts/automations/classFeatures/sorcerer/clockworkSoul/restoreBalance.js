@@ -23,7 +23,6 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent;
-        const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
 
         if(workflowType === "save") {
             let targetAllies = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
@@ -58,11 +57,11 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                                             <label for="ally-token" class="gps-dialog-label">Ally:</label>
                                             <select id="ally-token" class="gps-dialog-select"
                                                 ${targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? 
-                                                    `onchange="resetEnemySelect()"> <option style="background-color: ${optionBackground};" class="gps-dialog-option" value="" selected>Select Ally:</option>` : 
+                                                    `onchange="resetEnemySelect()"> <option class="gps-dialog-option" value="" selected>Select Ally:</option>` : 
                                                     '>'
                                                 }
                                                 ${targetAllyNames.map((name, index) => 
-                                                    `<option style="background-color: ${optionBackground};" class="gps-dialog-option" value="${targetAllyUuids[index]}">${name}</option>`
+                                                    `<option class="gps-dialog-option" value="${targetAllyUuids[index]}">${name}</option>`
                                                 ).join('')}
                                             </select>
                                         </div>` 
@@ -73,11 +72,11 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                                             <label for="enemy-token" class="gps-dialog-label">Enemy:</label>
                                             <select id="enemy-token" class="gps-dialog-select"
                                                 ${targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? 
-                                                    `onchange="resetAllySelect()"> <option style="background-color: ${optionBackground};" class="gps-dialog-option" value="" selected>Select Enemy:</option>` : 
+                                                    `onchange="resetAllySelect()"> <option class="gps-dialog-option" value="" selected>Select Enemy:</option>` : 
                                                     '>'
                                                 }
                                                 ${targetEnemyNames.map((name, index) => 
-                                                    `<option style="background-color: ${optionBackground};" class="gps-dialog-option" value="${targetEnemyUuids[index]}">${name}</option>`
+                                                    `<option class="gps-dialog-option" value="${targetEnemyUuids[index]}">${name}</option>`
                                                 ).join('')}
                                             </select>
                                         </div>`

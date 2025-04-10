@@ -17,19 +17,19 @@ export async function drafynsBaneOfExcellence({ speaker, actor, token, character
             const effectName = await actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "e6e24759-a9d3-4993-b0f2-6328010a6520");
             await effectName.delete();
             await MidiQOL.socket().executeAsGM('_gmUnsetFlag', { actorUuid : workflow.actor.uuid, base : 'midi-qol', key : 'drafynFlag' })
-            const saveSetting = workflow.options.noOnUseMacro;
-            workflow.options.noOnUseMacro = true;
+            const saveSetting = workflow.workflowOptions.noOnUseMacro;
+            workflow.workflowOptions.noOnUseMacro = true;
             let reroll = await new Roll(`-99`).roll();
             await workflow.setAttackRoll(reroll);
-            workflow.options.noOnUseMacro = saveSetting;
+            workflow.workflowOptions.noOnUseMacro = saveSetting;
         }
         else {
             await actor.setFlag("midi-qol", "drafynFlag", flagValue - 1);
-            const saveSetting = workflow.options.noOnUseMacro;
-            workflow.options.noOnUseMacro = true;
+            const saveSetting = workflow.workflowOptions.noOnUseMacro;
+            workflow.workflowOptions.noOnUseMacro = true;
             let reroll = await new Roll(`-99`).roll();
             await workflow.setAttackRoll(reroll);
-            workflow.options.noOnUseMacro = saveSetting;
+            workflow.workflowOptions.noOnUseMacro = saveSetting;
         }
         let content = `<div class="midi-qol-flex-container"><div class="midi-qol-target-npc midi-qol-target-name" id="${token.id}"></br>Your natural 20 was cancelled due to Drafyn's Bane of Excellence and you fail the attack.</div><div><img src="${token.actor.img}" width="30" height="30" style="border:0px"></div></div>`;
         let chatData = {

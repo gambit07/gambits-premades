@@ -282,8 +282,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         }
     }
     
-    const optionBackground = (document.body.classList.contains("theme-dark")) ? 'black' : 'var(--color-bg)';
-    
     let dialogContent = `
         <style>
         #gps-favorite-checkbox {
@@ -319,7 +317,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
                         <div class="gps-dialog-flex">
                             <label for="item-select_${dialogId}" class="gps-dialog-label">Weapon:</label>
                             <select id="item-select_${dialogId}" class="gps-dialog-select">
-                                ${validWeapons.map(item => `<option name="${item.img}" value="${item.uuid}" class="gps-dialog-option" style="background-color: ${optionBackground};">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""} ${((act) => act ? (act.actionType==="msak" ? "(Melee)" : act.actionType==="rsak" ? "(Ranged)" : act.actionType==="save" ? "(Save)" : "") : "")(item.system.activities?.find(a => ["msak","rsak","save"].includes(a.actionType)))}</option>`).join('')}
+                                ${validWeapons.map(item => `<option name="${item.img}" value="${item.uuid}" class="gps-dialog-option">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""} ${((act) => act ? (act.actionType==="msak" ? "(Melee)" : act.actionType==="rsak" ? "(Ranged)" : act.actionType==="save" ? "(Save)" : "") : "")(item.system.activities?.find(a => ["msak","rsak","save"].includes(a.actionType)))}</option>`).join('')}
                             </select>
                             <div id="image-container" class="gps-dialog-image-container">
                                 <img id="weapon-img_${dialogId}" class="gps-dialog-image">

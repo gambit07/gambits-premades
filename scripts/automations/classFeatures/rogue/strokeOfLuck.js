@@ -53,11 +53,11 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
             return;
         }
         else if (userDecision) {
-            const saveSetting = workflow.options.noOnUseMacro;
-            workflow.options.noOnUseMacro = true;
+            const saveSetting = workflow.workflowOptions.noOnUseMacro;
+            workflow.workflowOptions.noOnUseMacro = true;
             let reroll = await new Roll(`50`).evaluate();
             await workflow.setAttackRoll(reroll);
-            workflow.options.noOnUseMacro = saveSetting;
+            workflow.workflowOptions.noOnUseMacro = saveSetting;
             
             await item.update({"system.uses.spent":item.system.uses.spent + 1})
         }
