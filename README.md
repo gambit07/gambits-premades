@@ -1,4 +1,4 @@
-<b>To support my continued work on this module! Join my Patreon at https://www.patreon.com/GambitsLounge or donate on Kofi at https://ko-fi.com/gambit07</b>
+<b>To support my continued work on this module! Join my Patreon at https://www.patreon.com/GambitsLounge or donate on Kofi at https://ko-fi.com/gambit07</b><br/>
 <b>Join my Discord! If you have any questions, feature requests, or just generally want to chat feel free to join Gambit's Lounge: https://discord.gg/YNquuTzcJB
 
 A collection of automated items, spells, feats, and anything else I decide to do! This module primarily uses MidiQOL along with other synergistic modules to achieve these automations, credit to tposney, caewok, zhell, aedif, and saibot for all of their relevant modules.
