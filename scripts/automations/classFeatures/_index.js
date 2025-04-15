@@ -15,6 +15,7 @@ import { perfectSelf } from "./monk/perfectSelf.js";
 import { scornfulRebuke } from "./paladin/oathOfConquest/scornfulRebuke.js";
 import { divineSense } from "./paladin/divineSense.js";
 import { huntersSense } from "./ranger/monsterSlayerConclave/huntersSense.js";
+import { magicUsersNemesis } from "./ranger/monsterSlayerConclave/magicUsersNemesis.js";
 import { fancyFootwork } from "./rogue/swashbuckler/fancyFootwork.js";
 import { strokeOfLuck } from "./rogue/strokeOfLuck.js";
 import { restoreBalance } from "./sorcerer/clockworkSoul/restoreBalance.js";
@@ -44,6 +45,7 @@ export const classFeaturesMacros = {
   scornfulRebuke,
   divineSense,
   huntersSense,
+  magicUsersNemesis,
   fancyFootwork,
   strokeOfLuck,
   restoreBalance,

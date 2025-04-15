@@ -128,6 +128,8 @@ export function registerWrapping() {
     let wrappingEnabled = game.settings.get("gambits-premades", "enableRegionWrapping");
     if(wrappingEnabled) {
         libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
+            if(game.gps.disableRegionTeleport) return false;
+
             const [region, position] = args;
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
@@ -171,6 +173,7 @@ export function registerWrapping() {
         }, 'MIXED');
         
         libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
+            if (game.gps.disableRegionTeleport) return [];
             const [region, waypoints, options] = args;
 
             if(region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args); //GPS boolean flag to exclude region wrapping
@@ -241,7 +244,8 @@ export function updateSettings(settingKey = null) {
         'enableTemporalShunt': 'temporalShuntEnabled',
         'disableCuttingWordsMaxMiss': 'disableCuttingWordsMaxMiss',
         'enableTaleOfHubris': 'taleOfHubrisEnabled',
-        'enableChronalShift': 'chronalShiftEnabled'
+        'enableChronalShift': 'chronalShiftEnabled',
+        'enableMagicUsersNemesis': 'magicUsersNemesisEnabled'
     };
 
     if (settingKey === null) {

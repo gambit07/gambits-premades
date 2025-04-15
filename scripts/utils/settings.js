@@ -641,6 +641,31 @@ export function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableMagicUsersNemesis", {
+        name: "enableMagicUsersNemesis",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', "Magic-User's Nemesis Timeout", {
+        name: "Magic-User's Nemesis Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register("gambits-premades", "enableTaleOfHubris", {
         name: "enableTaleOfHubris",
         scope: "world",
@@ -942,7 +967,9 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
             enableTaleOfHubris: game.settings.get("gambits-premades", "enableTaleOfHubris"),
             taleOfHubrisTimeout: game.settings.get("gambits-premades", "Tale of Hubris Timeout"),
             enableChronalShift: game.settings.get("gambits-premades", "enableChronalShift"),
-            chronalShiftTimeout: game.settings.get("gambits-premades", "Chronal Shift Timeout")
+            chronalShiftTimeout: game.settings.get("gambits-premades", "Chronal Shift Timeout"),
+            enableMagicUsersNemesis: game.settings.get("gambits-premades", "enableMagicUsersNemesis"),
+            magicUsersNemesisTimeout: game.settings.get("gambits-premades", "Magic-User's Nemesis Timeout")
         };
 
         return data;
@@ -979,6 +1006,8 @@ class classFeaturesSettingsMenu extends BaseSettingsMenu {
         await game.settings.set("gambits-premades", "Tale of Hubris Timeout", formData.taleOfHubrisTimeout);
         await game.settings.set("gambits-premades", "enableChronalShift", formData.enableChronalShift);
         await game.settings.set("gambits-premades", "Chronal Shift Timeout", formData.chronalShiftTimeout);
+        await game.settings.set("gambits-premades", "enableMagicUsersNemesis", formData.enableMagicUsersNemesis);
+        await game.settings.set("gambits-premades", "Magic-User's Nemesis Timeout", formData.magicUsersNemesisTimeout);
     }
 }
 

@@ -1,6 +1,15 @@
 import { executeWorkflow, updateRegionPosition, hideTemplateElements, updateSettings, daeAddFlags, arcaneShotValidActivities } from "./hookUtils.js";
 
 export function registerHooks() {
+    Hooks.on("preUpdateToken", async (token, updateData, options, userId) => {
+        if(!options?.teleport || !updateData?.x) return;
+
+        const originX = token._source.x;
+        const originY = token._source.y;
+        let tokenObject = await MidiQOL.tokenForActor(token.actor);
+        if (game.gpsSettings.magicUsersNemesisEnabled) await executeWorkflow({ workflowItem: "magicUsersNemesis", workflowData: { token: tokenObject, tokenOriginX: originX, tokenOriginY: originY }, workflowType: "teleport", workflowCombat: true });
+    });
+
     Hooks.on("midi-qol.preItemRollV2", async ({workflow, usage, dialog, message}) => {
         if (!((workflow.item.type === "spell" && workflow.activity.description.chatFlavor.includes("gpsFreeSpellUse")) || (workflow.item.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")) || (workflow.item.identifier === "identify" && workflow.item.flags["gambits-premades"]?.gpsUuid === "2cc1f50d-cdb8-4f17-a532-2532f74440ae"))) return;
         let freeSpellUsed;
@@ -34,6 +43,7 @@ export function registerHooks() {
         if (game.gpsSettings.counterspellEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
         if (game.gpsSettings.counterspellEnabled && workflow?.item?.type === "spell") await executeWorkflow({ workflowItem: "counterspell2024", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
         if (game.gpsSettings.temporalShuntEnabled && (workflow.item.type === "spell" || workflow.activity.hasAttack)) await executeWorkflow({ workflowItem: "temporalShunt", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
+        if (game.gpsSettings.magicUsersNemesisEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "magicUsersNemesis", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {

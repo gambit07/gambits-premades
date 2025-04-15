@@ -130,6 +130,7 @@
                         <input type="text" id="chronalShiftTimeout" name="chronalShiftTimeout" value="{{chronalShiftTimeout}}" data-dtype="String">
                     </td>
                 </tr>
+
                 <tr class="clickable" data-content-id="collapsible-content-cuttingwords">
                     <td class="column-item">
                         <label>Cutting Words<br><span class="small-text">Presents a dialog to College of Lore Bards with Cutting Words.</span>
@@ -258,6 +259,21 @@
                     </td>
                     <td class="column-timeout">
                         <input type="text" id="instinctiveCharmTimeout" name="instinctiveCharmTimeout" value="{{instinctiveCharmTimeout}}" data-dtype="String">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="column-item">
+                        <label for="enableMagicUsersNemesis">Magic-User's Nemesis<br><span class="small-text">Presents a dialog to Monster Slayer Conclave Ranger's with Magic-User's Nemesis.</span>
+                        </label>
+                    </td>
+                    <td class="column-enable-td">
+                        <div>
+                            <input type="checkbox" id="enableMagicUsersNemesis" name="enableMagicUsersNemesis" data-dtype="Boolean" {{checked enableMagicUsersNemesis}}/>
+                        </div>
+                    </td>
+                    <td class="column-timeout">
+                        <input type="text" id="magicUsersNemesisTimeout" name="magicUsersNemesisTimeout" value="{{magicUsersNemesisTimeout}}" data-dtype="String">
                     </td>
                 </tr>
 

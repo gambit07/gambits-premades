@@ -1,6 +1,6 @@
 export async function deleteChatMessage({ chatId }) {
     if(!chatId) return;
-    let chatMessage = game.messages.get(chatId);
+    let chatMessage = await game.messages.get(chatId);
     if(!chatMessage) return;
     await chatMessage.delete();
 }

@@ -85,7 +85,8 @@ Hooks.once('ready', async function() {
         ...helpers,
         ...automationRegistry,
         ...automationRegistry2024,
-        weaponAnimations
+        weaponAnimations,
+        disableRegionTeleport: false
     };
 
     refreshTemplateVisibility();
