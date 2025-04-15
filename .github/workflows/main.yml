@@ -19,7 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Magic Users Nemesis: Added Monster Slayer Conclave Rangers Magic Users Nemesis feature." >> release_notes.txt
+          echo "  - Magic Users Nemesis: Added Monster Slayer Conclave Rangers Magic Users Nemesis feature. Covers all components" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
