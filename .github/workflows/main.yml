@@ -19,11 +19,7 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Additions:" >> release_notes.txt
-          echo "  - Chronal Shift: Added Chronurgist Wizards Chronal Shift feature. Covers enemy attacks and saves, along with allied saves." >> release_notes.txt
-          echo "- Bugfixes:" >> release_notes.txt
-          echo "  - Fixed a midi deprecation warning." >> release_notes.txt
-          echo "  - Added additional handling for chat card update/creation function to avoid failures." >> release_notes.txt
-          echo "  - Removed some unnecessary html for dialogs." >> release_notes.txt
+          echo "  - Magic Users Nemesis: Added Monster Slayer Conclave Rangers Magic Users Nemesis feature." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
