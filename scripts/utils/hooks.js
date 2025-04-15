@@ -11,7 +11,7 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.preItemRollV2", async ({workflow, usage, dialog, message}) => {
-        if (!((workflow.item.type === "spell" && workflow.activity.description.chatFlavor.includes("gpsFreeSpellUse")) || (workflow.item.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")) || (workflow.item.identifier === "identify" && workflow.item.flags["gambits-premades"]?.gpsUuid === "2cc1f50d-cdb8-4f17-a532-2532f74440ae"))) return;
+        if (!((workflow.item.type === "spell" && workflow.activity?.description.chatFlavor.includes("gpsFreeSpellUse")) || (workflow.item?.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")) || (workflow.item.identifier === "identify" && workflow.item.flags["gambits-premades"]?.gpsUuid === "2cc1f50d-cdb8-4f17-a532-2532f74440ae"))) return;
         let freeSpellUsed;
 
         if(workflow.item.identifier === "guiding-bolt") {
@@ -106,12 +106,12 @@ export function registerHooks() {
         if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
-    Hooks.on("preUpdateItem", (item, update) => {
-        if (!game.user.isGM && !item.system?.identified && "identified" in (update.system ?? {}) && game.gpsSettings.identifyRestrictionEnabled) {
+    Hooks.on("preUpdateItem", (item, update, options) => {
+        if (!game.user.isGM && !item.system?.identified && "identified" in (update.system ?? {}) && game.gpsSettings.identifyRestrictionEnabled && !options?.isAdvancement) {
             ui.notifications.error(`${game.gpsSettings.identifyRestrictionMessage}`);
             return false;
         }
-      });
+    });
 
     Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
         if(!workflow.activity.hasDamage) return;
@@ -149,7 +149,7 @@ export function registerHooks() {
         const startedPath = `gambits-premades.started`;
         const prevStarted = combat.started;
         foundry.utils.setProperty(options, startedPath, prevStarted);
-    })
+    });
     
     Hooks.on("updateCombat", async (combat, update, options) => {
         if(game.user.id !== game.gps.getPrimaryGM()) return;
@@ -159,7 +159,7 @@ export function registerHooks() {
             await combat.setFlag('gambits-premades', `startProcessed-${combat.id}`, true);
             await game.gps.enableOpportunityAttack(combat, "startCombat");
         }
-    })
+    });
     
     Hooks.on("createCombatant", async (combatant, options, userId) => {
         if(game.user.id !== game.gps.getPrimaryGM()) return;

@@ -68,40 +68,7 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
             const currentIndex = findValidTokens.indexOf(validTokenPrimary);
             const isLastToken = currentIndex === findValidTokens.length - 1;
 
-            let subtleSpell = getSubtleSpell({validToken: validTokenPrimary});
-            const { dialogSubtle = "", itemSorcery = false } = subtleSpell;
-
             let dialogContent = `
-                <style>
-                #gps-checkbox {
-                    position: absolute;
-                    opacity: 0;
-                    width: 0;
-                    height: 0;
-                }
-
-                #gps-checkbox + label {
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                }
-
-                #gps-checkbox + label::before {
-                    content: "\\f6a9";
-                    font-family: "Font Awesome 5 Free";
-                    font-weight: 400; /* Regular (outlined) style */
-                    font-size: 20px;
-                    margin-right: 5px;
-                    line-height: 1;
-                    vertical-align: middle;
-                }
-
-                #gps-checkbox:checked + label::before {
-                    content: "\\f6a9";
-                    font-family: "Font Awesome 5 Free";
-                    font-weight: 900; /* Solid (filled) style */
-                }
-                </style>
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
@@ -112,7 +79,6 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
                                 </div>
-                                ${dialogSubtle}
                             </div>
                         </div>
                     </div>
@@ -210,31 +176,9 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
                     .play()
                 }
 
-                //game.gps.disableRegionTeleport = false;
-
                 if(workflowType !== "teleport") return workflow.aborted = true;
                 else return;
             }
         }
     }
-}
-
-function getSubtleSpell({validToken}) {
-    let subtleSpell = validToken.actor.items.some(i => i.flags["chris-premades"]?.info?.identifier === "subtleSpell" || i.identifier === "subtle-spell");
-    let itemSorcery;
-    let dialogSubtle = "";
-    if(subtleSpell) itemSorcery = validToken.actor.items.find(i => (i.identifier === "sorcery-points" || i.identifier === "font-of-magic" || i.identifier === "metamagic-adept") && i.system.uses?.max && i.system.uses?.spent < i.system.uses?.max);
-
-    if(itemSorcery) {
-        dialogSubtle = `
-            <div style="display: flex; align-items: center;">
-                <input type="checkbox" id="gps-checkbox" style="vertical-align: middle;"/>
-                <label for="gps-checkbox">
-                    Use Subtle Spell? | ${ itemSorcery.system.uses.max - itemSorcery.system.uses.spent } ${ itemSorcery.system.uses.max - itemSorcery.system.uses.spent > 1 ? "Points" : "Point" } Remaining
-                </label>
-            </div>
-        `;
-    }
-
-    return {dialogSubtle, itemSorcery};
 }
