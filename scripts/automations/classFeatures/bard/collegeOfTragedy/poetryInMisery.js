@@ -1,5 +1,5 @@
 export async function poetryInMisery({workflowData,workflowType,workflowCombat}) {
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData) ?? null;
+    const workflow = workflowCombat ? await MidiQOL.Workflow.getWorkflow(workflowData) ?? null : null;
     if(!workflow && workflowCombat === true) return;
     const gpsUuid = "f4b6923a-eda4-4c29-a6fb-a1728f6e71e3";
     if(workflow?.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;

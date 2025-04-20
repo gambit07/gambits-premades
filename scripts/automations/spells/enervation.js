@@ -1,5 +1,4 @@
 export async function enervation({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    let macroName = "Enervation";
     if(args[0].macroPass === "postActiveEffects") {
         let targets = Array.from(workflow.failedSaves);
         let effectData = actor.appliedEffects.find(e => e.name === "Enervation - Range");

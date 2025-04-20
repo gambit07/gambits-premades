@@ -304,7 +304,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             {
                 let slotValue = checkItem.system.uses.max - checkItem.system.uses.spent;
                 let slotEnabled = checkItem.system.uses.max;
-                if (slotValue > 0 || slotEnabled === "") hasSpellSlots = true;
+                if (slotValue > 0 || !slotEnabled) hasSpellSlots = true;
             }
     
             if (!hasSpellSlots) {
@@ -484,7 +484,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
         {
             let slotValue = checkItem.system.uses.max - checkItem.system.uses.spent;
             let slotEnabled = checkItem.system.uses.max;
-            if (slotValue > 0 || slotEnabled === null) hasSpellSlots = true;
+            if (slotValue > 0 || !slotEnabled) hasSpellSlots = true;
         }
 
         if (!hasSpellSlots) {

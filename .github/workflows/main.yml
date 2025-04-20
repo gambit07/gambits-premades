@@ -18,9 +18,9 @@ jobs:
       - name: Set Release Notes for Github
         id: set-release-notes-github
         run: |
-          echo "- Updates:" >> release_notes.txt
-          echo "  - Magic Users Nemesis: Cleaned up a couple things" >> release_notes.txt
-          echo "  - Identify Restrictions: Updated to prevent the identify denial message when a player levels up a character. The level up process seems to try to modify the items attunement in certain instances which would cause a denial message to pop." >> release_notes.txt
+          echo "- Bugfixes:" >> release_notes.txt
+          echo "  - findValidToken: Fix a small bug for innate/at will spells that have no max uses set" >> release_notes.txt
+          echo "  - Poetry in Misery: Resolve error thrown on save rolls when workflow undefined" >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
