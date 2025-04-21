@@ -207,7 +207,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
             }
             else if(workflowType === "attack") {
                 let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
-                let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
+                let targetAC = workflow.targets.first().actor.system.attributes.ac.value;
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let reroll;

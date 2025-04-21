@@ -215,7 +215,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 }
             }
             else if(workflowType === "attack") {
-                let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
+                let targetAC = workflow.targets.first().actor.system.attributes.ac.value;
                 const saveSetting = workflow.workflowOptions.noOnUseMacro;
                 workflow.workflowOptions.noOnUseMacro = true;
                 let reroll;

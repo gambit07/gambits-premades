@@ -261,7 +261,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             }
             else if(workflowType === "attack") {
                 let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
-                let targetAC = workflow.hitTargets.first().actor.system.attributes.ac.value;
+                let targetAC = workflow.targets.first().actor.system.attributes.ac.value;
                 const saveSetting = workflow.workflowOptions.noOnUseMacro;
                 workflow.workflowOptions.noOnUseMacro = true;
                 let reroll;

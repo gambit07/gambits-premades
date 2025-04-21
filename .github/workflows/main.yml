@@ -19,8 +19,8 @@ jobs:
         id: set-release-notes-github
         run: |
           echo "- Bugfixes:" >> release_notes.txt
-          echo "  - findValidToken: Fix a small bug for innate/at will spells that have no max uses set" >> release_notes.txt
-          echo "  - Poetry in Misery: Resolve error thrown on save rolls when workflow undefined" >> release_notes.txt
+          echo "  - workflow.hitTargets: Unsure if this is a midi bug, but put a workaround in place to determine targets differently for certain workflow passes to prevent failure." >> release_notes.txt
+          echo "  - Dissonant Whispers: Add in missing Medkit config option for enabling/disabling animation." >> release_notes.txt
           echo "release-notes-github<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

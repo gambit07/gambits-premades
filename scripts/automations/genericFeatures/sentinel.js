@@ -6,7 +6,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Sentinel";
     let dialogId = gpsUuid;
-    let target = workflow.hitTargets.first();
+    let target = workflow.targets.first();
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 

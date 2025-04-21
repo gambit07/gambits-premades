@@ -32,7 +32,10 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
             }
             else
             {
-                new Sequence()
+                let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
+                const { animEnabled } = cprConfig;
+                if(animEnabled) {
+                    new Sequence()
                     .effect()
                         .file("jb2a.spell_projectile.music_note.greenyellow")
                         .atLocation(token)
@@ -49,6 +52,7 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
                         .fadeOut(1000, {ease: "easeInSine"})
                         .filter("Glow", { color: 0x006400 })
                     .play()
+                }
 
                 const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
 
