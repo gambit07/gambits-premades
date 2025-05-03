@@ -97,7 +97,7 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
             if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
             else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
-            if(!itemRoll) continue;
+            if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) continue;
 
             let rollFound = workflow.saveRolls.find(roll => roll.data.actorUuid === allyToken.actor.uuid);
 

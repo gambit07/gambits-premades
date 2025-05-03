@@ -130,9 +130,9 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
     let tokenDocument = await fromUuid(tokenUuid);
     token = tokenDocument?.object;
     
-    if (!MidiQOL.isTargetable(token)) return;
-
-    if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
+    if(!MidiQOL.isTargetable(token)) return;
+    if((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
+    if(token.actor.items.some(i => i.identifier === "web-walker")) return;
 
     if(regionScenario === "tokenExit") {
         const isRestrained = await token.actor.appliedEffects.find(e => e.name === "Restrained");

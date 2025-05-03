@@ -1,0 +1,13 @@
+- Additions:
+  - Hideous Laughter 2024: Added the 2024 spell compendium item. No change in functionality from my 2014 version.
+  - Sleep 2024: Added the 2024 Sleep spell
+- Updates:
+  - Rebuke the Damned: Updated for V4 Compatability
+  - Web: Added handling for tokens with the web walker feature
+- Bugfixes:
+  - Grasping Arrow: Fix damage roll processor not looking for the origin actor's scale
+  - Cloak of Displacement: Fix movement speed of 0 and the incapacitated condition not disabling the cloak's effect
+  - Amulet of the Devout +1/+2/+3: Fix AE mode of custom not working for the spell dc bonus
+  - Rod of the Pact Keeper +1/+2/+3: Fix AE mode of custom not working for the spell dc bonus
+  - findValidTokens: Added a cast activity check to determine if a 3rd party reaction has item uses from a parent item and do additional validation based off that result
+  - remoteCompleteItemUse: Fixed a bunch of reaction items that were not properly ending the reaction use process if the user cancelled the item use dialog after selecting yes to the reaction dialog

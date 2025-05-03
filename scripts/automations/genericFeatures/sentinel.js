@@ -178,7 +178,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
             if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
             else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
     
-            if(!itemRoll) continue;
+            if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) continue;
 
             let checkHits = itemRoll.checkHits;
 

@@ -171,7 +171,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
             return;
         }
 
-        let damageRoll = await new CONFIG.Dice.DamageRoll(`${actor.system.scale["arcane-archer"]["arcane-shot-options"].formula}`, {}, {type: "slashing", properties: ["mgc"]}).evaluate();
+        let damageRoll = await new CONFIG.Dice.DamageRoll(`${effectOriginActor.system.scale["arcane-archer"]["arcane-shot-options"].formula}`, {}, {type: "slashing", properties: ["mgc"]}).evaluate();
         await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 
         const itemData = {

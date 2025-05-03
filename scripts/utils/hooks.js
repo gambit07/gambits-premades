@@ -2,7 +2,7 @@ import { executeWorkflow, updateRegionPosition, hideTemplateElements, updateSett
 
 export function registerHooks() {
     Hooks.on("preUpdateToken", async (token, updateData, options, userId) => {
-        if(!options?.teleport || !updateData?.x) return;
+        if(!options?.teleport || !updateData?.x || !game.gpsSettings.magicUsersNemesisEnabled) return;
 
         const originX = token._source.x;
         const originY = token._source.y;
@@ -11,7 +11,7 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.preItemRollV2", async ({workflow, usage, dialog, message}) => {
-        if (!((workflow.item.type === "spell" && workflow.activity?.description.chatFlavor.includes("gpsFreeSpellUse")) || (workflow.item?.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")) || (workflow.item.identifier === "identify" && workflow.item.flags["gambits-premades"]?.gpsUuid === "2cc1f50d-cdb8-4f17-a532-2532f74440ae"))) return;
+        if (!((workflow.item.type === "spell" && workflow.activity?.description?.chatFlavor?.includes("gpsFreeSpellUse")) || (workflow.item?.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")) || (workflow.item.identifier === "identify" && workflow.item.flags["gambits-premades"]?.gpsUuid === "2cc1f50d-cdb8-4f17-a532-2532f74440ae"))) return;
         let freeSpellUsed;
 
         if(workflow.item.identifier === "guiding-bolt") {
@@ -231,4 +231,25 @@ export function registerHooks() {
     });
 
     Hooks.on('dae.setFieldData', daeAddFlags);
+
+    Hooks.on('createActiveEffect', async (effect) => {
+        if (effect.target?.system.attributes.movement.walk !== 0 && effect.name !== "Incapacitated") return;
+        if (!effect.target?.appliedEffects.some(e => e.name === "Cloak of Displacement")) return;
+        await game.gps.cloakOfDisplacement({ actor: effect?.target, token: effect?.target.getActiveTokens()?.[0], args: "effectSuppression" });
+    });
+
+    let codPreDeletePassed = false;
+    Hooks.on('preDeleteActiveEffect', async (effect) => {
+        if (effect.target?.system.attributes.movement.walk !== 0 && effect.name !== "Incapacitated") return;
+        if (!effect.target?.appliedEffects.some(e => e.name === "Cloak of Displacement: Start-End")) return;
+        if (effect.target?.getFlag("gambits-premades", "codTurnSuppressed")) return;
+        codPreDeletePassed = true;
+    });
+
+    Hooks.on('deleteActiveEffect', async (effect) => {
+        if (effect.target?.system.attributes.movement.walk === 0) return;
+        if(!codPreDeletePassed) return;
+        codPreDeletePassed = false;
+        await game.gps.cloakOfDisplacement({ actor: effect?.target, args: "effectActivation" });
+    });
 }

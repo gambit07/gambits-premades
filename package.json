@@ -1,0 +1,11 @@
+{
+  "name": "gambits-premades",
+  "type": "commonjs",
+  "scripts": {
+    "release": "node update-module.js",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3"
+  }
+}

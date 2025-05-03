@@ -271,7 +271,21 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             let checkType = checkItem?.system?.preparation?.mode;
             let hasSpellSlots = false;
             if(checkType === "prepared" && checkItem?.system?.preparation?.prepared === false) return false;
-            if(checkType === "prepared" || checkType === "always")
+            const cachedForValue = checkItem.flags?.dnd5e?.cachedFor;
+
+            if(cachedForValue) {
+                const match = cachedForValue.match(/\.Item\.([^.]+)\.Activity\./);
+                if (match) {
+                    const castItemId = match[1];
+                    const castItem = checkItem.parent.items.get(castItemId);
+                    if(castItem) {
+                        let slotValue = castItem.system.uses.max - castItem.system.uses.spent;
+                        let slotEnabled = castItem.system.uses.max;
+                        if (slotValue > 0 || !slotEnabled) hasSpellSlots = true;
+                    }
+                }
+            }
+            else if(checkType === "prepared" || checkType === "always")
             {
                 for (let level = spellLevel; level <= 9; level++) {
                     let spellSlot = t.actor.system.spells[`spell${level}`].value;
@@ -333,7 +347,6 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         if(itemType === "item") {
             const itemNames = itemChecked.map(item => item.toLowerCase());
             let itemExists = t.actor.items.some(i => itemNames.includes(i.identifier.toLowerCase()) || itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
-            if(!itemExists)
 
             if (!itemExists) {
                 if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at valid item supporting feature`);
@@ -342,7 +355,8 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         if(debugEnabled) {
-            console.warn(`%c${itemName} for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
+            if(sourceRules === "2024") console.warn(`%c${itemName} 2024 for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
+            else console.warn(`%c${itemName} for ${t.actor.name} Reaction Validation Passed`, 'font-weight: bold');
         }
 
         return t;
@@ -392,12 +406,12 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
 
     // Check if the token has the actual item to use
     if(!checkItem && sourceRules === "2024") {
-        if(debugEnabled) console.error(`${itemName} 2024 for ${t.actor.name} failed at check if reaction item exists`);
+        if(debugEnabled) console.error(`${itemName} 2024 for ${targetedToken.actor.name} failed at check if reaction item exists`);
         return;
     }
 
     else if(!checkItem) {
-        if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
+        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check if reaction item exists`);
         return;
     }
 
@@ -521,7 +535,8 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
     }
 
     if(debugEnabled) {
-        console.warn(`%c${itemName} for ${targetedToken.actor.name} Reaction Validation Passed`, 'font-weight: bold');
+        if(sourceRules === "2024") console.warn(`%c${itemName} 2024 for ${targetedToken.actor.name} Reaction Validation Passed`, 'font-weight: bold');
+        else console.warn(`%c${itemName} for ${targetedToken.actor.name} Reaction Validation Passed`, 'font-weight: bold');
     }
 
     return true;
