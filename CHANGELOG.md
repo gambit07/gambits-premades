@@ -1,5 +1,8 @@
 # Changelog
 
+## [v1.0.33] - 2025-05-04
+- Foundry api didn't update off the last build, is it as simple as re-posting...
+
 ## [v1.0.32] - 2025-05-03
 - Additions:
   - Hideous Laughter 2024: Added the 2024 spell compendium item. No change in functionality from my 2014 version.
