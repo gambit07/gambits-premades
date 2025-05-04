@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.0.36] - 2025-05-04
+- Bugfixes:
+  - Sleep 2024: Fix a few small bugs
+  - Region Wrapping: Updated inset to a dynamic calculation so that it will work appropriately on grids with a small pixel Grid Size
+  - Few other small misc bugfixes
+
 ## [v1.0.35] - 2025-05-04
 - Additions:
   - Hideous Laughter 2024: Added the 2024 spell compendium item. No change in functionality from my 2014 version.
