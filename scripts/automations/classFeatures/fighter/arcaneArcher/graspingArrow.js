@@ -108,7 +108,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
         if (targets.length === 0) return;
             
         for(let target of targets) {
-            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"].gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3");
+            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3");
             if(hasItem) await target.actor.deleteEmbeddedDocuments("Item", [hasItem.id]);
             await target.actor.createEmbeddedDocuments("Item", itemData);
         }
@@ -119,7 +119,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
 
         let targets = canvas.tokens.placeables.filter(t => {
             if (t.document.disposition !== token.document.disposition) return;
-            if (!t.actor.items.some(i => i.flags["gambits-premades"].gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3")) return;
+            if (!t.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3")) return;
             return t;
         });
 
@@ -129,7 +129,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
         if (targets.length === 0) return;
 
         for(let target of targets) {
-            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"].gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3");
+            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3");
             if(hasItem) await target.actor.deleteEmbeddedDocuments("Item", [hasItem.id]);
         }
     }

@@ -233,21 +233,21 @@ export function registerHooks() {
     Hooks.on('dae.setFieldData', daeAddFlags);
 
     Hooks.on('createActiveEffect', async (effect) => {
-        if (effect.target?.system.attributes.movement.walk !== 0 && effect.name !== "Incapacitated") return;
+        if (effect.target?.system?.attributes?.movement?.walk !== 0 && effect.name !== "Incapacitated") return;
         if (!effect.target?.appliedEffects.some(e => e.name === "Cloak of Displacement")) return;
         await game.gps.cloakOfDisplacement({ actor: effect?.target, token: effect?.target.getActiveTokens()?.[0], args: "effectSuppression" });
     });
 
     let codPreDeletePassed = false;
     Hooks.on('preDeleteActiveEffect', async (effect) => {
-        if (effect.target?.system.attributes.movement.walk !== 0 && effect.name !== "Incapacitated") return;
+        if (effect.target?.system?.attributes?.movement?.walk !== 0 && effect.name !== "Incapacitated") return;
         if (!effect.target?.appliedEffects.some(e => e.name === "Cloak of Displacement: Start-End")) return;
         if (effect.target?.getFlag("gambits-premades", "codTurnSuppressed")) return;
         codPreDeletePassed = true;
     });
 
     Hooks.on('deleteActiveEffect', async (effect) => {
-        if (effect.target?.system.attributes.movement.walk === 0) return;
+        if (effect.target?.system?.attributes?.movement?.walk === 0) return;
         if(!codPreDeletePassed) return;
         codPreDeletePassed = false;
         await game.gps.cloakOfDisplacement({ actor: effect?.target, args: "effectActivation" });

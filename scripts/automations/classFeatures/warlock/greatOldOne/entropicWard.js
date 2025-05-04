@@ -123,7 +123,7 @@ export async function entropicWard({ speaker, actor, token, character, item, arg
     }
 
     if(args[0].macroPass === "postAttackRoll") {
-        let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"].gpsUuid === "403b07d9-0c55-4949-bfe8-797f22ba4b79");
+        let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "403b07d9-0c55-4949-bfe8-797f22ba4b79");
         if(!effectData) return;
         let effectDataTarget = effectData.getFlag("gambits-premades", "entropicWardTarget");
         if(!effectDataTarget) return;
