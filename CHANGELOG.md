@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.0.37] - 2025-05-09
+- Additions:
+  - Ice Knife: Added 2014 and 2024 (same version) with an animation, configurable in cprs medkit
+  - Phantasmal Killer: Added 2014 and 2024 versions
+- Updates:
+  - Updated module.json for 12.343 compatability
+- Bugfixes:
+  - Cloak of Displacement: Fix small logic issue around re-activating effect in certain instances
+
 ## [v1.0.36] - 2025-05-04
 - Bugfixes:
   - Sleep 2024: Fix a few small bugs
