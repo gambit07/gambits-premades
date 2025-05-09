@@ -31,6 +31,7 @@ export async function cloakOfDisplacement({ speaker, actor, token, character, it
     }
 
     else if (args === "effectActivation") {
+        if(actor.getFlag("gambits-premades", "codTurnSuppressed")) return;
         let effectData = await actor.allApplicableEffects().find(e => e.name === "Cloak of Displacement")
         if(effectData.disabled) await effectData.update({"disabled" : false});
     }

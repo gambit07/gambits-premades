@@ -13,8 +13,8 @@
   "version": "1.0.36",
   "compatibility": {
     "minimum": 12.328,
-    "verified": 12.331,
-    "maximum": 12.331
+    "verified": 12.343,
+    "maximum": 12
   },
   "socket": true,
   "esmodules": [
