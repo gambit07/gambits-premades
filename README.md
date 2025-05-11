@@ -1,7 +1,20 @@
-<p><b>To support my continued work on this module! Join my Patreon at https://www.patreon.com/GambitsLounge or donate on Kofi at https://ko-fi.com/gambit07</b></p>
-<p><b>Join my Discord! If you have any questions, feature requests, or just generally want to chat feel free to join Gambit's Lounge: https://discord.gg/YNquuTzcJB</b></p>
-
-A collection of automated items, spells, feats, and anything else I decide to do! This module primarily uses MidiQOL along with other synergistic modules to achieve these automations, credit to tposney, caewok, zhell, aedif, and saibot for all of their relevant modules.
+<h1 style="text-align: center;">Gambit's Premades</h1>
+<p style="text-align: center;"><i>Gambit&rsquo;s Premades delivers a curated library of automated spells, items, and feats that slot straight into your Foundry VTT world. Leveraging MidiQOL, focus on storytelling&mdash;premades handle the mechanics so you don&rsquo;t have to.</i></p>
+<p style="text-align: center;"><img src="https://img.shields.io/github/v/release/gambit07/gambits-premades?style=for-the-badge" alt="GitHub release" /> <img src="https://img.shields.io/github/downloads/gambit07/gambits-premades/total?style=for-the-badge" alt="GitHub all releases" /> <a href="https://discord.gg/YNquuTzcJB" target="_blank" rel="nofollow noopener"><img src="https://dcbadge.limes.pink/api/server/BA7SQKqMpa" alt="Discord" /></a></p>
+<h2 style="text-align: center;">Supporting The Module</h2>
+<p style="text-align: center;"><a href="https://ko-fi.com/gambit07" target="_blank" rel="nofollow noopener"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" /></a> <a href="https://www.patreon.com/GambitsLounge" target="_blank" rel="nofollow noopener"> <img src="https://img.shields.io/badge/Patreon-Gambits Lounge-F96854?style=for-the-badge&amp;logo=patreon" alt="Patreon Gambits Lounge" /> </a></p>
+<hr />
+<p>A custom collection of automated spells, items, and feats for Foundry VTT. These automations primarily use the MidiQOL and Dynamic Active Effect modules to implement automations, along with other synergistic modules.</p>
+<ul>
+<li>Contains a suite of fully automated items, features, spells, etc. This includes some very difficult to handle "3rd party reaction" items such as Counterspell, Opportunity Attacks, Silvery Barbs, etc.</li>
+<li>Custom beautiful AppV2 Dialogs for reaction automations with an integrated and animated countdown timer.</li>
+<li>Optional customization to display reaction dialogs for the module to both the GM and Player. AFK player? No problem.</li>
+<li>Optional customization to set the Primary GM in your world for the module, helpful for DM's that run with an assistant GM for automation handling.</li>
+<li>Optional customization for Region Token wrapping to better recognize tokens within regions based off 5e's ruleset.</li>
+<li>Optional customization to fully hide placed templates, let an animation define the area without ugly template borders and filler.</li>
+<li>Optional customization to fully prevent players from self-identifying unidentified items, except when using the Identify spell automation.</li>
+<li>And many more</li>
+</ul>
 
 <b>Dependencies V11</b>
 <p>
