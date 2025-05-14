@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.38] - 2025-05-14
+- Updates:
+  - Ashardalons Stride: Migrated damage to an activity, moving forward damage type can be customized in the activity for homebrew. Fixed bug causing animation not to display.
+  - Identify Restrictions: Added check for my new module Gambit's Identification Inhibitor and ignore gps identification handling if that's active.
+-Bugfixes:
+  - Motivational Speech: flags.dae.onUpdateTarget seems to no longer work, switched to a more robust alternative
+  - Ice Knife: Fixed damage not scaling properly. Updated macroPass to account for misses properly.
+
 ## [v1.0.37] - 2025-05-09
 - Additions:
   - Ice Knife: Added 2014 and 2024 (same version) with an animation, configurable in cprs medkit
