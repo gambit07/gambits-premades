@@ -106,12 +106,14 @@ export function registerHooks() {
         if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
-    Hooks.on("preUpdateItem", (item, update, options) => {
-        if (!game.user.isGM && !item.system?.identified && "identified" in (update.system ?? {}) && game.gpsSettings.identifyRestrictionEnabled && !options?.isAdvancement) {
-            ui.notifications.error(`${game.gpsSettings.identifyRestrictionMessage}`);
-            return false;
-        }
-    });
+    if(!game.modules.get("gambitsIdentificationInhibitor")?.active) {
+        Hooks.on("preUpdateItem", (item, update, options) => {
+            if (!game.user.isGM && !item.system?.identified && "identified" in (update.system ?? {}) && game.gpsSettings.identifyRestrictionEnabled && !options?.isAdvancement) {
+                ui.notifications.error(`${game.gpsSettings.identifyRestrictionMessage}`);
+                return false;
+            }
+        });
+    }
 
     Hooks.on("midi-qol.preDamageRollComplete", async (workflow) => {
         if(!workflow.activity.hasDamage) return;
@@ -252,4 +254,13 @@ export function registerHooks() {
         codPreDeletePassed = false;
         await game.gps.cloakOfDisplacement({ actor: effect?.target, args: "effectActivation" });
     });
+
+    Hooks.on('updateActor', async (actor, diff, options, userID) => {
+        if (!foundry.utils.hasProperty(diff, 'system.attributes.hp.temp')) return;
+      
+        const hpTemp = diff.system.attributes.hp.temp;
+        let effectData = actor.appliedEffects?.some(e => e.flags["gambits-premades"]?.gpsUuid === "32cabdaf-560e-48ea-8980-37cf5ad242c0");
+        if(hpTemp > 0 || !effectData) return;
+        await game.gps.motivationalSpeech({ actor: actor, args: "effectRemoval" });
+      });
 }

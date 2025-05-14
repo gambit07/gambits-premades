@@ -20,6 +20,8 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         }
     
         let castLevel = workflow.castData.castLevel;
+        let castMode = workflow.item?.system?.preparation?.mode;
+        if ((castMode === "innate" || castMode === "atwill") && castLevel === 0) castLevel = workflow.castData.baseLevel;
         let movementSpeed = castLevel > 3 ? (((castLevel - 3) * 5) + 20) : 20;
         const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid);
     
@@ -57,7 +59,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
                     "showIcon": false,
                     "macroRepeat": "startEveryTurn"
                 },
-                "gambits-premades": {"gpsUuid": "ef27f042-ba6d-4ff4-ac2b-4ca6ff611c17", "castLevel": castLevel}
+                "gambits-premades": {"gpsUuid": "ef27f042-ba6d-4ff4-ac2b-4ca6ff611c17", "asCastLevel": castLevel}
             }
         }
         ];
@@ -67,11 +69,11 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
     }
 
     if(args[0] === "on") {
+        let gmUser = game.gps.getPrimaryGM();
         let item = await fromUuid(args[2]);
         let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
         const { animEnabled } = cprConfig;
         let originActor = await fromUuid(args[3]);
-        let originToken = await MidiQOL.tokenForActor(originActor);
         let targetActor = actor;
         let targetToken = token;
         if(originActor.uuid === targetActor.uuid) return;
@@ -82,17 +84,15 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         if (turn === lastTurn) return;
         await effectData.setFlag('gambits-premades', 'ashardalonsStrideTurn.' + targetToken.id + '.turn', turn);
     
-        const itemData = {
-            name: "Ashardalon's Stride - Damage (Fire)",
-            type: "feat",
-            img: item.img
-        }
-    
-        let castLevel = await effectData?.getFlag('gambits-premades', 'castLevel');
+        let castLevel = await effectData?.getFlag('gambits-premades', 'asCastLevel');
         let numDie = (castLevel - 2) * 1;
-        let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDie}d6`, {}, {type: "fire", properties: ["mgc"]}).evaluate();
-        await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
-        new MidiQOL.DamageOnlyWorkflow(originActor, originToken, damageRoll.total, "fire", [targetToken], damageRoll, {itemData: itemData, flavor: "Ashardalon's Stride - Damage (Fire)"});
+        let activityToUpdate = item.system.activities.find(a => a.identifier === "syntheticDamage");
+        if(activityToUpdate.damage.parts[0]?.number !== numDie) {
+            let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
+            damageParts[0].number = numDie;
+            await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
+        }
+        await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: targetToken.document.uuid});
     
         if(animEnabled) {
         new Sequence()
@@ -109,7 +109,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
         const { animEnabled } = cprConfig;
         let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "ef27f042-ba6d-4ff4-ac2b-4ca6ff611c17");
-        let castLevel = await effectData?.getFlag('gambits-premades', 'castLevel');
+        let castLevel = await effectData?.getFlag('gambits-premades', 'asCastLevel');
     
         const rangeCheck = MidiQOL.findNearby(null, token, 5, { includeToken: false });
         if (rangeCheck.length > 0) {
@@ -118,17 +118,15 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
                 let lastTurn = await effectData?.getFlag('gambits-premades', 'ashardalonsStrideTurn.' + target.id + '.turn');
                 if (turn === lastTurn) continue;
                 await effectData.setFlag('gambits-premades', 'ashardalonsStrideTurn.' + target.id + '.turn', turn);
-            
-                const itemData = {
-                    name: "Ashardalon's Stride - Damage (Fire)",
-                    type: "feat",
-                    img: item.img
-                }
 
                 let numDie = (castLevel - 2) * 1;
-                let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDie}d6`, {}, {type: "fire", properties: ["mgc"]}).evaluate();
-                await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
-                new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "fire", [target], damageRoll, {itemData: itemData, flavor: "Ashardalon's Stride - Damage (Fire)"});
+                let activityToUpdate = item.system.activities.find(a => a.identifier === "syntheticDamage");
+                if(activityToUpdate.damage.parts[0]?.number !== numDie) {
+                    let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
+                    damageParts[0].number = numDie;
+                    await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
+                }
+                await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
             
                 if(animEnabled) {
                 new Sequence()

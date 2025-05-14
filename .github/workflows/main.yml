@@ -36,7 +36,7 @@ jobs:
                 "notes": "https://github.com/gambit07/gambits-premades/releases/tag/'"${VERSION}"'",
                 "compatibility": {
                   "minimum": "12.328",
-                  "verified": "12.331",
+                  "verified": "12.343",
                   "maximum": "12"
                 }
               }

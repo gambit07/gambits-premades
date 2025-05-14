@@ -1,10 +1,5 @@
-export async function motivationalSpeech({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
-    if (args[0] === "onUpdateActor" && args?.[1].updates.system.attributes.hp.temp <= 0) {
-      const effectId = await args[1].actor.appliedEffects?.find(e => e.flags["gambits-premades"]?.gpsUuid === "32cabdaf-560e-48ea-8980-37cf5ad242c0").id;
-      await MidiQOL.socket().executeAsGM("removeEffects", { actorUuid: args[1].actorUuid, effects: [effectId] });
-    }
-    
-    if(args[0].macroPass === "isHit")
+export async function motivationalSpeech({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {   
+    if(args?.[0].macroPass === "isHit")
     {
       item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "32cabdaf-560e-48ea-8980-37cf5ad242c0");
       const effectName = "Motivational Speech Advantage";
@@ -35,15 +30,21 @@ export async function motivationalSpeech({ speaker, actor, token, character, ite
         await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: uuid, effects: effectData });
       }
     }
+
+    if(args === "effectRemoval")
+    {
+      const effectId = await actor.appliedEffects?.find(e => e.flags["gambits-premades"]?.gpsUuid === "32cabdaf-560e-48ea-8980-37cf5ad242c0")?.id;
+      await MidiQOL.socket().executeAsGM("removeEffects", { actorUuid: actor.uuid, effects: [effectId] });
+    }
     
-    if(args[0].macroPass === "preActiveEffects")
+    if(args?.[0].macroPass === "preActiveEffects")
     {
       const spellLevel = workflow.castData.castLevel - 2;
       const tempHpAmount = parseInt(spellLevel) * 5;
       await Promise.all(workflow.targets.map(target => target.actor.applyTempHP(tempHpAmount)));
     }
     
-    if(args[0] === "off")
+    if(args?.[0] === "off")
     {
         await actor.update({"system.attributes.hp.temp": 0});
     }

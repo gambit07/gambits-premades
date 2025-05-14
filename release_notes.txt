@@ -1,7 +1,6 @@
-- Additions:
-  - Ice Knife: Added 2014 and 2024 (same version) with an animation, configurable in cprs medkit
-  - Phantasmal Killer: Added 2014 and 2024 versions
 - Updates:
-  - Updated module.json for 12.343 compatability
-- Bugfixes:
-  - Cloak of Displacement: Fix small logic issue around re-activating effect in certain instances
+  - Ashardalons Stride: Migrated damage to an activity, moving forward damage type can be customized in the activity for homebrew. Fixed bug causing animation not to display.
+  - Identify Restrictions: Added check for my new module Gambit's Identification Inhibitor and ignore gps identification handling if that's active.
+-Bugfixes:
+  - Motivational Speech: flags.dae.onUpdateTarget seems to no longer work, switched to a more robust alternative
+  - Ice Knife: Fixed damage not scaling properly. Updated macroPass to account for misses properly

@@ -30,6 +30,7 @@ import { viciousMockery } from "./viciousMockery.js";
 import { web } from "./web.js";
 import { zephyrStrike } from "./zephyrStrike.js";
 import { mentalPrison } from "./mentalPrison.js";
+import { iceKnife } from "./iceKnife.js";
 
 export const spellsMacros = {
   ashardalonsStride,
@@ -63,5 +64,6 @@ export const spellsMacros = {
   viciousMockery,
   web,
   zephyrStrike,
-  mentalPrison
+  mentalPrison,
+  iceKnife
 };
