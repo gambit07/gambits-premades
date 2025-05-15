@@ -1,6 +1,2 @@
-- Updates:
-  - Ashardalons Stride: Migrated damage to an activity, moving forward damage type can be customized in the activity for homebrew. Fixed bug causing animation not to display.
-  - Identify Restrictions: Added check for my new module Gambit's Identification Inhibitor and ignore gps identification handling if that's active.
 -Bugfixes:
-  - Motivational Speech: flags.dae.onUpdateTarget seems to no longer work, switched to a more robust alternative
-  - Ice Knife: Fixed damage not scaling properly. Updated macroPass to account for misses properly.
+  - Ice Knife: Fixed damage not scaling properly... again, for real this time.
