@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.39] - 2025-05-15
+-Bugfixes:
+  - Ice Knife: Fixed damage not scaling properly... again, for real this time.
+
 ## [v1.0.38] - 2025-05-14
 - Updates:
   - Ashardalons Stride: Migrated damage to an activity, moving forward damage type can be customized in the activity for homebrew. Fixed bug causing animation not to display.
