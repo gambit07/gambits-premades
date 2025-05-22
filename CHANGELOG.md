@@ -1,5 +1,16 @@
 # Changelog
 
+## [v1.0.40] - 2025-05-22
+-Additions:
+  - Dimension Door 2024: Added the 2024 version
+  - Fire's Burn 2024: Added the Goliath feature
+  - Frost's Chill 2024: Added the Goliath feature
+  - Hill's Tumble 2024: Added the Goliath feature
+  - Storm's Thunder 2024: Added the Goliath feature
+  - Light: Added the 2014 and 2024 versions of the Cantrip
+-Updates:
+  - Opportunity Attack: Added check to try and better handle tokens on different Levels levels
+
 ## [v1.0.39] - 2025-05-15
 -Bugfixes:
   - Ice Knife: Fixed damage not scaling properly... again, for real this time.
