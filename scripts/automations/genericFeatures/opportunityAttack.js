@@ -217,6 +217,12 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         return;
     }
 
+    // Check if Levels believes tokens are on different levels
+    if(CONFIG?.Levels?.API?.checkCollision?.(effectOriginActor, token)) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because Levels indicates the tokens cannot see each other`);
+        return;
+    }
+
     let itemNamesDis = ["escape the hoard", "speedy"];
     let hasItemDis = token.actor.items.some(i => itemNamesDis.some(name => i.name.toLowerCase().includes(name)));
     let effectNameDis = ["boots of speed"];

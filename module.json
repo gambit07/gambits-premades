@@ -132,6 +132,14 @@
       "path": "packs/gps-spells-2024",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
       "module": "gambits-premades"
+    },
+    {
+      "label": "GPS Race Features 2024",
+      "type": "Item",
+      "name": "gps-race-features-2024",
+      "path": "packs/gps-race-features-2024",
+      "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
+      "module": "gambits-premades"
     }
   ],
   "packFolders": [
@@ -165,7 +173,8 @@
           "sorting": "m",
           "color": "#93678d",
           "packs": [
-            "gps-spells-2024"
+            "gps-spells-2024",
+            "gps-race-features-2024"
           ]
         }
       ]
