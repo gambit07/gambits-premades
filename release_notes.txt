@@ -1,9 +1,2 @@
--Additions:
-  - Dimension Door 2024: Added the 2024 version
-  - Fire's Burn 2024: Added the Goliath feature
-  - Frost's Chill 2024: Added the Goliath feature
-  - Hill's Tumble 2024: Added the Goliath feature
-  - Storm's Thunder 2024: Added the Goliath feature
-  - Light: Added the 2014 and 2024 versions of the Cantrip
 -Updates:
-  - Opportunity Attack: Added check to try and better handle tokens on different Levels levels
+  - Opportunity Attack: Added check to try and better handle tokens on different Levels levels - again
