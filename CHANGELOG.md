@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.42] - 2025-05-22
+-Updates:
+  - Opportunity Attack: Added check to try and better handle tokens on different Levels levels - again
+
 ## [v1.0.41] - 2025-05-22
 -Updates:
   - Opportunity Attack: Added check to try and better handle tokens on different Levels levels - again
