@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.44] - 2025-05-23
+-Bugfixes:
+  - Fix issue with pack data
+
 ## [v1.0.43] - 2025-05-22
 -Updates:
   - Opportunity Attack: Fixed OA region not updating appropriately on token elevation changes. Added some additional guards into the update hook which should make OA a tiny bit more performant as well.
