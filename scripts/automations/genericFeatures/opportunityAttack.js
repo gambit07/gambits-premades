@@ -571,6 +571,9 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const topLeftY = tokenCenterY - (sideLength / 2);
             const radius = maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance;
             const points = [];
+            let elevationTop = token.elevation + maxRange;
+            let elevationBottom = token.elevation - maxRange;
+            console.log(elevationTop, elevationBottom, "elevation")
             let regionShape;
 
             if (canvas.scene.grid.type === 0) {  // Gridless
@@ -626,7 +629,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const regionData = {
                 name: `${actor.name} OA Region`,
                 color: browserUser.color,
-                elevation: { bottom: -maxRange, top: maxRange },
+                elevation: { bottom: elevationBottom, top: elevationTop },
                 shapes: [regionShape],
                 behaviors: [
                     {
@@ -688,6 +691,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                                 let maxRange = calculateMaxRange(validWeapons, validSpells, tokenSize);
                                 if(maxRange === false) return;
 
+                                await region.setFlag("gambits-premades", "opportunityAttackRegionMaxRange", maxRange);
                                 await region.setFlag("gambits-premades", "opportunityAttackRegionValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
 
                                 const tokenCenterX = token.x + token.object.w / 2;
@@ -826,7 +830,8 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         'opportunityAttackRegionValidSpells': validSpells,
                         'opportunityAttackRegionMwakRange': mwakRange,
                         'opportunityAttackRegionTokenSize': Math.max(token.width, token.height),
-                        'opportunityAttackRegionConFac': conversionFactor
+                        'opportunityAttackRegionConFac': conversionFactor,
+                        'opportunityAttackRegionMaxRange': maxRange
                     }
                 }
             };

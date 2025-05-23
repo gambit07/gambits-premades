@@ -1,2 +1,2 @@
 -Updates:
-  - Opportunity Attack: Added check to try and better handle tokens on different Levels levels - again
+  - Opportunity Attack: Fixed OA region not updating appropriately on token elevation changes. Added some additional guards into the update hook which should make OA a tiny bit more performant as well.

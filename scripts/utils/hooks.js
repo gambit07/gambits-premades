@@ -205,7 +205,7 @@ export function registerHooks() {
     });
 
     Hooks.on('updateToken', async (tokenDocument, updateData, options, userId) => {
-        if (game.user.id !== game.gps.getPrimaryGM()) return;
+        if(game.user.id !== game.gps.getPrimaryGM()) return;
         if(!game.gpsSettings.opportunityAttackEnabled) return;
         if(!game.combat) return;
     
@@ -214,7 +214,7 @@ export function registerHooks() {
         for (const regionUuid of regions) {
             const region = fromUuidSync(regionUuid);
             if (region) {
-                updateRegionPosition(region, tokenDocument);
+                updateRegionPosition(region, tokenDocument, updateData?.elevation, updateData?.x, updateData?.y);
             }
         }
     });

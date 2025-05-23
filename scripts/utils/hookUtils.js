@@ -4,9 +4,11 @@ export async function executeWorkflow({ workflowItem, workflowData, workflowType
     await game.gps[workflowItem]({ workflowData, workflowType, workflowCombat });
 }
 
-export function updateRegionPosition(region, tokenDocument) {
+export function updateRegionPosition(region, tokenDocument, updatedElevation = null, updatedX = null, updatedY = null) {
     if (game.user.id !== game.gps.getPrimaryGM()) return;
     if (!region || !tokenDocument) return;
+    if(updatedElevation === null && updatedX === null && updatedY === null) return;
+
 
     let regionDisabled = region.getFlag("gambits-premades", "regionDisabled");
     if (!regionDisabled) region.setFlag("gambits-premades", "regionDisabled", true);
@@ -14,6 +16,19 @@ export function updateRegionPosition(region, tokenDocument) {
     let previousX1 = tokenDocument.object.center.x;
     let previousY1 = tokenDocument.object.center.y;
     let previousX2, previousY2;
+
+    if(Number.isFinite(updatedElevation)) {
+        let rangeOffset = region.getFlag("gambits-premades", "opportunityAttackRegionMaxRange");
+        const bottomOffset = updatedElevation - rangeOffset;
+        const topOffset = updatedElevation + rangeOffset;
+
+        region.update({
+            elevation: {
+                bottom: bottomOffset,
+                top: topOffset
+            }
+        });
+    }
 
     const checkPosition = () => {
         const currentX = tokenDocument.object.center.x;
