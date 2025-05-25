@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.0.46] - 2025-05-25
+- Additions:
+  - Cloud of Daggers 2024: Added 2024 version of Cloud of Daggers
+- Bugfixes:
+  - Defile Ground: Fix for activity id error, updated item to use regions instead of AA for template handling
+  - Cloud of Daggers: Small fix for a missing return
+
 ## [v1.0.45] - 2025-05-25
 -Updates:
   - Opportunity Attack: Added a new DAE key oaDisadvantage. This key will grant disadvantage to a token for any opportunity attack made against them while the effect is active.
