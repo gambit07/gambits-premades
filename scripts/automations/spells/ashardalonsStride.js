@@ -4,20 +4,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         return workflow.aborted = true;
     }
     if(args[0].macroPass === "preActiveEffects") {
-        let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
-        const { animEnabled } = cprConfig;
-    
-        if(animEnabled) {
-            new Sequence()
-                .effect()
-                .attachTo(token, {offset:{x: 0, y: -30}, local: true})
-                .file("animated-spell-effects-cartoon.fire.30")
-                .scaleToObject(2)
-                .name(`${token.id}_ashardalonsStride`)
-                .belowTokens()
-                .persist()
-                .play()
-        }
+        game.gps.animation.ashardalonsStride({type: "use", token, itemUuid: item.uuid});
     
         let castLevel = workflow.castData.castLevel;
         let castMode = workflow.item?.system?.preparation?.mode;
@@ -71,8 +58,6 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
     if(args[0] === "on") {
         let gmUser = game.gps.getPrimaryGM();
         let item = await fromUuid(args[2]);
-        let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
-        const { animEnabled } = cprConfig;
         let originActor = await fromUuid(args[3]);
         let targetActor = actor;
         let targetToken = token;
@@ -94,20 +79,11 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         }
         await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: targetToken.document.uuid});
     
-        if(animEnabled) {
-        new Sequence()
-            .effect()
-            .atLocation(targetToken)
-            .file("animated-spell-effects-cartoon.fire.16")
-            .scaleToObject(1.3)
-            .play()
-        }
+        game.gps.animation.ashardalonsStride({type: "damage", token: targetToken, itemUuid: item.uuid});
     }
 
     if(args[0] === "each") {
         let item = await fromUuid(args[2]);
-        let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
-        const { animEnabled } = cprConfig;
         let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "ef27f042-ba6d-4ff4-ac2b-4ca6ff611c17");
         let castLevel = await effectData?.getFlag('gambits-premades', 'asCastLevel');
     
@@ -128,14 +104,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
                 }
                 await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
             
-                if(animEnabled) {
-                new Sequence()
-                    .effect()
-                    .atLocation(target)
-                    .file("animated-spell-effects-cartoon.fire.16")
-                    .scaleToObject(1.3)
-                    .play()
-                }
+                game.gps.animation.ashardalonsStride({type: "damage", token: target, itemUuid: item.uuid});
             }
         }
     }

@@ -1,4 +1,4 @@
-import {registerSettings} from './utils/settings.js';
+import { registerSettings } from './utils/settings.js';
 import { registerHooks } from "./utils/hooks.js";
 import { daeInitFlags, daeInjectFlags } from "./utils/hookUtils.js"
 import { automationRegistry } from "./automations/index.js";
@@ -6,6 +6,7 @@ import { automationRegistry2024 } from "./automations2024/index.js";
 import { refreshTemplateVisibility, registerWrapping, updateSettings } from "./utils/hookUtils.js";
 import * as helpers from "./utils/helpers.js";
 import { weaponAnimations } from "./utils/animationUtils.js";
+import { animation } from './animations/_index.js';
 
 Hooks.once('init', async function() {
     registerSettings();
@@ -16,6 +17,7 @@ Hooks.once('init', async function() {
     Hooks.on("dae.modifySpecials", (specKey, specials) => {
         specials["flags.gambits-premades.oaImmunity"] = [new foundry.data.fields.StringField(), 5];
         specials["flags.gambits-premades.oaSuppression"] = [new foundry.data.fields.StringField(), 5];
+        specials["flags.gambits-premades.oaDisadvantage"] = [new foundry.data.fields.StringField(), 5];
     });
 
     registerWrapping();
@@ -86,7 +88,8 @@ Hooks.once('ready', async function() {
         ...automationRegistry,
         ...automationRegistry2024,
         weaponAnimations,
-        disableRegionTeleport: false
+        disableRegionTeleport: false,
+        animation,
     };
 
     refreshTemplateVisibility();

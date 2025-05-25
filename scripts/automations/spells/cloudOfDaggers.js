@@ -4,23 +4,7 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
     if(args?.[0]?.macroPass === "templatePlaced") {
         const template = await fromUuid(workflow.templateUuid);
         await template.setFlag("gambits-premades", "codCastLevel", workflow.castData.castLevel);
-        let cprConfig = game.gps.getCprConfig({itemUuid: workflow.item.uuid});
-        const { animEnabled } = cprConfig;
-        if(animEnabled) {
-            new Sequence()
-                .effect()
-                    .attachTo(template)
-                    .stretchTo(template)
-                    .file("jb2a.cloud_of_daggers.kunai.orange")
-                    .tieToDocuments(template)
-                    .scaleIn(0, 500, {ease: "easeOutCubic"})
-                    .fadeIn(500)
-                    .fadeOut(500)
-                    .mask()
-                    .persist()
-                    .belowTokens()
-            .play()
-        }
+        game.gps.animation.cloudOfDaggers({template, itemUuid: workflow.item.uuid});
     }
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');

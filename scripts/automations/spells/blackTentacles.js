@@ -3,37 +3,8 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
     let gmUser = game.gps.getPrimaryGM();
 
     if (args?.[0]?.macroPass === "templatePlaced") {
-        let cprConfig = game.gps.getCprConfig({itemUuid: workflow.item.uuid});
-        const { animEnabled } = cprConfig;
-        if(animEnabled) {
-            const template = await fromUuid(workflow.templateUuid);
-        
-            new Sequence()
-                .effect()
-                    .file("jb2a.darkness.black") //assets/animations/animated_spells/black_tentacles_border.webm
-                    .stretchTo(template)
-                    .attachTo(template)
-                    .delay(500)
-                    .scaleIn(0, 500, {ease: "easeOutCubic"})
-                    .fadeIn(500)
-                    .fadeOut(500)
-                    .filter("ColorMatrix", { brightness:0 })
-                    .belowTokens()
-                    .persist()
-
-                .effect()
-                    .file("jaamod.spells_effects.tentacles_black") //assets/animations/animated_spells/black_tentacles_border.webm
-                    .stretchTo(template)
-                    .attachTo(template)
-                    .delay(500)
-                    .scaleIn(0, 500, {ease: "easeOutCubic"})
-                    .fadeIn(500)
-                    .fadeOut(500)
-                    .opacity(0.8)
-                    .persist()
-            .play()
-        }
-        
+        const template = await fromUuid(workflow.templateUuid);
+        game.gps.animation.blackTentacles({template, itemUuid: workflow.item.uuid});
         return;
     }
 

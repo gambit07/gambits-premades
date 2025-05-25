@@ -228,7 +228,8 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let hasItemDis = token.actor.items.some(i => itemNamesDis.some(name => i.name.toLowerCase().includes(name)));
     let effectNameDis = ["boots of speed"];
     let hasEffectDis = token.actor.appliedEffects.some(e => effectNameDis.some(name => e.name.toLowerCase().includes(name)));
-    const originDisadvantage = hasItemDis || hasEffectDis;
+    let oaDisadvantage = token.actor.flags["gambits-premades"]?.oaDisadvantage;
+    const originDisadvantage = hasItemDis || hasEffectDis || oaDisadvantage;
     
     // Check valid weapons
     let hasWarCaster = effectOriginActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
@@ -573,7 +574,6 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             const points = [];
             let elevationTop = token.elevation + maxRange;
             let elevationBottom = token.elevation - maxRange;
-            console.log(elevationTop, elevationBottom, "elevation")
             let regionShape;
 
             if (canvas.scene.grid.type === 0) {  // Gridless

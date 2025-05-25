@@ -2,41 +2,9 @@ export async function biohazard({speaker, actor, character, item, args, scope, w
     let gmUser = game.gps.getPrimaryGM();
 
     if (args?.[0]?.macroPass === "templatePlaced") {
-        let cprConfig = game.gps.getCprConfig({itemUuid: workflow.item.uuid});
-        const { animEnabled } = cprConfig;
-        if(animEnabled) {
-            const template = await fromUuid(workflow.templateUuid);
-            await template.setFlag("gambits-premades", "biohazardCastLevel", workflow.castData.castLevel - 1)
-
-            new Sequence()
-                .effect()
-                    .file("jb2a.plant_growth.01.square.4x4.loop.bluepurple")
-                    .stretchTo(template)
-                    .attachTo(template)
-                    .filter("ColorMatrix", { hue: 240 })
-                    .delay(500)
-                    .scaleIn(0, 500, {ease: "easeOutCubic"})
-                    .fadeIn(500)
-                    .fadeOut(500)
-                    .mask()
-                    .belowTokens()
-                    .persist()
-                    .zIndex(2)
-                .effect()
-                    .file("jb2a.template_square.symbol.normal.poison.dark_green")
-                    .stretchTo(template)
-                    .attachTo(template)
-                    .delay(500)
-                    .scaleIn(0, 500, {ease: "easeOutCubic"})
-                    .fadeIn(500)
-                    .fadeOut(500)
-                    .mask()
-                    .belowTokens()
-                    .persist()
-                    .zIndex(2)
-            .play()
-        }
-
+        const template = await fromUuid(workflow.templateUuid);
+        await template.setFlag("gambits-premades", "biohazardCastLevel", workflow.castData.castLevel - 1)
+        game.gps.animation.biohazard({template, itemUuid: workflow.item.uuid});
         return;
     }
 
