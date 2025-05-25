@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.0.45] - 2025-05-25
+-Updates:
+  - Opportunity Attack: Added a new DAE key oaDisadvantage. This key will grant disadvantage to a token for any opportunity attack made against them while the effect is active.
+  - Animations: Began process of moving animations into a dedicated animations library - Thanks bakana for the inspiration and work on fireball!
+  - Fireball: Updated some pieces of the animation to make it more consistent. Added automated handling if different damage types are set on fireball to change the color. A user selected color is still set as the highest priority.
+  - Template Animations: No longer require Grid Aligned Square Templates 5e setting to be off
+  - Cloud of Daggers: Added medkit config for different animation color options
+-Bugfixes:
+  - Fire's Burn: Fix automation not only applying to attack damage
+  - Frost's Chill: Fix automation not only applying to attack damage
+  - Hill's Tumble: Fix automation not only applying to attack damage
+
 ## [v1.0.44] - 2025-05-23
 -Bugfixes:
   - Fix issue with pack data
