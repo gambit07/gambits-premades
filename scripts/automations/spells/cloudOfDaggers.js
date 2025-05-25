@@ -5,6 +5,7 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
         const template = await fromUuid(workflow.templateUuid);
         await template.setFlag("gambits-premades", "codCastLevel", workflow.castData.castLevel);
         game.gps.animation.cloudOfDaggers({template, itemUuid: workflow.item.uuid});
+        return;
     }
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
