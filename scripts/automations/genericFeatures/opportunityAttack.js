@@ -374,6 +374,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         if (braceItemUuid) {
             let braceRoll;
             const options = {
+                isGPSopportunityAttack: true,
                 showFullCard: false,
                 createWorkflow: true,
                 versatile: false,
@@ -416,6 +417,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         else if(source && source === "gm") userSelect = gmUser;
 
         const options = {
+            isGPSopportunityAttack: true,
             showFullCard: false,
             createWorkflow: true,
             versatile: false,
