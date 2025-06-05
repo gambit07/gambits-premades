@@ -5,6 +5,15 @@
   - Wound: Added homebrew feature Wound
 - Bugfixes:
   - Opportunity Attack: couple small bugfixes - thanks bugbear!
+  - Small 3rd party automation general fix
+  - Roksja's Husk: Fix roll not being passed to the correct origin user
+  - Motivational Speech: Fix temporary hp not being applied due to missing socket
+
+## [v1.0.47] - 2025-06-05
+- Additions:
+  - Wound: Added homebrew feature Wound
+- Bugfixes:
+  - Opportunity Attack: couple small bugfixes - thanks bugbear!
   - Roksja's Husk: Fix roll not being passed to the correct origin user
   - Motivational Speech: Fix temporary hp not being applied due to missing socket
 
