@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.48] - 2025-06-05
+- Bugfixes:
+  - Wound: Fix bug using macroItem with Midi
+  - Fires Burn: Fix bug using macroItem with Midi
+  - Frosts Chill: Fix bug using macroItem with Midi
+  - Storms Thunder: Fix bug using macroItem with Midi
+  - Hills Tumble: Fix bug using macroItem with Midi
+
 ## [v1.0.47] - 2025-06-05
 - Additions:
   - Wound: Added homebrew feature Wound
