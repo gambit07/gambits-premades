@@ -7,6 +7,7 @@ import { itemsMacros } from "./items/_index.js";
 import { monsterFeaturesMacros } from "./monsterFeatures/_index.js";
 import { raceFeaturesMacros } from "./raceFeatures/_index.js";
 import { spellsMacros } from "./spells/_index.js";
+import { homebrewFeaturesMacros } from "./homebrewFeatures/_index.js";
 
 export const automationRegistry = {
     ...thirdPartyClassFeaturesMacros,
@@ -17,5 +18,6 @@ export const automationRegistry = {
     ...itemsMacros,
     ...monsterFeaturesMacros,
     ...raceFeaturesMacros,
-    ...spellsMacros
+    ...spellsMacros,
+    ...homebrewFeaturesMacros
 };

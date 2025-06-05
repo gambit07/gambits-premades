@@ -62,7 +62,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
             result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
-        const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result;
+        const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
 
         if (!userDecision) {
             continue;
@@ -134,7 +134,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                     result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId: `${dialogId}-1`,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,numTargets: numTargets, source: gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
                 }
                         
-                const { userDecision, enemyTokenUuid, enemyTokenUuids, allyTokenUuid, damageChosen, source, type } = result;
+                const { userDecision, enemyTokenUuid, enemyTokenUuids, allyTokenUuid, damageChosen, source, type } = result || {};
                 
                 targets.push(...enemyTokenUuids);
             }

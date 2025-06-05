@@ -39,9 +39,10 @@ export async function motivationalSpeech({ speaker, actor, token, character, ite
     
     if(args?.[0].macroPass === "preActiveEffects")
     {
+      let gmUser = game.gps.getPrimaryGM();
       const spellLevel = workflow.castData.castLevel - 2;
       const tempHpAmount = parseInt(spellLevel) * 5;
-      await Promise.all(workflow.targets.map(target => target.actor.applyTempHP(tempHpAmount)));
+      await game.gps.socket.executeAsUser("gpsApplyTempHp", gmUser, { actorUuids: workflow.targets.map(target => target.actor.uuid), tempHp: tempHpAmount });
     }
     
     if(args?.[0] === "off")

@@ -57,7 +57,7 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
                 type: "singleDialog"
                 });
                 
-                const { userDecision, allyTokenUuid } = result;
+                const { userDecision, allyTokenUuid } = result || {};
                 
                 if (!userDecision) {
                 return;

@@ -134,7 +134,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
             }
                     
-            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result;
+            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result || {};
 
             if (!userDecision && isLastToken) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
@@ -332,7 +332,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
                 result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenSecondary.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessageSecondary._id});
             }
                     
-            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result;
+            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result || {};
 
             if (!userDecision && isLastToken) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });

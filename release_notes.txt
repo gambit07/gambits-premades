@@ -1,5 +1,6 @@
 - Additions:
-  - Cloud of Daggers 2024: Added 2024 version of Cloud of Daggers
+  - Wound: Added homebrew feature Wound
 - Bugfixes:
-  - Defile Ground: Fix for activity id error, updated item to use regions instead of AA for template handling
-  - Cloud of Daggers: Small fix for a missing return
+  - Opportunity Attack: couple small bugfixes - thanks bugbear!
+  - Roksja's Husk: Fix roll not being passed to the correct origin user
+  - Motivational Speech: Fix temporary hp not being applied due to missing socket

@@ -106,7 +106,7 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
                 result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage.id});
             }
                     
-            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result;
+            const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result || {};
 
             if (!userDecision && isLastToken) {
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });

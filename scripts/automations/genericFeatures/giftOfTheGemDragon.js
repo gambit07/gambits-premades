@@ -97,7 +97,7 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
             result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, source: gmUser === browserUser ? "gm" : "user", type: "singleDialog"});
         }
                 
-        const { userDecision, source, type } = result;
+        const { userDecision, source, type } = result || {};
 
         if (!userDecision) {
             return;
