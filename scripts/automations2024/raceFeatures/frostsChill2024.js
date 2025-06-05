@@ -1,7 +1,7 @@
 export async function frostsChill2024({ speaker, actor, token, character, item, args, scope, workflow, options, rolledItem, rolledActivity, macroItem }) {
     if(args[0].macroPass === "postDamageRollComplete") {
         if(!workflow.activity.hasAttack) return;
-        macroItem = actor.items.find(i => i.system.identifier === macroItem.system.identifier);
+        macroItem = actor.items.find(i => i.system.identifier === "frosts-chill");
         let itemName = macroItem.name;
         let target = workflow.hitTargets.first();
         if(!target) return;

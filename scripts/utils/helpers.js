@@ -1433,7 +1433,7 @@ export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
     const item = await fromUuid(itemUuid);
     if(!item) return console.error(`Shame you didn't pass me an itemUuid`);
     const activity = item.system.activities.find(a => a.identifier === identifier);
-    if(!activity) return console.error(`Naughty Naughty: You've likely removed the identifier name from a ${item.name} automation activity and now it's nowhere to be found ¯\_(ツ)_/¯`);
+    if(!activity) return console.error(`You've likely removed the identifier name from a ${item.name} automation activity which will cause failure.`);
     let targetUuids = (Array.isArray(targetUuid)) ? targetUuid : [targetUuid]
 
     const options = { midiOptions: { targetUuids: targetUuids, noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMStatus: true, autoRollAttack: true, autoRollDamage: "always", fastForwardAttack: true, fastForwardDamage: true, workflowData: true } };

@@ -1,7 +1,6 @@
-- Additions:
-  - Wound: Added homebrew feature Wound
 - Bugfixes:
-  - Opportunity Attack: couple small bugfixes - thanks bugbear!
-  - Small 3rd party automation general fix
-  - Roksja's Husk: Fix roll not being passed to the correct origin user
-  - Motivational Speech: Fix temporary hp not being applied due to missing socket
+  - Wound: Fix bug using macroItem with Midi
+  - Fires Burn: Fix bug using macroItem with Midi
+  - Frosts Chill: Fix bug using macroItem with Midi
+  - Storms Thunder: Fix bug using macroItem with Midi
+  - Hills Tumble: Fix bug using macroItem with Midi

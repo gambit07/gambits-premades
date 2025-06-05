@@ -2,9 +2,11 @@ export async function wound({ speaker, actor, token, character, item, args, scop
     if(args?.[0].macroPass === "postDamageRollComplete") {
         if(!workflow.activity?.description?.chatFlavor?.includes("gpsWoundingItem")) return;
         if(workflow?.damageTotal <= 0) return;
+        item = token.actor.items.find(i => i.name === "Wound");
         let targets = Array.from(workflow?.hitTargets);
         const targetUuids = targets.map(t => t.document.uuid);
-        await game.gps.gpsActivityUse({itemUuid: macroItem.uuid, identifier: "syntheticWound", targetUuid: targetUuids});
+        
+        await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticWound", targetUuid: targetUuids});
     }
     else if(args?.[0] === "each") {
         item = await fromUuid(args[2]);
