@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.0.49] - 2025-06-12
+- Bugfixes:
+  - Black Tentacles: Resolve missing synthetic activities on items
+  - Opportunity Attack: Fix variable not initialized early enough for debug logs
+  - Hide  Wound Checker effect by default for Wound homebrew
+
 ## [v1.0.48] - 2025-06-05
 - Bugfixes:
   - Wound: Fix bug using macroItem with Midi
