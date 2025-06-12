@@ -2,7 +2,7 @@ export async function wound({ speaker, actor, token, character, item, args, scop
     if(args?.[0].macroPass === "postDamageRollComplete") {
         if(!workflow.activity?.description?.chatFlavor?.includes("gpsWoundingItem")) return;
         if(workflow?.damageTotal <= 0) return;
-        item = token.actor.items.find(i => i.name === "Wound");
+        item = token.actor.items.find(i => i.system.identifier === "wound");
         let targets = Array.from(workflow?.hitTargets);
         const targetUuids = targets.map(t => t.document.uuid);
         

@@ -1,6 +1,4 @@
 - Bugfixes:
-  - Wound: Fix bug using macroItem with Midi
-  - Fires Burn: Fix bug using macroItem with Midi
-  - Frosts Chill: Fix bug using macroItem with Midi
-  - Storms Thunder: Fix bug using macroItem with Midi
-  - Hills Tumble: Fix bug using macroItem with Midi
+  - Black Tentacles: Resolve missing synthetic activities on items
+  - Opportunity Attack: Fix variable not initialized early enough for debug logs
+  - Hide  Wound Checker effect by default for Wound homebrew

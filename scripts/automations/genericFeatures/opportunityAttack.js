@@ -2,6 +2,7 @@ const regionTokenStates = new Map();
 
 export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, originX, originY, isTeleport}) {
     let gmUser = game.gps.getPrimaryGM();
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     if(game.user.id !== gmUser) return;
     //async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     let region = await fromUuid(regionUuid);
@@ -40,8 +41,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let dialogTitle;
     let dialogId;
     let braceItemUuid;
-
-    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
 
     // Check if origin token can see token moving
     if(!MidiQOL.canSee(effectOriginToken, token)) {
