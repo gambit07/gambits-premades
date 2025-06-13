@@ -313,7 +313,7 @@ export async function arcaneShotValidActivities({item, actor}) {
         if (!activity) continue;
         
         const hasArrowItem = actor.items.some(i => 
-        i.name === shot.itemName || i.flags["gambits-premades"]?.gpsUuid === shot.gpsUuid
+            i.name === shot.itemName || i.flags["gambits-premades"]?.gpsUuid === shot.gpsUuid
         );
         
         const baseId = shot.identifier.replace(/18$/, '');
@@ -336,21 +336,6 @@ export async function arcaneShotValidActivities({item, actor}) {
 
   Hooks.on('updateActor', async (actor, diff, options, userID) => {
     const token = actor.getActiveTokens()?.[0];
-  
-    if (!diff.system?.attributes?.hp) return;
-    if (!token.actor.appliedEffects.some(e => e.name === "Wound")) return;
-  
-    const hpCurr    = actor.system.attributes.hp.value;
-    const hpMax     = actor.system.attributes.hp.max;
 
-    if(hpCurr >= hpMax) {
-        let allEffects = token.actor.appliedEffects.filter(e => e.name === "Wound");
-        if(allEffects.length === 0) return;
-        
-        for (let effectData of allEffects) {
-            await effectData.delete();
-        }
-        let effectRemover = token.actor.appliedEffects.find(e => e.name === "Wound Checker");
-        if(effectRemover) effectRemover.delete();
-    }
+    await game.gps.wound({args: "woundRemovalFullHeal", token, options: diff})
   });

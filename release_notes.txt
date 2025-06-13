@@ -1,2 +1,2 @@
-- Bugfixes:
-  - Wound - Fix missing identifier
+- Updates:
+  - Wound: Updated the effect to use a single stacking effect instead of multiple effects. Cleaned up self-damage application

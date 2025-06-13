@@ -10,18 +10,35 @@ export async function wound({ speaker, actor, token, character, item, args, scop
     }
     else if(args?.[0] === "each") {
         item = await fromUuid(args[2]);
-        let allEffects = token.actor.appliedEffects.filter(e => e.name === item.name);
-        if (allEffects.length === 0) return;
+        let effectData = token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "7186eac1-010a-4fb4-bd22-699d06839162");
+        if (!effectData) return;
 
-        let gmUser = game.gps.getPrimaryGM();
-        let count = allEffects.length;
+        let count = effectData.flags.dae.stacks;
 
-        let activityToUpdate = item.system.activities.find(a => a.identifier === "syntheticDamage");
+        let damageRoll = await new CONFIG.Dice.DamageRoll(`${count}`, {}, {type: "none"}).evaluate();
 
-        let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
-        damageParts[0].custom.formula = count;
+        const itemData = {
+            name: "Wound Damage",
+            type: "feat",
+            img: item.img
+        }
 
-        await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: { "damage.parts": damageParts } });
-        await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: token.document.uuid});
+        new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "none", token ? [token] : [], damageRoll, {itemData: itemData, flavor: "Wound Damage"});
+    }
+    else if(args === "woundRemovalFullHeal") {
+        if (!options.system?.attributes?.hp) return;
+        if (!token.actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === "7186eac1-010a-4fb4-bd22-699d06839162")) return;
+    
+        const hpCurr = token.actor.system.attributes.hp.value;
+        const hpMax = token.actor.system.attributes.hp.max;
+
+        if(hpCurr >= hpMax) {
+            let effectData = token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "7186eac1-010a-4fb4-bd22-699d06839162");
+            let count = effectData.flags.dae.stacks;
+            await effectData.delete({removeStacks: count});
+
+            let effectRemover = token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "a6e73d28-8fac-4aad-a30a-4d992217a710");
+            if(effectRemover) await effectRemover.delete();
+        }
     }
 }
