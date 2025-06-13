@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.51] - 2025-06-13
+- Updates:
+  - Wound: Updated the effect to use a single stacking effect instead of multiple effects. Cleaned up self-damage application
+
 ## [v1.0.50] - 2025-06-13
 - Bugfixes:
   - Wound - Fix missing identifier
