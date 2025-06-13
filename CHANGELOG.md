@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.0.50] - 2025-06-13
+- Bugfixes:
+  - Wound - Fix missing identifier
+
 ## [v1.0.49] - 2025-06-12
 - Bugfixes:
   - Black Tentacles: Resolve missing synthetic activities on items
