@@ -1,4 +1,2 @@
 - Bugfixes:
-  - Black Tentacles: Resolve missing synthetic activities on items
-  - Opportunity Attack: Fix variable not initialized early enough for debug logs
-  - Hide  Wound Checker effect by default for Wound homebrew
+  - Wound - Fix missing identifier
