@@ -1,5 +1,16 @@
 # Changelog
 
+## [v1.0.52] - 2025-06-22
+- Additions:
+  - Sentinel 2024: Added the 2024 version of Sentinel
+- Updates:
+  - Opportunity Attack: BREAKING-Removed all deprecated code for item specific effect lookup handling. Moving forward, Opportunity Attack Immunity, Opportunity Attack Suppression, and Opportunity Attack Disadvantage should be applied with the relevant gps DAE keys.
+- Bugfixes:
+  - Portent/Greater Portent: Fixed item card lookup no longer functioning and cleaned up chat card output plus a few other small things
+  - Mobile: Fixed mobile's effect not being applied to actor by default
+  - Sentinel: Updated macropass to invoke a Sentinel attack after initiating attack is complete
+  - Generic Weapon Animations: Abort animation if JB2A Patreon is not present
+
 ## [v1.0.51] - 2025-06-13
 - Updates:
   - Wound: Updated the effect to use a single stacking effect instead of multiple effects. Cleaned up self-damage application
