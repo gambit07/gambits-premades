@@ -1,4 +1,3 @@
-//done
 export async function sentinel({workflowData,workflowType,workflowCombat}) {
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;

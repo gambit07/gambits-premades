@@ -146,20 +146,14 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         return;
     }
 
-    // Check if origin tokens reaction is already used or a spell effect is preventing reactions
-    const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
-    let hasEffectOrigin = effectOriginActor.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
-    if(hasEffectOrigin) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at spell effect preventing reaction`);
-        return;
-    }
-
+    // Check if an Opportunity Attack Suppression flag is present
     let oaSuppression = effectOriginActor.flags["gambits-premades"]?.oaSuppression;
     if(oaSuppression) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at oaSuppression effect preventing reactions`);
         return;
     }
 
+    // Check if an Opportunity Attack Immunity flag is present
     let oaImmunity = token.actor.flags["gambits-premades"]?.oaImmunity;
     if(oaImmunity) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at oaImmunity effect preventing reactions against the target`);
@@ -205,33 +199,14 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         }
     }
 
-    // Check if the token has cast Kinetic Jaunt, Zephyr Strike, or the generic immunity effect has been applied
-    const effectNamesToken = ["Kinetic Jaunt", "Zephyr Strike", "Opportunity Attack Immunity", "Rabbit Hop", "Ashardalon's Stride", "Hurried Response", "Sudden Rush"];
-    let hasEffectToken = token.actor.appliedEffects.some(effect => effectNamesToken.includes(effect.name));
-    if(hasEffectToken) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using an immunity effect`);
-        return;
-    }
-
-    // Check if the token has used Flyby
-    let hasFlyby = token.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "54bf1c5f-09d2-4ca9-8465-c9d5b3a72798");
-    if(hasFlyby) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token has flyby`);
-        return;
-    }
-
     // Check if Levels believes tokens are on different levels
     if(CONFIG?.Levels?.API?.testCollision?.({x: effectOriginToken.object.center.x, y: effectOriginToken.object.center.y, z: effectOriginToken.object.losHeight},{x: token.object.center.x, y: token.object.center.y, z: token.object.losHeight})) {
         if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because Levels indicates the tokens cannot see each other`);
         return;
     }
 
-    let itemNamesDis = ["escape the hoard", "speedy"];
-    let hasItemDis = token.actor.items.some(i => itemNamesDis.some(name => i.name.toLowerCase().includes(name)));
-    let effectNameDis = ["boots of speed"];
-    let hasEffectDis = token.actor.appliedEffects.some(e => effectNameDis.some(name => e.name.toLowerCase().includes(name)));
     let oaDisadvantage = token.actor.flags["gambits-premades"]?.oaDisadvantage;
-    const originDisadvantage = hasItemDis || hasEffectDis || oaDisadvantage;
+    const originDisadvantage = oaDisadvantage;
     
     // Check valid weapons
     let hasWarCaster = effectOriginActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");

@@ -65,7 +65,6 @@ export function registerHooks() {
     Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
         if(!workflow.activity.hasAttack) return;
         let workflowItemUuid = workflow.itemCardUuid;
-        if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.protectionEnabled && game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.powerWordReboundEnabled) await executeWorkflow({ workflowItem: "powerWordRebound", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.rainOfCindersEnabled) await executeWorkflow({ workflowItem: "rainOfCinders", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
@@ -126,6 +125,8 @@ export function registerHooks() {
         if (!workflow.activity.type === "spell") return;
         let workflowItemUuid = workflow.itemCardUuid;
         if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "spell", workflowCombat: true });
+        if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel2024", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("dnd5e.rollSavingThrow", async (rolls, data) => {

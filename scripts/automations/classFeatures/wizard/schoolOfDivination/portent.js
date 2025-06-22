@@ -13,6 +13,7 @@ export async function portent({ speaker, actor, token, character, item, args, sc
         }
 
         let portentRollDivs = extractPortentRolls(description);
+        if(!portentRollDivs || portentRollDivs.length === 0) return workflow.aborted = true;
 
         function generatePortentRollButtons() {
             let buttons = [];
@@ -39,11 +40,11 @@ export async function portent({ speaker, actor, token, character, item, args, sc
                         }
                     }
                     }]);
-
-                    const chatMessage = game.messages.get(args[0].itemCardId);
-                    let content = duplicate(chatMessage.content);
+                    
+                    const chatMessage = MidiQOL.getCachedChatMessage(workflow.itemCardUuid);
+                    let content = foundry.utils.duplicate(chatMessage.content);
                     let searchString = /<div class="midi-qol-attack-roll">[\s\S]*<div class="end-midi-qol-attack-roll">/g;
-                    let replaceString = `<div class="midi-qol-attack-roll">You used ${divContent.id} and changed the dice<br> result to ${roll}.<div class="end-midi-qol-attack-roll">`;
+                    let replaceString = `<div class="midi-qol-attack-roll"><span style='text-wrap: wrap;'>You used ${divContent.id} and changed the dice result to ${roll}.</span><div class="end-midi-qol-attack-roll">`;
                     content = content.replace(searchString, replaceString);
                     await chatMessage.update({ content: content });
                 }

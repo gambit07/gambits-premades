@@ -287,6 +287,7 @@ export async function animateLight({ tokenData, effectName, filePath, offsets = 
 }
 
 export async function weaponAnimations({enableTrail = true, enableImpact = true, enableSound = false, enableSwitchDistance = false, enableReturn = false, enableBlood = true, enableShake = true, weapon, trail, impact, impactScale, soundFileMelee, soundFileRange, delaySound, switchDistanceFt, range, returnFile, delayBetweenAttacks, source, targets}) {
+  if(!game.modules.get("jb2a_patreon")?.active) return;
   try {
       async function meleeAttack({target, randMelee, randTrail, impact, isMirrored, targetScale, within5ft}) {
           const sourceScale = { x: source?.document?.texture?.scaleX ?? 1, y: source?.document?.texture?.scaleY ?? 1 }
