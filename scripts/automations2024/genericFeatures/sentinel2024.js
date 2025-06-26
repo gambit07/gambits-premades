@@ -1,7 +1,7 @@
 export async function sentinel2024({workflowData,workflowType,workflowCombat}) {
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    const gpsUuid = "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c";
+    const gpsUuid = "35e47204-cb58-405f-8231-2a945aa9a52d";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Sentinel";
     let dialogId = gpsUuid;
