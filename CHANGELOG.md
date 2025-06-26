@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.53] - 2025-06-26
+- Additions:
+  - Mage Slayer 2024: Added the 2024 version of Mage Slayer
+- Bugfixes:
+  - Circle of Power: Fix animation playing on each ally in the aura
+  - Reckless: Somehow removed the macro, re-added and made a couple small fixes
+  - Sentinel 2024: Fix item use gpsUuid from Sentinel 2014
+
 ## [v1.0.52] - 2025-06-22
 - Additions:
   - Sentinel 2024: Added the 2024 version of Sentinel
