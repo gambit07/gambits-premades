@@ -3,20 +3,7 @@ export async function stinkingCloud({tokenUuid, regionUuid, regionScenario, regi
 
     if(args?.[0]?.macroPass === "templatePlaced") {
         const template = await fromUuid(workflow.templateUuid);
-        let cprConfig = game.gps.getCprConfig({itemUuid: workflow.item.uuid});
-        const { animEnabled } = cprConfig;
-        if(animEnabled) {
-            new Sequence()
-                .effect()
-                    .atLocation(template)
-                    .file("jb2a.fog_cloud.02.green")
-                    .scaleToObject()
-                    .tieToDocuments(template)
-                    .belowTokens()
-                    .mask()
-                    .persist()
-            .play()
-        }
+        game.gps.animation.stinkingCloud({template, itemUuid: workflow.item.uuid});
     }
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
@@ -28,7 +15,6 @@ export async function stinkingCloud({tokenUuid, regionUuid, regionScenario, regi
     }
 
     let region = await fromUuid(regionUuid);
-    let template = await fromUuid(region.flags["region-attacher"].attachedTemplate)
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
 
@@ -38,13 +24,6 @@ export async function stinkingCloud({tokenUuid, regionUuid, regionScenario, regi
     }
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) {
         if(debugEnabled) console.error(`Token is not a character or creature for ${itemName}`);
-        return;
-    }
-
-    let validatedRegionMovement = game.gps.validateRegionMovement({ regionScenario: regionScenario, regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid, validExit: false });
-    const { validRegionMovement, validReroute } = validatedRegionMovement;
-    if(!validRegionMovement) {
-        if(debugEnabled) console.error(`No valid region movement for ${itemName}`);
         return;
     }
 

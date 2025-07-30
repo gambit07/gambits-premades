@@ -1,0 +1,99 @@
+<div class="gps-settings flexcol">
+  <div class="gps-settings-header flexrow">
+    <div class="gps-settings-item-th">Class Features</div>
+    <div class="gps-settings-enable-th">Enable</div>
+    {{#if hasTimeoutColumn}}
+    <div class="gps-settings-timeout-th">Timeout (s)</div>
+    {{/if}}
+  </div>
+
+  {{#each features}}
+    <div
+      class="gps-settings-row flexrow"
+      data-content-id="collapsible-content-{{this.id}}"
+    >
+      <div class="gps-settings-row-text flexrow clickable {{#if this.children}}has-children{{/if}}" data-action="toggleCollapse" data-content-id="collapsible-content-{{this.id}}">
+        <label for="enable-{{this.id}}">
+          {{this.name}}
+          <br/><span class="gps-settings-small-text">{{this.description}}</span>
+        </label>
+      </div>
+      {{#if this.children}}
+        <span class="gps-settings-collapse-arrow">
+          <i class="fa-solid fa-chevron-down"></i>
+        </span>
+      {{/if}}
+      <div class="gps-settings-column-enable">
+        <input
+          type="checkbox"
+          id="enable-{{this.id}}"
+          name="{{this.boolKey}}"
+          data-dtype="Boolean"
+          data-action="stopPropagation"
+          {{#if this.enabled}}checked{{/if}}
+        />
+      </div>
+      {{#if this.timeoutKey}}
+        <div class="gps-settings-column-timeout">
+          <input
+            type="text"
+            id="{{this.id}}-timeout"
+            name="{{this.timeoutKey}}"
+            value="{{this.timeout}}"
+            data-dtype="String"
+            data-action="validateNumericInput"
+          />
+        </div>
+      {{/if}}
+    </div>
+
+    {{#if this.children}}
+      <div
+        class="gps-settings-children flexcol"
+        id="collapsible-content-{{this.id}}"
+      >
+        {{#each this.children}}
+          <div class="gps-settings-row-child flexrow">
+            <div class="gps-settings-column-item">
+              <label for="enable-{{this.id}}-child">{{this.name}}<br/><span class="gps-settings-small-text">{{this.description}}</span></label>
+            </div>
+            <div class="gps-settings-column-enable">
+              {{#if (eq this.type "String")}}
+                <input
+                  type="text"
+                  id="text-{{this.id}}-child"
+                  name="{{this.boolKey}}"
+                  value="{{this.value}}"
+                  data-dtype="String"
+                />
+              {{else}}
+                <input
+                  type="checkbox"
+                  id="enable-{{this.id}}-child"
+                  name="{{this.boolKey}}"
+                  data-dtype="Boolean"
+                  data-action="stopPropagation"
+                  {{#if this.enabled}}checked{{/if}}
+                />
+              {{/if}}
+            </div>
+            <div class="gps-settings-column-timeout">
+              {{#if this.timeoutKey}}
+                <input
+                  type="text"
+                  id="{{this.id}}-timeout-child"
+                  name="{{this.timeoutKey}}"
+                  value="{{this.timeout}}"
+                  data-dtype="String"
+                  data-action="validateNumericInput"
+                />
+              {{/if}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
+
+  {{/each}}
+
+</div>

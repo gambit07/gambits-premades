@@ -9,7 +9,7 @@ export function blackTentacles({template, itemUuid}) {
         scaleDecision = 1.25;
     }
     else {
-        alignmentDecision = { edge: "on", offset: ( {x: 275, y: 0} ) };
+        alignmentDecision = { edge: "on", offset: ( {x: 198, y: 0} ) };
         scaleDecision = 0.65;
     }
 

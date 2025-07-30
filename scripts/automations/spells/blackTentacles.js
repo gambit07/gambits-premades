@@ -1,4 +1,4 @@
-export async function blackTentacles({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus}) {
+export async function blackTentacles({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, regionStatus}) {
     if(!game.combat) return ui.notifications.warn("Black Tentacles requires an active combat.");
     let gmUser = game.gps.getPrimaryGM();
 
@@ -18,15 +18,6 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
 
-    if(regionScenario === "tokenExit") {
-        const isRestrained = await token.actor.appliedEffects.find(e => e.name === "Restrained");
-        if (isRestrained) await isRestrained.delete();
-    }
-
-    let validatedRegionMovement = game.gps.validateRegionMovement({ regionScenario: regionScenario, regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid, validExit: false });
-    const { validRegionMovement, validReroute } = validatedRegionMovement;
-    if(!validRegionMovement) return;
-
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem?.name;
     
@@ -36,6 +27,8 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
     const hasEffectApplied = token.document.hasStatusEffect("restrained");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkBlackTentacleRound");
     if(damagedThisTurn && damagedThisTurn === `${token.id}_${game.combat.round}`) return;
+
+    let resumeMovement;
 
     if (hasEffectApplied && regionScenario === "tokenTurnStart") {
         const dealDamage = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticDamage", targetUuid: token.document.uuid});
@@ -104,10 +97,12 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
     }
 
     else if (!hasEffectApplied) {
+        if(regionScenario === "tokenEnter") resumeMovement = await tokenDocument.pauseMovement();
         const saveResult = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
         if(!saveResult) return;
         
         if (saveResult.failedSaves.size !== 0) {
+            await region.setFlag("gambits-premades", "checkBlackTentacleRound", `${token.id}_${game.combat.round}`);
             const hasEffectApplied = token.document.hasStatusEffect("restrained");
 
             if (!hasEffectApplied) {
@@ -142,12 +137,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
     
             if (!userDecision) {
-                if(validReroute) {
-                    game.gps.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
-    
-                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { teleport: true });
-                }
-
+                if(regionScenario === "tokenEnter") await game.gps.stopMovementEnter({token: tokenDocument});
                 return;
             }
             else if (userDecision) {
@@ -155,7 +145,10 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                     let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticCheck");
                     await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"check.ability": abilityCheck} });
                     const skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: token.document.uuid});
-                    if(!skillCheck) return;
+                    if(!skillCheck && regionScenario === "tokenEnter") {
+                        return await game.gps.stopMovementEnter({token: tokenDocument});
+                    }
+                    else if(!skillCheck) return;
 
                     if (skillCheck.failedSaves.size === 0) {
                         await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
@@ -165,22 +158,23 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                         content: `<span style='text-wrap: wrap;'>You successfully escape from Black Tentacles!</span>`
                         };
                         ChatMessage.create(chatData);
+                        await resumeMovement();
                     }
                     else {
-                        if(validReroute) {
-                            game.gps.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
-            
-                            if(originX && originY) await token.document.update({ x: originX, y: originY }, { teleport: true });
-                        }
                         let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),
                         content: `<span style='text-wrap: wrap;'>You are unable to escape Black Tentacles this turn.</span>`
                         };
                         ChatMessage.create(chatData);
+
+                        await game.gps.stopMovementEnter({token: tokenDocument});
                     }
                 }
             }
+        }
+        else {
+            if(regionScenario === "tokenEnter") await resumeMovement();
         }
         
         if(saveResult) {

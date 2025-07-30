@@ -1,7 +1,8 @@
 export async function enervation({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "postActiveEffects") {
         let targets = Array.from(workflow.failedSaves);
-        let effectData = actor.appliedEffects.find(e => e.name === "Enervation - Range");
+        let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "9c513478-ffd9-4d5a-9e39-3d72bf0518ab");
+        let effectDataRange = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "0d9ce5a3-a0b0-44a9-b03b-edd413590139");
 
         if(!targets || targets.length >= 3) {
             const concEffect = MidiQOL.getConcentrationEffect(actor, item.uuid);
@@ -28,6 +29,7 @@ export async function enervation({ speaker, actor, token, character, item, args,
             .effect()
                 .file("jb2a.energy_beam.reverse.dark_green")
                 .persist()
+                .tieToDocuments(effectDataRange)
                 .name(`${target.id}_Enervation`)
                 .fadeIn(500)
                 .fadeOut(500)
@@ -36,77 +38,37 @@ export async function enervation({ speaker, actor, token, character, item, args,
             .play()
         }
 
-        let targetValidation;
         if(targetUuids.length > 1) {
-            targetValidation = {
-                "ActiveAuras": 
-                {
-                    "customCheck": `(token.document.uuid === '${targets[0].document.uuid}' || token.document.uuid === '${targets[1].document.uuid}') && (MidiQOL.canSee(token.document.uuid, '${targets[0].document.uuid}') || MidiQOL.canSee(token.document.uuid, '${targets[1].document.uuid}'))`,
-                    "isAura": true,
-                    "aura": "Enemy",
-                    "nameOverride": "",
-                    "radius": "60",
-                    "alignment": "",
-                    "type": "",
-                    "ignoreSelf": true,
-                    "height": true,
-                    "hidden": false,
-                    "displayTemp": false,
-                    "hostile": false,
-                    "onlyOnce": false,
-                    "wallsBlock": "true"
-                }
-            };
+            await effectDataRange.update({ 'system.script': `(token.document.uuid === '${targets[0].document.uuid}' || token.document.uuid === '${targets[1].document.uuid}') && (MidiQOL.canSee(token.document.uuid, '${targets[0].document.uuid}') || MidiQOL.canSee(token.document.uuid, '${targets[1].document.uuid}'))` });
         }
         else {
-            targetValidation = {
-                "ActiveAuras": 
-                {
-                    "customCheck": `token.document.uuid === '${targets[0].document.uuid}' && MidiQOL.canSee(token.document.uuid, '${targets[0].document.uuid}')`,
-                    "isAura": true,
-                    "aura": "Enemy",
-                    "nameOverride": "",
-                    "radius": "60",
-                    "alignment": "",
-                    "type": "",
-                    "ignoreSelf": true,
-                    "height": true,
-                    "hidden": false,
-                    "displayTemp": false,
-                    "hostile": false,
-                    "onlyOnce": false,
-                    "wallsBlock": "true"
-                }
-            };
+            await effectDataRange.update({ 'system.script': `token.document.uuid === '${targets[0].document.uuid}' && MidiQOL.canSee(token.document.uuid, '${targets[0].document.uuid}')` });
         }
 
-        await effectData.update({ flags: targetValidation });
-        let effectDataSource = actor.appliedEffects.find(e => e.name === item.name);
-        await effectDataSource.setFlag("gambits-premades", "enervationTargetUuid", targetUuids);
-        await effectDataSource.setFlag("gambits-premades", "enervationCastLevel", workflow.castData.castLevel);
+
+        await effectData.setFlag("gambits-premades", "enervationTargetUuid", targetUuids);
+        await effectData.setFlag("gambits-premades", "enervationCastLevel", workflow.castData.castLevel);
     }
 
     if(args[0] === "off") {
+        if(args[4]["expiry-reason"] === "midi-qol:isMoved") return;
         const originActor = await fromUuid(args[2]);
 
         let effectData = originActor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "9c513478-ffd9-4d5a-9e39-3d72bf0518ab");
-        if(!effectData) return;
         let effectDataRange = originActor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "0d9ce5a3-a0b0-44a9-b03b-edd413590139");
-        if(!effectDataRange) return;
-        let targetUuids = effectData.getFlag("gambits-premades", "enervationTargetUuid");
+        let targetUuids = effectData?.getFlag("gambits-premades", "enervationTargetUuid");
 
         if(targetUuids.length <= 1) {
             const concEffect = MidiQOL.getConcentrationEffect(originActor, args[3]);
-            if(!concEffect) return;
-            await MidiQOL.socket().executeAsGM('removeEffects', { actorUuid: originActor.uuid, effects: [concEffect.id] });
+            if(concEffect) await MidiQOL.socket().executeAsGM('removeEffects', { actorUuid: originActor.uuid, effects: [concEffect.id] });
         }
         else {
-            targetUuids = targetUuids.filter(uuid => uuid !== token.document.uuid);
-            await effectData.setFlag("gambits-premades", "enervationTargetUuid", targetUuids);
-            await effectDataRange.setFlag("ActiveAuras", "customCheck", `token.document.uuid === '${targetUuids[0]}' && MidiQOL.canSee(token.document.uuid, '${targetUuids[0]}')`);
+            targetUuids = targetUuids?.filter(uuid => uuid !== token.document.uuid);
+            await effectData?.setFlag("gambits-premades", "enervationTargetUuid", targetUuids);
+            await effectDataRange?.update({ 'system.script': `token.document.uuid === '${targetUuids[0]}' && MidiQOL.canSee(token.document.uuid, '${targetUuids[0]}')` });
         }
 
-        await Sequencer.EffectManager.endEffects({ name: `${token.id}_Enervation`});
+        //await Sequencer.EffectManager.endEffects({ name: `${token.id}_Enervation`});
     }
 
     if(args[0] === "each") {

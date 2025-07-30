@@ -1,15 +1,7 @@
-export async function entangle({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if (args[0].macroPass === "preActiveEffects") {
-        return await AAHelpers.applyTemplate(args);
-    }
-
-    if(args[0].macroPass === "postSave")
+export async function entangle({ tokenUuid, regionUuid, regionScenario, speaker, actor, token, character, item, args, scope, workflow, options }) {
+    if(args?.[0].macroPass === "postSave")
     {
         const template = await fromUuid(workflow.templateUuid);
-        const gridDecision = true;
-        let edgeDecision = "inner";
-        let alignmentDecision;
-        (MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates') === true) ? alignmentDecision = "center" : alignmentDecision = "right";
         const targets = Array.from(workflow.failedSaves);
 
         for (let target of targets) {
@@ -20,157 +12,21 @@ export async function entangle({ speaker, actor, token, character, item, args, s
             }
         }
 
-        new Sequence()
-
-        .effect()
-        .atLocation(token)
-        .file(`jb2a.magic_signs.circle.02.conjuration.loop.green`)
-        .scaleToObject(1.25)
-        .rotateIn(180, 600, {ease: "easeOutCubic"})
-        .scaleIn(0, 600, {ease: "easeOutCubic"})
-        .loopProperty("sprite", "rotation", { from: 0, to: -360, duration: 10000})
-        .belowTokens()
-        .fadeOut(2000)
-        .zIndex(0)
-
-        .effect()
-        .atLocation(token)
-        .file(`jb2a.magic_signs.circle.02.conjuration.complete.dark_green`)
-        .scaleToObject(1.25)
-        .rotateIn(180, 600, {ease: "easeOutCubic"})
-        .scaleIn(0, 600, {ease: "easeOutCubic"})
-        .loopProperty("sprite", "rotation", { from: 0, to: -360, duration: 10000})
-        .belowTokens(true)
-        .filter("ColorMatrix", {saturate:-1, brightness:2})
-        .filter("Blur", { blurX: 5, blurY: 10 })
-        .zIndex(1)
-        .duration(1200)
-        .fadeIn(200, {ease: "easeOutCirc", delay: 500})
-        .fadeOut(300, {ease: "linear"})
-
-        .effect()
-        .file("jb2a.entangle.green")
-        .attachTo(template, { align: alignmentDecision, edge: edgeDecision })
-        .delay(1000)
-        .fadeIn(2000)
-        .opacity(0.95)
-        .fadeOut(500)
-        .belowTokens()
-        .persist()
-        .zIndex(1.5)
-        .name(`Entangle`)
-
-        .effect()
-        .file("jb2a.entangle.green")
-        .attachTo(template, { align: alignmentDecision, edge: edgeDecision })
-        .delay(1000)
-        .fadeIn(2000)
-        .opacity(0.85)
-        .fadeOut(500)
-        .belowTokens()
-        .persist()
-        .zIndex(1.3)
-        .name(`Entangle`)
-
-        .effect()
-        .file("jb2a.entangle.green")
-        .attachTo(template, { align: alignmentDecision, edge: edgeDecision })
-        .delay(1000)
-        .fadeIn(2000)
-        .opacity(0.75)
-        .fadeOut(500)
-        .belowTokens()
-        .persist()
-        .zIndex(1.2)
-        .name(`Entangle`)
-
-        .effect()
-        .file("jb2a.plant_growth.02.ring.4x4.pulse.greenred")
-        .attachTo(template, { align: alignmentDecision, edge: edgeDecision })
-        .scale(0.8)
-        .delay(500)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .fadeIn(500)
-        .fadeOut(500)
-        .belowTokens()
-        .randomRotation()
-        .zIndex(2)
-        .name(`Entangle`)
-
-        .effect()
-        .attachTo(template, { align: alignmentDecision, edge: edgeDecision })
-        .file(`jb2a.fireflies.many.01.green`)
-        .delay(1000)
-        .size(4, {gridUnits: gridDecision})
-        .fadeIn(2500)
-        .opacity(1)
-        .persist()
-        .zIndex(2)
-        .name(`Entangle`)
-
-        .effect()
-        .file("jb2a.plant_growth.02.ring.4x4.pulse.greenred")
-        .attachTo(template, { align: alignmentDecision, edge: edgeDecision })
-        .scale(0.8)
-        .delay(500)
-        .scaleIn(0, 500, {ease: "easeOutCubic"})
-        .fadeIn(500)
-        .fadeOut(500)
-        .belowTokens()
-        .randomRotation()
-        .zIndex(2)
-
-        .effect()
-        .file("jb2a.swirling_leaves.outburst.01.greenorange")
-        .scaleIn(0, 500, {ease: "easeOutQuint"})
-        .delay(500)
-        .fadeOut(1000)
-        .atLocation(token)
-        .duration(1000)
-        .size(1.75, {gridUnits: gridDecision})
-        .animateProperty("spriteContainer", "position.y", {  from:0 , to: -0.15, gridUnits:gridDecision, duration: 1000})
-        .zIndex(1)
-
-        .effect()
-        .attachTo(template, { align: alignmentDecision, edge: edgeDecision })
-        .file(`jb2a.magic_signs.circle.02.conjuration.complete.dark_green`)
-        .scale(0.5)
-        .fadeIn(600)
-        .rotateIn(180, 600, {ease: "easeOutCubic"})
-        .scaleIn(0, 600, {ease: "easeOutCubic"})
-        .opacity(1)
-        .persist()
-        .belowTokens()
-        .zIndex(1)
-        .name(`Entangle`)
-        .waitUntilFinished()
-
-        .play()
-
-        targets.forEach(target => {
-
-        new Sequence()
-
-        .effect()
-        .delay(100)
-        .file('jb2a.entangle.green')
-        .scaleToObject(1, {considerTokenScale:true})
-        .attachTo(target)
-        .fadeIn(5000)
-        .zIndex(1)
-        .fadeOut(1000)
-        .scaleIn(0, 5000, {ease: "easeOutCubic"})
-        .mask(target)
-        .persist() 
-        .name(`${target.document.id}Entangle`)
-
-
-        .play()
-            
-        })
+        await game.gps.animation.entangle({template, itemUuid: workflow.item.uuid, targets, token});
     }
 
-    if(args[0] === "each") {
+    if(regionScenario === "tokenTurnStart") {
+        if(!tokenUuid || !regionUuid || !regionScenario) {
+            if(debugEnabled) console.error(`No Region or Token found for ${itemName}`);
+            return;
+        }
+
+        let region = await fromUuid(regionUuid);
+        let tokenDocument = await fromUuid(tokenUuid);
+        let token = tokenDocument?.object;
+        actor = tokenDocument.actor;
+        item = await fromUuid(region.flags["region-attacher"].itemUuid);
+
         const hasEffectApplied = actor.appliedEffects.find(e => e.name === "Restrained");
         if(!hasEffectApplied) return;
 
@@ -201,7 +57,7 @@ export async function entangle({ speaker, actor, token, character, item, args, s
             </div>
         `;
         
-        let result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+        let result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: tokenDocument.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
 
@@ -209,28 +65,29 @@ export async function entangle({ speaker, actor, token, character, item, args, s
             return;
         }
         else if (userDecision) {
-            const saveResult = await game.gps.gpsActivityUse({itemUuid: args[2], identifier: "syntheticSave", targetUuid: token.document.uuid});
+            const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: tokenDocument.uuid});
 
             if (saveResult.failedSaves.size === 0)
             {
-                const hasEffectApplied = token.document.hasStatusEffect("restrained");
+                const hasEffectApplied = tokenDocument.hasStatusEffect("restrained");
 
                 if (hasEffectApplied) {
-                    await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
+                    await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${tokenDocument.uuid}`, status: "restrained", active: false });
                 }
 
-                Sequencer.EffectManager.endEffects({ name: `${token.document.id}Entangle`, object: token });
+                Sequencer.EffectManager.endEffects({ name: `${tokenDocument.id}Entangle`, object: token });
             }
         }
     }
 
-    if(args[0] === "off") {
-        const hasEffectApplied = token.document.hasStatusEffect("restrained");
+    if(regionScenario === "tokenExits") {
+        let tokenDocument = await fromUuid(tokenUuid);
+        const hasEffectApplied = tokenDocument.hasStatusEffect("restrained");
 
         if (hasEffectApplied) {
-            await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
+            await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${tokenDocument.uuid}`, status: "restrained", active: false });
         }
 
-        Sequencer.EffectManager.endEffects({ name: `${token.document.id}Entangle`, object: token });
+        Sequencer.EffectManager.endEffects({ name: `${tokenDocument.id}Entangle`, object: token });
     }
 }

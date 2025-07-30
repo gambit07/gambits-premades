@@ -187,20 +187,23 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 }
             }
 
+            let reroll;
+
             if(workflowType === "save") {
                 const saveSetting = workflow.workflowOptions.noOnUseMacro;
                 workflow.workflowOptions.noOnUseMacro = true;
-                let saveDC = workflow.saveItem.system.save.dc;
+                let saveDC = workflow.activityHasSave.dc.value;
+                
 
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });
                 if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${hexDie}`, type: workflowType });
-                let rollFound = workflow.saveRolls.find(roll => roll.data.tokenUuid === returnedTokenUuid);
+                let rollFound = workflow.saveRolls.find(roll => roll.data.tokenUuid === enemyTokenUuid);
                 let rollTotal = rollFound.total;
                 let modifiedRoll = await new Roll(`${rollTotal} - ${reroll.total}`).evaluate();
 
                 workflow.workflowOptions.noOnUseMacro = saveSetting;
 
-                if(modifiedRoll < saveDC) {
+                if(modifiedRoll.total < saveDC) {
                     workflow.saves.delete(target);
                     workflow.failedSaves.add(target);
 
@@ -218,7 +221,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 let targetAC = workflow.targets.first().actor.system.attributes.ac.value;
                 const saveSetting = workflow.workflowOptions.noOnUseMacro;
                 workflow.workflowOptions.noOnUseMacro = true;
-                let reroll;
+
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });
                 if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${hexDie}`, type: workflowType });
                 let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).evaluate();

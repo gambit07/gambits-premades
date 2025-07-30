@@ -12,9 +12,9 @@
   ],
   "version": "1.0.53",
   "compatibility": {
-    "minimum": 12.328,
-    "verified": 12.343,
-    "maximum": 12
+    "minimum": 13.346,
+    "verified": 13.346,
+    "maximum": 13
   },
   "socket": true,
   "esmodules": [
@@ -148,6 +148,14 @@
       "path": "packs/gps-generic-features-2024",
       "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
       "module": "gambits-premades"
+    },
+    {
+      "label": "GPS Items 2024",
+      "type": "Item",
+      "name": "gps-items-2024",
+      "path": "packs/gps-items-2024",
+      "banner": "modules/gambits-premades/assets/images/gambit_banner.webp",
+      "module": "gambits-premades"
     }
   ],
   "packFolders": [
@@ -183,7 +191,8 @@
           "packs": [
             "gps-spells-2024",
             "gps-race-features-2024",
-            "gps-generic-features-2024"
+            "gps-generic-features-2024",
+            "gps-items-2024"
           ]
         }
       ]
@@ -198,9 +207,9 @@
         "id": "dnd5e",
         "type": "system",
         "compatibility": {
-          "minimum": "4.3.6",
-          "verified": "4.3.8",
-          "maximum": "4.9.9"
+          "minimum": "5.0.4",
+          "verified": "5.0.4",
+          "maximum": "5.0.9"
         }
       }
     ],
@@ -209,64 +218,64 @@
         "id": "midi-qol",
         "type": "module",
         "compatibility": {
-          "minimum": "12.4.37",
-          "verified": "12.4.37"
+          "minimum": "13.0.9.1",
+          "verified": "13.0.9.1"
         }
       },
       {
-        "id": "ActiveAuras",
+        "id": "auraeffects",
         "type": "module",
         "compatibility": {
-          "minimum": "0.11.2",
-          "verified": "0.11.3"
+          "minimum": "1.2.1",
+          "verified": "1.2.1"
         }
       },
       {
         "id": "sequencer",
         "type": "module",
         "compatibility": {
-          "minimum": "3.4.8",
-          "verified": "3.4.9"
+          "minimum": "3.6.7",
+          "verified": "3.6.7"
         }
       },
       {
         "id": "socketlib",
         "type": "module",
         "compatibility": {
-          "minimum": "1.1.0",
-          "verified": "1.1.0"
+          "minimum": "1.1.3",
+          "verified": "1.1.3"
         }
       },
       {
         "id": "lib-wrapper",
         "type": "module",
         "compatibility": {
-          "minimum": "1.13.2.0",
-          "verified": "1.13.2.0"
+          "minimum": "1.13.3.0",
+          "verified": "1.13.3.0"
         }
       },
       {
         "id": "dae",
         "type": "module",
         "compatibility": {
-          "minimum": "12.0.15",
-          "verified": "12.0.15"
+          "minimum": "13.0.6",
+          "verified": "13.0.6"
         }
       },
       {
         "id": "region-attacher",
         "type": "module",
         "compatibility": {
-          "minimum": "1.6.2",
-          "verified": "1.7.0"
+          "minimum": "1.9.1",
+          "verified": "1.9.1"
         }
       },
       {
         "id": "times-up",
         "type": "module",
         "compatibility": {
-          "minimum": "11.3.20",
-          "verified": "11.3.20"
+          "minimum": "13.1.0",
+          "verified": "13.1.0"
         }
       }
     ],
@@ -275,14 +284,14 @@
         "id": "tidy5e-sheet",
         "type": "module",
         "compatibility": {
-          "verified": "9.1.0"
+          "verified": "10.4.0"
         }
       },
       {
         "id": "jb2a_patreon",
         "type": "module",
         "compatibility": {
-          "verified": "0.7.0"
+          "verified": "0.7.4"
         }
       },
       {

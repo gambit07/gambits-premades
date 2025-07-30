@@ -24,14 +24,13 @@ export async function biohazard({speaker, actor, character, item, args, scope, w
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
 
-    let validatedRegionMovement = game.gps.validateRegionMovement({ regionScenario: regionScenario, regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
-    const { validRegionMovement, validReroute } = validatedRegionMovement;
-    if(!validRegionMovement) return;
-
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let castLevel = template.getFlag("gambits-premades", "biohazardCastLevel");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkBiohazardRound");
     if(damagedThisTurn && damagedThisTurn === `${token.id}_${game.combat.round}`) return;
+
+    let resumeMovement;
+    if(regionScenario === "tokenEnter") resumeMovement = await tokenDocument.pauseMovement();
 
     let activityToUpdate = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
     let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
@@ -41,4 +40,5 @@ export async function biohazard({speaker, actor, character, item, args, scope, w
     await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
     
     await region.setFlag("gambits-premades", "checkBiohazardRound", `${token.id}_${game.combat.round}`);
+    if(regionScenario === "tokenEnter") await resumeMovement();
 }

@@ -7,19 +7,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
         const { animEnabled } = cprConfig;
         if(animEnabled) {
             const template = await fromUuid(workflow.templateUuid);
-            let alignmentDecision;
-            (MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates') === true) ? alignmentDecision = "center" : alignmentDecision = "right";
-        
-            new Sequence()
-                .effect()
-                .file("modules/gambits-premades/assets/images/ballBearings.webp")
-                .scaleToObject(0.5, {uniform:true})
-                .attachTo(template, { align: alignmentDecision, edge: "inner" })
-                .tieToDocuments(template)
-                .mask()
-                .belowTokens()
-                .persist()
-                .play()
+            game.gps.animation.ballBearings({template, itemUuid: workflow.item.uuid});
         }
     }
 
@@ -33,9 +21,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
 
-    let validatedRegionMovement = game.gps.validateRegionMovement({ regionScenario: regionScenario, regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
-    const { validRegionMovement, validReroute } = validatedRegionMovement;
-    if(!validRegionMovement) return;
+    let resumeMovement = await tokenDocument?.pauseMovement();
 
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem.name;
@@ -72,14 +58,10 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
         let saveResult;
         if(source && source === "user") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
         else if(source && source === "gm") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
-        if(!saveResult) return;
+        if(!saveResult) return await game.gps.stopMovementEnter({token: tokenDocument});
 
         if (saveResult.failedSaves.size !== 0) {
-            if(validReroute) {
-                game.gps.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
-
-                await token.document.update({ x: originX, y: originY }, { teleport: true });
-            }
+            await game.gps.stopMovementEnter({token: tokenDocument});
 
             const hasEffectApplied = tokenDocument.hasStatusEffect("prone");
 
@@ -87,8 +69,10 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
                 await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "prone", active: true });
             }
         }
+        else await resumeMovement();
     }
     else if (userDecision) {
+        await resumeMovement();
         return;
     }
 }

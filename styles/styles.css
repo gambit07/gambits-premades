@@ -1,3 +1,8 @@
+:root {
+  --gps-settings-max-height: 85vh;
+  --gps-settings-max-height: 85dvh;
+}
+
 .gps-dialog-container {
     display: flex;
     flex-direction: column;
@@ -116,4 +121,166 @@
 .gps-dialog-button {
     margin-bottom: 8px;
     width: 150px;
+}
+
+/* Container stays the same */
+.gps-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  height: auto;
+  max-height: var(--gps-settings-max-height);
+  overflow-y: auto !important;
+}
+
+.gps-settings-column-enable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gps-settings-header,
+.gps-settings-row {
+  display: grid;
+  grid-template-columns: 4fr 3rem 5rem;
+  column-gap: 2rem;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+/* Header border slightly heavier, rows lighter */
+.gps-settings-header {
+  font-weight: bold;
+  border: 1.5px solid var(--color-border-light-2);
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.gps-settings-row {
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+  position: relative; /* for your arrow */
+}
+.gps-settings-row:hover {
+  background: var(--color-warm-2);
+}
+
+/* 2) Column sizing: left=3×, middle=2rem, right=4rem */
+.gps-settings-header > .gps-settings-item-th,
+.gps-settings-row   > .gps-settings-column-item {
+  flex: 3;             /* 3 parts of the available space */
+  padding-right: 0.5rem;
+}
+
+.gps-settings-header > .gps-settings-column-enable-th,
+.gps-settings-row   > .gps-settings-column-enable {
+  flex: 0 0 3rem;      /* fixed 2rem */
+  text-align: center;
+}
+
+.gps-settings-header > .gps-settings-column-timeout-th,
+.gps-settings-row   > .gps-settings-column-timeout {
+  flex: 0 0 4rem;      /* fixed 4rem */
+  text-align: center;
+}
+
+/* 3) Child rows indent & share the same text padding */
+.gps-settings-children {
+  display: none;
+  margin-left: 1.5rem;
+  border-left: 2px dashed var(--color-border-light-2);
+  padding-left: 1rem;
+}
+.gps-settings-children.show {
+  display: flex;
+  flex-direction: column;
+}
+.gps-settings-children .gps-settings-column-enable {
+  padding-left: 0rem;
+}
+.gps-settings-row-child {
+  display: grid;
+  grid-template-columns: 4fr 3rem 5rem;
+  column-gap: 2rem;
+  align-items: center;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* 4) Inputs & small text unchanged */
+.gps-settings-column-enable input[type="checkbox"] {
+  transform: scale(1.2);
+  margin: 0;
+}
+.gps-settings-column-enable input[type="text"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 10rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 0.25rem;
+}
+.gps-settings-column-timeout input[type="text"] {
+  width: 100%;
+  max-width: 3.5rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 0.25rem;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.gps-settings-column-timeout input[type="text"]:focus {
+  border-color: var(--color-border-light-2);
+  outline: none;
+}
+.gps-settings-small-text {
+  font-size: 0.8em;
+  margin-top: 0.25rem;
+}
+
+/* 5) Footer button back to auto-width */
+.gps-settings .form-footer button {
+  margin-top: 0.5rem;
+  width: 100%;
+  border-color: var(--color-border-light-2);
+}
+
+/* 6) Chevron arrow stays in the right place */
+.gps-settings-collapse-arrow {
+  position: absolute;
+  right: 12.5rem;  /* timeout (4rem) + gap (1rem) */
+  pointer-events: none;
+  transition: transform 0.5s ease;
+}
+.gps-settings-row-text.open + .gps-settings-collapse-arrow i {
+  transform: rotate(180deg);
+}
+#gps-favorite-checkbox {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+#gps-favorite-checkbox + label {
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer !important;
+}
+
+#gps-favorite-checkbox + label::before {
+    content: "☆" !important; /* Unicode empty star (☆) for my remembrance*/
+    font-size: 30px !important;
+    margin-right: 5px !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+}
+
+#gps-favorite-checkbox:checked + label::before {
+    content: "★" !important; /* Unicode filled star (★) also for my remembrance */
 }

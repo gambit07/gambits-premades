@@ -40,7 +40,7 @@ export function updateRegionPosition(region, tokenDocument, updatedElevation = n
             previousX1 = currentX;
             previousY1 = currentY;
 
-            setTimeout(checkPosition, 25);
+            setTimeout(checkPosition, 100);
         } else if (previousX1 === previousX2 && previousY1 === previousY2) {
             const updatedShapes = region.shapes.map(shape => {
                 if (shape.type === "ellipse") {
@@ -98,7 +98,7 @@ export function updateRegionPosition(region, tokenDocument, updatedElevation = n
         } else {
             previousX2 = previousX1;
             previousY2 = previousY1;
-            setTimeout(checkPosition, 100);
+            setTimeout(checkPosition, 250);
         }
     };
 
@@ -143,67 +143,59 @@ export function registerWrapping() {
     let wrappingEnabled = game.settings.get("gambits-premades", "enableRegionWrapping");
     if (!wrappingEnabled) return;
 
-    const REFERENCE_GRID  = 140;
-    const REFERENCE_INSET = 70;
-
-    libWrapper.register('gambits-premades', 'Token.prototype.testInsideRegion', function (wrapped, ...args) {
+    libWrapper.register('gambits-premades', 'TokenDocument.prototype.testInsideRegion', function (wrapped, region, data = {}) {
         if (game.gps.disableRegionTeleport) return false;
-        const [region, position] = args;
-        if (region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args);
-        if (!this?.document) return wrapped(...args);
-        for (const behavior of region.document.behaviors.values()) {
-        if (behavior.type !== "executeScript") return wrapped(...args);
+        if (region?.flags["gambits-premades"]?.excludeRegionHandling) return wrapped.call(this, region, data);
+        for (const behavior of region.behaviors.values()) {
+            if (behavior.type !== "executeScript") return wrapped.call(this, region, data);
         }
 
-        const size      = canvas.dimensions.size;
-        const reduction = Math.round(REFERENCE_INSET * (size / REFERENCE_GRID));
-        const wPx       = this.document.width  * size;
-        const hPx       = this.document.height * size;
+        const size = canvas.dimensions.size;
+        const wPx = data.width  * size;
+        const hPx = data.height * size;
+        const reduction = Math.min(wPx, hPx) * 0.15;
 
         const points = [
-        { x: this.document.x + reduction,     y: this.document.y + reduction,     elevation: this.document.elevation },
-        { x: this.document.x + wPx - reduction, y: this.document.y + reduction,     elevation: this.document.elevation },
-        { x: this.document.x + reduction,     y: this.document.y + hPx - reduction, elevation: this.document.elevation },
-        { x: this.document.x + wPx - reduction, y: this.document.y + hPx - reduction, elevation: this.document.elevation },
-        { x: this.document.x + wPx / 2,       y: this.document.y + reduction,     elevation: this.document.elevation },
-        { x: this.document.x + wPx / 2,       y: this.document.y + hPx - reduction, elevation: this.document.elevation },
-        { x: this.document.x + reduction,     y: this.document.y + hPx / 2,       elevation: this.document.elevation },
-        { x: this.document.x + wPx - reduction, y: this.document.y + hPx / 2,       elevation: this.document.elevation },
-        { x: this.document.x + wPx / 2,       y: this.document.y + hPx / 2,       elevation: this.document.elevation }
+            { x: data.x + reduction, y: data.y + reduction, elevation: data.elevation },
+            { x: data.x + wPx - reduction, y: data.y + reduction, elevation: data.elevation },
+            { x: data.x + reduction, y: data.y + hPx - reduction, elevation: data.elevation },
+            { x: data.x + wPx - reduction, y: data.y + hPx - reduction, elevation: data.elevation },
+            { x: data.x + wPx / 2, y: data.y + reduction, elevation: data.elevation },
+            { x: data.x + wPx / 2, y: data.y + hPx - reduction, elevation: data.elevation },
+            { x: data.x + reduction, y: data.y + hPx / 2, elevation: data.elevation },
+            { x: data.x + wPx - reduction, y: data.y + hPx / 2, elevation: data.elevation },
+            { x: data.x + wPx / 2, y: data.y + hPx / 2, elevation: data.elevation }
         ];
 
-        const isInside = points.some(p => region.testPoint(p, position?.elevation ?? this.document.elevation));
-        return isInside || wrapped(...args);
+        const isInside = points.some(p => region.testPoint(p, p.elevation));
+        return isInside || wrapped.call(this, region, data);
     }, 'MIXED');
 
-    libWrapper.register('gambits-premades', 'Token.prototype.segmentizeRegionMovement', function (wrapped, ...args) {
+    libWrapper.register('gambits-premades', 'TokenDocument.prototype.segmentizeRegionMovementPath', function (wrapped, region, waypoints) {
         if (game.gps.disableRegionTeleport) return [];
-        const [region, waypoints, options] = args;
-        if (region?.document.flags["gambits-premades"]?.excludeRegionHandling) return wrapped(...args);
-        if (!this?.document) return wrapped(...args);
-        for (const behavior of region.document.behaviors.values()) {
-        if (behavior.type !== "executeScript") return wrapped(...args);
+        if (region?.flags["gambits-premades"]?.excludeRegionHandling) return wrapped.call(this, region, waypoints);
+        for (const behavior of region.behaviors.values()) {
+            if (behavior.type !== "executeScript") return wrapped.call(this, region, waypoints);
         }
 
-        const size      = canvas.dimensions.size;
-        const reduction = Math.round(REFERENCE_INSET * (size / REFERENCE_GRID));
-        const wPx       = this.document.width  * size;
-        const hPx       = this.document.height * size;
-        const { teleport = false } = options || {};
+        const size = canvas.dimensions.size;
+        const wPx = this.width  * size;
+        const hPx = this.height * size;
+        const reduction = Math.min(wPx, hPx) * 0.15;
 
         const points = [
-        { x: reduction,     y: reduction,     elevation: this.document.elevation },
-        { x: wPx - reduction, y: reduction,     elevation: this.document.elevation },
-        { x: reduction,     y: hPx - reduction, elevation: this.document.elevation },
-        { x: wPx - reduction, y: hPx - reduction, elevation: this.document.elevation },
-        { x: wPx / 2,       y: reduction,     elevation: this.document.elevation },
-        { x: wPx / 2,       y: hPx - reduction, elevation: this.document.elevation },
-        { x: reduction,     y: hPx / 2,       elevation: this.document.elevation },
-        { x: wPx - reduction, y: hPx / 2,       elevation: this.document.elevation }
+            { x: reduction, y: reduction, elevation: this.elevation },
+            { x: wPx - reduction, y: reduction, elevation: this.elevation },
+            { x: reduction, y: hPx - reduction, elevation: this.elevation },
+            { x: wPx - reduction, y: hPx - reduction, elevation: this.elevation },
+            { x: wPx / 2, y: reduction, elevation: this.elevation },
+            { x: wPx / 2, y: hPx - reduction, elevation: this.elevation },
+            { x: reduction, y: hPx / 2, elevation: this.elevation },
+            { x: wPx - reduction, y: hPx / 2,       elevation: this.elevation }
         ];
 
-        const segments = region.segmentizeMovement(waypoints, points, { teleport });
-        return segments || wrapped(...args);
+        const segments = region.segmentizeMovementPath(waypoints, points);
+        return (segments.length > 0) ? segments : wrapped.call(this, region, waypoints);
     }, 'MIXED');
 }
 

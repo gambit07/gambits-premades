@@ -19,7 +19,7 @@ export function web({template, token, itemUuid}) {
         scaleMagicSign2 = 1;
     }
     else {
-        alignmentDecision = { edge: "on", offset: ( {x: 275, y: 0} ) };
+        alignmentDecision = { edge: "on", offset: ( {x: 198, y: 0} ) };
         scaleDecision = 0.55;
         scaleOrb = 0.2;
         scaleWeb = 0.15;

@@ -30,13 +30,6 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
         return;
     }
 
-    let validatedRegionMovement = game.gps.validateRegionMovement({ regionScenario: regionScenario, regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid, validExit: false });
-    const { validRegionMovement, validReroute } = validatedRegionMovement;
-    if(!validRegionMovement) {
-        if(debugEnabled) console.error(`No valid region movement for ${itemName}`);
-        return;
-    }
-
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
     const effectOriginToken = await MidiQOL.tokenForActor(region.flags["region-attacher"].actorUuid);
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
@@ -47,6 +40,9 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
         if(debugEnabled) console.error(`Token already damaged this round for ${itemName}`);
         return;
     }
+
+    let resumeMovement;
+    if(regionScenario === "tokenEnter") resumeMovement = await tokenDocument.pauseMovement();
 
     await region.setFlag('gambits-premades', 'spell.cloudOfDaggers.' + token.id + '.turn', turn);
 
@@ -63,5 +59,6 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
     }
 
     await new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, "slashing", token ? [token] : [], damageRoll, {itemData: itemData, flavor: "Cloud of Daggers - Damage (Slashing)"});
+    if(regionScenario === "tokenEnter") await resumeMovement();
     return;
 }

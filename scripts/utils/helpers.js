@@ -594,7 +594,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
     
         function handleItemSelectChange(event) {
             const selectedOption = event.target.options[event.target.selectedIndex];
-            weaponImg.src = selectedOption.getAttribute('name');
+            weaponImg.src = selectedOption.getAttribute('data-img');
         }
     
         function handleDragStart(event) {
@@ -643,7 +643,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
         }
     
         if (itemSelect && itemSelect.options.length > 0 && weaponImg) {
-            weaponImg.src = itemSelect.options[0].getAttribute('name');
+            weaponImg.src = itemSelect.options[0].getAttribute('data-img');
             itemSelect.addEventListener('change', handleItemSelectChange);
         }
     
@@ -1195,46 +1195,19 @@ export async function replaceChatCard({ actorUuid, itemUuid, chatContent, rollDa
     }
 }
 
-let regionTokenStates = new Map();
 export function validateRegionMovement({regionScenario, regionStatus, regionUuid, tokenUuid, isTeleport = false, validExit = true}) {
     let region = fromUuidSync(regionUuid);
     if(!region) return;
     let token = fromUuidSync(tokenUuid);
     if(!token) return;
-    let regionId = region.id;
-    let tokenId = token.id;
     let validatedRegionMovement;
 
-    if(regionScenario === "tokenStatusChanged" && regionStatus) {
-        regionTokenStates.set(`${regionId}-${tokenId}-statuschanged`, true);
-        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
-    }
-    else if(regionScenario === "tokenStatusChanged" && !regionStatus) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+    if(regionScenario === "tokenEnter" || regionScenario === "tokenExit" || regionScenario === "tokenForcedMovement") {
+        const entered = regionScenario === "tokenEnter" ? "tokenEnter" : "";
+        const exited = regionScenario === "tokenExit" ? "tokenExit" : "";
+        const forcedMovement = regionScenario === "tokenForcedMovement" ? "tokenForcedMovement" : "";
 
-    if(regionScenario === "tokenExit") {
-        regionTokenStates.set(`${regionId}-${tokenId}-exited`, true);
-        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
-    }
-    else if(regionScenario === "tokenEnter") {
-        regionTokenStates.set(`${regionId}-${tokenId}-entered`, true);
-        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
-    }
-    else if(regionScenario === "tokenForcedMovement") {
-        regionTokenStates.set(`${regionId}-${tokenId}-forcedMovement`, true);
-        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
-    }
-    else if(regionScenario === "tokenPostMove") {
-        const entered = regionTokenStates.get(`${regionId}-${tokenId}-entered`);
-        const exited = regionTokenStates.get(`${regionId}-${tokenId}-exited`);
-        const forcedMovement = regionTokenStates.get(`${regionId}-${tokenId}-forcedMovement`);
-        const statusChanged = regionTokenStates.get(`${regionId}-statuschanged`);
-
-        if(exited) regionTokenStates.delete(`${regionId}-${tokenId}-exited`);
-        if(entered) regionTokenStates.delete(`${regionId}-${tokenId}-entered`);
-        if(forcedMovement) regionTokenStates.delete(`${regionId}-${tokenId}-forcedMovement`);
-        if(statusChanged) regionTokenStates.delete(`${regionId}-${tokenId}-statuschanged`);
-
-        if(forcedMovement || statusChanged) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
+        if(forcedMovement) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
 
         if (!exited && !entered && !isTeleport) {
             if (token.regions.has(region)) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
@@ -1327,10 +1300,9 @@ export function getBrowserUser({ actorUuid }) {
 }
 
 export function getPrimaryGM() {
-    const primaryGMId = MidiQOL.safeGetGameSetting('gambits-premades', `primaryGM`);
-    const primaryGM = game.users.find(user => user.id === primaryGMId && user.active && user.isGM);
+    const primaryGMId = MidiQOL.safeGetGameSetting('midi-qol', `PreferredGM`);
     
-    if (!primaryGM) {
+    if (!primaryGMId) {
       const activeGM = game.users.activeGM;
       
       if (!activeGM) {
@@ -1342,7 +1314,7 @@ export function getPrimaryGM() {
     }
 
     return primaryGMId;
-  }
+}
 
 export async function gmDeleteItem({itemUuid}) {
     if(!itemUuid) return;
@@ -1350,16 +1322,30 @@ export async function gmDeleteItem({itemUuid}) {
     await itemData.delete();
 }
 
-export function getCprConfig({itemUuid}) {
-    if(!game.modules.get("chris-premades")?.active) return {animEnabled: true, animColor: null};
-    let itemData = fromUuidSync(itemUuid);
-    if(!itemData) return {animEnabled: true, animColor: null};
-    let cprConfig = itemData.getFlag("chris-premades", "config");
-    if(!cprConfig) return {animEnabled: true, animColor: null};
-    let animEnabled = cprConfig?.playAnimation;
-    let animColor = cprConfig?.color ?? null;
-    if(animEnabled === true || animEnabled === false) return {animEnabled: animEnabled, animColor: animColor};
-    else return {animEnabled: true, animColor: animColor};
+export function getCprConfig({itemUuid, type = "anim"}) {
+    if(type === "anim") {
+        if(!game.modules.get("chris-premades")?.active) return {animEnabled: true, animColor: null};
+        let itemData = fromUuidSync(itemUuid);
+        if(!itemData) return {animEnabled: true, animColor: null};
+        let cprConfig = itemData.getFlag("chris-premades", "config");
+        if(!cprConfig) return {animEnabled: true, animColor: null};
+        let animEnabled = cprConfig?.playAnimation;
+        let animColor = cprConfig?.color ?? null;
+        if(animEnabled === true || animEnabled === false) return {animEnabled: animEnabled, animColor: animColor};
+        else return {animEnabled: true, animColor: animColor};
+    }
+    else if(type === "homebrewDice") {
+        if(!game.modules.get("chris-premades")?.active) return {homebrewDiceEnabled: false};
+        let itemData = fromUuidSync(itemUuid);
+        if(!itemData) return {homebrewDiceEnabled: false};
+        let cprConfig = itemData.getFlag("chris-premades", "config");
+        if(!cprConfig) return {homebrewDiceEnabled: false};
+        let homebrewDiceEnabled = cprConfig?.enableCustomDice;
+        let dieNumber = cprConfig?.customDiceNum;
+        let dieFace = cprConfig?.customDiceFace;
+        if(homebrewDiceEnabled) return {homebrewDiceEnabled, dieNumber, dieFace};
+        else return {homebrewDiceEnabled: false};
+    }
 }
 
 export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWeapon = false}) {
@@ -1405,8 +1391,17 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
             await game.gps.socket.executeAsUser("gpsUpdateMidiRange", game.gps.getPrimaryGM(), { configSettings: configSettings, turnOff: true, originalCheckRange: originalCheckRange });
         }
     }
-    
-    let remoteCIU = await MidiQOL.completeItemUse(itemData, {actorUuid}, options);
+
+    let remoteCIU = await MidiQOL.completeItemUse(
+        itemData,
+        {
+            actorUuid,
+            midiOptions: options
+        },
+        {},    // or your dialog settings
+        {}     // or your ChatMessage options
+    );
+
     let checkHits = remoteCIU?.hitTargets?.first() ? true : false;
 
     if (originalCheckRange !== "none") {
@@ -1436,7 +1431,7 @@ export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
     if(!item) return console.error(`Shame you didn't pass me an itemUuid`);
     const activity = item.system.activities.find(a => a.identifier === identifier);
     if(!activity) return console.error(`You've likely removed the identifier name from a ${item.name} automation activity which will cause failure.`);
-    let targetUuids = (Array.isArray(targetUuid)) ? targetUuid : [targetUuid]
+    let targetUuids = (Array.isArray(targetUuid)) ? targetUuid : [targetUuid];
 
     const options = { midiOptions: { targetUuids: targetUuids, noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMStatus: true, autoRollAttack: true, autoRollDamage: "always", fastForwardAttack: true, fastForwardDamage: true, workflowData: true } };
     let activityUse = await MidiQOL.completeActivityUse(activity.uuid, options, {}, {});
@@ -1549,4 +1544,60 @@ export async function gpsApplyTempHp({ actorUuids, tempHp }) {
         let actor = await fromUuid(actorUuid);
         actor.applyTempHP(tempHp);
     }
+}
+
+export async function stopMovementExit({token}) {
+    await token.stopMovement();
+
+    let waypoints = token.movementHistory;
+
+    if(canvas.scene.grid.type >= 1) {
+        const last = waypoints.length === 1 ? waypoints[0] : waypoints[waypoints.length - 2];
+        const snapped = canvas.grid.getTopLeftPoint({ x: last.x, y: last.y });
+        await token.update({ x: snapped.x, y: snapped.y }, { animate: false });
+    }
+    else {
+        const last = waypoints.at(-1);
+        const prev = waypoints.at(-2);
+        const dx = last.x - prev.x;
+        const dy = last.y - prev.y;
+
+        const gridSize = canvas.grid.size;
+        let moveBackX = 0;
+        let moveBackY = 0;
+
+        const absDx = Math.abs(dx);
+        const absDy = Math.abs(dy);
+
+        const diagonalTolerance = 0.25;
+        const ratio = absDx / absDy;
+
+        const isDiagonal = ratio > 1 - diagonalTolerance && ratio < 1 + diagonalTolerance;
+
+        if (isDiagonal) {
+            moveBackX = -Math.sign(dx) * gridSize;
+            moveBackY = -Math.sign(dy) * gridSize;
+        } 
+        else if (absDx > absDy) {
+            moveBackX = -Math.sign(dx) * gridSize;
+        } 
+        else {
+            moveBackY = -Math.sign(dy) * gridSize;
+        }
+
+        const newX = token.x + moveBackX;
+        const newY = token.y + moveBackY;
+
+        await token.update({ x: newX, y: newY }, { animate: false });
+    }
+}
+
+export async function stopMovementEnter({token}) {
+    //token.document.revertRecordedMovement("9UOH2OzKt9aS9zx1");
+    await token.stopMovement();
+
+    let waypoints = token.movementHistory;
+    const last = waypoints[waypoints.length - 1];
+    const snapped = canvas.grid.getTopLeftPoint({ x: last.x, y: last.y });
+    await token.update({ x: snapped.x, y: snapped.y }, { animate: false });
 }

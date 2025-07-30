@@ -9,8 +9,8 @@ export function biohazard({template, itemUuid}) {
         scaleDecision = 1.1;
     }
     else {
-        alignmentDecision = { edge: "on", offset: ( {x: 210, y: 0} ) };
-        scaleDecision = 0.55;
+        alignmentDecision = { edge: "on", offset: ( {x: 145, y: 0} ) };
+        scaleDecision = 0.6;
     }
 
     new Sequence()

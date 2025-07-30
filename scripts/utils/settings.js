@@ -1,3 +1,6 @@
+// Create a Base class mixing in Handlebars support onto V2 Application
+const Base = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
+
 export function registerSettings() {
     game.settings.register('gambits-premades', 'Mirror 3rd Party Dialog for GMs', {
         name: "Mirror 3rd Party Dialog for GMs",
@@ -391,47 +394,6 @@ export function registerSettings() {
         type: Boolean
     });
 
-    game.settings.register("gambits-premades", "enableInterceptionCustomDice", {
-        name: "enableInterceptionCustomDice",
-        scope: "world",
-        config: false,
-        type: Boolean,
-        default: false,
-        type: Boolean
-    });
-
-    game.settings.register('gambits-premades', 'enableInterceptionCustomDiceNumber', {
-        name: "enableInterceptionCustomDiceNumber",
-        hint: "Enter custom number. Default timeout value is 1.",
-        scope: 'world',
-        config: false,
-        type: String,
-        default: "1",
-        onChange: value => {
-            const numericValue = Number(value);
-            if (!isNaN(numericValue)) {
-            } else {
-                console.error("Invalid input for enableInterceptionCustomDiceNumber: Not a number.");
-            }
-        }
-    });
-
-    game.settings.register('gambits-premades', 'enableInterceptionCustomDiceFace', {
-        name: "enableInterceptionCustomDiceFace",
-        hint: "Enter custom number. Default timeout value is 10.",
-        scope: 'world',
-        config: false,
-        type: String,
-        default: "10",
-        onChange: value => {
-            const numericValue = Number(value);
-            if (!isNaN(numericValue)) {
-            } else {
-                console.error("Invalid input for enableInterceptionCustomDiceFace: Not a number.");
-            }
-        }
-    });
-
     game.settings.register("gambits-premades", "enableCounterspellSpellPenetration", {
         name: "enableCounterspellSpellPenetration",
         scope: "world",
@@ -725,7 +687,7 @@ export function registerSettings() {
         icon: 'fas fa-cogs',
         scope: 'world',
         config: true,
-        type: generalSettingsMenu,
+        type: GeneralSettingsMenu,
         restricted: true
     });
 
@@ -736,7 +698,7 @@ export function registerSettings() {
         icon: 'fas fa-magic',
         scope: 'world',
         config: true,
-        type: spellSettingsMenu,
+        type: SpellSettingsMenu,
         restricted: true
     });
 
@@ -747,7 +709,7 @@ export function registerSettings() {
         icon: 'fas fa-book',
         scope: 'world',
         config: true,
-        type: classFeaturesSettingsMenu,
+        type: ClassFeaturesSettingsMenu,
         restricted: true
     });
 
@@ -758,7 +720,7 @@ export function registerSettings() {
         icon: 'fas fa-globe',
         scope: 'world',
         config: true,
-        type: genericFeatureSettingsMenu,
+        type: GenericFeatureSettingsMenu,
         restricted: true
     });
 
@@ -770,381 +732,482 @@ export function registerSettings() {
         icon: 'fas fa-dragon',
         scope: 'world',
         config: true,
-        type: monsterFeaturesSettingsMenu,
+        type: MonsterFeaturesSettingsMenu,
         restricted: true
     });
 }
 
-class BaseSettingsMenu extends FormApplication {
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["gambits-premades", "settings-window"],
-            width: 700,
-            closeOnSubmit: true
-        });
+export class BaseSettingsMenu extends Base {
+  static DEFAULT_OPTIONS = {
+    id: "classFeaturesSettingsMenu",
+    tag: "form",
+    classes: [ "gambits-premades", "gps-settings" ],
+    actions: {
+      stopPropagation: (event, element) => event.stopPropagation(),
+      toggleCollapse: BaseSettingsMenu.toggleCollapse,
+      validateNumericInput: BaseSettingsMenu.validateNumericInput
+    },
+    form: {
+      closeOnSubmit: true,
+      handler: this.#handleSubmit
+    },
+    position: {
+      width: 800,
+      height: "auto",
+    }
+  };
+
+  static PARTS =
+    {
+      form: { template: "modules/gambits-premades/templates/settingsMenu.hbs" },
+      footer: {
+        template: "templates/generic/form-footer.hbs",
+      },
+    };
+
+  setDefault(object) {
+    this.default = object;
+  }
+
+  static toggleCollapse(event, element) {
+    if ( event.target.tagName.toLowerCase() === "input" ) return;
+
+    event.preventDefault();
+
+    const rowText = element;
+    const contentId = rowText.dataset.contentId;
+    const form = rowText.closest("form.gps-settings");
+    const panel = form?.querySelector(`#${contentId}`);
+    if (!panel) return;
+
+    panel.classList.toggle("show");
+    rowText.classList.toggle("open");
+    const app = form.closest(".window-app");
+    if (app) app.style.height = `${form.scrollHeight}px`;
+  }
+
+  static validateNumericInput(event, element) {
+    const inputField = element;
+    const numericValue = Number(inputField.value);
+
+    if (isNaN(numericValue)) {
+      console.error("Invalid input: Not a number.");
+      inputField.value = inputField.defaultValue;
+    }
+  }
+
+  _onRender(options) {
+    super._onRender?.(options);
+    this.expandCheckedCollapsibleSections();
+  }
+
+  expandCheckedCollapsibleSections() {
+    const form = this.element;
+    for ( const row of form.querySelectorAll(".gps-settings-row") ) {
+      const contentId = row.dataset.contentId;
+      if ( !contentId ) continue;
+      const container = form.querySelector(`#${CSS.escape(contentId)}`);
+      if ( !container ) continue;
+
+      const childChecked = container.querySelector("input[type=checkbox]:checked");
+      if ( childChecked ) {
+        container.classList.add("show");
+        const rowText = row.querySelector(".gps-settings-row-text");
+        rowText?.classList.add("open");
+      }
     }
 
-    activateListeners(html) {
-        super.activateListeners(html);
-        this.expandCheckedCollapsibleSections(html);
-        this.populateSelectElements(html);
+    // Resize window to fit expanded content
+    const app = form.closest(".window-app");
+    if ( app ) app.style.height = `${form.scrollHeight}px`;
+  }
 
-        function validateNumericInput(inputElement) {
-            const numericValue = Number(inputElement.value);
-            if (isNaN(numericValue)) {
-                console.error("Invalid input: Not a number.");
-                inputElement.value = inputElement.defaultValue;
-            }
-        }
-
-        html.find('.column-enable-td input[type="checkbox"]').on('click', (event) => {
-            event.stopPropagation();
-        });
-
-        html.find('.clickable').on('click', (event) => {
-            const contentId = $(event.currentTarget).data('content-id');
-            this.toggleCollapsibleContent(event, contentId);
-        });
-
-        html.find('.column-timeout input[data-dtype="String"]').on('input', function() {
-            validateNumericInput(this);
-        });
+  static async #handleSubmit(event, form, formData) {
+    for (let [key, value] of Object.entries(formData.object)) {
+        if (game.settings.get('gambits-premades', key) === value) continue;
+        await game.settings.set('gambits-premades', key, value);
     }
-
-    expandCheckedCollapsibleSections(html) {
-        const data = this.getData();
-
-        if (data.enableProtection && data.enableProtectionOnSuccess) {
-            const protectionContent = html.find('#collapsible-content-protection');
-            if (protectionContent.length) {
-                protectionContent.addClass('show');
-            }
-        }
-
-        if (data.enableIndomitable && data.enableAutoSucceedIndomitable) {
-            const indomitableContent = html.find('#collapsible-content-indomitable');
-            if (indomitableContent.length) {
-                indomitableContent.addClass('show');
-            }
-        }
-
-        if (data.enableSilveryBarbs && (data.disableSilveryBarbsOnNat20 || data.enableSilveryBarbsOnNat20)) {
-            const silveryBarbsContent = html.find('#collapsible-content-silverybarbs');
-            if (silveryBarbsContent.length) {
-                silveryBarbsContent.addClass('show');
-            }
-        }
-
-        if (data.enableInterception && data.enableInterceptionCustomDice) {
-            const interceptionContent = html.find('#collapsible-content-interception');
-            if (interceptionContent.length) {
-                interceptionContent.addClass('show');
-            }
-        }
-
-        if (data.enableCounterspell && data.enableCounterspellSpellPenetration) {
-            const counterspellContent = html.find('#collapsible-content-counterspell');
-            if (counterspellContent.length) {
-                counterspellContent.addClass('show');
-            }
-        }
-
-        if (data.enableCuttingWords && data.disableCuttingWordsMaxMiss) {
-            const cuttingWordsContent = html.find('#collapsible-content-cuttingwords');
-            if (cuttingWordsContent.length) {
-                cuttingWordsContent.addClass('show');
-            }
-        }
-    }
-
-    toggleCollapsibleContent(event, contentId) {
-        if (event.target.tagName.toLowerCase() === 'input' || event.target.tagName.toLowerCase() === 'label') {
-            return;
-        }
-
-        const content = document.getElementById(contentId);
-        if (!content) return;
-        const wasVisible = content.classList.contains('show');
-        content.classList.toggle('show');
-
-        const form = event.currentTarget.closest('form.categories');
-        let newHeight = form.scrollHeight;
-        const parent = form.closest('.window-app');
-
-        if (parent) {
-            parent.style.height = newHeight + 'px';
-            if (wasVisible) {
-                newHeight -= content.scrollHeight;
-            } else {
-                newHeight += content.scrollHeight;
-            }
-            parent.style.height = newHeight + 'px';
-        }
-    }
-
-    populateSelectElements(html) {
-
-        const settings = {
-            enableInterceptionCustomDiceNumber: Number(game.settings.get("gambits-premades", "enableInterceptionCustomDiceNumber")),
-            enableInterceptionCustomDiceFace: Number(game.settings.get("gambits-premades", "enableInterceptionCustomDiceFace")),
-            primaryGM: game.settings.get("gambits-premades", "primaryGM")
-        };
-
-        const numberSelect = html.find('#enableInterceptionCustomDiceNumber');
-        for (let i = 1; i <= 10; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i;
-            if (i === settings.enableInterceptionCustomDiceNumber) {
-                option.selected = true;
-            }
-            numberSelect.append(option);
-        };
-
-        const faceSelect = html.find('#enableInterceptionCustomDiceFace');
-        const faces = [4, 6, 8, 10, 12, 20];
-        faces.forEach(face => {
-            const option = document.createElement('option');
-            option.value = face;
-            option.textContent = `d${face}`;
-            if (face === settings.enableInterceptionCustomDiceFace) {
-                option.selected = true;
-            }
-            faceSelect.append(option);
-        });
-
-        const primaryGM = html.find('#primaryGM');
-        for (const user of game.users.contents) {
-            if(!user.isGM) continue;
-            const option = document.createElement('option');
-            option.value = user.id;
-            option.textContent = user.name;
-            if (user.id === settings.primaryGM) {
-                option.selected = true;
-            }
-            primaryGM.append(option);
-        };
-    }
+  }
 }
 
-class classFeaturesSettingsMenu extends BaseSettingsMenu {
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "classFeaturesSettingsMenu",
-            title: "Enable Class Features",
-            template: "modules/gambits-premades/templates/classFeaturesSettingsMenu.html",
-        });
+export class ClassFeaturesSettingsMenu extends BaseSettingsMenu {
+  static DEFAULT_OPTIONS = {
+    id: "classFeaturesSettingsMenu",
+    window: {
+      title: "Enable Class Features"
     }
+  };
 
-    getData() {
-        const data = {
-            enableCuttingWords: game.settings.get("gambits-premades", "Enable Cutting Words"),
-            cuttingWordsTimeout: game.settings.get("gambits-premades", "Cutting Words Timeout"),
-            disableCuttingWordsMaxMiss: game.settings.get("gambits-premades", "disableCuttingWordsMaxMiss"),
-            enableInterception: game.settings.get("gambits-premades", "Enable Interception"),
-            interceptionTimeout: game.settings.get("gambits-premades", "Interception Timeout"),
-            enableInterceptionCustomDice: game.settings.get("gambits-premades", "enableInterceptionCustomDice"),
-            enableInterceptionCustomDiceNumber: game.settings.get("gambits-premades", "enableInterceptionCustomDiceNumber"),
-            enableInterceptionCustomDiceFace: game.settings.get("gambits-premades", "enableInterceptionCustomDiceFace"),
-            enablePoetryInMisery: game.settings.get("gambits-premades", "Enable Poetry in Misery"),
-            poetryInMiseryTimeout: game.settings.get("gambits-premades", "Poetry in Misery Timeout"),
-            enableIndomitable: game.settings.get("gambits-premades", "Enable Indomitable"),
-            indomitableTimeout: game.settings.get("gambits-premades", "Indomitable Timeout"),
-            enableAutoSucceedIndomitable: game.settings.get("gambits-premades", "enableAutoSucceedIndomitable"),
-            enableProtection: game.settings.get("gambits-premades", "Enable Protection"),
-            protectionTimeout: game.settings.get("gambits-premades", "Protection Timeout"),
-            enableProtectionOnSuccess: game.settings.get("gambits-premades", "enableProtectionOnSuccess"),
-            enableRiposte: game.settings.get("gambits-premades", "Enable Riposte"),
-            riposteTimeout: game.settings.get("gambits-premades", "Riposte Timeout"),
-            enableWitchesHex: game.settings.get("gambits-premades", "Enable Witches Hex"),
-            witchesHexTimeout: game.settings.get("gambits-premades", "Witches Hex Timeout"),
-            enableInstinctiveCharm: game.settings.get("gambits-premades", "enableInstinctiveCharm"),
-            instinctiveCharmTimeout: game.settings.get("gambits-premades", "Instinctive Charm Timeout"),
-            enableRainOfCinders: game.settings.get("gambits-premades", "enableRainOfCinders"),
-            rainOfCindersTimeout: game.settings.get("gambits-premades", "Rain of Cinders Timeout"),
-            enableRestoreBalance: game.settings.get("gambits-premades", "enableRestoreBalance"),
-            restoreBalanceTimeout: game.settings.get("gambits-premades", "Restore Balance Timeout"),
-            enableTaleOfHubris: game.settings.get("gambits-premades", "enableTaleOfHubris"),
-            taleOfHubrisTimeout: game.settings.get("gambits-premades", "Tale of Hubris Timeout"),
-            enableChronalShift: game.settings.get("gambits-premades", "enableChronalShift"),
-            chronalShiftTimeout: game.settings.get("gambits-premades", "Chronal Shift Timeout"),
-            enableMagicUsersNemesis: game.settings.get("gambits-premades", "enableMagicUsersNemesis"),
-            magicUsersNemesisTimeout: game.settings.get("gambits-premades", "Magic-User's Nemesis Timeout")
-        };
+  async _prepareContext(options) {
+    let context = await super._prepareContext(options);
+    let hasTimeoutColumn = true;
 
-        return data;
-    }
+    const definitions = [
+      {
+        id: "chronalShift",
+        name: "Chronal Shift",
+        description: "Dialog for Chronurgy Wizards' Chronal Shift.",
+        boolKey: "enableChronalShift",
+        timeoutKey: "Chronal Shift Timeout"
+      },
+      {
+        id: "cuttingWords",
+        name: "Cutting Words",
+        description: "Dialog for College of Lore Bards' Cutting Words.",
+        boolKey: "Enable Cutting Words",
+        timeoutKey: "Cutting Words Timeout",
+        children: [
+          {
+            id: "disableCuttingWordsMaxMiss",
+            name: "Disable Cutting Words Max Miss",
+            description: "Skip prompt if max bardic die wouldn't effect hit.",
+            boolKey: "disableCuttingWordsMaxMiss"
+          }
+        ]
+      },
+      {
+        id: "interception",
+        name: "Interception",
+        description: "Dialog for Paladins/Fighters' Interception.",
+        boolKey: "Enable Interception",
+        timeoutKey: "Interception Timeout"
+      },
+      {
+        id: "protection",
+        name: "Protection",
+        description: "Dialog for Paladins/Fighters' Protection.",
+        boolKey: "Enable Protection",
+        timeoutKey: "Protection Timeout",
+        children: [
+          {
+            id: "enableProtectionOnSuccess",
+            name: "Enable Protection On Success",
+            description: "Only trigger on a successful attack.",
+            boolKey: "enableProtectionOnSuccess"
+          }
+        ]
+      },
+      {
+        id: "indomitable",
+        name: "Indomitable",
+        description: "Dialog for Fighters' Indomitable.",
+        boolKey: "Enable Indomitable",
+        timeoutKey: "Indomitable Timeout",
+        children: [
+          {
+            id: "enableAutoSucceedIndomitable",
+            name: "Enable Auto Succeed Indomitable",
+            description: "Auto-succeed on use.",
+            boolKey: "enableAutoSucceedIndomitable"
+          }
+        ]
+      },
+      {
+        id: "instinctiveCharm",
+        name: "Instinctive Charm",
+        description: "Dialog for Enchantment Wizards' Instinctive Charm.",
+        boolKey: "enableInstinctiveCharm",
+        timeoutKey: "Instinctive Charm Timeout"
+      },
+      {
+        id: "magicUsersNemesis",
+        name: "Magic-User's Nemesis",
+        description: "Dialog for Monster Slayer Rangers'.",
+        boolKey: "enableMagicUsersNemesis",
+        timeoutKey: "Magic-User's Nemesis Timeout"
+      },
+      {
+        id: "riposte",
+        name: "Riposte",
+        description: "Dialog for Battle Master Fighters' Riposte.",
+        boolKey: "Enable Riposte",
+        timeoutKey: "Riposte Timeout"
+      },
+      {
+        id: "poetryInMisery",
+        name: "Poetry in Misery",
+        description: "Dialog for College of Tragedy Bards'.",
+        boolKey: "Enable Poetry in Misery",
+        timeoutKey: "Poetry in Misery Timeout"
+      },
+      {
+        id: "rainOfCinders",
+        name: "Rain of Cinders",
+        description: "Dialog for Roiling Hearth Witches'.",
+        boolKey: "enableRainOfCinders",
+        timeoutKey: "Rain of Cinders Timeout"
+      },
+      {
+        id: "restoreBalance",
+        name: "Restore Balance",
+        description: "Dialog for Clockwork Soul Sorcerers'.",
+        boolKey: "enableRestoreBalance",
+        timeoutKey: "Restore Balance Timeout"
+      },
+      {
+        id: "taleOfHubris",
+        name: "Tale of Hubris",
+        description: "Dialog for College of Tragedy Bards'.",
+        boolKey: "enableTaleOfHubris",
+        timeoutKey: "Tale of Hubris Timeout"
+      },
+      {
+        id: "witchesHex",
+        name: "Witches Hex",
+        description: "Dialog for Roiling Hearth Witches' Hex.",
+        boolKey: "Enable Witches Hex",
+        timeoutKey: "Witches Hex Timeout"
+      }
+    ];
 
-    async _updateObject(event, formData) {
-        await game.settings.set("gambits-premades", "Enable Cutting Words", formData.enableCuttingWords);
-        await game.settings.set("gambits-premades", "Cutting Words Timeout", formData.cuttingWordsTimeout);
-        await game.settings.set("gambits-premades", "disableCuttingWordsMaxMiss", formData.disableCuttingWordsMaxMiss);
-        await game.settings.set("gambits-premades", "Enable Interception", formData.enableInterception);
-        await game.settings.set("gambits-premades", "Interception Timeout", formData.interceptionTimeout);
-        await game.settings.set("gambits-premades", "enableInterceptionCustomDice", formData.enableInterceptionCustomDice);
-        await game.settings.set("gambits-premades", "enableInterceptionCustomDiceNumber", formData.enableInterceptionCustomDiceNumber);
-        await game.settings.set("gambits-premades", "enableInterceptionCustomDiceFace", formData.enableInterceptionCustomDiceFace);
-        await game.settings.set("gambits-premades", "Enable Poetry in Misery", formData.enablePoetryInMisery);
-        await game.settings.set("gambits-premades", "Poetry in Misery Timeout", formData.poetryInMiseryTimeout);
-        await game.settings.set("gambits-premades", "Enable Indomitable", formData.enableIndomitable);
-        await game.settings.set("gambits-premades", "Indomitable Timeout", formData.indomitableTimeout);
-        await game.settings.set("gambits-premades", "enableAutoSucceedIndomitable", formData.enableAutoSucceedIndomitable);
-        await game.settings.set("gambits-premades", "Enable Protection", formData.enableProtection);
-        await game.settings.set("gambits-premades", "Protection Timeout", formData.protectionTimeout);
-        await game.settings.set("gambits-premades", "enableProtectionOnSuccess", formData.enableProtectionOnSuccess);
-        await game.settings.set("gambits-premades", "Enable Riposte", formData.enableRiposte);
-        await game.settings.set("gambits-premades", "Riposte Timeout", formData.riposteTimeout);
-        await game.settings.set("gambits-premades", "Enable Witches Hex", formData.enableWitchesHex);
-        await game.settings.set("gambits-premades", "Witches Hex Timeout", formData.witchesHexTimeout);
-        await game.settings.set("gambits-premades", "enableInstinctiveCharm", formData.enableInstinctiveCharm);
-        await game.settings.set("gambits-premades", "Instinctive Charm Timeout", formData.instinctiveCharmTimeout);
-        await game.settings.set("gambits-premades", "enableRainOfCinders", formData.enableRainOfCinders);
-        await game.settings.set("gambits-premades", "Rain of Cinders Timeout", formData.rainOfCindersTimeout);
-        await game.settings.set("gambits-premades", "enableRestoreBalance", formData.enableRestoreBalance);
-        await game.settings.set("gambits-premades", "Restore Balance Timeout", formData.restoreBalanceTimeout);
-        await game.settings.set("gambits-premades", "enableTaleOfHubris", formData.enableTaleOfHubris);
-        await game.settings.set("gambits-premades", "Tale of Hubris Timeout", formData.taleOfHubrisTimeout);
-        await game.settings.set("gambits-premades", "enableChronalShift", formData.enableChronalShift);
-        await game.settings.set("gambits-premades", "Chronal Shift Timeout", formData.chronalShiftTimeout);
-        await game.settings.set("gambits-premades", "enableMagicUsersNemesis", formData.enableMagicUsersNemesis);
-        await game.settings.set("gambits-premades", "Magic-User's Nemesis Timeout", formData.magicUsersNemesisTimeout);
-    }
+    const features = definitions.map(def => {
+      const feature = {
+        id:          def.id,
+        name:        def.name,
+        description: def.description,
+        boolKey:     def.boolKey,
+        timeoutKey:  def.timeoutKey,
+        enabled:     game.settings.get("gambits-premades", def.boolKey),
+        timeout:     game.settings.get("gambits-premades", def.timeoutKey)
+      };
+      if (Array.isArray(def.children)) {
+        feature.children = def.children.map(child => ({
+          id:          child.id,
+          name:        child.name,
+          description: child.description,
+          boolKey:     child.boolKey,
+          enabled:     game.settings.get("gambits-premades", child.boolKey)
+        }));
+      }
+      return feature;
+    });
+
+    return foundry.utils.mergeObject(context, {
+      features,
+      hasTimeoutColumn,
+      buttons: [
+        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+      ]
+    });
+  }
 }
 
-class genericFeatureSettingsMenu extends BaseSettingsMenu {
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "genericFeatureSettingsMenu",
-            title: "Enable Generic Features",
-            template: "modules/gambits-premades/templates/genericFeatureSettingsMenu.html",
-        });
-    }
+// -------------------------
+// Generic Features Menu
+// -------------------------
+export class GenericFeatureSettingsMenu extends BaseSettingsMenu {
+  static DEFAULT_OPTIONS = {
+    id: "genericFeatureSettingsMenu",
+    window: {
+      title: "Enable Generic Features"
+    },
+  };
 
-    getData() {
-        return {
-            enableOpportunityAttack: game.settings.get("gambits-premades", "Enable Opportunity Attack"),
-            opportunityAttackTimeout: game.settings.get("gambits-premades", "Opportunity Attack Timeout"),
-            enableSentinel: game.settings.get("gambits-premades", "Enable Sentinel"),
-            sentinelTimeout: game.settings.get("gambits-premades", "Sentinel Timeout"),
-            enableMageSlayer: game.settings.get("gambits-premades", "enableMageSlayer"),
-            mageSlayerTimeout: game.settings.get("gambits-premades", "Mage Slayer Timeout"),
-            enableLegendaryResistance: game.settings.get("gambits-premades", "enableLegendaryResistance"),
-            legendaryResistanceTimeout: game.settings.get("gambits-premades", "Legendary Resistance Timeout")
-        };
-    }
+  async _prepareContext(options) {
+    let context = await super._prepareContext(options);
+    let hasTimeoutColumn = true;
 
-    async _updateObject(event, formData) {
-        const prevEnableOpportunityAttack = game.settings.get("gambits-premades", "Enable Opportunity Attack");
-        if (!game.combat) {
-            await game.settings.set("gambits-premades", "Enable Opportunity Attack", formData.enableOpportunityAttack);
-        }
-        else if (game.combat && prevEnableOpportunityAttack !== formData.enableOpportunityAttack) {
-            ui.notifications.warn("You may only enable/disable Opportunity Attack outside of combat, otherwise it will create a number of issues.")
-        }
-        await game.settings.set("gambits-premades", "Opportunity Attack Timeout", formData.opportunityAttackTimeout);
-        await game.settings.set("gambits-premades", "Enable Sentinel", formData.enableSentinel);
-        await game.settings.set("gambits-premades", "Sentinel Timeout", formData.sentinelTimeout);
-        await game.settings.set("gambits-premades", "enableMageSlayer", formData.enableMageSlayer);
-        await game.settings.set("gambits-premades", "Mage Slayer Timeout", formData.mageSlayerTimeout);
-        await game.settings.set("gambits-premades", "enableLegendaryResistance", formData.enableLegendaryResistance);
-        await game.settings.set("gambits-premades", "Legendary Resistance Timeout", formData.legendaryResistanceTimeout);
-    }
+    const definitions = [
+      { id: "opportunityAttack", name: "Opportunity Attack", description: "Automatically enables Opportunity Attacks for combatants in combat.", boolKey: "Enable Opportunity Attack", timeoutKey: "Opportunity Attack Timeout" },
+      { id: "sentinel", name: "Sentinel", description: "Presents a dialog to players with the Sentinel feat when an enemy attacks an ally within range.", boolKey: "Enable Sentinel", timeoutKey: "Sentinel Timeout" },
+      { id: "mageSlayer", name: "Mage Slayer", description: "Presents a dialog to players with the Mage Slayer feat.", boolKey: "enableMageSlayer", timeoutKey: "Mage Slayer Timeout" },
+      { id: "legendaryResistance", name: "Legendary Resistance", description: "Presents a dialog for monsters Legendary Resistance feature.", boolKey: "enableLegendaryResistance", timeoutKey: "Legendary Resistance Timeout" }
+    ];
+
+    const features = definitions.map(def => ({
+      id:          def.id,
+      name:        def.name,
+      description: def.description,
+      boolKey:     def.boolKey,
+      timeoutKey:  def.timeoutKey,
+      enabled:     game.settings.get("gambits-premades", def.boolKey),
+      timeout:     game.settings.get("gambits-premades", def.timeoutKey)
+    }));
+
+    return foundry.utils.mergeObject(context, {
+      features: features,
+      hasTimeoutColumn,
+      buttons:  [
+        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+      ]
+    });
+  }
 }
 
-class spellSettingsMenu extends BaseSettingsMenu {
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "spellSettingsMenu",
-            title: "Enable Spells",
-            template: "modules/gambits-premades/templates/spellSettingsMenu.html",
-        });
+// ----------------
+// Spell Settings
+// ----------------
+export class SpellSettingsMenu extends BaseSettingsMenu {
+  static DEFAULT_OPTIONS = {
+    id: "spellSettingsMenu",
+    window: {
+      title: "Enable Spells"
     }
+  };
 
-    getData() {
-        return {
-            enableCounterspell: game.settings.get("gambits-premades", "Enable Counterspell"),
-            counterspellTimeout: game.settings.get("gambits-premades", "Counterspell Timeout"),
-            enableCounterspellSpellPenetration: game.settings.get("gambits-premades", "enableCounterspellSpellPenetration"),
-            enableSilveryBarbs: game.settings.get("gambits-premades", "Enable Silvery Barbs"),
-            silveryBarbsTimeout: game.settings.get("gambits-premades", "Silvery Barbs Timeout"),
-            disableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "disableSilveryBarbsOnNat20"),
-            enableSilveryBarbsOnNat20: game.settings.get("gambits-premades", "enableSilveryBarbsOnNat20"),
-            enablePowerWordRebound: game.settings.get("gambits-premades", "Enable Power Word Rebound"),
-            powerWordReboundTimeout: game.settings.get("gambits-premades", "Power Word Rebound Timeout"),
-            enableTemporalShunt: game.settings.get("gambits-premades", "enableTemporalShunt"),
-            temporalShuntTimeout: game.settings.get("gambits-premades", "Temporal Shunt Timeout")
-        };
-    }
+  async _prepareContext(options) {
+    let context = await super._prepareContext(options);
+    let hasTimeoutColumn = true;
 
-    async _updateObject(event, formData) {
-        await game.settings.set("gambits-premades", "Enable Counterspell", formData.enableCounterspell);
-        await game.settings.set("gambits-premades", "Counterspell Timeout", formData.counterspellTimeout);
-        await game.settings.set("gambits-premades", "enableCounterspellSpellPenetration", formData.enableCounterspellSpellPenetration);
-        await game.settings.set("gambits-premades", "Enable Silvery Barbs", formData.enableSilveryBarbs);
-        await game.settings.set("gambits-premades", "Silvery Barbs Timeout", formData.silveryBarbsTimeout);
-        await game.settings.set("gambits-premades", "disableSilveryBarbsOnNat20", formData.disableSilveryBarbsOnNat20);
-        await game.settings.set("gambits-premades", "enableSilveryBarbsOnNat20", formData.enableSilveryBarbsOnNat20);
-        await game.settings.set("gambits-premades", "Enable Power Word Rebound", formData.enablePowerWordRebound);
-        await game.settings.set("gambits-premades", "Power Word Rebound Timeout", formData.powerWordReboundTimeout);
-        await game.settings.set("gambits-premades", "enableTemporalShunt", formData.enableTemporalShunt);
-        await game.settings.set("gambits-premades", "Temporal Shunt Timeout", formData.temporalShuntTimeout);
-    }
+    const definitions = [
+      {
+        id: "counterspell",
+        name: "Counterspell",
+        description: "Presents a dialog to players with Counterspell.",
+        boolKey: "Enable Counterspell",
+        timeoutKey: "Counterspell Timeout",
+        children: [ { id: "counterspellSpellPenetration", name: "Spell Penetration", description: "Enable optional Bloodied & Bruised feature Spell Penetration.", boolKey: "enableCounterspellSpellPenetration" } ]
+      },
+      {
+        id: "silveryBarbs",
+        name: "Silvery Barbs",
+        description: "Presents a dialog to players with Silvery Barbs.",
+        boolKey: "Enable Silvery Barbs",
+        timeoutKey: "Silvery Barbs Timeout",
+        children: [
+          { id: "disableSilveryBarbsOnNat20", name: "Disable on Critical", description: "Disable on a Critical Attack Roll.", boolKey: "disableSilveryBarbsOnNat20" },
+          { id: "enableSilveryBarbsOnNat20", name: "Enable on Critical", description: "Enable only on a Critical Attack Roll.", boolKey: "enableSilveryBarbsOnNat20" }
+        ]
+      },
+      { id: "powerWordRebound", name: "Power Word Rebound", description: "Presents a dialog to players with Power Word Rebound.", boolKey: "Enable Power Word Rebound", timeoutKey: "Power Word Rebound Timeout" },
+      { id: "temporalShunt", name: "Temporal Shunt", description: "Presents a dialog to players with Temporal Shunt.", boolKey: "enableTemporalShunt", timeoutKey: "Temporal Shunt Timeout" }
+    ];
+
+    const features = definitions.map(def => {
+      const feature = {
+        id:          def.id,
+        name:        def.name,
+        description: def.description,
+        boolKey:     def.boolKey,
+        timeoutKey:  def.timeoutKey,
+        enabled:     game.settings.get("gambits-premades", def.boolKey),
+        timeout:     game.settings.get("gambits-premades", def.timeoutKey)
+      };
+      if (Array.isArray(def.children)) {
+        feature.children = def.children.map(child => ({
+          id:          child.id,
+          name:        child.name,
+          description: child.description,
+          boolKey:     child.boolKey,
+          enabled:     game.settings.get("gambits-premades", child.boolKey)
+        }));
+      }
+      return feature;
+    });
+
+    return foundry.utils.mergeObject(context, {
+      features,
+      hasTimeoutColumn,
+      buttons: [
+        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+      ]
+    });
+  }
 }
 
-class generalSettingsMenu extends BaseSettingsMenu {
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "generalSettingsMenu",
-            title: "General Settings",
-            template: "modules/gambits-premades/templates/generalSettingsMenu.html",
-        });
+// -------------------
+// General Settings
+// -------------------
+export class GeneralSettingsMenu extends BaseSettingsMenu {
+  static DEFAULT_OPTIONS = {
+    id: "generalSettingsMenu",
+    window: {
+      title: "General Settings"
     }
+  };
 
-    getData() {
-        return {
-            enableMirrorDialog: game.settings.get("gambits-premades", "Mirror 3rd Party Dialog for GMs"),
-            enable3prNoCombat: game.settings.get("gambits-premades", "enable3prNoCombat"),
-            enableTimerFullAnim: game.settings.get("gambits-premades", "enableTimerFullAnim"),
-            hideTemplates: game.settings.get("gambits-premades", "hideTemplates"),
-            debugEnabled: game.settings.get("gambits-premades", "debugEnabled"),
-            enableIdentifyRestrictions: game.settings.get("gambits-premades", "Enable Identify Restrictions"),
-            identifyRestrictionMessage: game.settings.get("gambits-premades", "Identify Restriction Message"),
-            enableRegionWrapping: game.settings.get("gambits-premades", "enableRegionWrapping"),
-            primaryGM: game.settings.get("gambits-premades", "primaryGM")
-        };
-    }
+  async _prepareContext(options) {
+    let context = await super._prepareContext(options);
+    let hasTimeoutColumn = false;
 
-    async _updateObject(event, formData) {
-        await game.settings.set("gambits-premades", "Mirror 3rd Party Dialog for GMs", formData.enableMirrorDialog);
-        await game.settings.set("gambits-premades", "enable3prNoCombat", formData.enable3prNoCombat);
-        await game.settings.set("gambits-premades", "enableTimerFullAnim", formData.enableTimerFullAnim);
-        await game.settings.set("gambits-premades", "hideTemplates", formData.hideTemplates);
-        await game.settings.set("gambits-premades", "debugEnabled", formData.debugEnabled);
-        await game.settings.set("gambits-premades", "Enable Identify Restrictions", formData.enableIdentifyRestrictions);
-        await game.settings.set("gambits-premades", "Identify Restriction Message", formData.identifyRestrictionMessage);
-        await game.settings.set("gambits-premades", "enableRegionWrapping", formData.enableRegionWrapping);
-        await game.settings.set("gambits-premades", "primaryGM", formData.primaryGM);
-    }
+    const definitions = [
+      { id: "enable3prNoCombat", name: "Enable 3rd Party Reactions Outside Combat", description: "Allows 3rd party reactions to function while combat is not active.", boolKey: "enable3prNoCombat" },
+      { id: "enableIdentifyRestrictions", name: "Enable Identify Restrictions", description: "Prevents players from Identifying items except through the use of my Identify spell.", boolKey: "Enable Identify Restrictions", children: [{ id: "identifyRestrictionMessage", name: "Identify Restriction Message", description: "Custom message that will display to users if they are restricted.", type: "String", boolKey: "Identify Restriction Message" }] },
+      { id: "enableRegionWrapping", name: "Enable Region Wrapping", description: "Replaces Foundry default region behavior testing token center points only with multi-point tests to better match the 5e ruleset <b>(Requires Reload)</b>.", boolKey: "enableRegionWrapping" },
+      { id: "enableTimerFullAnim", name: "Enable Timer Full Bar Animation", description: "Modify the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.", boolKey: "enableTimerFullAnim" },
+      { id: "hideTemplates", name: "Hide Templates", description: "Hide templates after placement.", boolKey: "hideTemplates" },
+      { id: "mirror3rdPartyDialogForGMs", name: "Mirror 3rd Party Dialog for GMs", description: "3rd party dialog's will be sent to the GM and the player so that either party can interact with the dialog to use/dismiss/pause it.", boolKey: "Mirror 3rd Party Dialog for GMs" },
+      { id: "debugEnabled", name: "Enable Debugging", description: "Enable console logs for the reaction validation process for troubleshooting.", boolKey: "debugEnabled" }
+    ];
+
+    const features = definitions.map(def => {
+      const feature = {
+        id:          def.id,
+        name:        def.name,
+        description: def.description,
+        boolKey:     def.boolKey,
+        enabled:     game.settings.get("gambits-premades", def.boolKey),
+      };
+      if (Array.isArray(def.children)) {
+        feature.children = def.children.map(child => ({
+          id:          child.id,
+          name:        child.name,
+          description: child.description,
+          boolKey:     child.boolKey,
+          value:       game.settings.get("gambits-premades", child.boolKey),
+          type:        child.type || "Boolean"
+        }));
+      }
+      return feature;
+    });
+
+    return foundry.utils.mergeObject(context, {
+      features,
+      hasTimeoutColumn,
+      buttons: [
+        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+      ]
+    });
+  }
 }
 
-class monsterFeaturesSettingsMenu extends BaseSettingsMenu {
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            id: "monsterFeatureSettingsMenu",
-            title: "Enable Monster Features",
-            template: "modules/gambits-premades/templates/monsterFeaturesSettingsMenu.html",
-        });
+// -----------------------
+// Monster Features Menu
+// -----------------------
+export class MonsterFeaturesSettingsMenu extends BaseSettingsMenu {
+  static DEFAULT_OPTIONS = {
+    id: "monsterFeaturesSettingsMenu",
+    window: {
+      title: "Enable Monster Features"
     }
+  };
 
-    getData() {
-        return {
-            enableBurstOfIngenuity: game.settings.get("gambits-premades", "enableBurstOfIngenuity"),
-            burstOfIngenuityTimeout: game.settings.get("gambits-premades", "Burst of Ingenuity Timeout")
-        };
-    }
+  async _prepareContext(options) {
+    let context = await super._prepareContext(options);
+    let hasTimeoutColumn = true;
 
-    async _updateObject(event, formData) {
-        await game.settings.set("gambits-premades", "enableBurstOfIngenuity", formData.enableBurstOfIngenuity);
-        await game.settings.set("gambits-premades", "Burst of Ingenuity Timeout", formData.burstOfIngenuityTimeout);
-    }
+    const definitions = [
+      { id: "burstOfIngenuity", name: "Burst of Ingenuity", description: "Presents a dialog for monsters with Burst of Ingenuity.", boolKey: "enableBurstOfIngenuity", timeoutKey: "Burst of Ingenuity Timeout" }
+    ];
+
+    const features = definitions.map(def => {
+      const feature = {
+        id:          def.id,
+        name:        def.name,
+        description: def.description,
+        boolKey:     def.boolKey,
+        timeoutKey:  def.timeoutKey,
+        enabled:     game.settings.get("gambits-premades", def.boolKey),
+        timeout:     game.settings.get("gambits-premades", def.timeoutKey)
+      };
+      if (Array.isArray(def.children)) {
+        feature.children = def.children.map(child => ({
+          id:          child.id,
+          name:        child.name,
+          description: child.description,
+          boolKey:     child.boolKey,
+          enabled:     game.settings.get("gambits-premades", child.boolKey)
+        }));
+      }
+      return feature;
+    });
+
+    return foundry.utils.mergeObject(context, {
+      features,
+      hasTimeoutColumn,
+      buttons: [
+        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+      ]
+    });
+  }
 }

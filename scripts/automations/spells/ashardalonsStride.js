@@ -33,6 +33,11 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
                 "mode": 0,
                 "value": `function.game.gps.ashardalonsStride ${item.uuid} ${actor.uuid}`,
                 "priority": 20
+            },
+            {
+                "key": "flags.gambits-premades.oaImmunity",
+                "value": 1,
+                "priority": 20
             }
             ],
             "transfer": false,
@@ -83,6 +88,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
     }
 
     if(args[0] === "each") {
+        let gmUser = game.gps.getPrimaryGM();
         let item = await fromUuid(args[2]);
         let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "ef27f042-ba6d-4ff4-ac2b-4ca6ff611c17");
         let castLevel = await effectData?.getFlag('gambits-premades', 'asCastLevel');

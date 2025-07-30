@@ -1,7 +1,6 @@
-export function cloudOfDaggers({template, itemUuid}) {
+export function caltrops({template, itemUuid}) {
     let cprConfig = game.gps.getCprConfig({itemUuid});
     if(!cprConfig.animEnabled) return;
-    let animColor = cprConfig.animColor ?? "orange";
     
     let alignmentDecision;
     let scaleDecision;
@@ -11,19 +10,17 @@ export function cloudOfDaggers({template, itemUuid}) {
     }
     else {
         alignmentDecision = { edge: "on", offset: ( {x: 50, y: 0} ) };
-        scaleDecision = 0.65;
+        scaleDecision = 0.5;
     }
 
     new Sequence()
         .effect()
+            .file("jb2a.caltrops.endframe.01.grey")
             .attachTo(template, alignmentDecision)
-            .file(`jb2a.cloud_of_daggers.kunai.${animColor}`)
             .tieToDocuments(template)
             .scaleToObject(scaleDecision)
-            .scaleIn(0, 500, {ease: "easeOutCubic"})
-            .fadeIn(500)
-            .fadeOut(500)
-            .persist()
+            .mask()
             .belowTokens()
+            .persist()
     .play()
 }

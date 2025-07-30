@@ -155,8 +155,8 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             }
 
             let targetAC = target?.actor.system.attributes.ac.value;
-            let saveDC = workflow.saveItem?.system.save.dc;
-            let saveDice = workflow.saveRolls?.find(dice => dice.data.actorId === target.actor.id)
+            let saveDC = workflow.activityHasSave.dc.value;
+            let saveDice = workflow.saveRolls?.find(dice => dice.data.actorId === target.actor.id);
             let saveResult = saveDice?.dice[0].results[0].result + (saveDice?.total - saveDice?.dice[0].total);
             let attackResult = workflow.attackRoll?.dice[0].results[0].result + (workflow.attackRoll?.total - workflow.attackRoll?.dice[0].total);
 
@@ -192,7 +192,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             }
             else if(workflowType === "attack" && workflow.token.document.uuid !== validTokenPrimary.document.uuid) {
                 if((attackResult < targetAC && workflow.hitTargets.first()) || !workflow.hitTargets.first()) {
-                    if(attackResult < targetAC && workflow.hitTargets.first()) workflow.hitTargets.delete(target);
+                    if((attackResult < targetAC || workflow.attackRoll?.dice[0].results[0].result === 1) && workflow.hitTargets.first()) workflow.hitTargets.delete(target);
 
                     chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
@@ -220,14 +220,14 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             }
             else if(workflowType === "save" && enemyTokenUuid) {
                 if((saveResult < saveDC && !workflow.failedSaves.has(target)) || workflow.failedSaves.has(target)) {
-                    if (saveResult < saveDC && !workflow.failedSaves.has(target)) workflow.failedSaves.add(target);
+                    if ((saveResult < saveDC || saveDice?.dice[0].results[0].result === 1) && !workflow.failedSaves.has(target)) workflow.failedSaves.add(target);
 
-                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of disadvantage removed and were unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
                     return;
                 }
                 else if(!workflow.failedSaves.has(target)) {
-                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of disadvantage removed but were still able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
                     return;
                 }

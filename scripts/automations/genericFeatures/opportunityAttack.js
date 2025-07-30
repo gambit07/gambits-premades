@@ -1,10 +1,7 @@
-const regionTokenStates = new Map();
-
-export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, originX, originY, isTeleport}) {
+export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, isTeleport, waypoints}) {
     let gmUser = game.gps.getPrimaryGM();
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     if(game.user.id !== gmUser) return;
-    //async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     let region = await fromUuid(regionUuid);
     let token = await fromUuid(tokenUuid);
     if(!token || !region || !regionScenario) return;
@@ -13,25 +10,55 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
     let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled");
     if(oaDisabled) return;
-    
-    let currentCombatant = canvas.tokens.get(game.combat?.current.tokenId);
-    if (currentCombatant?.id !== token.object.id) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed due to bugbear`);
-        return; // Avoid initiating opportunity attack when it's not a token's turn
-    }
 
     const effectOriginActor = await fromUuid(region.flags["gambits-premades"].actorUuid);
     const effectOriginToken = await fromUuid(region.flags["gambits-premades"].tokenUuid);
+
+    if(regionScenario === "onTurnEnd") {
+        let recalculate = false;
+        let tokenSize = Math.max(effectOriginToken.width, effectOriginToken.height);
+
+        let validWeapons = effectOriginActor.items.filter(item => {
+            const acts = item.system?.activities ?? [];
+        
+            const qualifiesWeaponOrFeat = (acts.some(a => a.actionType === "mwak") && item.system?.equipped === true) || (item.system?.type?.value === "monster" && item.type === "feat" && acts.some(a => a.actionType === "mwak" || a.actionType === "msak"));
+        
+            return qualifiesWeaponOrFeat;
+        });
+
+        recalculate = await checkAndSetFlag("opportunityAttackRegionValidWeapons", validWeapons, region) || recalculate;
+        recalculate = await checkAndSetFlag("opportunityAttackRegionTokenSize", tokenSize, region) || recalculate;
+        recalculate = await handleMwakRange(effectOriginActor, region) || recalculate;
+
+        if (!recalculate) return;
+
+        let processedValidRange = processValidRange({actor: effectOriginActor, token: effectOriginToken});
+        const {maxRange} = processedValidRange;
+
+        await region.setFlag("gambits-premades", "opportunityAttackRegionMaxRange", maxRange);
+        await region.setFlag("gambits-premades", "opportunityAttackRegionValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
+
+        let processedOaSize = processOaSize({token: effectOriginToken, maxRange});
+        const {regionShape, elevationTop, elevationBottom} = processedOaSize;
+
+        region.update({
+            elevation: { bottom: elevationBottom, top: elevationTop },
+            shapes: region.shapes.map(shape => ({
+                ...shape,
+                ...regionShape,
+            }))
+        });
+
+        return;
+    }
+
+    let currentCombatant = canvas.tokens.get(game.combat?.current.tokenId);
+    if(currentCombatant?.id !== token.object.id) {
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed due to not tokens turn in combat`);
+        return; // Avoid initiating opportunity attack when it's not a token's turn
+    }
     
     let hasSentinel = effectOriginActor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c");
-
-    /*if(hasSentinel) {
-        let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
-        if(sentinelUsed) return effectOriginActor.unsetFlag("gambits-premades", "sentinelUsed");
-        let sentinelDeclined = effectOriginActor.getFlag("gambits-premades", "sentinelDeclined");
-        if(sentinelDeclined) return effectOriginActor.unsetFlag("gambits-premades", "sentinelDeclined");
-    }*/
-
     let hasPolearmReaction = effectOriginActor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "1c6b264d-ea96-42c4-8237-e42d3e41bb96");
     let hasDeadlyReachReaction = effectOriginActor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "e38813a6-9707-4ff3-bf2e-59c3c91b86ac");
 
@@ -48,79 +75,34 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         return;
     }
 
-    if(regionScenario === "tokenExit") {
-        const tokenState = regionTokenStates.get(region.id);
-
-        if (tokenState) {
-            tokenState.delete(token.id);
-            regionTokenStates.set(region.id, tokenState);
-        }
-
-        regionTokenStates.set(`${region.id}-${token.id}-exited`, true);
-
-        return;
-    }
-    else if(regionScenario === "tokenEnter") {
-        const tokenState = regionTokenStates.get(region.id) || new Set();
-        tokenState.add(token.id);
-        regionTokenStates.set(region.id, tokenState);
-        regionTokenStates.set(`${region.id}-${token.id}-entered`, true);
-
-        return;
-    }
-    else if(regionScenario === "tokenPostMove") {
-        const entered = regionTokenStates.get(`${region.id}-${token.id}-entered`);
-        const exited = regionTokenStates.get(`${region.id}-${token.id}-exited`);
-
-        /*let sentinelUsed = effectOriginActor.getFlag("gambits-premades", "sentinelUsed");
-        let sentinelDeclined = effectOriginActor.getFlag("gambits-premades", "sentinelDeclined");
+    if(regionScenario === "onExit") {
+        if(isTeleport) return;
+        if(token.regions.has(region)) return;
+        let dragonTurtleShield = effectOriginActor.items.getName("Dragon Turtle Dueling Shield");
+        if(dragonTurtleShield) await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
         
-        if(hasSentinel && !sentinelUsed && !sentinelDeclined && ((entered && (hasPolearmReaction || hasDeadlyReachReaction)) || exited)) {
-            //await wait(450); //Prevent Active Auras from freaking out
-            await token.update({ x: originX, y: originY }, { animate: false });
-        }*/
-
-        /*if (entered || exited) {
-            regionTokenStates.delete(`${region.id}-${token.id}-entered`);
-            regionTokenStates.delete(`${region.id}-${token.id}-exited`);
-            return;
-        }*/
-
-        regionTokenStates.delete(`${region.id}-${token.id}-exited`);
-        regionTokenStates.delete(`${region.id}-${token.id}-entered`);
-
-        //if(hasSentinel && (sentinelUsed || sentinelDeclined)) return;
-
-        if((exited || (!exited && !entered)) && !isTeleport) {
-            if (token.regions.has(region)) return;
-            let dragonTurtleShield = effectOriginActor.items.getName("Dragon Turtle Dueling Shield");
-            if(dragonTurtleShield) await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
-            
-            dialogTitle = "Opportunity Attack";
-            dialogId = "opportunityattack";
+        dialogTitle = "Opportunity Attack";
+        dialogId = "opportunityattack";
+    }
+    else if(regionScenario === "onEnter") {
+        if(isTeleport) return;
+        if (hasPolearmReaction) {
+            let weaponNames = ["glaive","halberd","pike","quarterstaff","spear"];
+            let hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.type?.baseItem && weaponNames.includes(item.system?.type?.baseItem.toLowerCase()) && item.system.equipped === true);
+            if(!hasPolearmWeapon) return;
+            dialogTitle = "Polearm Opportunity Attack";
+            dialogId = "polearmopportunityattack";
         }
-        else if(entered && !isTeleport) {
-            if (hasPolearmReaction) {
-                let weaponNames = ["glaive","halberd","pike","quarterstaff","spear"];
-                let hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.type?.baseItem && weaponNames.includes(item.system?.type?.baseItem.toLowerCase()) && item.system.equipped === true);
-                if(!hasPolearmWeapon) return;
-                dialogTitle = "Polearm Opportunity Attack";
-                dialogId = "polearmopportunityattack";
-            }
-            else if(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === "Battle Master") {
-                let braceItem = effectOriginActor.items.getName("Maneuvers: Brace");
-                if(!braceItem) return;
-                braceItemUuid = braceItem.uuid;
-                dialogTitle = "Maneuvers: Brace Opportunity Attack";
-                dialogId = "maneuversbraceopportunityattack";
-            }
-            else if (hasDeadlyReachReaction) {
-                dialogTitle = "Deadly Reach Opportunity Attack";
-                dialogId = "deadlyreachopportunityattack";
-            }
-            else {
-                return;
-            }
+        else if(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === "Battle Master") {
+            let braceItem = effectOriginActor.items.getName("Maneuvers: Brace");
+            if(!braceItem) return;
+            braceItemUuid = braceItem.uuid;
+            dialogTitle = "Maneuvers: Brace Opportunity Attack";
+            dialogId = "maneuversbraceopportunityattack";
+        }
+        else if (hasDeadlyReachReaction) {
+            dialogTitle = "Deadly Reach Opportunity Attack";
+            dialogId = "deadlyreachopportunityattack";
         }
         else {
             return;
@@ -205,96 +187,17 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         return;
     }
 
+    //Initial Checks Passed, Pause Movement
+    const resumeMovement = await token.pauseMovement();
+
     let oaDisadvantage = token.actor.flags["gambits-premades"]?.oaDisadvantage;
     const originDisadvantage = oaDisadvantage;
     
-    // Check valid weapons
-    let hasWarCaster = effectOriginActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
-    let warCasterMelee = true;
-    let warCasterRange = true;
-    if (hasWarCaster) {
-        if (game.modules.get("chris-premades")?.active) {
-            let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
-            if (cprConfig && 'warCasterRange' in cprConfig) {
-                warCasterRange = cprConfig.warCasterRange;
-              }
-              
-              if (cprConfig && 'warCasterMelee' in cprConfig) {
-                warCasterMelee = cprConfig.warCasterMelee;
-              }
-        }
-    }
-    if(!warCasterMelee && !warCasterRange) hasWarCaster = false;
-    
-    let overrideItems = ["Booming Blade"];
-
-    let validWeapons = effectOriginActor.items.filter(item => {
-        const acts = item.system?.activities ?? [];
-      
-        const qualifiesWeaponOrFeat = (acts.some(a => a.actionType === "mwak") && item.system?.equipped === true) || (item.system?.type?.value === "monster" && item.type === "feat" && acts.some(a => a.actionType === "mwak" || a.actionType === "msak"));
-
-        let warCasterSpell;
-        if(hasWarCaster) {
-            let allowedActionTypes = [];
-            if (warCasterMelee) allowedActionTypes.push("msak");
-            if (warCasterRange) allowedActionTypes.push("rsak", "save");
-        
-            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.preparation?.prepared || item.system?.preparation?.mode !== "prepared" || !item.system?.preparation ) && acts.some(a => ["creature", "enemy"].includes(a.target?.affects?.type))) || (warCasterMelee && overrideItems.includes(item.name));
-        }
-      
-        return qualifiesWeaponOrFeat || warCasterSpell;
-    });
-
-    if (!validWeapons.length) return;
-    
-    // Sort the weapons alphabetically
-    validWeapons.sort((a, b) => a.name.localeCompare(b.name));
-    
-    // Check for favorite weapon and put it on top
-    let favoriteWeaponUuid = null;
-    const favoriteWeaponIndex = validWeapons.findIndex(item => item.flags?.['midi-qol']?.oaFavoriteAttack);
-    if (favoriteWeaponIndex > -1) {
-        const favoriteWeapon = validWeapons.splice(favoriteWeaponIndex, 1)[0];
-        favoriteWeaponUuid = favoriteWeapon.uuid;
-        validWeapons.unshift(favoriteWeapon);
-    }
-
-    // Find 'Unarmed Strike' from the validWeapons array and add to end of list
-    const unarmedIndex = validWeapons.findIndex(item => item.name.toLowerCase() === "unarmed strike");
-    if (unarmedIndex > -1) {
-        if(validWeapons[unarmedIndex]?.uuid !== favoriteWeaponUuid) {
-            let unarmedStrike = validWeapons.splice(unarmedIndex, 1)[0];
-            validWeapons.push(unarmedStrike);
-        }
-    }
+    let processedValidOptions = await processValidOptions({actor: effectOriginActor});
+    const {hasWarCaster, favoriteWeaponUuid, validWeapons} = processedValidOptions;
+    if (!validWeapons.length) return await resumeMovement();
     
     let dialogContent = `
-        <style>
-        #gps-favorite-checkbox {
-        position: absolute;
-        opacity: 0;
-        width: 0;
-        height: 0;
-        }
-
-        #gps-favorite-checkbox + label {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        }
-
-        #gps-favorite-checkbox + label::before {
-        content: "\\2606"; /* Unicode empty star (☆) for my remembrance*/
-        font-size: 30px;
-        margin-right: 5px;
-        line-height: 1;
-        vertical-align: middle;
-        }
-
-        #gps-favorite-checkbox:checked + label::before {
-            content: "\\2605"; /* Unicode filled star (★) also for my remembrance */
-        }
-        </style>
         <div class="gps-dialog-container">
             <div class="gps-dialog-section">
                 <div class="gps-dialog-content">
@@ -303,7 +206,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
                         <div class="gps-dialog-flex">
                             <label for="item-select_${dialogId}" class="gps-dialog-label">Weapon:</label>
                             <select id="item-select_${dialogId}" class="gps-dialog-select">
-                                ${validWeapons.map(item => `<option name="${item.img}" value="${item.uuid}" class="gps-dialog-option">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""} ${((act) => act ? (act.actionType==="msak" ? "(Melee)" : act.actionType==="rsak" ? "(Ranged)" : act.actionType==="save" ? "(Save)" : "") : "")(item.system.activities?.find(a => ["msak","rsak","save"].includes(a.actionType)))}</option>`).join('')}
+                                ${validWeapons.map(item => `<option data-img="${item.img}" value="${item.uuid}" class="gps-dialog-option">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""} ${((act) => act ? (act.actionType==="msak" ? "(Melee)" : act.actionType==="rsak" ? "(Ranged)" : act.actionType==="save" ? "(Save)" : "") : "")(item.system.activities?.find(a => ["msak","rsak","save"].includes(a.actionType)))}</option>`).join('')}
                             </select>
                             <div id="image-container" class="gps-dialog-image-container">
                                 <img id="weapon-img_${dialogId}" class="gps-dialog-image">
@@ -345,8 +248,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
     if (!userDecision) {
         await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
-        //if(hasSentinel) await effectOriginActor.setFlag("gambits-premades", "sentinelDeclined", true);
-        return;
+        return await resumeMovement();
     }
     else if (userDecision) {
         if (braceItemUuid) {
@@ -366,12 +268,12 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
             if(source && source === "user") braceRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
             else if(source && source === "gm") braceRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
-            if(!braceRoll.baseLevel && !braceRoll.castLevel && !braceRoll.checkHits && !braceRoll.itemType) return;
+            if(!braceRoll.baseLevel && !braceRoll.castLevel && !braceRoll.checkHits && !braceRoll.itemType) return await resumeMovement();
         }
 
         if (!selectedItemUuid) {
             console.log("No weapon selected");
-            return;
+            return await resumeMovement();
         }
 
         let chosenWeapon = await fromUuid(selectedItemUuid);
@@ -417,12 +319,12 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
         await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
 
-        if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) return;
+        if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) return await resumeMovement();
 
         await game.gps.addReaction({actorUuid: `${effectOriginActor.uuid}`});
 
         if(hasSentinel && checkHits) {
-            //await effectOriginActor.setFlag("gambits-premades", "sentinelUsed", true);
+            await game.gps.stopMovementExit({token});
 
             let effectData = [
                 {
@@ -447,7 +349,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
             await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: token.actor.uuid, effects: effectData });
         }
-        //else if(hasSentinel && !checkHits) await effectOriginActor.setFlag("gambits-premades", "sentinelDeclined", true);
+        else await resumeMovement();
     }
 }
 
@@ -459,150 +361,11 @@ export async function enableOpportunityAttack(combat, combatEvent) {
         let browserUser = MidiQOL.playerForActor(actor);
     
         if (actor.type === 'npc' || actor.type === 'character') {
-            let hasWarCaster = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
-            let warCasterMelee = true;
-            let warCasterRange = true;
-            if (hasWarCaster) {
-                if (game.modules.get("chris-premades")?.active) {
-                    let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
-                    if (cprConfig && 'warCasterRange' in cprConfig) {
-                        warCasterRange = cprConfig.warCasterRange;
-                    }
-                    
-                    if (cprConfig && 'warCasterMelee' in cprConfig) {
-                        warCasterMelee = cprConfig.warCasterMelee;
-                    }
-                }
-            }
-            if(!warCasterMelee && !warCasterRange) hasWarCaster = false;
-            let overrideItems = ["Booming Blade"];
-
-            let validWeapons = actor.items.filter(item =>
-                (item.type === "weapon" && item.system.equipped === true && item.system.activities?.some(a => a.actionType === "msak" || a.actionType === "mwak")) || ((item.system?.type?.value === "monster" && item.type === "feat") && item.system.activities?.some(a => a.actionType === "mwak" || a.actionType === "msak"))
-            );
-
-            let validSpells = actor.items.filter(item =>
-                (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.actionType === "save")) && (item.system.preparation?.prepared === true || item.system.preparation?.mode !== "prepared" || !item.system.preparation) && item.system.activities?.some(a => ["creature", "enemy"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
-            );
-
-            let oaDisabled;
-            if (!validWeapons.length && !validSpells.length) {
-                ui.notifications.warn(`No Valid Melee options found, cancelling Opportunity Attack options for ${actor.name}`);
-                oaDisabled = true;
-            }
-        
-            let onlyThrownWeapons = validWeapons.length > 0 && validWeapons.every(item => item.system.properties.has('thr'));
+            let processedValidRange = await processValidRange({actor, token});
+            const {maxRange, validWeapons, mwakRange, oaDisabled} = processedValidRange;
             
-            const units = canvas.scene.grid.units;
-            let conversionFactor;
-            if (units === "meters" || units === "m" || units === "mt") {
-                conversionFactor = 0.3;
-            }
-            else conversionFactor = 1;
-        
-            let maxRange;
-            let mwakRange = actor.flags["midi-qol"]?.range?.mwak;
-            if (onlyThrownWeapons || (validSpells && !validWeapons)) {
-                maxRange = 5;
-            } else {
-                maxRange = validWeapons.reduce((max, item) => {
-                    let itemMaxRange = item.system.range?.reach;
-
-                    if(!itemMaxRange || isNaN(itemMaxRange)) {
-                        itemMaxRange = item.system.activities.reduce((actMax, activity) => {
-                            let rangeVal = activity.range?.value;
-                            return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
-                        }, 0);
-                    }
-                    
-                    if (!item.system.properties?.has('thr')) {
-                        return Math.max(max, itemMaxRange);
-                    }
-                    return max;
-                }, 0);
-            }
-
-            if(maxRange === 0 || oaDisabled) {
-                const tokenSize = Math.max(token.width, token.height);
-                maxRange = 4 * tokenSize;
-            }
-            else {
-                if (token.width === 1 && maxRange === 10) maxRange;
-                else if (token.width === 2 && maxRange === 5) maxRange;
-                else if (token.width === 3 && maxRange === 5) maxRange;
-                else if (token.width === 3 && maxRange === 10) maxRange;
-                else if (token.width === 4 && maxRange === 10) maxRange;
-                
-                const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * canvas.scene.dimensions.distance;
-                maxRange = (maxRange * conversionFactor) + tokenSizeOffset;
-            
-                if (mwakRange) maxRange += (mwakRange * conversionFactor);
-            }
-    
-            //if(oaDisabled) maxRange = 1;
-        
-            const tokenCenterX = token.x + token.object.w / 2;
-            const tokenCenterY = token.y + token.object.h / 2;
-            const gridSize = canvas.scene.grid.size;
-            const gridDistance = canvas.scene.grid.distance;
-            const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize);
-            const topLeftX = tokenCenterX - (sideLength / 2);
-            const topLeftY = tokenCenterY - (sideLength / 2);
-            const radius = maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance;
-            const points = [];
-            let elevationTop = token.elevation + maxRange;
-            let elevationBottom = token.elevation - maxRange;
-            let regionShape;
-
-            if (canvas.scene.grid.type === 0) {  // Gridless
-                const exponent = 4;
-                const numVertices = 40; // Adjust curve smoothness
-
-                for (let i = 0; i < numVertices; i++) {
-                    const theta = (i / numVertices) * 2 * Math.PI;
-                    const cosTheta = Math.cos(theta);
-                    const sinTheta = Math.sin(theta);
-                    
-                    const x = tokenCenterX + radius * Math.sign(cosTheta) * Math.pow(Math.abs(cosTheta), 2/exponent);
-                    const y = tokenCenterY + radius * Math.sign(sinTheta) * Math.pow(Math.abs(sinTheta), 2/exponent);
-                    points.push(x, y);
-                }
-
-                regionShape = {
-                    type: "polygon",
-                    points: points,
-                    hole: false
-                };
-            } else if(canvas.scene.grid.type === 1) {   // Square
-                regionShape = {
-                    type: "rectangle",
-                    x: topLeftX,
-                    y: topLeftY,
-                    width: sideLength,
-                    height: sideLength,
-                    rotation: 0,
-                    hole: false
-                };
-            } else if(canvas.scene.grid.type > 1) {     // Hex
-                const R_max = (canvas.scene.grid.type === 4 || canvas.scene.grid.type === 5) ? radius * 0.75 : radius * 1.0;
-                const R_min = (canvas.scene.grid.type === 4 || canvas.scene.grid.type === 5) ? radius * 1.0 : radius * 0.75;
-
-                const numVertices = 60; // Adjust curve smoothness
-
-                for (let i = 0; i < numVertices; i++) {
-                    const theta = (i / numVertices) * 2 * Math.PI;
-                    const r_current = (R_max + R_min) / 2 + ((R_max - R_min) / 2) * Math.cos(6 * theta);
-                    const x = tokenCenterX + r_current * Math.cos(theta);
-                    const y = tokenCenterY + r_current * Math.sin(theta);
-                    points.push(x, y);
-                }
-
-                regionShape = {
-                    type: "polygon",
-                    points: points,
-                    hole: false
-                };
-            }
+            let processedOaSize = processOaSize({token, maxRange});
+            const {regionShape, elevationTop, elevationBottom} = processedOaSize;
     
             const regionData = {
                 name: `${actor.name} OA Region`,
@@ -615,8 +378,8 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onExit",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenExit", isTeleport: event.data.teleport});`,
-                            events: ['tokenExit']
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onExit", isTeleport: event.data.teleport, waypoints: event.data.movement.passed.waypoints});`,
+                            events: ['tokenMoveOut']
                         }
                     },
                     {
@@ -624,17 +387,8 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onEnter",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenEnter", isTeleport: event.data.teleport});`,
-                            events: ['tokenEnter']
-                        }
-                    },
-                    {
-                        type: "executeScript",
-                        name: "onPostMove",
-                        disabled: false,
-                        system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenPostMove", originX: event.data.segments[0].to.x, originY: event.data.segments[0].to.y, isTeleport: event.data.teleport});`,
-                            events: ['tokenMove']
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onEnter", isTeleport: event.data.teleport, waypoints: event.data.movement.passed.waypoints});`,
+                            events: ['tokenMoveIn']
                         }
                     },
                     {
@@ -642,159 +396,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onTurnEnd",
                         disabled: false,
                         system: {
-                            source: `
-                                if(game.user.id !== game.gps.getPrimaryGM()) return;
-                                if(event.data.token.uuid !== region.flags["gambits-premades"].tokenUuid) return;
-                                let token = await fromUuid(region.flags["gambits-premades"].tokenUuid);
-                                let actor = await fromUuid(region.flags["gambits-premades"].actorUuid);
-
-                                let recalculate = false;
-                                let tokenSize = Math.max(token.width, token.height);
-
-                                let validWeapons = actor.items.filter(item => {
-                                    const acts = item.system?.activities ?? [];
-                                
-                                    const qualifiesWeaponOrFeat = (acts.some(a => a.actionType === "mwak") && item.system?.equipped === true) || (item.system?.type?.value === "monster" && item.type === "feat" && acts.some(a => a.actionType === "mwak" || a.actionType === "msak"));
-                                
-                                    return qualifiesWeaponOrFeat;
-                                });
-
-                                recalculate = await checkAndSetFlag("opportunityAttackRegionValidWeapons", validWeapons) || recalculate;
-                                recalculate = await checkAndSetFlag("opportunityAttackRegionTokenSize", tokenSize) || recalculate;
-                                recalculate = await handleMWAKRange() || recalculate;
-
-                                if (!recalculate) return;
-
-                                const validSpells = region.flags["gambits-premades"].opportunityAttackRegionValidSpells;
-                                let maxRange = calculateMaxRange(validWeapons, validSpells, tokenSize);
-                                if(maxRange === false) return;
-
-                                await region.setFlag("gambits-premades", "opportunityAttackRegionMaxRange", maxRange);
-                                await region.setFlag("gambits-premades", "opportunityAttackRegionValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
-
-                                const tokenCenterX = token.x + token.object.w / 2;
-                                const tokenCenterY = token.y + token.object.h / 2;
-                                const gridSize = canvas.scene.grid.size;
-                                const gridDistance = canvas.scene.grid.distance;
-                                const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize);
-                                const topLeftX = tokenCenterX - (sideLength / 2);
-                                const topLeftY = tokenCenterY - (sideLength / 2);
-                                let regionShape;
-
-                                if (canvas.scene.grid.type === 0) {  // Gridless
-                                    regionShape = {
-                                        type: "ellipse",
-                                        x: tokenCenterX,
-                                        y: tokenCenterY,
-                                        radiusX: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
-                                        radiusY: maxRange * canvas.scene.grid.size / canvas.scene.dimensions.distance,
-                                        rotation: 0,
-                                        hole: false
-                                    };
-                                } else {
-                                    regionShape = {
-                                        type: "rectangle",
-                                        x: topLeftX,
-                                        y: topLeftY,
-                                        width: sideLength,
-                                        height: sideLength,
-                                        rotation: 0,
-                                        hole: false
-                                    };
-                                }
-
-                                region.update({
-                                    elevation: { bottom: -maxRange, top: maxRange },
-                                    shapes: region.shapes.map(shape => ({
-                                        ...shape,
-                                        ...regionShape,
-                                    }))
-                                });
-                                
-                                async function checkAndSetFlag(property, newValue) {
-                                    const oldValue = JSON.stringify(region.flags["gambits-premades"][property]);
-                                    if (oldValue !== JSON.stringify(newValue)) {
-                                        await region.setFlag("gambits-premades", property, newValue);
-                                        return true;
-                                    }
-                                    return false;
-                                }
-
-                                async function handleMWAKRange() {
-                                    if (!actor.flags["midi-qol"]?.range?.mwak) return false;
-
-                                    let mwakExpire = actor.appliedEffects
-                                        .filter(effect => effect.duration.turns == 1)
-                                        .reduce((acc, effect) => {
-                                            const change = effect.changes.find(change => change.key == "flags.midi-qol.range.mwak");
-                                            return change ? acc + Number(change.value) : acc;
-                                        }, 0);
-
-                                    let mwakRange = actor.flags["midi-qol"].range.mwak - mwakExpire;
-                                    return await checkAndSetFlag("opportunityAttackRegionMwakRange", mwakRange);
-                                }
-
-                                function calculateMaxRange(validWeapons, validSpells, tokenSize) {
-                                    const units = canvas.scene.grid.units;
-                                    let conversionFactor;
-                                    if (units === "meters" || units === "m" || units === "mt") {
-                                        conversionFactor = 0.3;
-                                    }
-                                    else conversionFactor = 1;
-
-                                    const tokenSizeOffset = tokenSize * 0.5 * canvas.scene.dimensions.distance;
-
-                                    if (!validWeapons?.length && !validSpells?.length) {
-                                        region.update({
-                                            elevation: { bottom: -1, top: 1 },
-                                            shapes: region.shapes.map(shape => ({
-                                                ...shape,
-                                                radiusX: 100 * tokenSize,
-                                                radiusY: 100 * tokenSize
-                                            }))
-                                        });
-                                        return false;
-                                    }
-
-                                    let onlyThrownWeapons = validWeapons?.length > 0 && validWeapons?.every(item => {
-                                        return item.system.properties.has('thr');
-                                    });
-
-                                    let maxRange;
-
-                                    if (onlyThrownWeapons || (validSpells?.length && !validWeapons?.length)) {
-                                        maxRange = 5;
-                                    } else {
-                                        maxRange = validWeapons.reduce((max, item) => {
-                                            let itemMaxRange = item.system.range?.reach;
-
-                                            if(!itemMaxRange || isNaN(itemMaxRange)) {
-                                                itemMaxRange = item.system.activities.reduce((actMax, activity) => {
-                                                    let rangeVal = activity.range?.value;
-                                                    return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
-                                                }, 0);
-                                            }
-                                            
-                                            if (!item.system.properties?.has('thr')) {
-                                                return Math.max(max, itemMaxRange);
-                                            }
-                                            return max;
-                                        }, 0);
-                                    }
-
-                                    if (token.width === 1 && maxRange === 10) maxRange;
-                                    else if (token.width === 2 && maxRange === 5) maxRange;
-                                    else if (token.width === 3 && maxRange === 5) maxRange;
-                                    else if (token.width === 3 && maxRange === 10) maxRange;
-                                    else if (token.width === 4 && maxRange === 10) maxRange;
-
-                                    maxRange = (maxRange * conversionFactor) + tokenSizeOffset;
-
-                                    if (actor.flags["midi-qol"]?.range?.mwak) {
-                                        maxRange += (region.flags["gambits-premades"].opportunityAttackRegionMwakRange * conversionFactor);
-                                    }
-                                    return maxRange;
-                                }`,
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid !== event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onTurnEnd"});`,
                             events: ['tokenTurnEnd']
                         }
                     }
@@ -803,12 +405,9 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                     "gambits-premades": {
                         'actorUuid': actor.uuid,
                         'tokenUuid': token.uuid,
-                        'opportunityAttackSet': true,
                         'opportunityAttackRegionValidWeapons': validWeapons,
-                        'opportunityAttackRegionValidSpells': validSpells,
                         'opportunityAttackRegionMwakRange': mwakRange,
                         'opportunityAttackRegionTokenSize': Math.max(token.width, token.height),
-                        'opportunityAttackRegionConFac': conversionFactor,
                         'opportunityAttackRegionMaxRange': maxRange
                     }
                 }
@@ -854,7 +453,6 @@ export async function enableOpportunityAttack(combat, combatEvent) {
 
 export async function disableOpportunityAttack(combat, combatEvent) {
     if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
-    regionTokenStates.clear();
 
     async function processCombatant(combatant) {
         const { actor } = combatant;
@@ -869,18 +467,6 @@ export async function disableOpportunityAttack(combat, combatEvent) {
             await actor.unsetFlag('gambits-premades', 'attachedRegions');
         }
 
-        //let sentinelUsed = actor.getFlag("gambits-premades", "sentinelUsed");
-        //let sentinelDeclined = actor.getFlag("gambits-premades", "sentinelDeclined");
-
-        /*let effectNames = ["Opportunity Attack Reaction", "Maneuvers: Brace Opportunity Attack"];
-        let effectIdsToDelete = actor.effects
-            .filter(effect => effectNames.includes(effect.name))
-            .map(effect => effect.id);
-
-        if (effectIdsToDelete.length > 0) {
-            await actor.deleteEmbeddedDocuments("ActiveEffect", effectIdsToDelete);
-        }*/
-
         let regionData = null;
 
         try {
@@ -894,8 +480,6 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         }
         let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
         if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
-        //if(sentinelUsed) await actor.unsetFlag("gambits-premades", "sentinelUsed");
-        //if(sentinelDeclined) await actor.unsetFlag("gambits-premades", "sentinelDeclined");
     }
 
     if (combatEvent === "endCombat") {
@@ -909,3 +493,236 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         await processCombatant(combatant);
     }
 };
+
+function processOaSize({token, maxRange}) {
+    const tokenCenterX = token.x + token.object.w / 2;
+    const tokenCenterY = token.y + token.object.h / 2;
+    const gridSize = canvas.scene.grid.size;
+    const gridDistance = canvas.scene.grid.distance;
+    const gridType = canvas.scene.grid.type;
+    const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize);
+    const topLeftX = tokenCenterX - (sideLength / 2);
+    const topLeftY = tokenCenterY - (sideLength / 2);
+    const radius = maxRange * gridSize / gridDistance;
+    const points = [];
+    let elevationTop = token.elevation + maxRange;
+    let elevationBottom = token.elevation - maxRange;
+    let regionShape;
+
+    if (gridType === 0) { // Gridless
+        const exponent = 4;
+        const numVertices = 40; // Adjust curve smoothness
+
+        for (let i = 0; i < numVertices; i++) {
+            const theta = (i / numVertices) * 2 * Math.PI;
+            const cosTheta = Math.cos(theta);
+            const sinTheta = Math.sin(theta);
+            
+            const x = tokenCenterX + radius * Math.sign(cosTheta) * Math.pow(Math.abs(cosTheta), 2/exponent);
+            const y = tokenCenterY + radius * Math.sign(sinTheta) * Math.pow(Math.abs(sinTheta), 2/exponent);
+            points.push(x, y);
+        }
+
+        regionShape = {
+            type: "polygon",
+            points: points,
+            hole: false
+        };
+    } else if(gridType === 1) { // Square
+        regionShape = {
+            type: "rectangle",
+            x: topLeftX,
+            y: topLeftY,
+            width: sideLength,
+            height: sideLength,
+            rotation: 0,
+            hole: false
+        };
+    } else if(gridType > 1) { // Hex
+        const R_max = (gridType === 4 || gridType === 5) ? radius * 0.75 : radius * 1.0;
+        const R_min = (gridType === 4 || gridType === 5) ? radius * 1.0 : radius * 0.75;
+
+        const numVertices = 60; // Adjust curve smoothness
+
+        for (let i = 0; i < numVertices; i++) {
+            const theta = (i / numVertices) * 2 * Math.PI;
+            const r_current = (R_max + R_min) / 2 + ((R_max - R_min) / 2) * Math.cos(6 * theta);
+            const x = tokenCenterX + r_current * Math.cos(theta);
+            const y = tokenCenterY + r_current * Math.sin(theta);
+            points.push(x, y);
+        }
+
+        regionShape = {
+            type: "polygon",
+            points: points,
+            hole: false
+        };
+    }
+
+    return {regionShape, elevationTop, elevationBottom}
+}
+
+async function processValidOptions({actor}) {
+    // Check valid weapons
+    let hasWarCaster = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
+    let warCasterMelee = true;
+    let warCasterRange = true;
+    if (hasWarCaster) {
+        if (game.modules.get("chris-premades")?.active) {
+            let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
+            if (cprConfig && 'warCasterRange' in cprConfig) {
+                warCasterRange = cprConfig.warCasterRange;
+            }
+            if (cprConfig && 'warCasterMelee' in cprConfig) {
+                warCasterMelee = cprConfig.warCasterMelee;
+            }
+        }
+    }
+    if(!warCasterMelee && !warCasterRange) hasWarCaster = false;
+    
+    let overrideItems = ["Booming Blade"];
+
+    let validWeapons = actor.items.filter(item => {
+        const acts = item.system?.activities ?? [];
+      
+        const qualifiesWeaponOrFeat = (acts.some(a => a.actionType === "mwak") && item.system?.equipped === true) || (item.system?.type?.value === "monster" && item.type === "feat" && acts.some(a => a.actionType === "mwak" || a.actionType === "msak"));
+
+        let warCasterSpell;
+        if(hasWarCaster) {
+            let allowedActionTypes = [];
+            if (warCasterMelee) allowedActionTypes.push("msak");
+            if (warCasterRange) allowedActionTypes.push("rsak", "save");
+        
+            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.preparation?.prepared || item.system?.preparation?.mode !== "prepared" || !item.system?.preparation ) && acts.some(a => ["creature", "enemy"].includes(a.target?.affects?.type))) || (warCasterMelee && overrideItems.includes(item.name));
+        }
+      
+        return qualifiesWeaponOrFeat || warCasterSpell;
+    });
+    
+    // Sort the weapons alphabetically
+    validWeapons.sort((a, b) => a.name.localeCompare(b.name));
+    
+    // Check for favorite weapon and put it on top
+    let favoriteWeaponUuid = null;
+    const favoriteWeaponIndex = validWeapons.findIndex(item => item.flags?.['midi-qol']?.oaFavoriteAttack);
+    if (favoriteWeaponIndex > -1) {
+        const favoriteWeapon = validWeapons.splice(favoriteWeaponIndex, 1)[0];
+        favoriteWeaponUuid = favoriteWeapon.uuid;
+        validWeapons.unshift(favoriteWeapon);
+    }
+
+    // Find 'Unarmed Strike' from the validWeapons array and add to end of list
+    const unarmedIndex = validWeapons.findIndex(item => item.name.toLowerCase() === "unarmed strike");
+    if (unarmedIndex > -1) {
+        if(validWeapons[unarmedIndex]?.uuid !== favoriteWeaponUuid) {
+            let unarmedStrike = validWeapons.splice(unarmedIndex, 1)[0];
+            validWeapons.push(unarmedStrike);
+        }
+    }
+
+    return {hasWarCaster, favoriteWeaponUuid, validWeapons};
+}
+
+async function processValidRange({actor, token}) {
+    let hasWarCaster = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
+    let warCasterMelee = true;
+    let warCasterRange = true;
+    if (hasWarCaster) {
+        if (game.modules.get("chris-premades")?.active) {
+            let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
+            if (cprConfig && 'warCasterRange' in cprConfig) {
+                warCasterRange = cprConfig.warCasterRange;
+            }
+            
+            if (cprConfig && 'warCasterMelee' in cprConfig) {
+                warCasterMelee = cprConfig.warCasterMelee;
+            }
+        }
+    }
+    if(!warCasterMelee && !warCasterRange) hasWarCaster = false;
+    let overrideItems = ["Booming Blade"];
+
+    let validWeapons = actor.items.filter(item =>
+        (item.type === "weapon" && item.system.equipped === true && item.system.activities?.some(a => a.actionType === "msak" || a.actionType === "mwak")) || ((item.system?.type?.value === "monster" && item.type === "feat") && item.system.activities?.some(a => a.actionType === "mwak" || a.actionType === "msak"))
+    );
+
+    let validSpells = actor.items.filter(item =>
+        (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.actionType === "save")) && (item.system.preparation?.prepared === true || item.system.preparation?.mode !== "prepared" || !item.system.preparation) && item.system.activities?.some(a => ["creature", "enemy"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
+    );
+
+    let oaDisabled;
+    if (!validWeapons.length && !validSpells.length) {
+        ui.notifications.warn(`No Valid Melee options found, cancelling Opportunity Attack options for ${actor.name}`);
+        oaDisabled = true;
+    }
+
+    let onlyThrownWeapons = validWeapons.length > 0 && validWeapons.every(item => item.system.properties.has('thr'));
+
+    let maxRange;
+    let mwakRange = actor.flags["midi-qol"]?.range?.mwak;
+    if (onlyThrownWeapons || (validSpells && !validWeapons)) {
+        maxRange = 5;
+    } else {
+        maxRange = validWeapons.reduce((max, item) => {
+            let activityMaxRange = item.system.activities?.reduce((actMax, activity) => {
+            let rangeVal = activity.range?.value;
+            return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
+            }, 0);
+
+            if (!activityMaxRange || activityMaxRange === 0) {
+                const reach = item.system.range?.reach;
+                if (typeof reach === "number" && !isNaN(reach)) {
+                    activityMaxRange = reach;
+                }
+            }
+
+            if (!item.system.properties?.has("thr")) {
+                return Math.max(max, activityMaxRange);
+            }
+
+            return max;
+        }, 0);
+    }
+
+    if(maxRange === 0 || oaDisabled) {
+        const tokenSize = Math.max(token.width, token.height);
+        maxRange = 4 * tokenSize;
+    }
+    else {
+        if (token.width === 1 && maxRange === 10) maxRange;
+        else if (token.width === 2 && maxRange === 5) maxRange;
+        else if (token.width === 3 && maxRange === 5) maxRange;
+        else if (token.width === 3 && maxRange === 10) maxRange;
+        else if (token.width === 4 && maxRange === 10) maxRange;
+        
+        const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * canvas.scene.dimensions.distance;
+        maxRange = (game.gps.convertFromFeet({ range: maxRange })) + tokenSizeOffset;
+    
+        if (mwakRange) maxRange += (game.gps.convertFromFeet({ range: mwakRange }));
+    }
+
+    return {maxRange, validWeapons, mwakRange, oaDisabled};
+}
+
+async function checkAndSetFlag(property, newValue, region) {
+    const oldValue = JSON.stringify(region.flags["gambits-premades"][property]);
+    if (oldValue !== JSON.stringify(newValue)) {
+        await region.setFlag("gambits-premades", property, newValue);
+        return true;
+    }
+    return false;
+}
+
+async function handleMwakRange(effectOriginActor, region) {
+    if (!effectOriginActor.flags["midi-qol"]?.range?.mwak) return false;
+
+    let mwakExpire = effectOriginActor.appliedEffects
+        .filter(effect => effect.duration.turns == 1)
+        .reduce((acc, effect) => {
+            const change = effect.changes.find(change => change.key == "flags.midi-qol.range.mwak");
+            return change ? acc + Number(change.value) : acc;
+        }, 0);
+
+    let mwakRange = effectOriginActor.flags["midi-qol"].range.mwak - mwakExpire;
+    return await checkAndSetFlag("opportunityAttackRegionMwakRange", mwakRange, region);
+}

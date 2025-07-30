@@ -17,15 +17,6 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
     if((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
     if(token.actor.items.some(i => i.identifier === "web-walker")) return;
 
-    if(regionScenario === "tokenExit") {
-        const isRestrained = await token.actor.appliedEffects.find(e => e.name === "Restrained");
-        if (isRestrained) await isRestrained.delete();
-    }
-
-    let validatedRegionMovement = game.gps.validateRegionMovement({ regionScenario: regionScenario, regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid, validExit: false });
-    const { validRegionMovement, validReroute } = validatedRegionMovement;
-    if(!validRegionMovement) return;
-
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem?.name;
     
@@ -36,6 +27,8 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
     const hasEffectApplied = token.document.hasStatusEffect("restrained");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkWebRound");
     if(damagedThisTurn && damagedThisTurn === `${token.id}_${game.combat.round}`) return;
+
+    let resumeMovement;
 
     if (hasEffectApplied && regionScenario === "tokenTurnStart") {
         let dialogContent = `
@@ -97,9 +90,12 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
     }
 
     else if (!hasEffectApplied) {
+        if(regionScenario === "tokenEnter") resumeMovement = await tokenDocument.pauseMovement();
         const saveResult = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
+        if(!saveResult) return;
         
         if (saveResult.failedSaves.size !== 0) {
+            await region.setFlag("gambits-premades", "checkWebRound", `${token.id}_${game.combat.round}`);
             const hasEffectApplied = token.document.hasStatusEffect("restrained");
 
             if (!hasEffectApplied) {
@@ -133,16 +129,15 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
     
             if (!userDecision) {
-                if(validReroute) {
-                    game.gps.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
-    
-                    if(originX && originY) await token.document.update({ x: originX, y: originY }, { teleport: true });
-                }
-
+                if(regionScenario === "tokenEnter") await game.gps.stopMovementEnter({token: tokenDocument});
                 return;
             }
             else if (userDecision) {
                 const skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: token.document.uuid});
+                if(!skillCheck && regionScenario === "tokenEnter") {
+                    return await game.gps.stopMovementEnter({token: tokenDocument});
+                }
+                else if(!skillCheck) return;
                 if (skillCheck.failedSaves.size === 0) {
                     await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
                         let chatData = {
@@ -151,21 +146,22 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                         content: `<span style='text-wrap: wrap;'>You successfully escape from the ${chosenItem.name}!</span>`
                     };
                     ChatMessage.create(chatData);
+                    await resumeMovement();
                 }
                 else {
-                    if(validReroute) {
-                        game.gps.validateRegionMovement({ regionScenario: "tokenForcedMovement", regionStatus: regionStatus, regionUuid: regionUuid, tokenUuid: tokenUuid });
-        
-                        if(originX && originY) await token.document.update({ x: originX, y: originY }, { teleport: true });
-                    }
                     let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),
                         content: `<span style='text-wrap: wrap;'>You are unable to escape the ${chosenItem.name} this turn.</span>`
                     };
                     ChatMessage.create(chatData);
+
+                    await game.gps.stopMovementEnter({token: tokenDocument});
                 }
             }
+        }
+        else {
+            if(regionScenario === "tokenEnter") await resumeMovement();
         }
         
         if(saveResult) {

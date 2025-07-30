@@ -106,10 +106,11 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
             let actorProf = validTokenPrimary.actor.system.attributes.prof;
             let reroll;
             let numDice = '1d10';
-            if(MidiQOL.safeGetGameSetting('gambits-premades', 'enableInterceptionCustomDice')) {
-                let dieNumber = MidiQOL.safeGetGameSetting('gambits-premades', 'enableInterceptionCustomDiceNumber');
-                let dieFace = MidiQOL.safeGetGameSetting('gambits-premades', 'enableInterceptionCustomDiceFace');
-                numDice = `${dieNumber}d${dieFace}`;
+            let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid, type: "homebrewDice"});
+            if(cprConfig.homebrewDiceEnabled) {
+                let dieNumber = cprConfig.dieNumber;
+                let dieFace = cprConfig.dieFace;
+                numDice = `${dieNumber}${dieFace}`;
             }
 
             if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
