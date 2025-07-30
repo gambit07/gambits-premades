@@ -19,29 +19,6 @@ jobs:
       - name: Zip Files
         run: zip -r module.zip ./*
 
-      - name: Release Foundry Package
-        env:
-          FOUNDRY_API_TOKEN: ${{ secrets.FOUNDRY_API_TOKEN }}
-        run: |
-          VERSION=$(node -p "require('./module.json').version")
-          curl -X POST "https://api.foundryvtt.com/_api/packages/release_version" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: $FOUNDRY_API_TOKEN" \
-            -d '{
-              "id": "gambits-premades",
-              "release": {
-                "version": "'"${VERSION}"'",
-                "manifest": "https://github.com/gambit07/gambits-premades/releases/latest/download/module.json",
-                "download": "https://github.com/gambit07/gambits-premades/releases/download/'"${VERSION}"'/module.zip",
-                "notes": "https://github.com/gambit07/gambits-premades/releases/tag/'"${VERSION}"'",
-                "compatibility": {
-                  "minimum": "13.346",
-                  "verified": "13.346",
-                  "maximum": "13"
-                }
-              }
-            }'
-
       - name: Post to Midi Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
@@ -75,3 +52,26 @@ jobs:
                    }
                  }]
                }' $DISCORD_WEBHOOK
+
+      - name: Release Foundry Package
+        env:
+          FOUNDRY_API_TOKEN: ${{ secrets.FOUNDRY_API_TOKEN }}
+        run: |
+          VERSION=$(node -p "require('./module.json').version")
+          curl -X POST "https://api.foundryvtt.com/_api/packages/release_version" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: $FOUNDRY_API_TOKEN" \
+            -d '{
+              "id": "gambits-premades",
+              "release": {
+                "version": "'"${VERSION}"'",
+                "manifest": "https://github.com/gambit07/gambits-premades/releases/latest/download/module.json",
+                "download": "https://github.com/gambit07/gambits-premades/releases/download/'"${VERSION}"'/module.zip",
+                "notes": "https://github.com/gambit07/gambits-premades/releases/tag/'"${VERSION}"'",
+                "compatibility": {
+                  "minimum": "13.346",
+                  "verified": "13.346",
+                  "maximum": "13"
+                }
+              }
+            }'
