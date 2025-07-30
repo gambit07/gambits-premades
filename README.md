@@ -7,7 +7,7 @@
 <p>A custom collection of automated spells, items, and feats for Foundry VTT. These automations primarily use the MidiQOL and Dynamic Active Effect modules to implement automations, along with other synergistic modules.</p>
 <ul>
 <li>Contains a suite of fully automated items, features, spells, etc. This includes some very difficult to handle "3rd party reaction" items such as Counterspell, Opportunity Attacks, Silvery Barbs, etc.</li>
-<li>Custom beautiful AppV2 Dialogs for reaction automations with an integrated and animated countdown timer.</li>
+<li>Beautiful AppV2 Dialogs for reaction automations with an integrated and animated countdown timer.</li>
 <li>Optional customization to display reaction dialogs for the module to both the GM and Player. AFK player? No problem.</li>
 <li>Optional customization to set the Primary GM in your world for the module, helpful for DM's that run with an assistant GM for automation handling.</li>
 <li>Optional customization for Region Token wrapping to better recognize tokens within regions based off 5e's ruleset.</li>
