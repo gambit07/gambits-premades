@@ -1,4 +1,4 @@
-- V13 and 5e 5.x first release! I would still classify this as a beta, I'm sure there will be some issues so keep that in mind if you want to use it in a live game. If you find a bug, feel free to post it to my gps-bugs channel on my discord. I've added a new V13 and 5.x tag
+- V13 and 5e 5.x first release! I would still classify this as a beta, I'm sure there will be some issues so keep that in mind if you want to use it in a live game. If you find a bug, feel free to post it to my gps-bugs channel on my discord
 - Updated settings menus to app v2
 - Updated module dependencies: Removed Active Auras and added Aura Effects. Converted all existing aura effect automations to the Aura Effects module. Thanks to MrPrimate for maintaining Active Auras for so long, and thanks to Michael for creating a new and more performant module for v13!
 - Fully removed GPS Primary GM setting, now relies on MidiQOL's Preferred GM setting instead
@@ -20,7 +20,6 @@
   - Biohazard: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors. Added region's native movement cost addition for difficult terrain.
   - Caltrops: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors.
   - Ball Bearings: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors.
-  - Stinking Cloud: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors.
   - Entangle: Converted from an Aura automation to a Region automation. Added region's native movement cost addition for difficult terrain.
   - Aura Automations: All automations using an Aura updated to use the Aura Effects module instead of the Active Auras module.
 - Bugfixes:
