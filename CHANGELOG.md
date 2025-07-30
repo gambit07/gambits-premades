@@ -1,34 +1,5 @@
 # Changelog
 
-## [v2.0.2] - 2025-07-30
-- V13 and 5e 5.x first release! I would still classify this as a beta, I'm sure there will be some issues so keep that in mind if you want to use it in a live game. If you find a bug, feel free to post it to my gps-bugs channel on my discord. I've added a new V13 and 5.x tag
-- Updated settings menus to app v2
-- Updated module dependencies: Removed Active Auras and added Aura Effects. Converted all existing aura effect automations to the Aura Effects module. Thanks to MrPrimate for maintaining Active Auras for so long, and thanks to Michael for creating a new and more performant module for v13!
-- Fully removed GPS Primary GM setting, now relies on MidiQOL's Preferred GM setting instead
-- Reworked Region Wrapping to be compatible with V13
-- Note: The next release of core Foundry V13 will have a bugfix for some token hitching that is present when moving in and out of a region. This primarily effects Opportunity Attacks, but also other region Execute Script automations so just something to be aware of.
-- Additions:
-  - Web 2024: No changes in functionality
-  - Boots of Speed 2024: No changes in functionality
-  - Candle 2024: No changes in functionality
-  - Lamp 2024: No changes in functionality
-  - Lantern, Bullseye 2024: No changes in functionality
-  - Staff of Withering 2024: No changes in functionality
-  - Torch 2024: No changes in functionality
-- Updates:
-  - Opportunity Attacks: Tons of improvements made possible by Foundry V13. Now makes use of Pause/Resume/Stop system functionality to allow parsing opportunity attacks in sequence, this enables Sentinel to be fully automated and is just a better visual user experience. Resolved bug with finding the proper max range value in certain circumstances where multiple activities were present for a weapon. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors. Cleaned up and removed about 1/3 of the code base.
-  - Web: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors. Added region's native movement cost addition for difficult terrain.
-  - Black Tentacles: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors. Added region's native movement cost addition for difficult terrain.
-  - Cloud of Daggers: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors. Many bugfixes for 2024 CoD.
-  - Biohazard: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors. Added region's native movement cost addition for difficult terrain.
-  - Caltrops: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors.
-  - Ball Bearings: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors.
-  - Stinking Cloud: Tons of improvements made possible by Foundry V13. Cleaned up codebase. Reduced complexity of region setup, less region behaviors needed and less code on those region behaviors.
-  - Entangle: Converted from an Aura automation to a Region automation. Added region's native movement cost addition for difficult terrain.
-  - Aura Automations: All automations using an Aura updated to use the Aura Effects module instead of the Active Auras module.
-- Bugfixes:
-  - Silvery Barbs: Fixed Magic Resistance (or other advantage effects) applying advantage to the Silvery Barbs roll when it should always be a straight roll
-
 ## [v1.0.53] - 2025-06-26
 - Additions:
   - Mage Slayer 2024: Added the 2024 version of Mage Slayer
