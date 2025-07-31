@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.0.5] - 2025-07-31
+- Bugfixes:
+  - Rust Metal: Fixed and improved implementation. Now gives a clear GM chat message regarding the status of the effected weapon.
+  - Blood Frenzy: Fixed to correctly look at activity info
+  - Settings: A few bugfixes for html strings that were no longer relevant in appv2
+
 ## [v2.0.4] - 2025-07-30
 - V13 and 5e 5.x first release! I would still classify this as a beta, I'm sure there will be some issues so keep that in mind if you want to use it in a live game. If you find a bug, feel free to post it to my gps-bugs channel on my discord
 - Updated settings menus to app v2
