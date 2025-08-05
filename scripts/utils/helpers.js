@@ -809,14 +809,16 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 }
             }, 1000);
 
-            dialog.animate = () => {
+            let lastUpdateTime = 0;
+            dialog.animate = (timestamp) => {
                 if (!dialog.isPaused) {
-                    const now = Date.now();
-                    dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
-                    dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
-                    if (dialog.timeLeft > 0) {
-                        requestAnimationFrame(dialog.animate);
+                    if (timestamp - lastUpdateTime > 50) {
+                        lastUpdateTime = timestamp;
+                        const now = Date.now();
+                        dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
+                        dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
                     }
+                    if (dialog.timeLeft > 0) requestAnimationFrame(dialog.animate);
                 }
             };
             requestAnimationFrame(dialog.animate);
@@ -1392,15 +1394,7 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
         }
     }
 
-    let remoteCIU = await MidiQOL.completeItemUse(
-        itemData,
-        {
-            actorUuid,
-            midiOptions: options
-        },
-        {},    // or your dialog settings
-        {}     // or your ChatMessage options
-    );
+    let remoteCIU = await MidiQOL.completeItemUse( itemData, { actorUuid, midiOptions: options }, {}, {} ); // dialog/chat
 
     let checkHits = remoteCIU?.hitTargets?.first() ? true : false;
 

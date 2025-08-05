@@ -1,11 +1,2 @@
-- Additions:
-  - Elemental Affinity 2024: Added Draconic Sorcerer's 2024 ability Elemental Affinity
-  - Shield Master 2024: Added the generic feature Shield Master for 2024
-  - Dread Counterspell: Added Vecna's Dread Counterspell
 - Bugfixes:
-  - Dissonant Whispers: Fix spell damage not scaling properly
-  - Enervation: Updated to work with Aura Effects latest update which resolved a few lingering issues for the V13 Enervation release
-  - Heated Body: Resolved effect not looking at activity type properly
-  - Defile Ground: A few touch ups, probably needs to be cleaned up further
-- Removed:
-  - Generic Weapons: Seemed most people found them an annoyance, so they've been completely removed
+  - Dialogs: Added throttling to the dialog title bar animation to keep it from consuming FPS
