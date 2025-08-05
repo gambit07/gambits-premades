@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.0.7] - 2025-08-05
+- Bugfixes:
+  - Dialogs: Added throttling to the dialog title bar animation to keep it from consuming FPS
+
 ## [v2.0.6] - 2025-08-04
 - Additions:
   - Elemental Affinity 2024: Added Draconic Sorcerer's 2024 ability Elemental Affinity
