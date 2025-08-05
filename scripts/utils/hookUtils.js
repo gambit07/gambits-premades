@@ -231,7 +231,8 @@ export function updateSettings(settingKey = null) {
         'disableCuttingWordsMaxMiss': 'disableCuttingWordsMaxMiss',
         'enableTaleOfHubris': 'taleOfHubrisEnabled',
         'enableChronalShift': 'chronalShiftEnabled',
-        'enableMagicUsersNemesis': 'magicUsersNemesisEnabled'
+        'enableMagicUsersNemesis': 'magicUsersNemesisEnabled',
+        'enableDreadCounterspell': 'dreadCounterspellEnabled'
     };
 
     if (settingKey === null) {

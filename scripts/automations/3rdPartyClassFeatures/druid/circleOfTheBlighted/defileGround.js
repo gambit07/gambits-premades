@@ -124,8 +124,6 @@ export async function defileGround({ speaker, actor, token, character, item, arg
     }
 
     if (args[0] === "off") {
-        async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
-        await wait(250);
         const originActor = await fromUuid(args[2]);
         let itemCheck = originActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "f3bca81e-885d-4f45-aac4-c817eba4efc2");
         item = originActor.items.find(i => i.identifier === "defile-ground");

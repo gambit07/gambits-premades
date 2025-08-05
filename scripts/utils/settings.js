@@ -628,6 +628,31 @@ export function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableDreadCounterspell", {
+        name: "enableDreadCounterspell",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', "Dread Counterspell Timeout", {
+        name: "Dread Counterspell Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register("gambits-premades", "enableTaleOfHubris", {
         name: "enableTaleOfHubris",
         scope: "world",
@@ -1177,7 +1202,8 @@ export class MonsterFeaturesSettingsMenu extends BaseSettingsMenu {
     let hasTimeoutColumn = true;
 
     const definitions = [
-      { id: "burstOfIngenuity", name: "Burst of Ingenuity", description: "Presents a dialog for monsters with Burst of Ingenuity.", boolKey: "enableBurstOfIngenuity", timeoutKey: "Burst of Ingenuity Timeout" }
+      { id: "burstOfIngenuity", name: "Burst of Ingenuity", description: "Presents a dialog for monsters with Burst of Ingenuity.", boolKey: "enableBurstOfIngenuity", timeoutKey: "Burst of Ingenuity Timeout" },
+      { id: "dreadCounterspell", name: "Dread Counterspell", description: "Presents a dialog for Vecna's Dread Counterspell.", boolKey: "enableDreadCounterspell", timeoutKey: "Dread Counterspell Timeout" }
     ];
 
     const features = definitions.map(def => {

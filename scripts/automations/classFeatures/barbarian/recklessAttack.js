@@ -1,7 +1,7 @@
 export async function recklessAttack({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preAttackRoll") {
         if(!game.combat) return;
-        let meleeAttack = ((workflow.activity?.actionType == 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType == 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(),6).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
+        let meleeAttack = ((workflow.activity?.actionType === 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType === 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(),6).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
         if (!meleeAttack) return;
         let recklessCheck = await actor.getFlag("midi-qol", "checkRecklessAttack");
         if(recklessCheck === false || recklessCheck === true) return;

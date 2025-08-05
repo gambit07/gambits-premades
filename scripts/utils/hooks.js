@@ -44,6 +44,7 @@ export function registerHooks() {
         if (game.gpsSettings.counterspellEnabled && workflow?.item?.type === "spell") await executeWorkflow({ workflowItem: "counterspell2024", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
         if (game.gpsSettings.temporalShuntEnabled && (workflow.item.type === "spell" || workflow.activity.hasAttack)) await executeWorkflow({ workflowItem: "temporalShunt", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
         if (game.gpsSettings.magicUsersNemesisEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "magicUsersNemesis", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
+        if (game.gpsSettings.dreadCounterspellEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "dreadCounterspell", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
     });
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
