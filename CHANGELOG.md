@@ -1,5 +1,18 @@
 # Changelog
 
+## [v2.0.6] - 2025-08-04
+- Additions:
+  - Elemental Affinity 2024: Added Draconic Sorcerer's 2024 ability Elemental Affinity
+  - Shield Master 2024: Added the generic feature Shield Master for 2024
+  - Dread Counterspell: Added Vecna's Dread Counterspell
+- Bugfixes:
+  - Dissonant Whispers: Fix spell damage not scaling properly
+  - Enervation: Updated to work with Aura Effects latest update which resolved a few lingering issues for the V13 Enervation release
+  - Heated Body: Resolved effect not looking at activity type properly
+  - Defile Ground: A few touch ups, probably needs to be cleaned up further
+- Removed:
+  - Generic Weapons: Seemed most people found them an annoyance, so they've been completely removed
+
 ## [v2.0.5] - 2025-07-31
 - Bugfixes:
   - Rust Metal: Fixed and improved implementation. Now gives a clear GM chat message regarding the status of the effected weapon.
