@@ -67,7 +67,7 @@ Dynamic effects using Active Effects
 <a href="https://www.patreon.com/c/JB2A/posts" target="_blank">JB2A Patreon</a>
 </p>
 
-**<NOTE: All of the example videos below are now outdated, I hope to update them when I have time. Dialogs are now using Foundry's Application V2 and look much cleaner**
+**NOTE: All of the example videos below are now outdated, I hope to update them when I have time. Dialogs are now using Foundry's Application V2 and look much cleaner**
 
 <b>Instructions:</b>
 <p>
