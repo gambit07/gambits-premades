@@ -67,6 +67,8 @@ Dynamic effects using Active Effects
 <a href="https://www.patreon.com/c/JB2A/posts" target="_blank">JB2A Patreon</a>
 </p>
 
+**<NOTE: All of the example videos below are now outdated, I hope to update them when I have time. Dialogs are now using Foundry's Application V2 and look much cleaner**
+
 <b>Instructions:</b>
 <p>
 Most of my automations exist as an item in my compendiums, which are labeled as GPS [Automation Item Type]. Each automation item in a compendium will include an item description with the required dependencies, and any relevant information related to the setup of the item. To use these automations, you can simply replace the item on the characters sheet with the item from my compendium. Alternatively, this module is also integrated with Chris Premades modules 'Medkit' button. This is a button on the item sheet which can be pressed to automatically import an item automation, based on compendium priorities within the Chris Premades module. To setup my module for proper integration with Chris Premades see the screenshot below:
