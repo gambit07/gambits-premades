@@ -17,37 +17,37 @@
 </ul>
 
 <b>Dependencies V13 5e 5.x (V2.0.0-V2.x.x)</b>
-<p>
+<BLOCKQUOTE>
 Midi QOL<br>
 Aura Effects<br>
 Sequencer<br>
 socketlib<br>
 Dynamic effects using Active Effects<br>
 Region Attacher<br>
-</p>
+</BLOCKQUOTE>
 
 <b>Dependencies V12 5e 4.x (V1.0.1-V1.0.53)</b>
-<p>
+<BLOCKQUOTE>
 Midi QOL<br>
 Active Auras<br>
 Sequencer<br>
 socketlib<br>
 Dynamic effects using Active Effects<br>
 Region Attacher<br>
-</p>
+</BLOCKQUOTE>
 
 <b>Dependencies V12 5e 3.x (V0.5.0-V0.5.90)</b>
-<p>
+<BLOCKQUOTE>
 Midi QOL<br>
 Active Auras<br>
 Sequencer<br>
 socketlib<br>
 Dynamic effects using Active Effects<br>
 Region Attacher<br>
-</p>
+</BLOCKQUOTE>
 
-<b>Dependencies V11 (V0.0.6-V0.1.86</b>
-<p>
+<b>Dependencies V11 (V0.0.6-V0.1.86)</b>
+<BLOCKQUOTE>
 Midi QOL<br>
 Active Auras<br>
 Dfreds Convenient Effects<br>
@@ -57,7 +57,7 @@ Template Macro<br>
 Sequencer<br>
 socketlib<br>
 Dynamic effects using Active Effects
-</p>
+</BLOCKQUOTE>
 
 <b>Animation Modules</b><br>
 <p>
