@@ -11,6 +11,17 @@
   - Caltrops: Resolved a number of issues caused by a change in how regions execute script behavior in v13
   - Ball Bearings: Resolved a number of issues caused by a change in how regions execute script behavior in v13
 
+## [v2.0.8] - 2025-08-09
+- Bugfixes:
+  - Hide Templates: Resolved non-gm users templates displaying after world refresh when Hide Templates setting was enabled
+  - stopMovementEnter: Tweaked gps region function for stopping a token to more consistently stop the token within the Region bounds appropriately
+  - Black Tentacles: Resolved a number of issues caused by a change in how regions execute script behavior in v13
+  - Web: Resolved a number of issues caused by a change in how regions execute script behavior in v13
+  - Biohazard: Resolved a number of issues caused by a change in how regions execute script behavior in v13
+  - Cloud of Daggers: Resolved a number of issues caused by a change in how regions execute script behavior in v13
+  - Caltrops: Resolved a number of issues caused by a change in how regions execute script behavior in v13
+  - Ball Bearings: Resolved a number of issues caused by a change in how regions execute script behavior in v13
+
 ## [v2.0.7] - 2025-08-05
 - Bugfixes:
   - Dialogs: Added throttling to the dialog title bar animation to keep it from consuming FPS
