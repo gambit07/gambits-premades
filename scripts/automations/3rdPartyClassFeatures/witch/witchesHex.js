@@ -243,5 +243,3 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         }
     }
 }
-
-await game.gps.socket.executeAsUser("blackTentacles", game.gps.getPrimaryGM(), {tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "tokenEnter"});
