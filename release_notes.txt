@@ -6,4 +6,4 @@
   - Biohazard: Resolved a number of issues caused by a change in how regions execute script behavior in v13
   - Cloud of Daggers: Resolved a number of issues caused by a change in how regions execute script behavior in v13
   - Caltrops: Resolved a number of issues caused by a change in how regions execute script behavior in v13
-  - Ball Bearings: Resolved a number of issues caused by a change in how regions execute script behavior in v13
+  - Ball Bearings: Resolved a number of issues caused by a change in how regions execute script behavior in v13 
