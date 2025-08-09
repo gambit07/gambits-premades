@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.0.9] - 2025-08-09
+- Bugfixes:
+  - Fix module not loading because I did a dumb thing
+
 ## [v2.0.8] - 2025-08-09
 - Bugfixes:
   - Hide Templates: Resolved non-gm users templates displaying after world refresh when Hide Templates setting was enabled
