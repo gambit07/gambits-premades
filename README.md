@@ -16,8 +16,38 @@
 <li>And many more</li>
 </ul>
 
-<b>Dependencies V11</b>
-<p>
+<b>Dependencies V13 5e 5.x (V2.0.0-V2.x.x)</b>
+<BLOCKQUOTE>
+Midi QOL<br>
+Aura Effects<br>
+Sequencer<br>
+socketlib<br>
+Dynamic effects using Active Effects<br>
+Region Attacher<br>
+</BLOCKQUOTE>
+
+<b>Dependencies V12 5e 4.x (V1.0.1-V1.0.53)</b>
+<BLOCKQUOTE>
+Midi QOL<br>
+Active Auras<br>
+Sequencer<br>
+socketlib<br>
+Dynamic effects using Active Effects<br>
+Region Attacher<br>
+</BLOCKQUOTE>
+
+<b>Dependencies V12 5e 3.x (V0.5.0-V0.5.90)</b>
+<BLOCKQUOTE>
+Midi QOL<br>
+Active Auras<br>
+Sequencer<br>
+socketlib<br>
+Dynamic effects using Active Effects<br>
+Region Attacher<br>
+</BLOCKQUOTE>
+
+<b>Dependencies V11 (V0.0.6-V0.1.86)</b>
+<BLOCKQUOTE>
 Midi QOL<br>
 Active Auras<br>
 Dfreds Convenient Effects<br>
@@ -27,17 +57,7 @@ Template Macro<br>
 Sequencer<br>
 socketlib<br>
 Dynamic effects using Active Effects
-</p>
-
-<b>Dependencies V12</b>
-<p>
-Midi QOL<br>
-Active Auras<br>
-Sequencer<br>
-socketlib<br>
-Dynamic effects using Active Effects<br>
-Region Attacher<br>
-</p>
+</BLOCKQUOTE>
 
 <b>Animation Modules</b><br>
 <p>
@@ -46,6 +66,8 @@ Region Attacher<br>
 <a href="https://github.com/chrisk123999/animated-spell-effects-cartoon" target="_blank">Animated Spell Effects: Cartoon (Jack Kerouac)</a><br>
 <a href="https://www.patreon.com/c/JB2A/posts" target="_blank">JB2A Patreon</a>
 </p>
+
+**NOTE: All of the example videos below are now outdated, I hope to update them when I have time. Dialogs are now using Foundry's Application V2 and look much cleaner**
 
 <b>Instructions:</b>
 <p>
