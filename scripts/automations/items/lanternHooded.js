@@ -4,6 +4,7 @@ import {
 } from "../../utils/lightActions.js";
   
 export async function lanternHooded({ speaker, actor, token, item, args, workflow }) {
+  if(!game.modules.get("ATL")?.active) return ui.notifications.warn("The Active Token Effects module must be active");
   const effectName = `${token.document.id} Hooded Lantern`;
   const gpsUuid = "4d035518-5171-42fb-94e0-2f68f1208e55";
   const gpsUuidDim = "16b82105-df43-4489-89ac-d20b4915e601";

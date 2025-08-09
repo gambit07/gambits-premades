@@ -4,6 +4,7 @@ import {
 } from "../../utils/lightActions.js";
   
 export async function torch({ speaker, actor, token, item, args, workflow }) {
+  if(!game.modules.get("ATL")?.active) return ui.notifications.warn("The Active Token Effects module must be active");
   const effectName = `${token.document.id} Torch`;
   const gpsUuid = "31ef3b37-2ae3-4057-8335-63f690d1ae8d";
   const filePath = "modules/gambits-premades/assets/images/torch.webp";
@@ -52,7 +53,7 @@ export async function torch({ speaker, actor, token, item, args, workflow }) {
   ];
 
   const activeLight = actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === gpsUuid);
-  const canThrow = game.modules.get("item-piles")?.active === true;
+  const canThrow = game.modules.get("item-piles")?.active;
   const hasRemaining = (item.system.quantity !== 0);
 
   if (!activeLight) {

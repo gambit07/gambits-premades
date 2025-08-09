@@ -13,7 +13,7 @@
   "version": "2.0.7",
   "compatibility": {
     "minimum": 13.346,
-    "verified": 13.346,
+    "verified": 13.347,
     "maximum": 13
   },
   "socket": true,

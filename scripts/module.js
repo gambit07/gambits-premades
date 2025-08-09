@@ -70,7 +70,6 @@ Hooks.once('socketlib.ready', async function() {
     game.gps.socket.register("gmUpdateDisposition", helpers.gmUpdateDisposition);
     game.gps.socket.register("gmToggleStatus", helpers.gmToggleStatus);
     game.gps.socket.register("replaceChatCard", helpers.replaceChatCard);
-    game.gps.socket.register("validateRegionMovement", helpers.validateRegionMovement);
     game.gps.socket.register("ritualSpellUse", helpers.ritualSpellUse);
     game.gps.socket.register("getBrowserUser", helpers.getBrowserUser);
     game.gps.socket.register("gmDeleteItem", helpers.gmDeleteItem);
@@ -79,6 +78,7 @@ Hooks.once('socketlib.ready', async function() {
     game.gps.socket.register("gpsActivityUse", helpers.gpsActivityUse);
     game.gps.socket.register("gpsActivityUpdate", helpers.gpsActivityUpdate);
     game.gps.socket.register("gpsUpdateMidiRange", helpers.gpsUpdateMidiRange);
+    game.gps.socket.register("gmSetFlag", helpers.gmSetFlag);
 })
 
 Hooks.once('ready', async function() {

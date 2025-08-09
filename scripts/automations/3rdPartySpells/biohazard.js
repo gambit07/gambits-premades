@@ -1,4 +1,4 @@
-export async function biohazard({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, regionStatus}) {
+export async function biohazard({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, regionStatus, userId}) {
     let gmUser = game.gps.getPrimaryGM();
 
     if (args?.[0]?.macroPass === "templatePlaced") {
@@ -9,6 +9,8 @@ export async function biohazard({speaker, actor, character, item, args, scope, w
     }
 
     if(!tokenUuid || !regionUuid || !regionScenario) return;
+
+    if(game.user.id !== userId) return;
 
     let region = await fromUuid(regionUuid);
     let template;
@@ -39,6 +41,6 @@ export async function biohazard({speaker, actor, character, item, args, scope, w
     await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
     await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
     
-    await region.setFlag("gambits-premades", "checkBiohazardRound", `${token.id}_${game.combat.round}`);
+    await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkBiohazardRound", value: `${token.id}_${game.combat.round}` });
     if(regionScenario === "tokenEnter") await resumeMovement();
 }

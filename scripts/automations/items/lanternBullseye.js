@@ -4,6 +4,7 @@ import {
 } from "../../utils/lightActions.js";
   
 export async function lanternBullseye({ speaker, actor, token, item, args, workflow }) {
+  if(!game.modules.get("ATL")?.active) return ui.notifications.warn("The Active Token Effects module must be active");
   const effectName = `${token.document.id} Bullseye Lantern`;
   const gpsUuid = "c11cf151-f1aa-4ba1-bab6-1c483fcfa3c9";
   const filePath = "modules/gambits-premades/assets/images/bullseyeLantern.webp";

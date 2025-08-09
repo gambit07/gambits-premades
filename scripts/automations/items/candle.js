@@ -4,6 +4,7 @@ import {
 } from "../../utils/lightActions.js";
   
 export async function candle({ speaker, actor, token, item, args, workflow }) {
+  if(!game.modules.get("ATL")?.active) return ui.notifications.warn("The Active Token Effects module must be active");
   const effectName = `${token.document.id} Candle`;
   const gpsUuid = "3c2adfee-50c0-4393-8ed3-b6ac53a53fe2";
   const filePath = "modules/gambits-premades/assets/images/candle.webp";

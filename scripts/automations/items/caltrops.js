@@ -1,4 +1,4 @@
-export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus, speaker, actor, character, item, args, scope, workflow, options}) {
+export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus, speaker, actor, character, item, args, scope, workflow, options, userId}) {
     let gmUser = game.gps.getPrimaryGM();
 
     if(args?.[0]?.macroPass === "templatePlaced") {
@@ -9,7 +9,8 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
 
     if(!tokenUuid || !regionUuid || !regionScenario) return;
 
-    let region = await fromUuid(regionUuid);
+    if(game.user.id !== userId) return;
+
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
     
@@ -19,6 +20,7 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
 
     let resumeMovement = await tokenDocument?.pauseMovement();
 
+    let region = await fromUuid(regionUuid);
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem.name;
     let dialogId = "caltrops";

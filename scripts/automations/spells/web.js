@@ -1,4 +1,4 @@
-export async function web({tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus, speaker, actor, token, character, item, args, scope, workflow, options}) {
+export async function web({tokenUuid, regionUuid, regionScenario, originX, originY, regionStatus, speaker, actor, token, character, item, args, scope, workflow, options, userId}) {
     if(args?.[0]?.macroPass === "templatePlaced") {
         const template = await fromUuid(workflow.templateUuid);
         game.gps.animation.web({template, token, itemUuid: workflow.item.uuid});
@@ -8,8 +8,9 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
     let gmUser = game.gps.getPrimaryGM();
 
     if(!tokenUuid || !regionUuid || !regionScenario) return;
+    
+    if(game.user.id !== userId) return;
 
-    let region = await fromUuid(regionUuid);
     let tokenDocument = await fromUuid(tokenUuid);
     token = tokenDocument?.object;
     
@@ -17,16 +18,17 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
     if((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
     if(token.actor.items.some(i => i.identifier === "web-walker")) return;
 
+    let region = await fromUuid(regionUuid);
     let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
     let itemProperName = chosenItem?.name;
     
     let dialogId = "web";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
-    let browserUser = game.gps.getBrowserUser({ actorUuid: token.actor.uuid });
 
     const hasEffectApplied = token.document.hasStatusEffect("restrained");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkWebRound");
     if(damagedThisTurn && damagedThisTurn === `${token.id}_${game.combat.round}`) return;
+    let browserUser = game.gps.getBrowserUser({ actorUuid: token.actor.uuid });
 
     let resumeMovement;
 
@@ -58,7 +60,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
 
         if (!userDecision) {
-            await region.setFlag("gambits-premades", "checkWebRound", `${token.id}_${game.combat.round}`);
+            await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkWebRound", value: `${token.id}_${game.combat.round}` });
             return;
         }
         else if (userDecision) {
@@ -86,7 +88,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
             }
         }
     
-        await region.setFlag("gambits-premades", "checkWebRound", `${token.id}_${game.combat.round}`);
+        await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkWebRound", value: `${token.id}_${game.combat.round}` });
     }
 
     else if (!hasEffectApplied) {
@@ -95,7 +97,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
         if(!saveResult) return;
         
         if (saveResult.failedSaves.size !== 0) {
-            await region.setFlag("gambits-premades", "checkWebRound", `${token.id}_${game.combat.round}`);
+            await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkWebRound", value: `${token.id}_${game.combat.round}` });
             const hasEffectApplied = token.document.hasStatusEffect("restrained");
 
             if (!hasEffectApplied) {
@@ -165,7 +167,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
         }
         
         if(saveResult) {
-            await region.setFlag("gambits-premades", "checkWebRound", `${token.id}_${game.combat.round}`);
+            await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkWebRound", value: `${token.id}_${game.combat.round}` });
         }
     }
 }

@@ -4,6 +4,7 @@ import {
 } from "../../utils/lightActions.js";
   
 export async function lamp({ speaker, actor, token, item, args, workflow }) {
+  if(!game.modules.get("ATL")?.active) return ui.notifications.warn("The Active Token Effects module must be active");
   const effectName = `${token.document.id} Lamp`;
   const gpsUuid = "ed5ddad4-9a4b-4ff8-ba7a-141862cb4fec";
   const filePath = "modules/gambits-premades/assets/images/lamp.webp";

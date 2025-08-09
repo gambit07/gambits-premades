@@ -30,8 +30,8 @@ export async function gmUpdateDisposition({ tokenUuid, disposition }) {
 
 export async function gmToggleStatus({ tokenUuid, status, active }) {
     if(!tokenUuid || !status || (active !== true && active !== false)) return;
-    let token = await fromUuid(`${tokenUuid}`);
-    if(token) await token.actor.toggleStatusEffect(status, { active: active, overlay: false });
+    let token = await fromUuid(tokenUuid);
+    if(token) token.actor.toggleStatusEffect(status, { active, overlay: false });
 }
 
 export async function freeSpellUse({ item, actor }) {
@@ -780,26 +780,17 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             dialog.timeLeft = initialTimeLeft;
             dialog.isPaused = false;
             dialog.pausedTime = 0;
-            const startTime = Date.now();
+            const startTime = performance.now();
             dialog.endTime = startTime + initialTimeLeft * 1000;
             const enemySelect = dialog?.element.querySelector(`#enemy-token`);
             const allySelect = dialog?.element.querySelector(`#ally-token`);
 
-            function resetEnemySelect() {
-                if (enemySelect) {
-                    enemySelect.selectedIndex = 0;
-                }
-            }
-            
-            function resetAllySelect() {
-                if (allySelect) {
-                    allySelect.selectedIndex = 0;
-                }
-            }
+            function resetEnemySelect() { if (enemySelect) { enemySelect.selectedIndex = 0; } };
+            function resetAllySelect() { if (allySelect) { allySelect.selectedIndex = 0; } };
 
             dialog.timer = setInterval(() => {
                 if (!dialog.isPaused) {
-                    const now = Date.now();
+                    const now = performance.now();
                     dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
                     dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
                     if (dialog.timeLeft <= 0) {
@@ -812,9 +803,9 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             let lastUpdateTime = 0;
             dialog.animate = (timestamp) => {
                 if (!dialog.isPaused) {
-                    if (timestamp - lastUpdateTime > 50) {
+                    if (timestamp - lastUpdateTime > 33) {
                         lastUpdateTime = timestamp;
-                        const now = Date.now();
+                        const now = timestamp;
                         dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
                         dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
                     }
@@ -873,7 +864,6 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                     pauseButton.style.backgroundColor = this.isPaused ? dialogColors.pauseColor : "";
                 }
             };
-            requestAnimationFrame(dialog.animate);
             dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
         },
         close: async (event, dialog) => {
@@ -1544,10 +1534,11 @@ export async function stopMovementExit({token}) {
     await token.stopMovement();
 
     let waypoints = token.movementHistory;
+    if (!waypoints || waypoints.length === 0) return;
 
     if(canvas.scene.grid.type >= 1) {
         const last = waypoints.length === 1 ? waypoints[0] : waypoints[waypoints.length - 2];
-        const snapped = canvas.grid.getTopLeftPoint({ x: last.x, y: last.y });
+        const snapped = canvas.scene.grid.getSnappedPoint({ x: last.x, y: last.y }, { mode: 0xFF0, resolution: 1 });
         await token.update({ x: snapped.x, y: snapped.y }, { animate: false });
     }
     else {
@@ -1586,12 +1577,22 @@ export async function stopMovementExit({token}) {
     }
 }
 
-export async function stopMovementEnter({token}) {
-    //token.document.revertRecordedMovement("9UOH2OzKt9aS9zx1");
-    await token.stopMovement();
+export async function stopMovementEnter({ token }) {
+  if (!token) return;
 
-    let waypoints = token.movementHistory;
-    const last = waypoints[waypoints.length - 1];
-    const snapped = canvas.grid.getTopLeftPoint({ x: last.x, y: last.y });
-    await token.update({ x: snapped.x, y: snapped.y }, { animate: false });
+  await token.stopMovement();
+
+  const waypoints = token.movementHistory;
+  if (!waypoints || waypoints.length === 0) return;
+
+  const last = waypoints[waypoints.length - 1];
+
+  const snapped = canvas.scene.grid.getSnappedPoint({ x: last.x, y: last.y }, { mode: 0xFF0, resolution: 1 });
+
+  await token.update({ x: snapped.x, y: snapped.y }, { animate: false });
+}
+
+export async function gmSetFlag({flagDocumentUuid, key, value}) {
+    let flagDocument = await fromUuid(flagDocumentUuid);
+    await flagDocument.setFlag("gambits-premades", key, value);
 }

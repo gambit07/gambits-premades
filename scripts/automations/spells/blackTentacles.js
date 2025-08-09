@@ -1,4 +1,4 @@
-export async function blackTentacles({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, regionStatus}) {
+export async function blackTentacles({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, regionStatus, userId}) {
     if(!game.combat) return ui.notifications.warn("Black Tentacles requires an active combat.");
     let gmUser = game.gps.getPrimaryGM();
 
@@ -13,6 +13,9 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
     let region = await fromUuid(regionUuid);
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
+
+    if(game.user.id === gmUser && gmUser !== userId) return; //If GM User browser and user making movement is not GM
+    if(game.user.id !== gmUser && gmUser === userId) return; //If Not GM User browser and user making movement is GM
     
     if (!MidiQOL.isTargetable(token)) return;
 
@@ -23,10 +26,10 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
     
     let dialogId = "blacktentacles";
     let dialogTitlePrimary = `${token.actor.name} | ${itemProperName}`;
-    let browserUser = game.gps.getBrowserUser({ actorUuid: token.actor.uuid });
     const hasEffectApplied = token.document.hasStatusEffect("restrained");
     const damagedThisTurn = await region.getFlag("gambits-premades", "checkBlackTentacleRound");
     if(damagedThisTurn && damagedThisTurn === `${token.id}_${game.combat.round}`) return;
+    let browserUser = game.gps.getBrowserUser({ actorUuid: token.actor.uuid });
 
     let resumeMovement;
 
@@ -62,7 +65,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
 
         if (!userDecision) {
-            await region.setFlag("gambits-premades", "checkBlackTentacleRound", `${token.id}_${game.combat.round}`);
+            await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkBlackTentacleRound", value: `${token.id}_${game.combat.round}` });
             return;
         }
         else if (userDecision) {
@@ -93,7 +96,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
             }
         }
     
-        await region.setFlag("gambits-premades", "checkBlackTentacleRound", `${token.id}_${game.combat.round}`);
+        await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkBlackTentacleRound", value: `${token.id}_${game.combat.round}` });
     }
 
     else if (!hasEffectApplied) {
@@ -102,7 +105,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
         if(!saveResult) return;
         
         if (saveResult.failedSaves.size !== 0) {
-            await region.setFlag("gambits-premades", "checkBlackTentacleRound", `${token.id}_${game.combat.round}`);
+            await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkBlackTentacleRound", value: `${token.id}_${game.combat.round}` });
             const hasEffectApplied = token.document.hasStatusEffect("restrained");
 
             if (!hasEffectApplied) {
@@ -178,7 +181,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
         }
         
         if(saveResult) {
-            await region.setFlag("gambits-premades", "checkBlackTentacleRound", `${token.id}_${game.combat.round}`);
+            await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: "checkBlackTentacleRound", value: `${token.id}_${game.combat.round}` });
         }
     }
 }

@@ -1,4 +1,4 @@
-export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario, movementScenario, regionStatus, speaker, actor, token, character, item, args, scope, workflow, options}) {
+export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario, movementScenario, regionStatus, speaker, actor, token, character, item, args, scope, workflow, options, userId}) {
     if(!game.combat) return ui.notifications.warn("Cloud of Daggers requires an active combat.")
 
     if(args?.[0]?.macroPass === "templatePlaced") {
@@ -139,21 +139,17 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let itemName = "Cloud of Daggers";
+    let gmUser = game.gps.getPrimaryGM();
 
     if(!regionUuid || !regionScenario || !tokenUuid) {
         if(debugEnabled) console.error(`No Region or Token found for ${itemName}`);
         return;
     }
 
-    let region = await fromUuid(regionUuid);
+    if(game.user.id !== userId) return;
+
     let tokenDocument = await fromUuid(tokenUuid);
     token = tokenDocument?.object;
-    let template = await fromUuid(region.flags["region-attacher"]?.attachedTemplate)
-    const effectOriginActor = await fromUuid(region.flags["region-attacher"]?.actorUuid);
-    const effectOriginToken = await MidiQOL.tokenForActor(region.flags["region-attacher"]?.actorUuid);
-    let chosenItem = await fromUuid(region.flags["region-attacher"]?.itemUuid);
-    let castLevel = template.getFlag("gambits-premades", "codCastLevel");
-    let damageDice = (2*(castLevel - 2)) + 4;
 
     if (!MidiQOL.isTargetable(token)) {
         if(debugEnabled) console.error(`Token is not targetable for ${itemName}`);
@@ -164,6 +160,7 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
         return;
     }
 
+    let region = await fromUuid(regionUuid);
     let turn = game.combat.round + '-' + game.combat.turn;
     let lastTurn = region.flags['gambits-premades']?.spell?.cloudOfDaggers?.[token.id]?.turn;
     if (turn === lastTurn) {
@@ -171,10 +168,17 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
         return;
     }
 
+    let template = await fromUuid(region.flags["region-attacher"]?.attachedTemplate)
+    const effectOriginActor = await fromUuid(region.flags["region-attacher"]?.actorUuid);
+    const effectOriginToken = await MidiQOL.tokenForActor(region.flags["region-attacher"]?.actorUuid);
+    let chosenItem = await fromUuid(region.flags["region-attacher"]?.itemUuid);
+    let castLevel = template.getFlag("gambits-premades", "codCastLevel");
+    let damageDice = (2*(castLevel - 2)) + 4;
+
     let resumeMovement;
     if(regionScenario === "tokenEnter" && movementScenario) resumeMovement = await tokenDocument?.pauseMovement();
 
-    await region.setFlag('gambits-premades', 'spell.cloudOfDaggers.' + token.id + '.turn', turn);
+    await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: 'spell.cloudOfDaggers.' + token.id + '.turn', value: turn });
 
     let damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}d4`, {}, {type: "slashing", properties: ["mgc"]}).evaluate();
     await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');

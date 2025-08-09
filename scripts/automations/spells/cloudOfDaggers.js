@@ -1,4 +1,4 @@
-export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, regionStatus, speaker, actor, character, item, args, scope, workflow, options}) {
+export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, regionStatus, speaker, actor, character, item, args, scope, workflow, options, userId}) {
     if(!game.combat) return ui.notifications.warn("Cloud of Daggers requires an active combat.")
 
     if(args?.[0]?.macroPass === "templatePlaced") {
@@ -10,14 +10,15 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
 
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let itemName = "Cloud of Daggers";
+    let gmUser = game.gps.getPrimaryGM();
 
     if(!tokenUuid || !regionUuid || !regionScenario) {
         if(debugEnabled) console.error(`No Region or Token found for ${itemName}`);
         return;
     }
 
-    let region = await fromUuid(regionUuid);
-    let template = await fromUuid(region.flags["region-attacher"].attachedTemplate)
+    if(game.user.id !== userId) return;
+
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
 
@@ -29,6 +30,9 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
         if(debugEnabled) console.error(`Token is not a character or creature for ${itemName}`);
         return;
     }
+
+    let region = await fromUuid(regionUuid);
+    let template = await fromUuid(region.flags["region-attacher"].attachedTemplate)
 
     const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
     const effectOriginToken = await MidiQOL.tokenForActor(region.flags["region-attacher"].actorUuid);
@@ -44,7 +48,7 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
     let resumeMovement;
     if(regionScenario === "tokenEnter") resumeMovement = await tokenDocument.pauseMovement();
 
-    await region.setFlag('gambits-premades', 'spell.cloudOfDaggers.' + token.id + '.turn', turn);
+    await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: 'spell.cloudOfDaggers.' + token.id + '.turn', value: turn });
 
     let castLevel = template.getFlag("gambits-premades", "codCastLevel");
 
