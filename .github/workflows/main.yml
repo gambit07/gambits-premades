@@ -3,7 +3,7 @@ name: Module Builder
 on:
   push:
     branches:
-      - main
+      - v12-4x-final
     paths-ignore:
       - 'README.md'
 
