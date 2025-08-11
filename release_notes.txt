@@ -1,4 +1,4 @@
-- Some general bugfixes found while working on the V13 release. This will be the last release for V12.
+- Some general bugfixes found while working on the V13 release. This will be the last release for V12
 - Bugfixes:
   - Dialogs: Added throttling to the dialog title bar animation to keep it from consuming FPS in certain situations
   - Dissonant Whispers: Fix spell damage not scaling properly
