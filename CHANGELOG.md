@@ -24,6 +24,18 @@
   - Silvery Barbs: Fixed Magic Resistance (or other advantage effects) applying advantage to the Silvery Barbs roll when it should always be a straight roll
   - Hide Templates: Resolved non-gm users templates displaying after world refresh when Hide Templates setting was enabled
 
+## [v1.0.54] - 2025-08-11
+- Some general bugfixes found while working on the V13 release. This will be the last release for V12.
+- Bugfixes:
+  - Dialogs: Added throttling to the dialog title bar animation to keep it from consuming FPS in certain situations
+  - Dissonant Whispers: Fix spell damage not scaling properly
+  - Entropic Ward: Resolved item calls not referencing the origin item
+  - Heated Body: Resolved effect not looking at activity type properly
+  - Rust Metal: Fixed and improved implementation. Now gives a clear GM chat message regarding the status of the effected weapon.
+  - Blood Frenzy: Fixed to correctly look at activity info
+  - Silvery Barbs: Fixed Magic Resistance (or other advantage effects) applying advantage to the Silvery Barbs roll when it should always be a straight roll
+  - Hide Templates: Resolved non-gm users templates displaying after world refresh when Hide Templates setting was enabled
+
 ## [v1.0.53] - 2025-06-26
 - Additions:
   - Mage Slayer 2024: Added the 2024 version of Mage Slayer
