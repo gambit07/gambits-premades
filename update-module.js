@@ -74,7 +74,8 @@ try {
 
 // *** PUSH the bump before the CI push happens ***
 console.log('🚀  Pushing bump commit to origin/main');
-execSync('git push origin main --no-verify', { stdio: 'inherit' });
+const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+execSync(`git push origin ${branch} --no-verify`, { stdio: 'inherit' });
 
 // ─── 5) Build the ZIP ────────────────────────────────────────────────────
 
