@@ -809,14 +809,16 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 }
             }, 1000);
 
-            dialog.animate = () => {
+            let lastUpdateTime = 0;
+            dialog.animate = (timestamp) => {
                 if (!dialog.isPaused) {
-                    const now = Date.now();
-                    dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
-                    dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
-                    if (dialog.timeLeft > 0) {
-                        requestAnimationFrame(dialog.animate);
+                    if (timestamp - lastUpdateTime > 33) {
+                        lastUpdateTime = timestamp;
+                        const now = timestamp;
+                        dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
+                        dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
                     }
+                    if (dialog.timeLeft > 0) requestAnimationFrame(dialog.animate);
                 }
             };
             requestAnimationFrame(dialog.animate);

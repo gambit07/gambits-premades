@@ -106,8 +106,6 @@ export function updateRegionPosition(region, tokenDocument, updatedElevation = n
 }
 
 export function refreshTemplateVisibility() {
-    if(game.user.id !== game.gps.getPrimaryGM()) return;
-
     canvas.templates.placeables.forEach(template => {
         if (game.gpsSettings.hideTemplates || template.document.getFlag('gambits-premades', 'templateHiddenOA')) {
             hideTemplateElements(template);

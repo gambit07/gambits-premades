@@ -54,13 +54,16 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
                     .play()
                 }
 
+                let activityToUpdate = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
+                let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
+                let castDamage = (workflow.castData.castLevel - 1) + 3;
+                damageParts[0].number = castDamage;
+
+                await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
                 const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
 
                 if (saveResult.failedSaves.size === 1) {
-                    if(!hasReactionUsed)
-                    {
-                        await game.gps.addReaction({actorUuid: `${target.actor.uuid}`});
-                    }
+                    if(!hasReactionUsed) await game.gps.addReaction({actorUuid: `${target.actor.uuid}`});
 
                     await game.gps.socket.executeAsGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: target.document.uuid, distance: targetMovementSpeed });
 

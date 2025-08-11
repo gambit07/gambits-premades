@@ -6,6 +6,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     let itemName = "Silvery Barbs";
     let dialogId = gpsUuid;
     let gmUser = game.gps.getPrimaryGM();
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let homebrewDisableNat20 = MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20');
     let homebrewEnableNat20 = MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20');
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
@@ -13,9 +14,9 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     if(workflow.legendaryResistanceUsed) return;
 
     // Check if attack hits
-    if(workflowType === "attack" && workflow.attackTotal < workflow.targets?.first()?.actor.system.attributes.ac.value) return;
+    if(workflowType === "attack" && workflow.attackTotal < workflow.targets?.first()?.actor.system.attributes.ac.value) return debugEnabled ? console.error(`${itemName} failed due to no valid attack targets`) : "";
     // Check if there is a save success
-    if(workflowType === "save" && workflow.saves.size === 0) return;
+    if(workflowType === "save" && workflow.saves.size === 0) return debugEnabled ? console.error(`${itemName} failed due to no valid save targets`) : "";
 
     let findValidTokens;
     
@@ -46,7 +47,10 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             if(homebrewDisableNat20) targets = targets.filter(t => workflow.saveRolls.find(roll => roll.data.actorUuid === t.actor.uuid && !roll.isCritical));
             if(homebrewEnableNat20) targets = targets.filter(t => workflow.saveRolls.find(roll => roll.data.actorUuid === t.actor.uuid && roll.isCritical));
 
-            if(targets.length === 0) continue;
+            if(targets.length === 0) {
+                debugEnabled ? console.error(`${itemName} for ${validTokenPrimary.actor.name} failed due to no valid save targets`) : "";
+                continue;
+            }
 
             const targetUuids = targets.map(t => t.document.uuid);
             const targetNames = targets.map(t => t.document.name);
@@ -88,9 +92,12 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             `;
         }
         else if(workflowType === "attack") {
-            if (workflow.token.document.disposition === validTokenPrimary.document.disposition) continue;
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return;
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return;
+            if (workflow.token.document.disposition === validTokenPrimary.document.disposition) {
+                debugEnabled ? console.error(`${itemName} for ${validTokenPrimary.actor.name} failed due to no valid attack targets`) : "";
+                continue;
+            }
+            if (MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return debugEnabled ? console.error(`${itemName} failed due to homebrew rule disabling on criticle success`) : "";
+            if (MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return debugEnabled ? console.error(`${itemName} failed due to homebrew rule enabling only on criticle success`) : "";
 
             dialogContent = `
                 <div class="gps-dialog-container">
@@ -238,24 +245,24 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 let saveAbility = workflow.activityHasSave.ability.first();
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === enemyTokenUuid);
 
-                let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
-                await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"save.dc.calculation": "", "save.dc.formula": saveDC, "save.dc.value": saveDC, "save.ability": [saveAbility]} });
+                let browserUserTarget = game.gps.getBrowserUser({ actorUuid: workflowTarget.actor.uuid });
+                let targetSaveBonus = workflowTarget.actor.system.abilities[`${saveAbility}`].save.value + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
                 let reroll;
-                if(source && source === "user") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
-                else if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
+                if(workflowTarget.actor.type !== "npc") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUserTarget, { rollParams: `1d20 + ${targetSaveBonus}` });
+                else reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${targetSaveBonus}` });
 
-                if(reroll.failedSaves.size !== 0) {
+                if(reroll.total < saveDC) {
                     workflow.saves.delete(workflowTarget);
                     workflow.failedSaves.add(workflowTarget);
 
                     chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
+                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     return;
                 }
 
                 else {
                     chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
+                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     continue;
                 }
             }

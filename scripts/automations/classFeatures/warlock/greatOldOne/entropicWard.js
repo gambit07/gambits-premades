@@ -1,10 +1,12 @@
 export async function entropicWard({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "isPreAttacked") {
         if(MidiQOL.hasUsedReaction(actor)) return;
-        if(item.system.uses.spent >= item.system.uses.max) return;
+        let gpsUuid = "f330325d-bce8-4352-9e47-9f696a0f9434"
+        let chosenItem = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        if(chosenItem.system.uses.spent >= chosenItem.system.uses.max) return;
         let dialogId = "entropicward";
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${item.name}`;
-        let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
+        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${chosenItem.name}`;
+        let dialogTitlePrimary = `${token.actor.name} | ${chosenItem.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
         let initialTimeLeft = 15;
@@ -18,7 +20,7 @@ export async function entropicWard({ speaker, actor, token, character, item, arg
                             <div class="gps-dialog-flex">
                                 <p class="gps-dialog-paragraph">Would you like to use your reaction to disadvantage the attack against you and potentially gain advantage against the attacker?</p>
                                 <div id="image-container" class="gps-dialog-image-container">
-                                    <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
+                                    <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
                             </div>
                         </div>
@@ -51,19 +53,21 @@ export async function entropicWard({ speaker, actor, token, character, item, arg
             workflow.disadvantage = true;
             await actor.setFlag("gambits-premades", "entropicWardUsed", true);
             MidiQOL.setReactionUsed(actor);
-            await item.update({"system.uses.spent" : item.system.uses.spent + 1})
+            await chosenItem.update({"system.uses.spent" : chosenItem.system.uses.spent + 1})
         }
     }
 
     if(args[0].macroPass === "isAttacked") {
+        let gpsUuid = "f330325d-bce8-4352-9e47-9f696a0f9434"
+        let chosenItem = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let entropicFlag = actor.getFlag("gambits-premades", "entropicWardUsed");
         
         if(entropicFlag && workflow.attackTotal < actor.system.attributes.ac.value) {
             let initialEffectData = [{
-                "origin": item.uuid,
+                "origin": chosenItem.uuid,
                 "disabled": false,
-                "name": `${item.name} - Advantage`,
-                "img": item.img,
+                "name": `${chosenItem.name} - Advantage`,
+                "img": chosenItem.img,
                 "type": "base",
                 "changes": [
                     {
