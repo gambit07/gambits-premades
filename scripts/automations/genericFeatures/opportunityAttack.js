@@ -32,11 +32,10 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
         if (!recalculate) return;
 
-        let processedValidRange = processValidRange({actor: effectOriginActor, token: effectOriginToken});
+        let processedValidRange = await processValidRange({actor: effectOriginActor, token: effectOriginToken});
         const {maxRange} = processedValidRange;
 
         await region.setFlag("gambits-premades", "opportunityAttackRegionMaxRange", maxRange);
-        await region.setFlag("gambits-premades", "opportunityAttackRegionValidOptions", validWeapons?.length > 0 || validSpells?.length > 0);
 
         let processedOaSize = processOaSize({token: effectOriginToken, maxRange});
         const {regionShape, elevationTop, elevationBottom} = processedOaSize;
@@ -688,13 +687,7 @@ async function processValidRange({actor, token}) {
         const tokenSize = Math.max(token.width, token.height);
         maxRange = 4 * tokenSize;
     }
-    else {
-        if (token.width === 1 && maxRange === 10) maxRange;
-        else if (token.width === 2 && maxRange === 5) maxRange;
-        else if (token.width === 3 && maxRange === 5) maxRange;
-        else if (token.width === 3 && maxRange === 10) maxRange;
-        else if (token.width === 4 && maxRange === 10) maxRange;
-        
+    else {      
         const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * canvas.scene.dimensions.distance;
         maxRange = (game.gps.convertFromFeet({ range: maxRange })) + tokenSizeOffset;
     
