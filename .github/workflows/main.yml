@@ -31,7 +31,7 @@ jobs:
               "id": "gambits-premades",
               "release": {
                 "version": "'"${VERSION}"'",
-                "manifest": "https://github.com/gambit07/gambits-premades/releases/latest/download/module.json",
+                "manifest": "https://github.com/gambit07/gambits-premades/releases/download/'"${VERSION}"'/module.json",
                 "download": "https://github.com/gambit07/gambits-premades/releases/download/'"${VERSION}"'/module.zip",
                 "notes": "https://github.com/gambit07/gambits-premades/releases/tag/'"${VERSION}"'",
                 "compatibility": {

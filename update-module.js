@@ -17,7 +17,7 @@ const MODULE_JSON = path.resolve(__dirname, 'module.json');
 let moduleData    = JSON.parse(fs.readFileSync(MODULE_JSON, 'utf8'));
 
 moduleData.version  = version;
-moduleData.manifest = `https://github.com/gambit07/gambits-premades/releases/latest/download/module.json`;
+moduleData.manifest = `https://github.com/gambit07/gambits-premades/releases/download/${version}/module.json`;
 moduleData.download = `https://github.com/gambit07/gambits-premades/releases/download/${version}/module.zip`;
 
 fs.writeFileSync(
