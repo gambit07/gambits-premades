@@ -10,7 +10,7 @@
       "ko-fi": "https://ko-fi.com/gambit07"
     }
   ],
-  "version": "1.0.55",
+  "version": "1.0.56",
   "compatibility": {
     "minimum": 12.328,
     "verified": 12.343,
@@ -309,6 +309,6 @@
     ]
   },
   "url": "https://github.com/gambit07/gambits-premades",
-  "manifest": "https://github.com/gambit07/gambits-premades/releases/download/1.0.55/module.json",
-  "download": "https://github.com/gambit07/gambits-premades/releases/download/1.0.55/module.zip"
+  "manifest": "https://github.com/gambit07/gambits-premades/releases/download/1.0.56/module.json",
+  "download": "https://github.com/gambit07/gambits-premades/releases/download/1.0.56/module.zip"
 }
