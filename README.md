@@ -25,7 +25,7 @@ Dynamic effects using Active Effects<br>
 Region Attacher<br>
 </BLOCKQUOTE>
 
-<b>Dependencies V12 5e 4.x (V1.0.1-V1.0.53)</b>
+<b>Dependencies V12 5e 4.x (V1.0.1-V1.0.56)</b>
 <BLOCKQUOTE>
 Midi QOL<br>
 Active Auras<br>
