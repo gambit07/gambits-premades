@@ -1,5 +1,10 @@
 # Changelog
 
+## [v2.0.10] - 2025-08-11
+- Bugfixes:
+  - Entropic Ward: Resolved item calls not referencing the origin item
+  - Fix OA size not updating if a weapon was enabled/disabled before turn end
+
 ## [v2.0.9] - 2025-08-09
 - Bugfixes:
   - Fix module not loading because I did a dumb thing

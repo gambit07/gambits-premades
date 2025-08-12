@@ -10,7 +10,7 @@
       "ko-fi": "https://ko-fi.com/gambit07"
     }
   ],
-  "version": "2.0.9",
+  "version": "2.0.10",
   "compatibility": {
     "minimum": 13.346,
     "verified": 13.347,
@@ -328,5 +328,5 @@
   },
   "url": "https://github.com/gambit07/gambits-premades",
   "manifest": "https://github.com/gambit07/gambits-premades/releases/latest/download/module.json",
-  "download": "https://github.com/gambit07/gambits-premades/releases/download/2.0.9/module.zip"
+  "download": "https://github.com/gambit07/gambits-premades/releases/download/2.0.10/module.zip"
 }
