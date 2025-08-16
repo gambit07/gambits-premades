@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.1.1] - 2025-08-16
+- Additions:
+  - Indomitable 2024: Added Fighter's 2024 feature
+- Bugfixes:
+  - Midi's workflow.activityHasSave was probably reverted to it's proper true/false value, but previously it stored some save data that was used. Multiple automations fixed where that caused issues
+  - findValidTokens: Function updated to find spell slots appropriately again, typo in the spell check path
+
 ## [v2.1.0] - 2025-08-16
 - Official 5e 5.1 release! This includes some features only available in 5.1, so this and future releases will be 5.1 specific moving forward
 - Additions:
