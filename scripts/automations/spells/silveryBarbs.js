@@ -241,8 +241,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             }
 
             if(workflowType === "save") {
-                let saveDC = workflow.activityHasSave.dc.value;
-                let saveAbility = workflow.activityHasSave.ability.first();
+                let saveDC = workflow?.saveActivity?.save.dc?.value;
+                let saveAbility = workflow?.saveActivity?.ability;
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === enemyTokenUuid);
 
                 let browserUserTarget = game.gps.getBrowserUser({ actorUuid: workflowTarget.actor.uuid });

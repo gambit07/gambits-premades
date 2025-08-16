@@ -1,8 +1,8 @@
-2025/08/16-00:11:05.287 3484 Recovering log #6744
-2025/08/16-00:11:05.291 3484 Delete type=0 #6744
-2025/08/16-00:11:05.291 3484 Delete type=3 #6742
-2025/08/16-12:14:00.479 bcdc Level-0 table #6749: started
-2025/08/16-12:14:00.480 bcdc Level-0 table #6749: 0 bytes OK
-2025/08/16-12:14:00.482 bcdc Delete type=0 #6747
-2025/08/16-12:14:00.487 bcdc Manual compaction at level-0 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
-2025/08/16-12:14:00.487 bcdc Manual compaction at level-1 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
+2025/08/16-12:15:40.258 3484 Recovering log #6748
+2025/08/16-12:15:40.263 3484 Delete type=0 #6748
+2025/08/16-12:15:40.263 3484 Delete type=3 #6746
+2025/08/16-12:21:22.311 bcdc Level-0 table #6753: started
+2025/08/16-12:21:22.311 bcdc Level-0 table #6753: 0 bytes OK
+2025/08/16-12:21:22.313 bcdc Delete type=0 #6751
+2025/08/16-12:21:22.317 bcdc Manual compaction at level-0 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)
+2025/08/16-12:21:22.317 bcdc Manual compaction at level-1 from '!actors!2Q055cZ4Q4eMWCQT' @ 72057594037927935 : 1 .. '!actors.items.effects!2Q055cZ4Q4eMWCQT.icorevoMIkBVXL37.jFKhp34XZd32ryYT' @ 0 : 0; will stop at (end)

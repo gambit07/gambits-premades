@@ -192,7 +192,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             if(workflowType === "save") {
                 const saveSetting = workflow.workflowOptions.noOnUseMacro;
                 workflow.workflowOptions.noOnUseMacro = true;
-                let saveDC = workflow.activityHasSave.dc.value;
+                let saveDC = workflow?.saveActivity?.save.dc?.value;
                 
 
                 if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });

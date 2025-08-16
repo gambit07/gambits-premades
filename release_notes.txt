@@ -1,13 +1,5 @@
-- Official 5e 5.1 release! This includes some features only available in 5.1, so this and future releases will be 5.1 specific moving forward
 - Additions:
-  - Freedom of Movement 2014 & 2024: Added the spell Freedom of Movement now that it is able to work with difficult terrain natively in Foundry. These spells handle difficult terrain, movement un-restriction for walk and swim, and paralyzed/restrained prevention. It does not handle grapple/restraint removal
-- Updates:
-  - Black Tentacles: Added full difficult terrain handling
-  - Web: Added full difficult terrain handling
-  - Biohazard: Added full difficult terrain handling
-  - Entangle: Added full difficult terrain handling
-  - Updated a number of items to account for new item.system.method and item.system.prepared deprecations
+  - Indomitable 2024: Added Fighter's 2024 feature
 - Bugfixes:
-  - Restore Balance: Resolved a number of issues preventing it from working at all
-  - Sentinel: Resolved hook not firing under the correct conditions
-  - Sleep 2024: Resolved concentration not being applied correctly on initial cast
+  - Midi's workflow.activityHasSave was probably reverted to it's proper true/false value, but previously it stored some save data that was used. Multiple automations fixed where that caused issues
+  - findValidTokens: Function updated to find spell slots appropriately again, typo in the spell check path

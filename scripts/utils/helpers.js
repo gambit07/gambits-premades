@@ -287,7 +287,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
                     }
                 }
             }
-            else if(checkType === "prepared" || checkType === "always")
+            else if(checkType === "spell")
             {
                 for (let level = spellLevel; level <= 9; level++) {
                     let spellSlot = t.actor.system.spells[`spell${level}`].value;
