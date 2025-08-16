@@ -105,6 +105,7 @@ export function registerHooks() {
     Hooks.on("midi-qol.postSavesComplete", async (workflow) => {
         if(!workflow.saveActivity) return;
         let workflowItemUuid = workflow.itemCardUuid;
+        if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "savePost", workflowCombat: true });
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
     });
 
@@ -125,11 +126,10 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.preCompleted", async (workflow) => {
-        if (!workflow.activity.type === "spell") return;
         let workflowItemUuid = workflow.itemCardUuid;
-        if (game.gpsSettings.mageSlayerEnabled) await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "spell", workflowCombat: true });
-        if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        if (game.gpsSettings.sentinelEnabled) await executeWorkflow({ workflowItem: "sentinel2024", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.mageSlayerEnabled && workflow.activity.type === "spell") await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "spell", workflowCombat: true });
+        if (game.gpsSettings.sentinelEnabled && workflow.activity.type === "attack") await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.sentinelEnabled && workflow.activity.type === "attack") await executeWorkflow({ workflowItem: "sentinel2024", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("dnd5e.rollSavingThrow", async (rolls, data) => {

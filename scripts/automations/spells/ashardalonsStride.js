@@ -7,7 +7,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         game.gps.animation.ashardalonsStride({type: "use", token, itemUuid: item.uuid});
     
         let castLevel = workflow.castData.castLevel;
-        let castMode = workflow.item?.system?.preparation?.mode;
+        let castMode = workflow.item?.system?.method;
         if ((castMode === "innate" || castMode === "atwill") && castLevel === 0) castLevel = workflow.castData.baseLevel;
         let movementSpeed = castLevel > 3 ? (((castLevel - 3) * 5) + 20) : 20;
         const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid);

@@ -23,10 +23,10 @@ export async function identify({ speaker, actor, token, character, item, args, s
             callback: async () => {
                 const spells = actor.system.spells;
                 let spellLevel = item?.system?.level;
-                let checkType = item?.system?.preparation?.mode;
+                let checkType = item?.system?.method;
                 let hasSpellSlots = false;
-                if(checkType === "prepared" && item?.system?.preparation?.prepared === false) return;
-                if(checkType === "prepared" || checkType === "always")
+                if(checkType === "spell" && !item?.system.prepared) return;
+                if(checkType === "spell")
                 {
                     for (let level = spellLevel; level <= 9; level++) {
                         let spellSlot = actor.system.spells[`spell${level}`].value;

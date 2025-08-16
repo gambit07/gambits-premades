@@ -27,7 +27,7 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
     let chatContent = [];
     let saveCheck;
     let browserUser;
-    let castType = workflow.item?.system?.preparation?.mode;
+    let castType = workflow.item?.system?.method;
     let itemCardUuid = workflow.itemCardUuid;
 
     await initialCounterspellProcess(workflow, lastMessage, notInitialCast, selectedToken);

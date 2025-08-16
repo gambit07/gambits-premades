@@ -270,9 +270,9 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     
             const spells = t.actor.system.spells;
             let spellLevel = checkItem?.system?.level;
-            let checkType = checkItem?.system?.preparation?.mode;
+            let checkType = checkItem?.system?.method;
             let hasSpellSlots = false;
-            if(checkType === "prepared" && checkItem?.system?.preparation?.prepared === false) return false;
+            if(checkType === "spell" && !checkItem?.system?.prepared) return false;
             const cachedForValue = checkItem.flags?.dnd5e?.cachedFor;
 
             if(cachedForValue) {
@@ -464,10 +464,10 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
 
         const spells = targetedToken.actor.system.spells;
         let spellLevel = checkItem?.system?.level;
-        let checkType = checkItem?.system?.preparation?.mode;
+        let checkType = checkItem?.system?.method;
         let hasSpellSlots = false;
-        if(checkType === "prepared" && checkItem?.system?.preparation?.prepared === false) return false;
-        if(checkType === "prepared" || checkType === "always")
+        if(checkType === "spell" && !checkItem?.system?.prepared) return false;
+        if(checkType === "spell")
         {
             for (let level = spellLevel; level <= 9; level++) {
                 let spellSlot = targetedToken.actor.system.spells[`spell${level}`].value;
@@ -1392,7 +1392,7 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
         await game.gps.socket.executeAsUser("gpsUpdateMidiRange", game.gps.getPrimaryGM(), { configSettings: configSettings, turnOff: false, originalCheckRange: originalCheckRange });
     }
 
-    return {castLevel: remoteCIU?.castData?.castLevel, baseLevel: remoteCIU?.castData?.baseLevel, itemType: remoteCIU?.item?.system?.preparation?.mode, checkHits: checkHits};
+    return {castLevel: remoteCIU?.castData?.castLevel, baseLevel: remoteCIU?.castData?.baseLevel, itemType: remoteCIU?.item?.system?.method, checkHits: checkHits};
 }
 
 export async function remoteAbilityTest({spellcasting, actorUuid}) {

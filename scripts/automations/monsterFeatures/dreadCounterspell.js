@@ -36,7 +36,7 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
             const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
             const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
             
-            let castType = workflow.item?.system?.preparation?.mode;
+            let castType = workflow.item?.system?.method;
             if(castType === "innate" || castType === "atwill") castLevel = workflow.castData.baseLevel;
             else castLevel = workflow.castData.castLevel;
             browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });

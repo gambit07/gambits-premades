@@ -14,8 +14,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
 
-    if(game.user.id === gmUser && gmUser !== userId) return; //If GM User browser and user making movement is not GM
-    if(game.user.id !== gmUser && gmUser === userId) return; //If Not GM User browser and user making movement is GM
+    if(game.user.id !== userId) return;
     
     if (!MidiQOL.isTargetable(token)) return;
 

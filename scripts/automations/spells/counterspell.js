@@ -54,7 +54,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
             const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
             const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
             
-            let castType = workflow.item?.system?.preparation?.mode;
+            let castType = workflow.item?.system?.method;
             if(castType === "innate" || castType === "atwill") castLevel = !castLevel ? workflow.castData.baseLevel : castLevel;
             else castLevel = !castLevel ? workflow.castData.castLevel : castLevel;
             browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });

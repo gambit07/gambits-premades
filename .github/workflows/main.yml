@@ -24,7 +24,7 @@ jobs:
           FOUNDRY_API_TOKEN: ${{ secrets.FOUNDRY_API_TOKEN }}
         run: |
           VERSION=$(node -p "require('./module.json').version")
-          curl -X POST "https://api.foundryvtt.com/_api/packages/release_version" \
+          curl -X POST "https://foundryvtt.com/_api/packages/release_version" \
             -H "Content-Type: application/json" \
             -H "Authorization: $FOUNDRY_API_TOKEN" \
             -d '{
@@ -36,7 +36,7 @@ jobs:
                 "notes": "https://github.com/gambit07/gambits-premades/releases/tag/'"${VERSION}"'",
                 "compatibility": {
                   "minimum": "13.346",
-                  "verified": "13.346",
+                  "verified": "13.347",
                   "maximum": "13"
                 }
               }

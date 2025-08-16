@@ -2,13 +2,51 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
     const gpsUuid = "6a8cd8d0-7a6b-42b1-9da7-d9d4aa54a7c1"
-    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    if(workflow?.item?.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Restore Balance";
     let dialogId = gpsUuid;
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(workflow.legendaryResistanceUsed) return;
+
+    if(workflowType === "savePost" && workflow?.gps?.restoreBalanceFlag) {
+        for (const flag of workflow.gps?.restoreBalanceFlag ?? []) {
+            let { targetUuid, disposition, saveResult, saveDC, validTokenPrimaryUuid, chosenItemUuid } = flag;
+            let target = await fromUuid(targetUuid);
+            target = target?.object;
+            let validTokenPrimary = await fromUuid(validTokenPrimaryUuid);
+            let chosenItem = await fromUuid(chosenItemUuid);
+            let chatContent;
+
+            if(disposition === "ally") {
+                if(saveResult >= saveDC) {
+                    workflow.failedSaves.delete(target);
+                    workflow.saves.add(target)
+
+                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                }
+                else {
+                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                }
+                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+            }
+            else if(disposition === "enemy") {
+                if(saveResult < saveDC) {
+                    workflow.failedSaves.add(target);
+                    workflow.saves.delete(target)
+
+                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                }
+                else {
+                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                }
+                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+            }
+        }
+        return;
+    }
+    else if(workflowType === "savePost") return;
     
     let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: false, dispositionCheckType: "", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
@@ -98,8 +136,8 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             `;
         }
         else if(workflowType === "attack") {
-            if(workflow.token.document.disposition === validTokenPrimary.document.disposition && (!workflow.disadvantage && !workflow.attackRoll.formula.includes("kl") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) continue;
-            if(workflow.token.document.disposition !== validTokenPrimary.document.disposition && (!workflow.advantage && !workflow.attackRoll.formula.includes("kh") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) continue;
+            if(workflow.token.document.disposition === validTokenPrimary.document.disposition && (!workflow.disadvantage && !workflow.attackRoll.formula.includes("kl") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) return;
+            if(workflow.token.document.disposition !== validTokenPrimary.document.disposition && (!workflow.advantage && !workflow.attackRoll.formula.includes("kh") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) return;
 
             dialogContent = `
                 <div class="gps-dialog-container">
@@ -146,19 +184,32 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             let chatContent;
 
             let target;
+            let disposition;
             if(workflowType === "attack") target = await workflow.targets.first();
             else if(workflowType === "save") {
-                if(allyTokenUuid) target = await fromUuid(allyTokenUuid);
-                else if(enemyTokenUuid) target = await fromUuid(enemyTokenUuid);
+                if(allyTokenUuid) {
+                    target = await fromUuid(allyTokenUuid);
+                    disposition = "ally";
+                }
+                else if(enemyTokenUuid) {
+                    target = await fromUuid(enemyTokenUuid);
+                    disposition = "enemy";
+                }
 
                 target = target.object;
             }
 
             let targetAC = target?.actor.system.attributes.ac.value;
-            let saveDC = workflow.activityHasSave.dc.value;
+            let saveDC = workflow?.saveActivity?.save.dc?.value;
             let saveDice = workflow.saveRolls?.find(dice => dice.data.actorId === target.actor.id);
             let saveResult = saveDice?.dice[0].results[0].result + (saveDice?.total - saveDice?.dice[0].total);
-            let attackResult = workflow.attackRoll?.dice[0].results[0].result + (workflow.attackRoll?.total - workflow.attackRoll?.dice[0].total);
+            let baseAttack = workflow.attackRoll?.dice[0].results[0].result;
+            let attackResult = baseAttack + (workflow.attackRoll?.total - workflow.attackRoll?.dice[0].total);
+            let criticalSuccessThreshold = workflow.attackRoll?.options?.criticalSuccess;
+            let criticalSuccess = baseAttack >= criticalSuccessThreshold ? true : false;
+            let criticalFailureThreshold = workflow.attackRoll?.options?.criticalFailure;
+            let criticalFailure = baseAttack <= criticalFailureThreshold ? true : false;
+            let attackRoll;
 
             const options = {
                 showFullCard: false,
@@ -176,61 +227,65 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
 
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            if(workflowType === "attack" && workflow.token.document.uuid === validTokenPrimary.document.uuid) {
-                if((attackResult >= targetAC && !workflow.hitTargets.first()) || workflow.hitTargets.first()) {
-                    if (attackResult >= targetAC && !workflow.hitTargets.first()) workflow.hitTargets.add(target);
+            if(workflowType === "attack") {
+                if(criticalSuccess) {
+                    attackRoll = new CONFIG.Dice.D20Roll('1d20').evaluateSync({maximize: true});
+                    workflow.setAttackRoll(attackRoll);
+                }
+                else if(criticalFailure) {
+                    attackRoll = new CONFIG.Dice.D20Roll('1d20').evaluateSync({minimize: true});
+                    workflow.setAttackRoll(attackRoll);
+                }
+                else {
+                    attackRoll = await new CONFIG.Dice.D20Roll('1d20', {},{minimum:attackResult, maximum:attackResult} ).evaluate();
+                    await workflow.setAttackRoll(attackRoll);
+                }
 
-                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                if(workflow.token.document.disposition === validTokenPrimary.document.disposition) {
+                    if(attackResult >= targetAC) {
+                        if(criticalSuccess) chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to hit their target with a critical hit. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    }
+                    else {
+                        if(criticalFailure) chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to hit their target with a critical miss. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    }
+                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: attackRoll});
                     return;
                 }
-                else if(!workflow.hitTargets.first()) {
-                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                else if(workflow.token.document.disposition !== validTokenPrimary.document.disposition) {
+                    if(attackResult < targetAC) {
+                        if(criticalFailure) chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a critical miss. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    }
+                    else {
+                        if(criticalSuccess) chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to hit their target with a critical hit. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    }
+                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: attackRoll});
                     return;
                 }
             }
-            else if(workflowType === "attack" && workflow.token.document.uuid !== validTokenPrimary.document.uuid) {
-                if((attackResult < targetAC && workflow.hitTargets.first()) || !workflow.hitTargets.first()) {
-                    if((attackResult < targetAC || workflow.attackRoll?.dice[0].results[0].result === 1) && workflow.hitTargets.first()) workflow.hitTargets.delete(target);
+            else if(workflowType === "save") {
+                if(saveResult >= saveDC && disposition === "ally") {
+                    workflow.failedSaves.delete(target);
+                    workflow.saves.add(target)
+                }
+                if(saveResult < saveDC && disposition === "enemy") {
+                    workflow.failedSaves.add(target);
+                    workflow.saves.delete(target)
+                }
 
-                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
-                    return;
-                }
-                else if(workflow.hitTargets.first()) {
-                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
-                    return;
-                }
-            }
-            else if(workflowType === "save" && allyTokenUuid) {
-                if((saveResult >= saveDC && workflow.failedSaves.has(target)) || !workflow.failedSaves.has(target)) {
-                    if (saveResult >= saveDC && workflow.failedSaves.has(target)) workflow.failedSaves.delete(target);
+                ((workflow.gps ??= {}).restoreBalanceFlag ??= []).push({
+                    targetUuid: target.document.uuid,
+                    disposition,
+                    saveResult,
+                    saveDC,
+                    validTokenPrimaryUuid: validTokenPrimary.document.uuid,
+                    chosenItemUuid: chosenItem.uuid
+                });
 
-                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
-                    return;
-                }
-                else if(workflow.failedSaves.has(target)) {
-                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
-                    return;
-                }
-            }
-            else if(workflowType === "save" && enemyTokenUuid) {
-                if((saveResult < saveDC && !workflow.failedSaves.has(target)) || workflow.failedSaves.has(target)) {
-                    if ((saveResult < saveDC || saveDice?.dice[0].results[0].result === 1) && !workflow.failedSaves.has(target)) workflow.failedSaves.add(target);
-
-                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
-                    return;
-                }
-                else if(!workflow.failedSaves.has(target)) {
-                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
-                    return;
-                }
+                return;
             }
         }
     }

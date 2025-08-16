@@ -1,15 +1,8 @@
-2025/08/08-17:20:46.647 3df8 Recovering log #7695
-2025/08/08-17:20:46.652 3df8 Delete type=0 #7695
-2025/08/08-17:20:46.652 3df8 Delete type=3 #7693
-2025/08/09-01:36:46.710 3514 Level-0 table #7700: started
-2025/08/09-01:36:46.715 3514 Level-0 table #7700: 237 bytes OK
-2025/08/09-01:36:46.718 3514 Delete type=0 #7698
-2025/08/09-01:36:46.720 3514 Manual compaction at level-0 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.v3j3orDGcbQyk7ZI' @ 0 : 0; will stop at (end)
-2025/08/09-01:36:46.720 3514 Manual compaction at level-1 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.v3j3orDGcbQyk7ZI' @ 0 : 0; will stop at '!items.effects!9VnDwZqxXEDSeElR.W63fpHQKKzscmDyS' @ 581 : 0
-2025/08/09-01:36:46.720 3514 Compacting 1@1 + 1@2 files
-2025/08/09-01:36:46.724 3514 Generated table #7701@1: 27 keys, 73789 bytes
-2025/08/09-01:36:46.724 3514 Compacted 1@1 + 1@2 files => 73789 bytes
-2025/08/09-01:36:46.726 3514 compacted to: files[ 0 0 1 0 0 0 0 ]
-2025/08/09-01:36:46.726 3514 Delete type=2 #7344
-2025/08/09-01:36:46.726 3514 Delete type=2 #7700
-2025/08/09-01:36:46.728 3514 Manual compaction at level-1 from '!items.effects!9VnDwZqxXEDSeElR.W63fpHQKKzscmDyS' @ 581 : 0 .. '!items.effects!zEXJxqsAmVM7Pohu.v3j3orDGcbQyk7ZI' @ 0 : 0; will stop at (end)
+2025/08/16-12:15:40.234 3484 Recovering log #7927
+2025/08/16-12:15:40.239 3484 Delete type=0 #7927
+2025/08/16-12:15:40.239 3484 Delete type=3 #7925
+2025/08/16-12:21:22.305 bcdc Level-0 table #7932: started
+2025/08/16-12:21:22.305 bcdc Level-0 table #7932: 0 bytes OK
+2025/08/16-12:21:22.307 bcdc Delete type=0 #7930
+2025/08/16-12:21:22.307 bcdc Manual compaction at level-0 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.v3j3orDGcbQyk7ZI' @ 0 : 0; will stop at (end)
+2025/08/16-12:21:22.307 bcdc Manual compaction at level-1 from '!items!1WSJjnpLJhilXEgO' @ 72057594037927935 : 1 .. '!items.effects!zEXJxqsAmVM7Pohu.v3j3orDGcbQyk7ZI' @ 0 : 0; will stop at (end)

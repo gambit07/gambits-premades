@@ -592,7 +592,7 @@ async function processValidOptions({actor}) {
             if (warCasterMelee) allowedActionTypes.push("msak");
             if (warCasterRange) allowedActionTypes.push("rsak", "save");
         
-            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.preparation?.prepared || item.system?.preparation?.mode !== "prepared" || !item.system?.preparation ) && acts.some(a => ["creature", "enemy"].includes(a.target?.affects?.type))) || (warCasterMelee && overrideItems.includes(item.name));
+            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual") ) && acts.some(a => ["creature", "enemy"].includes(a.target?.affects?.type))) || (warCasterMelee && overrideItems.includes(item.name));
         }
       
         return qualifiesWeaponOrFeat || warCasterSpell;
@@ -646,7 +646,7 @@ async function processValidRange({actor, token}) {
     );
 
     let validSpells = actor.items.filter(item =>
-        (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.actionType === "save")) && (item.system.preparation?.prepared === true || item.system.preparation?.mode !== "prepared" || !item.system.preparation) && item.system.activities?.some(a => ["creature", "enemy"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
+        (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.actionType === "save")) && (item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual")) && item.system.activities?.some(a => ["creature", "enemy"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
     );
 
     let oaDisabled;

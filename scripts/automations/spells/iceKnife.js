@@ -2,7 +2,7 @@ export async function iceKnife({ speaker, actor, token, character, item, args, s
     if(args[0].macroPass === "postPreambleComplete") {
         item = await fromUuid(workflow.itemUuid);
         let castLevel = workflow.castData.castLevel;
-        let castMode = workflow.item?.system?.preparation?.mode;
+        let castMode = workflow.item?.system?.method;
         if ((castMode === "innate" || castMode === "atwill") && castLevel === 0) castLevel = workflow.castData.baseLevel;
         await item.setFlag("gambits-premades", "ikCastLevel", castLevel);
     }
