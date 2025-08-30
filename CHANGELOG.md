@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.3] - 2025-08-30
+- Updates:
+  - Add check for Wounded homebrew to prevent hook failures
+
 ## [v2.1.2] - 2025-08-30
 - Updates:
   - Updated a TON of reaction items not using activation condition false in activities which was causing the default midi reaction to pop-up as a duplicate. Think I caught everything but let me know if you see a rogue Midi reaction dialog
