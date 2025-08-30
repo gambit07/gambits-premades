@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.1.4] - 2025-08-30
+- Additions:
+  - Confusion 2024: Added 2024 version, only a slight change to the directional roll
+  - Command 2024: Added 2024 version, now only has a dropdown list of selectable commands
+- Updates:
+  - Re-built all module compendiums, hopefully will be more stable compendium db's across all server builds
+
 ## [v2.1.3] - 2025-08-30
 - Updates:
   - Add check for Wounded homebrew to prevent hook failures
