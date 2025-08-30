@@ -884,7 +884,9 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
 export async function moveTokenByOriginPoint({ originX, originY, targetUuid, distance }) {
     if (!targetUuid) return console.log("No valid target to move");
     if (!distance || isNaN(distance)) return console.log("No valid distance to move");
-    if (!originX || !originY) return console.log("No valid origin x/y coordinate given, for a token object this value should be token.center.x/token.center.y");
+    if (!Number.isFinite(originX) || !Number.isFinite(originY)) {
+        return console.log("No valid origin x/y coordinate given, for a token object this value should be token.center.x/token.center.y");
+    }
 
     const targetDocument = await fromUuid(targetUuid);
     const target = targetDocument.object;
@@ -892,108 +894,161 @@ export async function moveTokenByOriginPoint({ originX, originY, targetUuid, dis
     const gridDistance = canvas.scene.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
     const gridDiagonals = game.settings.get("core", "gridDiagonals");
+    const isSquare = canvas.scene.grid.type === 1;
+    const isGridless = canvas.scene.grid.type === 0;
 
-    const ray = new Ray({ x: originX, y: originY }, { x: target.center.x, y: target.center.y });
+    const ray = new foundry.canvas.geometry.Ray(
+        { x: originX, y: originY },
+        { x: target.center.x, y: target.center.y }
+    );
     const rayAngle = ray.angle;
 
-    let allowedDistance = distance;
-    let totalDistance = distance;
-    let measuredCost;
-    let finalX = target.center.x + Math.cos(rayAngle) * (allowedDistance * pixelsPerFoot);
-    let finalY = target.center.y + Math.sin(rayAngle) * (allowedDistance * pixelsPerFoot);
+    const c = Math.cos(rayAngle), s = Math.sin(rayAngle), eps = 1e-12;
+    const ux = Math.abs(c) < eps ? 0 : c;
+    const uy = Math.abs(s) < eps ? 0 : s;
 
-    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, new PIXI.Point(finalX, finalY), { type: "move", mode: "any" });
+    const movingTowardOrigin = distance < 0;
+    const minCost = gridDistance;
+    const pathToOrigin = [
+        { x: target.center.x, y: target.center.y },
+        { x: originX, y: originY }
+    ];
+    const currentCost = canvas.grid.measurePath(pathToOrigin).cost;
+
+    if (movingTowardOrigin && currentCost <= minCost) return 0;
+
+    let totalDistance = Math.abs(distance);
+    if (movingTowardOrigin) {
+        const available = Math.max(0, currentCost - minCost);
+        totalDistance = Math.min(totalDistance, available);
+    }
+
+    let allowedDistance = totalDistance;
+    let measuredCost;
+
+    const dirSign = movingTowardOrigin ? -1 : 1;
+    const toCenterAt = (distUnits) => {
+        const px = distUnits * pixelsPerFoot;
+        return {
+        x: target.center.x + dirSign * ux * px,
+        y: target.center.y + dirSign * uy * px
+        };
+    };
+    const snapTopLeftFromCenter = (cx2, cy2) => {
+        const halfW = target.w / 2, halfH = target.h / 2;
+        const snapped = canvas.scene.grid.getSnappedPoint(
+        { x: cx2 - halfW, y: cy2 - halfH },
+        { mode: 0xFF0, resolution: 1 }
+        );
+        return { x: snapped.x, y: snapped.y, cx: snapped.x + halfW, cy: snapped.y + halfH };
+    };
+
+    let intendedCenter = toCenterAt(allowedDistance);
+
+    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(
+        target.center, new PIXI.Point(intendedCenter.x, intendedCenter.y),
+        { type: "move", mode: "any" }
+    );
+
+    let finalCenterX = intendedCenter.x;
+    let finalCenterY = intendedCenter.y;
 
     if (!collisionDetected) {
-        if (canvas.scene.grid.type === 1) {
-            while (true) {
-                let intendedX = target.center.x + Math.cos(rayAngle) * (allowedDistance * pixelsPerFoot);
-                let intendedY = target.center.y + Math.sin(rayAngle) * (allowedDistance * pixelsPerFoot);
-        
-                if (canvas.scene.grid.type === 1) {
-                    const snapped = canvas.scene.grid.getSnappedPoint({ x: intendedX, y: intendedY }, { mode: 0xFF0, resolution: 1 });
-                    intendedX = snapped.x;
-                    intendedY = snapped.y;
-                }
-        
-                const path = [
-                    { x: target.center.x, y: target.center.y },
-                    { x: intendedX, y: intendedY }
-                ];
-        
-                const measuredSegments = canvas.grid.measurePath(path);
-                measuredCost = measuredSegments.cost;
-        
-                if (measuredCost < totalDistance && gridDiagonals === 0) {
-                    allowedDistance += gridDistance;
-                    continue;
-                }
-        
-                else if (measuredCost <= totalDistance) {
-                    break;
-                }
-        
-                allowedDistance -= gridDistance;
-                if (allowedDistance <= 0) {
-                    allowedDistance = 0;
-                    break;
-                }
-            }
-        
-            finalX = target.center.x + Math.cos(rayAngle) * (allowedDistance * pixelsPerFoot);
-            finalY = target.center.y + Math.sin(rayAngle) * (allowedDistance * pixelsPerFoot);
+        if (isSquare) {
+        const maxIters = 1000; let iter = 0;
+        while (true) {
+            iter++; if (iter > maxIters) { console.warn("moveTokenByOriginPoint guard break"); break; }
 
-            const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
-            finalX = snapped.x;
-            finalY = snapped.y;
+            intendedCenter = toCenterAt(allowedDistance);
+
+            const path = [
+            { x: target.center.x, y: target.center.y },
+            { x: intendedCenter.x, y: intendedCenter.y }
+            ];
+            const measuredSegments = canvas.grid.measurePath(path);
+            measuredCost = measuredSegments.cost;
+
+            if (measuredCost < totalDistance && gridDiagonals === 0) {
+            allowedDistance += gridDistance;
+            continue;
+            } else if (measuredCost <= totalDistance) {
+            finalCenterX = intendedCenter.x;
+            finalCenterY = intendedCenter.y;
+            break;
+            }
+
+            allowedDistance -= gridDistance;
+            if (allowedDistance <= 0) {
+            finalCenterX = target.center.x;
+            finalCenterY = target.center.y;
+            break;
+            }
         }
-    }
-    else {
-        let stepDistance = canvas.scene.grid.size / 10;
-        let totalSteps = (distance * pixelsPerFoot) / stepDistance;
+        }
+    } else {
+        const stepDistance = canvas.scene.grid.size / 10;
+        const totalSteps = (totalDistance * pixelsPerFoot) / stepDistance;
         let stepCounter = 0;
 
         for (let step = 1; step <= totalSteps; step++) {
-            let nextX = target.x + Math.cos(rayAngle) * (stepDistance * step);
-            let nextY = target.y + Math.sin(rayAngle) * (stepDistance * step);
-            if (canvas.scene.grid.type === 1) {
-                const snapped = canvas.scene.grid.getSnappedPoint({ x: nextX, y: nextY }, { mode: 0xFF0, resolution: 1 });
-                nextX = snapped.x;
-                nextY = snapped.y;
-            }
-            let nextPoint = new PIXI.Point(nextX, nextY);
+        const nextCenterX = target.center.x + dirSign * ux * (stepDistance * step);
+        const nextCenterY = target.center.y + dirSign * uy * (stepDistance * step);
 
-            collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, nextPoint, { type: "move", mode: "any" });
-
-            if (collisionDetected) {
-                break;
-            }
-            stepCounter = step;
+        collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(
+            target.center, new PIXI.Point(nextCenterX, nextCenterY),
+            { type: "move", mode: "any" }
+        );
+        if (collisionDetected) break;
+        stepCounter = step;
         }
 
-        finalX = target.x + Math.cos(rayAngle) * (stepDistance * stepCounter);
-        finalY = target.y + Math.sin(rayAngle) * (stepDistance * stepCounter);
+        finalCenterX = target.center.x + dirSign * ux * (stepDistance * stepCounter);
+        finalCenterY = target.center.y + dirSign * uy * (stepDistance * stepCounter);
+    }
 
-        if (stepCounter > 0) {
-            if (canvas.scene.grid.type === 1) {
-                const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
-                finalX = snapped.x;
-                finalY = snapped.y;
-            }
+    let finalX = finalCenterX - target.w / 2;
+    let finalY = finalCenterY - target.h / 2;
+
+    if (isSquare) {
+        const snapped = snapTopLeftFromCenter(finalCenterX, finalCenterY);
+        finalX = snapped.x; finalY = snapped.y;
+        finalCenterX = snapped.cx; finalCenterY = snapped.cy;
+    }
+
+    const postPath = [
+        { x: originX, y: originY },
+        { x: finalCenterX, y: finalCenterY }
+    ];
+    let postCost = canvas.grid.measurePath(postPath).cost;
+
+    if (movingTowardOrigin && postCost < minCost) {
+        const pxAtMin = (minCost) * pixelsPerFoot;
+        const cxMin = originX + ux * pxAtMin;
+        const cyMin = originY + uy * pxAtMin;
+
+        if (isSquare) {
+        const snappedMin = snapTopLeftFromCenter(cxMin, cyMin);
+        finalX = snappedMin.x; finalY = snappedMin.y;
+        finalCenterX = snappedMin.cx; finalCenterY = snappedMin.cy;
+        } else {
+        finalCenterX = cxMin; finalCenterY = cyMin;
+        finalX = finalCenterX - target.w / 2;
+        finalY = finalCenterY - target.h / 2;
         }
     }
 
     const path = [
         { x: target.center.x, y: target.center.y },
-        { x: finalX, y: finalY }
+        { x: finalCenterX, y: finalCenterY }
     ];
     let finalDistance = canvas.grid.measurePath(path).cost;
+
     await target.document.update({ x: finalX, y: finalY });
     return finalDistance;
 }
 
 export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
-    const directions = ["north", "south", "east", "west", "northwest", "northeast", "southwest", "southeast"];
+    const directions = ["north","south","east","west","northwest","northeast","southwest","southeast"];
     direction = direction.toLowerCase();
 
     if (!targetUuid) return console.log("No valid target to move");
@@ -1007,125 +1062,100 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
     const gridDiagonals = game.settings.get("core", "gridDiagonals");
 
-    let angle = 0;
-    switch (direction) {
-        case "north":
-            angle = -Math.PI / 2;
-            break;
-        case "south":
-            angle = Math.PI / 2;
-            break;
-        case "east":
-            angle = 0;
-            break;
-        case "west":
-            angle = Math.PI;
-            break;
-        case "northwest":
-            angle = -3 * Math.PI / 4;
-            break;
-        case "northeast":
-            angle = -Math.PI / 4;
-            break;
-        case "southwest":
-            angle = 3 * Math.PI / 4;
-            break;
-        case "southeast":
-            angle = Math.PI / 4;
-            break;
-    }
+    const V = {
+        north: {x:0,y:-1}, south:{x:0,y:1}, east:{x:1,y:0}, west:{x:-1,y:0},
+        northwest:{x:-Math.SQRT1_2,y:-Math.SQRT1_2}, northeast:{x:Math.SQRT1_2,y:-Math.SQRT1_2},
+        southwest:{x:-Math.SQRT1_2,y:Math.SQRT1_2}, southeast:{x:Math.SQRT1_2,y:Math.SQRT1_2},
+    };
+    const ux = V[direction].x;
+    const uy = V[direction].y;
 
     let allowedDistance = distance;
     let totalDistance = distance;
     let measuredCost;
-    let finalX = target.center.x + Math.cos(angle) * (allowedDistance * pixelsPerFoot);
-    let finalY = target.center.y + Math.sin(angle) * (allowedDistance * pixelsPerFoot);
 
-    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, new PIXI.Point(finalX, finalY), { type: "move", mode: "any" });
+    const deltaPx = allowedDistance * pixelsPerFoot;
+    let finalCenterX = target.center.x + ux * deltaPx;
+    let finalCenterY = target.center.y + uy * deltaPx;
+
+    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(
+        target.center,
+        new PIXI.Point(finalCenterX, finalCenterY),
+        { type: "move", mode: "any" }
+    );
 
     if (!collisionDetected) {
         if (canvas.scene.grid.type === 1) {
-            while (true) {
-                let intendedX = target.center.x + Math.cos(angle) * (allowedDistance * pixelsPerFoot);
-                let intendedY = target.center.y + Math.sin(angle) * (allowedDistance * pixelsPerFoot);
-        
-                if (canvas.scene.grid.type === 1) {
-                    const snapped = canvas.scene.grid.getSnappedPoint({ x: intendedX, y: intendedY }, { mode: 0xFF0, resolution: 1 });
-                    intendedX = snapped.x;
-                    intendedY = snapped.y;
-                }
-        
-                const path = [
-                    { x: target.center.x, y: target.center.y },
-                    { x: intendedX, y: intendedY }
-                ];
-        
-                const measuredSegments = canvas.grid.measurePath(path);
-                measuredCost = measuredSegments.cost;
-        
-                if (measuredCost < totalDistance && gridDiagonals === 0) {
-                    allowedDistance += gridDistance;
-                    continue;
-                }
-        
-                else if (measuredCost <= totalDistance) {
-                    break;
-                }
-        
-                allowedDistance -= gridDistance;
-                if (allowedDistance <= 0) {
-                    allowedDistance = 0;
-                    break;
-                }
-            }
-        
-            finalX = target.center.x + Math.cos(angle) * (allowedDistance * pixelsPerFoot);
-            finalY = target.center.y + Math.sin(angle) * (allowedDistance * pixelsPerFoot);
+        while (true) {
+            const px = allowedDistance * pixelsPerFoot;
+            const intendedCenterX = target.center.x + ux * px;
+            const intendedCenterY = target.center.y + uy * px;
 
-            const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
-            finalX = snapped.x;
-            finalY = snapped.y;
+            const path = [
+            { x: target.center.x, y: target.center.y },
+            { x: intendedCenterX, y: intendedCenterY }
+            ];
+            const measuredSegments = canvas.grid.measurePath(path);
+            measuredCost = measuredSegments.cost;
+
+            if (measuredCost < totalDistance && gridDiagonals === 0) {
+            allowedDistance += gridDistance;
+            continue;
+            } else if (measuredCost <= totalDistance) {
+            finalCenterX = intendedCenterX;
+            finalCenterY = intendedCenterY;
+            break;
+            }
+
+            allowedDistance -= gridDistance;
+            if (allowedDistance <= 0) {
+            allowedDistance = 0;
+            finalCenterX = target.center.x;
+            finalCenterY = target.center.y;
+            break;
+            }
+        }
         }
     } else {
-        let stepDistance = canvas.scene.grid.size / 10;
-        let totalSteps = (distance * pixelsPerFoot) / stepDistance;
+        const stepDistance = canvas.scene.grid.size / 10;
+        const totalSteps = (distance * pixelsPerFoot) / stepDistance;
         let stepCounter = 0;
 
         for (let step = 1; step <= totalSteps; step++) {
-            let nextX = target.x + Math.cos(angle) * (stepDistance * step);
-            let nextY = target.y + Math.sin(angle) * (stepDistance * step);
-            if (canvas.scene.grid.type === 1) {
-                const snapped = canvas.scene.grid.getSnappedPoint({ x: nextX, y: nextY }, { mode: 0xFF0, resolution: 1 });
-                nextX = snapped.x;
-                nextY = snapped.y;
-            }
-            let nextPoint = new PIXI.Point(nextX, nextY);
+        const nextCenterX = target.center.x + ux * (stepDistance * step);
+        const nextCenterY = target.center.y + uy * (stepDistance * step);
 
-            collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(target.center, nextPoint, { type: "move", mode: "any" });
-
-            if (collisionDetected) {
-                break;
-            }
-            stepCounter = step;
+        collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(
+            target.center,
+            new PIXI.Point(nextCenterX, nextCenterY),
+            { type: "move", mode: "any" }
+        );
+        if (collisionDetected) break;
+        stepCounter = step;
         }
 
-        finalX = target.x + Math.cos(angle) * (stepDistance * stepCounter);
-        finalY = target.y + Math.sin(angle) * (stepDistance * stepCounter);
+        finalCenterX = target.center.x + ux * (stepDistance * stepCounter);
+        finalCenterY = target.center.y + uy * (stepDistance * stepCounter);
+    }
 
-        if (stepCounter > 0) {
-            if (canvas.scene.grid.type === 1) {
-                const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
-                finalX = snapped.x;
-                finalY = snapped.y;
-            }
-        }
+    let finalX = finalCenterX - target.w / 2;
+    let finalY = finalCenterY - target.h / 2;
+
+    if (canvas.scene.grid.type === 1) {
+        const snapped = canvas.scene.grid.getSnappedPoint({ x: finalX, y: finalY }, { mode: 0xFF0, resolution: 1 });
+        finalX = snapped.x;
+        finalY = snapped.y;
+
+        finalCenterX = finalX + target.w / 2;
+        finalCenterY = finalY + target.h / 2;
     }
 
     const path = [
         { x: target.center.x, y: target.center.y },
-        { x: finalX, y: finalY }
+        { x: finalCenterX, y: finalCenterY }
     ];
     let finalDistance = canvas.grid.measurePath(path).cost;
+
     await target.document.update({ x: finalX, y: finalY });
     return finalDistance;
 }
@@ -1337,6 +1367,16 @@ export function getCprConfig({itemUuid, type = "anim"}) {
         let dieFace = cprConfig?.customDiceFace;
         if(homebrewDiceEnabled) return {homebrewDiceEnabled, dieNumber, dieFace};
         else return {homebrewDiceEnabled: false};
+    }
+    else if(type === "damageType") {
+        if(!game.modules.get("chris-premades")?.active) return {damageType: false};
+        let itemData = fromUuidSync(itemUuid);
+        if(!itemData) return {damageType: false};
+        let cprConfig = itemData.getFlag("chris-premades", "config");
+        if(!cprConfig) return {damageType: false};
+        let dType = cprConfig?.damageType;
+        if(dType) return {dType};
+        else return {dType: false};
     }
 }
 

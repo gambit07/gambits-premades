@@ -6,10 +6,11 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
     let itemName = "Indomitable";
     let dialogId = gpsUuid;
     let gmUser = game.gps.getPrimaryGM();
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     // Check if there is a save success
-    if(workflowType === "save" && workflow.failedSaves.size === 0) return;
+    if(workflowType === "save" && workflow.failedSaves.size === 0) return debugEnabled ? console.error(`${itemName} failed due to no valid failed save targets`) : "";
 
     let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["indomitable"], reactionCheck: false, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     

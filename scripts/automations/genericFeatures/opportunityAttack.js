@@ -626,6 +626,7 @@ async function processValidRange({actor, token}) {
     let hasWarCaster = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
     let warCasterMelee = true;
     let warCasterRange = true;
+    let isMetric = false;
     if (hasWarCaster) {
         if (game.modules.get("chris-premades")?.active) {
             let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
@@ -649,6 +650,8 @@ async function processValidRange({actor, token}) {
         (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.actionType === "save")) && (item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual")) && item.system.activities?.some(a => ["creature", "enemy"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
     );
 
+    isMetric ||= validSpells.some(item => ((item.system?.range?.units ?? "").toLowerCase() === "m") || (item.system?.activities ?? []).some(a => ((a.range?.units ?? "").toLowerCase() === "m")));
+
     let oaDisabled;
     if (!validWeapons.length && !validSpells.length) {
         ui.notifications.warn(`No Valid Melee options found, cancelling Opportunity Attack options for ${actor.name}`);
@@ -659,13 +662,13 @@ async function processValidRange({actor, token}) {
 
     let maxRange;
     let mwakRange = actor.flags["midi-qol"]?.range?.mwak;
-    if (onlyThrownWeapons || (validSpells && !validWeapons)) {
-        maxRange = 5;
+    if (onlyThrownWeapons || validSpells.length > 0) {
+        maxRange = isMetric ? game.gps.convertFromFeet({ range: 5 }) : 5;
     } else {
-        maxRange = validWeapons.reduce((max, item) => {
+        const result = validWeapons.reduce((acc, item) => {
             let activityMaxRange = item.system.activities?.reduce((actMax, activity) => {
-            let rangeVal = activity.range?.value;
-            return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
+                let rangeVal = activity.range?.value;
+                return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
             }, 0);
 
             if (!activityMaxRange || activityMaxRange === 0) {
@@ -676,11 +679,17 @@ async function processValidRange({actor, token}) {
             }
 
             if (!item.system.properties?.has("thr")) {
-                return Math.max(max, activityMaxRange);
+                if (activityMaxRange > acc.max) {
+                    acc.max = activityMaxRange;
+                    acc.isMetric = (item.system.range?.units === 'm');
+                }
             }
 
-            return max;
-        }, 0);
+            return acc;
+        }, { max: 0, isMetric: false });
+
+        maxRange = result.max;
+        isMetric = result.isMetric;
     }
 
     if(maxRange === 0 || oaDisabled) {
@@ -689,7 +698,9 @@ async function processValidRange({actor, token}) {
     }
     else {      
         const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * canvas.scene.dimensions.distance;
-        maxRange = (game.gps.convertFromFeet({ range: maxRange })) + tokenSizeOffset;
+        
+        if(isMetric) maxRange = maxRange + tokenSizeOffset;
+        else maxRange = (game.gps.convertFromFeet({ range: maxRange })) + tokenSizeOffset; // Never gunna remember why unless noted, I'm doing this as a backup to check IF scene is set to metric, but weapon is not
     
         if (mwakRange) maxRange += (game.gps.convertFromFeet({ range: mwakRange }));
     }

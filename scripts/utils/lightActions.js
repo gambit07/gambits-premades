@@ -109,7 +109,7 @@ export async function lightThrow({ token, actor, item, filePath, filePathDim, li
   const options = {
     position: { x: token.center.x, y: token.center.y },
     sceneId: game.scenes.current.id,
-    tokenOverrides: { name: itemData.name, img: filePath },
+    tokenOverrides: { name: itemData.name, texture: {src: filePath} },
     actorOverrides: { effects: lightEffect, ownership: { [game.user.id]: 3 } },
     items: [itemData],
     createActor: false,
@@ -120,10 +120,6 @@ export async function lightThrow({ token, actor, item, filePath, filePathDim, li
   try {
     const { tokenUuid } = await game.itempiles.API.createItemPile(options);
     let tokenData = await fromUuid(tokenUuid);
-
-    if (tokenData.texture.src !== filePath) {
-      await tokenData.update({ "texture.src": filePath });
-    }
     tokenData = tokenData.object;
 
     await Sequencer.EffectManager.endEffects({ name: effectName, object: token });

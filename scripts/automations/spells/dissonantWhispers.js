@@ -1,6 +1,7 @@
 export async function dissonantWhispers({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if (args[0].macroPass === "postActiveEffects") {
         const targets = workflow.hitTargets;
+        const gmUser = game.gps.getPrimaryGM();
         for(let target of targets) {
             const targetMovementSpeed = target.actor.system.attributes.movement.walk;
             const damageType = "psychic";
@@ -54,7 +55,7 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
                     .play()
                 }
 
-                let activityToUpdate = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
+                let activityToUpdate = item.system.activities.find(a => a.identifier === "syntheticSave");
                 let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
                 let castDamage = (workflow.castData.castLevel - 1) + 3;
                 damageParts[0].number = castDamage;
