@@ -327,6 +327,7 @@ export async function arcaneShotValidActivities({item, actor}) {
 
   Hooks.on('updateActor', async (actor, diff, options, userID) => {
     const token = actor.getActiveTokens()?.[0];
+    if(!token) return;
 
     await game.gps.wound({args: "woundRemovalFullHeal", token, options: diff})
   });
