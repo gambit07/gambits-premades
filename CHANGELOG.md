@@ -1,5 +1,22 @@
 # Changelog
 
+## [v2.1.6] - 2025-08-31
+- Additions:
+  - All relevant 2014 spells should now have their 2024 variant included
+  - Entangle 2024: Added 2024 version
+  - Black Tentacles 2024: Added 2024 version
+  - Dissonant Whispers 2024: Added 2024 version
+  - Foresight 2024: Added 2024 version (No changes)
+  - Hellish Rebuke 2024: Added 2024 version (No changes)
+  - Heroes Feast 2024: Added 2024 version
+  - Holy Aura 2024: Added 2024 version (No changes)
+  - Identify 2024: Added 2024 version (No changes)
+  - Ray of Sickness 2024: Added 2024 version
+  - Power Word Heal 2024: Added 2024 version
+  - Power Word Stun 2024: Added 2024 version
+  - Stinking Cloud 2024: Added 2024 version
+  - Vicious Mockery 2024: Added 2024 version
+
 ## [v2.1.4] - 2025-08-30
 - Additions:
   - Confusion 2024: Added 2024 version, only a slight change to the directional roll
