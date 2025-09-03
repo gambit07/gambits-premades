@@ -1,5 +1,6 @@
 export async function armorOfHexes({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "isAttacked") {
+        if(!workflow.actor.appliedEffects.some(e => e.name === "Hexblade's Curse: Target")) return;
         let target = workflow.targets.first();
         if(item.parent.uuid !== target.actor.uuid) return;
         if (MidiQOL.hasUsedReaction(target.actor)) return;

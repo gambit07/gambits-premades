@@ -6,6 +6,7 @@ export async function indomitable2024({workflowData,workflowType,workflowCombat}
     let itemName = "Indomitable";
     let dialogId = gpsUuid;
     let gmUser = game.gps.getPrimaryGM();
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     // Check if there is a save success
