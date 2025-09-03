@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.1.7] - 2025-09-03
+- Bugfixes:
+  - Armor of Hexes: Added missing check for Hexblade's Curse effect
+  - Dissonant Whispers: Fixed reaction effect application not socketed correctly
+  - Indomitable 2024: Fix missing debugEnabled variable
+
 ## [v2.1.6] - 2025-08-31
 - Additions:
   - All relevant 2014 spells should now have their 2024 variant included
