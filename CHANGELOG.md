@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.1.9] - 2025-09-04
+- Additions:
+  - Reckless Attack 2024: Added due to minimal changes needed from the 2014 version. Offers an alternative if you'd prefer the dialog on first attack instead of CPR toggle
+- Bugfixes:
+  - Reckless Attack: Fixed advantage not working after initial attack due to missing activity handling along with other various fixes
+  - Opportunity Attack: Improved diagonal movement parsing on gridded by modifying the region shapes
+
 ## [v2.1.8] - 2025-09-03
 - Bugfixes:
   - Restore Balance: Cleaned up attack handling to resolve a number of issues
