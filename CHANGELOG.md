@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.8] - 2025-09-03
+- Bugfixes:
+  - Restore Balance: Cleaned up attack handling to resolve a number of issues
+
 ## [v2.1.7] - 2025-09-03
 - Bugfixes:
   - Armor of Hexes: Added missing check for Hexblade's Curse effect
