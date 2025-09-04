@@ -151,7 +151,7 @@ export function registerWrapping() {
         const size = canvas.dimensions.size;
         const wPx = data.width  * size;
         const hPx = data.height * size;
-        const reduction = Math.min(wPx, hPx) * 0.15;
+        const reduction = Math.min(wPx, hPx) * 0.1;
 
         const points = [
             { x: data.x + reduction, y: data.y + reduction, elevation: data.elevation },
@@ -179,7 +179,7 @@ export function registerWrapping() {
         const size = canvas.dimensions.size;
         const wPx = this.width  * size;
         const hPx = this.height * size;
-        const reduction = Math.min(wPx, hPx) * 0.15;
+        const reduction = Math.min(wPx, hPx) * 0.1;
 
         const points = [
             { x: reduction, y: reduction, elevation: this.elevation },

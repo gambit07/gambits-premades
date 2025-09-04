@@ -1,7 +1,7 @@
 export async function recklessAttack({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preAttackRoll") {
         if(!game.combat) return;
-        let meleeAttack = ((workflow.activity?.actionType === 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType === 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(),6).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
+        let meleeAttack = (workflow.activity?.ability === 'str' && workflow.activity?.actionType === 'mwak' && ((!workflow.item.system?.properties?.has('thr')) || MidiQOL.checkDistance(token, workflow.targets.first(), game.gps.convertFromFeet({ range: 6 })))) ? true : false;
         if (!meleeAttack) return;
         let recklessCheck = await actor.getFlag("midi-qol", "checkRecklessAttack");
         if(recklessCheck === false || recklessCheck === true) return;
@@ -68,15 +68,15 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
                         "priority": 20
                     },
                     {
-                        "key": "flags.midi-qol.advantage.attack.str",
-                        "value": "(item?.actionType == 'mwak' && !item?.properties.has('thr')) || (item?.actionType == 'mwak' && findNearby('Hostile',workflow.targets.first(),6).length > 0 && item?.properties.has('thr'))",
+                        "key": "flags.midi-qol.advantage.attack.all",
+                        "value": "activity?.ability === 'str' && activity?.actionType === 'mwak' && (!item?.properties.has('thr') || checkDistance(token, workflow.targets.first(), game.gps.convertFromFeet({ range: 6 })))",
                         "mode": 0,
                         "priority": 20
                     },
                     {
                         "key": "macro.itemMacro",
                         "mode": 0,
-                        "value": "",
+                        "value": "function.game.gps.recklessAttack",
                         "priority": 20
                     },
                 ],
@@ -108,19 +108,19 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
         }
     }
 
-    if(args[0] === "each" && args[2].turn === "startTurn") {
+    if(args?.[0] === "each" && args?.[2].turn === "startTurn") {
         await actor.unsetFlag("midi-qol", "checkRecklessAttack");
     }
 
-    if(args[0] === "each" && args[2].turn === "endTurn") {
+    if(args?.[0] === "each" && args?.[2].turn === "endTurn") {
         let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "872c2cfd-5f58-4e64-a804-2b0db2c65900");
         if(effectData) {
-            let removeAdv = effectData.changes.filter(change => change.key !== "flags.midi-qol.advantage.attack.str");
+            let removeAdv = effectData.changes.filter(change => change.key !== "flags.midi-qol.advantage.attack.all");
             await MidiQOL.socket().executeAsGM("updateEffects",{actorUuid:actor.uuid,updates:[{_id: effectData.id,changes: removeAdv}]});
         }
     }
 
-    if(args[0] === "off") {
+    if(args?.[0] === "off") {
         await actor.unsetFlag("midi-qol", "checkRecklessAttack");
     }
 }

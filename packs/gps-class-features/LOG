@@ -1,8 +1,15 @@
-2025/08/31-00:29:44.335 592b0 Recovering log #4
-2025/08/31-00:29:44.339 592b0 Delete type=0 #4
-2025/08/31-00:29:44.339 592b0 Delete type=3 #2
-2025/08/31-02:20:38.982 57f1c Level-0 table #9: started
-2025/08/31-02:20:38.982 57f1c Level-0 table #9: 0 bytes OK
-2025/08/31-02:20:38.985 57f1c Delete type=0 #7
-2025/08/31-02:20:38.985 57f1c Manual compaction at level-0 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
-2025/08/31-02:20:38.985 57f1c Manual compaction at level-1 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
+2025/09/04-11:28:04.088 592b0 Recovering log #196
+2025/09/04-11:28:04.092 592b0 Delete type=0 #196
+2025/09/04-11:28:04.092 592b0 Delete type=3 #194
+2025/09/04-18:38:14.671 57f1c Level-0 table #201: started
+2025/09/04-18:38:14.673 57f1c Level-0 table #201: 7838 bytes OK
+2025/09/04-18:38:14.675 57f1c Delete type=0 #199
+2025/09/04-18:38:14.682 57f1c Manual compaction at level-0 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)
+2025/09/04-18:38:14.682 57f1c Manual compaction at level-1 from '!folders!89rvrtGjpBsZz1Tr' @ 72057594037927935 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at '!items.effects!ddIm1TJtpoiZuW23.HvqYLk6a33Mq6j0n' @ 82 : 1
+2025/09/04-18:38:14.682 57f1c Compacting 1@1 + 1@2 files
+2025/09/04-18:38:14.686 57f1c Generated table #202@1: 72 keys, 107041 bytes
+2025/09/04-18:38:14.686 57f1c Compacted 1@1 + 1@2 files => 107041 bytes
+2025/09/04-18:38:14.687 57f1c compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/09/04-18:38:14.687 57f1c Delete type=2 #5
+2025/09/04-18:38:14.688 57f1c Delete type=2 #201
+2025/09/04-18:38:14.694 57f1c Manual compaction at level-1 from '!items.effects!ddIm1TJtpoiZuW23.HvqYLk6a33Mq6j0n' @ 82 : 1 .. '!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP' @ 0 : 0; will stop at (end)

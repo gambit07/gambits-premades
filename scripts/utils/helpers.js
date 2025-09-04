@@ -1217,42 +1217,6 @@ export async function replaceChatCard({ actorUuid, itemUuid, chatContent, rollDa
     }
 }
 
-export function validateRegionMovement({regionScenario, regionStatus, regionUuid, tokenUuid, isTeleport = false, validExit = true}) {
-    let region = fromUuidSync(regionUuid);
-    if(!region) return;
-    let token = fromUuidSync(tokenUuid);
-    if(!token) return;
-    let validatedRegionMovement;
-
-    if(regionScenario === "tokenEnter" || regionScenario === "tokenExit" || regionScenario === "tokenForcedMovement") {
-        const entered = regionScenario === "tokenEnter" ? "tokenEnter" : "";
-        const exited = regionScenario === "tokenExit" ? "tokenExit" : "";
-        const forcedMovement = regionScenario === "tokenForcedMovement" ? "tokenForcedMovement" : "";
-
-        if(forcedMovement) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
-
-        if (!exited && !entered && !isTeleport) {
-            if (token.regions.has(region)) return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
-            else return validatedRegionMovement = ({ validRegionMovement: true, validReroute: true });
-        }
-        else if(exited && validExit && !isTeleport) {
-            return validatedRegionMovement = ({ validRegionMovement: true, validReroute: true });
-        }
-        else if (entered && !isTeleport) {
-            return validatedRegionMovement = ({ validRegionMovement: true, validReroute: false });
-        }
-        else {
-            return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
-        }
-    }
-    else if(regionScenario === "tokenTurnStart") {
-        return validatedRegionMovement = ({ validRegionMovement: true, validReroute: false });
-    }
-    else {
-        return validatedRegionMovement = ({ validRegionMovement: false, validReroute: false });
-    }
-}
-
 export async function ritualSpellUse({ workflowUuid }) {
     if(!workflowUuid) return;
 

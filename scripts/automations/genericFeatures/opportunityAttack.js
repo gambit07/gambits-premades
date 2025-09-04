@@ -290,10 +290,6 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
            await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
         }
 
-        let userSelect = undefined;
-        if(source && source === "user") userSelect = browserUser;
-        else if(source && source === "gm") userSelect = gmUser;
-
         const options = {
             showFullCard: false,
             createWorkflow: true,
@@ -377,7 +373,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onExit",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onExit", isTeleport: event.data.teleport, waypoints: event.data.movement.passed.waypoints});`,
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onExit", isTeleport: event.data.movement.passed.waypoints?.[0]?.action === "displace" ? true : false, waypoints: event.data.movement.passed.waypoints});`,
                             events: ['tokenMoveOut']
                         }
                     },
@@ -386,7 +382,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onEnter",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onEnter", isTeleport: event.data.teleport, waypoints: event.data.movement.passed.waypoints});`,
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onEnter", isTeleport: event.data.movement.passed.waypoints?.[0]?.action === "displace" ? true : false, waypoints: event.data.movement.passed.waypoints});`,
                             events: ['tokenMoveIn']
                         }
                     },
@@ -499,14 +495,21 @@ function processOaSize({token, maxRange}) {
     const gridSize = canvas.scene.grid.size;
     const gridDistance = canvas.scene.grid.distance;
     const gridType = canvas.scene.grid.type;
-    const sideLength = canvas.scene.grid.type === 0 ? (maxRange / gridDistance) * 2 * gridSize : ((maxRange / gridDistance) * 2 * gridSize);
-    const topLeftX = tokenCenterX - (sideLength / 2);
-    const topLeftY = tokenCenterY - (sideLength / 2);
     const radius = maxRange * gridSize / gridDistance;
     const points = [];
     let elevationTop = token.elevation + maxRange;
     let elevationBottom = token.elevation - maxRange;
     let regionShape;
+    const sizeMap = {
+        tiny: 1,
+        sm: 2,
+        med: 3,
+        lg: 4,
+        huge: 5,
+        grg: 6
+    };
+
+    let tokenSize = sizeMap[token.actor.system.traits.size]
 
     if (gridType === 0) { // Gridless
         const exponent = 4;
@@ -528,13 +531,22 @@ function processOaSize({token, maxRange}) {
             hole: false
         };
     } else if(gridType === 1) { // Square
+        const exponent = tokenSize >= 5 ? 6 : tokenSize === 4 ? 4 : 2;
+        const numVertices = 40; // Adjust curve smoothness
+
+        for (let i = 0; i < numVertices; i++) {
+            const theta = (i / numVertices) * 2 * Math.PI;
+            const cosTheta = Math.cos(theta);
+            const sinTheta = Math.sin(theta);
+            
+            const x = tokenCenterX + radius * Math.sign(cosTheta) * Math.pow(Math.abs(cosTheta), 2/exponent);
+            const y = tokenCenterY + radius * Math.sign(sinTheta) * Math.pow(Math.abs(sinTheta), 2/exponent);
+            points.push(x, y);
+        }
+
         regionShape = {
-            type: "rectangle",
-            x: topLeftX,
-            y: topLeftY,
-            width: sideLength,
-            height: sideLength,
-            rotation: 0,
+            type: "polygon",
+            points: points,
             hole: false
         };
     } else if(gridType > 1) { // Hex
