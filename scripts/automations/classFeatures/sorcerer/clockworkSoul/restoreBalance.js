@@ -204,12 +204,15 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             let saveDice = workflow.saveRolls?.find(dice => dice.data.actorId === target.actor.id);
             let saveResult = saveDice?.dice[0].results[0].result + (saveDice?.total - saveDice?.dice[0].total);
             let baseAttack = workflow.attackRoll?.dice[0].results[0].result;
+            let bonusAttack = workflow.attackRoll?.total - workflow.attackRoll?.dice[0].total;
             let attackResult = baseAttack + (workflow.attackRoll?.total - workflow.attackRoll?.dice[0].total);
             let criticalSuccessThreshold = workflow.attackRoll?.options?.criticalSuccess;
             let criticalSuccess = baseAttack >= criticalSuccessThreshold ? true : false;
             let criticalFailureThreshold = workflow.attackRoll?.options?.criticalFailure;
             let criticalFailure = baseAttack <= criticalFailureThreshold ? true : false;
-            let attackRoll;
+            let baseRoll;
+            let bonusRoll;
+            let totalRoll;
 
             const options = {
                 showFullCard: false,
@@ -229,16 +232,18 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
 
             if(workflowType === "attack") {
                 if(criticalSuccess) {
-                    attackRoll = new CONFIG.Dice.D20Roll('1d20').evaluateSync({maximize: true});
-                    workflow.setAttackRoll(attackRoll);
+                    totalRoll = await new CONFIG.Dice.D20Roll('1d20').evaluateSync({maximize: true});
+                    await workflow.setAttackRoll(totalRoll);
                 }
                 else if(criticalFailure) {
-                    attackRoll = new CONFIG.Dice.D20Roll('1d20').evaluateSync({minimize: true});
-                    workflow.setAttackRoll(attackRoll);
+                    totalRoll = await new CONFIG.Dice.D20Roll('1d20').evaluateSync({minimize: true});
+                    await workflow.setAttackRoll(totalRoll);
                 }
                 else {
-                    attackRoll = await new CONFIG.Dice.D20Roll('1d20', {},{minimum:attackResult, maximum:attackResult} ).evaluate();
-                    await workflow.setAttackRoll(attackRoll);
+                    baseRoll = await new CONFIG.Dice.BasicRoll(`${baseAttack}`).evaluate();
+                    bonusRoll = await new CONFIG.Dice.BasicRoll(`${bonusAttack}`).evaluate();
+                    totalRoll = await MidiQOL.addRollTo(baseRoll, bonusRoll);
+                    await workflow.setAttackRoll(totalRoll);
                 }
 
                 if(workflow.token.document.disposition === validTokenPrimary.document.disposition) {
@@ -250,10 +255,10 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                         if(criticalFailure) chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to hit their target with a critical miss. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         else chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: attackRoll});
+                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: totalRoll});
                     return;
                 }
-                else if(workflow.token.document.disposition !== validTokenPrimary.document.disposition) {
+                else{
                     if(attackResult < targetAC) {
                         if(criticalFailure) chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a critical miss. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         else chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
@@ -262,7 +267,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                         if(criticalSuccess) chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to hit their target with a critical hit. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         else chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: attackRoll});
+                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: totalRoll});
                     return;
                 }
             }
