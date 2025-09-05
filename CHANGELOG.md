@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.10] - 2025-09-05
+- Updates:
+  - Restore Balance: Added better debug support
+
 ## [v2.1.9] - 2025-09-04
 - Additions:
   - Reckless Attack 2024: Added due to minimal changes needed from the 2014 version. Offers an alternative if you'd prefer the dialog on first attack instead of CPR toggle
