@@ -6,6 +6,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
     let itemName = "Restore Balance";
     let dialogId = gpsUuid;
     let gmUser = game.gps.getPrimaryGM();
+    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(workflow.legendaryResistanceUsed) return;
@@ -69,7 +70,10 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             targetAllies = targetAllies.filter(t => workflow.saveRolls?.find(roll => roll.data.actorId === t.actor.id && roll.formula.includes("kl") && !roll.formula.includes("kh")) !== undefined);
             targetEnemies = targetEnemies.filter(t => workflow.saveRolls?.find(roll => roll.data.actorId === t.actor.id && !roll.formula.includes("kl") && roll.formula.includes("kh")) !== undefined);
 
-            if((!targetAllies || targetAllies?.length === 0) && (!targetEnemies || targetEnemies?.length === 0)) continue;
+            if((!targetAllies || targetAllies?.length === 0) && (!targetEnemies || targetEnemies?.length === 0)) {
+                if(debugEnabled) console.error(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
+                continue;
+            }
 
             const targetAllyUuids = targetAllies.map(t => t.document.uuid);
             const targetAllyNames = targetAllies.map(t => t.document.name);
@@ -136,8 +140,14 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             `;
         }
         else if(workflowType === "attack") {
-            if(workflow.token.document.disposition === validTokenPrimary.document.disposition && (!workflow.disadvantage && !workflow.attackRoll.formula.includes("kl") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) return;
-            if(workflow.token.document.disposition !== validTokenPrimary.document.disposition && (!workflow.advantage && !workflow.attackRoll.formula.includes("kh") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) return;
+            if(workflow.token.document.disposition === validTokenPrimary.document.disposition && (!workflow.disadvantage && !workflow.attackRoll.formula.includes("kl") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) {
+                if(debugEnabled) console.error(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
+                continue;
+            }
+            if(workflow.token.document.disposition !== validTokenPrimary.document.disposition && (!workflow.advantage && !workflow.attackRoll.formula.includes("kh") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) {
+                if(debugEnabled) console.error(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
+                continue;
+            }
 
             dialogContent = `
                 <div class="gps-dialog-container">
@@ -200,7 +210,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             }
 
             let targetAC = target?.actor.system.attributes.ac.value;
-            let saveDC = workflow?.saveActivity?.save.dc?.value;
+            let saveDC = workflow.saveActivity?.save?.dc?.value;
             let saveDice = workflow.saveRolls?.find(dice => dice.data.actorId === target.actor.id);
             let saveResult = saveDice?.dice[0].results[0].result + (saveDice?.total - saveDice?.dice[0].total);
             let baseAttack = workflow.attackRoll?.dice[0].results[0].result;
