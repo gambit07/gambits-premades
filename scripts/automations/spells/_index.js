@@ -32,6 +32,7 @@ import { zephyrStrike } from "./zephyrStrike.js";
 import { mentalPrison } from "./mentalPrison.js";
 import { iceKnife } from "./iceKnife.js";
 import { freedomOfMovement } from "./freedomOfMovement.js";
+import { powerWordPain } from "./powerWordPain.js";
 
 export const spellsMacros = {
   ashardalonsStride,
@@ -67,5 +68,6 @@ export const spellsMacros = {
   zephyrStrike,
   mentalPrison,
   iceKnife,
-  freedomOfMovement
+  freedomOfMovement,
+  powerWordPain
 };

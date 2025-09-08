@@ -1,12 +1,13 @@
-export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, isTeleport, waypoints}) {
+export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, isTeleport, waypoints, userId}) {
     let gmUser = game.gps.getPrimaryGM();
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
-    if(game.user.id !== gmUser) return;
     let region = await fromUuid(regionUuid);
     let token = await fromUuid(tokenUuid);
     if(!token || !region || !regionScenario) return;
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
+
+    if(game.user.id !== userId) return;
 
     let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled");
     if(oaDisabled) return;
@@ -373,7 +374,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onExit",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onExit", isTeleport: event.data.movement.passed.waypoints?.[0]?.action === "displace" ? true : false, waypoints: event.data.movement.passed.waypoints});`,
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onExit", isTeleport: event.data.movement.passed.waypoints?.[0]?.action === "displace" ? true : false, waypoints: event.data.movement.passed.waypoints, userId: event.user.id});`,
                             events: ['tokenMoveOut']
                         }
                     },
@@ -382,7 +383,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onEnter",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onEnter", isTeleport: event.data.movement.passed.waypoints?.[0]?.action === "displace" ? true : false, waypoints: event.data.movement.passed.waypoints});`,
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onEnter", isTeleport: event.data.movement.passed.waypoints?.[0]?.action === "displace" ? true : false, waypoints: event.data.movement.passed.waypoints, userId: event.user.id});`,
                             events: ['tokenMoveIn']
                         }
                     },
@@ -391,7 +392,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onTurnEnd",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid !== event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onTurnEnd"});`,
+                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid !== event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onTurnEnd", userId: event.user.id});`,
                             events: ['tokenTurnEnd']
                         }
                     }

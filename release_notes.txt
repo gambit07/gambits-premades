@@ -1,2 +1,6 @@
+- Additions:
+  - Power Word Pain: Added
 - Updates:
-  - Restore Balance: Added better debug support
+  - Second try at removing default midi reactions for a bunch of items because I'm a dummy
+- Bugfixes:
+  - Opportunity Attack: Resolve error preventing GM from receiving Opportunity Attacks when PC's moved due to token control issue
