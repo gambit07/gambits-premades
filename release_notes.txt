@@ -1,6 +1,4 @@
-- Additions:
-  - Power Word Pain: Added
 - Updates:
-  - Second try at removing default midi reactions for a bunch of items because I'm a dummy
+  - freeSpellUse: Revamped freeSpellUse function. As a reminder, this can be used by adding gpsFreeSpellUse to an activity Chat Flavor text box. Previously this only supported a single free use per long rest. Now also supports configuring the number of uses when setting the activity up to use Item or Activity Uses. This will account for the number of uses, as well as the recharge duration option set (Long Rest, Short Rest, or Daily). You can still simply add gpsFreeSpellUse without item/activity uses to have a simple once per long rest effect added.
 - Bugfixes:
-  - Opportunity Attack: Resolve error preventing GM from receiving Opportunity Attacks when PC's moved due to token control issue
+  - Burst of Ingenuity: Fixed Save DC not being checked on activity properly

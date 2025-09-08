@@ -104,7 +104,7 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
             let saveBonus = await new CONFIG.Dice.DamageRoll(`2`).evaluate();
             let newRoll;
             if(rollFound) newRoll = await MidiQOL.addRollTo(rollFound, saveBonus);
-            let saveDC = workflow.saveItem.system.save.dc;
+            let saveDC = workflow?.saveActivity?.save.dc?.value;
             let chatContent;
             if(newRoll.total >= saveDC && rollFound.total < saveDC) {
                 workflow.failedSaves.delete(allyToken);

@@ -28,11 +28,15 @@ export function registerHooks() {
             await game.gps.identify({ item: workflow.item, actor: workflow.actor, workflow, dialog, usage });
         }
         else {
-            freeSpellUsed = await game.gps.freeSpellUse({item: workflow.item, actor: workflow.actor});
+            freeSpellUsed = await game.gps.freeSpellUse({item: workflow.item, actor: workflow.actor, activity: workflow.activity});
             if(freeSpellUsed) {
                 dialog.configure = false;
                 usage.consume = usage.consume || {};
                 usage.consume.spellSlot = false;
+            }
+            else {
+                usage.consume = usage.consume || {};
+                usage.consume.resources = false;
             }
         }
     });

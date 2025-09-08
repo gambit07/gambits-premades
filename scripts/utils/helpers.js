@@ -34,57 +34,97 @@ export async function gmToggleStatus({ tokenUuid, status, active }) {
     if(token) token.actor.toggleStatusEffect(status, { active, overlay: false });
 }
 
-export async function freeSpellUse({ item, actor }) {
-    const effectName = `${item.name}: Long Rest Charge Used`;
+export async function freeSpellUse({ item, actor, activity }) {
+    const targets = activity?.consumption?.targets ?? [];
+    const isItemUse = targets.some(t => t.type === "itemUses");
+    const isActivityUse = !isItemUse && targets.some(t => t.type === "activityUses");
+    const isCounterMode = isItemUse || isActivityUse;
 
-    if (!actor.appliedEffects.some(e => e.name === effectName)) {
-        let result = await foundry.applications.api.DialogV2.wait({
-            window: { title: `Free ${item.name} Use` },
-            content: `
-                <div class="gps-dialog-container">
-                    <div class="gps-dialog-section">
-                        <div class="gps-dialog-content">
-                            <div>
-                                <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to activate your free use of ${item.name}? It will be cast at its base level.</p>
-                                    <div id="image-container" class="gps-dialog-image-container">
-                                        <img src="${item.img}" class="gps-dialog-image">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    const genericEffectName = `${item.name}: Long Rest Charge Used`;
+
+    const uses = isItemUse ? item?.system?.uses : isActivityUse ? activity?.uses : null;
+    const spent = Number(uses?.spent ?? 0);
+    const max = Number(uses?.max ?? 0);
+    const remaining = Math.max(0, max - spent);
+    const availableUses = isCounterMode ? (max > 0 && spent < max) : false;
+
+    const restModeKey = isCounterMode ? (uses?.recovery?.[0]?.period ?? "lr") : "lr";
+    const restModeName = restModeKey === "sr" ? "Short Rest" : restModeKey === "lr" ? "Long Rest" : "Daily";
+    const specialDuration = restModeKey === "sr" ? ["shortRest"] : restModeKey === "lr" ? ["longRest"] : ["newDay"];
+
+    if (isCounterMode) {
+        if (!availableUses) return false;
+    } else {
+        const alreadyGeneric = actor.appliedEffects.some(e => e.name === genericEffectName);
+        if (alreadyGeneric) return false;
+    }
+
+    const effectNameCurrent = isCounterMode ? `${item.name}: ${spent}/${max} ${restModeName} Charges Used` : genericEffectName;
+
+    const effectNameNext = isCounterMode ? `${item.name}: ${spent + 1}/${max} ${restModeName} Charges Used` : genericEffectName;
+
+    const remainingText = isCounterMode ? (remaining > 1 ? `You have ${remaining} uses remaining.` : remaining === 1 ? `You have ${remaining} use remaining.` : ``) : `This grants one free use ${restModeName === "Daily" ? restModeName : `per ${restModeName}`}.`;
+
+    const result = await foundry.applications.api.DialogV2.wait({
+        window: { title: `Free ${item.name} Use` },
+        content: `
+        <div class="gps-dialog-container">
+            <div class="gps-dialog-section">
+            <div class="gps-dialog-content">
+                <div>
+                <div class="gps-dialog-flex">
+                    <p class="gps-dialog-paragraph">
+                    Would you like to activate a free use of ${item.name}? It will be cast at its base level.
+                    ${remainingText}
+                    </p>
+                    <div id="image-container" class="gps-dialog-image-container">
+                    <img src="${item.img}" class="gps-dialog-image">
                     </div>
                 </div>
-            `,
-            buttons: [{
-                action: "Yes",
-                label: "Yes",
-                callback: async (event, button, dialog) => {
-                    const effectData = {
-                        name: effectName,
-                        icon: item.img,
-                        duration: {},
-                        origin: actor.uuid,
-                        flags: {dae:{specialDuration:['longRest']}}
-                    }
-                    ui.notifications.info(`You used your once per long rest option to initiate ${item.name} and did not use a spell slot`)
-                    await actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
-                    return true;
-                }
-            },
-            {
-                action: "No",
-                label: "No",
-                callback: async () => {return false;}
-            }],
-            close: async (event, dialog) => {
-                return false;
-            }, rejectClose:false
-        });
+                </div>
+            </div>
+            </div>
+        </div>
+        `,
+        buttons: [
+        {
+            action: "Yes",
+            label: "Yes",
+            callback: async () => {
+            if (isCounterMode) {
+                const prevCount = actor.appliedEffects.find(e => e.name === effectNameCurrent);
+                if (prevCount) await prevCount.delete();
+                const nextCount = actor.appliedEffects.find(e => e.name === effectNameNext);
+                if (nextCount) await nextCount.delete();
+                const prevGeneric = actor.appliedEffects.find(e => e.name === genericEffectName);
+                if (prevGeneric) await prevGeneric.delete();
+            }
 
-        return result;
-    }
-    else return false;
+            const effectData = {
+                name: effectNameNext,
+                icon: item.img,
+                duration: {},
+                origin: item.uuid,
+                flags: { dae: { specialDuration } }
+            };
+
+            ui.notifications.info(`You used your ${restModeName} cast option to initiate ${item.name} and did not use a spell slot. The spell was cast at its base level.`);
+
+            await actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
+
+            if (isItemUse) await item.update({ "system.uses.spent": spent + 1 });
+            else if (isActivityUse) await activity.update({ "uses.spent": spent + 1 });
+
+            return true;
+            }
+        },
+        { action: "No", label: "No", callback: async () => false }
+        ],
+        close: async () => false,
+        rejectClose: false
+    });
+
+    return result;
 }
 
 export async function gmUpdateTemplateSize({ templateUuid, templateSize }) {
