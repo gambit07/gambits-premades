@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.1.13] - 2025-09-22
+- Additions:
+  - Flash of Genius: Added Artificer's Flash of Genius feature
+- Updates:
+  - Fireball: Reduced overall volume of the blast sound
+  - Opportunity Attack: Fixed incorrect debug log text for sight
+  - Silvery Barbs: Added handling for ability checks triggered via a midi activity
+  - Riposte: Added origin item lookup for the Combat Superiority item to better align with CPR (I think)
+- Bugfixes:
+  - Shield Master: Resolved Shield Bash never prompting after the first use, and Shield Bash potentially popping up on Opportunity Attacks
+  - Elemental Affinity: Resolved damage type not being parsed correctly in some circumstances
+
 ## [v2.1.12] - 2025-09-08
 - Updates:
   - freeSpellUse: Revamped freeSpellUse function. As a reminder, this can be used by adding gpsFreeSpellUse to an activity Chat Flavor text box. Previously this only supported a single free use per long rest. Now also supports configuring the number of uses when setting the activity up to use Item or Activity Uses. This will account for the number of uses, as well as the recharge duration option set (Long Rest, Short Rest, or Daily). You can still simply add gpsFreeSpellUse without item/activity uses to have a simple once per long rest effect added.
