@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.1.14] - 2025-09-22
+- Updates:
+  - Opportunity Attack: Tried to scrape some more performance out of Opportunity Attacks. Increased duration of timeout period before a region will update itself on movement and coalesced to a single update with improved logic. Added new onTurnStart behavior that will turn off onExit and onEnter processing for that tokens region on their turn. This prevents any of the OA logic from firing on a tokens turn when they don't need it anyway, and should help a smidge with performance on lower end machines. onTurnEnd will re-enable the onExit and onEnter events for normal processing of OA.
+- Bugfixes:
+  - Shield Master: Fixed a couple bugs introduced in the last update
+  - Silvery Barbs: Fixed an issue that could occur in certain circumstances for the save ability pickup. Added text to the SB output description defining what item the SB use was for.
+
 ## [v2.1.13] - 2025-09-22
 - Additions:
   - Flash of Genius: Added Artificer's Flash of Genius feature
