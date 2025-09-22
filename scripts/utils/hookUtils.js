@@ -230,7 +230,8 @@ export function updateSettings(settingKey = null) {
         'enableTaleOfHubris': 'taleOfHubrisEnabled',
         'enableChronalShift': 'chronalShiftEnabled',
         'enableMagicUsersNemesis': 'magicUsersNemesisEnabled',
-        'enableDreadCounterspell': 'dreadCounterspellEnabled'
+        'enableDreadCounterspell': 'dreadCounterspellEnabled',
+        'enableFlashOfGenius': 'flashOfGeniusEnabled'
     };
 
     if (settingKey === null) {

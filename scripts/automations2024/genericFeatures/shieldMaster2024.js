@@ -1,11 +1,16 @@
 export async function shieldMaster2024({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
-    if(args[0].macroPass === "postAttackRollComplete" && workflow.hitTargets.first() && token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) {
+    if(args?.[0].macroPass === "postAttackRollComplete" && workflow.hitTargets.first() && token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) {
+        let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
         if(!game.combat) return;
         let meleeAttack = ((workflow.activity?.actionType === 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType === 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(),6).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
         if (!meleeAttack) return;
+        if(game.combat?.current.tokenId !== token.object.id) {
+            if(debugEnabled) console.error(`Shield Bash for ${actor.name} failed due to not tokens turn in combat`);
+            return;
+        }
 
         item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "b32e3d48-034b-4a56-95b4-f392a525f299");
-        let shieldMasterCheck = await item.getFlag("midi-qol", "checkShieldMaster") ?? null;
+        let shieldMasterCheck = await item.getFlag("gambits-premades", "checkShieldMaster") ?? null;
         if(shieldMasterCheck === false || shieldMasterCheck === `${token.id}_${game.combat.round}`) return;
 
         let target = workflow.hitTargets.first();
@@ -16,12 +21,14 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         let initialTimeLeft = 30;
         let gmUser = game.gps.getPrimaryGM();
         let result;
+        let pushRange = game.gps.convertFromFeet({range: 5});
+        let pushRangeText = `${pushRange} ${(units === "meters" || units === "m" || units === "mt" || units === "metri") ? "m" : "ft"}`
 
         let dialogContent = `
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Would you like to use Shield Bash to cause your target to make a saving throw to potentially be Pushed (5 ft) or to go Prone?</p>
+                        <p class="gps-dialog-paragraph">Would you like to use Shield Bash to cause your target to make a saving throw to potentially be Pushed (${pushRangeText}) or to go Prone?</p>
                         <div>
                             <div class="gps-dialog-flex">
                                 <table style="background-color: rgba(181, 99, 69, 0.2);" width="100%"><tbody><tr><th>Prone</th><th>Push</th></tr><tr><td style="text-align: center;vertical-align: middle;"><input type="radio" value="prone" id="prone" name="ability-check" style="margin: 0 auto;"></td><td style="text-align: center;vertical-align: middle;"><input type="radio" value="push" id="push" name="ability-check" style="margin: 0 auto;"></td></tr></tbody></table>
@@ -53,23 +60,23 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
 
         if (!userDecision) {
-            await item.setFlag("midi-qol", "checkShieldMaster", false);
+            await item.setFlag("gambits-premades", "checkShieldMaster", false);
             return;
         }
         else if (userDecision) {
-            await item.setFlag("midi-qol", "checkShieldMaster", `${token.id}_${game.combat.round}`);
+            await item.setFlag("gambits-premades", "checkShieldMaster", `${token.id}_${game.combat.round}`);
 
             const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
 
             if (saveResult.failedSaves.size !== 0) {
                 if(abilityCheck === "prone") await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${target.document.uuid}`, status: "prone", active: true });
-                else if(abilityCheck === "push") await MidiQOL.moveTokenAwayFromPoint(target, 5, token, true, true);
+                else if(abilityCheck === "push") await MidiQOL.moveTokenAwayFromPoint(target, pushRange, token, true, true);
                 else return;
             }
         }
     }
 
-    if(args[0].macroPass === "preTargetSave") {
+    if(args?.[0].macroPass === "preTargetSave") {
         if(!token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) return;
         if(MidiQOL.hasUsedReaction(actor)) return;
         item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "b32e3d48-034b-4a56-95b4-f392a525f299");
@@ -124,5 +131,10 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
             await effectData.update({"disabled" : false});
             await game.gps.addReaction({actorUuid: `${actor.uuid}`});
         }
+    }
+
+    if(args?.[0] === "each") {
+        item = await fromUuid(args[2]);
+        await item.unsetFlag("gambits-premades", "checkShieldMaster");
     }
 }

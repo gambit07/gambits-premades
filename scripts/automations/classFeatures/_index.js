@@ -25,6 +25,7 @@ import { portent } from "./wizard/schoolOfDivination/portent.js";
 import { instinctiveCharm } from "./wizard/schoolOfEnchantment/instinctiveCharm.js";
 import { interception } from "./interception.js";
 import { protection } from "./protection.js";
+import { flashOfGenius } from "./artificer/flashOfGenius.js";
 
 export const classFeaturesMacros = {
   recklessAttack,
@@ -53,5 +54,6 @@ export const classFeaturesMacros = {
   portent,
   instinctiveCharm,
   interception,
-  protection
+  protection,
+  flashOfGenius
 };

@@ -1,11 +1,13 @@
-export async function elementalAffinity2024({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "postDamageRoll") {
+export async function elementalAffinity2024({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
+    if(args?.[0].macroPass === "postDamageRoll") {
+        let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
+        item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "1c11dbbe-c4f3-4208-9449-c025d6a34218");
+        
         if(workflow.item.type !== "spell") return;
         if(!workflow.activity.consumption.spellSlot) {
-            if(debugEnabled) console.error(`${itemName} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
+            if(debugEnabled) console.error(`${item.name} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
             return;
         }
-        item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "1c11dbbe-c4f3-4208-9449-c025d6a34218");
         let damageType = false;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let gmUser = game.gps.getPrimaryGM();
@@ -13,9 +15,15 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
         let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid, type: "damageType"});
         if(cprConfig.dType) damageType = cprConfig.dType;
 
-        if(!damageType) return;
-        const damageSpell = workflow.activity?.damage?.parts?.flatMap(part => Array.from(part?.types ?? []));
-        if (!damageSpell?.some(type => damageType.includes(type))) return;
+        if(!damageType) {
+            if(debugEnabled) console.error(`${item.name} no damage type selected in CPR medkit, default Acid used`);
+            damageType = "acid";
+        }
+        const damageSpell = workflow.damageDetail.flatMap(part => Array.from(part?.type ?? []));
+        if (!damageSpell?.some(type => damageType.includes(type))) {
+            if(debugEnabled) console.error(`${item.name} failed, not relevant damage type`);
+            return;
+        }
 
         let targets = Array.from(workflow.targets);
         const targetUuids = targets.map(t => t.document.uuid);
@@ -72,6 +80,7 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
                 let targetDocument = await fromUuid(enemyTokenUuid);
                 target = targetDocument.object;
             }
+            else return;
         }
 
         let extraDamage = await new CONFIG.Dice.DamageRoll(`${actor.system.abilities.cha.mod}`, {}, {type: damageType, properties: ["mgc"]}).evaluate();
@@ -82,6 +91,6 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
             img: item.img
         }
 
-        await new MidiQOL.DamageOnlyWorkflow(actor, token, extraDamage.total, damageType, [target], extraDamage, {itemData: itemData, flavor: `Elemental Affinity Damage - ${damageType}`});
+        await new MidiQOL.DamageOnlyWorkflow(actor, token, extraDamage.total, damageType, [target], extraDamage, {itemData: itemData, flavor: `Elemental Affinity Damage - ${damageType.charAt(0).toUpperCase() + damageType.slice(1)}`});
     }
 }

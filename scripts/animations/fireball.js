@@ -132,6 +132,7 @@ export function fireball({type, token, templateData, color = "orange"}) {
                 .file(blastSound)
                 .fadeInAudio(500)
                 .fadeOutAudio(500)
+                .volume(0.5)
 
             .effect()
                 .file(explosion)

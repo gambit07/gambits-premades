@@ -59,7 +59,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? ${targets.length > 1 ? "An enemy succeeded their saving throw. Choose" : "Enemies succeeded their saving throw. Choose an enemy to target and"} an ally to give advantage to below.</p>
+                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? ${targets.length > 1 ? "Enemies succeeded their saving throw. Choose an enemy to target and" : "An enemy succeeded their saving throw. Choose"} an ally to give advantage to below.</p>
                             <div class="gps-dialog-flex-wrapper">
                                 <div class="gps-dialog-select-container">
                                     <div class="gps-dialog-flex">
@@ -241,12 +241,16 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             }
 
             if(workflowType === "save") {
-                let saveDC = workflow?.saveActivity?.save.dc?.value;
-                let saveAbility = workflow?.saveActivity?.ability;
+                let isSave = workflow?.saveActivity.type === "save" ? true : false;
+                let saveDC = workflow?.saveActivityDetails?.dc?.value;
+                console.log(workflow, "sb workflow")
+                let saveAbility = isSave ? workflow?.saveActivityDetails?.ability : workflow?.saveActivityDetails?.associated.first() ? workflow?.saveActivityDetails?.associated.first() : workflow?.saveActivityDetails?.ability;
+                console.log(saveAbility, "saveAbility")
                 let workflowTarget = Array.from(workflow.saves).find(t => t.document.uuid === enemyTokenUuid);
 
                 let browserUserTarget = game.gps.getBrowserUser({ actorUuid: workflowTarget.actor.uuid });
-                let targetSaveBonus = workflowTarget.actor.system.abilities[`${saveAbility}`].save.value + workflowTarget.actor.system.abilities[`${saveAbility}`].saveBonus;
+                let targetSaveBonus = isSave ? workflowTarget.actor.system.abilities[`${saveAbility}`].save.value : workflowTarget.actor.system.skills[`${saveAbility}`]?.total ? workflowTarget.actor.system.skills[`${saveAbility}`].total : workflowTarget.actor.system.abilities[`${saveAbility}`].mod;
+                console.log(targetSaveBonus, "targetSaveBonus")
                 let reroll;
                 if(workflowTarget.actor.type !== "npc") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUserTarget, { rollParams: `1d20 + ${targetSaveBonus}` });
                 else reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${targetSaveBonus}` });
@@ -255,13 +259,13 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                     workflow.saves.delete(workflowTarget);
                     workflow.failedSaves.add(workflowTarget);
 
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their ${isSave ? "save" : "check"}. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     return;
                 }
 
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their ${isSave ? "save" : "check"}. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     continue;
                 }

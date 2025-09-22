@@ -678,6 +678,31 @@ export function registerSettings() {
         }
     });
 
+    game.settings.register("gambits-premades", "enableFlashOfGenius", {
+        name: "enableFlashOfGenius",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        type: Boolean
+    });
+
+    game.settings.register('gambits-premades', 'Flash of Genius Timeout', {
+        name: "Flash of Genius Timeout",
+        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "15",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue)) {
+            } else {
+                console.error("Invalid input for Numeric Setting Example: Not a number.");
+            }
+        }
+    });
+
     game.settings.register("gambits-premades", "disableCuttingWordsMaxMiss", {
         name: "disableCuttingWordsMaxMiss",
         scope: "world",
@@ -913,6 +938,13 @@ export class ClassFeaturesSettingsMenu extends BaseSettingsMenu {
         ]
       },
       {
+        id: "flashOfGenius",
+        name: "Flash of Genius",
+        description: "Dialog for Artificers Flash of Genius.",
+        boolKey: "enableFlashOfGenius",
+        timeoutKey: "Flash of Genius Timeout"
+      },
+      {
         id: "indomitable",
         name: "Indomitable",
         description: "Dialog for Fighters' Indomitable.",
@@ -942,13 +974,6 @@ export class ClassFeaturesSettingsMenu extends BaseSettingsMenu {
         timeoutKey: "Magic-User's Nemesis Timeout"
       },
       {
-        id: "riposte",
-        name: "Riposte",
-        description: "Dialog for Battle Master Fighters' Riposte.",
-        boolKey: "Enable Riposte",
-        timeoutKey: "Riposte Timeout"
-      },
-      {
         id: "poetryInMisery",
         name: "Poetry in Misery",
         description: "Dialog for College of Tragedy Bards'.",
@@ -968,6 +993,13 @@ export class ClassFeaturesSettingsMenu extends BaseSettingsMenu {
         description: "Dialog for Clockwork Soul Sorcerers'.",
         boolKey: "enableRestoreBalance",
         timeoutKey: "Restore Balance Timeout"
+      },
+      {
+        id: "riposte",
+        name: "Riposte",
+        description: "Dialog for Battle Master Fighters' Riposte.",
+        boolKey: "Enable Riposte",
+        timeoutKey: "Riposte Timeout"
       },
       {
         id: "taleOfHubris",

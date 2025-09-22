@@ -71,7 +71,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
     // Check if origin token can see token moving
     if(!MidiQOL.canSee(effectOriginToken, token)) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed - not tokens turn`);
+        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed - ${effectOriginToken.actor.name} cannot see ${token.actor.name}`);
         return;
     }
 
