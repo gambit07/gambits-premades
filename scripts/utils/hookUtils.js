@@ -4,105 +4,87 @@ export async function executeWorkflow({ workflowItem, workflowData, workflowType
     await game.gps[workflowItem]({ workflowData, workflowType, workflowCombat });
 }
 
+const _timers = new Map();
+const _lastApplied = new Map();
+const DEBOUNCE_MS = 2000;
+
+function _calcCenterPx(tokenDocument, updateData) {
+  const gridSize = (canvas.dimensions?.size ?? canvas.grid?.size) || 100;
+  const xTL = Number.isFinite(updateData?.x) ? updateData.x : tokenDocument.x;
+  const yTL = Number.isFinite(updateData?.y) ? updateData.y : tokenDocument.y;
+  const wG  = Number.isFinite(updateData?.width)  ? updateData.width  : tokenDocument.width  || 1;
+  const hG  = Number.isFinite(updateData?.height) ? updateData.height : tokenDocument.height || 1;
+  return { cx: xTL + (wG * gridSize) / 2, cy: yTL + (hG * gridSize) / 2 };
+}
+
 export function updateRegionPosition(region, tokenDocument, updatedElevation = null, updatedX = null, updatedY = null) {
-    if (game.user.id !== game.gps.getPrimaryGM()) return;
-    if (!region || !tokenDocument) return;
-    if(updatedElevation === null && updatedX === null && updatedY === null) return;
+  if (game.user.id !== game.gps.getPrimaryGM()) return;
+  if (!region || !tokenDocument) return;
 
+  const wantsXY = Number.isFinite(updatedX) || Number.isFinite(updatedY);
+  const wantsZ  = Number.isFinite(updatedElevation);
+  if (!wantsXY && !wantsZ) return;
 
-    let regionDisabled = region.getFlag("gambits-premades", "regionDisabled");
-    if (!regionDisabled) region.setFlag("gambits-premades", "regionDisabled", true);
+  const key = `${region.id}:${tokenDocument.id}`;
+  const pending = _timers.get(key);
+  if (pending) clearTimeout(pending);
 
-    let previousX1 = tokenDocument.object.center.x;
-    let previousY1 = tokenDocument.object.center.y;
-    let previousX2, previousY2;
+  _timers.set(key, setTimeout(async () => {
+    _timers.delete(key);
 
-    if(Number.isFinite(updatedElevation)) {
-        let rangeOffset = region.getFlag("gambits-premades", "opportunityAttackRegionMaxRange");
-        const bottomOffset = updatedElevation - rangeOffset;
-        const topOffset = updatedElevation + rangeOffset;
+    const { cx, cy } = _calcCenterPx(tokenDocument, { x: updatedX, y: updatedY });
 
-        region.update({
-            elevation: {
-                bottom: bottomOffset,
-                top: topOffset
-            }
-        });
+    let bottom, top;
+    if (wantsZ) {
+      const range = region.getFlag("gambits-premades", "opportunityAttackRegionMaxRange") ?? 0;
+      bottom = updatedElevation - range;
+      top    = updatedElevation + range;
+    } else {
+      bottom = region.elevation?.bottom;
+      top    = region.elevation?.top;
     }
 
-    const checkPosition = () => {
-        const currentX = tokenDocument.object.center.x;
-        const currentY = tokenDocument.object.center.y;
+    const last = _lastApplied.get(key);
+    if (last && last.cx === cx && last.cy === cy && last.bottom === bottom && last.top === top) return;
 
-        if (currentX !== previousX1 || currentY !== previousY1) {
-            previousX2 = previousX1;
-            previousY2 = previousY1;
-            previousX1 = currentX;
-            previousY1 = currentY;
+    const src = region.shapes;
+    const shapes = new Array(src.length);
+    for (let i = 0; i < src.length; i++) {
+      const s = src[i];
+      if (s.type === "ellipse") {
+        shapes[i] = { ...s, x: cx, y: cy };
 
-            setTimeout(checkPosition, 100);
-        } else if (previousX1 === previousX2 && previousY1 === previousY2) {
-            const updatedShapes = region.shapes.map(shape => {
-                if (shape.type === "ellipse") {
-                    return {
-                        ...shape,
-                        x: currentX,
-                        y: currentY
-                    };
-                } else if (shape.type === "rectangle") {
-                    const sideLength = shape.width || (shape.radiusX * 2);
-                    const topLeftX = currentX - (sideLength / 2);
-                    const topLeftY = currentY - (sideLength / 2);
-                    return {
-                        ...shape,
-                        x: topLeftX,
-                        y: topLeftY
-                    };
-                } else if (shape.type === "polygon") {
-                    const pts = [];
-                    for (let j = 0; j < shape.points.length; j += 2) {
-                        pts.push({ x: shape.points[j], y: shape.points[j+1] });
-                    }
-                    const centroid = pts.reduce((sum, pt) => ({
-                        x: sum.x + pt.x,
-                        y: sum.y + pt.y
-                    }), { x: 0, y: 0 });
-                    centroid.x /= pts.length;
-                    centroid.y /= pts.length;
-            
-                    const dx = currentX - centroid.x;
-                    const dy = currentY - centroid.y;
-            
-                    const updatedPoints = shape.points.map((coord, idx) => {
-                        return (idx % 2 === 0) ? coord + dx : coord + dy;
-                    });
-                    return {
-                        ...shape,
-                        points: updatedPoints
-                    };
-                } else {
-                    return {
-                        ...shape,
-                        x: currentX,
-                        y: currentY
-                    };
-                }
-            });
+      } else if (s.type === "rectangle") {
+        const w = s.width  ?? ((s.radiusX ?? 0) * 2);
+        const h = s.height ?? ((s.radiusY ?? 0) * 2);
+        shapes[i] = { ...s, x: cx - w / 2, y: cy - h / 2 };
 
-            region.update({
-                shapes: updatedShapes
-            });
+      } else if (s.type === "polygon" && Array.isArray(s.points)) {
+        let sx = 0, sy = 0, n = 0;
+        for (let j = 0; j < s.points.length; j += 2) { sx += s.points[j]; sy += s.points[j+1]; n++; }
+        const dx = cx - (sx / n);
+        const dy = cy - (sy / n);
+        const pts = new Array(s.points.length);
+        for (let j = 0; j < s.points.length; j += 2) { pts[j] = s.points[j] + dx; pts[j+1] = s.points[j+1] + dy; }
+        shapes[i] = { ...s, points: pts };
 
-            if (!regionDisabled) region.unsetFlag("gambits-premades", "regionDisabled");
-            return;
-        } else {
-            previousX2 = previousX1;
-            previousY2 = previousY1;
-            setTimeout(checkPosition, 250);
-        }
-    };
+      } else {
+        shapes[i] = { ...s, x: cx, y: cy };
+      }
+    }
 
-    checkPosition();
+    const wasDisabled = region.getFlag("gambits-premades", "regionDisabled");
+    if (!wasDisabled) await region.setFlag("gambits-premades", "regionDisabled", true);
+
+    try {
+      const patch = { shapes };
+      if (Number.isFinite(bottom) && Number.isFinite(top)) patch.elevation = { bottom, top };
+      await region.update(patch);
+      _lastApplied.set(key, { cx, cy, bottom, top });
+    } finally {
+      if (!wasDisabled) await region.unsetFlag("gambits-premades", "regionDisabled");
+    }
+  }, DEBOUNCE_MS));
 }
 
 export function refreshTemplateVisibility() {

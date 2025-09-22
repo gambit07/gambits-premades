@@ -4,7 +4,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         if(!game.combat) return;
         let meleeAttack = ((workflow.activity?.actionType === 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType === 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(),6).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
         if (!meleeAttack) return;
-        if(game.combat?.current.tokenId !== token.object.id) {
+        if(game.combat?.current.tokenId !== token.id) {
             if(debugEnabled) console.error(`Shield Bash for ${actor.name} failed due to not tokens turn in combat`);
             return;
         }
@@ -22,6 +22,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         let gmUser = game.gps.getPrimaryGM();
         let result;
         let pushRange = game.gps.convertFromFeet({range: 5});
+        const units = canvas.scene.grid.units;
         let pushRangeText = `${pushRange} ${(units === "meters" || units === "m" || units === "mt" || units === "metri") ? "m" : "ft"}`
 
         let dialogContent = `

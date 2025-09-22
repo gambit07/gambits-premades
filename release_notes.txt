@@ -1,10 +1,5 @@
-- Additions:
-  - Flash of Genius: Added Artificer's Flash of Genius feature
 - Updates:
-  - Fireball: Reduced overall volume of the blast sound
-  - Opportunity Attack: Fixed incorrect debug log text for sight
-  - Silvery Barbs: Added handling for ability checks triggered via a midi activity
-  - Riposte: Added origin item lookup for the Combat Superiority item to better align with CPR (I think)
+  - Opportunity Attack: Tried to scrape some more performance out of Opportunity Attacks. Increased duration of timeout period before a region will update itself on movement and coalesced to a single update with improved logic. Added new onTurnStart behavior that will turn off onExit and onEnter processing for that tokens region on their turn. This prevents any of the OA logic from firing on a tokens turn when they don't need it anyway, and should help a smidge with performance on lower end machines. onTurnEnd will re-enable the onExit and onEnter events for normal processing of OA.
 - Bugfixes:
-  - Shield Master: Resolved Shield Bash never prompting after the first use, and Shield Bash potentially popping up on Opportunity Attacks
-  - Elemental Affinity: Resolved damage type not being parsed correctly in some circumstances
+  - Shield Master: Fixed a couple bugs introduced in the last update
+  - Silvery Barbs: Fixed an issue that could occur in certain circumstances for the save ability pickup. Added text to the SB output description defining what item the SB use was for.

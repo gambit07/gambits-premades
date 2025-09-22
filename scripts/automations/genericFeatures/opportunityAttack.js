@@ -15,7 +15,20 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     const effectOriginActor = await fromUuid(region.flags["gambits-premades"].actorUuid);
     const effectOriginToken = await fromUuid(region.flags["gambits-premades"].tokenUuid);
 
+    if(regionScenario === "onTurnStart") {
+        let behaviors = region.behaviors.filter(b => b.name === "onExit" || b.name === "onEnter");
+        for(let behavior of behaviors) {
+            await behavior.update({"disabled": true});
+        }
+        return;
+    }
+
     if(regionScenario === "onTurnEnd") {
+        let behaviors = region.behaviors.filter(b => b.name === "onExit" || b.name === "onEnter");
+        for(let behavior of behaviors) {
+            await behavior.update({"disabled": false});
+        }
+
         let recalculate = false;
         let tokenSize = Math.max(effectOriginToken.width, effectOriginToken.height);
 
@@ -394,6 +407,15 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         system: {
                             source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid !== event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onTurnEnd", userId: event.user.id});`,
                             events: ['tokenTurnEnd']
+                        }
+                    },
+                    {
+                        type: "executeScript",
+                        name: "onTurnStart",
+                        disabled: false,
+                        system: {
+                            source: `if(region.flags["gambits-premades"].actorUuid !== event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onTurnStart", userId: event.user.id});`,
+                            events: ['tokenTurnStart']
                         }
                     }
                 ],
