@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.1.15] - 2025-09-24
+- Updates:
+  - Ill Omen Bow: Updated for v13, last updated in.... v11
+  - Fire Form: Updated Fire Elemental's monster feature to use Aura Effects instead of Active Auras
+  - Cold Aura: Updated Ice Spider Queen's monster feature to use Aura Effects instead of Active Auras
+  - Flash of Genius: Updated to account for sheet rolls
+
 ## [v2.1.14] - 2025-09-22
 - Updates:
   - Opportunity Attack: Tried to scrape some more performance out of Opportunity Attacks. Increased duration of timeout period before a region will update itself on movement and coalesced to a single update with improved logic. Added new onTurnStart behavior that will turn off onExit and onEnter processing for that tokens region on their turn. This prevents any of the OA logic from firing on a tokens turn when they don't need it anyway, and should help a smidge with performance on lower end machines. onTurnEnd will re-enable the onExit and onEnter events for normal processing of OA.
