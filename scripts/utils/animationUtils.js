@@ -294,7 +294,7 @@ export async function weaponAnimations({enableTrail = true, enableImpact = true,
           const gridSize = canvas.grid.size;
           
           const amplitude = Sequencer.Helpers.random_float_between(0.0, 0.2);
-          let hitRay = new Ray(source, target);
+          let hitRay = new foundry.canvas.geometry.Ray(source, target);
           const shakeDirection = { x: Math.sign(hitRay.dx), y: Math.sign(hitRay.dy) };
           const values = {
               x: [0, -amplitude * shakeDirection.y, amplitude * shakeDirection.y, (-amplitude * shakeDirection.y) / 4, (amplitude * shakeDirection.y) / 4, 0],

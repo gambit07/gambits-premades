@@ -142,18 +142,21 @@ export function registerHooks() {
         let actor = data.subject;
         let abilityId = data.ability;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "save", workflowCombat: false });
+        if (game.gpsSettings.flashOfGeniusEnabled) await executeWorkflow({ workflowItem: "flashOfGenius", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "save", workflowCombat: false });
     });
 
     Hooks.on("dnd5e.rollAbilityCheck", async (rolls, data) => {
         let actor = data.subject;
         let abilityId = data.ability;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "ability", workflowCombat: false });
+        if (game.gpsSettings.flashOfGeniusEnabled) await executeWorkflow({ workflowItem: "flashOfGenius", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "ability", workflowCombat: false });
     });
 
     Hooks.on("dnd5e.rollSkillV2", async (rolls, data) => {
         let actor = data.subject;
         let abilityId = data.skill;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "skill", workflowCombat: false });
+        if (game.gpsSettings.flashOfGeniusEnabled) await executeWorkflow({ workflowItem: "flashOfGenius", workflowData: { actor: actor, roll: rolls[0], abilityId: abilityId }, workflowType: "skill", workflowCombat: false });
     });
 
     Hooks.on("preUpdateCombat", (combat, update, options) => {

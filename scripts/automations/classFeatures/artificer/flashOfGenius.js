@@ -1,19 +1,25 @@
 export async function flashOfGenius({workflowData,workflowType,workflowCombat}) {
-    const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
-    if(!workflow) return;
+    const workflow = workflowCombat ? await MidiQOL.Workflow.getWorkflow(workflowData) ?? null : null;
+    if(!workflow && workflowCombat === true) return;
     const gpsUuid = "a0e20506-9e70-4bca-bfa6-7e5d16ba42fa";
-    if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
+    if(workflow?.item?.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Flash of Genius";
     let dialogId = gpsUuid;
+    let initiatingToken;
+    (workflow) ? initiatingToken = workflow.token : initiatingToken = await MidiQOL.tokenForActor(workflowData.actor.uuid);
+    let targetedToken;
+    (workflow) ? targetedToken = "" : targetedToken = await MidiQOL.tokenForActor(workflowData.actor.uuid);
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
+    let dispositionCheckType;
+    (workflow) ? dispositionCheckType = "enemy" : dispositionCheckType = "ally";
 
-    let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["flash-of-genius"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
+    let findValidTokens = game.gps.findValidTokens({initiatingToken: initiatingToken, targetedToken: targetedToken, itemName: itemName, itemType: "feature", itemChecked: ["flash-of-genius"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: dispositionCheckType, workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
     let browserUser;
     
     for (const validTokenPrimary of findValidTokens) {
-        let targets = Array.from(workflow.targets).filter(t => t.document.uuid === validTokenPrimary.document.uuid);
+        let targets = workflow ? Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition) : [initiatingToken];
         if(targets.length === 0) continue;
         const casterInTargets = targets.includes(validTokenPrimary);
         const targetUuids = targets.map(t => t.document.uuid);
@@ -87,13 +93,13 @@ export async function flashOfGenius({workflowData,workflowType,workflowCombat}) 
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
             if(itemRoll.aborted === true) continue;
-
-            let rollFound = workflow.saveRolls.find(roll => roll.data.actorUuid === target.actor.uuid);
+            await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
+            let rollFound = workflow ? workflow.saveRolls.find(roll => roll.data.actorUuid === target.actor.uuid) : workflowData.roll;
 
             let saveBonus = await new CONFIG.Dice.DamageRoll(`${intMod}`).evaluate();
             let newRoll = await MidiQOL.addRollTo(rollFound, saveBonus);
 
-            let chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used ${chosenItem.name} and added ${intMod} to ${target.actor.name}'s roll.<img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+            let chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used ${chosenItem.name} and added ${intMod} to ${target.actor.name}'s roll.<img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
             await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: newRoll});
             return;
