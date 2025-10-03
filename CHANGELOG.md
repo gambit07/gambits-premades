@@ -1,5 +1,20 @@
 # Changelog
 
+## [v2.1.16] - 2025-10-02
+- Updates:
+  - Dissonant Whispers: Changed chat notification output to go to GM instead of player for movement info
+  - Zephyr Strike: Updated to add roll to initial damage roll to avoid multiple concentration checks
+  - Portent: Change dice roll type to better work with CPR manual rolls
+  - process3rdPartyReactionDialog: Improved performance of countdown timer animation
+- Bugfixes:
+  - Defile Ground: Fix effect being created multiple times on application
+  - Phantasmal Force 2014 & 2024: Fix overtime not applying save DC correctly
+  - findValidTokens: Fix general item validity checks being inside out
+  - Confusion 2014 & 2024: Fix initial activity firing automation only activity
+  - Elemental Affinity: Fix damage roll applying for any damage type
+  - Freedom of Movement 2014 & 2024: Fix effect always applying to caster
+  - Opportunity Attack: Fix activity parsing sometimes incorrectly using a ranged value
+
 ## [v2.1.15] - 2025-09-24
 - Updates:
   - Ill Omen Bow: Updated for v13, last updated in.... v11
