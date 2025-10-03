@@ -1,5 +1,5 @@
 export async function portent({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "preActiveEffects") {
+    if(args?.[0].macroPass === "preActiveEffects") {
         let description = item.system.description.value;
 
         function extractPortentRolls(description) {
@@ -24,8 +24,8 @@ export async function portent({ speaker, actor, token, character, item, args, sc
                 let roll = span ? span.innerText : "N/A";
 
                 buttons.push({
-                action: `${divContent.id} | <b>${roll}</b>`,
-                label: `${divContent.id} | <b>${roll}</b>`,
+                action: `${divContent.id} | ${roll}`,
+                label: `${divContent.id} | ${roll}`,
                 callback: async (html) => {
                     const divId = `${divContent.id}`;
                     const regex = new RegExp(`<div id="${divId}">[\\s\\S]*?<\\/div>`, 'g');
@@ -78,12 +78,12 @@ export async function portent({ speaker, actor, token, character, item, args, sc
         });
     }
 
-    else if(args[0] === "off") {
+    else if(args?.[0] === "off") {
         let diceNum = actor.classes.wizard.system.levels >= 14 ? 3 : 2;
         let diceResult = "Your portent rolls are:<br><br>";
         
         for (let i = 1; i <= diceNum; i++) {
-            let roll = await new CONFIG.Dice.DamageRoll('1d20').evaluate();
+            let roll = await new CONFIG.Dice.D20Roll('1d20').evaluate();
             await MidiQOL.displayDSNForRoll(roll, 'damageRoll');
             let result = roll.dice[0].results[0].result;
             

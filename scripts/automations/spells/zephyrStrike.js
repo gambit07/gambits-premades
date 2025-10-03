@@ -63,23 +63,17 @@ export async function zephyrStrike({ speaker, actor, token, character, item, arg
         });
     }
     
-    if(args[0].macroPass === "postDamageRollComplete") {
+    if(args[0].macroPass === "preDamageRollComplete") {
         if(workflow.activity?.actionType !== "mwak" && workflow.activity?.actionType !== "rwak") return;
         let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "507baaea-a55b-43b5-af50-6fefba1b3220");
         let effectAdv = effectData.getFlag("gambits-premades", "zephyrStrikeUsed");
-        let target = workflow.hitTargets.first();
         let numDice = workflow.isCritical ? 2 : 1;
         if(effectAdv) {
             let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDice}d8`, {}, {type: "force", properties: ["mgc"]}).evaluate();
-            await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
-        
-            const itemData = {
-                name: "Zephyr Strike - Damage (Force)",
-                type: "feat",
-                img: item.img
-            }
-        
-            new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "force", [target], damageRoll, {itemData: itemData, flavor: "Zephyr Strike - Damage (Force)"});
+
+            let rollFound = workflow.damageRoll;
+
+            if(rollFound) await MidiQOL.addRollTo(rollFound, damageRoll);
         
             await effectData.delete();
         }

@@ -5,7 +5,6 @@ export async function dissonantWhispers2024({ speaker, actor, token, character, 
         for(let target of targets) {
             const targetMovementSpeed = target.actor.system.attributes.movement.walk;
             const hasReactionUsed = MidiQOL.hasUsedReaction(target.actor);
-            let actorPlayer = MidiQOL.playerForActor(token.actor);
 
             let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
             const { animEnabled } = cprConfig;
@@ -43,9 +42,9 @@ export async function dissonantWhispers2024({ speaker, actor, token, character, 
                 await game.gps.socket.executeAsGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: target.document.uuid, distance: targetMovementSpeed });
 
                 let chatData = {
-                    user: actorPlayer.id,
+                    user: gmUser,
                     speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: game.i18n.localize(`The target moved ${targetMovementSpeed} feet away from you. The target doesn't move into obviously dangerous ground, adjust the movement if this occurs.`)
+                    content: game.i18n.localize(`The target moved ${targetMovementSpeed} feet away from ${token.actor.name}. The target doesn't move into obviously dangerous ground, adjust the movement if this occurs.`)
                 };
                 ChatMessage.create(chatData);
             }

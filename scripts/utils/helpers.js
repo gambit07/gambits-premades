@@ -387,8 +387,17 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         if(itemType === "item") {
-            const itemNames = itemChecked.map(item => item.toLowerCase());
-            let itemExists = t.actor.items.some(i => itemNames.includes(i.identifier.toLowerCase()) || itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
+            const itemNames = itemChecked.map(s => s.toLowerCase().trim());
+
+            const itemExists = t.actor.items.some(i => {
+                const id   = i.identifier?.toLowerCase() ?? "";
+                const name = i.name?.toLowerCase() ?? "";
+                const act  = i.system?.actionType?.toLowerCase() ?? "";
+
+                return itemNames.some(n =>
+                    id.includes(n) || name.includes(n) || act.includes(n)
+                );
+            });
 
             if (!itemExists) {
                 if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at valid item supporting feature`);
@@ -815,95 +824,111 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             },
         ],
         render: (event) => {
-            let dialog = event.target;
-            dialog.dialogState = dialogState;          
+            const dialog = event.target;
+
+            const PROGRESS_BUCKET = 0.25;
+            const FRAME_MS = 16;
+            const SMOOTHING = 0.25;
+
+            dialog.dialogState = dialogState;
             dialog.timeLeft = initialTimeLeft;
             dialog.isPaused = false;
             dialog.pausedTime = 0;
+
             const startTime = performance.now();
             dialog.endTime = startTime + initialTimeLeft * 1000;
-            const enemySelect = dialog?.element.querySelector(`#enemy-token`);
-            const allySelect = dialog?.element.querySelector(`#ally-token`);
 
-            function resetEnemySelect() { if (enemySelect) { enemySelect.selectedIndex = 0; } };
-            function resetAllySelect() { if (allySelect) { allySelect.selectedIndex = 0; } };
+            const root       = dialog.element;
+            const enemySelect = root?.querySelector('#enemy-token');
+            const allySelect  = root?.querySelector('#ally-token');
+            const titleEl     = root?.querySelector('.window-title');
+            const headerEl    = root?.querySelector('.window-header');
+            const pauseIcon   = root?.querySelector(`#pauseIcon_${dialogId}`);
+            const pauseBtn    = root?.querySelector(`#pauseButton_${dialogId}`);
+            const selectEls   = root?.querySelectorAll('.gps-dialog-select');
+            const optionEls   = root?.querySelectorAll('.gps-dialog-option');
 
-            dialog.timer = setInterval(() => {
-                if (!dialog.isPaused) {
-                    const now = performance.now();
-                    dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
-                    dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
-                    if (dialog.timeLeft <= 0) {
-                        clearInterval(dialog.timer);
-                        dialog.close();
+            function resetEnemySelect() { if (enemySelect) enemySelect.selectedIndex = 0; }
+            function resetAllySelect()  { if (allySelect)  allySelect.selectedIndex  = 0; }
+
+            let lastSecondShown = -1;
+            let lastProgressBucket = -1;
+            let lastPaused = dialog.isPaused;
+            let lastPaint = 0;
+            dialog._visProgress = 100;
+
+            const useFullTitleBar = !!game.settings.get("gambits-premades", "enableTimerFullAnim");
+
+            dialog.updateTimer = function updateTimer(newTimeLeft, paused) {
+                this.timeLeft = newTimeLeft;
+                this.isPaused = paused;
+
+                const secs = Math.ceil(this.timeLeft);
+                const initial = Math.max(initialTimeLeft, 0.0001);
+                const rawProgress = Math.max(0, Math.min(100, (this.timeLeft / initial) * 100));
+
+                const progress = SMOOTHING > 0
+                ? (dialog._visProgress += (rawProgress - dialog._visProgress) * SMOOTHING)
+                : rawProgress;
+
+                const bucket = PROGRESS_BUCKET > 0 ? Math.floor(progress / PROGRESS_BUCKET) : progress;
+
+                if (bucket !== lastProgressBucket) {
+                    const dialogColors = getDialogColors({ type, source, timeLeft: this.timeLeft, initialTimeLeft: initialTimeLeft });
+                    const colorStop1 = Math.max(progress - 5, 0);
+                    const borderStr =
+                        `linear-gradient(to right, ${dialogColors.borderColorStop}, ${dialogColors.borderColorStop} ${colorStop1}%, rgba(0,0,0,0.5) ${progress}%, rgba(0,0,0,0.5))`;
+
+                    if (useFullTitleBar && headerEl) {
+                        headerEl.style.background = borderStr;
+                        headerEl.style.border = '';
+                        headerEl.style.borderImage = '';
+                    } else if (headerEl) {
+                        headerEl.style.background = '';
+                        headerEl.style.border = '2px solid';
+                        headerEl.style.borderImage = `${borderStr} 1`;
+                        headerEl.style.borderImageSlice = 1;
                     }
+
+                    if (selectEls?.length) selectEls.forEach(el => { el.style.backgroundColor = dialogColors.selectColor; });
+                    if (optionEls?.length) optionEls.forEach(el => { el.style.backgroundColor = dialogColors.optionColor; });
+
+                    if (pauseBtn) pauseBtn.style.backgroundColor = this.isPaused ? dialogColors.pauseColor : '';
+
+                    lastProgressBucket = bucket;
                 }
-            }, 1000);
 
-            let lastUpdateTime = 0;
-            dialog.animate = (timestamp) => {
-                if (!dialog.isPaused) {
-                    if (timestamp - lastUpdateTime > 33) {
-                        lastUpdateTime = timestamp;
-                        const now = timestamp;
-                        dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
-                        dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
-                    }
-                    if (dialog.timeLeft > 0) requestAnimationFrame(dialog.animate);
+                if (secs !== lastSecondShown && titleEl) {
+                    titleEl.textContent = `${dialogTitle} - ${secs}s`;
+                    lastSecondShown = secs;
+                }
+
+                if (pauseIcon && paused !== lastPaused) {
+                    pauseIcon.classList.toggle('fa-play', paused);
+                    pauseIcon.classList.toggle('fa-pause', !paused);
+                    lastPaused = paused;
                 }
             };
-            requestAnimationFrame(dialog.animate);
+
+            dialog.animate = (now) => {
+                if (now - lastPaint >= FRAME_MS) {
+                    if (!dialog.isPaused) {
+                        dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
+                    }
+                    dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
+                    lastPaint = now;
+                }
+
+                if (dialog.timeLeft > 0) {
+                    requestAnimationFrame(dialog.animate);
+                } else {
+                    dialog.close();
+                }
+            };
 
             dialog.listeners = attachEventListeners(dialog, dialog.animate);
 
-            dialog.updateTimer = function updateTimer(newTimeLeft, paused) {
-                let useFullTitleBar = false;
-                if(game.settings.get("gambits-premades", "enableTimerFullAnim")) useFullTitleBar = true;
-                this.timeLeft = newTimeLeft;
-                this.isPaused = paused;
-                const dialogElement = dialog?.element;
-                const pauseIcon = dialogElement?.querySelector(`#pauseIcon_${dialogId}`);
-                const pauseButton = dialogElement?.querySelector(`#pauseButton_${dialogId}`);
-                const titleElement = dialogElement?.querySelector(`.window-title`);
-                const titleBackground = dialogElement?.querySelector(`.window-header`);
-    
-                if (titleElement) {
-                    titleElement.textContent = `${dialogTitle} - ${Math.ceil(this.timeLeft)}s`;
-                }
-    
-                const progressPercentage = (this.timeLeft / initialTimeLeft) * 100;
-                let colorStop1;
-                let borderColor;
-
-                let dialogColors = getDialogColors({type, source, timeLeft: this.timeLeft, initialTimeLeft});
-        
-                colorStop1 = Math.max(progressPercentage - 5, 0);
-                borderColor = `linear-gradient(to right, ${dialogColors.borderColorStop}, ${dialogColors.borderColorStop} ${colorStop1}%, rgba(0, 0, 0, 0.5) ${progressPercentage}%, rgba(0, 0, 0, 0.5))`;
-
-                const selectElements = dialogElement?.querySelectorAll('.gps-dialog-select') || [];
-                selectElements.forEach(el => {
-                    el.style.backgroundColor = dialogColors.selectColor;
-                });
-                
-                const optionElements = dialogElement?.querySelectorAll('.gps-dialog-option') || [];
-                optionElements.forEach(el => {
-                    el.style.backgroundColor = dialogColors.optionColor;
-                });
-    
-                if (useFullTitleBar && titleBackground) {
-                    titleBackground.style.background = borderColor;
-                } else if (titleBackground) {
-                    titleBackground.style.border = `2px solid`;
-                    titleBackground.style.borderImage = borderColor;
-                    titleBackground.style.borderImageSlice = 1;
-                }
-    
-                if (pauseIcon && pauseButton) {
-                    pauseIcon.classList.toggle("fa-play", this.isPaused);
-                    pauseIcon.classList.toggle("fa-pause", !this.isPaused);
-                    pauseButton.style.backgroundColor = this.isPaused ? dialogColors.pauseColor : "";
-                }
-            };
+            requestAnimationFrame(dialog.animate);
             dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
         },
         close: async (event, dialog) => {

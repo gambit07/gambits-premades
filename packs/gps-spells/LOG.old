@@ -1,8 +1,15 @@
-2025/09/24-01:29:15.009 ab0 Recovering log #1409
-2025/09/24-01:29:15.016 ab0 Delete type=0 #1409
-2025/09/24-01:29:15.016 ab0 Delete type=3 #1407
-2025/09/24-11:25:46.515 2010 Level-0 table #1414: started
-2025/09/24-11:25:46.515 2010 Level-0 table #1414: 0 bytes OK
-2025/09/24-11:25:46.517 2010 Delete type=0 #1412
-2025/09/24-11:25:46.520 2010 Manual compaction at level-0 from '!items!0Gz9aO3EhQHVE6MV' @ 72057594037927935 : 1 .. '!items.effects!zArPg7AlzWVW60Pd.m2ELujtfE92t39Xl' @ 0 : 0; will stop at (end)
-2025/09/24-11:25:46.520 2010 Manual compaction at level-1 from '!items!0Gz9aO3EhQHVE6MV' @ 72057594037927935 : 1 .. '!items.effects!zArPg7AlzWVW60Pd.m2ELujtfE92t39Xl' @ 0 : 0; will stop at (end)
+2025/10/01-09:13:11.984 248c Recovering log #1641
+2025/10/01-09:13:11.990 248c Delete type=0 #1641
+2025/10/01-09:13:11.990 248c Delete type=3 #1639
+2025/10/01-10:16:20.817 2010 Level-0 table #1647: started
+2025/10/01-10:16:20.819 2010 Level-0 table #1647: 6662 bytes OK
+2025/10/01-10:16:20.821 2010 Delete type=0 #1645
+2025/10/01-10:16:20.822 2010 Manual compaction at level-0 from '!items!0Gz9aO3EhQHVE6MV' @ 72057594037927935 : 1 .. '!items.effects!zArPg7AlzWVW60Pd.m2ELujtfE92t39Xl' @ 0 : 0; will stop at (end)
+2025/10/01-10:16:20.822 2010 Manual compaction at level-1 from '!items!0Gz9aO3EhQHVE6MV' @ 72057594037927935 : 1 .. '!items.effects!zArPg7AlzWVW60Pd.m2ELujtfE92t39Xl' @ 0 : 0; will stop at '!items.effects!bUG2JJxbThnm9Uq3.Dc6XCuIlDfpSxju0' @ 265 : 1
+2025/10/01-10:16:20.822 2010 Compacting 1@1 + 1@2 files
+2025/10/01-10:16:20.828 2010 Generated table #1648@1: 76 keys, 203896 bytes
+2025/10/01-10:16:20.828 2010 Compacted 1@1 + 1@2 files => 203896 bytes
+2025/10/01-10:16:20.831 2010 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/10/01-10:16:20.831 2010 Delete type=2 #1643
+2025/10/01-10:16:20.831 2010 Delete type=2 #1647
+2025/10/01-10:16:20.840 2010 Manual compaction at level-1 from '!items.effects!bUG2JJxbThnm9Uq3.Dc6XCuIlDfpSxju0' @ 265 : 1 .. '!items.effects!zArPg7AlzWVW60Pd.m2ELujtfE92t39Xl' @ 0 : 0; will stop at (end)

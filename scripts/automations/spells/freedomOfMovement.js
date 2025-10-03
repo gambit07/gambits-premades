@@ -1,5 +1,6 @@
 export async function freedomOfMovement({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     let gmUser = game.gps.getPrimaryGM();
+    let targets = workflow.targets;
     let effectData = 
     [
         {
@@ -66,5 +67,7 @@ export async function freedomOfMovement({ speaker, actor, token, character, item
         }
     ];
 
-    await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: actor.uuid, effects: effectData });
+    for (let target of targets) {
+        await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: target.actor.uuid, effects: effectData });
+    }
 }

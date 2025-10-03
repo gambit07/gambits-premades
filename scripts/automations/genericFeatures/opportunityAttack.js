@@ -701,10 +701,13 @@ async function processValidRange({actor, token}) {
         maxRange = isMetric ? game.gps.convertFromFeet({ range: 5 }) : 5;
     } else {
         const result = validWeapons.reduce((acc, item) => {
-            let activityMaxRange = item.system.activities?.reduce((actMax, activity) => {
-                let rangeVal = activity.range?.value;
-                return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
-            }, 0);
+            let activityMaxRange = item.system.activities
+                ?.filter(a => a?.actionType === "msak" || a?.actionType === "mwak")
+                .reduce((actMax, activity) => {
+                    console.log(activity, "activity");
+                    let rangeVal = activity.range?.value;
+                    return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
+                }, 0);
 
             if (!activityMaxRange || activityMaxRange === 0) {
                 const reach = item.system.range?.reach;

@@ -19,7 +19,8 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
             if(debugEnabled) console.error(`${item.name} no damage type selected in CPR medkit, default Acid used`);
             damageType = "acid";
         }
-        const damageSpell = workflow.damageDetail.flatMap(part => Array.from(part?.type ?? []));
+        const damageSpell = workflow.damageDetail.map(part => part?.type ?? null);
+
         if (!damageSpell?.some(type => damageType.includes(type))) {
             if(debugEnabled) console.error(`${item.name} failed, not relevant damage type`);
             return;
