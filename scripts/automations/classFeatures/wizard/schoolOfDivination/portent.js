@@ -83,9 +83,9 @@ export async function portent({ speaker, actor, token, character, item, args, sc
         let diceResult = "Your portent rolls are:<br><br>";
         
         for (let i = 1; i <= diceNum; i++) {
-            let roll = await new CONFIG.Dice.D20Roll('1d20').evaluate();
-            await MidiQOL.displayDSNForRoll(roll, 'damageRoll');
-            let result = roll.dice[0].results[0].result;
+            let roll = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticRoll", targetUuid: token.document.uuid});
+
+            let result = roll?.utilityRolls?.total;
             
             diceResult += `<div id="Portent Roll ${i}">- Portent Roll ${i}: <b><span id="portentRoll${i}">${result}</span></b></div>`;
         }
