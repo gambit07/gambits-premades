@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.1.17] - 2025-10-03
+- Updates:
+  - Portent: Converted portent rolls to activity rolls so roll data context is accessible
+- Bugfixes:
+  - Gift of the Gem Dragon: Fixed activity not consuming item uses
+
 ## [v2.1.16] - 2025-10-02
 - Updates:
   - Dissonant Whispers: Changed chat notification output to go to GM instead of player for movement info
