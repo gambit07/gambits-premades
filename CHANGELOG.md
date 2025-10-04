@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.1.18] - 2025-10-04
+- Updates:
+  - Healing Surge: Updated to dialogV2, added native hit die roll handling, removed custom chat modification, etc
+- Bugfixes:
+  - findValidTokens: Fix a missing guard for actorless tokens
+  - Triumph: Fix a couple dialog issues
+
 ## [v2.1.17] - 2025-10-03
 - Updates:
   - Portent: Converted portent rolls to activity rolls so roll data context is accessible
