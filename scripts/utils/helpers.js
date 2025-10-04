@@ -240,15 +240,15 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     
     function filterToken(t) {
         // Check if invalid token on the canvas
-        if (!t.actor) {
+        if (!t?.actor) {
             if(debugEnabled) console.error(`${itemName} for ${t.actor ? t.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
             return;
         }
         let checkItem;
-        if(gpsUuid) checkItem = t?.actor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
-        else checkItem = t?.actor?.items?.find(i => i.name.toLowerCase() === itemName.toLowerCase());
+        if(gpsUuid) checkItem = t.actor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        else checkItem = t.actor?.items?.find(i => i.name.toLowerCase() === itemName.toLowerCase());
         const effectNamesOrigin = ["Confusion", "Arms of Hadar", "Shocking Grasp", "Slow", "Staggering Smite"];
-        let hasEffectOrigin = t?.actor?.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
+        let hasEffectOrigin = t.actor?.appliedEffects.some(effect => effectNamesOrigin.includes(effect.name));
         let measuredDistance = (dispositionCheckType === "ally" || dispositionCheckType === "enemyAlly") ? MidiQOL.computeDistance(targetedToken,t, {wallsBlock: true, includeCover: true}) : MidiQOL.computeDistance(initiatingToken,t, {wallsBlock: true, includeCover: true});
         let range = game.gps.convertFromFeet({range: rangeTotal});
 
@@ -443,7 +443,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
     }
 
     // Check if invalid token on the canvas
-    if (!targetedToken.actor) {
+    if (!targetedToken?.actor) {
         if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor ? targetedToken.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
         return false;
     }

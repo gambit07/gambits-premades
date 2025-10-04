@@ -1,4 +1,5 @@
 - Updates:
-  - Portent: Converted portent rolls to activity rolls so roll data context is accessible
+  - Healing Surge: Updated to dialogV2, added native hit die roll handling, removed custom chat modification, etc
 - Bugfixes:
-  - Gift of the Gem Dragon: Fixed activity not consuming item uses
+  - findValidTokens: Fix a missing guard for actorless tokens
+  - Triumph: Fix a couple dialog issues
