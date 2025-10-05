@@ -1,0 +1,213 @@
+{
+  "name": "Perfect Self",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "1.0.1",
+      "rules": "2014",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "Monk 20",
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "identifier": "perfect-self",
+    "activities": {},
+    "advancement": [],
+    "enchant": {}
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 244,
+      "data": {
+        "id": 244,
+        "name": "Perfect Self",
+        "prerequisite": null,
+        "description": "<p class=\"Core-Styles_Core-Body\">At 20th level, when you roll for initiative and have no ki points remaining, you regain 4 ki points.</p>",
+        "requiredLevel": 20,
+        "displayOrder": 30
+      },
+      "version": "3.4.63",
+      "featureId": 244,
+      "featureName": "Perfect Self",
+      "requiredLevel": 20,
+      "prerequisite": null,
+      "class": "Monk",
+      "classId": 11,
+      "subClass": "",
+      "parentClassId": null
+    },
+    "obsidian": {
+      "source": {
+        "type": "class",
+        "text": "Monk"
+      }
+    },
+    "scene-packer": {
+      "sourceId": "Item.kEiDdRi5zPvEf96F",
+      "hash": "c02ed8de9503daeb00849bb05ecf3954c373ee54"
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": ""
+    },
+    "core": {},
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "never",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault"
+    },
+    "dae": {
+      "macro": {
+        "name": "Perfect Self",
+        "img": "icons/magic/perception/third-eye-blue-red.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/magic/perception/third-eye-blue-red.webp",
+  "effects": [
+    {
+      "name": "Perfect Self",
+      "origin": "Compendium.world.gps-class-features.Item.ugNmjDFbPNnpG0CG",
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": 84,
+        "startTurn": 1
+      },
+      "transfer": true,
+      "disabled": false,
+      "_id": "Z6aK5JHacSpklffP",
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "function.game.gps.perfectSelf",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "statuses": [],
+      "flags": {
+        "times-up": {
+          "isPassive": true
+        },
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [
+            "joinCombat"
+          ],
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "effectmacro": {},
+        "core": {
+          "overlay": false
+        }
+      },
+      "tint": "#ffffff",
+      "img": "icons/magic/perception/third-eye-blue-red.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP"
+    }
+  ],
+  "folder": "QgRUG7AmY7FhONve",
+  "_id": "ugNmjDFbPNnpG0CG",
+  "_key": "!items!ugNmjDFbPNnpG0CG"
+}

@@ -1,0 +1,277 @@
+{
+  "name": "Healing Glyph",
+  "type": "spell",
+  "img": "icons/magic/life/heart-cross-strong-green.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>This item comes from Kobold Press' Deep Magic 2, purchase at </em><a href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" title=\"Deep Magic 2\"><em>https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/</em></a></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "1.0.9",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "activation": {
+      "type": "hour",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "",
+      "units": "spec",
+      "special": ""
+    },
+    "target": {
+      "affects": {
+        "choice": false,
+        "type": ""
+      },
+      "template": {
+        "units": "ft",
+        "type": "radius",
+        "size": "15",
+        "contiguous": false,
+        "count": ""
+      }
+    },
+    "range": {
+      "units": "self",
+      "special": ""
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "ability": "",
+    "level": 3,
+    "school": "abj",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal",
+      "somatic",
+      "material"
+    ],
+    "activities": {
+      "tUxAW92MxOArIyMG": {
+        "type": "utility",
+        "_id": "tUxAW92MxOArIyMG",
+        "sort": 0,
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false,
+          "formula": "",
+          "name": ""
+        },
+        "useConditionText": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": false,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "name": "",
+        "useConditionReason": "",
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "healing-glyph",
+    "sourceClass": "",
+    "method": "spell",
+    "prepared": 1
+  },
+  "effects": [],
+  "flags": {
+    "core": {},
+    "scene-packer": {
+      "hash": "4b59032fd5260501a929ec67a28e06a9a463f38d",
+      "sourceId": "Compendium.world.gps-homebrew-spells.Item.zm1K9ygQkfP0RsQn"
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault",
+      "attachToken": "na",
+      "addTokenSize": false
+    },
+    "dae": {
+      "macro": {
+        "name": "Healing Glyph",
+        "img": "icons/magic/life/heart-cross-strong-green.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"templatePlaced\") {\n    if(!game.modules.get(\"effectmacro\")?.active) return;\n    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }\n    const targetsSet = workflow.targets;\n    const targetsArray = Array.from(targetsSet);\n    const excludedTypes = [\"undead\", \"construct\"];\n    const actorProf = actor.system.attributes.prof;\n\n    const validTargetsArray = targetsArray.filter(target => {\n        const creatureType = MidiQOL.raceOrType(target);\n        return !excludedTypes.includes(creatureType);\n    });\n    console.log(validTargetsArray, \"validTargetArray\")\n\n    for (validTarget of validTargetsArray) {\n    const tempEffectData = [{\n        \"icon\": macroItem.img,\n        \"name\": macroItem.name,\n        \"origin\": macroItem.uuid,\n        \"disabled\": false,\n        \"duration\": {\n            \"rounds\": 1\n        },\n        \"flags\": {\n            \"effectmacro\": {\n                \"onCreate\": {\n                    \"script\": `\n                        const validTarget = await fromUuid('${validTarget.document.uuid}');\n\n                        let effectBlinded = validTarget.actor.appliedEffects.find(e => e.name === \"Blinded\");\n                        let effectDeafened = validTarget.actor.appliedEffects.find(e => e.name === \"Deafened\");\n                        let effectParalyzed = validTarget.actor.appliedEffects.find(e => e.name === \"Paralyzed\");\n                        let effectPoisoned = validTarget.actor.appliedEffects.find(e => e.name === \"Poisoned\");\n\n                        let buttons = [\n                            {\n                                action: \"Healing\",\n                                label: \"Healing\",\n                                callback: async () => {\n                                    const targetMaxHp = validTarget.actor.system.attributes.hp.max;\n                                    const targetCurrentHp = validTarget.actor.system.attributes.hp.value;\n                                    let healRoll = await new CONFIG.Dice.DamageRoll(\"3d8 + ${actorProf}\", {}, {type: \"healing\", properties: [\"mgc\"]}).evaluate();\n                                    await MidiQOL.displayDSNForRoll(healRoll, 'damageRoll')\n                                    let healTotal = healRoll.total;\n\n                                    const itemData = {\n                                        name: \"Healing Glyph\",\n                                        type: \"feat\",\n                                        img: \"${macroItem.img}\"\n                                    }\n                                    await new MidiQOL.DamageOnlyWorkflow(validTarget.actor, validTarget.token, healRoll.total, \"healing\", token ? [validTarget.token] : [], healRoll, {itemData: itemData, flavor: \"Healing Glyph\"});\n                                    new Sequence()\n\n                                    .effect()\n                                    .file(\"jb2a.particle_burst.01.circle.green\")\n                                    .attachTo(token)\n                                    .scaleToObject(3)\n                                    .opacity(1)\n                                    .zIndex(0)\n                                    .belowTokens(false)\n                                    .fadeIn(1500)\n                                    .fadeOut(1500)\n\n                                    .play()\n\n                                    let displayHp = healTotal;\n                                    if((healTotal + targetCurrentHp) > targetMaxHp) displayHp = targetMaxHp - targetCurrentHp;\n\n                                    let content = \\`Healing Glyph heals you for \\` + displayHp + \\` hit points.\\`;\n                                    let actorPlayer = MidiQOL.playerForActor(validTarget.actor);\n                                    let chatData = {\n                                    user: actorPlayer.id,\n                                    speaker: ChatMessage.getSpeaker({ token: validTarget }),\n                                    content: content\n                                    };\n                                    ChatMessage.create(chatData);\n                                }\n                            }\n                        ];\n\n                        // Dynamically add buttons based on conditions\n                        if (effectBlinded) {\n                            buttons.push({\n                                action: \"Restoration - Blinded\",\n                                label: \"Restoration - Blinded\",\n                                callback: async () => {\n                                    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: validTarget.actor.uuid, effects: [effectBlinded.id] });\n                                    content = \"Healing Glyph removes the Blinded Effect\";\n                                    let actorPlayer = MidiQOL.playerForActor(validTarget.actor);\n                                    let chatData = {\n                                    user: actorPlayer.id,\n                                    speaker: ChatMessage.getSpeaker({ token: validTarget }),\n                                    content: content\n                                    };\n                                    ChatMessage.create(chatData);\n                                }\n                            });\n                        }\n\n                        if (effectDeafened) {\n                            buttons.push({\n                                action: \"Restoration - Deafened\",\n                                label: \"Restoration - Deafened\",\n                                callback: async () => {\n                                    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: validTarget.actor.uuid, effects: [effectDeafened.id] });\n                                    content = \"Healing Glyph removes the Deafened Effect\";\n                                    let actorPlayer = MidiQOL.playerForActor(validTarget.actor);\n                                    let chatData = {\n                                    user: actorPlayer.id,\n                                    speaker: ChatMessage.getSpeaker({ token: validTarget }),\n                                    content: content\n                                    };\n                                    ChatMessage.create(chatData);\n                                }\n                            });\n                        }\n\n                        if (effectParalyzed) {\n                            buttons.push({\n                                action: \"Restoration - Paralyzed\",\n                                label: \"Restoration - Paralyzed\",\n                                callback: async () => {\n                                    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: validTarget.actor.uuid, effects: [effectParalyzed.id] });\n                                    content = \"Healing Glyph removes the Paralyzed Effect\";\n                                    let actorPlayer = MidiQOL.playerForActor(validTarget.actor);\n                                    let chatData = {\n                                    user: actorPlayer.id,\n                                    speaker: ChatMessage.getSpeaker({ token: validTarget }),\n                                    content: content\n                                    };\n                                    ChatMessage.create(chatData);\n                                }\n                            });\n                        }\n\n                        if (effectPoisoned) {\n                            buttons.push({\n                                action: \"Restoration - Poisoned\",\n                                label: \"Restoration - Poisoned\",\n                                callback: async () => {\n                                    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: validTarget.actor.uuid, effects: [effectPoisoned.id] });\n                                    content = \"Healing Glyph removes the Poisoned Effect\";\n                                    let actorPlayer = MidiQOL.playerForActor(validTarget.actor);\n                                    let chatData = {\n                                    user: actorPlayer.id,\n                                    speaker: ChatMessage.getSpeaker({ token: validTarget }),\n                                    content: content\n                                    };\n                                    ChatMessage.create(chatData);\n                                }\n                            });\n                        }\n                        await foundry.applications.api.DialogV2.wait({\n                            window: { title: '${validTarget.actor.name} | Healing Glyph' },\n                            content: \\`\n                                <div class='gps-dialog-container'>\n                                    <div class='gps-dialog-section'>\n                                        <div class='gps-dialog-content'>\n                                            <div>\n                                                <div class='gps-dialog-flex'>\n                                                    <p class='gps-dialog-paragraph'>How would you like to use the Healing Glyph effect?</p>\n                                                    <div id='image-container' class='gps-dialog-image-container'>\n                                                        <img src='${macroItem.img}' class='gps-dialog-image'>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>\n                            \\`,\n                            buttons: buttons,\n                            default: \"healing\"\n                        });\n                    `\n                }\n            }\n        }\n    }];\n\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: validTarget.actor.uuid, effects: tempEffectData });\n    await wait(100);\n    let tempEffectRemoveOpp = validTarget.actor.appliedEffects.find(i => i.name.toLowerCase() === \"healing glyph\");\n    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: validTarget.actor.uuid, effects: [tempEffectRemoveOpp.id] });\n    }\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.3.5",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "midi-qol": {
+      "AoETargetType": "any",
+      "AoETargetTypeIncludeSelf": true,
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "effectActivation": false,
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[templatePlaced]ItemMacro",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "tidy5e-sheet": {
+      "action-filter-override": true,
+      "actionSection": "",
+      "section": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "region-attacher": {
+      "attachRegionToTemplate": false
+    },
+    "chris-premades": {
+      "info": {
+        "source": "gambits-premades",
+        "version": "0.5.0"
+      }
+    }
+  },
+  "folder": null,
+  "_id": "10NaF6o9vp9CZ6Q9",
+  "_key": "!items!10NaF6o9vp9CZ6Q9"
+}

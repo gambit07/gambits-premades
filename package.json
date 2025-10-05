@@ -2,10 +2,19 @@
   "name": "gambits-premades",
   "type": "commonjs",
   "scripts": {
+    "prebuild": "npm run buildCompendiums",
+    "build": "webpack",
+    "buildCompendiums": "node packData/packData.mjs",
     "release": "node update-module.js",
     "prepare": "husky install"
   },
+  "dependencies": {
+    "terser-webpack-plugin": "^5.3.9",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
   "devDependencies": {
+    "@foundryvtt/foundryvtt-cli": "^3.0.0",
     "husky": "^8.0.3"
   }
 }

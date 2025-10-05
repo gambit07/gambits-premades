@@ -1,0 +1,15 @@
+{
+  "name": "Rust Monster",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "KXFmyecWVGyjMN4Y",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "0f3dd1d4b8d42d517dfc921efabbffe9099bbf2a"
+    }
+  },
+  "description": "",
+  "_key": "!folders!KXFmyecWVGyjMN4Y"
+}

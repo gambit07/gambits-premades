@@ -1,0 +1,15 @@
+{
+  "name": "Ranger",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "NowaLJ3HLS3vH4W7",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "959b4058ebf9e7251490ef964d9a9bceba5a2334"
+    }
+  },
+  "description": "",
+  "_key": "!folders!NowaLJ3HLS3vH4W7"
+}

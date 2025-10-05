@@ -1,0 +1,366 @@
+{
+  "name": "Dipolar Gages",
+  "type": "equipment",
+  "img": "modules/abyssal-brews-magical-kompendium-vol2/artwork/Dipolar%20Gages.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires Midi QOL, DAE, Dfreds CE. This item comes from the Abyssal Brews patreon, subscribe to the Abyssal Brews patreon at </em><a href=\"https://www.patreon.com/abyssalbrews\" title=\"Abyssal Brews\"><em>https://www.patreon.com/abyssalbrews</em></a></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "0.0.38",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "attunement": "required",
+    "equipped": true,
+    "rarity": "rare",
+    "identified": true,
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "2",
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 2
+    },
+    "armor": {
+      "value": null,
+      "dex": null,
+      "magicalBonus": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "speed": {
+      "value": null,
+      "conditions": ""
+    },
+    "strength": null,
+    "proficient": null,
+    "unidentified": {
+      "description": ""
+    },
+    "type": {
+      "value": "clothing",
+      "baseItem": ""
+    },
+    "container": null,
+    "properties": [],
+    "attuned": true,
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "special",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [
+            {
+              "type": "itemUses",
+              "target": "",
+              "value": "1",
+              "scaling": {
+                "mode": "",
+                "formula": ""
+              }
+            }
+          ],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "ft"
+          },
+          "affects": {
+            "count": "",
+            "type": "self",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "dipolar-gages"
+  },
+  "effects": [
+    {
+      "name": "Dipolar Gages",
+      "origin": "Actor.4rgwJtcvBFEmAQ4A.Item.QHaSUe6nNJkA4BwS",
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "transfer": true,
+      "disabled": false,
+      "_id": "s5vVugxWuFKNWeL3",
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro,preDamageRoll",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro,isAttacked",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "statuses": [],
+      "flags": {
+        "times-up": {
+          "isPassive": true
+        },
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        },
+        "effectmacro": {}
+      },
+      "tint": "#ffffff",
+      "img": "modules/abyssal-brews-magical-kompendium-vol2/artwork/Dipolar%20Gages.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!Sahgrs44C8h5pVyJ.s5vVugxWuFKNWeL3"
+    }
+  ],
+  "folder": null,
+  "flags": {
+    "archon": {
+      "uuid": "Item.e4iAhRoZr1qxIhRq"
+    },
+    "core": {},
+    "scene-packer": {
+      "hash": "ed01ea02d7528322e8aca479e557c70f07c7f50e",
+      "sourceId": "Compendium.world.gps-homebrew-items.Item.zU5rb6IHhnrk4kHv"
+    },
+    "character-actions-list-5e": {
+      "filter-override": true
+    },
+    "midi-qol": {
+      "onUseMacroName": "[isAttacked]ItemMacro",
+      "effectActivation": false,
+      "itemCondition": "",
+      "reactionCondition": "reaction === \"isAttacked\"",
+      "otherCondition": "",
+      "effectCondition": "",
+      "rollAttackPerTarget": "default"
+    },
+    "midiProperties": {
+      "confirmTargets": "never",
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "ddbimporter": {
+      "overrideId": "NONE",
+      "ignoreIcon": false,
+      "ignoreItemImport": true,
+      "ignoreItemForChrisPremades": false,
+      "retainResourceConsumption": false,
+      "ignoreItemUpdate": false
+    },
+    "dae": {
+      "macro": {
+        "name": "Dipolar Gages",
+        "img": "modules/abyssal-brews-magical-kompendium-vol2/artwork/Dipolar%20Gages.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if (args[0].macroPass === \"preDamageRoll\" && workflow.hitTargets.first() && workflow.item.system.actionType === 'mwak') {\n\tconst itemCharges = macroItem.system.uses.value;\n\tconst newItemCharges = itemCharges - 1;\n\tif(itemCharges === 0) return;\n\tlet dialog = new Dialog({\n\ttitle: `Dipolar Gages`,\n\tcontent: `\n\t\t\t\t<div style=\"display: flex; align-items: center; justify-content: space-between;\">\n\t\t\t\t\t<div style=\"flex: 1;\">\n\t\t\t\t\t\t<p>Would you like to use a charge of Dipolar Gages to push your target 15 feet away from you and attempt to knock them prone?<br/><br/>You have <b>${itemCharges}</b> charges available.</p>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div style=\"border-left: 1px solid #ccc; padding-left: 10px; text-align: center;\">\n\t\t\t\t\t\t<p><b>Time remaining</b></p>\n\t\t\t\t\t\t<p><span id=\"countdown\" style=\"font-size: 16px; color: red; align: center;\">15</span> seconds</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>`,\n\t\tbuttons: {\n\t\t\trecover: {\n\t\t\t\tlabel: \"Continue\", callback: async (html) => {\n\t\t\t\t\tawait MidiQOL.moveTokenAwayFromPoint(workflow.hitTargets.first(), 15, {x: token.center.x, y: token.center.y}, animate = false);\n\t\t\t\t\tlet content = `You successfully push the creature back 15 feet.`\n\t\t\t\t\tlet actorPlayer = MidiQOL.playerForActor(actor);\n\t\t\t\t\tlet chatData = {\n\t\t\t\t\tuser: actorPlayer.id,\n\t\t\t\t\tspeaker: ChatMessage.getSpeaker({ token: token }),\n\t\t\t\t\tcontent: content\n\t\t\t\t\t};\n\t\t\t\t\tChatMessage.create(chatData);\n\t\t\t\t\t\n\t\t\t\t\tconst itemData = macroItem.clone(\n\t\t\t\t\t{\n\t\t\t\t\tname: \"Dipolar Gages Save\",\n\t\t\t\t\ttype: \"feat\",\n\t\t\t\t\teffects: [],\n\t\t\t\t\tflags: {\n\t\t\t\t\t\t\"midi-qol\": {\n\t\t\t\t\t\tnoProvokeReaction: true,\n\t\t\t\t\t\tonUseMacroName: null,\n\t\t\t\t\t\tforceCEOff: true\n\t\t\t\t\t\t},\"midiProperties\": {\n\t\t\t\t\t\tnodam: true \n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\tsystem: {\n\t\t\t\t\t\tequipped: true,\n\t\t\t\t\t\tactionType: \"save\",\n\t\t\t\t\t\tsave: { dc: 15, ability: \"dex\", scaling: \"flat\" },\n\t\t\t\t\t\tcomponents: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n\t\t\t\t\t\tduration: { units: \"inst\", value: undefined },\n\t\t\t\t\t\tactivation: {type: \"\", cost: null, condition: \"\"},\n\t\t\t\t\t\ttarget: {value: null, width: null, units: \"\", type: \"self\"}\n\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\t{ keepId:true }\n\t\t\t\t\t);\n\n\t\t\t\t\titemData.system.target.type = \"self\";\n\t\t\t\t\tsetProperty(itemData.flags, \"autoanimations.killAnim\", true);\n\t\t\t\t\tconst itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: workflow.hitTargets.first().actor });\n\t\t\t\t\tconst options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n\t\t\t\t\tconst saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\t\t\t\t\tif (saveResult.failedSaves.size === 1) {\n\t\t\t\t\t\tconst uuid = workflow.hitTargets.first().actor.uuid;\n\t\t\t\t\t\tconst hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Prone', uuid);\n\n\t\t\t\t\t\tif (!hasEffectApplied) {\n\t\t\t\t\t\tawait game.dfreds.effectInterface.addEffect({ effectName: 'Prone', uuid });\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tawait macroItem.update({ \"system.uses.value\": newItemCharges });\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t},\n\t\t\tcancel: { label: \"Cancel\", callback: () => false }\n\t\t},\n\t\t\tdefault: \"Cancel\",\n\t\t\trender: (html) => {\n\t\t\t\tlet timeLeft = 15;\n\t\t\t\tconst countdownElement = html.find(\"#countdown\");\n\t\t\t\tconst timer = setInterval(() => {\n\t\t\t\t\ttimeLeft--;\n\t\t\t\t\tcountdownElement.text(timeLeft);\n\t\t\t\t\tif (timeLeft <= 0) {\n\t\t\t\t\t\tclearInterval(timer);\n\t\t\t\t\t\tdialog.close();\n\t\t\t\t\t}\n\t\t\t\t}, 1000);\n\n\t\t\t\tsetTimeout(() => {\n\t\t\t\t\tclearInterval(timer);\n\t\t\t\t\tif (timeLeft > 0) dialog.close();\n\t\t\t\t}, timeLeft * 1000);\n\t\t\t}\n\t\t});\n    dialog.render(true);\n};\n\nif(args[0].macroPass === \"isAttacked\" && workflow.item.system.actionType === \"mwak\" && workflow.attackTotal < actor.system.attributes.ac.value) {\nconst itemCharges = macroItem.system.uses.value;\nconst newItemCharges = itemCharges - 1;\nconst uuid = actor.uuid;\nlet chatMessage = game.messages.contents.slice(-2)[0];\nchatMessage = chatMessage.flags[\"midi-qol\"].workflowId;\nconst workflowOrigin = await MidiQOL.Workflow.getWorkflow(chatMessage);\n\nlet dialog = new Dialog({\n  title: `Dipolar Gages`,\n  content: `\n            <div style=\"display: flex; align-items: center; justify-content: space-between;\">\n                <div style=\"flex: 1;\">\n                    <p>Would you like to use your reaction and a charge of Dipolar Gages to attempt to take your attacker's weapon?<br/><br/><b>The weapon must be made of a magnetic metal - Confirm with GM before using ;)</b><br/><br/>You have <b>${itemCharges}</b> charges available.</p>\n                </div>\n                <div style=\"border-left: 1px solid #ccc; padding-left: 10px; text-align: center;\">\n                    <p><b>Time remaining</b></p>\n                    <p><span id=\"countdown\" style=\"font-size: 16px; color: red; align: center;\">15</span> seconds</p>\n                </div>\n            </div>`,\n\tbuttons: {\n\t\trecover: {\n\t\t\tlabel: \"Continue\", callback: async (html) => {\n\t\t\t\tconst itemData = macroItem.clone(\n\t\t\t\t{\n\t\t\t\tname: \"Dipolar Gages Save\",\n\t\t\t\ttype: \"feat\",\n\t\t\t\teffects: [],\n\t\t\t\tflags: {\n\t\t\t\t\t\"midi-qol\": {\n\t\t\t\t\tnoProvokeReaction: true,\n\t\t\t\t\tonUseMacroName: null,\n\t\t\t\t\tforceCEOff: true\n\t\t\t\t\t},\"midiProperties\": {\n\t\t\t\t\tnodam: true \n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\tsystem: {\n\t\t\t\t\tequipped: true,\n\t\t\t\t\tactionType: \"save\",\n\t\t\t\t\tsave: { dc: 15, ability: \"str\", scaling: \"flat\" },\n\t\t\t\t\tcomponents: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n\t\t\t\t\tduration: { units: \"inst\", value: undefined },\n\t\t\t\t\tactivation: {type: \"\", cost: null, condition: \"\"},\n\t\t\t\t\ttarget: {value: null, width: null, units: \"\", type: \"self\"}\n\t\t\t\t},\n\t\t\t\t},\n\t\t\t\t{ keepId:true }\n\t\t\t\t);\n\t\t\t\titemData.system.target.type = \"self\";\n\t\t\t\tsetProperty(itemData.flags, \"autoanimations.killAnim\", true);\n\t\t\t\tconst itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: workflowOrigin.actor });\n\t\t\t\tconst options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n                const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n\t\t\t\tif (saveResult.failedSaves.size === 1) {\n\t\t\t\t\tawait game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });\n\t\t\t\t\tawait workflowOrigin.item.update({ \"system.equipped\": false });\n\t\t\t\t\tlet content = `Your ${workflowOrigin.item.name} is taken from your hands by ${actor.name}.`\n\t\t\t\t\tlet actorPlayer = MidiQOL.playerForActor(workflowOrigin.actor);\n\t\t\t\t\tlet chatData = {\n\t\t\t\t\tuser: actorPlayer.id,\n\t\t\t\t\tspeaker: ChatMessage.getSpeaker({ token: workflowOrigin.token }),\n\t\t\t\t\tcontent: content\n\t\t\t\t\t};\n\t\t\t\t\tChatMessage.create(chatData);\n\t\t\t\t}\n\t\t\t\tawait macroItem.update({ \"system.uses.value\": newItemCharges });\n\t\t\t\treturn;\n\t\t\t}\n\t\t},\n\t\tcancel: { label: \"Cancel\", callback: () => false }\n\t},\n        default: \"Cancel\",\n        render: (html) => {\n            let timeLeft = 15;\n            const countdownElement = html.find(\"#countdown\");\n            const timer = setInterval(() => {\n                timeLeft--;\n                countdownElement.text(timeLeft);\n                if (timeLeft <= 0) {\n                    clearInterval(timer);\n                    dialog.close();\n                }\n            }, 1000);\n\n            setTimeout(() => {\n                clearInterval(timer);\n                if (timeLeft > 0) dialog.close();\n            }, timeLeft * 1000);\n        }\n    });\n    dialog.render(true);\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "link-item-resource-5e": {
+      "resource-link": ""
+    },
+    "tidy5e-sheet": {
+      "favorite": false
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      },
+      "migratedUses": 0
+    }
+  },
+  "_id": "Sahgrs44C8h5pVyJ",
+  "_key": "!items!Sahgrs44C8h5pVyJ"
+}

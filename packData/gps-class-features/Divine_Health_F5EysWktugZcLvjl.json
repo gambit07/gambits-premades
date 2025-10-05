@@ -1,0 +1,170 @@
+{
+  "name": "Divine Health",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "1.0.1",
+      "rules": "2014",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "Paladin 3",
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "identifier": "divine-health",
+    "activities": {},
+    "advancement": [],
+    "enchant": {}
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 265,
+      "data": {
+        "id": 265,
+        "name": "Divine Health",
+        "prerequisite": null,
+        "description": "<p class=\"Core-Styles_Core-Body\">By 3rd level, the divine magic flowing through you makes you immune to disease.</p>",
+        "requiredLevel": 3,
+        "displayOrder": 8
+      },
+      "version": "3.4.63",
+      "featureId": 265,
+      "featureName": "Divine Health",
+      "requiredLevel": 3,
+      "prerequisite": null,
+      "class": "Paladin",
+      "classId": 4,
+      "subClass": "",
+      "parentClassId": null
+    },
+    "obsidian": {
+      "source": {
+        "type": "class",
+        "text": "Paladin"
+      }
+    },
+    "scene-packer": {
+      "sourceId": "Item.",
+      "hash": "fd0d342d88715a6505ba9f62788a768d3f35b10a"
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/magic/life/cross-worn-green.webp",
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-class-features.Item.F5EysWktugZcLvjl",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Divine Health",
+      "img": "icons/magic/life/cross-worn-green.webp",
+      "_id": "JdqqSYmmv9DHxxj1",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "system.traits.ci.value",
+          "mode": 2,
+          "value": "diseased",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_key": "!items.effects!F5EysWktugZcLvjl.JdqqSYmmv9DHxxj1"
+    }
+  ],
+  "folder": "Rr6FA73OqipfG65M",
+  "_id": "F5EysWktugZcLvjl",
+  "_key": "!items!F5EysWktugZcLvjl"
+}

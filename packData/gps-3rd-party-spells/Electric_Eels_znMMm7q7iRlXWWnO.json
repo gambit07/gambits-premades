@@ -1,0 +1,652 @@
+{
+  "name": "Electric Eels",
+  "type": "spell",
+  "img": "icons/magic/lightning/bolt-strike-sparks-teal.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires Token Magic FX and Portal. This item comes from Kobold Press' Deep Magic 2, purchase at </em><a class=\"hyperlink\" href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" target=\"_blank\" rel=\"nofollow noopener\"><em>https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/</em></a></p><p></p><p><strong>To use this spell, add this item to the characters sheet, and add the Electric Eel actor from the GPS Actors compendium to your actors sidebar.</strong></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "1.0.8",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "activation": {
+      "type": "action",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "1",
+      "units": "hour"
+    },
+    "target": {
+      "affects": {
+        "choice": false,
+        "type": ""
+      },
+      "template": {
+        "units": "ft",
+        "contiguous": false,
+        "type": ""
+      }
+    },
+    "range": {
+      "value": "60",
+      "units": "self",
+      "special": ""
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "ability": "",
+    "level": 4,
+    "school": "evo",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal",
+      "somatic",
+      "material"
+    ],
+    "sourceClass": "",
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "sC8LPNOsmlare51n"
+          }
+        ],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": false,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "useConditionReason": "",
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "electric-eels",
+    "method": "spell",
+    "prepared": 1
+  },
+  "effects": [
+    {
+      "origin": "Actor.1xFtQVMnMyuFm2w2.Item.bRNDK6dWXpSAg2qt",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 3600,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Electric Eels",
+      "img": "icons/magic/lightning/bolt-strike-sparks-teal.webp",
+      "_id": "sC8LPNOsmlare51n",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "enableCondition": "",
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "selfTarget": true,
+          "selfTargetAlways": true,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": true,
+          "aura": "Allies",
+          "nameOverride": "",
+          "radius": "5",
+          "alignment": "",
+          "type": "",
+          "customCheck": "token.actor.name === 'Electric Eel'",
+          "ignoreSelf": true,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "_key": "!items.effects!znMMm7q7iRlXWWnO.sC8LPNOsmlare51n"
+    }
+  ],
+  "flags": {
+    "core": {},
+    "scene-packer": {
+      "hash": "ce3a2256378c282f1a3480e0ed773118399f7a7c",
+      "sourceId": "Compendium.world.gps-homebrew-spells.Item.DNMd8aCqnoIToyuT"
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault",
+      "attachToken": "na",
+      "addTokenSize": true,
+      "hideBorder": "globalDefault",
+      "hideHighlighting": "globalDefault",
+      "showOnHover": "globalDefault",
+      "noAutotarget": false
+    },
+    "dae": {
+      "macro": {
+        "name": "Electric Eels",
+        "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(!game.modules.get(\"portal-lib\")?.active) return ui.notifications.error(\"You must install the Portal module to use the Scatter automation.\");\n\nif (args[0].macroPass === \"postActiveEffects\") {\n\n    const electricEel1 = await new Portal()\n        .color(\"#ff0000\")\n        .origin(token)\n        .addCreature(\"Electric Eel\", {count: 1})\n        .range(60)\n        .spawn();\n\n    if (!electricEel1) {\n        console.error(\"No valid location picked.\");\n        return;\n    }\n    \n    new Sequence()\n        .effect()\n        .file('jb2a.lightning_bolt.wide.green')\n        .atLocation(token)\n        .stretchTo(electricEel1[0].object)\n    .play()\n\n    const electricEel2 = await new Portal()\n        .color(\"#ff0000\")\n        .origin(token)\n        .addCreature(\"Electric Eel\", {count: 1})\n        .range(60)\n        .spawn();\n\n    if (!electricEel2) {\n        console.error(\"No valid location picked.\");\n        return;\n    }\n\n    new Sequence()\n        .effect()\n        .file('jb2a.lightning_bolt.wide.green')\n        .duration(1200)\n        .fadeOut(500)\n        .fadeIn(200)\n        .atLocation(token)\n        .stretchTo(electricEel2[0].object)\n    .play()\n\n    let params = [{\n        filterType: \"electric\",\n        filterId: \"myElectric\",\n        color: 0xFFFFFF,\n        time: 0,\n        blend: 1,\n        intensity: 5,\n        animated: {\n        time: { \n            active: true, \n            speed: 0.0020, \n            animType: \"move\" \n        }\n        }\n    }];\n\n    await TokenMagic.addUpdateFilters(electricEel1[0].object, params);\n    await TokenMagic.addUpdateFilters(electricEel2[0].object, params);\n}\n\nif(args[0].macroPass === \"preActiveEffects\") {\n  const actorData = game.actors.find(a => a.name === \"Electric Eel\");\n  if(!actorData) return;\n  const spellcastingAbility = actor.system.attributes.spellcasting;\n  const spellCastingTotal = actor.system.abilities[spellcastingAbility].value;\n  let updateData = {\n    [`system.attributes.spellcasting`]: spellcastingAbility,\n    [`system.abilities.${spellcastingAbility}.value`]: spellCastingTotal\n};\n  await actorData.update(updateData)\n}\n\nif(args[0] === \"off\") {\n    const effectOriginActor = await fromUuid(args[1].efData.flags.dae.actor);\n    if(effectOriginActor.uuid === actor.uuid) {\n        const tokensToDelete = canvas.tokens.placeables.filter(token => token.name === \"Electric Eel\").map(token => token.id);\n\n        if (tokensToDelete.length > 0) {\n            canvas.scene.deleteEmbeddedDocuments(\"Token\", tokensToDelete);\n        }\n    }\n    else {\n        let diValues = effectOriginActor.system.traits.di.value.has(\"lightning\");\n        let drValues = effectOriginActor.system.traits.dr.value.has(\"lightning\");\n\n        if (actor.name === \"Electric Eel\") {\n            if (diValues) { \n                effectOriginActor.system.traits.di.value.delete('lightning');\n                effectOriginActor.system.traits.dr.value.add('lightning');\n            } \n            else if(drValues) {\n                effectOriginActor.system.traits.dr.value.delete('lightning');\n            }\n        }\n    }\n}\n\nif(args[0] === \"on\") {\n    console.log(arguments)\n    console.log(args)\n    console.log(effect)\n    console.log(item)\n    const effectOriginActor = await fromUuid(args[1].efData.flags.dae.actor);\n\n    let drValues = effectOriginActor.system.traits.dr.value.has(\"lightning\");\n\n    if (actor.name === \"Electric Eel\") {\n        if (!drValues) {\n            effectOriginActor.system.traits.dr.value.add('lightning');\n        } \n        else {\n            effectOriginActor.system.traits.di.value.add('lightning');\n            effectOriginActor.system.traits.dr.value.delete('lightning');\n        }\n    }\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.3.5",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "midi-qol": {
+      "fumbleThreshold": null,
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "effectActivation": false,
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[postActiveEffects]ItemMacro,[preActiveEffects]ItemMacro",
+      "AoETargetType": "any",
+      "AoETargetTypeIncludeSelf": true,
+      "autoTarget": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "tidy5e-sheet": {
+      "action-filter-override": true,
+      "section": "",
+      "actionSection": ""
+    },
+    "templatemacro": {
+      "whenEntered": {
+        "asGM": false,
+        "command": "const effectOriginActor = await fromUuid(template.flags[\"midi-qol\"].actorUuid);\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\nif (token.actor.name === \"Electric Eel\") {\n    let drValues = effectOriginToken.actor.system.traits.dr.value.has(\"lightning\");\n    if (!drValues) {\n        effectOriginToken.actor.system.traits.dr.value.add('lightning');\n    }\n    else{\n        effectOriginToken.actor.system.traits.di.value.add('lightning');\n    }\n}"
+      },
+      "whenLeft": {
+        "asGM": false,
+        "command": "const effectOriginActor = await fromUuid(template.flags[\"midi-qol\"].actorUuid);\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\nif (token.actor.name === \"Electric Eel\") {\n    let diValues = effectOriginToken.actor.system.traits.di.value.has(\"lightning\");\n    if (diValues) {\n        effectOriginToken.actor.system.traits.di.value.delete('lightning');\n    }\n    else{\n        effectOriginToken.actor.system.traits.dr.value.delete('lightning');\n    }\n}"
+      }
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "region-attacher": {
+      "attachRegionToTemplate": false,
+      "regionBehaviors": [
+        {
+          "name": "onEnter",
+          "type": "executeScript",
+          "_id": "vQPnqOUAUICrkmsG",
+          "system": {
+            "events": [
+              "tokenEnter"
+            ],
+            "source": "console.log(\"onEnter\")\nlet regionActor = region?.flags[\"region-attacher\"]?.actorUuid;\nif(regionActor) {\nconst effectOriginActor = await fromUuid(region.flags[\"region-attacher\"].actorUuid);\n\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\nif (event.data?.token?.actor.name === \"Electric Eel\") {\n    let drValues = effectOriginToken.actor.system.traits.dr.value.has(\"lightning\");\n    if (!drValues) {\n        effectOriginToken.actor.system.traits.dr.value.add('lightning');\n    }\n    else{\n        effectOriginToken.actor.system.traits.di.value.add('lightning');\n    }\n}\n}"
+          },
+          "disabled": false,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "coreVersion": "12.331",
+            "systemId": "dnd5e",
+            "systemVersion": "3.3.1",
+            "createdTime": null,
+            "modifiedTime": null,
+            "lastModifiedBy": null
+          }
+        },
+        {
+          "name": "onExit",
+          "type": "executeScript",
+          "_id": "b77e2tGkcvDhxeOX",
+          "system": {
+            "events": [
+              "tokenExit"
+            ],
+            "source": "console.log(\"onExit\")\nlet regionActor = region?.flags[\"region-attacher\"]?.actorUuid;\nif(regionActor) {\nconst effectOriginActor = await fromUuid(region.flags[\"region-attacher\"]?.actorUuid);\n\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\nif (event.data.token.actor.name === \"Electric Eel\") {\n    let diValues = effectOriginToken.actor.system.traits.di.value.has(\"lightning\");\n    if (diValues) {\n        effectOriginToken.actor.system.traits.di.value.delete('lightning');\n    }\n    else{\n        effectOriginToken.actor.system.traits.dr.value.delete('lightning');\n    }\n}\n}"
+          },
+          "disabled": false,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "coreVersion": "12.331",
+            "systemId": "dnd5e",
+            "systemVersion": "3.3.1",
+            "createdTime": null,
+            "modifiedTime": null,
+            "lastModifiedBy": null
+          }
+        },
+        {
+          "name": "onStateChange",
+          "type": "executeScript",
+          "_id": "bEZgtFa2jXjEjRdW",
+          "system": {
+            "events": [
+              "behaviorStatus"
+            ],
+            "source": "if(event.data.active) {\nasync function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }\nawait wait(500);\nconsole.log(event)\n\nlet regionActor = region?.flags[\"region-attacher\"]?.actorUuid;\n\nif(regionActor) {\nconst effectOriginActor = await fromUuid(regionActor);\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\nlet attachedRegions = effectOriginActor.getFlag('gambits-premades', 'attachedRegions') || [];\n                attachedRegions.push(region.uuid);\n                await effectOriginActor.setFlag('gambits-premades', 'attachedRegions', attachedRegions);\n}\n}"
+          },
+          "disabled": false,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "coreVersion": "12.331",
+            "systemId": "dnd5e",
+            "systemVersion": "3.3.1",
+            "createdTime": null,
+            "modifiedTime": null,
+            "lastModifiedBy": null
+          }
+        }
+      ]
+    },
+    "chris-premades": {
+      "info": {
+        "source": "gambits-premades",
+        "version": "0.5.25"
+      }
+    },
+    "autoanimations": {
+      "id": "2788a82f-7927-4e31-affb-b28fd9c576b5",
+      "label": "Electric Eels",
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      },
+      "macro": {
+        "enable": false
+      },
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular"
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "club",
+          "variant": "01",
+          "color": "white",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": false,
+      "isCustomized": false,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": null,
+  "_id": "znMMm7q7iRlXWWnO",
+  "_key": "!items!znMMm7q7iRlXWWnO"
+}

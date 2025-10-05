@@ -1,0 +1,936 @@
+{
+  "type": "spell",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.0.8",
+      "revision": 1,
+      "rules": "2024",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "activation": {
+      "type": "action",
+      "condition": "false",
+      "value": 1
+    },
+    "duration": {
+      "value": "1",
+      "units": "minute"
+    },
+    "target": {
+      "affects": {
+        "choice": false,
+        "count": "",
+        "type": ""
+      },
+      "template": {
+        "units": "ft",
+        "type": "",
+        "size": "5",
+        "contiguous": false,
+        "count": ""
+      }
+    },
+    "range": {
+      "value": "60",
+      "units": "ft",
+      "special": ""
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": null
+    },
+    "ability": "",
+    "level": 2,
+    "school": "con",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": null,
+      "supply": null
+    },
+    "properties": [
+      "vocal",
+      "somatic",
+      "material",
+      "concentration"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "pCcWkTZ9j8Yp7gN9"
+          }
+        ],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft",
+            "type": "cube",
+            "size": "5",
+            "count": ""
+          },
+          "affects": {
+            "choice": false,
+            "count": "",
+            "type": ""
+          },
+          "override": true
+        },
+        "uses": {
+          "spent": null,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "identifier": "",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "useConditionReason": "",
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "cloud-of-daggers",
+    "method": "spell",
+    "prepared": 1
+  },
+  "name": "Cloud of Daggers",
+  "flags": {
+    "ddbimporter": {
+      "id": 136217,
+      "definitionId": 2327,
+      "entityTypeId": 435869154,
+      "dndbeyond": {
+        "lookup": "classSpell",
+        "lookupName": "generic",
+        "level": 9,
+        "castAtLevel": null,
+        "class": "Bard",
+        "characterClassId": 115283842,
+        "spellLevel": 2,
+        "ability": "cha",
+        "mod": 4,
+        "dc": 16,
+        "cantripBoost": false,
+        "overrideDC": false,
+        "id": 136217,
+        "entityTypeId": 435869154,
+        "healingBoost": 0,
+        "usesSpellSlot": true,
+        "forceMaterial": false
+      },
+      "originalName": "Cloud of Daggers",
+      "sources": [
+        {
+          "sourceId": 2,
+          "pageNumber": 222,
+          "sourceType": 1
+        }
+      ],
+      "tags": [
+        "Damage"
+      ],
+      "version": "3.6.0",
+      "effectsApplied": true,
+      "pack": "world.ddb-spelljammer-adventures-in-space-ddb-override",
+      "importId": "cnFbt2Z7bN7kvfb9",
+      "originalItemName": "Cloud of Daggers",
+      "replaced": true
+    },
+    "midiProperties": {
+      "magicdam": false,
+      "magiceffect": false,
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "never",
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "scene-packer": {
+      "sourceId": "Item.o7OPpweRYAsxuUwu",
+      "hash": "ad6b3ccb72df6a9122804d94fa045b5d6bd295c1"
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault",
+      "attachToken": "na",
+      "addTokenSize": false,
+      "noAutotarget": false,
+      "hideBorder": "globalDefault",
+      "hideHighlighting": "globalDefault",
+      "showOnHover": "globalDefault"
+    },
+    "midi-qol": {
+      "effectActivation": true,
+      "onUseMacroName": "[templatePlaced]function.game.gps.cloudOfDaggers2024,[postActiveEffects]function.game.gps.cloudOfDaggers2024",
+      "AoETargetType": "any",
+      "AoETargetTypeIncludeSelf": true,
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": "false",
+      "removeAttackDamageButtons": "default"
+    },
+    "core": {},
+    "itemacro": {
+      "macro": {
+        "name": "Cloud of Daggers",
+        "img": "icons/skills/ranged/daggers-thrown-salvo-green.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if (args[0].macroPass === \"preActiveEffects\") {\nreturn await game.modules.get(\"ActiveAuras\").api.AAHelpers.applyTemplate(args);\n}\nconsole.log(args)\nif (args[0] === 'each') {\n    console.log(\"made it here\")\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "dae": {
+      "macro": {
+        "name": "Cloud of Daggers",
+        "img": "icons/skills/ranged/daggers-thrown-salvo-green.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "templatemacro": {},
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "autoanimations": {
+      "id": "4fe33caf-78de-4e1a-b667-ac101c5f2ea7",
+      "label": "Cloud of Daggers",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "templatefx",
+      "primary": {
+        "video": {
+          "dbSection": "templatefx",
+          "menuType": "circle",
+          "animation": "cloudofdaggers",
+          "variant": "kunai",
+          "color": "orange",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": true,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75,
+          "file": "modules/dnd5e-animations/assets/sounds/Spells/Whoosh/spell-whoosh-13.mp3"
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 0,
+          "isMasked": false,
+          "isWait": false,
+          "occlusionAlpha": 0.5,
+          "occlusionMode": "3",
+          "opacity": 1,
+          "persistent": true,
+          "persistType": "attachtemplate",
+          "playbackRate": 1,
+          "removeTemplate": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "rotate": 0,
+          "saturate": 0,
+          "scale": "2,1",
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1,
+          "anchor": ".25,.5"
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": false,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    },
+    "region-attacher": {
+      "attachRegionToTemplate": {
+        "dnd5eactivity000": true
+      },
+      "regionBehaviors": {
+        "dnd5eactivity000": [
+          {
+            "name": "tokenEnter",
+            "type": "executeScript",
+            "_id": "O40QtQ1hMs0RUHV3",
+            "system": {
+              "events": [
+                "tokenEnter"
+              ],
+              "source": "await game.gps.cloudOfDaggers2024({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: \"tokenEnter\", movementScenario: event.data?.movement, userId: event.user.id});"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.347",
+              "systemId": "dnd5e",
+              "systemVersion": "5.0.4",
+              "lastModifiedBy": "roRDywD19pu2VxlC",
+              "modifiedTime": 1754634075558
+            }
+          },
+          {
+            "name": "tokenEndsTurn",
+            "type": "executeScript",
+            "_id": "O8NswCmZEREgHbmE",
+            "system": {
+              "events": [
+                "tokenTurnEnd"
+              ],
+              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nawait game.gps.cloudOfDaggers2024({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: \"tokenTurnEnd\", movementScenario: event.data?.movement, userId: event.user.id});"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.347",
+              "systemId": "dnd5e",
+              "systemVersion": "5.0.4",
+              "lastModifiedBy": "roRDywD19pu2VxlC",
+              "modifiedTime": 1754634065794
+            }
+          }
+        ]
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "chris-premades": {
+      "customConfig": [
+        {
+          "value": "playAnimation",
+          "label": "CHRISPREMADES.Config.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animation"
+        },
+        {
+          "value": "color",
+          "label": "CHRISPREMADES.Config.Color",
+          "type": "select",
+          "default": "orange",
+          "category": "animation",
+          "options": [
+            {
+              "value": "blue",
+              "label": "CHRISPREMADES.Config.Colors.Blue",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "green",
+              "label": "CHRISPREMADES.Config.Colors.Green",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "purple",
+              "label": "CHRISPREMADES.Config.Colors.Purple",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "orange",
+              "label": "CHRISPREMADES.Config.Colors.Orange",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "red",
+              "label": "CHRISPREMADES.Config.Colors.Red",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "yellow",
+              "label": "CHRISPREMADES.Config.Colors.Yellow",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "dark_purple",
+              "label": "Dark Purple",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "dark_red",
+              "label": "Dark Red",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "crux": {
+      "trayVisibility": "default"
+    }
+  },
+  "effects": [
+    {
+      "name": "Cloud of Daggers",
+      "origin": "Compendium.world.gps-spells-2024.Item.eDJIU9cOb1iEWhuE",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 60,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "img": "icons/skills/ranged/daggers-thrown-salvo-green.webp",
+      "_id": "pCcWkTZ9j8Yp7gN9",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "function.game.gps.cloudOfDaggers2024 @actorUuid",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "autoanimations": {
+          "id": "4fe33caf-78de-4e1a-b667-ac101c5f2ea7",
+          "label": "Cloud of Daggers",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "circle",
+              "animation": "cloudofdaggers",
+              "variant": "kunai",
+              "color": "orange",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": true,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75,
+              "file": "modules/dnd5e-animations/assets/sounds/Spells/Whoosh/spell-whoosh-13.mp3"
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 0,
+              "isMasked": false,
+              "isWait": false,
+              "occlusionAlpha": 0.5,
+              "occlusionMode": "3",
+              "opacity": 1,
+              "persistent": true,
+              "persistType": "attachtemplate",
+              "playbackRate": 1,
+              "removeTemplate": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "rotate": 0,
+              "saturate": 0,
+              "scale": "2,1",
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1,
+              "anchor": ".25,.5"
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": false,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "multi",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "enableCondition": "",
+          "selfTarget": true,
+          "selfTargetAlways": true,
+          "dontApply": false
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        }
+      },
+      "_key": "!items.effects!K4nbHdBY6TFtz94Y.pCcWkTZ9j8Yp7gN9"
+    }
+  ],
+  "img": "icons/skills/ranged/daggers-thrown-salvo-green.webp",
+  "folder": null,
+  "_id": "K4nbHdBY6TFtz94Y",
+  "_key": "!items!K4nbHdBY6TFtz94Y"
+}

@@ -1,0 +1,240 @@
+{
+  "name": "Transient Healing",
+  "type": "feat",
+  "img": "icons/magic/life/crosses-trio-red.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires Midi QOL, DAE</em></p><p>As an action, you can select 1 ally of your choice within 30 feet and use any number up to your maximum hit dice to give them temporary hit points equal to the amount rolled with those hit dice. The hit dice are then removed from your pool of available hit dice until you finish a long rest.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "0.0.24",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "requirements": "",
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "value": "30",
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "1",
+            "type": "ally",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "transient-healing",
+    "enchant": {},
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "advancement": []
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "c09b39799a70fc6b68f913503e44f8b30a62487e",
+      "sourceId": "Item.pQ7BpXhCsPB7vbWX"
+    },
+    "dae": {
+      "macro": {
+        "name": "Transient Healing",
+        "img": "icons/magic/life/crosses-trio-red.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "const actorClasses = actor.classes;\nconst classKeys = Object.keys(actorClasses);\nconst target = workflow.targets.first();\nlet totalTempHp = 0;\nlet totalTempHpDice = [];\nlet totalFormula = [];\nlet diceList = [];\nlet chatList = [];\n\n//Check if there are any hit dice left before creating the dialog else exit\nconst totalHitDice = classKeys.reduce((acc, key) => acc + (parseInt(actorClasses[key].system.levels) - parseInt(actorClasses[key].system.hitDiceUsed)), 0);\nif (totalHitDice === 0) {\n\treturn ui.notifications.warn(\"You have no hit dice remaining.\");\n}\n\nlet content = `<p>Select the number of hit dice to use:</p><form>`;\n\nfor (const key of classKeys) {\n\tconst cls = actorClasses[key];\n\tconst hitDiceAvailable = parseInt(cls.system.levels) - parseInt(cls.system.hitDiceUsed);\n\tlet hitDiceRollType = cls.system.hitDice;\n\n\t//Skip the class if no hit dice are available\n\tif (hitDiceAvailable === 0) continue;\n\ncontent += `\n<div class=\"form-group\">\n\t<label style=\"flex: 0 0 auto; margin: 0 10px; text-align: left;\">${cls.name} - Available: <b>${hitDiceAvailable}${hitDiceRollType}</b></label>\n\t<div class=\"form-fields\">\n\t\t<button type=\"button\" class=\"hit-dice-decrement\" data-key=\"${key}\">-</button>\n\t\t<span id=\"hitDiceDisplay-${key}\" style=\"flex: 0 0 auto; margin: 0 10px; text-align: center;\">0</span>\n\t\t<button type=\"button\" class=\"hit-dice-increment\" data-key=\"${key}\">+</button>\n\t</div>\n</div>\n`;\n}\n\ncontent += `</form>`;\n\nawait new Dialog({\n\ttitle: `Use Hit Dice`,\n\tcontent: content,\n\tbuttons: {\n\trecover: {\n\t\tlabel: \"Continue\",\n\t\tcallback: async (html) => {\n\t\tlet hitDiceUsed = false;\n\t\tfor (const key of classKeys) {\n\t\t\tconst display = html.find(`#hitDiceDisplay-${key}`)[0];\n\t\t\tif (!display) continue;\n\n\t\t\tconst hitDiceToUse = parseInt(display.textContent);\n\t\t\tif (!isNaN(hitDiceToUse) && hitDiceToUse > 0) {\n\t\t\thitDiceUsed = true;\n\t\t\t}\n\n\t\t\t//Exit if no hit dice selected\n\t\t\tif (!hitDiceUsed) {\n\t\t\t  ui.notifications.warn(\"You did not select any hit dice to use.\");\n\t\t\t  return;\n\t\t\t}\n\n\t\t\t//Update the actor with the new hitDiceUsed value per class\n\t\t\tconst hitDiceRemaining = parseInt(actorClasses[key].system.hitDiceUsed) + hitDiceToUse;\n\t\t\tawait actorClasses[key].update({ 'system.hitDiceUsed': hitDiceRemaining });\n\n\t\t\t//Roll hit dice and store temp hp for the target\n\t\t\thitDiceRollType = actorClasses[key].system.hitDice;\n\t\t\tlet tempHpRoll = await new Roll(`${hitDiceToUse}${hitDiceRollType}`,actor.getRollData()).evaluate();\n\t\t\tawait MidiQOL.displayDSNForRoll(tempHpRoll, 'damageRoll')\n\t\t\ttempHpRoll.dice.forEach(die => {die.results.forEach(rollResult => {diceList.push(`<li class=\"roll die ${hitDiceRollType}\">${rollResult.result}</li>`);});});\n\t\t\ttotalTempHp += tempHpRoll.total;\n\t\t\ttotalTempHpDice.push(tempHpRoll.total);\n\t\t\ttotalFormula.push(tempHpRoll.formula);\n\t\t}\n\t\t\n\t\t\t//Update temp hp for the target and finish chat stuff\n\t\t\tconst currentTempHp = target.actor.system.attributes.hp.temp;\n\t\t\tif(currentTempHp >=totalTempHp) return ui.notifications.warn(`${target.actor.name} already has more temporary hit points than you are able to give.`);\n\t\t\tchatList = `<div class=\"flexrow 2\"><div class=\"midi-qol-damage-roll\"><div style=\"text-align:center\">(Temporary HP)</div><div class=\"dice-roll\"><div class=\"dice-result\"><h4 class=\"dice-total\">${totalTempHp}</h4><div class=\"dice-tooltip\"><section class=\"tooltip-part\"><div class=\"dice\"><header class=\"part-header flexrow\"><span class=\"part-formula\">${totalFormula.join(' + ')}</span><span class=\"part-total\">${totalTempHpDice.join(' + ')}</span></header><ol class=\"dice-rolls\">${diceList.join('')}</ol></div></section></div></div></div><div class=\"end-midi-qol-damage-roll\"></div></div></div><div class=\"midi-qol-flex-container\"><div class=\"midi-qol-target-npc midi-qol-target-name\" id=\"${target.id}\"></br>${target.actor.name} receives ${totalTempHp} temporary hit points.</div><div><img src=\"${target.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></div></div>`;\n\t\t\tawait target.actor.applyTempHP(totalTempHp);\n\t\t\tlet healResults = `<div><div class=\"midi-qol-nobox\">${chatList}</div></div>`;\n\t\t\tlet chatMessage = await game.messages.get(args[0].itemCardId);\n\t\t\tlet content = await duplicate(chatMessage.content);\n\t\t\tlet searchString = /<div class=\"midi-qol-attack-roll\">[\\s\\S]*<div class=\"end-midi-qol-attack-roll\">/g;\n\t\t\tlet replaceString = `<div class=\"midi-qol-attack-roll\"><div class=\"end-midi-qol-attack-roll\">${healResults}`;\n\t\t\tcontent = await content.replace(searchString, replaceString);\n\t\t\treturn await chatMessage.update({ content: content });\n\t\t}\n\t},\n\t\tcancel: {\n\t\t\tlabel: \"Cancel\",\n\t\t\tcallback: () => false\n\t\t}\n\t},\n\t\tdefault: \"cancel\",\nrender: (html) => {\n\t//Implement clickable buttons in the dialog box and prevent going over max/min values\n\thtml[0].addEventListener('click', event => {\n\t\tconst targetClick = event.target;\n\t\tconst isIncrement = targetClick.classList.contains('hit-dice-increment');\n\t\tconst isDecrement = targetClick.classList.contains('hit-dice-decrement');\n\n\t\tif (isIncrement || isDecrement) {\n\t\t\tconst key = targetClick.dataset.key;\n\t\t\tconst spanDisplay = html[0].querySelector(`#hitDiceDisplay-${key}`);\n\t\t\tlet currentValue = parseInt(spanDisplay.textContent);\n\t\t\tconst maxValue = parseInt(actorClasses[key].system.levels) - parseInt(actorClasses[key].system.hitDiceUsed);\n\n\t\t\tif (isIncrement && currentValue < maxValue) {\n\t\t\tspanDisplay.textContent = currentValue + 1;\n\t\t\t} else if (isDecrement && currentValue > 0) {\n\t\t\tspanDisplay.textContent = currentValue - 1;\n\t\t\t}\n\t\t}\n\t});\n}\n}).render(true);",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "core": {},
+    "character-actions-list-5e": {
+      "filter-override": true
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]ItemMacro",
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": ""
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "never"
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault"
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    }
+  },
+  "_id": "LfBpYvKYFeaeWIF8",
+  "_key": "!items!LfBpYvKYFeaeWIF8"
+}

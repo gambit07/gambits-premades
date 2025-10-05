@@ -1,0 +1,325 @@
+{
+  "name": "Festering Fever",
+  "type": "spell",
+  "img": "icons/magic/unholy/strike-hand-glow-pink.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires Midi QOL, DAE, Effect Macro. This item comes from Kobold Press' Deep Magic 2, purchase at </em><a href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" title=\"Deep Magic 2\"><em></em></a><em><a class=\"hyperlink\" href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" target=\"_blank\" rel=\"nofollow noopener\"></a><a class=\"hyperlink\" href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" target=\"_blank\" rel=\"nofollow noopener\">https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/</a></em></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "0.5.38",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "activation": {
+      "type": "action",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "1",
+      "units": "minute"
+    },
+    "target": {
+      "affects": {
+        "choice": false,
+        "type": ""
+      },
+      "template": {
+        "units": "m",
+        "contiguous": false,
+        "type": ""
+      }
+    },
+    "range": {
+      "value": "30",
+      "units": "ft",
+      "special": ""
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "ability": "",
+    "level": 4,
+    "school": "nec",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal",
+      "somatic",
+      "material"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "QVjYYIpry4j5zgop"
+          }
+        ],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "festering-fever",
+    "method": "spell",
+    "prepared": 1
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-3rd-party-spells.Item.lB8uMNYOuJpDIJH5",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Festering Fever",
+      "img": "icons/magic/unholy/strike-hand-glow-pink.webp",
+      "_id": "QVjYYIpry4j5zgop",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "startEveryTurn",
+          "specialDuration": []
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "_key": "!items.effects!GqeDCrvZxpHJHuLO.QVjYYIpry4j5zgop"
+    }
+  ],
+  "flags": {
+    "midi-qol": {
+      "effectActivation": false,
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "removeAttackDamageButtons": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": true,
+      "magiceffect": true,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "default",
+      "noConcentrationCheck": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "core": {},
+    "scene-packer": {
+      "hash": "5f787136d965aab65676f7f23d6fbbeac84541aa",
+      "sourceId": "Compendium.world.gps-homebrew-spells.Item.6QBzihrPx5u059k4"
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault"
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "dae": {
+      "macro": {
+        "name": "Festering Fever",
+        "img": "icons/magic/unholy/strike-hand-glow-pink.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0] === \"on\") {\n    let effectData = token.actor.appliedEffects.find(e => e.name === item.name);\n    if(!effectData) return;\n    let effectOriginToken = await fromUuid(effectData.getFlag(\"gambits-premades\", \"festeringFeverTokenUuid\"));\n    if(!effectOriginToken) return;\n    let castTotal = await effectData.getFlag(\"gambits-premades\", \"festeringFeverCastTotal\");\n    if(!castTotal) return;\n    let spellDC = await effectData.getFlag(\"gambits-premades\", \"festeringFeverSpellDC\");\n    await actor.setFlag(\"midi-qol\", \"festeringFeverApplied\", true);\n\n    const itemData = {\n        name: item.name,\n        img: item.img,\n        type: \"feat\",\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            },\"midiProperties\": {\n                saveDamage: \"halfdam\",\n                magiceffect: true,\n                magicdamage: true\n            },\n            \"autoanimations\": {\n                killAnim: true\n            }\n        },\n        system: {\n            equipped: true,\n            actionType: \"save\",\n            save: { dc: spellDC, ability: \"con\", scaling: \"flat\" },\n            damage: { parts: [[`${castTotal}d8`, \"necrotic\"]] },\n            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n            duration: { units: \"inst\", value: undefined }\n        }\n    };\n\n    const itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: effectOriginToken.actor });\n    const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [token.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n    const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n    let content;\n\n    if (saveResult.failedSaves.size === 0 || castTotal === 1) {\n        if(saveResult.failedSaves.size === 0) {\n            content = `<span style='text-wrap: wrap;'>The target saves for half damage and the fever subsides.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n        }\n        else if(castTotal === 1) {\n            content = `<span style='text-wrap: wrap;'>The target does not save but the fever subsides as its energy runs out.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n        }\n        await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: token.actor.uuid, effects: [effectData.id] });\n\n        let targets = canvas.tokens.placeables.filter(t => {\n            if (t.document.disposition !== token.document.disposition) return;\n            if (!t.actor.flags[\"gambits-premades\"].festeringFeverApplied) return;\n            return t;\n        });\n\n        if (targets.length === 0) return;\n\n        for(let target of targets) {\n            await target.actor.unsetFlag(\"midi-qol\", \"festeringFeverApplied\");\n        }\n    }\n    else {\n        content = `<span style='text-wrap: wrap;'>The target does not save and the fever continues to fester.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    }\n\n    new Sequence()\n\n    .effect()\n    .file(\"jb2a.magic_signs.rune.necromancy.complete.green\")\n    .attachTo(token)\n    .scaleToObject(2.5)\n    .opacity(1)\n    .zIndex(1)\n    .belowTokens(false)\n    .fadeIn(1500)\n    .fadeOut(1500)\n    .filter(\"ColorMatrix\", { hue: 140, brightness: 0.8, contrast: 1, saturate: 1 })\n\n    .play()\n\n    let actorPlayer = MidiQOL.playerForActor(effectOriginToken.actor);\n\n    let chatData = {\n        user: actorPlayer.id,\n        speaker: ChatMessage.getSpeaker({ token: effectOriginToken }),\n        content: game.i18n.localize(content)\n    };\n    ChatMessage.create(chatData);\n}\n\nelse if(args[0].macroPass === \"postActiveEffects\") {\n    let effectData = target.actor.appliedEffects.find(e => e.name === macroItem.name);\n    let castTotal = workflow.castData.castLevel;\n    let spellDC = actor.system.attributes.spelldc;\n    await effectData.setFlag(\"gambits-premades\", \"festeringFeverCastTotal\", castTotal);\n    await effectData.setFlag(\"gambits-premades\", \"festeringFeverSpellDC\", spellDC);\n    await effectData.setFlag(\"gambits-premades\", \"festeringFeverTokenUuid\", token.document.uuid);\n}\n\nelse if(args[0] === \"each\") {\n    let effectData = token.actor.appliedEffects.find(e => e.name === item.name);\n    if(!effectData) return;\n    let effectOriginToken = await fromUuid(effectData.getFlag(\"gambits-premades\", \"festeringFeverTokenUuid\"));\n    if(!effectOriginToken) return;\n    let castTotal = await effectData.getFlag(\"gambits-premades\", \"festeringFeverCastTotal\");\n    if(!castTotal) return;\n\n    castTotal = castTotal - 1;\n    await effectData.setFlag(\"midi-qol\", \"festeringFeverCastTotal\", castTotal);\n\n    const rangeCheck = MidiQOL.findNearby(null, token, 10, { includeToken: false });\n    const withinRange = rangeCheck.filter(t => (!t.actor.flags[\"gambits-premades\"].festeringFeverApplied) && t.document.disposition === token.document.disposition);\n\n    if (withinRange.length > 0) {\n        const randomToken = withinRange[Math.floor(Math.random() * withinRange.length)];\n        await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: randomToken.actor.uuid, effects: [effectData.toObject()] });\n    }\n    else {\n        let targets = canvas.tokens.placeables.filter(t => {\n            if (t.document.disposition !== token.document.disposition) return;\n            if (!t.actor.flags[\"gambits-premades\"].festeringFeverApplied) return;\n            return t;\n        });\n\n        if (targets.length === 0) return;\n\n        for(let target of targets) {\n            await target.actor.unsetFlag(\"midi-qol\", \"festeringFeverApplied\");\n        }\n\n        let content = `<span style='text-wrap: wrap;'>The fever subsides on the target and there are no additional targets within 10 feet.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n\n        let actorPlayer = MidiQOL.playerForActor(effectOriginToken.actor);\n\n        let chatData = {\n            user: actorPlayer.id,\n            speaker: ChatMessage.getSpeaker({ token: effectOriginToken }),\n            content: game.i18n.localize(content)\n        };\n        ChatMessage.create(chatData);\n    }\n\n    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: target.actor.uuid, effects: [effectData.id] });\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.1",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "folder": null,
+  "_id": "GqeDCrvZxpHJHuLO",
+  "_key": "!items!GqeDCrvZxpHJHuLO"
+}

@@ -1,0 +1,442 @@
+{
+  "type": "spell",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "1.0.38",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "activation": {
+      "type": "minute",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "1",
+      "units": "hour"
+    },
+    "target": {
+      "affects": {
+        "choice": false,
+        "count": "",
+        "type": ""
+      },
+      "template": {
+        "units": "ft",
+        "contiguous": false,
+        "type": ""
+      }
+    },
+    "range": {
+      "value": "60",
+      "units": "ft",
+      "special": ""
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": null
+    },
+    "ability": "",
+    "level": 3,
+    "school": "enc",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "X2DULn5BEfgIp6tO"
+          }
+        ],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": null,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "identifier": "",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "useConditionReason": "",
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "motivational-speech",
+    "method": "spell",
+    "prepared": 0
+  },
+  "name": "Motivational Speech",
+  "flags": {
+    "ddbimporter": {
+      "id": 1665826,
+      "definitionId": 188142,
+      "entityTypeId": 435869154,
+      "dndbeyond": {
+        "lookup": "classSpell",
+        "class": "Bard",
+        "level": 8,
+        "characterClassId": 115283842,
+        "spellLevel": 3,
+        "ability": "cha",
+        "mod": 4,
+        "dc": 15,
+        "cantripBoost": false,
+        "overrideDC": false,
+        "id": 1665826,
+        "entityTypeId": 435869154,
+        "healingBoost": 0,
+        "usesSpellSlot": true,
+        "forceMaterial": false
+      },
+      "originalName": "Motivational Speech",
+      "sources": [
+        {
+          "sourceId": 44,
+          "pageNumber": 77,
+          "sourceType": 1
+        }
+      ],
+      "tags": [
+        "Buff"
+      ],
+      "version": "3.4.63",
+      "effectsApplied": true,
+      "importId": "x1EYutCogYK0iGcS",
+      "pack": "world.ddb-spelljammer-adventures-in-space-ddb-override",
+      "originalItemName": "Motivational Speech",
+      "replaced": true
+    },
+    "midiProperties": {
+      "magicdam": false,
+      "magiceffect": true,
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "noConcentrationCheck": false,
+      "confirmTargets": "never",
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "spell-class-filter-for-5e": {
+      "parentClass": "bard"
+    },
+    "scene-packer": {
+      "hash": "be33ff93f4abf1cc1661cfc6f4b4eb3205cce95d",
+      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-override.Item.ezVoasOw8qwxbYh6"
+    },
+    "character-actions-list-5e": {
+      "filter-override": true
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[preActiveEffects]function.game.gps.motivationalSpeech",
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": ""
+    },
+    "itemacro": {
+      "macro": {
+        "name": "Motivational Speech",
+        "type": "script",
+        "scope": "global",
+        "command": "if (args[0] === \"onUpdateActor\" && args[1].updates.system.attributes.hp.temp <= 0)\n{\n  const effectId = args[1].actor.effects.find((e) => e.name === \"Motivational Speech\").id;\n  await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: args[1].actorUuid, effects: [effectId] });\n}\n\nif(args[0].macroPass === \"isHit\")\n{\nconst lastArg = args[args.length - 1];\nconst effectName = \"Motivational Speech Advantage\";\nconst effectCheck = lastArg.options.actor.effects.find((e) => e.name === effectName);\nif(!effectCheck)\n{\nconst uuid = lastArg.options.actor.uuid;\nlet effectData = [{\n\tdisabled: false,\n\tflags: {\n\t\tdae: { specialDuration: [\"1Attack\"] }\n\t},\n\ticon: \"icons/svg/clockwork.svg\",\n\tname: \"Motivational Speech Advantage\",\n\tchanges: [\n        {\n          key: \"flags.midi-qol.advantage.attack.all\",\n          mode: 2,\n          value: \"1\",\n          priority: 20\n        }\n      ]\n\t}];\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: uuid, effects: effectData });\n}\n}\n\nif(args[0].macroPass === \"preActiveEffects\")\n{\nconst spellLevel = workflow.itemLevel - 2;\nconst tempHpAmount = parseInt(spellLevel) * 5;\nawait Promise.all(workflow.targets.map(target => target.actor.applyTempHP(tempHpAmount)));\n}\n\nif(args[0] === \"off\")\n{\n\tawait actor.update({\"system.attributes.hp.temp\": 0});\n}",
+        "author": "roRDywD19pu2VxlC",
+        "_id": null,
+        "img": "icons/svg/dice-target.svg",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 0
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "core": {},
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "walledtemplates": {
+      "wallRestriction": "globalDefault",
+      "wallsBlock": "globalDefault"
+    },
+    "dae": {
+      "macro": {
+        "name": "Motivational Speech",
+        "img": "icons/skills/social/peace-luck-insult.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.2.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      },
+      "dependents": [
+        {
+          "uuid": "Actor.Q7GcFBwAbXgQX9Yv.ActiveEffect.sXbggr5hpxbDpqqK"
+        }
+      ]
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "gambits-premades": {
+      "gpsUuid": "32cabdaf-560e-48ea-8980-37cf5ad242c0"
+    }
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-spells.Item.0gEfNrgZuAxvnL5H",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 3600,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Motivational Speech",
+      "img": "icons/skills/social/peace-luck-insult.webp",
+      "_id": "X2DULn5BEfgIp6tO",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.advantage.ability.save.wis",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.motivationalSpeech,isHit",
+          "priority": 20
+        },
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "function.game.gps.motivationalSpeech",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "enableCondition": "",
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "gambits-premades": {
+          "gpsUuid": "32cabdaf-560e-48ea-8980-37cf5ad242c0"
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_key": "!items.effects!YKDseqsSmfuayOrX.X2DULn5BEfgIp6tO"
+    }
+  ],
+  "img": "icons/skills/social/peace-luck-insult.webp",
+  "folder": null,
+  "_id": "YKDseqsSmfuayOrX",
+  "_key": "!items!YKDseqsSmfuayOrX"
+}

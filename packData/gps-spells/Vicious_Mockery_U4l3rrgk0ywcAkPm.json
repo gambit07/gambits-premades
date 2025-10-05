@@ -1,0 +1,601 @@
+{
+  "type": "spell",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.6",
+      "book": "Player’s Handbook (2014)",
+      "page": "285",
+      "license": "",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "activation": {
+      "type": "action",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "",
+      "units": "inst"
+    },
+    "target": {
+      "affects": {
+        "type": "creature",
+        "count": "1",
+        "choice": false,
+        "special": ""
+      },
+      "template": {
+        "units": "m",
+        "contiguous": false,
+        "type": ""
+      }
+    },
+    "range": {
+      "value": "60",
+      "units": "ft",
+      "special": ""
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": null
+    },
+    "ability": "",
+    "level": 0,
+    "school": "enc",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "save",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": null,
+          "max": "",
+          "recovery": []
+        },
+        "damage": {
+          "onSave": "none",
+          "parts": [
+            {
+              "custom": {
+                "enabled": false,
+                "formula": ""
+              },
+              "number": 1,
+              "denomination": 4,
+              "bonus": "",
+              "types": [
+                "psychic"
+              ],
+              "scaling": {
+                "mode": "whole",
+                "number": 1,
+                "formula": ""
+              }
+            }
+          ],
+          "critical": {
+            "allow": false
+          }
+        },
+        "save": {
+          "ability": [
+            "wis"
+          ],
+          "dc": {
+            "calculation": "spellcasting",
+            "formula": ""
+          }
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "friendlySave": "default",
+        "img": "",
+        "appliedEffects": []
+      }
+    },
+    "identifier": "vicious-mockery",
+    "method": "spell",
+    "prepared": 1
+  },
+  "name": "Vicious Mockery",
+  "flags": {
+    "ddbimporter": {
+      "id": 138907,
+      "definitionId": 2290,
+      "entityTypeId": 435869154,
+      "dndbeyond": {
+        "lookup": "generic",
+        "lookupName": "generic",
+        "level": null,
+        "castAtLevel": null
+      },
+      "originalName": "Vicious Mockery",
+      "sources": [
+        {
+          "sourceId": 1,
+          "pageNumber": null,
+          "sourceType": 2
+        },
+        {
+          "sourceId": 2,
+          "pageNumber": 285,
+          "sourceType": 1
+        }
+      ],
+      "tags": [
+        "Damage",
+        "Debuff"
+      ],
+      "version": "5.2.29",
+      "effectsApplied": true
+    },
+    "midiProperties": {
+      "magicdam": true,
+      "magiceffect": true,
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "never",
+      "noConcentrationCheck": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false,
+      "saveDamage": "nodam",
+      "bonusSaveDamage": "default"
+    },
+    "midi-qol": {
+      "forceCEOff": true,
+      "effectActivation": false,
+      "removeAttackDamageButtons": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[prePreambleComplete]function.game.gps.viciousMockery,[postSavesComplete]function.game.gps.viciousMockery",
+      "forceCEOn": false,
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "scene-packer": {
+      "sourceId": "Actor.w88977HaPVOXN7mP.Item.CxSb3LlEnJ1BKk5s",
+      "hash": "bd2a8e14871a1e2858557f6af7ed791dadaaf091"
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault"
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "autoanimations": {
+      "id": "8836133c-6997-45f9-867b-cf3927665f16",
+      "label": "Vicious Mockery",
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      },
+      "macro": {
+        "enable": false
+      },
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular"
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "club",
+          "variant": "01",
+          "color": "white",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": false,
+      "isCustomized": false,
+      "fromAmmo": false,
+      "version": 5
+    },
+    "tidy5e-sheet": {
+      "action-filter-override": true,
+      "section": "",
+      "actionSection": ""
+    },
+    "dae": {
+      "macro": {
+        "name": "Vicious Mockery",
+        "img": "icons/magic/control/fear-fright-white.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "spell-class-filter-for-5e": {
+      "parentClass": "bard"
+    },
+    "core": {},
+    "itemacro": {
+      "macro": {
+        "name": "Vicious Mockery",
+        "type": "script",
+        "scope": "global",
+        "command": "const targetToken = workflow.hitTargets.values().next().value;\nconst targetActor = targetToken.actor;\nconst targetUuid = targetToken.document.uuid;\nconsole.log(targetUuid);\nconst uuid = targetActor.uuid;\nconst hasDeafenedApplied = await game.dfreds.effectInterface.hasEffectApplied('Deafened', uuid);\nconst saveAbility = \"wis\";\nconst damageType = \"psychic\";\nconst spellDC = actor.system.attributes.spelldc;\nconst actorLevel = actor.system.details.level;\nlet attackNum = 1;\nif (actorLevel >= 5) attackNum += Math.floor(actorLevel / 5);\n\nif(!hasDeafenedApplied)\n{\nconst itemData = item.clone(\n{\nimg: \"icons/magic/control/fear-fright-white.webp\", //Change chat image here\ntype: \"spell\",\neffects: [],\nflags: {\n\t\"midi-qol\": {\n\t  noProvokeReaction: true,\n\t  onUseMacroName: null,\n\t  forceCEOff: true\n\t},\"midiProperties\": {\n\t  nodam: true\n\t  },\n  },\n  system: {\n\tequipped: true,\n\tactionType: \"save\",\n\tsave: { dc: spellDC, ability: saveAbility, scaling: \"flat\" },\n\tdamage: { parts: [[`${attackNum}d4`, damageType]] },\n\t\"target.type\": \"self\",\n\tcomponents: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n\tduration: { units: \"inst\", value: undefined },\n  },\n},\n{ keepId:true }\n);\nitemData.system.target.type = \"self\";\nsetProperty(itemData.flags, \"autoanimations.killAnim\", true);\nconst itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: targetActor });\nconst options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\nconst saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\nif (saveResult.failedSaves.size == 1) {\n\tconsole.log(\"made it here\");\n\tconst effectDisadv = [{\n\t\tchanges: [{ key: \"flags.midi-qol.disadvantage.attack.all\", mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM, value: 1, priority: 20 }],\n\t\tflags: { \"dae\": { \"token\": targetUuid, \"specialDuration\": [\"1Attack\",\"turnEnd\"] } },\n\t\tdisabled: false,\n\t\tname: `Vicious Mockery`,\n\t\ticon: \"icons/magic/control/fear-fright-white.webp\"\n\t}];\n\tconst checkEffect = targetActor.effects.find(i => i.name ===  `Vicious Mockery`);\n\tif(!checkEffect) await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: uuid, effects: effectDisadv });\n\n//Author: EskieMoh#2969\n\nnew Sequence()\n\n.effect()\n.name(\"Casting\")\n.atLocation(token)\n.file(`jb2a.magic_signs.circle.02.enchantment.loop.purple`)\n.scaleToObject(1.5)\n.rotateIn(180, 600, {ease: \"easeOutCubic\"})\n.scaleIn(0, 600, {ease: \"easeOutCubic\"})\n.loopProperty(\"sprite\", \"rotation\", { from: 0, to: -360, duration: 10000})\n.belowTokens()\n.fadeOut(2000)\n.zIndex(0)\n\n.effect()\n.atLocation(token)\n.file(`jb2a.magic_signs.circle.02.enchantment.loop.purple`)\n.scaleToObject(1.5)\n.rotateIn(180, 600, {ease: \"easeOutCubic\"})\n.scaleIn(0, 600, {ease: \"easeOutCubic\"})\n.loopProperty(\"sprite\", \"rotation\", { from: 0, to: -360, duration: 10000})\n.belowTokens(true)\n.filter(\"ColorMatrix\", {saturate:-1, brightness:2})\n.filter(\"Blur\", { blurX: 5, blurY: 10 })\n.zIndex(1)\n.duration(1200)\n.fadeIn(200, {ease: \"easeOutCirc\", delay: 500})\n.fadeOut(300, {ease: \"linear\"})\n\n.effect()\n.file(\"jb2a.music_notations.{{music}}.purple\")\n.scaleIn(0, 500, {ease: \"easeOutQuint\"})\n.delay(500)\n.atLocation(token, {offset:{y:-0.2}, gridUnits:true, randomOffset: 1.5})\n.scaleToObject(0.8)\n.zIndex(1)\n.playbackRate(1.5)\n.setMustache({\n\"music\": ()=> {\nconst musics = [`bass_clef`,`beamed_quavers`,`crotchet`,`flat`,`quaver`, `treble_clef`];\nreturn musics[Math.floor(Math.random()*musics.length)];\n}\n})\n.repeats(5, 200, 200)\n.fadeOut(500)\n\n.play()\n\nlet word = [];\n\nlet wordInput = await warpgate.menu({\n\n\tinputs: [{\n\t\t\tlabel: `What do you say?`,\n\t\t\ttype: 'text',\n\t    options: ``\n\t}],\n\t\tbuttons: [{\n\t\t\tlabel: 'Cast!',\n\t\t\tvalue: 1}]\n\t\t},\n\t\t{title: '🗣Vicious Mockery😜️'}\n\t);\n    \n   word.push(wordInput.inputs);\n\tconsole.log('Word Cast: ' + word.toString());\n    \nconst style = {\n    \"fill\": \"#ffffff\",\n    \"fontFamily\": \"Helvetica\",\n    \"fontSize\": 40,\n    \"strokeThickness\": 0,\n    fontWeight: \"bold\",\n\n}\n\nnew Sequence()\n\n.sound()\n\t.file(\"modules/dnd5e-animations/assets/sounds/Creatures/laughter.mp3\")\n\t.fadeInAudio(500)\n\t.fadeOutAudio(500)\n\n.effect()\n.atLocation(targetToken, {offset: {x: -0.25*targetToken.document.width, y:-0.3*targetToken.document.width}, randomOffset: 0.1, gridUnits: true})\n.file(`animated-spell-effects-cartoon.level 01.healing word.purple`)\n.fadeOut(250)\n.zIndex(1)\n.scale(0.25*targetToken.width)\n.scaleIn(0, 500, {ease: \"easeOutBack\"})\n.zIndex(0)\n.animateProperty(\"sprite\", \"position.x\", { from: -0.6, to:0, duration: 600, gridUnits: true, ease: \"easeInExpo\" })\n.animateProperty(\"sprite\", \"position.y\", { from: -0.6, to:0, duration: 600, gridUnits: true, ease: \"easeInExpo\" })\n.animateProperty(\"sprite\", \"rotation\", { from: 0, to:45, duration: 10,  ease: \"easeOutElastic\" })\n.scaleIn(0, 500, {ease: \"easeOutElastic\"})\n.filter(\"ColorMatrix\", { hue: 50 })\n\n.effect()\n.file(\"jb2a.particles.outward.orange.02.02\")\n.atLocation(targetToken, {offset: {x: -0.25*targetToken.document.width, y:-0.3*targetToken.document.width}, randomOffset: 0.1, gridUnits: true})\n.scale(0.25*targetToken.width)\n.duration(800)\n.fadeOut(200)\n.zIndex(1)\n.animateProperty(\"sprite\", \"position.x\", { from: -0.6, to:0, duration: 600, gridUnits: true, ease: \"easeInExpo\" })\n.animateProperty(\"sprite\", \"position.y\", { from: -0.6, to:0, duration: 600, gridUnits: true, ease: \"easeInExpo\" })\n.animateProperty(\"sprite\", \"rotation\", { from: 0, to:45, duration: 10,  ease: \"easeOutElastic\" })\n.scaleIn(0, 500, {ease: \"easeOutElastic\"})\n.zIndex(2)\n\n.effect()\n.atLocation(targetToken, {offset: {x: -0.25*targetToken.document.width, y:-0.3*targetToken.document.width}, randomOffset: 0.1, gridUnits: true})\n.text(`${word}`, style)\n.duration(5000)\n.fadeOut(1000)\n.animateProperty(\"sprite\", \"position.x\", { from: -2.0, to:0, duration: 2000, gridUnits: true, ease: \"easeInExpo\" })\n.animateProperty(\"sprite\", \"position.y\", { from: -2.0, to:0, duration: 2000, gridUnits: true, ease: \"easeInExpo\" })\n.animateProperty(\"sprite\", \"rotation\", { from: 0, to:45, duration: 500,  ease: \"easeOutElastic\" })\n.animateProperty(\"sprite\", \"rotation\", { from: -2.5, to:2.5, duration: 500,  ease: \"easeOutElastic\", delay: 650 })\n.scaleIn(0, 1000, {ease: \"easeOutElastic\"})\n.filter(\"Glow\", { color: 0x6820ee })\n.zIndex(2)\n.shape(\"polygon\", {\n            lineSize: 1,\n            lineColor: \"#FF0000\",\n            fillColor: \"#FF0000\",\npoints: [{ x: -4, y: -4},{ x: 1.175, y: -1},{ x: -1, y: 1.175} ],\n            fillAlpha: 1,\n            gridUnits: true,\n            isMask:true,\n            name: \"test\"\n        })\n        \n.effect()\n.delay(600)\n.file(\"jb2a.impact.010.purple\")\n.atLocation(targetToken, {offset: {x: -0.25*targetToken.document.width, y:-0.3*targetToken.document.width},gridUnits: true})\n.scaleToObject(1.25)\n.zIndex(1)\n\n.effect()\n.delay(600)\n.from(targetToken)\n.attachTo(targetToken)\n.fadeIn(200)\n.fadeOut(500)\n.loopProperty(\"sprite\", \"position.x\", { from: -0.05, to: 0.05, duration: 50, pingPong: true, gridUnits: true})\n.scaleToObject(targetToken.document.texture.scaleX)\n.duration(1800)\n.opacity(0.2)\n.tint(0x6820ee)\n\n.effect()\n.delay(1200)\n.file(\"animated-spell-effects-cartoon.misc.demon\")\n.atLocation(targetToken, {offset: {x: -0, y:-0.5*targetToken.document.width},gridUnits: true})\n.scaleToObject(0.75)\n.playbackRate(1.5)\n.rotate(-20)\n.filter(\"ColorMatrix\", {hue:-100})\n\n.effect()\n.delay(1500)\n.file(\"animated-spell-effects-cartoon.misc.demon\")\n.atLocation(targetToken, {offset: {x: -0.5*targetToken.document.width, y:-0},gridUnits: true})\n.scaleToObject(0.75)\n.playbackRate(1.5)\n.rotate(15)\n.filter(\"ColorMatrix\", {hue:-100})\n\n.play()\n}\n}\nelse\n{\n\tui.notifications.warn(\"This creature is not effected, it cannot hear you.\")\n}",
+        "author": "roRDywD19pu2VxlC",
+        "_id": null,
+        "img": "icons/svg/dice-target.svg",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 0
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "character-actions-list-5e": {
+      "filter-override": true
+    },
+    "tidy5e-sheet-kgar": {
+      "action-filter-override": true
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "chris-premades": {
+      "info": {
+        "source": "gambits-premades",
+        "version": "0.5.60"
+      },
+      "customConfig": [
+        {
+          "value": "playAnimation",
+          "label": "CHRISPREMADES.Config.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animation"
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "img": "icons/magic/control/fear-fright-white.webp",
+  "folder": null,
+  "_id": "U4l3rrgk0ywcAkPm",
+  "_key": "!items!U4l3rrgk0ywcAkPm"
+}

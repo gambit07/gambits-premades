@@ -1,0 +1,829 @@
+{
+  "type": "spell",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.6",
+      "revision": 1,
+      "rules": "2024",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "activation": {
+      "type": "action",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "1",
+      "units": "minute"
+    },
+    "target": {
+      "affects": {
+        "choice": false,
+        "count": "",
+        "type": ""
+      },
+      "template": {
+        "units": "ft",
+        "type": "square",
+        "size": "20",
+        "contiguous": false,
+        "count": "",
+        "height": ""
+      }
+    },
+    "range": {
+      "value": "90",
+      "units": "ft",
+      "special": ""
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": null
+    },
+    "ability": "",
+    "level": 1,
+    "school": "con",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal",
+      "somatic",
+      "concentration"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "save",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft",
+            "type": "square",
+            "size": "20",
+            "count": ""
+          },
+          "affects": {
+            "choice": false,
+            "count": "",
+            "type": "",
+            "special": ""
+          },
+          "override": true
+        },
+        "uses": {
+          "spent": null,
+          "max": "",
+          "recovery": []
+        },
+        "damage": {
+          "onSave": "none",
+          "parts": [],
+          "critical": {
+            "allow": false
+          }
+        },
+        "save": {
+          "ability": [
+            "str"
+          ],
+          "dc": {
+            "calculation": "spellcasting",
+            "formula": ""
+          }
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "friendlySave": "default",
+        "img": "",
+        "flags": {
+          "region-attacher": {
+            "attachRegionToTemplate": true
+          }
+        },
+        "appliedEffects": []
+      },
+      "PKG8JVB7mRkNOkHn": {
+        "type": "check",
+        "_id": "PKG8JVB7mRkNOkHn",
+        "sort": 0,
+        "activation": {
+          "type": "special",
+          "value": null,
+          "override": true,
+          "condition": ""
+        },
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": false,
+          "targets": []
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": true
+        },
+        "effects": [],
+        "range": {
+          "override": true,
+          "units": "any",
+          "special": ""
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft",
+            "type": ""
+          },
+          "affects": {
+            "choice": false,
+            "type": "any",
+            "count": "",
+            "special": ""
+          },
+          "override": true,
+          "prompt": false
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "check": {
+          "associated": [
+            "ath"
+          ],
+          "dc": {
+            "calculation": "spellcasting",
+            "formula": ""
+          },
+          "ability": ""
+        },
+        "useConditionText": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": true,
+          "otherActivityCompatible": false,
+          "identifier": "syntheticSave",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "damage": {
+          "onSave": "none",
+          "parts": [],
+          "critical": {
+            "allow": false
+          }
+        },
+        "name": "Check: Automation",
+        "useConditionReason": "",
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true,
+        "friendlySave": "default",
+        "img": "",
+        "appliedEffects": []
+      }
+    },
+    "identifier": "entangle",
+    "method": "spell",
+    "prepared": 1
+  },
+  "name": "Entangle",
+  "flags": {
+    "ddbimporter": {
+      "id": 3218,
+      "definitionId": 2014,
+      "entityTypeId": 435869154,
+      "dndbeyond": {
+        "lookup": "classSpell",
+        "class": "Warlock",
+        "level": 7,
+        "characterClassId": 116570746,
+        "spellLevel": 4,
+        "ability": "cha",
+        "mod": 4,
+        "dc": 15,
+        "cantripBoost": false,
+        "overrideDC": false,
+        "id": 3218,
+        "entityTypeId": 435869154,
+        "healingBoost": 0,
+        "usesSpellSlot": true
+      },
+      "originalName": "Black Tentacles",
+      "sources": [
+        {
+          "sourceId": 1,
+          "pageNumber": null,
+          "sourceType": 2
+        },
+        {
+          "sourceId": 2,
+          "pageNumber": null,
+          "sourceType": 1
+        }
+      ],
+      "tags": [
+        "Damage",
+        "Control"
+      ],
+      "version": "3.4.23",
+      "effect": {
+        "applyStart": true,
+        "handleStartRoll": true,
+        "autoDamageIfCondition": true,
+        "applyEnd": false,
+        "applyEntry": true,
+        "applyImmediate": true,
+        "everyEntry": false,
+        "conditionEffect": true,
+        "damageEffect": true,
+        "removeOnOff": true,
+        "allowVsRemoveCondition": true,
+        "removalCheck": [
+          "str",
+          "dex"
+        ],
+        "removalSave": null,
+        "saveRemoves": false,
+        "condition": "Restrained",
+        "dice": "3d6[bludgeoning]",
+        "damageType": "bludgeoning",
+        "save": "dex",
+        "sequencerFile": "jb2a.black_tentacles.dark_purple"
+      },
+      "effectsApplied": true,
+      "importId": "LcPaJ2JvQf4Nz6op"
+    },
+    "midiProperties": {
+      "magicdam": true,
+      "magiceffect": true,
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "never",
+      "noConcentrationCheck": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "spell-class-filter-for-5e": {
+      "parentClass": "warlock"
+    },
+    "itemacro": {
+      "macro": {
+        "data": {
+          "name": "Black Tentacles",
+          "type": "script",
+          "scope": "global",
+          "command": "if(!game.modules.get(\"ActiveAuras\")?.active) {\n  ui.notifications.error(\"ActiveAuras is not enabled\");\n  return;\n}\n\nconst lastArg = args[args.length - 1];\n\nasync function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }\n\nfunction getHighestAbility(actor, abilities) {\n  if (typeof abilities === \"string\") {\n    return abilities;\n  } else if (Array.isArray(abilities)) {\n    return abilities.reduce((prv, current) => {\n      if (actor.system.abilities[current].value > actor.system.abilities[prv].value) return current;\n      else return prv;\n    }, abilities[0]);\n  }\n}\n\nfunction getCantripDice(actor) {\n  const level = actor.type === \"character\" ? actor.system.details.level : actor.system.details.cr;\n  return 1 + Math.floor((level + 1) / 6);\n}\n\n\nasync function attemptRemoval(targetToken, condition, item) {\n  if (game.dfreds.effectInterface.hasEffectApplied(condition, targetToken.document.uuid)) {\n    new Dialog({\n      title: `Use action to attempt to remove ${condition}?`,\n      buttons: {\n        one: {\n          label: \"Yes\",\n          callback: async () => {\n            const caster = item.parent;\n            const saveDc = caster.system.attributes.spelldc;\n            const removalCheck = item.system.flags.ddbimporter.effect.removalCheck;\n            const removalSave = item.system.flags.ddbimporter.effect.removalSave;\n            const ability = removalCheck ? getHighestAbility(targetToken.actor.data, removalCheck) : getHighestAbility(targetToken.actor.data, removalSave);\n            const type = removalCheck ? \"check\" : \"save\";\n            const flavor = `${condition} (via ${item.name}) : ${CONFIG.DND5E.abilities[ability]} ${type} vs DC${saveDc}`;\n            const rollResult = removalCheck\n              ? (await targetToken.actor.rollAbilityTest(ability, { flavor })).total\n              : (await targetToken.actor.rollAbilitySave(ability, { flavor })).total;\n\n            if (rollResult >= saveDc) {\n              game.dfreds.effectInterface.removeEffect({ effectName: condition, uuid: targetToken.document.uuid });\n            } else {\n              if (rollResult < saveDc) ChatMessage.create({ content: `${targetToken.name} fails the ${type} for ${item.name}, still has the ${condition} condition.` });\n            }\n          },\n        },\n        two: {\n          label: \"No\",\n          callback: () => {},\n        },\n      },\n    }).render(true);\n  }\n}\n\nasync function applyCondition(condition, targetToken, item, itemLevel) {\n  if (!game.dfreds.effectInterface.hasEffectApplied(condition, targetToken.document.uuid)) {\n    const caster = item.parent;\n    const workflowItemData = duplicate(item.data);\n    workflowItemData.system.target = { value: 1, units: \"\", type: \"creature\" };\n    workflowItemData.system.save.ability = item.flags.ddbimporter.effect.save;\n    workflowItemData.system.components.concentration = false;\n    workflowItemData.system.level = itemLevel;\n    workflowItemData.system.duration = { value: null, units: \"inst\" };\n    workflowItemData.system.target = { value: null, width: null, units: \"\", type: \"creature\" };\n    workflowItemData.system.preparation.mode = \"atwill\";\n    setProperty(workflowItemData, \"flags.itemacro\", {});\n    setProperty(workflowItemData, \"flags.midi-qol\", {});\n    setProperty(workflowItemData, \"flags.dae\", {});\n    setProperty(workflowItemData, \"effects\", []);\n    delete workflowItemData._id;\n    workflowItemData.name = `${workflowItemData.name}: ${item.name} Condition save`;\n\n    const saveTargets = [...game.user?.targets].map((t )=> t.id);\n    game.user.updateTokenTargets([targetToken.id]);\n    const saveItem = new CONFIG.Item.documentClass(workflowItemData, { parent: caster });\n    const options = { showFullCard: false, createWorkflow: true, configureDialog: true };\n    const result = await MidiQOL.completeItemUse(saveItem, {}, options);\n\n    game.user.updateTokenTargets(saveTargets);\n    const failedSaves = [...result.failedSaves];\n    if (failedSaves.length > 0) {\n      await game.dfreds.effectInterface.addEffect({ effectName: condition, uuid: failedSaves[0].document.uuid });\n    }\n\n    return result;\n  }\n}\n\nasync function attachSequencerFileToTemplate(templateUuid, sequencerFile, originUuid) {\n  if (game.modules.get(\"sequencer\")?.active) {\n    if (Sequencer.Database.entryExists(sequencerFile)) {\n      console.debug(`Trying to apply sequencer effect (${sequencerFile}) to ${templateUuid} from ${originUuid}`, sequencerFile);\n      const template = await fromUuid(templateUuid);\n      new Sequence()\n      .effect()\n        .file(Sequencer.Database.entryExists(sequencerFile))\n        .size({\n          width: canvas.grid.size * (template.data.width / canvas.dimensions.distance),\n          height: canvas.grid.size * (template.data.width / canvas.dimensions.distance),\n        })\n        .persist(true)\n        .origin(originUuid)\n        .belowTokens()\n        .opacity(0.5)\n        .attachTo(template, { followRotation: true })\n        .stretchTo(template, { attachTo: true})\n      .play();\n    }\n  }\n}\n\n\nasync function rollItemDamage(targetToken, itemUuid, itemLevel) {\n  const item = await fromUuid(itemUuid);\n  const caster = item.parent;\n  const isCantrip = item.flags.ddbimporter.effect.isCantrip;\n  const damageDice = item.flags.ddbimporter.effect.dice;\n  const damageType = item.flags.ddbimporter.effect.damageType;\n  const saveAbility = item.flags.ddbimporter.effect.save;\n  const casterToken = canvas.tokens.placeables.find((t) => t.actor?.uuid === caster.uuid);\n  const scalingDiceArray = item.system.scaling.formula.split(\"d\");\n  const scalingDiceNumber = itemLevel - item.system.level;\n  const upscaledDamage =  isCantrip\n    ? `${getCantripDice(caster.data)}d${scalingDiceArray[1]}[${damageType}]`\n    : scalingDiceNumber > 0 ? `${scalingDiceNumber}d${scalingDiceArray[1]}[${damageType}] + ${damageDice}` : damageDice;\n  const damageRoll = await new Roll(upscaledDamage).evaluate({ async: true });\n  if (game.dice3d) game.dice3d.showForRoll(damageRoll);\n  const workflowItemData = duplicate(item.data);\n  workflowItemData.system.target = { value: 1, units: \"\", type: \"creature\" };\n  workflowItemData.system.save.ability = saveAbility;\n  workflowItemData.system.components.concentration = false;\n  workflowItemData.system.level = itemLevel;\n  workflowItemData.system.duration = { value: null, units: \"inst\" };\n  workflowItemData.system.target = { value: null, width: null, units: \"\", type: \"creature\" };\n\n  setProperty(workflowItemData, \"flags.itemacro\", {});\n  setProperty(workflowItemData, \"flags.midi-qol\", {});\n  setProperty(workflowItemData, \"flags.dae\", {});\n  setProperty(workflowItemData, \"effects\", []);\n  delete workflowItemData._id;\n  workflowItemData.name = `${workflowItemData.name}: Turn Entry Damage`;\n\n  await new MidiQOL.DamageOnlyWorkflow(\n    caster,\n    casterToken,\n    damageRoll.total,\n    damageType,\n    [targetToken],\n    damageRoll,\n    {\n      flavor: `(${CONFIG.DND5E.damageTypes[damageType]})`,\n      itemCardId: \"new\",\n      itemData: workflowItemData,\n      isCritical: false,\n    }\n  );\n}\n\nif (args[0].tag === \"OnUse\" && args[0].macroPass === \"preActiveEffects\") {\n  const safeName = lastArg.itemData.name.replace(/\\s|'|\\.|’/g, \"_\");\n  const dataTracker = {\n    randomId: randomID(),\n    targetUuids: lastArg.targetUuids,\n    startRound: game.combat.round,\n    startTurn: game.combat.turn,\n    spellLevel: lastArg.spellLevel,\n  };\n\n  const item = await fromUuid(lastArg.itemUuid);\n  // await item.update(dataTracker);\n  await DAE.unsetFlag(item, `${safeName}Tracker`);\n  await DAE.setFlag(item, `${safeName}Tracker`, dataTracker);\n\n  const ddbEffectFlags = lastArg.item.flags.ddbimporter?.effect;\n  if (ddbEffectFlags) {\n    const sequencerFile = ddbEffectFlags.sequencerFile;\n    if (sequencerFile) {\n      await attachSequencerFileToTemplate(lastArg.templateUuid, sequencerFile, lastArg.itemUuid)\n    }\n    if (ddbEffectFlags.isCantrip) {\n      const cantripDice = getCantripDice(lastArg.actor);\n      args[0].spellLevel = cantripDice;\n      ddbEffectFlags.cantripDice = cantripDice;\n      let newEffects = args[0].item.effects.map((effect) => {\n        effect.changes = effect.changes.map((change) => {\n          change.value = change.value.replace(\"@cantripDice\", cantripDice)\n          return change;\n        });\n        return effect;\n      });\n      args[0].item.effects = duplicate(newEffects);\n      args[0].itemData.effects = duplicate(newEffects);\n    }\n    const template = await fromUuid(lastArg.templateUuid);\n    await template.update({\"flags.effect\": ddbEffectFlags});\n\n    if (ddbEffectFlags.applyImmediate) {\n      console.debug(\"Applying immediate effect\");\n      await wait(500);\n      const condition = ddbEffectFlags.condition;\n      for (const token of lastArg.failedSaves) {\n        if (!game.dfreds.effectInterface.hasEffectApplied(condition, token.actor.uuid)) {\n          console.debug(`Applying ${condition} to ${token.name}`);\n          await game.dfreds.effectInterface.addEffect({ effectName: condition, uuid: token.actor.uuid });\n        }\n      };\n    }\n  }\n\n  console.debug(\"ItemMacro: Pre-apply finised, applying effect to template\")\n\n  return await game.modules.get(\"ActiveAuras\").api.AAHelpers.applyTemplate(args);\n\n} else if (args[0].tag === \"OnUse\" && args[0].macroPass === \"postActiveEffects\") {\n  if (lastArg.item.flags.ddbimporter?.effect?.applyImmediate) {\n    const condition = lastArg.item.flags.ddbimporter.effect.condition;\n    for (const token of lastArg.failedSaves) {\n      if (!game.dfreds.effectInterface.hasEffectApplied(condition, token.actor.uuid)) {\n        console.debug(`Applying ${condition} to ${token.name}`);\n        await game.dfreds.effectInterface.addEffect({ effectName: condition, uuid: token.actor.uuid });\n      }\n    };\n  }\n} else if (args[0] == \"on\" || args[0] == \"each\") {\n  const safeName = (lastArg.efData.name ?? lastArg.efData.label).replace(/\\s|'|\\.|’/g, \"_\");\n  const item = await fromUuid(lastArg.efData.origin);\n  const ddbEffectFlags = item.flags.ddbimporter.effect;\n  // sometimes the round info has not updated, so we pause a bit\n  if (args[0] == \"each\") await wait(500);\n  const targetItemTracker = DAE.getFlag(item.parent, `${safeName}Tracker`);\n  const originalTarget = targetItemTracker.targetUuids.includes(lastArg.tokenUuid);\n  const target = canvas.tokens.get(lastArg.tokenId);\n  const targetTokenTrackerFlag = DAE.getFlag(target, `${safeName}Tracker`);\n  const targetedThisCombat = targetTokenTrackerFlag && targetItemTracker.randomId === targetTokenTrackerFlag.randomId;\n  const targetTokenTracker = targetedThisCombat\n    ? targetTokenTrackerFlag\n    : {\n      randomId: targetItemTracker.randomId,\n      round: game.combat.round,\n      turn: game.combat.turn,\n      hasLeft: false,\n      condition: ddbEffectFlags.condition,\n    };\n\n  const castTurn = targetItemTracker.startRound === game.combat.round && targetItemTracker.startTurn === game.combat.turn;\n  const isLaterTurn = game.combat.round > targetTokenTracker.round || game.combat.turn > targetTokenTracker.turn;\n  const everyEntry = hasProperty(item.data, \"flags.ddbimporter.effect.everyEntry\")\n    ? item.flags.ddbimporter.effect.everyEntry\n    : false;\n\n  // if:\n  // not cast turn, and not part of the original target\n  // AND one of the following\n  // not original template and have not yet had this effect applied this combat OR\n  // has been targeted this combat, left and re-entered effect, and is a later turn\n\n  const autoDamageIfCondition = hasProperty(ddbEffectFlags, \"autoDamageIfCondition\") ? ddbEffectFlags.autoDamageIfCondition : false;\n  const hasConditionStart = game.dfreds.effectInterface.hasEffectApplied(targetTokenTracker.condition, target.actor.uuid);\n  const applyAutoConditionDamage = autoDamageIfCondition && hasConditionStart;\n\n  if (ddbEffectFlags.conditionEffect && !hasConditionStart) {\n    if (castTurn && originalTarget) {\n      console.debug(`Token ${target.name} is part of the original target for ${item.name}`);\n    } else if (everyEntry || !targetedThisCombat || (targetedThisCombat && isLaterTurn)) {\n      console.debug(`Token ${target.name} is targeted for immediate save vs condition with ${item.name}, using the following factors`, { originalTarget, castTurn, targetedThisCombat, targetTokenTracker, isLaterTurn });\n      targetTokenTracker.hasLeft = false;\n      await applyCondition(targetTokenTracker.condition, target, item, targetItemTracker.spellLevel);\n    } else {\n      console.debug(`Token ${target.name} has not evaluated for condition application`);\n    }\n  }\n  if (ddbEffectFlags.damageEffect) {\n    if (castTurn && originalTarget) {\n      console.debug(`Token ${target.name} is part of the original target for ${item.name}`);\n    } else if ((!targetedThisCombat && !autoDamageIfCondition) || //if auto damage applied by conditional save\n      (targetedThisCombat && ((targetTokenTracker.hasLeft && isLaterTurn) || (applyAutoConditionDamage && isLaterTurn)))\n    ) {\n      console.debug(`Token ${target.name} is targeted for immediate damage with ${item.name}, using the following factors`, { originalTarget, castTurn, targetedThisCombat, targetTokenTracker, isLaterTurn });\n      targetTokenTracker.hasLeft = false;\n      await rollItemDamage(target, lastArg.efData.origin, targetItemTracker.spellLevel);\n    } else {\n      console.debug(`Token ${target.name} has not evaluated for damage application`);\n    }\n  }\n\n  targetTokenTracker.turn = game.combat.turn;\n  targetTokenTracker.round = game.combat.round;\n  await DAE.setFlag(target, `${safeName}Tracker`, targetTokenTracker);\n  const allowVsRemoveCondition = item.flags.ddbimporter.effect.allowVsRemoveCondition;\n  const hasConditionAppliedEnd = game.dfreds.effectInterface.hasEffectApplied(targetTokenTracker.condition, target.document.uuid);\n  const currentTokenCombatTurn = game.combat.current.tokenId === lastArg.tokenId;\n  if (currentTokenCombatTurn && allowVsRemoveCondition && hasConditionAppliedEnd) {\n    console.log(`Asking ${target.name} wants to remove ${targetTokenTracker.condition}`);\n    await attemptRemoval(target, targetTokenTracker.condition, item);\n  }\n} else if (args[0] == \"off\") {\n  const safeName = (lastArg.efData.name ?? lastArg.efData.label).replace(/\\s|'|\\.|’/g, \"_\");\n  const targetToken = await fromUuid(lastArg.tokenUuid);\n  const targetTokenTracker = await DAE.getFlag(targetToken, `${safeName}Tracker`);\n  const removeOnOff = hasProperty(lastArg, \"efData.flags.ddbimporter.effect.removeOnOff\")\n    ? lastArg.efData.flags.ddbimporter.effect.removeOnOff\n    : true;\n\n  if (targetTokenTracker?.condition && removeOnOff && game.dfreds.effectInterface.hasEffectApplied(targetTokenTracker.condition, lastArg.tokenUuid)) {\n    console.debug(`Removing ${targetTokenTracker.condition} from ${targetToken.name}`);\n    game.dfreds.effectInterface.removeEffect({ effectName: targetTokenTracker.condition, uuid: lastArg.tokenUuid });\n  }\n\n  if (targetTokenTracker) {\n    targetTokenTracker.hasLeft = true;\n    await DAE.setFlag(targetToken, `${safeName}Tracker`, targetTokenTracker);\n  }\n}\n"
+        },
+        "options": {},
+        "apps": {},
+        "compendium": null,
+        "name": "Entangle",
+        "type": "script",
+        "scope": "global",
+        "command": "if (args[0].macroPass === \"preActiveEffects\") {\nconst template = await fromUuidSync(args[0].templateUuid);\nconst lastArg = args[args.length - 1];\nconst saveDC = actor.system.attributes.spelldc; // Replace this with the desired DC\nconst saveAbility = \"str\"; // Replace this with the desired ability\nconst tokenIds = await game.modules.get(\"templatemacro\").api.findContained(template);\nfor (let tokenId of tokenIds) {\nconst uuid = canvas.tokens.get(tokenId).actor.uuid;\nconst theActor = canvas.tokens.get(tokenId).actor;\nconst saveRoll = await theActor.rollAbilitySave(saveAbility, { fastForward: false, chatMessage: true, dc: saveDC });\nif (saveRoll.total < saveDC) {\ngame.dfreds.effectInterface.addEffect({ effectName: 'Restrained', uuid });\n}\n}\nreturn await game.modules.get(\"ActiveAuras\").api.AAHelpers.applyTemplate(args);\n}\nelse if(args[0].macroPass === \"templatePlaced\")\n{\nconst template = await fromUuidSync(args[0].templateUuid);\nawait template.update({fillColor:null});\n\nnew Sequence()\n    .effect()\n        .atLocation(template)\n        .file(\"jb2a.entangle.green\") // Change animation here\n\t.scaleToObject()\n\t.tieToDocuments(template)\n\t.belowTokens()\n\t.mask()\n\t.persist()\n    .play()\n}",
+        "author": "roRDywD19pu2VxlC",
+        "_id": null,
+        "img": "icons/svg/dice-target.svg",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 0
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "midi-qol": {
+      "onUseMacroName": "[preActiveEffects]function.game.gps.entangle2024,[postSave]function.game.gps.entangle2024",
+      "forceCEOff": true,
+      "effectActivation": false,
+      "AoETargetType": "any",
+      "AoETargetTypeIncludeSelf": true,
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "removeAttackDamageButtons": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "scene-packer": {
+      "hash": "f178727f56c0b250228240a835ebae2cdbfd8c62",
+      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-override.Item.LhcXHYzUuvHo5MUo"
+    },
+    "core": {},
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault",
+      "attachToken": "na",
+      "addTokenSize": false,
+      "noAutotarget": false,
+      "hideBorder": "globalDefault",
+      "hideHighlighting": "globalDefault"
+    },
+    "dae": {
+      "macro": {
+        "name": "Entangle",
+        "img": "icons/magic/nature/vines-thorned-curled-glow-green.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "autoanimations": {
+      "id": "90d09775-4bd7-4ac3-bb23-b32830608f4f",
+      "label": "Entangle",
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      },
+      "macro": {
+        "enable": false
+      },
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular"
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "club",
+          "variant": "01",
+          "color": "white",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": false,
+      "isCustomized": false,
+      "fromAmmo": false,
+      "version": 5
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "region-attacher": {
+      "attachRegionToTemplate": {
+        "dnd5eactivity000": true
+      },
+      "regionBehaviors": {
+        "dnd5eactivity000": [
+          {
+            "name": "tokenTurnStart",
+            "type": "executeScript",
+            "_id": "WO1qZBJkOBuSgycs",
+            "system": {
+              "events": [
+                "tokenTurnStart"
+              ],
+              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nawait game.gps.entangle2024({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: \"tokenTurnStart\"});"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.348",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.4",
+              "lastModifiedBy": "roRDywD19pu2VxlC",
+              "modifiedTime": 1756620651187
+            }
+          },
+          {
+            "name": "tokenExits",
+            "type": "executeScript",
+            "_id": "ghBipWgKgC9UsGjv",
+            "system": {
+              "events": [
+                "tokenExit"
+              ],
+              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nawait game.gps.entangle2024({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: \"tokenExits\"});"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.348",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.4",
+              "lastModifiedBy": "roRDywD19pu2VxlC",
+              "modifiedTime": 1756620638998
+            }
+          },
+          {
+            "name": "Difficult Terrain",
+            "type": "dnd5e.difficultTerrain",
+            "_id": "o0IAUew6uVkAdO5n",
+            "system": {
+              "magical": true,
+              "types": [],
+              "ignoredDispositions": []
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.348",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.4",
+              "lastModifiedBy": null
+            }
+          }
+        ]
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "effects": [],
+  "img": "icons/magic/nature/vines-thorned-curled-glow-green.webp",
+  "folder": null,
+  "_id": "DazxzlFrf2zXqADd",
+  "_key": "!items!DazxzlFrf2zXqADd"
+}

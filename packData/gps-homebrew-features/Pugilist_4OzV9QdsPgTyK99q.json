@@ -1,0 +1,15 @@
+{
+  "name": "Pugilist",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "4OzV9QdsPgTyK99q",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "a75ed8dc14079ad5e88445e84eb402480e556576"
+    }
+  },
+  "description": "",
+  "_key": "!folders!4OzV9QdsPgTyK99q"
+}

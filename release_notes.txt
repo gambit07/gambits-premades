@@ -1,5 +1,6 @@
+- Additions:
+  - Polearm Master 2024: Added 2024 feat, no changes
 - Updates:
-  - Healing Surge: Updated to dialogV2, added native hit die roll handling, removed custom chat modification, etc
+  - Compendium Data: Added a build of compendium data to the release process to resolve issues with invalid pack data
 - Bugfixes:
-  - findValidTokens: Fix a missing guard for actorless tokens
-  - Triumph: Fix a couple dialog issues
+  - Polearm Master: Add @mod damage bonus to attack

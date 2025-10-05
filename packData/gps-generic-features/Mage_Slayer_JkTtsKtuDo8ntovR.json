@@ -1,0 +1,184 @@
+{
+  "name": "Mage Slayer",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires MidiQOL, DAE. Make sure to Enable Mage Slayer in the module settings.</em></p>",
+      "chat": "When a creature within 5 ft. of you casts a spell, you can use your reaction to make a melee weapon attack against that creature, and when you damage a creature that is concentrating on a spell, that creature has disadvantage on the saving throw it makes to maintain its concentration. You also have advantage on saving throws against spells cast by creatures within 5 ft. of you."
+    },
+    "source": {
+      "custom": "1.0.1",
+      "rules": "2014",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "requirements": "",
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "identifier": "mage-slayer",
+    "activities": {},
+    "advancement": [],
+    "enchant": {}
+  },
+  "flags": {
+    "ddbimporter": {
+      "featId": 30,
+      "version": "3.4.63",
+      "prerequisites": []
+    },
+    "obsidian": {
+      "source": {
+        "type": "feat"
+      }
+    },
+    "scene-packer": {
+      "sourceId": "Item.",
+      "hash": "1b56897e8a613a609ee6cdf25534f357bd730591"
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "removeAttackDamageButtons": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "dae": {
+      "macro": {
+        "name": "Mage Slayer",
+        "img": "icons/weapons/polearms/halberd-crescent-glowing.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"preDamageRollComplete\") {\n  if(workflow.hitTargets.size === 0) return;\n  let target = workflow.hitTargets.first();\n\n  const hasConcApplied = target.actor.appliedEffects.some(e => e.name.includes(\"Concentrating\"));\n\tif (!hasConcApplied) return;\n\n  let effectData = [{\n    \"origin\": macroItem.uuid,\n    \"disabled\": false,\n    \"name\": `${macroItem.name} - Disadvantage`,\n    \"img\": macroItem.img,\n    \"type\": \"base\",\n    \"changes\": [\n      {\n        \"key\": \"flags.midi-qol.disadvantage.concentration\",\n        \"mode\": 0,\n        \"value\": \"1\",\n        \"priority\": 20\n      }\n    ],\n    \"transfer\": false,\n    \"flags\": {\n      \"dae\": {\n        \"specialDuration\": [\n          \"isSave.con\"\n        ]\n      }\n    }\n  }];\n\n  await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.330",
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.1",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "gambits-premades": {
+      "gpsUuid": "fc0e0473-038b-4e68-abd5-538b8fbbb4a5"
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/weapons/polearms/halberd-crescent-glowing.webp",
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-generic-features.Item.iuUGS62pqYBuo1U0",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Mage Slayer",
+      "img": "icons/weapons/polearms/halberd-crescent-glowing.webp",
+      "_id": "A2TnuwjVXETHP1rO",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro, preDamageRollComplete",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "_key": "!items.effects!JkTtsKtuDo8ntovR.A2TnuwjVXETHP1rO"
+    }
+  ],
+  "folder": null,
+  "_id": "JkTtsKtuDo8ntovR",
+  "_key": "!items!JkTtsKtuDo8ntovR"
+}

@@ -1,0 +1,145 @@
+{
+  "name": "Beguiling Arrow",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "A creature hit by the arrow takes an extra <a class=\"inline-roll inline-result\" data-tooltip=\"0 * 2 + 2\" data-roll=\"%7B%22class%22%3A%22Roll%22%2C%22options%22%3A%7B%7D%2C%22dice%22%3A%5B%5D%2C%22formula%22%3A%22floor%28+%2010/18%29%20*%202%20+%202%22%2C%22terms%22%3A%5B%7B%22class%22%3A%22NumericTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22number%22%3A0%7D%2C%7B%22class%22%3A%22OperatorTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22operator%22%3A%22*%22%7D%2C%7B%22class%22%3A%22NumericTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22number%22%3A2%7D%2C%7B%22class%22%3A%22OperatorTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22operator%22%3A%22+%22%7D%2C%7B%22class%22%3A%22NumericTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22number%22%3A2%7D%5D%2C%22total%22%3A2%2C%22evaluated%22%3Atrue%7D\"><i class=\"fas fa-dice-d20\"></i>2</a><strong>d6</strong> <span class=\"reference-link\"><a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.YIKbDv4zYqbE5teJ\" data-id=\"YIKbDv4zYqbE5teJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\"><i class=\"fas fa-book-open\"></i>psychic</a></span> damage, and is <span class=\"reference-link\"><a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.zZaEBrKkr66OWJvD\" data-id=\"zZaEBrKkr66OWJvD\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\"><i class=\"fas fa-book-open\"></i>charmed</a><a class=\"enricher-action\" data-action=\"apply\" data-status=\"charmed\" data-tooltip=\"EDITOR.DND5E.Inline.ApplyStatus\" aria-label=\"Apply Status to Selected Tokens\"><i class=\"fas fa-fw fa-reply-all fa-flip-horizontal\"></i></a></span> by one of your allies within 30 ft. of the target if it fails a WIS saving throw (DC <a class=\"inline-roll inline-result\" data-tooltip=\"8 + 0 + 4\" data-roll=\"%7B%22class%22%3A%22Roll%22%2C%22options%22%3A%7B%7D%2C%22dice%22%3A%5B%5D%2C%22formula%22%3A%228%20+%200%20+%204%22%2C%22terms%22%3A%5B%7B%22class%22%3A%22NumericTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22number%22%3A8%7D%2C%7B%22class%22%3A%22OperatorTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22operator%22%3A%22+%22%7D%2C%7B%22class%22%3A%22NumericTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22number%22%3A0%7D%2C%7B%22class%22%3A%22OperatorTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22operator%22%3A%22+%22%7D%2C%7B%22class%22%3A%22NumericTerm%22%2C%22options%22%3A%7B%7D%2C%22evaluated%22%3Atrue%2C%22number%22%3A4%7D%5D%2C%22total%22%3A12%2C%22evaluated%22%3Atrue%7D\"><i class=\"fas fa-dice-d20\"></i>12</a>) until the start of your next turn. This effect ends early if the ally attacks the <span class=\"reference-link\"><a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.zZaEBrKkr66OWJvD\" data-id=\"zZaEBrKkr66OWJvD\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\"><i class=\"fas fa-book-open\"></i>charmed</a><a class=\"enricher-action\" data-action=\"apply\" data-status=\"charmed\" data-tooltip=\"EDITOR.DND5E.Inline.ApplyStatus\" aria-label=\"Apply Status to Selected Tokens\"><i class=\"fas fa-fw fa-reply-all fa-flip-horizontal\"></i></a></span> target, deals damage to it, or forces it to make a saving throw."
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "type": {
+      "value": "class",
+      "subtype": "arcaneShot"
+    },
+    "properties": [
+      "mgc"
+    ],
+    "requirements": "",
+    "source": {
+      "custom": "1.0.14",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "activities": {},
+    "identifier": "beguiling-arrow",
+    "enchant": {},
+    "advancement": [],
+    "crewed": false
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": "64224",
+      "entityTypeId": "222216831",
+      "action": true,
+      "componentId": 222,
+      "componentTypeId": 258900837,
+      "originalName": "Beguiling Arrow",
+      "type": "class",
+      "class": "Fighter",
+      "subclass": "Arcane Archer",
+      "importId": "ISJMuDJAGah2PvZr"
+    },
+    "infusions": {
+      "infused": false
+    },
+    "obsidian": {
+      "source": {
+        "type": "class",
+        "text": "Fighter"
+      }
+    },
+    "midi-qol": {
+      "removeAttackDamageButtons": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "saveDamage": "default",
+      "bonusSaveDamage": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "dnd5e": {
+      "advancementOrigin": "RUVuq6gnFP7iNwLn",
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "scene-packer": {
+      "hash": "85b98f610e25f255a9b6491e1d07656cce6551fc",
+      "sourceId": "Item.VgtzRZ9iip79pUTe"
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault"
+    },
+    "dae": {
+      "macro": {
+        "name": "Beguiling Arrow",
+        "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "core": {},
+    "gambits-premades": {
+      "gpsUuid": "90456c7c-d138-41bd-9e69-a642720e4edd"
+    }
+  },
+  "effects": [],
+  "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  "folder": "PmXgZSJ8c2PqKenQ",
+  "_id": "1FB61enmSKJJikj9",
+  "_key": "!items!1FB61enmSKJJikj9"
+}

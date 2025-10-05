@@ -96,21 +96,26 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
                     "scope": "global",
                     "command": `
                         if(args[0].macroPass === \"preActiveEffects\") {
-                        let template = canvas.templates.placeables.find(t => t.id === '${templateId}');
+                            let template = canvas.templates.placeables.find(t => t.id === '${templateId}');
 
-                        let config = {
-                            gridHighlight: true,
-                            icon: {texture: 'icons/svg/dice-target.svg', borderVisible: true},
-                            location: {obj: template, limitMaxRange: 30, showRange: true},
-                            snap: { position: CONST.GRID_SNAPPING_MODES.CENTER | CONST.GRID_SNAPPING_MODES.LEFT_SIDE_MIDPOINT }
+                            let config = {
+                                gridHighlight: true,
+                                icon: {texture: 'icons/svg/dice-target.svg', borderVisible: true},
+                                location: {obj: template, limitMaxRange: 30, showRange: true}
+                                snap: { position: CONST.GRID_SNAPPING_MODES.CENTER | CONST.GRID_SNAPPING_MODES.LEFT_SIDE_MIDPOINT }
+                            }
+
+                            actor.sheet.minimize();
+
+                            let position = await Sequencer.Crosshair.show(config);
+
+                            if(!position) return actor.sheet.maximize();
+
+                            template.document.update({ x: position.x, y: position.y });
+
+                            actor.sheet.maximize();
                         }
-
-                        let position = await Sequencer.Crosshair.show(config);
-
-                        if(!position) return;
-
-                        template.document.update({ x: position.x, y: position.y });
-                    }`
+                    `
                 }
                 }
             }

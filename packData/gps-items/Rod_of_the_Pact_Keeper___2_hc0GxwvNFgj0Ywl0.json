@@ -1,0 +1,443 @@
+{
+  "name": "Rod of the Pact Keeper, +2",
+  "type": "equipment",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "1.0.32",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "attunement": "required",
+    "equipped": true,
+    "rarity": "uncommon",
+    "identified": true,
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "1",
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 0
+    },
+    "armor": {
+      "value": 10,
+      "dex": null,
+      "magicalBonus": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "speed": {
+      "value": null,
+      "conditions": ""
+    },
+    "strength": 0,
+    "proficient": 1,
+    "unidentified": {
+      "description": "Rod"
+    },
+    "type": {
+      "value": "trinket",
+      "baseItem": ""
+    },
+    "container": null,
+    "properties": [],
+    "attuned": true,
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [
+            {
+              "type": "itemUses",
+              "value": "1",
+              "target": "",
+              "scaling": {}
+            }
+          ],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "ft"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "rod-of-the-pact-keeper-2"
+  },
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {
+        "type": "Rod",
+        "filterType": "Rod",
+        "isConsumable": false,
+        "isContainer": false,
+        "isCustomItem": false,
+        "isHomebrew": false,
+        "isMonkWeapon": false,
+        "isPack": false,
+        "levelInfusionGranted": null,
+        "tags": [
+          "Buff"
+        ],
+        "sources": [
+          {
+            "sourceId": 3,
+            "pageNumber": null,
+            "sourceType": 1
+          }
+        ]
+      },
+      "id": 1120065883,
+      "entityTypeId": 1439493548,
+      "containerEntityId": 87261088,
+      "containerEntityTypeId": 1581111423,
+      "definitionEntityTypeId": 112130694,
+      "definitionId": 11217,
+      "originalName": "Rod of the Pact Keeper, +1",
+      "version": "3.4.23",
+      "effectsApplied": true,
+      "importId": "LcPaJ2JvQf4Nz6op",
+      "pack": "world.ddb-spelljammer-adventures-in-space-ddb-override",
+      "originalItemName": "Rod of the Pact Keeper, +1",
+      "replaced": true,
+      "overrideId": "NONE",
+      "ignoreIcon": false,
+      "ignoreItemImport": true,
+      "ignoreItemForChrisPremades": false,
+      "retainResourceConsumption": false,
+      "ignoreItemUpdate": false
+    },
+    "dae": {
+      "alwaysActive": false,
+      "activeEquipped": true,
+      "macro": {
+        "name": "Rod of the Pact Keeper, +2",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "_id": null,
+        "img": "icons/commodities/tech/pipe-metal.webp",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 3
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "infusions": {
+      "maps": [],
+      "applied": [],
+      "infused": false
+    },
+    "midi-qol": {
+      "forceCEOff": true,
+      "onUseMacroName": "[postActiveEffects]function.game.gps.rodOfThePactKeeper",
+      "effectActivation": false,
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": "",
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default"
+    },
+    "scene-packer": {
+      "hash": "e14641d9eb133d1c5eafed9efa1799fcf8af5a5a",
+      "sourceId": "Item.fJHV2lLr0fgZLW3d"
+    },
+    "link-item-resource-5e": {
+      "resource-link": "secondary"
+    },
+    "core": {},
+    "itemacro": {
+      "macro": {
+        "name": "Rod of the Pact Keeper, +1",
+        "type": "script",
+        "scope": "global",
+        "command": "if (args[0] !== \"on\") return;\n\nconst lastArg = args[args.length - 1];\nconst spellLevel = actor.system.spells.pact.value;\nconst spellMax = actor.system.spells.pact.max;\n\n\nif (spellLevel === spellMax) {\n  ui.notifications.warn(\"You have no appropriate spell slot to recover\");\n  return;\n}\n\nconst spellLevelNew = spellLevel + 1;\n\nawait new Dialog({\n  title: `Pact Keeper`,\n  content: `<p>Would you like to use your action to recover a spell slot?</p>`,\n\tbuttons: {\n\t\trecover: {\n\t\t\tlabel: \"Continue\", callback: async (html) => {\n\t\t\t\tawait actor.update({ \"system.spells.pact.value\": spellLevelNew });\n\t\t\t\tconst message = spellLevelNew === 1 ? \"Spell slot recovered! You now have 1 pact spell remaining.\" : `Spell slot recovered! You now have ${spellLevelNew} pact spells remaining.`;\n\nui.notifications.info(message);\n\t\t\t}\n\t\t},\n\t\tcancel: { label: \"Cancel\", callback: () => false }\n\t},\n\tdefault: \"Cancel\"\n}).render(true);",
+        "author": "roRDywD19pu2VxlC",
+        "_id": null,
+        "img": "icons/commodities/tech/pipe-metal.webp",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 0
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      },
+      "migratedUses": 1
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "effects": [
+    {
+      "changes": [
+        {
+          "key": "system.bonuses.spell.attack",
+          "mode": 2,
+          "value": "2",
+          "priority": 18
+        },
+        {
+          "key": "system.bonuses.spell.dc",
+          "mode": 2,
+          "value": "2",
+          "priority": 18
+        }
+      ],
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "tint": "#ffffff",
+      "transfer": true,
+      "disabled": false,
+      "flags": {
+        "dae": {
+          "transfer": true,
+          "stackable": "noneName",
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "dontApply": false,
+          "showIcon": false,
+          "disableIncapacitated": false,
+          "disableCondition": ""
+        },
+        "ddbimporter": {
+          "disabled": false,
+          "itemId": 1120065883,
+          "itemEntityTypeId": 1439493548
+        },
+        "midi-qol": {
+          "forceCEOff": true
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "nameOverride": "",
+          "customCheck": "",
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_id": "ZrTNMwai89gqFKJo",
+      "origin": "Compendium.world.gps-items.Item.lCJiSKNpKezVNOhq",
+      "name": "Rod of the Pact Keeper, +2",
+      "description": "",
+      "statuses": [],
+      "img": "icons/commodities/tech/pipe-metal.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!hc0GxwvNFgj0Ywl0.ZrTNMwai89gqFKJo"
+    }
+  ],
+  "img": "icons/commodities/tech/pipe-metal.webp",
+  "folder": null,
+  "_id": "hc0GxwvNFgj0Ywl0",
+  "_key": "!items!hc0GxwvNFgj0Ywl0"
+}

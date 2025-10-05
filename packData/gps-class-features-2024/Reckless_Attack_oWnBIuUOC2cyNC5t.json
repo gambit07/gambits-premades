@@ -1,0 +1,238 @@
+{
+  "name": "Reckless Attack",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.9",
+      "revision": 1,
+      "rules": "2024",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "",
+    "properties": [],
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "activities": {},
+    "identifier": "reckless-attack",
+    "enchant": {},
+    "advancement": []
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 53,
+      "type": "class",
+      "dndbeyond": {
+        "requiredLevel": 2,
+        "displayOrder": 5,
+        "levelScale": null,
+        "levelScales": [],
+        "limitedUse": [],
+        "class": "Barbarian"
+      },
+      "class": "Barbarian",
+      "subclass": "Path of the Totem Warrior",
+      "effectsApplied": true,
+      "importId": "LqcaPoeCikRHYH6K"
+    },
+    "obsidian": {
+      "source": {
+        "type": "class",
+        "text": "Barbarian"
+      }
+    },
+    "midi-qol": {
+      "forceCEOff": true,
+      "rollAttackPerTarget": "default",
+      "effectActivation": false,
+      "forceCEOn": false,
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "",
+      "removeAttackDamageButtons": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "scene-packer": {
+      "hash": "84ae7569f161446d66fbe44d85e0f4882e699e63",
+      "sourceId": "Actor.DX6KebS1bvxIkQlQ.Item.b4xUUAxHOA23hFhU"
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault",
+      "snapCenter": true,
+      "snapCorner": true,
+      "snapSideMidpoint": true
+    },
+    "core": {},
+    "dae": {
+      "macro": {
+        "name": "Reckless Attack",
+        "img": "icons/skills/melee/strike-axe-blood-red.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-class-features-2024.Item.oWnBIuUOC2cyNC5t",
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": 152,
+        "startTurn": 0
+      },
+      "disabled": false,
+      "name": "Reckless Attack",
+      "_id": "HvqYLk6a33Mq6j0n",
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.recklessAttack2024, preAttackRoll",
+          "priority": 20
+        },
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "function.game.gps.recklessAttack2024",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "transfer": true,
+      "statuses": [],
+      "flags": {
+        "times-up": {},
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "startEndEveryTurn",
+          "specialDuration": [
+            "None"
+          ],
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "effectmacro": {},
+        "core": {
+          "overlay": false
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "tint": "#ffffff",
+      "img": "icons/skills/melee/strike-axe-blood-red.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!oWnBIuUOC2cyNC5t.HvqYLk6a33Mq6j0n"
+    }
+  ],
+  "img": "icons/skills/melee/strike-axe-blood-red.webp",
+  "folder": "hUArnHo70IYFK3tY",
+  "_id": "oWnBIuUOC2cyNC5t",
+  "_key": "!items!oWnBIuUOC2cyNC5t"
+}

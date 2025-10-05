@@ -1,0 +1,352 @@
+{
+  "name": "Longsword (Corrosion)",
+  "type": "weapon",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires Midi QOL, DAE</em></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "0.5.1",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 3,
+      "units": "lb"
+    },
+    "price": {
+      "value": 15,
+      "denomination": "gp"
+    },
+    "attunement": "",
+    "equipped": true,
+    "rarity": "",
+    "identified": true,
+    "cover": null,
+    "crewed": false,
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft",
+      "reach": null
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "damage": {
+      "versatile": {
+        "number": 1,
+        "denomination": 10,
+        "bonus": "",
+        "types": [],
+        "custom": {
+          "enabled": false,
+          "formula": ""
+        },
+        "scaling": {
+          "mode": "",
+          "number": null,
+          "formula": ""
+        }
+      },
+      "base": {
+        "number": 1,
+        "denomination": 8,
+        "bonus": "",
+        "types": [
+          "slashing"
+        ],
+        "custom": {
+          "enabled": false,
+          "formula": ""
+        },
+        "scaling": {
+          "mode": "",
+          "number": null,
+          "formula": ""
+        }
+      }
+    },
+    "armor": {
+      "value": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": [
+      "ver"
+    ],
+    "proficient": null,
+    "unidentified": {
+      "description": "Longsword"
+    },
+    "type": {
+      "value": "martialM",
+      "baseItem": "longsword"
+    },
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "attack",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "attack": {
+          "ability": "",
+          "bonus": "",
+          "critical": {
+            "threshold": null
+          },
+          "flat": false,
+          "type": {
+            "value": "melee",
+            "classification": "weapon"
+          }
+        },
+        "damage": {
+          "critical": {
+            "bonus": ""
+          },
+          "includeBase": true,
+          "parts": []
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "attackMode": "oneHanded",
+        "ammunition": "",
+        "otherActivityUuid": "",
+        "attackRollPerTarget": "default",
+        "fumbleThreshold": 1
+      }
+    },
+    "identifier": "longsword-corrosion",
+    "container": null,
+    "attuned": false,
+    "ammunition": {},
+    "magicalBonus": null
+  },
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {
+        "type": "Longsword",
+        "damage": {
+          "parts": []
+        },
+        "classFeatures": [],
+        "restrictions": [],
+        "filterType": "Weapon",
+        "isConsumable": false,
+        "isContainer": false,
+        "isCustomItem": false,
+        "isHomebrew": false,
+        "isMonkWeapon": false,
+        "isPack": false,
+        "levelInfusionGranted": null,
+        "tags": [
+          "Damage",
+          "Combat"
+        ],
+        "sources": [
+          {
+            "sourceId": 1,
+            "pageNumber": null,
+            "sourceType": 2
+          },
+          {
+            "sourceId": 2,
+            "pageNumber": null,
+            "sourceType": 1
+          }
+        ]
+      },
+      "id": 0,
+      "entityTypeId": 0,
+      "definitionEntityTypeId": 1782728300,
+      "definitionId": 4,
+      "originalName": "Longsword",
+      "version": "3.5.7"
+    },
+    "scene-packer": {
+      "sourceId": "Item.Ccsf7i8aZ2JntYN7",
+      "hash": "857a9fceb6232e6f14b9279caae3f609b95f3231"
+    },
+    "midi-qol": {
+      "onUseMacroName": "[preDamageApplication]ItemMacro",
+      "fumbleThreshold": null,
+      "effectActivation": false,
+      "removeAttackDamageButtons": "default"
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "noConcentrationCheck": false,
+      "confirmTargets": "never"
+    },
+    "core": {},
+    "dae": {
+      "macro": {
+        "name": "Longsword (Corrosion)",
+        "img": "icons/weapons/swords/greatsword-crossguard-steel.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"preDamageApplication\") {\n  const spellDC = 16;\n  let saveAbility = \"con\";\n  const target = workflow.targets.first();\n  const targetActor = workflow.targets.first().actor;\n  const armorKeywords = [\"Chain Mail\", \"Chain Shirt\", \"Scale Mail\", \"Half Plate\", \"Plate Armor\", \"Plate\", \"Breastplate\", \"Ring Mail\", \"Chain Mail\", \"Splint\"];  // Add additional armor here that you want included for this effect. This will do partial matches, so Mithral Scale Mail would return true with the search below and continue with the effect\n  let hasMatchingArmor = targetActor.items.some(item => armorKeywords.some(keyword => item.name.includes(keyword)));\n  if(!hasMatchingArmor) return;\n\n\n  const itemData = {\n    name: macroItem.name,\n    img: macroItem.img,\n    type: \"feat\",\n    effects: [],\n    flags: {\n      \"midi-qol\": {\n        noProvokeReaction: true,\n        onUseMacroName: null,\n        forceCEOff: true\n      },\n      \"autoanimations\": {\n        killAnim: true\n      }\n    },\n    system: {\n      equipped: true,\n      actionType: \"save\",\n      save: { dc: spellDC, ability: saveAbility, scaling: \"flat\" },\n      components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n      duration: { units: \"inst\", value: undefined },\n    }\n  };\n\n  const itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: actor });\n  const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid] };\n  const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n  if (saveResult.failedSaves.size !== 0)\n  {\n    let stacked,name;\n    name = \"Corrosion\"\n\n    let targetActorAC = targetActor.system.attributes.ac.value;\n    let updateAC = 2;\n    let targetActorACCalc = targetActorAC - 2;\n    if(targetActorACCalc < 10) updateAC = 1;\n    if (targetActorAC === 10) return;\n\n    stacked = {name, stackable:'count',changes:[{key:'system.attributes.ac.value',mode: 2,value:-updateAC}]}\n\n    const effectData = {\n      name: stacked.name,\n      changes: stacked.changes,\n      icon: macroItem.img,\n      flags: {dae:{stackable:stacked.stackable,specialDuration:['longRest','shortRest']}},\n      statuses: [stacked.name],\n      origin: macroItem.uuid\n    }\n\n    await MidiQOL.socket().executeAsGM('createEffects',{actorUuid:targetActor.uuid, effects:[effectData]});\n  }\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.0",
+          "coreVersion": "12.329",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    }
+  },
+  "effects": [],
+  "img": "icons/weapons/swords/sword-guard-red.webp",
+  "folder": null,
+  "_id": "iOWBPjnjdWj2azU4",
+  "_key": "!items!iOWBPjnjdWj2azU4"
+}

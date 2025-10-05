@@ -1,0 +1,866 @@
+{
+  "name": "Web Strand",
+  "type": "weapon",
+  "system": {
+    "description": {
+      "value": "<p>Once a target is effected by Web Strand, other allies can attack the ally and deal damage to the web instead of damaging the ally. This only works for attacks, not saving throws.</p>",
+      "chat": ""
+    },
+    "source": {
+      "book": "Monstrous Compendium Vol. 1: Spelljammer Creatures",
+      "page": "3",
+      "custom": "1.0.0",
+      "license": "",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "identified": true,
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "",
+    "attunement": "",
+    "attuned": false,
+    "equipped": true,
+    "cover": null,
+    "crewed": false,
+    "range": {
+      "value": 120,
+      "long": null,
+      "units": "ft",
+      "reach": null
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": null
+    },
+    "damage": {
+      "versatile": {
+        "number": null,
+        "denomination": null,
+        "bonus": "",
+        "types": [],
+        "custom": {
+          "enabled": false,
+          "formula": ""
+        },
+        "scaling": {
+          "mode": "",
+          "number": null,
+          "formula": ""
+        }
+      },
+      "base": {
+        "number": null,
+        "denomination": 0,
+        "types": [],
+        "custom": {
+          "enabled": false
+        },
+        "scaling": {
+          "number": 1
+        },
+        "bonus": ""
+      }
+    },
+    "armor": {
+      "value": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "type": {
+      "value": "simpleR",
+      "baseItem": ""
+    },
+    "magicalBonus": null,
+    "properties": [],
+    "proficient": 1,
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "attack",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "4k9NUNFKsNboMaPi"
+          }
+        ],
+        "range": {
+          "value": "120",
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": null,
+          "max": "",
+          "recovery": []
+        },
+        "attack": {
+          "ability": "str",
+          "bonus": "",
+          "critical": {
+            "threshold": null
+          },
+          "flat": false,
+          "type": {
+            "value": "ranged",
+            "classification": "weapon"
+          }
+        },
+        "damage": {
+          "critical": {
+            "bonus": ""
+          },
+          "includeBase": true,
+          "parts": []
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "attackMode": "oneHanded",
+        "ammunition": "",
+        "otherActivityUuid": "",
+        "attackRollPerTarget": "default",
+        "fumbleThreshold": 1
+      }
+    },
+    "identifier": "web-strand",
+    "ammunition": {},
+    "mastery": ""
+  },
+  "effects": [
+    {
+      "origin": "Scene.mcZYI9W1Hd4rVznC.Token.RqizWjONLB6d6jFd.Actor.VuEOZY2vgy6qxOin.Item.LSMvlnXNLVMdoV1Z",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 99999,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Web Strand",
+      "img": "icons/commodities/materials/material-webbing.webp",
+      "_id": "4k9NUNFKsNboMaPi",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "macro.StatusEffect",
+          "mode": 0,
+          "value": "grappled",
+          "priority": 20
+        },
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro, isAttacked",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "enableCondition": "",
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "autoanimations": {
+          "id": "f8dbc81b-43a4-4d14-84e5-be5750c0ae5d",
+          "label": "Web Strand",
+          "activeEffectType": "ontoken",
+          "menu": "aefx",
+          "macro": {
+            "enable": false
+          },
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": false,
+              "opacity": 1,
+              "persistent": false,
+              "playbackRate": 1,
+              "playOn": "source",
+              "repeat": 1,
+              "repeatDelay": 250,
+              "size": 1,
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": false,
+          "isCustomized": false,
+          "version": 5
+        }
+      },
+      "_key": "!items.effects!ctFaouP3K7HEUAlw.4k9NUNFKsNboMaPi"
+    }
+  ],
+  "flags": {
+    "ddbimporter": {
+      "levelBonus": false,
+      "dndbeyond": {},
+      "parentId": "HEuUjYbuzL7ku34L"
+    },
+    "monsterMunch": {
+      "titleHTML": "<em>Web Strand.</em>",
+      "fullName": "Web Strand.",
+      "actionCopy": false,
+      "type": "action",
+      "actionInfo": {
+        "damage": {
+          "parts": [],
+          "versatile": ""
+        },
+        "baseAbility": "str",
+        "toHit": 13,
+        "proficient": true,
+        "extraAttackBonus": 0
+      }
+    },
+    "midi-qol": {
+      "removeAttackDamageButtons": "default",
+      "fumbleThreshold": null,
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[postActiveEffects]ItemMacro",
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "dae": {
+      "macro": {
+        "name": "Web Strand",
+        "img": "icons/commodities/materials/material-webbing.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    let target = workflow.hitTargets.first();\n    if(!target) return;\n\n    let webItem = await target.actor.appliedEffects.find(e => e.name === item.name);\n    await webItem.setFlag(\"gambits-premades\", \"webHP\", 20);\n    \n    new Sequence()\n    .effect()\n        .file(\"jb2a.energy_beam.normal.dark_greenpurple.03\")\n        .persist()\n        .name(`${target.id}_webStrand`)\n        .fadeIn(500)\n        .fadeOut(500)\n        .attachTo(token, {offset: { x: -125, y: 35 }})\n        .filter(\"ColorMatrix\", { hue: 0, saturate: -1 })\n        .stretchTo(target,{ attachTo: true })\n    .play()\n\n    new Sequence()\n        .effect()\n        .file(\"jb2a.shield_themed.below.eldritch_web.02.dark_green\")\n        .persist()\n        .name(`${target.id}_web`)\n        .fadeIn(500)\n        .fadeOut(500)\n        .scaleToObject(1.5)\n        .attachTo(target)\n        .filter(\"ColorMatrix\", { hue: 0, saturate: -1 })\n    .play()\n}\n\nif(args[0] === \"off\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.id}_webStrand` });\n    Sequencer.EffectManager.endEffects({ name: `${token.id}_web` });\n}\n\nif(args[0].macroPass === \"isAttacked\") {\n    let attacker = workflow.token;\n    if(token.document.disposition !== attacker.document.disposition) return;\n\n    const damageTypeImmunity = [\"Bludgeoning\", \"Poison\", \"Psychic\"];\n    const damageImmunity = damageTypeImmunity.some(type => workflow.item.labels.damageTypes.includes(type));\n    if(damageImmunity) return;\n\n    let webItem = await token.actor.appliedEffects.find(e => e.name === item.name);\n    if(!webItem) return;\n\n    if(workflow.attackTotal < 12) return;\n\n    const damageTypeVulnerability = [\"Fire\"];\n    const damageVulnerability = damageTypeVulnerability.some(type => workflow.item.labels.damageTypes.includes(type));\n    let webHP = await webItem.getFlag(\"gambits-premades\", \"webHP\");\n\n    const damageFormula = workflow.item.system.damage.parts\n        .map(damagePart => `${damagePart[0]}`)\n        .join(\" + \");\n\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`${damageFormula} + ${actor.system.attributes.prof}`).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    let damageTotal = damageVulnerability ? damageRoll.total * 2 : damageRoll.total;\n\n    let hpRemaining = webHP - damageTotal;\n    let chatContent;\n\n    if (hpRemaining > 0) {\n        await webItem.setFlag(\"gambits-premades\", \"webHP\", hpRemaining);\n        chatContent = `<span style='text-wrap: wrap;'>${attacker.document.name} hit the web strands surrounding you dealing ${damageTotal} points of damage. <img src=\"${attacker.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    } else {\n        await webItem.delete();\n        chatContent = `<span style='text-wrap: wrap;'>${attacker.document.name} hit the web strands surrounding you dealing ${damageTotal} points of damage and destroyed the web. <img src=\"${attacker.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    }\n\n    await game.gps.replaceChatCard({actorUuid: token.actor.uuid, itemUuid: item.uuid, chatContent: chatContent, rollData: damageRoll});\n\n    workflow.aborted = true;\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "dnd5e": {
+      "dependents": [
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.3LDQvvFihwo9Ny6V"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.5lPAQOwOOAhe6iaP"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.JlsXyP1zCaqT4oAn"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.CJVi4tji2O2eCvbx"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.n9b8gQQpFBbPaFYr"
+        },
+        {
+          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.VdzbZu3T4pFsi4w7"
+        },
+        {
+          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.SQJRszKo0ANMKmPD"
+        },
+        {
+          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.exsz0Ol6qgnU3bYw"
+        },
+        {
+          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.nAye6oc3kpnoyTqm"
+        },
+        {
+          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.1eOXLrcTZfKw8ii9"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.0ec9ZXAHR5lMvAjw"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.xCJjZb6kfOoojL8h"
+        },
+        {
+          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.AWULdBdoRN9NCLwk"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.LuJdH9SIghlHyRfD"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.SqJIbEa2glZqRvlh"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.99Bk7h1QcJuo8lVu"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.PakM7e2hAHFsm5MC"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.OSde8FAMF4SOGNpS"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.Al9AtwQb6ud9u8Js"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.fwncynDElTC8wqhA"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.ZvN3tut1Rdt828Ez"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.cDFhTNkyYBFganTl"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.dhQOhqTkHnYPFEib"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.tGe6xLok1FO8eS4F"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.2rA6c1JJOZwJrPHO"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.HCPHn09wHXDb76S1"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.WwuzG0r843Zc2IFg"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.LpTHaAHvWsjmtJnm"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.lwPOV8kSQPIRCghL"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.llxnSJ19ZaZK27Z5"
+        },
+        {
+          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.5sg5uy47lGAORyJq"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.5vyDubKccqwXpUL1"
+        },
+        {
+          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.BSypHvKiFKasb1Ej"
+        }
+      ],
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "autoanimations": {
+      "id": "4772de0a-5a07-4dd7-9188-cb27f3530e75",
+      "label": "Web Strand",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": "jb2a.shield_themed.below.eldritch_web.02.dark_green"
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": false,
+          "opacity": 1,
+          "persistent": true,
+          "playbackRate": 1,
+          "playOn": "target",
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "chains",
+          "animation": "diamond",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": false,
+      "isCustomized": false,
+      "fromAmmo": false,
+      "version": 5,
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      }
+    },
+    "scene-packer": {
+      "hash": "c1bb5b6a67be6fe2c1f8a42361f6801d0dc69617",
+      "sourceId": "Item.adVVmLmsHAQDsHXE"
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "img": "icons/commodities/materials/material-webbing.webp",
+  "folder": "GAnBy9HeHcpD2uyx",
+  "_id": "ctFaouP3K7HEUAlw",
+  "_key": "!items!ctFaouP3K7HEUAlw"
+}

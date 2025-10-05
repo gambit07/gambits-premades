@@ -1,0 +1,282 @@
+{
+  "name": "Skeletal Tail",
+  "flags": {
+    "bkit": {
+      "anchorId": "cb6gypy5y6u"
+    },
+    "dnd5e": {
+      "sourceId": "Compendium.sgeh-monkeydm.sgeh-items.Item.wOJckT3oQ17uIcAh",
+      "advancementOrigin": "Y4FR6LgAvko7MG0K.rGCTCzvns0WSnMUK",
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault",
+      "attachToken": "na",
+      "addTokenSize": false,
+      "noAutotarget": false,
+      "hideBorder": "globalDefault",
+      "hideHighlighting": "globalDefault"
+    },
+    "midi-qol": {
+      "AoETargetType": "any",
+      "AoETargetTypeIncludeSelf": false,
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[templatePlaced]ItemMacro"
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false
+    },
+    "templatemacro": {
+      "whenEntered": {
+        "asGM": false,
+        "command": "if (this.hook.animate === false || (token.actor.type !== 'npc' && token.actor.type !== 'character')) return;\n\nlet currentCombatant = canvas.tokens.get(game.combat.current.tokenId);\nif (currentCombatant.id !== token.id && currentCombatant.document.disposition === token.document.disposition) return; // Avoid initiating when it's not a token's turn if they are doing something like riding another allied token. This should allow for dialog to fire if forced movement via an enemy spell moves the token outside range outside of their turn but not when being moved as part of an allied unit\n\nconst effectOriginActor = await fromUuid(template.flags[\"midi-qol\"].actorUuid);\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\n//Simple elevation check in lieu of a more robust option\nif((token.document.elevation > (effectOriginToken.document.elevation + template.distance)) || (token.document.elevation < (effectOriginToken.document.elevation - template.distance))) return;\n\nawait template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Skeletal Tail`, effectOriginToken, effectOriginActor, token });"
+      },
+      "whenLeft": {
+        "asGM": false,
+        "command": "if (this.hook.animate === false || (token.actor.type !== 'npc' && token.actor.type !== 'character')) return;\n\nlet currentCombatant = canvas.tokens.get(game.combat.current.tokenId);\nif (currentCombatant.id !== token.id && currentCombatant.document.disposition === token.document.disposition) return; // Avoid initiating when it's not a token's turn if they are doing something like riding another allied token. This should allow for dialog to fire if forced movement via an enemy spell moves the token outside range outside of their turn but not when being moved as part of an allied unit\n\nconst effectOriginActor = await fromUuid(template.flags[\"midi-qol\"].actorUuid);\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\n//Simple elevation check in lieu of a more robust option\nif((token.document.elevation > (effectOriginToken.document.elevation + template.distance)) || (token.document.elevation < (effectOriginToken.document.elevation - template.distance))) return;\n\nawait template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Skeletal Tail`, effectOriginToken, effectOriginActor, token });"
+      },
+      "whenThrough": {
+        "asGM": false,
+        "command": "if (this.hook.animate === false || (token.actor.type !== 'npc' && token.actor.type !== 'character')) return;\n\nlet currentCombatant = canvas.tokens.get(game.combat.current.tokenId);\nif (currentCombatant.id !== token.id && currentCombatant.document.disposition === token.document.disposition) return; // Avoid initiating when it's not a token's turn if they are doing something like riding another allied token. This should allow for dialog to fire if forced movement via an enemy spell moves the token outside range outside of their turn but not when being moved as part of an allied unit\n\nconst effectOriginActor = await fromUuid(template.flags[\"midi-qol\"].actorUuid);\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\n//Simple elevation check in lieu of a more robust option\nif((token.document.elevation > (effectOriginToken.document.elevation + template.distance)) || (token.document.elevation < (effectOriginToken.document.elevation - template.distance))) return;\n\nawait template.callMacro(\"never\", { dialogTitle: `${effectOriginActor.name} | Skeletal Tail`, effectOriginToken, effectOriginActor, token });"
+      },
+      "never": {
+        "asGM": false,
+        "command": "let { dialogTitle,effectOriginToken,effectOriginActor,token,braceItem } = this;\nasync function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }\nlet gameVersion = parseInt(game.system.version.split('.')[0], 10);\n\n// Check if origin tokens reaction is already used or a spell effect is preventing reactions\nconst effectNamesOrigin = [\"Reaction\", \"Confusion\", \"Arms of Hadar\", \"Shocking Grasp\", \"Slow\", \"Staggering Smite\"];\nlet hasEffectOrigin = (gameVersion >= 3 ? effectOriginActor.appliedEffects : effectOriginActor.effects)\n    .some(effect => effectNamesOrigin.includes(effect.name));\nif(hasEffectOrigin) return;\n\nlet spellDC = effectOriginActor.system.attributes.spelldc;\nlet numDice = await effectOriginActor.getFlag(\"midi-qol\", \"skeletalTailDice\");\n\nconst initialTimeLeft = 15;\nlet dialogContent = `\n    <div style='display: flex; align-items: center; justify-content: space-between;'>\n        <div style='flex: 1;'>\n                    Would you like to use your Skeletal Tail for the target that moved?\n        </div>\n        <div style='border-left: 1px solid #ccc; padding-left: 10px; text-align: center;'>\n            <p><b>Time remaining</b></p>\n            <p><span id='countdown' style='font-size: 16px; color: red;'>${initialTimeLeft}</span> seconds</p>\n        </div>\n    </div>`;\n\n// Create temporary effect for dialog\nconst tempEffectData = [{\n\t\"icon\": \"icons/commodities/bones/hurn-curved-yellow.webp\",\n\t\"name\": \"Skeletal Tail Reaction\",\n        \"changes\": [],\n        \"origin\": effectOriginActor.uuid,\n        \"disabled\": false,\n        \"duration\": {\n            \"rounds\": 1\n        },\n        \"flags\": {\n            \"dae\": {\n                \"macroRepeat\": \"none\"\n            },\n            \"effectmacro\": {\n                \"onCreate\": {\n                    \"script\": `\n                        let timer;\n\n                        let dialog = new Dialog({\n                            title: \"Skeletal Tail Reaction\",\n                            content: \\`${dialogContent}\\`,\n                            buttons: {\n                                yes: {\n                                    label: \"Yes\",\n                                    callback: async (html) => {\n                                        let target = await fromUuid(\\`${token.document.uuid}\\`);\n                                        console.log(target, \"this is target\")\n                                        const itemData = {\n                                        name: \"Skeletal Tail Save\",\n                                        type: \"feat\",\n                                            img: 'icons/commodities/bones/hurn-curved-yellow.webp',\n                                        effects: [],\n                                        flags: {\n                                            \"midi-qol\": {\n                                                noProvokeReaction: true,\n                                                onUseMacroName: null,\n                                                forceCEOff: true\n                                            },\n                                            \"midiProperties\": {\n                                                nodam: true\n                                            },\n                                        },\n                                        system: {\n                                            equipped: true,\n                                            actionType: \"save\",\n                                                \"save\": { \"dc\": \\`${spellDC}\\`, \"ability\": \"dex\", \"scaling\": \"flat\" },\n                                            damage: { parts: [[\\`${numDice}d4\\`, 'piercing']] },\n                                            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n                                            duration: { units: \"inst\", value: undefined },\n                                            properties: {mgc: false}\n                                        },\n                                        };\n                                        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: actor});\n                                        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [\\`${token.document.uuid}\\`], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n                                        let saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n                                        if(saveResult.failedSaves.size !== 0) {\n                                            let distance = MidiQOL.computeDistance(target, token);\n                                            if(distance === 5) return;\n                                            moveDistance = distance - 5;\n                                            await MidiQOL.moveTokenAwayFromPoint(target, -moveDistance, {x: token.center.x, y: token.center.y});\n                                        }\n\t\t\t\t\t\t\t\t\t\tconst uuid = actor.uuid;\n\t\t\t\t\t\t\t\t\t\tconst hasEffectApplied = await game.dfreds.effectInterface.hasEffectApplied('Reaction', uuid);\n\t\t\t\t\t\t\t\t\t\tif (!hasEffectApplied) {\n\t\t\t\t\t\t\t\t\t\t  await game.dfreds.effectInterface.addEffect({ effectName: 'Reaction', uuid });\n\t\t\t\t\t\t\t\t\t\t}\n                                    }\n                                },\n                                no: {\n                                    label: \"No\",\n                                    callback: async () => {\n                                    }\n                                },\n                            }, default: \"no\",\n                                            render: (html) => {\n                let timeLeft = ${initialTimeLeft};\n                const countdownElement = html.find(\"#countdown\");\n                timer = setInterval(() => {\n                    timeLeft--;\n                    countdownElement.text(timeLeft);\n                    if (timeLeft <= 0) {\n                        dialog.data.buttons.no.callback();\n                        dialog.close();\n                    }\n                }, 1000);\n            },\n            close: () => {\n                clearInterval(timer);\n            }\n        });\n        dialog.render(true);\n                    `\n                }\n            }\n        }\n    }];\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: effectOriginActor.uuid, effects: tempEffectData });\nawait wait(500);\nlet tempEffectRemove;\nif(gameVersion >= 3) {\n   tempEffectRemove = effectOriginActor.appliedEffects.find(i => i.name.toLowerCase() === \"skeletal tail reaction\");\n}\nelse {\n   tempEffectRemove = effectOriginActor.effects.getName(\"Skeletal Tail Reaction\");\n}\nawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: effectOriginActor.uuid, effects: [tempEffectRemove.id] });"
+      },
+      "whenDeleted": {
+        "asGM": false,
+        "command": "const effectOriginActor = await fromUuid(template.flags[\"midi-qol\"].actorUuid);\nawait effectOriginActor.unsetFlag(\"midi-qol\", \"skeletalTailDice\");"
+      }
+    },
+    "dae": {
+      "macro": {
+        "name": "Skeletal Tail",
+        "img": "icons/commodities/bones/hurn-curved-yellow.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "let numDice = (workflow.castData.castLevel - 1) * 2;\nawait actor.setFlag(\"midi-qol\", \"skeletalTailDice\", numDice);\nconst template = await fromUuid(workflow.templateUuid);\nawait template.setFlag(\"gambits-premades\", \"templateHidden\", true);",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "core": {},
+    "scene-packer": {
+      "hash": "68a1a27429e21cb22ae45451735412db8fc5743f",
+      "sourceId": "Item.VBshr9debboY7kgo"
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    }
+  },
+  "system": {
+    "description": {
+      "value": "<p><em>Requires Midi QOL, DAE, Template Macro, Effect Macro. This item comes from Steinhardt's Guide to the Eldritch Hunt, purchase at https://www.kickstarter.com/projects/monkey-dm/eldritch-hunt</em></p>",
+      "chat": ""
+    },
+    "source": {
+      "book": "SGEH",
+      "page": "",
+      "custom": "0.1.54",
+      "license": "",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "activation": {
+      "type": "action",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "1",
+      "units": "minute"
+    },
+    "target": {
+      "affects": {
+        "choice": false
+      },
+      "template": {
+        "units": "ft",
+        "type": "radius",
+        "size": "20",
+        "contiguous": false
+      }
+    },
+    "range": {
+      "units": "self"
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "ability": "wis",
+    "level": 2,
+    "school": "con",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal",
+      "somatic",
+      "material"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "skeletal-tail",
+    "method": "spell",
+    "prepared": 2
+  },
+  "img": "icons/commodities/bones/hurn-curved-yellow.webp",
+  "type": "spell",
+  "folder": null,
+  "effects": [],
+  "_id": "ZNpTrEiiqvJFpAUz",
+  "_key": "!items!ZNpTrEiiqvJFpAUz"
+}

@@ -1,0 +1,204 @@
+{
+  "name": "Rust Metal",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.0.0",
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": "",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "monster",
+      "subtype": ""
+    },
+    "requirements": "",
+    "identifier": "rust-metal",
+    "activities": {},
+    "advancement": [],
+    "enchant": {},
+    "prerequisites": {
+      "repeatable": false,
+      "items": []
+    },
+    "properties": []
+  },
+  "flags": {
+    "core": {},
+    "dae": {
+      "macro": {
+        "name": "Rust Metal",
+        "img": "icons/skills/melee/shield-damaged-broken-gold.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if (workflow.activity?.midiProperties?.magicDamage === true || workflow.activity?.actionType !== 'mwak') return;\n\nconst actor = workflow.actor;\nconst item = workflow.item;\nconst activity = workflow.activity;\nif (!activity) return;\n\nconst gmUser = game.gps.getPrimaryGM();\nif (!gmUser) return;\n\nconst rustPath = `feature.rustMetal.${item.id}`;\nconst rustFlags = foundry.utils.getProperty(actor.flags['gambits-premades'], rustPath) ?? {};\nlet totalPenalty = Number(rustFlags.penalty ?? 0);\n\ntotalPenalty -= 1;\n\nif (totalPenalty === -5) {\n  const actorPlayer = MidiQOL.playerForActor(actor);\n  await ChatMessage.create({\n    user: actorPlayer?.id ?? game.user.id,\n    speaker: ChatMessage.getSpeaker({ actor }),\n    content: \"Your weapon crumbles and is fully destroyed as it rusts through.\"\n  });\n\n  await item.delete();\n  await actor.unsetFlag('gambits-premades', rustPath); // Clean up flag\n  return;\n}\nelse {\n  await ChatMessage.create({\n  user: gmUser,\n  whisper: [gmUser],\n  speaker: ChatMessage.getSpeaker({ actor }),\n  content: `⚠️ <strong>${item.name}</strong> has taken rust damage from a Rust Monster. Current penalty: <strong>${totalPenalty}</strong>. Destroyed at <strong>-5</strong>`\n});\n}\n\nawait actor.setFlag('gambits-premades', `${rustPath}.penalty`, totalPenalty);\nawait actor.setFlag('gambits-premades', `${rustPath}.damage`, `${totalPenalty}`);\n\n// Build penalty damage part (negative flat damage)\nconst penaltyPart = {\n  includeBase: false,\n  number: 0,\n  bonus: \"\",\n  denomination: null,\n  scaling: { mode: \"\", number: null, formula: \"\" },\n  types: new Set(), // Optional: Set([\"slashing\"])\n  custom: {\n    enabled: true,\n    formula: `${totalPenalty}`\n  }\n};\n\n// Push update to the activity via socket\nawait game.gps.socket.executeAsUser(\"gpsActivityUpdate\", gmUser, {\n  activityUuid: activity.uuid,\n  updates: {\n    \"damage.parts\": [penaltyPart]\n  }\n});",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "5.0.4",
+          "coreVersion": "13.346",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null,
+          "exportSource": null
+        }
+      }
+    },
+    "midi-qol": {
+      "feature": {
+        "rustMetal": {
+          "1SrSMh2RdLXp257x": {
+            "penalty": -4,
+            "originalDamage": "1d8[piercing] + @mod",
+            "damage": "1d8[piercing] + @mod -4"
+          },
+          "Vn0BVqrNgH2OvoVf": {}
+        }
+      },
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": ""
+    },
+    "scene-packer": {
+      "sourceId": "Item.SRTiu2NHaUvusvb9",
+      "hash": "9e239925540558293d8936a69c849e6089e3207d"
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "never",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault"
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/skills/melee/shield-damaged-broken-gold.webp",
+  "effects": [
+    {
+      "name": "Rust Metal",
+      "origin": "Compendium.world.gps-monster-features.Item.OViIIfcfXLb8lv6C",
+      "duration": {
+        "startTime": 1697165136,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "transfer": true,
+      "disabled": false,
+      "_id": "UCzjVUEiQr310D2P",
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro,isDamaged",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "statuses": [],
+      "flags": {
+        "times-up": {
+          "isPassive": true
+        },
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "tint": "#ffffff",
+      "img": "icons/skills/melee/shield-damaged-broken-gold.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!W99v6HsW2h4k4ImA.UCzjVUEiQr310D2P"
+    }
+  ],
+  "folder": "KXFmyecWVGyjMN4Y",
+  "_id": "W99v6HsW2h4k4ImA",
+  "_key": "!items!W99v6HsW2h4k4ImA"
+}

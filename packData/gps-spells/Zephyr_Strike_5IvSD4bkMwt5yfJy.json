@@ -1,0 +1,450 @@
+{
+  "type": "spell",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.16",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "activation": {
+      "type": "bonus",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "1",
+      "units": "minute"
+    },
+    "target": {
+      "affects": {
+        "type": "self",
+        "count": "",
+        "choice": false,
+        "special": ""
+      },
+      "template": {
+        "units": "m",
+        "contiguous": false,
+        "type": ""
+      }
+    },
+    "range": {
+      "units": "self",
+      "special": ""
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": null
+    },
+    "ability": "",
+    "level": 1,
+    "school": "trs",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal",
+      "concentration"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": "[1d8 - force] Additional damage on weapon attack"
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "uqNgDBSdJHG7c5h6"
+          },
+          {
+            "_id": "BeFDaWKaZDHf7rdZ"
+          }
+        ],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": null,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "identifier": "",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "useConditionReason": "",
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "zephyr-strike",
+    "method": "spell",
+    "prepared": 1
+  },
+  "name": "Zephyr Strike",
+  "flags": {
+    "ddbimporter": {
+      "id": 138301,
+      "definitionId": 14622,
+      "entityTypeId": 435869154,
+      "dndbeyond": {
+        "lookup": "generic",
+        "lookupName": "generic",
+        "level": null,
+        "castAtLevel": null
+      },
+      "originalName": "Zephyr Strike",
+      "sources": [
+        {
+          "sourceId": 27,
+          "pageNumber": 171,
+          "sourceType": 1
+        }
+      ],
+      "tags": [
+        "Damage",
+        "Movement",
+        "Combat"
+      ],
+      "version": "3.5.7",
+      "effectsApplied": true
+    },
+    "midiProperties": {
+      "magicdam": true,
+      "magiceffect": true,
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "itemacro": {
+      "macro": {
+        "data": {
+          "name": "Zephyr Strike",
+          "type": "script",
+          "scope": "global",
+          "command": "const lastArg = args[args.length - 1];\nconst tokenOrActor = await fromUuid(lastArg.actorUuid);\nconst targetActor = tokenOrActor.actor ? tokenOrActor.actor : tokenOrActor;\nconst gameRound = game.combat ? game.combat.round : 0;\n\nconst effectData = {\n  label: \"Zephyr Strike: Speed\",\n  name: \"Zephyr Strike: Speed\",\n  icon: lastArg.itemData.img,\n  origin: lastArg.uuid,\n  disabled: false,\n  duration: { round: 1, startRound: gameRound, startTime: game.time.worldTime },\n  changes: [\n    {\n      key: \"system.attributes.movement.all\",\n      value: \"+ 30\",\n      mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n      priority: 20,\n    },\n  ],\n  flags: { dae: { specialDuration: [\"turnEndSource\"] } },\n};\n\nChatMessage.create({ content: `${targetActor.name} gains 30ft of movement until the end of their turn` });\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: targetActor.uuid, effects: [effectData] });\n"
+        },
+        "options": {},
+        "apps": {},
+        "compendium": null,
+        "name": "Zephyr Strike",
+        "type": "script",
+        "scope": "global",
+        "command": "const lastArg = args[args.length - 1];\nconst tokenOrActor = await fromUuid(lastArg.actorUuid);\nconst targetActor = tokenOrActor.actor ? tokenOrActor.actor : tokenOrActor;\nconst gameRound = game.combat ? game.combat.round : 0;\n\nconst effectData = {\n  label: \"Zephyr Strike: Speed\",\n  name: \"Zephyr Strike: Speed\",\n  icon: lastArg.itemData.img,\n  origin: lastArg.uuid,\n  disabled: false,\n  duration: { round: 1, startRound: gameRound, startTime: game.time.worldTime },\n  changes: [\n    {\n      key: \"system.attributes.movement.all\",\n      value: \"+ 30\",\n      mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n      priority: 20,\n    },\n  ],\n  flags: { dae: { specialDuration: [\"turnEndSource\"] } },\n};\n\nChatMessage.create({ content: `${targetActor.name} gains 30ft of movement until the end of their turn` });\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: targetActor.uuid, effects: [effectData] });\n"
+      }
+    },
+    "midi-qol": {
+      "forceCEOff": true,
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "scene-packer": {
+      "sourceId": "Item.",
+      "hash": "747635fd2d63098a604ec34ac045c29d7d09a6d6"
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "dae": {
+      "macro": {
+        "name": "Zephyr Strike",
+        "img": "icons/skills/melee/maneuver-greatsword-yellow.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-spells.Item.uGk4urvP5vEO2MV6",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 60,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Zephyr Strike",
+      "img": "icons/skills/melee/maneuver-greatsword-yellow.webp",
+      "_id": "uqNgDBSdJHG7c5h6",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.gambits-premades.oaImmunity",
+          "mode": 5,
+          "value": "1",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": true,
+          "selfTargetAlways": true,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "enableCondition": "",
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_key": "!items.effects!5IvSD4bkMwt5yfJy.uqNgDBSdJHG7c5h6"
+    },
+    {
+      "origin": "Actor.Q7GcFBwAbXgQX9Yv.Item.X9OHWkBN7PLeoeUL",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Zephyr Strike - Advantage",
+      "img": "icons/skills/melee/maneuver-greatsword-yellow.webp",
+      "_id": "BeFDaWKaZDHf7rdZ",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.zephyrStrike,preAttackRoll",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.zephyrStrike,preDamageRollComplete",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "enableCondition": "",
+          "selfTarget": true,
+          "selfTargetAlways": true,
+          "dontApply": false
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "Enemy",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "gambits-premades": {
+          "gpsUuid": "507baaea-a55b-43b5-af50-6fefba1b3220"
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_key": "!items.effects!5IvSD4bkMwt5yfJy.BeFDaWKaZDHf7rdZ"
+    }
+  ],
+  "img": "icons/skills/melee/maneuver-greatsword-yellow.webp",
+  "folder": null,
+  "_id": "5IvSD4bkMwt5yfJy",
+  "_key": "!items!5IvSD4bkMwt5yfJy"
+}

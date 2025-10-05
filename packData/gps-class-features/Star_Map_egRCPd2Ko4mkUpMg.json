@@ -1,0 +1,143 @@
+{
+  "name": "Star Map",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.13",
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": "",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "@prof",
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 0
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "Circle of Stars 2",
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "identifier": "star-map",
+    "activities": {},
+    "advancement": [],
+    "enchant": {}
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 2996427,
+      "data": {
+        "id": 2996427,
+        "name": "Star Map",
+        "prerequisite": null,
+        "description": "<p><em>2nd-level Circle of the Stars feature </em></p>\r\n<p>You’ve created a star chart as part of your heavenly studies. It is a Tiny object and can serve as a spellcasting focus for your druid spells. You determine its form by rolling on the Star Map table or by choosing one.</p>\r\n<p>While holding this map, you have these benefits:</p>\r\n<ul>\r\n<li>You know the guidance cantrip.</li>\r\n<li>You have the guiding bolt spell prepared. It counts as a druid spell for you, and it doesn’t count against the number of spells you can have prepared.</li>\r\n<li>You can cast guiding bolt without expending a spell slot. You can do so a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</li>\r\n</ul>\r\n<p>If you lose the map, you can perform a 1-hour ceremony to magically create a replacement. This ceremony can be performed during a short or long rest, and it destroys the previous map.</p>\r\n<h5 id=\"StarMapTable\" class=\"quick-menu-exclude\">Star Map</h5>\r\n<table class=\"compendium-left-aligned-table\">\r\n<thead>\r\n<tr>\r\n<th>d6</th>\r\n<th>Map Form</th>\r\n</tr>\r\n</thead>\r\n<tbody>\r\n<tr>\r\n<td>1</td>\r\n<td>A scroll covered with depictions of constellations</td>\r\n</tr>\r\n<tr>\r\n<td>2</td>\r\n<td>A stone tablet with fine holes drilled through it</td>\r\n</tr>\r\n<tr>\r\n<td>3</td>\r\n<td>A speckled owlbear hide, tooled with raised marks</td>\r\n</tr>\r\n<tr>\r\n<td>4</td>\r\n<td>A collection of maps bound in an ebony cover</td>\r\n</tr>\r\n<tr>\r\n<td>5</td>\r\n<td>A crystal that projects starry patterns when placed before a light</td>\r\n</tr>\r\n<tr>\r\n<td>6</td>\r\n<td>Glass disks that depict constellations</td>\r\n</tr>\r\n</tbody>\r\n</table>",
+        "requiredLevel": 2,
+        "displayOrder": 1
+      },
+      "version": "3.4.63",
+      "featureId": 2996427,
+      "featureName": "Star Map",
+      "requiredLevel": 2,
+      "prerequisite": null,
+      "class": "Druid",
+      "classId": 654562,
+      "subClass": "Circle of Stars",
+      "parentClassId": 3
+    },
+    "obsidian": {
+      "source": {
+        "type": "class",
+        "text": "Circle of Stars"
+      }
+    },
+    "scene-packer": {
+      "sourceId": "Item.",
+      "hash": "9b3f6b8f3a142ad6e78824767796282b867e390e"
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "removeAttackDamageButtons": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "dae": {
+      "macro": {
+        "name": "Star Map",
+        "img": "icons/sundries/scrolls/scroll-symbol-eye-brown.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      },
+      "migratedUses": null
+    },
+    "gambits-premades": {
+      "gpsUuid": "62cd752b-7c9c-42ff-9e73-cd7b707aad66"
+    }
+  },
+  "img": "icons/sundries/scrolls/scroll-symbol-eye-brown.webp",
+  "effects": [],
+  "folder": "Bx9M27esbZ3oMhQa",
+  "_id": "egRCPd2Ko4mkUpMg",
+  "_key": "!items!egRCPd2Ko4mkUpMg"
+}

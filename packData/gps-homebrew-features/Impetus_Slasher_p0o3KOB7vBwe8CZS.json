@@ -1,0 +1,306 @@
+{
+  "name": "Impetus Slasher",
+  "type": "feat",
+  "img": "icons/weapons/swords/swords-cutlasses-white.webp",
+  "system": {
+    "description": {
+      "value": "<p>Requires MidiQOL, DAE</p><p></p><p>You learn how to use fear to take advantage of the weak spot of a creature. if the creature is afflicted by Frightened you attack with advantage. If you successfully hit you score a critical hit against it, adding an extra 2d12 force damage on the hit. You can activate this effect three times per long rest.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "0.5.37",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "3",
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 1
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "special",
+          "value": null,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [
+            {
+              "type": "itemUses",
+              "target": "",
+              "value": "1",
+              "scaling": {
+                "mode": "",
+                "formula": ""
+              }
+            }
+          ],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "ft"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "impetus-slasher",
+    "enchant": {},
+    "advancement": []
+  },
+  "effects": [
+    {
+      "origin": "Actor.4rgwJtcvBFEmAQ4A.Item.93rhOp07dHSQtJOr",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Impetus Slasher",
+      "img": "icons/weapons/swords/swords-cutlasses-white.webp",
+      "_id": "vhj7xJmCiTIagALN",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro, preAttackRoll",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro, preDamageRoll",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro, postDamageRollComplete",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        },
+        "gambits-premades": {}
+      },
+      "_key": "!items.effects!p0o3KOB7vBwe8CZS.vhj7xJmCiTIagALN"
+    }
+  ],
+  "folder": null,
+  "flags": {
+    "dae": {
+      "macro": {
+        "name": "Impetus Slasher",
+        "img": "systems/dnd5e/icons/svg/items/feature.svg",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"preAttackRoll\") {\n    if(macroItem.system.uses.value === 0) return;\n    let target = workflow.hitTargets.first();\n    if(!target.document.hasStatusEffect(\"frightened\")) return;\n  \n    await foundry.applications.api.DialogV2.wait({\n        window: { title: 'Impetus Slasher' },\n        content: `\n            <div class=\"gps-dialog-container\">\n                <div class=\"gps-dialog-section\">\n                    <div class=\"gps-dialog-content\">\n                        <div>\n                            <div class=\"gps-dialog-flex\">\n                                <p class=\"gps-dialog-paragraph\">Would you like to use Impetus Slasher to give advantage on this attack? If the attack hits, you gain critical and bonus damage.</p>\n                                <div id=\"image-container\" class=\"gps-dialog-image-container\">\n                                    <img src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        `,\n        buttons: [{\n            action: \"Yes\",\n            label: \"Yes\",\n            callback: async (event, button, dialog) => {\n                workflow.advantage = true;\n\n                let effectData = actor.appliedEffects.find(e => e.name === \"Impetus Slasher\");\n                await effectData.setFlag(\"gambits-premades\", \"impetusSlasherUsed\", true);\n            }\n        },\n        {\n            action: \"No\",\n            label: \"No\",\n            callback: async (event, button, dialog) => {return;}\n        }],\n        close: async (event, dialog) => {\n            return;\n        }, rejectClose:false\n    });\n}\n\nif(args[0].macroPass === \"preDamageRoll\") {\n    if(macroItem.system.uses.value === 0) return;\n    let target = workflow.hitTargets.first();\n    if(!target.document.hasStatusEffect(\"frightened\")) return;\n\n    let effectData = actor.appliedEffects.find(e => e.name === \"Impetus Slasher\");\n    let effectAdv = effectData.getFlag(\"gambits-premades\", \"impetusSlasherUsed\");\n    if(effectAdv) {\n        workflow.isCritical = true;\n    }\n}\n\nif(args[0].macroPass === \"postDamageRollComplete\") {\n    if(macroItem.system.uses.value === 0) return;\n    let target = workflow.hitTargets.first();\n    if(!target.document.hasStatusEffect(\"frightened\")) return;\n\n    let effectData = actor.appliedEffects.find(e => e.name === \"Impetus Slasher\");\n    let effectAdv = effectData.getFlag(\"gambits-premades\", \"impetusSlasherUsed\");\n    if(effectAdv) {\n        let damageRoll = await new CONFIG.Dice.DamageRoll(`2d12`).evaluate();\n        await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n        const itemData = {\n            name: \"Impetus Slasher - Damage (Force)\",\n            type: \"feat\",\n            img: macroItem.img\n        }\n\n        new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"force\", target ? [target] : [], damageRoll, {itemData: itemData});\n\n        await macroItem.update({\"system.uses.value\": macroItem.system.uses.value - 1});\n        await effectData.unsetFlag(\"gambits-premades\", \"impetusSlasherUsed\");\n    }\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.1",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "midi-qol": {
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      },
+      "migratedUses": 2
+    }
+  },
+  "_id": "p0o3KOB7vBwe8CZS",
+  "_key": "!items!p0o3KOB7vBwe8CZS"
+}

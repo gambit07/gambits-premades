@@ -1,0 +1,569 @@
+{
+  "name": "Torch",
+  "type": "consumable",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.0.0",
+      "revision": 1,
+      "rules": "2024",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0.1,
+      "denomination": "sp"
+    },
+    "attunement": "",
+    "rarity": "",
+    "identified": true,
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "autoDestroy": false,
+      "spent": 0
+    },
+    "damage": {
+      "base": {
+        "number": null,
+        "denomination": null,
+        "types": [],
+        "custom": {
+          "enabled": false
+        },
+        "scaling": {
+          "number": 1
+        }
+      },
+      "replace": false
+    },
+    "properties": [],
+    "unidentified": {
+      "description": "Gear"
+    },
+    "type": {
+      "value": "trinket",
+      "subtype": ""
+    },
+    "container": null,
+    "magicalBonus": null,
+    "attuned": false,
+    "equipped": false,
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "mFaZzeDRCdJjfZCE"
+          }
+        ],
+        "range": {
+          "value": "5",
+          "units": "self",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "5",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "toggleEffect": false
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "torch"
+  },
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {
+        "type": "Adventuring Gear",
+        "isConsumable": false,
+        "isContainer": false,
+        "isCustomItem": false,
+        "isHomebrew": false,
+        "isMonkWeapon": false,
+        "isPack": false,
+        "levelInfusionGranted": null,
+        "tags": [
+          "Damage",
+          "Utility",
+          "Exploration",
+          "Combat"
+        ],
+        "sources": [
+          {
+            "sourceId": 1,
+            "pageNumber": null,
+            "sourceType": 2
+          },
+          {
+            "sourceId": 2,
+            "pageNumber": null,
+            "sourceType": 1
+          }
+        ],
+        "stackable": true
+      },
+      "id": 976664155,
+      "entityTypeId": 1439493548,
+      "containerEntityId": 976664150,
+      "containerEntityTypeId": 1439493548,
+      "definitionEntityTypeId": 2103445194,
+      "definitionId": 91,
+      "originalName": "Torch",
+      "version": "3.6.0",
+      "importId": "LqcaPoeCikRHYH6K"
+    },
+    "infusions": {
+      "maps": [],
+      "applied": [],
+      "infused": false
+    },
+    "dae": {
+      "macro": {
+        "name": "Torch",
+        "img": "icons/sundries/lights/torch-white.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "itemacro": {
+      "macro": {
+        "name": "Torch",
+        "type": "script",
+        "scope": "global",
+        "command": "//Last Updated: 9/14/2023\n//Author: EskieMoh#2969\n\n//Set torch or lantern\nlet lightSource = \"torch\"\n\nif (lightSource == \"torch\"){\nfile = \"https://i.imgur.com/1U1eb9t.png\"\n}  \nelse if (lightSource == \"lantern\"){\nfile = \"https://i.imgur.com/3wFQD02.png\"\n}\n\nlet lightDim = token.document.light.dim;\nlet lightBright = token.document.light.bright;\n\nif (lightDim == 0 && lightBright == 0){\nnew Sequence()\n\n.effect()\n.delay(150)\n.name(`${token.document.name} ${lightSource}`)\n.file(\"jb2a.impact.002.orange\")\n.atLocation(token)\n.attachTo(token, {followRotation: true, local: true})\n.scaleToObject(0.9, {considerTokenScale: true})\n.spriteOffset({x:0.525*token.document.width, y:-0.05*token.document.width}, {gridUnits:true})\n.spriteRotation(45)\n.zIndex(0.1)\n.playIf(() => {\nreturn lightSource == \"torch\";\n})\n\n.effect()\n.name(`${token.document.name} ${lightSource}`)\n.file(file)\n.atLocation(token)\n.attachTo(token, {followRotation: true, local: true})\n.scaleToObject(1.2, {considerTokenScale: true})\n.scaleIn(0, 500, {ease: \"easeOutElastic\"})\n.scaleOut(0, 250, {ease: \"easeOutCubic\"})\n.spriteOffset({x:0.35*token.document.width, y:0.1*token.document.width}, {gridUnits:true})\n.animateProperty(\"sprite\", \"rotation\", { from: 15, to: -15, duration: 300, ease: \"easeInOutBack\"})\n.animateProperty(\"sprite\", \"rotation\", { from: 0, to: 30, duration: 250, delay: 200, ease: \"easeOutBack\"})\n.persist()\n.zeroSpriteRotation()\n.playIf(() => {\nreturn lightSource == \"torch\";\n})\n\n.effect()\n.delay(250)\n.name(`${token.document.name} ${lightSource}`)\n.file(\"jb2a.flames.01.orange\")\n.atLocation(token)\n.attachTo(token, {followRotation: true, local: true})\n.scaleToObject(1, {considerTokenScale: true})\n.spriteOffset({x:0.5*token.document.width, y:-0.05*token.document.width}, {gridUnits:true})\n.persist()\n.spriteRotation(45)\n.zIndex(0.1)\n.waitUntilFinished(-500)\n.playIf(() => {\nreturn lightSource == \"torch\";\n})\n\n.effect()\n.name(`${token.document.name} ${lightSource}`)\n.file(file)\n.atLocation(token)\n.attachTo(token, {followRotation: true, local: true})\n.scaleToObject(1, {considerTokenScale: true})\n.scaleIn(0, 500, {ease: \"easeOutElastic\"})\n.scaleOut(0, 250, {ease: \"easeOutCubic\"})\n.spriteOffset({x:0.35*token.document.width, y:0.1*token.document.width}, {gridUnits:true})\n.animateProperty(\"sprite\", \"rotation\", { from: 15, to: -15, duration: 300, ease: \"easeInOutBack\"})\n.animateProperty(\"sprite\", \"rotation\", { from: 0, to: 30, duration: 250, delay: 200, ease: \"easeOutBack\"})\n.loopProperty(\"sprite\", \"rotation\", { from: 3, to: -3, duration: 1500, ease: \"easeOutQuad\", pingPong: true })\n.persist()\n.zeroSpriteRotation()\n.waitUntilFinished(-500)\n.playIf(() => {\nreturn lightSource == \"lantern\";\n})\n\n.thenDo(function(){\nvar light = {dim: 0, bright: 0};\ntoken.document.update({light});\n\nSequencer.EffectManager.endEffects({ name: `${token.document.name} ${lightSource}`, object: token });\n})\n\n.play()\n\n//Define token light options\nvar light = {dim: 30, bright: 15, alpha:0.25, luminosity: 0.5, color: \"#ffb433\", animation: {type: \"torch\", speed: 4, intensity: 4},attenuation: 0.75, contrast:0.15, shadows:0.2,};\n\nawait token.document.update({light});\n\n} else {\n\nawait Sequencer.EffectManager.endEffects({ name: `${token.document.name} ${lightSource}`, object: token });\n    \nvar light = {dim: 0, bright: 0};\nawait token.document.update({light});\n}",
+        "author": "roRDywD19pu2VxlC",
+        "_id": null,
+        "img": "icons/svg/dice-target.svg",
+        "folder": null,
+        "sort": 0,
+        "ownership": {
+          "default": 0
+        },
+        "flags": {},
+        "_stats": {
+          "systemId": null,
+          "systemVersion": null,
+          "coreVersion": null,
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null
+        }
+      }
+    },
+    "midi-qol": {
+      "onUseMacroName": "[preApplyDynamicEffects]function.game.gps.torch",
+      "effectActivation": false,
+      "forceCEOff": true,
+      "forceCEOn": false,
+      "fumbleThreshold": null,
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": "",
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default"
+    },
+    "scene-packer": {
+      "hash": "5059d02a4bb80ff81a038c57df5581471214dd94",
+      "sourceId": "Item.k1Xsuy6O9DL6VXhs"
+    },
+    "midiProperties": {
+      "confirmTargets": "never",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "core": {},
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "autoanimations": {
+      "id": "2a658493-9f45-45d6-b2fb-b01e64ea70e2",
+      "label": "Torch",
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      },
+      "macro": {
+        "enable": false
+      },
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular"
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "club",
+          "variant": "01",
+          "color": "white",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": false,
+      "isCustomized": false,
+      "fromAmmo": false,
+      "version": 5
+    },
+    "universalAnimations": {
+      "override": "neverPlay"
+    },
+    "dnd5e": {
+      "dependents": [
+        {
+          "uuid": "Actor.edtGqNIYfHYowUUr.ActiveEffect.VEdz50CKdBDVXSmu"
+        }
+      ],
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "effects": [],
+  "img": "icons/sundries/lights/torch-white.webp",
+  "folder": null,
+  "_id": "09FM4qIum5cLd4Q4",
+  "_key": "!items!09FM4qIum5cLd4Q4"
+}

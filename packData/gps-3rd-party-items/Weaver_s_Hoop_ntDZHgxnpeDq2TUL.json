@@ -1,0 +1,179 @@
+{
+  "name": "Weaver's Hoop",
+  "type": "equipment",
+  "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Weaver%27s%20Hoop.webp",
+  "effects": [
+    {
+      "origin": "Actor.1xFtQVMnMyuFm2w2.Item.q4yCFb4aLYYzuxMt",
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Weaver's Hoop",
+      "_id": "UNiU6zoPTpbrxoIA",
+      "changes": [
+        {
+          "key": "system.attributes.ac.bonus",
+          "mode": 2,
+          "value": "+1",
+          "priority": 20
+        },
+        {
+          "key": "system.attributes.movement.climb",
+          "mode": 5,
+          "value": "@attributes.movement.walk",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "transfer": true,
+      "statuses": [],
+      "flags": {
+        "times-up": {},
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "tint": "#ffffff",
+      "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Weaver%27s%20Hoop.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!ntDZHgxnpeDq2TUL.UNiU6zoPTpbrxoIA"
+    }
+  ],
+  "flags": {
+    "core": {},
+    "scene-packer": {
+      "hash": "34e13030c037e552dc9e3c005ed1c2ee5a9e23f1",
+      "sourceId": "Compendium.world.gps-homebrew-items.Item.nN8SbUV8n3Mt40c1"
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": "",
+      "rollAttackPerTarget": "default"
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "system": {
+    "description": {
+      "value": "<p><em>This item comes from the Abyssal Brews patreon, subscribe to the Abyssal Brews patreon at </em><a href=\"https://www.patreon.com/abyssalbrews\" title=\"Abyssal Brews\"><em>https://www.patreon.com/abyssalbrews</em></a></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "1.0.3",
+      "rules": "2014",
+      "revision": 1
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "attunement": "required",
+    "equipped": true,
+    "rarity": "rare",
+    "identified": true,
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "armor": {
+      "value": 1,
+      "dex": null
+    },
+    "hp": {
+      "value": 0,
+      "max": 0,
+      "dt": null,
+      "conditions": ""
+    },
+    "speed": {
+      "value": null,
+      "conditions": ""
+    },
+    "strength": 0,
+    "proficient": null,
+    "unidentified": {
+      "description": ""
+    },
+    "type": {
+      "value": "trinket",
+      "baseItem": ""
+    },
+    "container": null,
+    "properties": [],
+    "identifier": "weavers-hoop",
+    "attuned": true,
+    "activities": {}
+  },
+  "folder": null,
+  "_id": "ntDZHgxnpeDq2TUL",
+  "_key": "!items!ntDZHgxnpeDq2TUL"
+}

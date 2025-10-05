@@ -1,0 +1,219 @@
+{
+  "name": "Entropic Ward",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.0.9",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "1",
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 0
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "",
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [
+      "mgc"
+    ],
+    "activities": {},
+    "identifier": "entropic-ward",
+    "enchant": {},
+    "advancement": []
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": "1040",
+      "entityTypeId": "222216831",
+      "componentId": 407,
+      "componentTypeId": 12168134,
+      "type": "class",
+      "class": "Warlock",
+      "subclass": "The Great Old One",
+      "dndbeyond": {
+        "levelScale": null,
+        "levelScales": [],
+        "limitedUse": [
+          {
+            "level": null,
+            "uses": 1
+          }
+        ]
+      },
+      "importId": "xvboe5BGmoLA2QUv"
+    },
+    "infusions": {
+      "infused": false
+    },
+    "obsidian": {
+      "source": {
+        "type": "class",
+        "text": "Warlock"
+      }
+    },
+    "link-item-resource-5e": {
+      "resource-link": "tertiary"
+    },
+    "dae": {
+      "macro": {
+        "name": "Entropic Ward",
+        "img": "icons/magic/death/skull-humanoid-worn-teal.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "reactionCondition": "false",
+      "effectCondition": ""
+    },
+    "scene-packer": {
+      "hash": "7dba4523174a790486e525c315519fc00f1b281c"
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": true,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      },
+      "migratedUses": 1
+    },
+    "gambits-premades": {
+      "gpsUuid": "f330325d-bce8-4352-9e47-9f696a0f9434"
+    }
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-class-features.Item.jBwdjplt0kpw4AL1",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Entropic Ward",
+      "img": "icons/magic/death/skull-humanoid-worn-teal.webp",
+      "_id": "jP0TooN88rrxhQwg",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.entropicWard, isPreAttacked",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.entropicWard, isAttacked",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "core": {
+          "overlay": false
+        }
+      },
+      "_key": "!items.effects!jBwdjplt0kpw4AL1.jP0TooN88rrxhQwg"
+    }
+  ],
+  "img": "icons/magic/death/skull-humanoid-worn-teal.webp",
+  "folder": "UjKBC9LbTe1zYrAB",
+  "_id": "jBwdjplt0kpw4AL1",
+  "_key": "!items!jBwdjplt0kpw4AL1"
+}

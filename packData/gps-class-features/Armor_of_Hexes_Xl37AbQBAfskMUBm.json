@@ -1,0 +1,205 @@
+{
+  "name": "Armor of Hexes",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "1.0.1",
+      "rules": "2014",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "The Hexblade 10",
+    "properties": [],
+    "identifier": "armor-of-hexes",
+    "activities": {},
+    "advancement": [],
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    }
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 759,
+      "data": {
+        "id": 759,
+        "name": "Armor of Hexes",
+        "prerequisite": null,
+        "description": "<p>At 10th level, your hex grows more powerful. If the target cursed by your Hexblade’s Curse hits you with an attack roll, you can use your reaction to roll a d6. On a 4 or higher, the attack instead misses you, regardless of its roll.</p>",
+        "requiredLevel": 10,
+        "displayOrder": 5
+      },
+      "version": "3.4.63",
+      "featureId": 759,
+      "featureName": "Armor of Hexes",
+      "requiredLevel": 10,
+      "prerequisite": null,
+      "class": "Warlock",
+      "classId": 115,
+      "subClass": "The Hexblade",
+      "parentClassId": 7
+    },
+    "obsidian": {
+      "source": {
+        "type": "class",
+        "text": "The Hexblade"
+      }
+    },
+    "scene-packer": {
+      "sourceId": "Actor.PpeGTVYvVoFsdZZD.Item.iJLgVp6UkrkbxHx1",
+      "hash": "451413512899afb18ece6afd7f04c85e7e3ebcb2"
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": ""
+    },
+    "core": {},
+    "walledtemplates": {
+      "wallsBlock": "globalDefault",
+      "wallRestriction": "globalDefault"
+    },
+    "dae": {
+      "macro": {
+        "name": "Armor of Hexes",
+        "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "LocknKey": {
+      "IDKeysFlag": "",
+      "RemoveKeyonUseFlag": false,
+      "LPFormulaFlag": "",
+      "LPFormulaOverrideFlag": false,
+      "LBFormulaFlag": "",
+      "LBFormulaOverrideFlag": false,
+      "ReplacementItemFlag": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-class-features.Item.Xl37AbQBAfskMUBm",
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": 0
+      },
+      "disabled": false,
+      "name": "Armor of Hexes",
+      "_id": "hABxNuY8XpmEFhvJ",
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.armorOfHexes, isAttacked",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "transfer": true,
+      "statuses": [],
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "core": {
+          "overlay": false
+        }
+      },
+      "tint": "#ffffff",
+      "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!Xl37AbQBAfskMUBm.hABxNuY8XpmEFhvJ"
+    }
+  ],
+  "folder": "UjKBC9LbTe1zYrAB",
+  "_id": "Xl37AbQBAfskMUBm",
+  "_key": "!items!Xl37AbQBAfskMUBm"
+}
