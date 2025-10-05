@@ -8,6 +8,7 @@ let packs = [
     'gps-homebrew-features',
     'gps-homebrew-items',
     'gps-homebrew-spells',
+    'gps-3rd-party-features',
     'gps-3rd-party-items',
     'gps-3rd-party-spells',
     'gps-race-features',

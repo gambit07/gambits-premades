@@ -1,3 +1,15 @@
-2025/10/05-14:37:51.314 bcb4 Recovering log #1691
-2025/10/05-14:37:51.317 bcb4 Delete type=0 #1691
-2025/10/05-14:37:51.317 bcb4 Delete type=3 #1689
+2025/10/05-15:31:32.088 64fc Recovering log #1701
+2025/10/05-15:31:32.091 64fc Delete type=0 #1701
+2025/10/05-15:31:32.091 64fc Delete type=3 #1700
+2025/10/05-15:31:32.093 c848 Level-0 table #1705: started
+2025/10/05-15:31:32.094 c848 Level-0 table #1705: 47611 bytes OK
+2025/10/05-15:31:32.095 c848 Delete type=0 #1703
+2025/10/05-15:31:32.095 c848 Manual compaction at level-0 from '!folders!4OzV9QdsPgTyK99q' @ 72057594037927935 : 1 .. '!items.effects!xNe2ghMwU8IvI6hG.C05Eou5Snf4u9O4B' @ 0 : 0; will stop at (end)
+2025/10/05-15:31:32.095 c848 Manual compaction at level-1 from '!folders!4OzV9QdsPgTyK99q' @ 72057594037927935 : 1 .. '!items.effects!xNe2ghMwU8IvI6hG.C05Eou5Snf4u9O4B' @ 0 : 0; will stop at '!items.effects!xNe2ghMwU8IvI6hG.C05Eou5Snf4u9O4B' @ 88 : 1
+2025/10/05-15:31:32.095 c848 Compacting 1@1 + 1@2 files
+2025/10/05-15:31:32.097 c848 Generated table #1706@1: 25 keys, 47611 bytes
+2025/10/05-15:31:32.097 c848 Compacted 1@1 + 1@2 files => 47611 bytes
+2025/10/05-15:31:32.097 c848 compacted to: files[ 0 0 1 0 0 0 0 ]
+2025/10/05-15:31:32.097 c848 Delete type=2 #1699
+2025/10/05-15:31:32.098 c848 Delete type=2 #1705
+2025/10/05-15:31:32.098 c848 Manual compaction at level-1 from '!items.effects!xNe2ghMwU8IvI6hG.C05Eou5Snf4u9O4B' @ 88 : 1 .. '!items.effects!xNe2ghMwU8IvI6hG.C05Eou5Snf4u9O4B' @ 0 : 0; will stop at (end)

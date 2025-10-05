@@ -2,9 +2,6 @@
   "name": "gambits-premades",
   "type": "commonjs",
   "scripts": {
-    "prebuild": "npm run buildCompendiums",
-    "build": "webpack",
-    "buildCompendiums": "node packData/packData.mjs",
     "release": "node update-module.js",
     "prepare": "husky install"
   },
