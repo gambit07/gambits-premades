@@ -1,5 +1,5 @@
 - Additions:
-  - Polearm Master 2024: Added 2024 feat, no changes
+  - Polearm Master 2024: Added 2024 feat, no changes.
 - Updates:
   - Compendium Data: Added a build of compendium data to the release process to resolve issues with invalid pack data
 - Bugfixes:
