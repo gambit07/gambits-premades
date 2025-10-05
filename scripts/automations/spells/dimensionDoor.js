@@ -5,7 +5,7 @@ export async function dimensionDoor({ speaker, actor, token, character, item, ar
         let target = workflow.targets.first() ?? null;
         if(target) {
             let targetDistance = MidiQOL.computeDistance(target,token, {wallsBlock: true, includeCover: true})
-            if(targetDistance > 6) return ui.notifications.warn("You must be within 5 feet of the ally you are trying to teleport");
+            if(targetDistance > game.gps.convertFromFeet({range:6})) return ui.notifications.warn("You must be within 5 feet of the ally you are trying to teleport");
 
             const sizeMap = {
                 tiny: 1,

@@ -30,7 +30,7 @@ export async function iceKnife({ speaker, actor, token, character, item, args, s
             .play()
         }
         
-        const targets = MidiQOL.findNearby(null, target, 5, { includeToken: true });
+        const targets = MidiQOL.findNearby(null, target, game.gps.convertFromFeet({range:6}), { includeToken: true });
         const targetUuids = targets.map(t => t.document.uuid);
         let numDie = castLevel + 1;
         let activityToUpdate = await item.system.activities.find(a => a.identifier === "syntheticSave");
