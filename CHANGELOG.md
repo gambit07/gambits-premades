@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.1.19] - 2025-10-05
+- Additions:
+  - Polearm Master 2024: Added 2024 feat, no changes
+- Updates:
+  - Compendium Data: Added a build of compendium data to the release process to resolve issues with invalid pack data
+- Bugfixes:
+  - Polearm Master: Add @mod damage bonus to attack
+
 ## [v2.1.18] - 2025-10-04
 - Updates:
   - Healing Surge: Updated to dialogV2, added native hit die roll handling, removed custom chat modification, etc
