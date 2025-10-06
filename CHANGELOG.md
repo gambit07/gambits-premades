@@ -1,32 +1,8 @@
 # Changelog
 
-## [v2.1.25] - 2025-10-06
+## [v2.1.26] - 2025-10-06
 - Updates:
   - Second pass at updating the release process.
-- Bugfixes:
-  - Merged fixes for various automations metric range detection, thanks Tallon
-
-## [v2.1.24] - 2025-10-06
-- Updates:
-  - Second pass at updating the release process.
-- Bugfixes:
-  - Merged fixes for various automations metric range detection, thanks Tallon
-
-## [v2.1.22] - 2025-10-06
-- Updates:
-  - Second pass at updating the release process.
-- Bugfixes:
-  - Merged fixes for various automations metric range detection, thanks Tallon
-
-## [v2.1.21] - 2025-10-06
-- Updates:
-  - Second pass at updating the release process
-- Bugfixes:
-  - Merged fixes for various automations metric range detection, thanks Tallon
-
-## [v2.1.21] - 2025-10-06
-- Updates:
-  - Second pass at updating the release process
 - Bugfixes:
   - Merged fixes for various automations metric range detection, thanks Tallon
 
