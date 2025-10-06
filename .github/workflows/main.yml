@@ -1,15 +1,14 @@
 name: Release
 
 on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch: {}
+  release:
+    types: [published]   # runs after you publish a release (not when you just create a draft)
 
 permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  build-and-attach:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,120 +17,58 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Guard against pushes for non-releases
-      - name: Detect release (module.json version change)
-        id: detect
-        shell: bash
-        run: |
-          set -euo pipefail
-          BEFORE_SHA="${{ github.event.before }}"
-          AFTER_SHA="${{ github.sha }}"
-
-          # Determine if module.json changed across the pushed range
-          if [ -n "$BEFORE_SHA" ] && git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
-            CHANGED=$(git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" | grep -c '^module.json$' || true)
-          else
-            # workflow_dispatch or first push: check only the final commit
-            CHANGED=$(git show --name-only "$AFTER_SHA" | grep -c '^module.json$' || true)
-          fi
-
-          if [ "$CHANGED" -eq 0 ]; then
-            echo "module.json not changed; skipping release."
-            echo "should_release=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # Extract versions from module.json at before/after (old may be blank)
-          getver () {
-            local ref="$1"
-            if [ -n "$ref" ] && git cat-file -e "${ref}^{commit}" 2>/dev/null; then
-              if git show "${ref}:module.json" >/tmp/mod.json 2>/dev/null; then
-                node -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/mod.json','utf8')).version || '')"
-              else
-                echo ""
-              fi
-            else
-              echo ""
-            fi
-          }
-
-          OLD_VER="$(getver "$BEFORE_SHA")"
-          NEW_VER="$(getver "$AFTER_SHA")"
-
-          echo "Old version: '${OLD_VER}'"
-          echo "New version: '${NEW_VER}'"
-
-          if [ -n "$NEW_VER" ] && [ "$NEW_VER" != "$OLD_VER" ]; then
-            echo "Version changed -> release."
-            echo "should_release=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "Version not changed; skipping release."
-            echo "should_release=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Setup Node
-        if: steps.detect.outputs.should_release == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
       - name: Install deps
-        if: steps.detect.outputs.should_release == 'true'
         run: npm ci
 
-      # Compile packData -> packs
+      # Build packs from packData -> packs (your existing script)
       - name: Compile packs (packData -> packs)
-        if: steps.detect.outputs.should_release == 'true'
         run: npm run packData
 
-      # Read version from module.json
-      - name: Get version
-        if: steps.detect.outputs.should_release == 'true'
-        id: ver
-        run: echo "VERSION=$(npm run -s get-version)" >> $GITHUB_OUTPUT
-
-      # Build module.zip using git archive
+      # Create Foundry-clean ZIP from repo (honors .gitattributes export-ignore)
       - name: Create base ZIP (from repo files)
-        if: steps.detect.outputs.should_release == 'true'
         run: |
           git archive --format=zip --output module.zip HEAD
 
-      # Append generated packs into the zip
+      # Append generated packs into the zip (packs/ isn't tracked by git)
       - name: Add packs/ to ZIP
-        if: steps.detect.outputs.should_release == 'true'
         run: |
           if [ -d "packs" ]; then
             sudo apt-get update && sudo apt-get install -y zip
             zip -r module.zip packs
           fi
 
-      # Ensure release notes file exists
-      - name: Ensure release notes
-        if: steps.detect.outputs.should_release == 'true'
-        id: release-notes-github
-        run: |
-          [ -f release_notes.txt ] || echo "No notes for this release." > release_notes.txt
-
-      # Upload release using the tag/version from module.json
-      - name: Create Release
-        if: steps.detect.outputs.should_release == 'true'
-        id: create-release
+      # Attach artifacts to the release that triggered this workflow
+      - name: Update Release with Files
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          name: Release ${{ steps.ver.outputs.VERSION }}
-          draft: false
-          prerelease: false
-          body: ${{ steps.release-notes-github }}
+          replacesArtifacts: true
+          makeLatest: true
+          # use the values from the release event
+          name: ${{ github.event.release.name }}
+          tag:  ${{ github.event.release.tag_name }}
+          # keep the body users typed in the UI (omit body/bodyFile to avoid overwriting)
+          artifacts: "module.zip,module.json"
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: './module.zip,./module.json'
-          tag: ${{ steps.ver.outputs.VERSION }}
+          body: ${{ github.event.release.body }}
 
+      # Compute plain version (strip leading 'v' if your tag uses it)
+      - name: Set VERSION/URLs for Foundry
+        run: |
+          echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+          echo "FOUNDRY_MANIFEST=https://github.com/${{ github.repository }}/releases/latest/download/module.json" >> $GITHUB_ENV
+          echo "FOUNDRY_DOWNLOAD=https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.zip" >> $GITHUB_ENV
+
+      # Publish to Foundry
       - name: Release Foundry Package
-        if: steps.detect.outputs.should_release == 'true' && success()
+        if: ${{ success() }}
         env:
           FOUNDRY_API_TOKEN: ${{ secrets.FOUNDRY_API_TOKEN }}
-          VERSION: ${{ steps.ver.outputs.VERSION }}
         run: |
           curl -X POST "https://foundryvtt.com/_api/packages/release_version" \
             -H "Content-Type: application/json" \
@@ -140,49 +77,40 @@ jobs:
               "id": "gambits-premades",
               "release": {
                 "version": "'"${VERSION}"'",
-                "manifest": "https://github.com/gambit07/gambits-premades/releases/latest/download/module.json",
-                "download": "https://github.com/gambit07/gambits-premades/releases/download/'"${VERSION}"'/module.zip",
-                "notes": "https://github.com/gambit07/gambits-premades/releases/tag/'"${VERSION}"'",
-                "compatibility": {
-                  "minimum": "13.346",
-                  "verified": "13.348",
-                  "maximum": "13"
-                }
+                "manifest": "'"${FOUNDRY_MANIFEST}"'",
+                "download": "'"${FOUNDRY_DOWNLOAD}"'",
+                "notes": "https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}",
+                "compatibility": { "minimum": "13.346", "verified": "13.348", "maximum": "13" }
               }
             }'
 
+      # Discord posts (unchanged except reuse $VERSION)
       - name: Post to Midi Discord
-        if: steps.detect.outputs.should_release == 'true' && success()
+        if: ${{ success() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
-          VERSION: ${{ steps.ver.outputs.VERSION }}
         run: |
-          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' release_notes.txt)
+          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' <<< "${{ github.event.release.body }}")
           curl -H "Content-Type: application/json" \
                -d '{
                  "embeds": [{
-                   "title": "Gambit'\''s Premades Release: '"$VERSION"'",
-                   "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
-                   "image": {
-                     "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
-                   }
+                   "title": "Gambit'\''s Premades Release: '"${VERSION}"'",
+                   "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"${RELEASE_NOTES}"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}>",
+                   "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
                  }]
                }' "$DISCORD_WEBHOOK"
 
       - name: Post to GPS Discord
-        if: steps.detect.outputs.should_release == 'true' && success()
+        if: ${{ success() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_GPS_WEBHOOK }}
-          VERSION: ${{ steps.ver.outputs.VERSION }}
         run: |
-          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' release_notes.txt)
+          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' <<< "${{ github.event.release.body }}")
           curl -H "Content-Type: application/json" \
                -d '{
                  "embeds": [{
-                   "title": "Gambit'\''s Premades Release: '"$VERSION"'",
-                   "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
-                   "image": {
-                     "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
-                   }
+                   "title": "Gambit'\''s Premades Release: '"${VERSION}"'",
+                   "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"${RELEASE_NOTES}"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}>",
+                   "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
                  }]
                }' "$DISCORD_WEBHOOK"
