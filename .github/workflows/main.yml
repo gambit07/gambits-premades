@@ -37,7 +37,7 @@ jobs:
 
           if [ "$CHANGED" -eq 0 ]; then
             echo "module.json not changed; skipping release."
-            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
