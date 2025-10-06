@@ -60,45 +60,28 @@ if (fs.existsSync(NOTES_FILE)) {
   console.warn(`⚠️  ${path.basename(NOTES_FILE)} not found—skipping CHANGELOG update`);
 }
 
-// ─── 4) Commit the changes ────────────────────────────────────────────────
+// ─── 4) Unpack packs ─────────────────────
+try {
+  console.log('🧰  Running unpackData to refresh packData from packs/');
+  execSync('npm run unpackData', { stdio: 'inherit' });
+  console.log('✅  Unpacked packs into packData/');
+} catch (err) {
+  console.error('❌  unpackData failed', err);
+  process.exit(1);
+}
 
+// ─── 5) Commit changes ─────────
 try {
   execSync('git config user.name "github-actions[bot]"');
   execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"');
-  execSync(`git add ${MODULE_JSON} ${CHANGELOG_FILE}`, { stdio: 'inherit' });
+  execSync(`git add module.json CHANGELOG.md packData`, { stdio: 'inherit' });
   execSync(`git commit -m "${version}"`, { stdio: 'inherit' });
-  console.log('💾  Committed module.json and CHANGELOG.md');
+  console.log('💾  Committed module.json, CHANGELOG.md, and packData/');
 } catch {
   console.log('ℹ️  Nothing to commit');
 }
 
-// *** PUSH the bump before the CI push happens ***
 console.log('🚀  Pushing bump commit to origin/main');
 execSync('git push origin main --no-verify', { stdio: 'inherit' });
-
-// ─── 5) Build the ZIP ────────────────────────────────────────────────────
-
-console.log('📦  Creating module.zip from current HEAD');
-execSync(
-  'git archive --format=zip --output module.zip HEAD',
-  { stdio: 'inherit' }
-);
-
-// ─── 6) Create GitHub Release + upload assets ─────────────────────────────
-
-try {
-  console.log(`🏷  Creating GitHub release v${version} with assets`);
-  execSync(
-    `gh release create ${version} \
-      --title "Release ${version}" \
-      --notes-file ${NOTES_FILE} \
-      module.zip module.json`,
-    { stdio: 'inherit' }
-  );
-  console.log(`✅  GitHub release ${version} created with module.zip & module.json`);
-} catch (err) {
-  console.error('❌  gh release create failed', err);
-  process.exit(1);
-}
 
 console.log('🎉  Release script complete!');

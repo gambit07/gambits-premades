@@ -3,7 +3,10 @@
   "type": "commonjs",
   "scripts": {
     "release": "node update-module.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "packData": "node --experimental-top-level-await ./packData/packData.mjs",
+    "unpackData": "node --experimental-top-level-await ./packData/unpackData.mjs",
+    "get-version": "node ./get-version.js"
   },
   "dependencies": {
     "terser-webpack-plugin": "^5.3.9",
