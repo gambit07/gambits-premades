@@ -66,7 +66,7 @@ jobs:
             echo "should_release=true" >> "$GITHUB_OUTPUT"
           else
             echo "Version not changed; skipping release."
-            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Setup Node
