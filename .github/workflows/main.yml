@@ -27,17 +27,24 @@ jobs:
           BEFORE_SHA="${{ github.event.before }}"
           AFTER_SHA="${{ github.sha }}"
 
-          # If module.json didn't change across the pushed range, skip release early.
-          if ! git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" | grep -q '^module.json$'; then
+          # Determine if module.json changed across the pushed range
+          if [ -n "$BEFORE_SHA" ] && git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+            CHANGED=$(git diff --name-only "$BEFORE_SHA" "$AFTER_SHA" | grep -c '^module.json$' || true)
+          else
+            # workflow_dispatch or first push: check only the final commit
+            CHANGED=$(git show --name-only "$AFTER_SHA" | grep -c '^module.json$' || true)
+          fi
+
+          if [ "$CHANGED" -eq 0 ]; then
             echo "module.json not changed; skipping release."
             echo "should_release=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Extract versions from module.json at before/after (BEFORE may not have module.json on first run)
+          # Extract versions from module.json at before/after (old may be blank)
           getver () {
             local ref="$1"
-            if git cat-file -e "${ref}^{commit}" 2>/dev/null; then
+            if [ -n "$ref" ] && git cat-file -e "${ref}^{commit}" 2>/dev/null; then
               if git show "${ref}:module.json" >/tmp/mod.json 2>/dev/null; then
                 node -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/mod.json','utf8')).version || '')"
               else
@@ -101,22 +108,24 @@ jobs:
       # Ensure release notes file exists
       - name: Ensure release notes
         if: steps.detect.outputs.should_release == 'true'
+        id: release-notes-github
         run: |
           [ -f release_notes.txt ] || echo "No notes for this release." > release_notes.txt
 
       # Upload release using the tag/version from module.json
-      - name: Create GitHub Release and upload assets
+      - name: Create Release
         if: steps.detect.outputs.should_release == 'true'
-        uses: softprops/action-gh-release@v2
+        id: create-release
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ steps.ver.outputs.VERSION }}
+          allowUpdates: true
           name: Release ${{ steps.ver.outputs.VERSION }}
-          body_path: release_notes.txt
-          files: |
-            module.zip
-            module.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: false
+          body: ${{ steps.release-notes-github }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: './module.zip,./module.json'
+          tag: ${{ steps.ver.outputs.VERSION }}
 
       - name: Release Foundry Package
         if: steps.detect.outputs.should_release == 'true' && success()

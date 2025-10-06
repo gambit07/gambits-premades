@@ -74,7 +74,7 @@ try {
 try {
   execSync('git config user.name "github-actions[bot]"');
   execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"');
-  execSync(`git add module.json CHANGELOG.md packData`, { stdio: 'inherit' });
+  execSync(`git add .`, { stdio: 'inherit' });
   execSync(`git commit -m "${version}"`, { stdio: 'inherit' });
   console.log('💾  Committed module.json, CHANGELOG.md, and packData/');
 } catch {
