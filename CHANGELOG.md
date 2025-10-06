@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.1.21] - 2025-10-06
+- Updates:
+  - Second pass at updating the release process
+- Bugfixes:
+  - Merged fixes for various automations metric range detection, thanks Tallon
+
+## [v2.1.21] - 2025-10-06
+- Updates:
+  - Second pass at updating the release process
+- Bugfixes:
+  - Merged fixes for various automations metric range detection, thanks Tallon
+
 ## [v2.1.20] - 2025-10-05
 - Additions:
   - Polearm Master 2024: Added 2024 feat, no changes.
