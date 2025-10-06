@@ -25,16 +25,16 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      # Build packs from packData -> packs (your existing script)
+      # Build packs from packData -> packs
       - name: Compile packs (packData -> packs)
         run: npm run packData
 
-      # Create Foundry-clean ZIP from repo (honors .gitattributes export-ignore)
+      # Create Foundry-clean ZIP from repo
       - name: Create base ZIP (from repo files)
         run: |
           git archive --format=zip --output module.zip HEAD
 
-      # Append generated packs into the zip (packs/ isn't tracked by git)
+      # Append packs to the zip
       - name: Add packs/ to ZIP
         run: |
           if [ -d "packs" ]; then
@@ -49,15 +49,13 @@ jobs:
           allowUpdates: true
           replacesArtifacts: true
           makeLatest: true
-          # use the values from the release event
           name: ${{ github.event.release.name }}
           tag:  ${{ github.event.release.tag_name }}
-          # keep the body users typed in the UI (omit body/bodyFile to avoid overwriting)
           artifacts: "module.zip,module.json"
           token: ${{ secrets.GITHUB_TOKEN }}
           body: ${{ github.event.release.body }}
 
-      # Compute plain version (strip leading 'v' if your tag uses it)
+      # Compute plain version
       - name: Set VERSION/URLs for Foundry
         run: |
           echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
@@ -84,7 +82,7 @@ jobs:
               }
             }'
 
-      # Discord posts (unchanged except reuse $VERSION)
+      # Discord posts
       - name: Post to Midi Discord
         if: ${{ success() }}
         env:
