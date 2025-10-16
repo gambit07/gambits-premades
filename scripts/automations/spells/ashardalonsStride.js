@@ -56,7 +56,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         }
         ];
     
-        let effectName = await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: actor.uuid, effects: effectData });
+        let effectName = await actor.createEmbeddedDocuments("ActiveEffect", effectData);
         await hasConcApplied.addDependent(effectName[0]);
     }
 

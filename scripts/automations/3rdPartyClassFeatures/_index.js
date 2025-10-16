@@ -4,6 +4,7 @@ import { flamesEmbrace } from "./witch/covenOfTheRoilingHearth/flamesEmbrace.js"
 import { drawingTheHearth } from "./witch/covenOfTheRoilingHearth/drawingTheHearth.js";
 import { chronalShift } from "./wizard/chronurgist/chronalShift.js";
 import { defileGround } from "./druid/circleOfTheBlighted/defileGround.js";
+import { calculatedFlourish } from "./savant/calculatedFlourish.js";
 
 export const thirdPartyClassFeaturesMacros = {
   rainOfCinders,
@@ -11,5 +12,6 @@ export const thirdPartyClassFeaturesMacros = {
   flamesEmbrace,
   drawingTheHearth,
   chronalShift,
-  defileGround
+  defileGround,
+  calculatedFlourish
 };

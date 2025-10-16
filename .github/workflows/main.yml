@@ -84,31 +84,35 @@ jobs:
 
       # Discord posts
       - name: Post to Midi Discord
-        if: ${{ success() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
         run: |
-          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' <<< "${{ github.event.release.body }}")
+          VERSION=$(node -p "require('./module.json').version")
+          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' release_notes.txt)
           curl -H "Content-Type: application/json" \
                -d '{
                  "embeds": [{
-                   "title": "Gambit'\''s Premades Release: '"${VERSION}"'",
-                   "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"${RELEASE_NOTES}"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}>",
-                   "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
+                   "title": "Gambit'\''s Premades Release: '$VERSION'",
+                   "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
+                   "image": {
+                     "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
+                   }
                  }]
-               }' "$DISCORD_WEBHOOK"
+               }' $DISCORD_WEBHOOK
 
       - name: Post to GPS Discord
-        if: ${{ success() }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_GPS_WEBHOOK }}
         run: |
-          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' <<< "${{ github.event.release.body }}")
+          VERSION=$(node -p "require('./module.json').version")
+          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' release_notes.txt)
           curl -H "Content-Type: application/json" \
                -d '{
                  "embeds": [{
-                   "title": "Gambit'\''s Premades Release: '"${VERSION}"'",
-                   "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"${RELEASE_NOTES}"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}>",
-                   "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
+                   "title": "Gambit'\''s Premades Release: '$VERSION'",
+                   "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
+                   "image": {
+                     "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
+                   }
                  }]
-               }' "$DISCORD_WEBHOOK"
+               }' $DISCORD_WEBHOOK

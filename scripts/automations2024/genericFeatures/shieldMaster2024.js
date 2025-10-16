@@ -78,9 +78,25 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
     }
 
     if(args?.[0].macroPass === "preTargetSave") {
-        if(!token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) return;
-        if(MidiQOL.hasUsedReaction(actor)) return;
+        let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
         item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "b32e3d48-034b-4a56-95b4-f392a525f299");
+
+        if(workflow.saveActivityDetails?.ability?.first() !== "dex") {
+            if(debugEnabled) console.error(`${item.name} Interpose Shield for ${actor.name} failed because save is not dex`);
+            return;
+        }
+        if(!token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) {
+            if(debugEnabled) console.error(`${item.name} Interpose Shield for ${actor.name} failed because shield is not equipped`);
+            return;
+        }
+        if(MidiQOL.hasUsedReaction(actor)) {
+            if(debugEnabled) console.error(`${item.name} Interpose Shield for ${actor.name} failed at reaction available`);
+            return;
+        }
+        if(MidiQOL.checkIncapacitated(effectOriginToken)) {
+            if(debugEnabled) console.error(`${item.name} Interpose Shield for ${actor.name} failed because token is incapacitated`);
+            return;
+        }
 
         let dialogId = "shieldmasterinterposeshield";
         let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${item.name}`;

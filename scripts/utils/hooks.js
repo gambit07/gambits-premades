@@ -70,6 +70,7 @@ export function registerHooks() {
     Hooks.on("midi-qol.preAttackRollComplete", async (workflow) => {
         if(!workflow.activity.hasAttack) return;
         let workflowItemUuid = workflow.itemCardUuid;
+        //if (game.gpsSettings.calculatedFlourishEnabled) await executeWorkflow({ workflowItem: "calculatedFlourish", workflowData: workflowItemUuid, workflowType: "preAttack", workflowCombat: true });
         if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.protectionEnabled && game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.powerWordReboundEnabled) await executeWorkflow({ workflowItem: "powerWordRebound", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
@@ -81,7 +82,7 @@ export function registerHooks() {
         let workflowItemUuid = workflow.itemCardUuid;
         if (game.gpsSettings.poetryInMiseryEnabled) await executeWorkflow({ workflowItem: "poetryInMisery", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.riposteEnabled) await executeWorkflow({ workflowItem: "riposte", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        //if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        //if (game.gpsSettings.calculatedFlourishEnabled) await executeWorkflow({ workflowItem: "calculatedFlourish", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.taleOfHubrisEnabled) await executeWorkflow({ workflowItem: "taleOfHubris", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 

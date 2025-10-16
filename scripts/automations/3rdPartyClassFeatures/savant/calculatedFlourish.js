@@ -1,9 +1,9 @@
-export async function riposte({workflowData,workflowType,workflowCombat}) {
+export async function calculatedFlourish({workflowData,workflowType,workflowCombat}) {
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
-    const gpsUuid = "73ae66c4-4bd4-41cd-b75a-0056ef8b670c";
+    const gpsUuid = "cac98118-cafc-4e80-b41e-e00cbbffbb66";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
-    let itemName = "Maneuvers: Riposte";
+    let itemName = "Calculated Flourish";
     let dialogId = gpsUuid;
     const actionTypes = ["mwak"];
     if (!actionTypes.some(type => workflow.activity?.actionType?.includes(type))) {
@@ -11,7 +11,7 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
     }
     let target = workflow.targets.first();
     let gmUser = game.gps.getPrimaryGM();
-    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Riposte Timeout`));
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Calculated Flourish Timeout`));
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
 
     let targetAC = target.actor.system.attributes.ac.value;
@@ -21,7 +21,7 @@ export async function riposte({workflowData,workflowType,workflowCombat}) {
         return;
     }
 
-    let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: ["superiority dice", "superiority die", "combat superiority"], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
+    let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: ["calculated-flourish"], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
     let browserUser;
 

@@ -1,4 +1,4 @@
 - Updates:
-  - Second pass at updating the release process.
+  - Bump 5e compatability so 5.1.10+ can be used
 - Bugfixes:
-  - Merged fixes for various automations metric range detection, thanks Tallon
+  - Shield Master 2024: Fix Interpose Shield activating on any save

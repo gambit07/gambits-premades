@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.1.28] - 2025-10-16
+- Updates:
+  - Bump 5e compatability so 5.1.10+ can be used
+- Bugfixes:
+  - Shield Master 2024: Fix Interpose Shield activating on any save
+
+## [v2.1.28] - 2025-10-16
+- Updates:
+  - Bump 5e compatability so 5.1.10+ can be used
+- Bugfixes:
+  - Shield Master 2024: Fix Interpose Shield activating on any save
+
 ## [v2.1.27] - 2025-10-06
 - Updates:
   - Second pass at updating the release process.
