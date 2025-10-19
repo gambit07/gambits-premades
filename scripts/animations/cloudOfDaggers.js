@@ -14,10 +14,12 @@ export function cloudOfDaggers({template, itemUuid}) {
         scaleDecision = 0.65;
     }
 
+    const animFileType = game.modules.get("jb2a_patreon")?.active ? "kunai" : "daggers";
+
     new Sequence()
         .effect()
             .attachTo(template, alignmentDecision)
-            .file(`jb2a.cloud_of_daggers.kunai.${animColor}`)
+            .file(`jb2a.cloud_of_daggers.${animFileType}.${animColor}`)
             .tieToDocuments(template)
             .scaleToObject(scaleDecision)
             .scaleIn(0, 500, {ease: "easeOutCubic"})
