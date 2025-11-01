@@ -730,6 +730,32 @@ export function registerSettings() {
         default: ""
     });
 
+    game.settings.register("gambits-premades", "enableTokenMovementSpeed", {
+        name: "enableTokenMovementSpeed",
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+        onChange: value => {
+          if(!value) CONFIG.Token.movement.defaultSpeed = 6;
+          else if(!isNaN(game.settings.get('gambits-premades', 'tokenMovementSpeed'))) CONFIG.Token.movement.defaultSpeed = game.settings.get('gambits-premades', 'tokenMovementSpeed');
+        }
+    });
+
+    game.settings.register('gambits-premades', 'tokenMovementSpeed', {
+        name: "tokenMovementSpeed",
+        hint: "",
+        scope: 'world',
+        config: false,
+        type: String,
+        default: "6",
+        onChange: value => {
+            const numericValue = Number(value);
+            if (!isNaN(numericValue) && game.settings.get('gambits-premades', 'enableTokenMovementSpeed')) CONFIG.Token.movement.defaultSpeed = numericValue;
+            else console.error("Invalid input for Numeric Setting Example: Not a number.");
+        }
+    });
+
     game.settings.registerMenu('gambits-premades', 'generalSettings', {
         name: game.i18n.localize("General Settings"),
         label: game.i18n.localize("General Settings"),
@@ -1175,7 +1201,6 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
 
   async _prepareContext(options) {
     let context = await super._prepareContext(options);
-    let hasTimeoutColumn = false;
 
     const definitions = [
       { id: "enable3prNoCombat", name: "Enable 3rd Party Reactions Outside Combat", description: "Allows 3rd party reactions to function while combat is not active.", boolKey: "enable3prNoCombat" },
@@ -1184,8 +1209,11 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
       { id: "enableTimerFullAnim", name: "Enable Timer Full Bar Animation", description: "Modify the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.", boolKey: "enableTimerFullAnim" },
       { id: "hideTemplates", name: "Hide Templates", description: "Hide templates after placement.", boolKey: "hideTemplates" },
       { id: "mirror3rdPartyDialogForGMs", name: "Mirror 3rd Party Dialog for GMs", description: "3rd party dialog's will be sent to the GM and the player so that either party can interact with the dialog to use/dismiss/pause it.", boolKey: "Mirror 3rd Party Dialog for GMs" },
+      { id: "tokenMovementSpeed", name: "Token Movement Speed", description: "Numeric value for token movement animation speed. Default Foundry speed is 6.", boolKey: "enableTokenMovementSpeed", timeoutKey: "tokenMovementSpeed" },
       { id: "debugEnabled", name: "Enable Debugging", description: "Enable console logs for the reaction validation process for troubleshooting.", boolKey: "debugEnabled" }
     ];
+
+    const hasTimeoutColumn = definitions.some(d => !!d.timeoutKey);
 
     const features = definitions.map(def => {
       const feature = {
@@ -1194,7 +1222,13 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
         description: def.description,
         boolKey:     def.boolKey,
         enabled:     game.settings.get("gambits-premades", def.boolKey),
+        timeoutKey:  def.timeoutKey
       };
+
+      if (def.timeoutKey) {
+        feature.timeout = game.settings.get("gambits-premades", def.timeoutKey);
+      }
+
       if (Array.isArray(def.children)) {
         feature.children = def.children.map(child => ({
           id:          child.id,
@@ -1205,6 +1239,7 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
           type:        child.type || "Boolean"
         }));
       }
+
       return feature;
     });
 

@@ -101,7 +101,7 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
                             let config = {
                                 gridHighlight: true,
                                 icon: {texture: 'icons/svg/dice-target.svg', borderVisible: true},
-                                location: {obj: template, limitMaxRange: 30, showRange: true}
+                                location: {obj: template, limitMaxRange: 30, showRange: true},
                                 snap: { position: CONST.GRID_SNAPPING_MODES.CENTER | CONST.GRID_SNAPPING_MODES.LEFT_SIDE_MIDPOINT }
                             }
 

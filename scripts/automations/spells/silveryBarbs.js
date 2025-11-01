@@ -44,8 +44,6 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
 
         if(workflowType === "save") {
             let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
-            if(homebrewDisableNat20) targets = targets.filter(t => workflow.saveRolls.find(roll => roll.data.actorUuid === t.actor.uuid && !roll.isCritical));
-            if(homebrewEnableNat20) targets = targets.filter(t => workflow.saveRolls.find(roll => roll.data.actorUuid === t.actor.uuid && roll.isCritical));
 
             if(targets.length === 0) {
                 debugEnabled ? console.error(`${itemName} for ${validTokenPrimary.actor.name} failed due to no valid save targets`) : "";
@@ -96,8 +94,8 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 debugEnabled ? console.error(`${itemName} for ${validTokenPrimary.actor.name} failed due to no valid attack targets`) : "";
                 continue;
             }
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'disableSilveryBarbsOnNat20') === true && workflow.isCritical === true) return debugEnabled ? console.error(`${itemName} failed due to homebrew rule disabling on criticle success`) : "";
-            if (MidiQOL.safeGetGameSetting('gambits-premades', 'enableSilveryBarbsOnNat20') === true && workflow.isCritical !== true) return debugEnabled ? console.error(`${itemName} failed due to homebrew rule enabling only on criticle success`) : "";
+            if (homebrewDisableNat20 && workflow.isCritical === true) return debugEnabled ? console.error(`${itemName} failed due to homebrew rule disabling on criticle success`) : "";
+            if (homebrewEnableNat20 && workflow.isCritical !== true) return debugEnabled ? console.error(`${itemName} failed due to homebrew rule enabling only on criticle success`) : "";
 
             dialogContent = `
                 <div class="gps-dialog-container">

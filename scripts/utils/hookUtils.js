@@ -213,7 +213,8 @@ export function updateSettings(settingKey = null) {
         'enableChronalShift': 'chronalShiftEnabled',
         'enableMagicUsersNemesis': 'magicUsersNemesisEnabled',
         'enableDreadCounterspell': 'dreadCounterspellEnabled',
-        'enableFlashOfGenius': 'flashOfGeniusEnabled'
+        'enableFlashOfGenius': 'flashOfGeniusEnabled',
+        'enableTokenMovementSpeed': 'enableTokenMovementSpeed'
     };
 
     if (settingKey === null) {

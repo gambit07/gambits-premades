@@ -704,7 +704,6 @@ async function processValidRange({actor, token}) {
             let activityMaxRange = item.system.activities
                 ?.filter(a => a?.actionType === "msak" || a?.actionType === "mwak")
                 .reduce((actMax, activity) => {
-                    console.log(activity, "activity");
                     let rangeVal = activity.range?.value;
                     return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
                 }, 0);

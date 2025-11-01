@@ -94,6 +94,11 @@ export async function recklessAttack2024({ speaker, actor, token, character, ite
                     },
                     "gambits-premades": {
                         "gpsUuid": "872c2cfd-5f58-4e64-a804-2b0db2c65900"
+                    },
+                    "chris-premades": {
+                        "info": {
+                            "identifier": "recklessAttackEffect"
+                        }
                     }
                 },
                 "name": "Reckless Attack - Effects",
