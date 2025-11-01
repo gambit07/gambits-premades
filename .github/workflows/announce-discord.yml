@@ -1,0 +1,83 @@
+name: Announce to Discord
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to show in the title (optional; defaults to latest release tag, stripped of 'v')"
+        required: false
+        type: string
+      notes:
+        description: "Announcement body (optional; if empty, use latest release body)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Derive VERSION and BODY
+        id: meta
+        env:
+          GH_REPO: ${{ github.repository }}
+          IN_VERSION: ${{ inputs.version }}
+          IN_NOTES: ${{ inputs.notes }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update && sudo apt-get install -y jq
+
+          if [ -n "${IN_VERSION}" ]; then
+            VERSION="${IN_VERSION#v}"
+            TAG="v${VERSION}"
+          else
+            # pull latest release; works even if your tags are not prefixed with v
+            latest=$(curl -sS -H "Authorization: Bearer $GH_TOKEN" \
+              "https://api.github.com/repos/${GH_REPO}/releases/latest")
+            TAG=$(echo "$latest" | jq -r .tag_name)
+            VERSION="${TAG#v}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+          if [ -n "${IN_NOTES}" ]; then
+            printf "%s" "${IN_NOTES}" > release_body.txt
+          else
+            rel=$(curl -sS -H "Authorization: Bearer $GH_TOKEN" \
+              "https://api.github.com/repos/${GH_REPO}/releases/tags/${TAG}" \
+              || curl -sS -H "Authorization: Bearer $GH_TOKEN" \
+              "https://api.github.com/repos/${GH_REPO}/releases/latest")
+            body=$(echo "$rel" | jq -r .body)
+            printf "%s" "${body:-No notes for this release.}" > release_body.txt
+          fi
+
+      - name: Post to Midi Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
+        run: |
+          NOTES_ESC=$(python3 -c "import json; print(json.dumps(open('release_body.txt','r',encoding='utf-8').read())[1:-1])")
+          curl -sS -H "Content-Type: application/json" \
+               -d '{
+                 "embeds": [{
+                   "title": "Gambit'\''s Premades Release: '"$VERSION"'",
+                   "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$NOTES_ESC"'\n\nCheck it out on GitHub:\n<https://github.com/'"${GITHUB_REPOSITORY}"'/releases/tag/'"$TAG"'>",
+                   "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
+                 }]
+               }' "$DISCORD_WEBHOOK"
+
+      - name: Post to GPS Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_GPS_WEBHOOK }}
+        run: |
+          NOTES_ESC=$(python3 -c "import json; print(json.dumps(open('release_body.txt','r',encoding='utf-8').read())[1:-1])")
+          curl -sS -H "Content-Type: application/json" \
+               -d '{
+                 "embeds": [{
+                   "title": "Gambit'\''s Premades Release: '"$VERSION"'",
+                   "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$NOTES_ESC"'\n\nCheck it out on GitHub:\n<https://github.com/'"${GITHUB_REPOSITORY}"'/releases/tag/'"$TAG"'>",
+                   "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
+                 }]
+               }' "$DISCORD_WEBHOOK"
