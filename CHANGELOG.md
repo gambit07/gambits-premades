@@ -1,15 +1,5 @@
 # Changelog
 
-## [v2.1.29] - 2025-11-01
-- Additions:
-  - Token Movement Speed: Added a token movement speed setting in GPS General Settings. This allows adjusting the default token movement speed on the canvas. Just a general setting I wanted!
-- Updates:
-  - Reckless Attack 2024: Added CPR's reckless attack identifer so that GPS reckless attack AE will work with CPR's Frenzy feature.
-- Bugfixes:
-  - Whirlwind: Updated Air Elemental's Whirlwind feature to fix a few issues
-  - Cloud of Daggers 2024: Fixed small syntax error causing the Move feature to not work
-  - Silvery Barbs: Fixed Enable/Disable on Nat 20 applying to Saves
-
 ## [v2.1.28] - 2025-10-16
 - Updates:
   - Bump 5e compatability so 5.1.10+ can be used

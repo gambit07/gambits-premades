@@ -42,6 +42,16 @@ jobs:
             zip -r module.zip packs
           fi
 
+      - name: Prepare release body
+        run: |
+          if [ -n "${{ github.event.release.body }}" ]; then
+            printf "%s" "${{ github.event.release.body }}" > release_body.txt
+          elif [ -f release_notes.txt ]; then
+            cp release_notes.txt release_body.txt
+          else
+            echo "No notes for this release." > release_body.txt
+          fi
+
       # Attach artifacts to the release that triggered this workflow
       - name: Update Release with Files
         uses: ncipollo/release-action@v1
@@ -88,7 +98,12 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
         run: |
           VERSION=$(node -p "require('./module.json').version")
-          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' release_notes.txt)
+          RELEASE_NOTES=$(python3 - <<'PY'
+              import json, sys
+              txt = open('release_body.txt','r',encoding='utf-8').read()
+              print(json.dumps(txt)[1:-1])  # JSON-escape, strip outer quotes
+              PY
+              )
           curl -H "Content-Type: application/json" \
                -d '{
                  "embeds": [{
@@ -105,7 +120,12 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_GPS_WEBHOOK }}
         run: |
           VERSION=$(node -p "require('./module.json').version")
-          RELEASE_NOTES=$(sed ':a;N;$!ba;s/\n/\\n/g' release_notes.txt)
+          RELEASE_NOTES=$(python3 - <<'PY'
+              import json, sys
+              txt = open('release_body.txt','r',encoding='utf-8').read()
+              print(json.dumps(txt)[1:-1])  # JSON-escape, strip outer quotes
+              PY
+              )
           curl -H "Content-Type: application/json" \
                -d '{
                  "embeds": [{
