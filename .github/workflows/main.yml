@@ -2,7 +2,7 @@ name: Release
 
 on:
   release:
-    types: [published]   # runs after you publish a release (not when you just create a draft)
+    types: [published]
 
 permissions:
   contents: write
@@ -42,6 +42,7 @@ jobs:
             zip -r module.zip packs
           fi
 
+      # Always create a body file from the published release body
       - name: Prepare release body
         run: |
           if [ -n "${{ github.event.release.body }}" ]; then
@@ -52,7 +53,14 @@ jobs:
             echo "No notes for this release." > release_body.txt
           fi
 
-      # Attach artifacts to the release that triggered this workflow
+      - name: Show artifacts
+        run: |
+          ls -lh module.json module.zip || true
+          command -v unzip >/dev/null && unzip -l module.zip | head -n 50 || true
+          echo "---- RELEASE BODY (first 20 lines) ----"
+          head -n 20 release_body.txt || true
+
+      # Attach artifacts and set the body on the same release that triggered this run
       - name: Update Release with Files
         uses: ncipollo/release-action@v1
         with:
@@ -61,11 +69,11 @@ jobs:
           makeLatest: true
           name: ${{ github.event.release.name }}
           tag:  ${{ github.event.release.tag_name }}
-          artifacts: "module.zip,module.json"
+          bodyFile: release_body.txt                  # ← ensure body is exactly what we prepared
+          artifacts: "module.zip,module.json"         # ← no spaces
           token: ${{ secrets.GITHUB_TOKEN }}
-          body: ${{ github.event.release.body }}
 
-      # Compute plain version
+      # Compute plain version and URLs for Foundry
       - name: Set VERSION/URLs for Foundry
         run: |
           echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
@@ -92,28 +100,26 @@ jobs:
               }
             }'
 
-      # Discord posts
+      # Discord posts (use *release_body.txt*, not repo file)
       - name: Post to Midi Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
         run: |
           VERSION=$(node -p "require('./module.json').version")
           RELEASE_NOTES=$(python3 - <<'PY'
-              import json, sys
-              txt = open('release_body.txt','r',encoding='utf-8').read()
-              print(json.dumps(txt)[1:-1])  # JSON-escape, strip outer quotes
-              PY
-              )
-          curl -H "Content-Type: application/json" \
-               -d '{
-                 "embeds": [{
-                   "title": "Gambit'\''s Premades Release: '$VERSION'",
-                   "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
-                   "image": {
-                     "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
-                   }
-                 }]
-               }' $DISCORD_WEBHOOK
+            import json, sys
+            txt = open('release_body.txt','r',encoding='utf-8').read()
+            print(json.dumps(txt)[1:-1])  # JSON-escape, strip surrounding quotes
+            PY
+            )
+            curl -H "Content-Type: application/json" \
+                -d '{
+                  "embeds": [{
+                    "title": "Gambit'\''s Premades Release: '"$VERSION"'",
+                    "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
+                    "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
+                  }]
+                }' "$DISCORD_WEBHOOK"
 
       - name: Post to GPS Discord
         env:
@@ -121,18 +127,16 @@ jobs:
         run: |
           VERSION=$(node -p "require('./module.json').version")
           RELEASE_NOTES=$(python3 - <<'PY'
-              import json, sys
-              txt = open('release_body.txt','r',encoding='utf-8').read()
-              print(json.dumps(txt)[1:-1])  # JSON-escape, strip outer quotes
-              PY
-              )
+          import json, sys
+          txt = open('release_body.txt','r',encoding='utf-8').read()
+          print(json.dumps(txt)[1:-1])
+          PY
+          )
           curl -H "Content-Type: application/json" \
-               -d '{
-                 "embeds": [{
-                   "title": "Gambit'\''s Premades Release: '$VERSION'",
-                   "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
-                   "image": {
-                     "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4"
-                   }
-                 }]
-               }' $DISCORD_WEBHOOK
+          -d '{
+            "embeds": [{
+              "title": "Gambit'\''s Premades Release: '"$VERSION"'",
+              "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
+              "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
+            }]
+          }' "$DISCORD_WEBHOOK"

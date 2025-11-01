@@ -1,7 +1,7 @@
 - Additions:
   - Token Movement Speed: Added a token movement speed setting in GPS General Settings. This allows adjusting the default token movement speed on the canvas. Just a general setting I wanted!
 - Updates:
-  - Reckless Attack 2024: Added CPR's reckless attack identifer so that GPS reckless attack AE will work with CPR's Frenzy feature.
+  - Reckless Attack 2024: Added CPR's reckless attack identifer so that GPS reckless attack AE will work with CPR's Frenzy feature
 - Bugfixes:
   - Whirlwind: Updated Air Elemental's Whirlwind feature to fix a few issues
   - Cloud of Daggers 2024: Fixed small syntax error causing the Move feature to not work
