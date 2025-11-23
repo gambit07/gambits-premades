@@ -629,7 +629,6 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 dialog.pausedTime = Date.now();
             } else {
                 dialog.endTime += Date.now() - dialog.pausedTime;
-                requestAnimationFrame(animate);
             }
             dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
     
@@ -772,6 +771,9 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 icon: "fas fa-check",
                 classes: ["default"],
                 callback: async (event, button, dialog) => {
+                    dialog._closing = true;
+                    if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
+                    dialog.timeLeft = 0;
                     dialogState.interacted = true;
                     dialogState.decision = "yes";
                     if (source && source === "user" && type === "multiDialog") await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
@@ -812,6 +814,9 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 classes: ["default"],
                 default: true,
                 callback: async (event, button, dialog) => {
+                    dialog._closing = true;
+                    if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
+                    dialog.timeLeft = 0;
                     dialogState.interacted = true;
                     dialogState.decision = "no";
                     if(source && source === "user" && type === "multiDialog") await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
@@ -827,7 +832,7 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
             const dialog = event.target;
 
             const PROGRESS_BUCKET = 0.25;
-            const FRAME_MS = 16;
+            const FRAME_MS = 66;
             const SMOOTHING = 0.25;
 
             dialog.dialogState = dialogState;
@@ -859,6 +864,11 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
 
             const useFullTitleBar = !!game.settings.get("gambits-premades", "enableTimerFullAnim");
 
+            let lastHeaderBg = "";
+            let lastBorderImg = "";
+            let lastSelectColor = "";
+            let lastOptionColor = "";
+
             dialog.updateTimer = function updateTimer(newTimeLeft, paused) {
                 this.timeLeft = newTimeLeft;
                 this.isPaused = paused;
@@ -880,18 +890,28 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                         `linear-gradient(to right, ${dialogColors.borderColorStop}, ${dialogColors.borderColorStop} ${colorStop1}%, rgba(0,0,0,0.5) ${progress}%, rgba(0,0,0,0.5))`;
 
                     if (useFullTitleBar && headerEl) {
+                    if (borderStr !== lastHeaderBg) {
                         headerEl.style.background = borderStr;
-                        headerEl.style.border = '';
-                        headerEl.style.borderImage = '';
+                        lastHeaderBg = borderStr;
+                    }
                     } else if (headerEl) {
-                        headerEl.style.background = '';
-                        headerEl.style.border = '2px solid';
-                        headerEl.style.borderImage = `${borderStr} 1`;
+                    const img = `${borderStr} 1`;
+                    if (img !== lastBorderImg) {
+                        headerEl.style.border = "2px solid";
+                        headerEl.style.borderImage = img;
                         headerEl.style.borderImageSlice = 1;
+                        lastBorderImg = img;
+                    }
                     }
 
-                    if (selectEls?.length) selectEls.forEach(el => { el.style.backgroundColor = dialogColors.selectColor; });
-                    if (optionEls?.length) optionEls.forEach(el => { el.style.backgroundColor = dialogColors.optionColor; });
+                    if (selectEls?.length && dialogColors.selectColor !== lastSelectColor) {
+                        selectEls.forEach(el => el.style.backgroundColor = dialogColors.selectColor);
+                        lastSelectColor = dialogColors.selectColor;
+                    }
+                    if (optionEls?.length && dialogColors.optionColor !== lastOptionColor) {
+                        optionEls.forEach(el => el.style.backgroundColor = dialogColors.optionColor);
+                        lastOptionColor = dialogColors.optionColor;
+                    }
 
                     if (pauseBtn) pauseBtn.style.backgroundColor = this.isPaused ? dialogColors.pauseColor : '';
 
@@ -910,28 +930,35 @@ export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent
                 }
             };
 
+            dialog._rafId = null;
+            dialog._closing = false;
+
             dialog.animate = (now) => {
+                if (dialog._closing) return;
+
                 if (now - lastPaint >= FRAME_MS) {
-                    if (!dialog.isPaused) {
-                        dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
-                    }
+                    if (!dialog.isPaused) dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
                     dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
                     lastPaint = now;
                 }
 
-                if (dialog.timeLeft > 0) {
-                    requestAnimationFrame(dialog.animate);
+                if (dialog.timeLeft > 0 && !dialog._closing) {
+                    dialog._rafId = requestAnimationFrame(dialog.animate);
                 } else {
                     dialog.close();
                 }
             };
 
+            dialog._rafId = requestAnimationFrame(dialog.animate);
+
             dialog.listeners = attachEventListeners(dialog, dialog.animate);
 
-            requestAnimationFrame(dialog.animate);
             dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
         },
         close: async (event, dialog) => {
+            dialog._closing = true;
+            if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
+            dialog.timeLeft = 0;
             clearInterval(dialog.timer);
             cleanupEventListeners(dialog.listeners);
             if(notificationId && ((type === "multiDialog" && source === "gm") || type === "singleDialog")) await game.gps.socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});

@@ -86,12 +86,8 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
 
         let extraDamage = await new CONFIG.Dice.DamageRoll(`${actor.system.abilities.cha.mod}`, {}, {type: damageType, properties: ["mgc"]}).evaluate();
 
-        const itemData = {
-            name: `Elemental Affinity Damage - ${damageType}`,
-            type: "feat",
-            img: item.img
-        }
+        let rollFound = workflow.damageRoll;
 
-        await new MidiQOL.DamageOnlyWorkflow(actor, token, extraDamage.total, damageType, [target], extraDamage, {itemData: itemData, flavor: `Elemental Affinity Damage - ${damageType.charAt(0).toUpperCase() + damageType.slice(1)}`});
+        if(rollFound) await MidiQOL.addRollTo(rollFound, extraDamage);
     }
 }

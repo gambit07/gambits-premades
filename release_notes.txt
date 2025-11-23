@@ -1,8 +1,7 @@
-- Additions:
-  - Token Movement Speed: Added a token movement speed setting in GPS General Settings. This allows adjusting the default token movement speed on the canvas. Just a general setting I wanted!
 - Updates:
-  - Reckless Attack 2024: Added CPR's reckless attack identifer so that GPS reckless attack AE will work with CPR's Frenzy feature
+  - Updated a number of spells to use default damage details instead of custom, just a relic of the old days
+  - Elemental Affinity: Updated damage roll to add to existing damage roll rather than creating its own in order to not trigger things like extra concentration checks
 - Bugfixes:
-  - Whirlwind: Updated Air Elemental's Whirlwind feature to fix a few issues
-  - Cloud of Daggers 2024: Fixed small syntax error causing the Move feature to not work
-  - Silvery Barbs: Fixed Enable/Disable on Nat 20 applying to Saves
+  - Dialogs: Resolved some bad performance bugs
+  - Ice Knife: Updated to work with CPR transmuted spell (I think)
+  - Reckless Attack 2024: Updated to prevent dialog if token is not using a strength weapon

@@ -105,38 +105,27 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_MIDI_WEBHOOK }}
         run: |
-          VERSION=$(node -p "require('./module.json').version")
-          RELEASE_NOTES=$(python3 - <<'PY'
-            import json, sys
-            txt = open('release_body.txt','r',encoding='utf-8').read()
-            print(json.dumps(txt)[1:-1])  # JSON-escape, strip surrounding quotes
-            PY
-            )
-            curl -H "Content-Type: application/json" \
-                -d '{
-                  "embeds": [{
-                    "title": "Gambit'\''s Premades Release: '"$VERSION"'",
-                    "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
-                    "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
-                  }]
-                }' "$DISCORD_WEBHOOK"
+          # VERSION already comes from the earlier Set VERSION step via $GITHUB_ENV
+          RELEASE_NOTES=$(python3 -c "import json,sys; print(json.dumps(open('release_body.txt','r',encoding='utf-8').read())[1:-1])")
+          curl -H "Content-Type: application/json" \
+               -d '{
+                 "embeds": [{
+                   "title": "Gambit'\''s Premades Release: '"$VERSION"'",
+                   "description": "[Gambits Lounge Discord](https://discord.gg/NVpRhRPdE4)\n**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
+                   "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
+                 }]
+               }' "$DISCORD_WEBHOOK"
 
       - name: Post to GPS Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_GPS_WEBHOOK }}
         run: |
-          VERSION=$(node -p "require('./module.json').version")
-          RELEASE_NOTES=$(python3 - <<'PY'
-          import json, sys
-          txt = open('release_body.txt','r',encoding='utf-8').read()
-          print(json.dumps(txt)[1:-1])
-          PY
-          )
+          RELEASE_NOTES=$(python3 -c "import json,sys; print(json.dumps(open('release_body.txt','r',encoding='utf-8').read())[1:-1])")
           curl -H "Content-Type: application/json" \
-          -d '{
-            "embeds": [{
-              "title": "Gambit'\''s Premades Release: '"$VERSION"'",
-              "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
-              "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
-            }]
-          }' "$DISCORD_WEBHOOK"
+               -d '{
+                 "embeds": [{
+                   "title": "Gambit'\''s Premades Release: '"$VERSION"'",
+                   "description": "**To support my continued work on this module!**\n[Patreon ❤️](https://www.patreon.com/GambitsLounge) | [Ko-fi ❤️](https://ko-fi.com/gambit07)\n\n'"$RELEASE_NOTES"'\n\nCheck it out through the Foundry package manager or the link below:\n<https://github.com/gambit07/gambits-premades/releases/tag/'"$VERSION"'>",
+                   "image": { "url": "https://avatars.githubusercontent.com/u/4236874?s=400&u=05d3718580ef87ea13467131a0c1fcaf4956630d&v=4" }
+                 }]
+               }' "$DISCORD_WEBHOOK"
