@@ -125,9 +125,7 @@
                 "necrotic"
               ],
               "scaling": {
-                "mode": "",
-                "number": 1,
-                "formula": ""
+                "mode": ""
               }
             }
           ],
@@ -196,7 +194,11 @@
         },
         "otherActivityId": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "img": "",
+        "appliedEffects": [
+          "m2ELujtfE92t39Xl"
+        ]
       }
     },
     "identifier": "enervation",
@@ -327,16 +329,15 @@
           "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.LzMjc8SaO8gk9hfj"
         }
       ],
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
       "last": {
         "dnd5eactivity000": {
           "damageType": {
             "0": "necrotic"
           }
         }
+      },
+      "riders": {
+        "activity": []
       }
     },
     "chris-premades": {

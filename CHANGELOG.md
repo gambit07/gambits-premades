@@ -9,6 +9,15 @@
   - Ice Knife: Updated to work with CPR transmuted spell (I think)
   - Reckless Attack 2024: Updated to prevent dialog if token is not using a strength weapon
 
+## [v2.1.31] - 2025-11-23
+- Updates:
+  - Updated a number of spells to use default damage details instead of custom, just a relic of the old days
+  - Elemental Affinity: Updated damage roll to add to existing damage roll rather than creating its own in order to not trigger things like extra concentration checks
+- Bugfixes:
+  - Dialogs: Resolved some bad performance bugs
+  - Ice Knife: Updated to work with CPR transmuted spell (I think)
+  - Reckless Attack 2024: Updated to prevent dialog if token is not using a strength weapon
+
 ## [v2.1.30] - 2025-11-01
 - Additions:
   - Token Movement Speed: Added a token movement speed setting in GPS General Settings. This allows adjusting the default token movement speed on the canvas. Just a general setting I wanted!

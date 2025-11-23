@@ -8,7 +8,7 @@
       "chat": "<p>A ray of sickening greenish energy lashes out toward a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 2d8 poison damage and must make a Constitution saving throw. On a failed save, it is also poisoned until the end of your next turn.</p>\n<p><strong>At Higher Levels. </strong>When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.</p>"
     },
     "source": {
-      "custom": "2.1.6",
+      "custom": "2.1.31",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -129,16 +129,16 @@
           "includeBase": true,
           "parts": [
             {
-              "number": null,
-              "denomination": null,
+              "custom": {
+                "enabled": false,
+                "formula": ""
+              },
+              "number": 2,
+              "denomination": 8,
               "bonus": "",
               "types": [
                 "poison"
               ],
-              "custom": {
-                "enabled": true,
-                "formula": "2d8[poison]"
-              },
               "scaling": {
                 "mode": "whole",
                 "number": null,
@@ -649,10 +649,6 @@
       "ReplacementItemFlag": ""
     },
     "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
       "last": {
         "dnd5eactivity000": {
           "damageType": {
@@ -664,6 +660,9 @@
             "0": "poison"
           }
         }
+      },
+      "riders": {
+        "activity": []
       }
     },
     "tidy5e-sheet": {

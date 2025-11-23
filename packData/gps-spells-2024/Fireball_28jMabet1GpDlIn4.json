@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.5",
+      "custom": "2.1.31",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -115,16 +115,16 @@
           "onSave": "half",
           "parts": [
             {
-              "number": null,
-              "denomination": null,
+              "custom": {
+                "enabled": false,
+                "formula": ""
+              },
+              "number": 8,
+              "denomination": 6,
               "bonus": "",
               "types": [
                 "fire"
               ],
-              "custom": {
-                "enabled": true,
-                "formula": "8d6[fire]"
-              },
               "scaling": {
                 "mode": "whole",
                 "number": null,
@@ -197,7 +197,14 @@
         },
         "otherActivityId": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "img": "",
+        "flags": {
+          "region-attacher": {
+            "attachRegionToTemplate": false
+          }
+        },
+        "appliedEffects": []
       }
     },
     "identifier": "fireball",
@@ -577,8 +584,7 @@
     },
     "dnd5e": {
       "riders": {
-        "activity": [],
-        "effect": []
+        "activity": []
       }
     },
     "chris-premades": {

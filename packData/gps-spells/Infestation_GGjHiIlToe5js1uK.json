@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.1",
+      "custom": "2.1.31",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -109,16 +109,16 @@
           "onSave": "none",
           "parts": [
             {
-              "number": null,
-              "denomination": null,
+              "custom": {
+                "enabled": false,
+                "formula": ""
+              },
+              "number": 1,
+              "denomination": 6,
               "bonus": "",
               "types": [
                 "poison"
               ],
-              "custom": {
-                "enabled": true,
-                "formula": "1d6[poison]"
-              },
               "scaling": {
                 "mode": "whole",
                 "number": 1,
@@ -191,7 +191,9 @@
         },
         "otherActivityId": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "img": "",
+        "appliedEffects": []
       }
     },
     "identifier": "infestation",
@@ -314,15 +316,14 @@
     },
     "core": {},
     "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
       "migratedProperties": [
         "vocal",
         "somatic",
         "material"
-      ]
+      ],
+      "riders": {
+        "activity": []
+      }
     },
     "tidy5e-sheet": {
       "section": "",
