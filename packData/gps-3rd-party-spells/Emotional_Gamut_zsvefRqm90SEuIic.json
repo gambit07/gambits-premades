@@ -98,7 +98,8 @@
         "effects": [
           {
             "_id": "tRBWoyAIFXz3MkXY",
-            "onSave": false
+            "onSave": false,
+            "level": {}
           }
         ],
         "range": {
@@ -188,7 +189,14 @@
         },
         "otherActivityId": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "emotional-gamut",
@@ -312,12 +320,7 @@
         {
           "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.68iUqDH2S8mHnElA"
         }
-      ],
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
+      ]
     },
     "core": {},
     "scene-packer": {

@@ -1,5 +1,6 @@
 export async function elementalAffinity2024({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
-    if(args?.[0].macroPass === "postDamageRoll") {
+    if(args?.[0].macroPass === "postAllRollsComplete") {
+
         let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
         item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "1c11dbbe-c4f3-4208-9449-c025d6a34218");
         
@@ -84,10 +85,14 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
             else return;
         }
 
-        let extraDamage = await new CONFIG.Dice.DamageRoll(`${actor.system.abilities.cha.mod}`, {}, {type: damageType, properties: ["mgc"]}).evaluate();
+        let activityToUpdate = await item.system.activities.find(a => a.identifier === "syntheticDamage");
 
-        let rollFound = workflow.damageRoll;
-
-        if(rollFound) await MidiQOL.addRollTo(rollFound, extraDamage);
+        let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
+        if(damageType !== damageParts[0].types[0]) {
+            damageParts[0].types = [];
+            damageParts[0].types.push(damageType);
+            await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
+        }
+        await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.uuid});
     }
 }

@@ -93,7 +93,8 @@
         },
         "effects": [
           {
-            "_id": "pdLI8545fAY1YBAM"
+            "_id": "pdLI8545fAY1YBAM",
+            "level": {}
           }
         ],
         "range": {
@@ -181,7 +182,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "oil-flame",
@@ -329,13 +337,7 @@
       "effectCondition": "",
       "onUseMacroName": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    }
+    "dnd5e": {}
   },
   "_id": "nG19wNDsveBN44rA",
   "_key": "!items!nG19wNDsveBN44rA"

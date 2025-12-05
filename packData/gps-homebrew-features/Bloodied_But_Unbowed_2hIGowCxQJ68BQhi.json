@@ -155,7 +155,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "bloodied-but-unbowed",
@@ -263,12 +270,7 @@
     },
     "dnd5e": {
       "sourceId": "Compendium.world.pugilist-class.Item.AclO1ro8VTMy5YnM",
-      "advancementOrigin": "lRflwN3N2u4styuf.zcxmwKII7B2eQ9W6",
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
+      "advancementOrigin": "lRflwN3N2u4styuf.zcxmwKII7B2eQ9W6"
     },
     "autoanimations": {
       "id": "07bc8aca-9241-402e-a5be-ecaa92c873e1",

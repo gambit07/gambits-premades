@@ -45,7 +45,8 @@
     },
     "speed": {
       "value": null,
-      "conditions": ""
+      "conditions": "",
+      "units": "ft"
     },
     "strength": null,
     "proficient": 1,
@@ -98,10 +99,12 @@
         },
         "effects": [
           {
-            "_id": "A1LsjG1ZxIxFP2ry"
+            "_id": "A1LsjG1ZxIxFP2ry",
+            "level": {}
           },
           {
-            "_id": "SShn5byLnHvn6yE7"
+            "_id": "SShn5byLnHvn6yE7",
+            "level": {}
           }
         ],
         "range": {
@@ -189,11 +192,21 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "boldins-beard-oil",
-    "attuned": false
+    "attuned": false,
+    "crew": {
+      "value": []
+    }
   },
   "effects": [
     {
@@ -364,13 +377,7 @@
       "effectCondition": "",
       "rollAttackPerTarget": "default"
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 8
-    }
+    "dnd5e": {}
   },
   "folder": null,
   "_id": "1sTnzvZ7IfUl9NJI",

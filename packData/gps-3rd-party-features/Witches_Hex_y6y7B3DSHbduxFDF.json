@@ -48,7 +48,8 @@
             {
               "type": "itemUses",
               "value": "1",
-              "target": ""
+              "target": "",
+              "scaling": {}
             }
           ],
           "scaling": {
@@ -157,7 +158,14 @@
         "otherActivityId": "none",
         "otherActivityAsParentType": true,
         "img": "",
-        "appliedEffects": []
+        "appliedEffects": [],
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "hex",
@@ -202,12 +210,7 @@
     },
     "dnd5e": {
       "sourceId": "Compendium.kp-deep-magic-volume-2.deep-magic-2-class-features.Item.yGAB8TFqkATWm89b",
-      "advancementOrigin": "n0EYWjezMNteLTIc.Lru2JrqeY8DTKrAN",
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 4
+      "advancementOrigin": "n0EYWjezMNteLTIc.Lru2JrqeY8DTKrAN"
     },
     "scene-packer": {
       "hash": "20d7b538bb1df90fc37f9aeea5a89db0e8024b53",

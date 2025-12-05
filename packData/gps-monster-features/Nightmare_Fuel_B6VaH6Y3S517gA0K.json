@@ -182,7 +182,14 @@
         },
         "otherActivityId": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "nightmare-fuel",
@@ -274,13 +281,7 @@
       "sourceId": "Actor.8ZAWDuGWMymdSpov.Item.P33OVYz5ACR0QxmR",
       "hash": "ee321f39ef9e7d55c0df7da112f43f4e7c1f4182"
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    },
+    "dnd5e": {},
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""

@@ -60,7 +60,8 @@
         },
         "effects": [
           {
-            "_id": "7bC6w7uSbAJQ7nTZ"
+            "_id": "7bC6w7uSbAJQ7nTZ",
+            "level": {}
           }
         ],
         "range": {
@@ -148,7 +149,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       },
       "buQa0bLMH4K9aWWb": {
         "type": "save",
@@ -266,7 +274,14 @@
         "useConditionReason": "",
         "otherActivityId": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "drawing-the-hearth",
@@ -531,12 +546,7 @@
     },
     "dnd5e": {
       "sourceId": "Compendium.kp-deep-magic-volume-2.deep-magic-2-subclass-features.Item.vHCdNgNKc8sxZ8uV",
-      "advancementOrigin": "lQQ9pO1utfZk9ktz.zpcvNEANdLOmhVQJ",
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
+      "advancementOrigin": "lQQ9pO1utfZk9ktz.zpcvNEANdLOmhVQJ"
     },
     "scene-packer": {
       "hash": "6842e3845842e911de4d28dd55deb23f89d7f247",

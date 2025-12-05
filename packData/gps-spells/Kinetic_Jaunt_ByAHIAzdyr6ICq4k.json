@@ -83,7 +83,8 @@
         },
         "effects": [
           {
-            "_id": "YgSG8yrzdcDQw3N7"
+            "_id": "YgSG8yrzdcDQw3N7",
+            "level": {}
           }
         ],
         "range": {
@@ -163,7 +164,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "kinetic-jaunt",
@@ -242,16 +250,7 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedProperties": [
-        "somatic",
-        "concentration"
-      ]
-    },
+    "dnd5e": {},
     "dae": {
       "macro": {
         "name": "Kinetic Jaunt",

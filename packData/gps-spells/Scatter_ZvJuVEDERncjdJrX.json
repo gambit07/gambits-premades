@@ -171,7 +171,14 @@
         },
         "otherActivityId": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "scatter",
@@ -283,15 +290,7 @@
       "LBFormulaOverrideFlag": false,
       "ReplacementItemFlag": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedProperties": [
-        "vocal"
-      ]
-    },
+    "dnd5e": {},
     "autoanimations": {
       "id": "c6c1414c-d069-458f-9faa-fdd9b9399082",
       "label": "Scatter",

@@ -1515,7 +1515,6 @@ export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
 
     const options = { midiOptions: { targetUuids: targetUuids, noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMStatus: true, autoRollAttack: true, autoRollDamage: "always", fastForwardAttack: true, fastForwardDamage: true, workflowData: true } };
     let activityUse = await MidiQOL.completeActivityUse(activity.uuid, options, {}, {});
-    console.log(activityUse)
 
     return { saveRolls: activityUse?.saveRolls?.[0], failedSaves: { size: activityUse?.failedSaves?.size }, failedSavesObject: activityUse?.failedSaves, utilityRolls: activityUse?.utilityRolls?.[0] };
 }

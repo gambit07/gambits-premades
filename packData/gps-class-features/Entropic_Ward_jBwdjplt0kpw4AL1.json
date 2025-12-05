@@ -130,13 +130,7 @@
       "idv": false,
       "ida": false
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    },
+    "dnd5e": {},
     "gambits-premades": {
       "gpsUuid": "f330325d-bce8-4352-9e47-9f696a0f9434"
     }

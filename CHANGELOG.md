@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.1.32] - 2025-12-05
+- Added compatability for DND5e V5.2
+- Updates:
+  - Hills Tumble: Added Prone check to prevent dialog from popping if target is already prone
+- Bugfixes:
+  - Ice Knife: Reverted last update to a working version
+  - Elemental Affinity 2024: Resolved issue causing additional damage not to apply
+
 ## [v2.1.31] - 2025-11-23
 - Updates:
   - Updated a number of spells to use default damage details instead of custom, just a relic of the old days

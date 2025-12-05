@@ -84,7 +84,8 @@
         },
         "effects": [
           {
-            "_id": "1x0dmzyNA4DM8YwN"
+            "_id": "1x0dmzyNA4DM8YwN",
+            "level": {}
           }
         ],
         "range": {
@@ -164,7 +165,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "intellect-fortress",
@@ -271,16 +279,7 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedProperties": [
-        "vocal",
-        "concentration"
-      ]
-    },
+    "dnd5e": {},
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""

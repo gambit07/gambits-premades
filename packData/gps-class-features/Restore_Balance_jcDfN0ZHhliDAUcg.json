@@ -52,7 +52,8 @@
             {
               "type": "itemUses",
               "value": "1",
-              "target": ""
+              "target": "",
+              "scaling": {}
             }
           ],
           "scaling": {
@@ -160,7 +161,14 @@
         "otherActivityId": "none",
         "otherActivityAsParentType": true,
         "img": "",
-        "appliedEffects": []
+        "appliedEffects": [],
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "restore-balance",
@@ -224,13 +232,7 @@
     "gambits-premades": {
       "gpsUuid": "6a8cd8d0-7a6b-42b1-9da7-d9d4aa54a7c1"
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    }
+    "dnd5e": {}
   },
   "img": "icons/tools/hand/scale-balances-merchant-brown.webp",
   "effects": [],

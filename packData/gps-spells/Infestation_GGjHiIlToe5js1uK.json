@@ -193,7 +193,14 @@
         "otherActivityAsParentType": true,
         "friendlySave": "default",
         "img": "",
-        "appliedEffects": []
+        "appliedEffects": [],
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "infestation",
@@ -315,16 +322,7 @@
       "otherCondition": ""
     },
     "core": {},
-    "dnd5e": {
-      "migratedProperties": [
-        "vocal",
-        "somatic",
-        "material"
-      ],
-      "riders": {
-        "activity": []
-      }
-    },
+    "dnd5e": {},
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""

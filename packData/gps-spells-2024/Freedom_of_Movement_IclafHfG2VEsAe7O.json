@@ -85,7 +85,8 @@
         },
         "effects": [
           {
-            "_id": "amB8gCtfalSc4hOg"
+            "_id": "amB8gCtfalSc4hOg",
+            "level": {}
           }
         ],
         "range": {
@@ -165,7 +166,14 @@
         },
         "otherActivityId": "none",
         "name": "",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "freedom-of-movement",
@@ -216,17 +224,7 @@
       "sourceId": "Item.",
       "hash": "9b8ef2f73f9b48053029680789639748115d97ca"
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedProperties": [
-        "vocal",
-        "somatic",
-        "material"
-      ]
-    },
+    "dnd5e": {},
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "onUseMacroName": "[postActiveEffects]function.game.gps.freedomOfMovement"

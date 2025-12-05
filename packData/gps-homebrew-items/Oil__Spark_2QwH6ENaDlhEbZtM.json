@@ -93,7 +93,8 @@
         },
         "effects": [
           {
-            "_id": "v3j3orDGcbQyk7ZI"
+            "_id": "v3j3orDGcbQyk7ZI",
+            "level": {}
           }
         ],
         "range": {
@@ -181,7 +182,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "oil-spark",
@@ -329,13 +337,7 @@
       "effectCondition": "",
       "onUseMacroName": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    }
+    "dnd5e": {}
   },
   "_id": "2QwH6ENaDlhEbZtM",
   "_key": "!items!2QwH6ENaDlhEbZtM"

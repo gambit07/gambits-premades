@@ -204,7 +204,13 @@
             "attachRegionToTemplate": false
           }
         },
-        "appliedEffects": []
+        "appliedEffects": [],
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "fireball",
@@ -582,16 +588,7 @@
       "LBFormulaOverrideFlag": false,
       "ReplacementItemFlag": ""
     },
-    "dnd5e": {
-      "migratedProperties": [
-        "vocal",
-        "somatic",
-        "material"
-      ],
-      "riders": {
-        "activity": []
-      }
-    },
+    "dnd5e": {},
     "chris-premades": {
       "customConfig": [
         {

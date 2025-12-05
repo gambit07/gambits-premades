@@ -99,7 +99,8 @@
         "effects": [
           {
             "_id": "Ka4crf96KPf0p7Uc",
-            "onSave": false
+            "onSave": false,
+            "level": {}
           }
         ],
         "range": {
@@ -207,7 +208,14 @@
         },
         "otherActivityId": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "mind-blast",
@@ -345,17 +353,7 @@
       "LBFormulaOverrideFlag": false,
       "ReplacementItemFlag": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1,
-      "migratedProperties": [
-        "vocal",
-        "somatic"
-      ]
-    }
+    "dnd5e": {}
   },
   "_id": "Oc2Fl4SwU4VxEFrH",
   "_key": "!items!Oc2Fl4SwU4VxEFrH"

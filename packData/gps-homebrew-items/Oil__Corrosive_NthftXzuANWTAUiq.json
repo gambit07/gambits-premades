@@ -93,7 +93,8 @@
         },
         "effects": [
           {
-            "_id": "eQudwYP9NznzaSiV"
+            "_id": "eQudwYP9NznzaSiV",
+            "level": {}
           }
         ],
         "range": {
@@ -181,7 +182,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "oil-corrosive",
@@ -335,13 +343,7 @@
       "effectCondition": "",
       "onUseMacroName": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    }
+    "dnd5e": {}
   },
   "_id": "NthftXzuANWTAUiq",
   "_key": "!items!NthftXzuANWTAUiq"

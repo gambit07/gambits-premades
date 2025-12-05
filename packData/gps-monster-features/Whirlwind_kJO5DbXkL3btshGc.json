@@ -355,7 +355,6 @@
       "attachRegionToTemplate": false
     },
     "dnd5e": {
-      "migratedUses": null,
       "last": {
         "dnd5eactivity000": {
           "damageType": {

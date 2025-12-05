@@ -48,7 +48,8 @@
           "targets": [
             {
               "type": "itemUses",
-              "value": "1"
+              "value": "1",
+              "scaling": {}
             }
           ],
           "scaling": {
@@ -69,7 +70,8 @@
         },
         "effects": [
           {
-            "_id": "8CiXpIuTA3ibBGsT"
+            "_id": "8CiXpIuTA3ibBGsT",
+            "level": {}
           }
         ],
         "range": {
@@ -163,7 +165,14 @@
         "img": "",
         "appliedEffects": [
           "8CiXpIuTA3ibBGsT"
-        ]
+        ],
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "mark-of-the-heretic",
@@ -282,12 +291,7 @@
         {
           "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.ebCSuEuAeiUZYOnQ.Actor.SNZJsEKbROB1q6bT.ActiveEffect.j9MYSHWFVW6uOqk4"
         }
-      ],
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
+      ]
     }
   },
   "effects": [

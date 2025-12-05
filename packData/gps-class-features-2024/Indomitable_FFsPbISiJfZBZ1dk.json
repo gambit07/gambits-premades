@@ -47,7 +47,8 @@
             {
               "type": "itemUses",
               "value": "1",
-              "target": ""
+              "target": "",
+              "scaling": {}
             }
           ],
           "scaling": {
@@ -155,7 +156,14 @@
         "otherActivityId": "none",
         "otherActivityAsParentType": true,
         "img": "",
-        "appliedEffects": []
+        "appliedEffects": [],
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       },
       "XQvsQEaLdzko9Rlq": {
         "type": "save",
@@ -271,7 +279,14 @@
         "otherActivityId": "none",
         "name": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "indomitable",
@@ -376,13 +391,7 @@
     "gambits-premades": {
       "gpsUuid": "7ca704b5-7d13-4240-a4dc-fa908dc7bd10"
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    }
+    "dnd5e": {}
   },
   "img": "icons/skills/melee/shield-block-fire-orange.webp",
   "effects": [],

@@ -84,7 +84,8 @@
         },
         "effects": [
           {
-            "_id": "e8PUC4mtW1UlZngp"
+            "_id": "e8PUC4mtW1UlZngp",
+            "level": {}
           }
         ],
         "range": {
@@ -164,7 +165,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "circle-of-power",
@@ -482,16 +490,7 @@
         }
       }
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedProperties": [
-        "vocal",
-        "concentration"
-      ]
-    },
+    "dnd5e": {},
     "rest-recovery": {
       "data": {
         "recovery": {

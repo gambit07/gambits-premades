@@ -53,7 +53,8 @@
             {
               "type": "itemUses",
               "value": "1",
-              "target": ""
+              "target": "",
+              "scaling": {}
             }
           ],
           "scaling": {
@@ -161,7 +162,14 @@
         "otherActivityId": "none",
         "otherActivityAsParentType": true,
         "img": "",
-        "appliedEffects": []
+        "appliedEffects": [],
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "burst-of-ingenuity",
@@ -222,13 +230,7 @@
     "gambits-premades": {
       "gpsUuid": "e63afca6-62d3-4896-850f-afefd1d8ce0a"
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 2
-    },
+    "dnd5e": {},
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""

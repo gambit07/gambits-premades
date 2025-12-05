@@ -5,6 +5,8 @@ export async function hillsTumble2024({ speaker, actor, token, character, item, 
         let itemName = macroItem.name;
         let target = workflow.hitTargets.first();
         if(!target) return;
+        let isProne = target.document.hasStatusEffect("prone");
+        if(isProne) return;
         let itemUses = macroItem.system.uses.spent;
         let itemUsesRemaining = macroItem.system.uses.max - itemUses;
         if(itemUsesRemaining === 0) return;

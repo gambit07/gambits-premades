@@ -86,7 +86,8 @@
         },
         "effects": [
           {
-            "_id": "dWYd1mYma7EktYDd"
+            "_id": "dWYd1mYma7EktYDd",
+            "level": {}
           }
         ],
         "range": {
@@ -166,7 +167,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "fortunes-favour",
@@ -346,17 +354,7 @@
       "idv": false,
       "ida": false
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedProperties": [
-        "vocal",
-        "somatic",
-        "material"
-      ]
-    },
+    "dnd5e": {},
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""

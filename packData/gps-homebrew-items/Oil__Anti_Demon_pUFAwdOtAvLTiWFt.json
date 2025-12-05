@@ -93,7 +93,8 @@
         },
         "effects": [
           {
-            "_id": "sPbS18OFzyix9Nsf"
+            "_id": "sPbS18OFzyix9Nsf",
+            "level": {}
           }
         ],
         "range": {
@@ -181,7 +182,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "oil-anti-demon",
@@ -329,13 +337,7 @@
       "effectCondition": "",
       "onUseMacroName": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    }
+    "dnd5e": {}
   },
   "_id": "pUFAwdOtAvLTiWFt",
   "_key": "!items!pUFAwdOtAvLTiWFt"

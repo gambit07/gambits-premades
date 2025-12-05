@@ -74,7 +74,8 @@
         },
         "effects": [
           {
-            "_id": "5ZnPYNdlzPTAmN6J"
+            "_id": "5ZnPYNdlzPTAmN6J",
+            "level": {}
           }
         ],
         "range": {
@@ -163,7 +164,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "rabbit-hop",
@@ -747,12 +755,7 @@
         {
           "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.bJhs2IaxSjeC92q5.Actor.SNZJsEKbROB1q6bT.ActiveEffect.5g3kj4tlQvr3R1dg"
         }
-      ],
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
+      ]
     },
     "scene-packer": {
       "hash": "bd946826828cad3517b2387e8e420e14f94eeeda",

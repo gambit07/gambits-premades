@@ -383,8 +383,7 @@
       "riders": {
         "activity": [],
         "effect": []
-      },
-      "migratedUses": null
+      }
     }
   },
   "effects": [

@@ -159,7 +159,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "impetus-slasher",
@@ -293,13 +300,7 @@
       "itemCondition": "",
       "effectCondition": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 2
-    }
+    "dnd5e": {}
   },
   "_id": "p0o3KOB7vBwe8CZS",
   "_key": "!items!p0o3KOB7vBwe8CZS"

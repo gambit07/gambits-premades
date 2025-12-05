@@ -93,7 +93,8 @@
         },
         "effects": [
           {
-            "_id": "UsRXac0yoqlThXxX"
+            "_id": "UsRXac0yoqlThXxX",
+            "level": {}
           }
         ],
         "range": {
@@ -181,7 +182,14 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
     "identifier": "oil-arcane",
@@ -329,13 +337,7 @@
       "effectCondition": "",
       "onUseMacroName": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 1
-    }
+    "dnd5e": {}
   },
   "_id": "kmhOfqlSZj2MlC7c",
   "_key": "!items!kmhOfqlSZj2MlC7c"

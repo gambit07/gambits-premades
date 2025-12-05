@@ -87,7 +87,8 @@
         "effects": [
           {
             "_id": "NQLLac7vAxeaoUOx",
-            "onSave": false
+            "onSave": false,
+            "level": {}
           }
         ],
         "range": {
@@ -184,7 +185,14 @@
         "otherActivityId": "none",
         "name": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       },
       "r6dQ6EGSYvYyjajt": {
         "type": "save",
@@ -214,7 +222,11 @@
         "effects": [
           {
             "_id": "uYzQNfTFL7dNlQRM",
-            "onSave": false
+            "onSave": false,
+            "level": {
+              "min": null,
+              "max": null
+            }
           }
         ],
         "range": {
@@ -225,10 +237,12 @@
         "target": {
           "template": {
             "contiguous": false,
-            "units": "ft"
+            "units": "ft",
+            "type": ""
           },
           "affects": {
-            "choice": false
+            "choice": false,
+            "type": ""
           },
           "override": false,
           "prompt": true
@@ -305,7 +319,21 @@
         "otherActivityId": "none",
         "name": "",
         "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {
+            "min": null,
+            "max": null
+          },
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        },
+        "img": "",
+        "appliedEffects": [
+          "uYzQNfTFL7dNlQRM"
+        ]
       }
     },
     "identifier": "sleep",
@@ -470,8 +498,7 @@
   "flags": {
     "dnd5e": {
       "riders": {
-        "activity": [],
-        "effect": []
+        "activity": []
       }
     },
     "midi-qol": {
@@ -496,10 +523,9 @@
       "trayVisibility": "default"
     },
     "chris-premades": {
-      "-=macros": null,
       "info": {
         "source": "gambits-premades",
-        "version": "1.0.32",
+        "version": "2.1.0",
         "rules": "modern"
       }
     }

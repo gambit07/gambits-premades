@@ -50,7 +50,8 @@
     },
     "speed": {
       "value": null,
-      "conditions": ""
+      "conditions": "",
+      "units": "ft"
     },
     "strength": null,
     "proficient": null,
@@ -188,10 +189,20 @@
           "postRemoveConditionText": ""
         },
         "otherActivityId": "none",
-        "otherActivityAsParentType": true
+        "otherActivityAsParentType": true,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
       }
     },
-    "identifier": "dipolar-gages"
+    "identifier": "dipolar-gages",
+    "crew": {
+      "value": []
+    }
   },
   "effects": [
     {
@@ -353,13 +364,7 @@
       "LBFormulaOverrideFlag": false,
       "ReplacementItemFlag": ""
     },
-    "dnd5e": {
-      "riders": {
-        "activity": [],
-        "effect": []
-      },
-      "migratedUses": 0
-    }
+    "dnd5e": {}
   },
   "_id": "Sahgrs44C8h5pVyJ",
   "_key": "!items!Sahgrs44C8h5pVyJ"
