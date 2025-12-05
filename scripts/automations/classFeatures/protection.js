@@ -49,7 +49,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
         `;
 
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
-        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
         let result;
 

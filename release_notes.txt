@@ -1,6 +1,2 @@
-- Added compatability for DND5e V5.2
 - Updates:
-  - Hills Tumble: Added Prone check to prevent dialog from popping if target is already prone
-- Bugfixes:
-  - Ice Knife: Reverted last update to a working version
-  - Elemental Affinity 2024: Resolved issue causing additional damage not to apply
+  - Third Party Reactions: Updated all temporary informational chat notifications for reactions to display for all users instead of just the GM, should give everybody a better sense of what's going on when there's a pause in gameplay while waiting for a dialog selection

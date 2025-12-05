@@ -32,7 +32,7 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
         `;
         
         let content = `<span style='text-wrap: wrap;'><img src="${token.actor.img}" style="width: 25px; height: auto;" /> ${token.actor.name} has a reaction available for a save triggering ${macroItem.name}.</span>`
-        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         let result;
@@ -107,7 +107,7 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
         `;
 
         let content = `<span style='text-wrap: wrap;'><img src="${token.actor.img}" style="width: 25px; height: auto;" /> ${token.actor.name} has a reaction available for a save triggering ${macroItem.name}.</span>`
-        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         let result;

@@ -30,7 +30,7 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
         let damageTotals = workflow.damageRolls.map(roll => roll.total);
 
         let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a roll triggering ${itemProperName}.</span>`
-        let chatData = { user: gmUser, content: content, roll: false, whisper: gmUser };
+        let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;

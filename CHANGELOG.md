@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.33] - 2025-12-05
+- Updates:
+  - Third Party Reactions: Updated all temporary informational chat notifications for reactions to display for all users instead of just the GM, should give everybody a better sense of what's going on when there's a pause in gameplay while waiting for a dialog selection
+
 ## [v2.1.32] - 2025-12-05
 - Added compatability for DND5e V5.2
 - Updates:
