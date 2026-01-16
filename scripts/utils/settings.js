@@ -747,12 +747,11 @@ export function registerSettings() {
         hint: "",
         scope: 'world',
         config: false,
-        type: String,
-        default: "6",
+        type: Number,
+        default: 6,
         onChange: value => {
-            const numericValue = Number(value);
-            if (!isNaN(numericValue) && game.settings.get('gambits-premades', 'enableTokenMovementSpeed')) CONFIG.Token.movement.defaultSpeed = numericValue;
-            else console.error("Invalid input for Numeric Setting Example: Not a number.");
+            if (isNaN(value)) console.error("Invalid input for Numeric Setting Example: Not a number.");
+            else if (game.settings.get('gambits-premades', 'enableTokenMovementSpeed')) CONFIG.Token.movement.defaultSpeed = value;
         }
     });
 
