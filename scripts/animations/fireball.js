@@ -1,4 +1,10 @@
-export function fireball({type, token, templateData, color = "orange"}) {
+const DEFAULT_SOUND = {
+    volume: 1.0,
+    enabled: true
+}
+
+export function fireball({type, token, templateData, color = "orange", sound = {}}) {
+    const soundCfg = foundry.utils.mergeObject(DEFAULT_SOUND, sound, {inplace:false});
     const castSound = "modules/gambits-premades/assets/sounds/fire-blast-binaural-1.ogg";
     const blastSound = "modules/gambits-premades/assets/sounds/explosion-echo-5.ogg";
     const lingeringSound = "modules/gambits-premades/assets/sounds/fire-flamethrower-2.ogg";
@@ -80,7 +86,9 @@ export function fireball({type, token, templateData, color = "orange"}) {
             .sound()
                 .file(castSound)
                 .fadeInAudio(500)
-                .fadeOutAudio(500);
+                .fadeOutAudio(500)
+                .volume(soundCfg.volume)
+                .playIf(soundCfg.enabled);
     }
 
     if(type === "explosion") {
@@ -133,6 +141,8 @@ export function fireball({type, token, templateData, color = "orange"}) {
                 .fadeInAudio(500)
                 .fadeOutAudio(500)
                 .volume(0.5)
+                .volume(soundCfg.volume)
+                .playIf(soundCfg.enabled)
 
             .effect()
                 .file(explosion)
@@ -146,6 +156,8 @@ export function fireball({type, token, templateData, color = "orange"}) {
                 .fadeInAudio(500)
                 .fadeOutAudio(500)
                 .delay(300)
+                .volume(soundCfg.volume)
+                .playIf(soundCfg.enabled)
 
             .effect()
                 .file(cracks)
