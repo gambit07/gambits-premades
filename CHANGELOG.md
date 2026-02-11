@@ -1,5 +1,16 @@
 # Changelog
 
+## [v2.1.34] - 2026-02-10
+- Additions:
+  - Opportunity Attacks: Added new DAE flag oaDisadvantageSource. This will cause the actor with the effect to have disadvantage on any opportunity attack they make.
+- Updates:
+  - Opportunity Attacks: Added guard to prevent opportunity attacks if the OA setting is disabled but for whatever reason a token still has an OA region.
+  - Dialogs: Reworked countdown bar animation again because I wasn't happy with it. Should be much more performant via updating to a transform animation that also allows a smoother bar animation
+- Bugfixes:
+  - Debug Logs: Fixed Unprepared spells not outputting their relevant debug message
+  - Elemental Affinity 2024: Fixed damage not applying
+  - Black Tentacles 2024: Resolved automation never firing after initial dialog prompt due to an invalid logic gate. Also updated animation to scale properly again
+
 ## [v2.1.33] - 2025-12-05
 - Updates:
   - Third Party Reactions: Updated all temporary informational chat notifications for reactions to display for all users instead of just the GM, should give everybody a better sense of what's going on when there's a pause in gameplay while waiting for a dialog selection

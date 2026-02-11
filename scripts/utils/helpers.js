@@ -312,7 +312,10 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             let spellLevel = checkItem?.system?.level;
             let checkType = checkItem?.system?.method;
             let hasSpellSlots = false;
-            if(checkType === "spell" && !checkItem?.system?.prepared) return false;
+            if(checkType === "spell" && !checkItem?.system?.prepared) {
+                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at spell not prepared`);
+                return false;
+            }
             const cachedForValue = checkItem.flags?.dnd5e?.cachedFor;
 
             if(cachedForValue) {
@@ -377,7 +380,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             let resourceExistsWithValue;
             let itemExistsWithValue;
 
-            if(itemNames.includes("legres")) resourceExistsWithValue = t.actor.system.resources.legres.value !== 0 ? true : false;
+            if(itemNames.includes("legres")) resourceExistsWithValue = t.actor.system.resources?.legres?.value !== 0 ? true : false;
             else itemExistsWithValue = t.actor.items.some(i => (itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.identifier.toLowerCase())) && i.system.uses?.spent < i.system.uses?.max);
 
             if (!itemExistsWithValue && !resourceExistsWithValue) {
@@ -515,7 +518,10 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
         let spellLevel = checkItem?.system?.level;
         let checkType = checkItem?.system?.method;
         let hasSpellSlots = false;
-        if(checkType === "spell" && !checkItem?.system?.prepared) return false;
+        if(checkType === "spell" && !checkItem?.system?.prepared) {
+            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at spell not prepared`);
+            return false;
+        }
         if(checkType === "spell")
         {
             for (let level = spellLevel; level <= 9; level++) {
@@ -593,383 +599,519 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
     return true;
 }
 
-export async function process3rdPartyReactionDialog({ dialogTitle, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid, source, type, notificationId, numTargets }) {
-    let validTokenPrimary = await fromUuid(validTokenPrimaryUuid);
-    let browserUser = getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
+export async function process3rdPartyReactionDialog({
+  dialogTitle,
+  dialogContent,
+  dialogId,
+  initialTimeLeft,
+  validTokenPrimaryUuid,
+  source,
+  type,
+  notificationId,
+  numTargets
+}) {
+  let validTokenPrimary = await fromUuid(validTokenPrimaryUuid);
+  let browserUser = getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
-    let dialogState = { interacted: false, decision: null, programmaticallyClosed: false, dialogId: dialogId };
-    let result = null;
+  let dialogState = { interacted: false, decision: null, programmaticallyClosed: false, dialogId: dialogId };
+  let result = null;
 
-    function attachEventListeners(dialog, animate) {
-        const dialogElement = dialog?.element;
-        const windowTitle = dialogElement?.querySelector('.window-title');
-        const pauseButton = dialogElement?.querySelector(`#pauseButton_${dialogId}`);
-        const itemSelect = dialogElement?.querySelector(`#item-select_${dialogId}`);
-        const weaponImg = dialogElement?.querySelector(`#weapon-img_${dialogId}`);
-        const damageList = dialogElement?.querySelector(`#damage-list`);
-        const enemyTokens = dialogElement?.querySelectorAll('input.enemy-tokens');
-        let draggedItem = null;
-    
-        function handleFocusIn(event) {
-            validTokenPrimary.object.control({ releaseOthers: true });
-        }
-    
-        function handleFocusOut(event) {
-            validTokenPrimary.object.release();
-        }
-    
-        function handleMouseDown(event) {
-            setTimeout(() => dialogElement.focus(), 0);
-            validTokenPrimary.object.control({ releaseOthers: true });
-        }
-    
-        function handlePauseButtonClick() {
-            dialog.isPaused = !dialog.isPaused;
-            if (dialog.isPaused) {
-                dialog.pausedTime = Date.now();
-            } else {
-                dialog.endTime += Date.now() - dialog.pausedTime;
+  function attachEventListeners(dialog) {
+    const dialogElement = dialog?.element;
+    const windowTitle = dialogElement?.querySelector(".window-title");
+    const pauseButton = dialogElement?.querySelector(`#pauseButton_${dialogId}`);
+    const itemSelect = dialogElement?.querySelector(`#item-select_${dialogId}`);
+    const weaponImg = dialogElement?.querySelector(`#weapon-img_${dialogId}`);
+    const damageList = dialogElement?.querySelector(`#damage-list`);
+    const enemyTokens = dialogElement?.querySelectorAll("input.enemy-tokens");
+    let draggedItem = null;
+
+    function handleFocusIn() {
+      validTokenPrimary.object.control({ releaseOthers: true });
+    }
+
+    function handleFocusOut() {
+      validTokenPrimary.object.release();
+    }
+
+    function handleMouseDown() {
+      setTimeout(() => dialogElement?.focus?.(), 0);
+      validTokenPrimary.object.control({ releaseOthers: true });
+    }
+
+    function handlePauseButtonClick() {
+      if (!dialog?.setPaused || !dialog?.getTimeLeft || !dialog?.updateUI) return;
+
+      dialog.setPaused(!dialog.isPaused);
+      dialog.updateUI(true);
+
+      const pauseState = {
+        dialogId,
+        timeLeft: dialog.getTimeLeft(),
+        isPaused: dialog.isPaused
+      };
+
+      if (source === "user" && type === "multiDialog") {
+        game.gps.socket.executeAsUser("pauseDialogById", getPrimaryGM(), pauseState);
+      } else if (source === "gm" && type === "multiDialog") {
+        game.gps.socket.executeAsUser("pauseDialogById", browserUser, pauseState);
+      }
+    }
+
+    function handleItemSelectChange(event) {
+      const selectedOption = event.target.options[event.target.selectedIndex];
+      if (weaponImg) weaponImg.src = selectedOption.getAttribute("data-img");
+    }
+
+    function handleDragStart(event) {
+      event.dataTransfer.setData("text/plain", event.target.innerText);
+      event.dataTransfer.effectAllowed = "move";
+      draggedItem = event.target;
+    }
+
+    function handleDragOver(event) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+      const target = event.target;
+      if (target && target.nodeName === "LI" && draggedItem) {
+        const rect = target.getBoundingClientRect();
+        const next = (event.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+        damageList.insertBefore(draggedItem, (next && target.nextSibling) || target);
+      }
+    }
+
+    function handleDragEnd() {
+      draggedItem = null;
+    }
+
+    function handleCheckboxChange(event) {
+      const checkedBoxes = dialogElement.querySelectorAll("input.enemy-tokens:checked");
+      if (checkedBoxes.length > numTargets) {
+        event.target.checked = false;
+        ui.notifications.warn(`You can only select up to ${numTargets} targets.`);
+      }
+    }
+
+    if (windowTitle) {
+      windowTitle.addEventListener("focusin", handleFocusIn);
+      windowTitle.addEventListener("focusout", handleFocusOut);
+      windowTitle.addEventListener("mousedown", handleMouseDown);
+    }
+
+    if (pauseButton) {
+      pauseButton.addEventListener("click", handlePauseButtonClick);
+
+      if (source === "gm" && type === "multiDialog") {
+        pauseButton.setAttribute("autofocus", "true");
+        pauseButton.focus();
+      }
+    }
+
+    if (itemSelect && itemSelect.options.length > 0 && weaponImg) {
+      weaponImg.src = itemSelect.options[0].getAttribute("data-img");
+      itemSelect.addEventListener("change", handleItemSelectChange);
+    }
+
+    if (damageList) {
+      const damageListItems = damageList.querySelectorAll("li");
+      damageListItems.forEach((item) => item.addEventListener("dragstart", handleDragStart));
+      damageList.addEventListener("dragover", handleDragOver);
+      damageList.addEventListener("dragend", handleDragEnd);
+    }
+
+    if (enemyTokens && enemyTokens.length > 0) {
+      enemyTokens.forEach((checkbox) => checkbox.addEventListener("change", handleCheckboxChange));
+    }
+
+    return {
+      windowTitle,
+      pauseButton,
+      itemSelect,
+      damageList,
+      handleFocusIn,
+      handleFocusOut,
+      handleMouseDown,
+      handlePauseButtonClick,
+      handleItemSelectChange,
+      handleDragStart,
+      handleDragOver,
+      handleDragEnd,
+      handleCheckboxChange,
+      enemyTokens
+    };
+  }
+
+  function cleanupEventListeners(listeners) {
+    if (!listeners) return;
+
+    const {
+      windowTitle,
+      pauseButton,
+      itemSelect,
+      damageList,
+      handleFocusIn,
+      handleFocusOut,
+      handleMouseDown,
+      handlePauseButtonClick,
+      handleItemSelectChange,
+      handleDragStart,
+      handleDragOver,
+      handleDragEnd,
+      handleCheckboxChange,
+      enemyTokens
+    } = listeners;
+
+    if (windowTitle) {
+      windowTitle.removeEventListener("focusin", handleFocusIn);
+      windowTitle.removeEventListener("focusout", handleFocusOut);
+      windowTitle.removeEventListener("mousedown", handleMouseDown);
+    }
+
+    if (pauseButton) pauseButton.removeEventListener("click", handlePauseButtonClick);
+    if (itemSelect) itemSelect.removeEventListener("change", handleItemSelectChange);
+
+    if (damageList) {
+      const damageListItems = damageList.querySelectorAll("li");
+      damageListItems.forEach((item) => item.removeEventListener("dragstart", handleDragStart));
+      damageList.removeEventListener("dragover", handleDragOver);
+      damageList.removeEventListener("dragend", handleDragEnd);
+    }
+
+    if (enemyTokens && enemyTokens.length > 0) {
+      enemyTokens.forEach((checkbox) => checkbox.removeEventListener("change", handleCheckboxChange));
+    }
+  }
+
+  await foundry.applications.api.DialogV2.wait({
+    window: { title: dialogTitle },
+    content: dialogContent,
+    buttons: [
+      {
+        action: "yes",
+        label: "Yes",
+        icon: "fas fa-check",
+        classes: ["default"],
+        callback: async (event, button, dialog) => {
+          dialog._closing = true;
+
+          if (dialog._uiTicker) clearInterval(dialog._uiTicker);
+          if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
+          if (dialog._barAnim) {
+            try {
+              dialog._barAnim.cancel();
+            } catch (_) {}
+          }
+
+          dialog.timeLeft = 0;
+          dialogState.interacted = true;
+          dialogState.decision = "yes";
+
+          if (source && source === "user" && type === "multiDialog")
+            await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
+          else if (source && source === "gm" && type === "multiDialog")
+            await game.gps.socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
+
+          let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
+          let allyTokenUuid = button.form?.elements["ally-token"]?.value ?? false;
+
+          let abilityCheck = button.form?.elements["ability-check"] ?? false;
+          if (abilityCheck) {
+            for (let i = 0; i < abilityCheck.length; i++) {
+              if (abilityCheck[i].checked) {
+                abilityCheck = abilityCheck[i].value;
+                break;
+              }
             }
-            dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
-    
-            const pauseState = { dialogId: dialogId, timeLeft: dialog.timeLeft, isPaused: dialog.isPaused };
-            if (source === "user" && type === "multiDialog") {
-                game.gps.socket.executeAsUser("pauseDialogById", getPrimaryGM(), pauseState);
-            } else if (source === "gm" && type === "multiDialog") {
-                game.gps.socket.executeAsUser("pauseDialogById", browserUser, pauseState);
-            }
+          }
+
+          // Scope DOM queries to THIS dialog (important for multiple dialogs)
+          const scope = dialog.element ?? button.form ?? document;
+
+          let damageChosen = [];
+          let damageListItems = scope.querySelectorAll("#damage-list li .damage-type");
+          if (damageListItems?.length > 0) {
+            damageListItems.forEach((item) => damageChosen.push(item.textContent.trim()));
+          }
+
+          let selectedItemUuid = button.form?.elements[`item-select_${dialogId}`]?.value ?? false;
+          let favoriteCheck = button.form?.elements["gps-favorite-checkbox"]?.checked ?? false;
+          let genericCheck = button.form?.elements["gps-checkbox"]?.checked ?? false;
+
+          let enemyTokenUuids = scope.querySelectorAll("input.enemy-tokens:checked");
+          enemyTokenUuids = enemyTokenUuids ? Array.from(enemyTokenUuids).map((checkbox) => checkbox.value) : false;
+
+          result = {
+            userDecision: true,
+            enemyTokenUuid,
+            allyTokenUuid,
+            damageChosen,
+            selectedItemUuid,
+            favoriteCheck,
+            genericCheck,
+            abilityCheck,
+            enemyTokenUuids,
+            programmaticallyClosed: false,
+            source,
+            type
+          };
         }
-    
-        function handleItemSelectChange(event) {
-            const selectedOption = event.target.options[event.target.selectedIndex];
-            weaponImg.src = selectedOption.getAttribute('data-img');
+      },
+      {
+        action: "no",
+        label: `No`,
+        icon: "fas fa-times",
+        classes: ["default"],
+        default: true,
+        callback: async (event, button, dialog) => {
+          dialog._closing = true;
+
+          if (dialog._uiTicker) clearInterval(dialog._uiTicker);
+          if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
+          if (dialog._barAnim) {
+            try {
+              dialog._barAnim.cancel();
+            } catch (_) {}
+          }
+
+          dialog.timeLeft = 0;
+          dialogState.interacted = true;
+          dialogState.decision = "no";
+
+          if (source && source === "user" && type === "multiDialog")
+            await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
+          else if (source && source === "gm" && type === "multiDialog")
+            await game.gps.socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
+
+          let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
+          result = { userDecision: false, enemyTokenUuid, programmaticallyClosed: false, source, type };
         }
-    
-        function handleDragStart(event) {
-            event.dataTransfer.setData('text/plain', event.target.innerText);
-            event.dataTransfer.effectAllowed = 'move';
-            draggedItem = event.target;
+      }
+    ],
+
+    render: (event) => {
+        const dialog = event.target;
+
+        dialog.dialogState = dialogState;
+        dialog.isPaused = false;
+        dialog._closing = false;
+
+        const root = dialog.element;
+        const titleEl = root?.querySelector(".window-title");
+        const headerEl = root?.querySelector(".window-header");
+        const pauseIcon = root?.querySelector(`#pauseIcon_${dialogId}`);
+        const pauseBtn = root?.querySelector(`#pauseButton_${dialogId}`);
+
+        const useFullTitleBar = !!game.settings.get("gambits-premades", "enableTimerFullAnim");
+
+        root?.classList.toggle("gps-timer-full", useFullTitleBar);
+        root?.classList.toggle("gps-timer-thin", !useFullTitleBar);
+
+        // ---- Mark dialog for CSS targeting ----
+        root?.classList.add("gps-dialog-timer");
+        if (pauseBtn) pauseBtn.classList.add("gps-pause-btn");
+
+        // ---- Build progress overlay ----
+        let barEl = headerEl?.querySelector(":scope > .gps-titlebar-progress");
+        if (!barEl && headerEl) {
+            barEl = document.createElement("div");
+            barEl.className = "gps-titlebar-progress";
+            headerEl.prepend(barEl);
         }
-    
-        function handleDragOver(event) {
-            event.preventDefault();
-            event.dataTransfer.dropEffect = 'move';
-            const target = event.target;
-            if (target && target.nodeName === 'LI') {
-                const rect = target.getBoundingClientRect();
-                const next = (event.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-                damageList.insertBefore(draggedItem, next && target.nextSibling || target);
-            }
+        if (barEl) {
+            barEl.classList.toggle("gps-titlebar-progress--thin", !useFullTitleBar);
         }
-    
-        function handleDragEnd() {
-            draggedItem = null;
+
+        const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+        const initial = Math.max(Number(initialTimeLeft) || 0, 0);
+        const durationMs = initial * 1000;
+
+        // ---- Kill any prior timers/animations (in case of re-render) ----
+        if (dialog._uiTicker) clearInterval(dialog._uiTicker);
+        if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
+        if (dialog._barAnim) {
+        try {
+            dialog._barAnim.cancel();
+        } catch (_) {}
         }
-    
-        function handleCheckboxChange(event) {
-            const checkedBoxes = dialogElement.querySelectorAll('input.enemy-tokens:checked');
-    
-            if (checkedBoxes.length > numTargets) {
-                event.target.checked = false;
-                ui.notifications.warn(`You can only select up to ${numTargets} targets.`);
-            }
-        }
-    
-        if (windowTitle) {
-            windowTitle.addEventListener('focusin', handleFocusIn);
-            windowTitle.addEventListener('focusout', handleFocusOut);
-            windowTitle.addEventListener('mousedown', handleMouseDown);
-        }
-    
-        if (pauseButton) {
-            pauseButton.addEventListener('click', handlePauseButtonClick);
-    
-            if (source === "gm" && type === "multiDialog") {
-                pauseButton.setAttribute("autofocus", "true");
-                pauseButton.focus();
-            }
-        }
-    
-        if (itemSelect && itemSelect.options.length > 0 && weaponImg) {
-            weaponImg.src = itemSelect.options[0].getAttribute('data-img');
-            itemSelect.addEventListener('change', handleItemSelectChange);
-        }
-    
-        if (damageList) {
-            const damageListItems = damageList.querySelectorAll('li');
-            damageListItems.forEach(item => {
-                item.addEventListener('dragstart', handleDragStart);
-            });
-            damageList.addEventListener('dragover', handleDragOver);
-            damageList.addEventListener('dragend', handleDragEnd);
-        }
-    
-        if (enemyTokens && enemyTokens.length > 0) {
-            enemyTokens.forEach(checkbox => {
-                checkbox.addEventListener('change', handleCheckboxChange);
-            });
-        }
-    
-        return {
-            windowTitle,
-            pauseButton,
-            itemSelect,
-            damageList,
-            handleFocusIn,
-            handleFocusOut,
-            handleMouseDown,
-            handlePauseButtonClick,
-            handleItemSelectChange,
-            handleDragStart,
-            handleDragOver,
-            handleDragEnd,
-            handleCheckboxChange,
-            enemyTokens
+
+        // ---- Prefer WAAPI (no per-frame JS), fallback to rAF if needed ----
+        const canWAAPI = !!barEl && typeof barEl.animate === "function" && durationMs > 0;
+
+        dialog.timeLeft = initial;
+
+        if (canWAAPI) {
+        dialog._barAnim = barEl.animate(
+            [{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }],
+            { duration: durationMs, easing: "linear", fill: "both" }
+        );
+
+        dialog.getTimeLeft = () => {
+            const ct = Number(dialog._barAnim?.currentTime ?? 0);
+            return clamp((durationMs - ct) / 1000, 0, initial);
         };
-    }
 
-    function cleanupEventListeners(listeners) {
-        const { windowTitle, pauseButton, itemSelect, damageList, handleFocusIn, handleFocusOut, handleMouseDown, handlePauseButtonClick, handleItemSelectChange, handleDragStart, handleDragOver, handleDragEnd, handleCheckboxChange, enemyTokens } = listeners;
-        
-        if (windowTitle) {
-            windowTitle.removeEventListener('focusin', handleFocusIn);
-            windowTitle.removeEventListener('focusout', handleFocusOut);
-            windowTitle.removeEventListener('mousedown', handleMouseDown);
-        }
+        dialog.setTimeLeft = (secs) => {
+            if (!dialog._barAnim) return;
+            const s = clamp(Number(secs) || 0, 0, initial);
+            const ct = durationMs - s * 1000;
+            dialog._barAnim.currentTime = clamp(ct, 0, durationMs);
+        };
 
-        if (pauseButton) {
-            pauseButton.removeEventListener('click', handlePauseButtonClick);
-        }
+        dialog.setPaused = (paused) => {
+            dialog.isPaused = !!paused;
+            if (!dialog._barAnim) return;
+            if (dialog.isPaused) dialog._barAnim.pause();
+            else dialog._barAnim.play();
+        };
+        } else {
+        // Fallback clock
+        dialog._endTime = performance.now() + durationMs;
 
-        if (itemSelect) {
-            itemSelect.removeEventListener('change', handleItemSelectChange);
-        }
+        dialog.getTimeLeft = () => {
+            if (dialog.isPaused) return dialog.timeLeft;
+            const t = Math.max((dialog._endTime - performance.now()) / 1000, 0);
+            return clamp(t, 0, initial);
+        };
 
-        if (damageList) {
-            const damageListItems = damageList.querySelectorAll('li');
-            damageListItems.forEach(item => {
-                item.removeEventListener('dragstart', handleDragStart);
-            });
-            damageList.removeEventListener('dragover', handleDragOver);
-            damageList.removeEventListener('dragend', handleDragEnd);
-        }
+        dialog.setTimeLeft = (secs) => {
+            const s = clamp(Number(secs) || 0, 0, initial);
+            dialog.timeLeft = s;
+            if (!dialog.isPaused) dialog._endTime = performance.now() + s * 1000;
+        };
 
-        if (enemyTokens && enemyTokens.length > 0) {
-            enemyTokens.forEach(checkbox => {
-                checkbox.removeEventListener('change', handleCheckboxChange);
-            });
-        }
-    }
-
-    await foundry.applications.api.DialogV2.wait({
-        window: { title: dialogTitle },
-        content: dialogContent,
-        buttons: [
-            {
-                action: "yes",
-                label: "Yes",
-                icon: "fas fa-check",
-                classes: ["default"],
-                callback: async (event, button, dialog) => {
-                    dialog._closing = true;
-                    if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
-                    dialog.timeLeft = 0;
-                    dialogState.interacted = true;
-                    dialogState.decision = "yes";
-                    if (source && source === "user" && type === "multiDialog") await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
-                    else if (source && source === "gm" && type === "multiDialog") await game.gps.socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
-
-                    let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
-                    let allyTokenUuid = button.form?.elements["ally-token"]?.value ?? false;
-                    let abilityCheck = button.form?.elements["ability-check"] ?? false;
-                    if(abilityCheck) {
-                        for (let i = 0; i < abilityCheck.length; i++) {
-                            if (abilityCheck[i].checked) {
-                                abilityCheck = abilityCheck[i].value;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    let damageChosen = [];
-                    let damageListItems = document?.querySelectorAll(`#damage-list li .damage-type`);
-                    if (damageListItems?.length > 0) {
-                        damageListItems.forEach(item => damageChosen.push(item.textContent.trim()));
-                    }
-
-                    let selectedItemUuid = button.form?.elements[`item-select_${dialogId}`]?.value ?? false;
-                    let favoriteCheck = button.form?.elements["gps-favorite-checkbox"]?.checked ?? false;
-                    let genericCheck = button.form?.elements["gps-checkbox"]?.checked ?? false;
-
-                    let enemyTokenUuids = document?.querySelectorAll('input.enemy-tokens:checked') ?? false;
-                    if(enemyTokenUuids) enemyTokenUuids = Array.from(enemyTokenUuids).map(checkbox => checkbox.value);
-
-                    result = ({ userDecision: true, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, genericCheck, abilityCheck, enemyTokenUuids, programmaticallyClosed: false, source, type });
-                }
-            },
-            {
-                action: "no",
-                label: `No`,
-                icon: "fas fa-times",
-                classes: ["default"],
-                default: true,
-                callback: async (event, button, dialog) => {
-                    dialog._closing = true;
-                    if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
-                    dialog.timeLeft = 0;
-                    dialogState.interacted = true;
-                    dialogState.decision = "no";
-                    if(source && source === "user" && type === "multiDialog") await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
-                    else if(source && source === "gm" && type === "multiDialog") await game.gps.socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
-
-                    let enemyTokenUuid = button.form?.elements["enemy-token"]?.value ?? false;
-
-                    result = ({ userDecision: false, enemyTokenUuid, programmaticallyClosed: false, source, type });
-                }
-            },
-        ],
-        render: (event) => {
-            const dialog = event.target;
-
-            const PROGRESS_BUCKET = 0.25;
-            const FRAME_MS = 66;
-            const SMOOTHING = 0.25;
-
-            dialog.dialogState = dialogState;
-            dialog.timeLeft = initialTimeLeft;
+        dialog.setPaused = (paused) => {
+            const next = !!paused;
+            if (next === dialog.isPaused) return;
+            if (next) {
+            dialog.timeLeft = dialog.getTimeLeft();
+            dialog.isPaused = true;
+            } else {
             dialog.isPaused = false;
-            dialog.pausedTime = 0;
+            dialog._endTime = performance.now() + dialog.timeLeft * 1000;
+            }
+        };
 
-            const startTime = performance.now();
-            dialog.endTime = startTime + initialTimeLeft * 1000;
+        // rAF only for fallback: drive bar transform + close timing
+        const tick = () => {
+            if (dialog._closing) return;
 
-            const root       = dialog.element;
-            const enemySelect = root?.querySelector('#enemy-token');
-            const allySelect  = root?.querySelector('#ally-token');
-            const titleEl     = root?.querySelector('.window-title');
-            const headerEl    = root?.querySelector('.window-header');
-            const pauseIcon   = root?.querySelector(`#pauseIcon_${dialogId}`);
-            const pauseBtn    = root?.querySelector(`#pauseButton_${dialogId}`);
-            const selectEls   = root?.querySelectorAll('.gps-dialog-select');
-            const optionEls   = root?.querySelectorAll('.gps-dialog-option');
+            const timeLeft = dialog.getTimeLeft();
+            dialog.timeLeft = timeLeft;
 
-            function resetEnemySelect() { if (enemySelect) enemySelect.selectedIndex = 0; }
-            function resetAllySelect()  { if (allySelect)  allySelect.selectedIndex  = 0; }
+            if (barEl && initial > 0) {
+            const ratio = clamp(timeLeft / initial, 0, 1);
+            barEl.style.transform = `scaleX(${ratio})`;
+            }
 
-            let lastSecondShown = -1;
-            let lastProgressBucket = -1;
-            let lastPaused = dialog.isPaused;
-            let lastPaint = 0;
-            dialog._visProgress = 100;
+            // close when done
+            if (timeLeft <= 0) dialog.close();
+            else dialog._rafId = requestAnimationFrame(tick);
+        };
 
-            const useFullTitleBar = !!game.settings.get("gambits-premades", "enableTimerFullAnim");
+        dialog._rafId = requestAnimationFrame(tick);
+        }
 
-            let lastHeaderBg = "";
-            let lastBorderImg = "";
-            let lastSelectColor = "";
-            let lastOptionColor = "";
+        // ---- Lightweight UI update: title + icons + CSS variables ----
+        let lastSecondShown = -1;
+        let lastColorTick = 0;
+        let lastPaused = dialog.isPaused;
 
-            dialog.updateTimer = function updateTimer(newTimeLeft, paused) {
-                this.timeLeft = newTimeLeft;
-                this.isPaused = paused;
+        dialog.updateUI = (force = false) => {
+        const timeLeft = dialog.getTimeLeft?.() ?? dialog.timeLeft ?? 0;
+        dialog.timeLeft = timeLeft;
 
-                const secs = Math.ceil(this.timeLeft);
-                const initial = Math.max(initialTimeLeft, 0.0001);
-                const rawProgress = Math.max(0, Math.min(100, (this.timeLeft / initial) * 100));
+        const secs = Math.ceil(timeLeft);
+        if ((force || secs !== lastSecondShown) && titleEl) {
+            titleEl.textContent = `${dialogTitle} - ${secs}s`;
+            lastSecondShown = secs;
+        }
 
-                const progress = SMOOTHING > 0
-                ? (dialog._visProgress += (rawProgress - dialog._visProgress) * SMOOTHING)
-                : rawProgress;
+        if (pauseIcon && (force || dialog.isPaused !== lastPaused)) {
+            pauseIcon.classList.toggle("fa-play", dialog.isPaused);
+            pauseIcon.classList.toggle("fa-pause", !dialog.isPaused);
+            lastPaused = dialog.isPaused;
+        }
 
-                const bucket = PROGRESS_BUCKET > 0 ? Math.floor(progress / PROGRESS_BUCKET) : progress;
+        const now = performance.now();
+        if (force || now - lastColorTick > 250) {
+            const dialogColors = getDialogColors({ type, source, timeLeft, initialTimeLeft: initial });
 
-                if (bucket !== lastProgressBucket) {
-                    const dialogColors = getDialogColors({ type, source, timeLeft: this.timeLeft, initialTimeLeft: initialTimeLeft });
-                    const colorStop1 = Math.max(progress - 5, 0);
-                    const borderStr =
-                        `linear-gradient(to right, ${dialogColors.borderColorStop}, ${dialogColors.borderColorStop} ${colorStop1}%, rgba(0,0,0,0.5) ${progress}%, rgba(0,0,0,0.5))`;
+            if (root) {
+            root.style.setProperty("--gps-timer-color", dialogColors.borderColorStop);
+            root.style.setProperty("--gps-select-color", dialogColors.selectColor);
+            root.style.setProperty("--gps-option-color", dialogColors.optionColor);
+            root.style.setProperty("--gps-pause-color", dialogColors.pauseColor);
+            }
 
-                    if (useFullTitleBar && headerEl) {
-                    if (borderStr !== lastHeaderBg) {
-                        headerEl.style.background = borderStr;
-                        lastHeaderBg = borderStr;
-                    }
-                    } else if (headerEl) {
-                    const img = `${borderStr} 1`;
-                    if (img !== lastBorderImg) {
-                        headerEl.style.border = "2px solid";
-                        headerEl.style.borderImage = img;
-                        headerEl.style.borderImageSlice = 1;
-                        lastBorderImg = img;
-                    }
-                    }
+            lastColorTick = now;
+        }
 
-                    if (selectEls?.length && dialogColors.selectColor !== lastSelectColor) {
-                        selectEls.forEach(el => el.style.backgroundColor = dialogColors.selectColor);
-                        lastSelectColor = dialogColors.selectColor;
-                    }
-                    if (optionEls?.length && dialogColors.optionColor !== lastOptionColor) {
-                        optionEls.forEach(el => el.style.backgroundColor = dialogColors.optionColor);
-                        lastOptionColor = dialogColors.optionColor;
-                    }
+        if (pauseBtn) pauseBtn.classList.toggle("paused", dialog.isPaused);
+        };
 
-                    if (pauseBtn) pauseBtn.style.backgroundColor = this.isPaused ? dialogColors.pauseColor : '';
+        // UI ticker (no bar motion here; WAAPI handles it)
+        dialog._uiTicker = setInterval(() => {
+        if (dialog._closing) return;
+        dialog.updateUI(false);
+        }, 200);
 
-                    lastProgressBucket = bucket;
-                }
+        // close exactly when WAAPI finishes (fallback already handles close via rAF)
+        if (canWAAPI && dialog._barAnim) {
+        dialog._barAnim.finished
+            .then(() => {
+            if (!dialog._closing) dialog.close();
+            })
+            .catch(() => {
+            /* cancelled */
+            });
+        }
 
-                if (secs !== lastSecondShown && titleEl) {
-                    titleEl.textContent = `${dialogTitle} - ${secs}s`;
-                    lastSecondShown = secs;
-                }
+        // initial paint
+        dialog.updateUI(true);
 
-                if (pauseIcon && paused !== lastPaused) {
-                    pauseIcon.classList.toggle('fa-play', paused);
-                    pauseIcon.classList.toggle('fa-pause', !paused);
-                    lastPaused = paused;
-                }
-            };
+        // IMPORTANT: attach listeners after timer methods exist
+        dialog.listeners = attachEventListeners(dialog);
+    },
 
-            dialog._rafId = null;
-            dialog._closing = false;
+    close: async (event, dialog) => {
+        dialog._closing = true;
 
-            dialog.animate = (now) => {
-                if (dialog._closing) return;
+        if (dialog._uiTicker) clearInterval(dialog._uiTicker);
+        if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
+        if (dialog._barAnim) {
+        try {
+            dialog._barAnim.cancel();
+        } catch (_) {}
+        }
 
-                if (now - lastPaint >= FRAME_MS) {
-                    if (!dialog.isPaused) dialog.timeLeft = Math.max((dialog.endTime - now) / 1000, 0);
-                    dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
-                    lastPaint = now;
-                }
+        dialog.timeLeft = 0;
 
-                if (dialog.timeLeft > 0 && !dialog._closing) {
-                    dialog._rafId = requestAnimationFrame(dialog.animate);
-                } else {
-                    dialog.close();
-                }
-            };
+        // old leftover safety; harmless if undefined
+        clearInterval(dialog.timer);
 
-            dialog._rafId = requestAnimationFrame(dialog.animate);
+        cleanupEventListeners(dialog.listeners);
 
-            dialog.listeners = attachEventListeners(dialog, dialog.animate);
+        if (
+        notificationId &&
+        ((type === "multiDialog" && source === "gm") || type === "singleDialog")
+        ) {
+        await game.gps.socket.executeAsUser("deleteChatMessage", getPrimaryGM(), { chatId: notificationId });
+        }
 
-            dialog.updateTimer(dialog.timeLeft, dialog.isPaused);
-        },
-        close: async (event, dialog) => {
-            dialog._closing = true;
-            if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
-            dialog.timeLeft = 0;
-            clearInterval(dialog.timer);
-            cleanupEventListeners(dialog.listeners);
-            if(notificationId && ((type === "multiDialog" && source === "gm") || type === "singleDialog")) await game.gps.socket.executeAsUser("deleteChatMessage", getPrimaryGM(), {chatId: notificationId});
-            
-            if (dialog.dialogState.programmaticallyClosed) result = ({ userDecision: false, programmaticallyClosed: true, source, type });
-            else if (!dialog.dialogState.interacted) result = ({ userDecision: false, programmaticallyClosed: false, source, type });
+        if (dialog.dialogState.programmaticallyClosed)
+        result = { userDecision: false, programmaticallyClosed: true, source, type };
+        else if (!dialog.dialogState.interacted)
+        result = { userDecision: false, programmaticallyClosed: false, source, type };
 
-            if(source && source === "user" && type === "multiDialog" && !dialog.dialogState.programmaticallyClosed) await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
-            else if(source && source === "gm" && type === "multiDialog" && !dialog.dialogState.programmaticallyClosed) await game.gps.socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
-        }, rejectClose:false
+        if (source && source === "user" && type === "multiDialog" && !dialog.dialogState.programmaticallyClosed)
+        await game.gps.socket.executeAsUser("closeDialogById", getPrimaryGM(), { dialogId: dialogId });
+        else if (source && source === "gm" && type === "multiDialog" && !dialog.dialogState.programmaticallyClosed)
+        await game.gps.socket.executeAsUser("closeDialogById", browserUser, { dialogId: dialogId });
+    },
+
+    rejectClose: false
     });
+
     return result;
 }
 

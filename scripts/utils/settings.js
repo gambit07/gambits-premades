@@ -747,13 +747,23 @@ export function registerSettings() {
         hint: "",
         scope: 'world',
         config: false,
-        type: String,
-        default: "6",
+        type: Number,
+        default: 6,
         onChange: value => {
-            const numericValue = Number(value);
-            if (!isNaN(numericValue) && game.settings.get('gambits-premades', 'enableTokenMovementSpeed')) CONFIG.Token.movement.defaultSpeed = numericValue;
-            else console.error("Invalid input for Numeric Setting Example: Not a number.");
+            if (!isNaN(value) && game.settings.get('gambits-premades', 'enableTokenMovementSpeed')) CONFIG.Token.movement.defaultSpeed = value;
+            else console.error("Invalid input for Numeric Setting: Not a number.");
         }
+    });
+
+    game.settings.registerMenu('gambits-premades', 'patreonSupport', {
+        name: "Patreon Support",
+        label: "Gambit's Lounge",
+        hint: "If you'd like to support me, Gambit! Subscribing helps support development of this and my other free modules, and also gets you access to my premium modules Gambit's FXMaster+, Gambit's Asset Previewer, and Gambit's Image Viewer!",
+        icon: "fas fa-card-spade",
+        scope: 'world',
+        config: true,
+        type: PatreonSupportMenu,
+        restricted: true
     });
 
     game.settings.registerMenu('gambits-premades', 'generalSettings', {
@@ -1302,5 +1312,23 @@ export class MonsterFeaturesSettingsMenu extends BaseSettingsMenu {
         { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
       ]
     });
+  }
+}
+
+class PatreonSupportMenu extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "gambits-patreon-support",
+      title: "Patreon Support",
+      template: "templates/blank.hbs",
+      width: 1,
+      height: 1,
+      popOut: false
+    });
+  }
+
+  render(force = false, options = {}) {
+    window.open("https://www.patreon.com/GambitsLounge/membership", "_blank", "noopener,noreferrer");
+    return this;
   }
 }

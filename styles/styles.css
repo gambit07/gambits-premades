@@ -3,125 +3,116 @@
   --gps-settings-max-height: 85dvh;
 }
 
+/* ---------------------------------------------------------
+   Dialog layout + controls
+   --------------------------------------------------------- */
+
 .gps-dialog-container {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: center;
-    width: 500px;
-    padding-left: 8px;
-    padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  width: 500px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .gps-dialog-section {
-    margin-bottom: 8px;
-    width: 100%;
-    display: flex;
-    gap: 20px;
+  margin-bottom: 8px;
+  width: 100%;
+  display: flex;
+  gap: 20px;
 }
 
 .gps-dialog-content {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
+.gps-dialog-paragraph,
 .gps-dialog-container .gps-dialog-paragraph {
-    margin-bottom: 16px;
-    font-weight: normal;
-    font-size: 14px;
-}
-
-.gps-dialog-paragraph {
-    margin-bottom: 16px;
-    font-weight: normal;
-    font-size: 14px;
+  margin-bottom: 16px;
+  font-weight: normal;
+  font-size: 14px;
 }
 
 .gps-dialog-flex {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
 }
-
-.gps-dialog-flex {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 10px;
-  }
 
 .gps-dialog-flex-wrapper {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    position: relative;
-  }
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
 
 .gps-dialog-label {
-    font-size: 16px;
-    margin-right: 5px;
+  font-size: 16px;
+  margin-right: 5px;
 }
 
+.gps-dialog-select,
 .gps-dialog-container .gps-dialog-select {
-    padding: 4px;
-    width: 100%;
-    box-sizing: border-box;
-    line-height: normal;
-}
-
-.gps-dialog-select {
-    padding: 4px;
-    width: 100%;
-    box-sizing: border-box;
-    line-height: normal;
+  padding: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: normal;
 }
 
 .gps-dialog-select-container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    margin-right: 5px;
-  }
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  margin-right: 5px;
+}
 
 .gps-dialog-option {
-    font-size: 14.5px;
+  font-size: 14.5px;
 }
 
 .gps-dialog-image-container {
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .gps-dialog-image-multi-container {
-    width: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 10px;
-    margin-top: -8px;
-  }
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  margin-top: -8px;
+}
 
 .gps-dialog-image {
-    max-width: 50px;
-    max-height: 50px;
-    border-width: 2px;
-    border-radius: 4px;
+  max-width: 50px;
+  max-height: 50px;
+  border-width: 2px;
+  border-radius: 4px;
 }
 
 .gps-dialog-button-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 12px;
-    margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 5px;
 }
 
 .gps-dialog-button {
-    margin-bottom: 8px;
-    width: 150px;
+  margin-bottom: 8px;
+  width: 150px;
 }
+
+/* ---------------------------------------------------------
+   Settings UI
+   --------------------------------------------------------- */
 
 /* Container stays the same */
 .gps-settings {
@@ -158,32 +149,34 @@
   border-radius: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
 .gps-settings-row {
   border: 1px solid var(--color-border-light-2);
   border-radius: 0.5rem;
   transition: background 0.2s;
   position: relative; /* for your arrow */
 }
+
 .gps-settings-row:hover {
   background: var(--color-warm-2);
 }
 
 /* 2) Column sizing: left=3×, middle=2rem, right=4rem */
 .gps-settings-header > .gps-settings-item-th,
-.gps-settings-row   > .gps-settings-column-item {
-  flex: 3;             /* 3 parts of the available space */
+.gps-settings-row > .gps-settings-column-item {
+  flex: 3; /* 3 parts of the available space */
   padding-right: 0.5rem;
 }
 
 .gps-settings-header > .gps-settings-column-enable-th,
-.gps-settings-row   > .gps-settings-column-enable {
-  flex: 0 0 3rem;      /* fixed 2rem */
+.gps-settings-row > .gps-settings-column-enable {
+  flex: 0 0 3rem; /* fixed 2rem */
   text-align: center;
 }
 
 .gps-settings-header > .gps-settings-column-timeout-th,
-.gps-settings-row   > .gps-settings-column-timeout {
-  flex: 0 0 4rem;      /* fixed 4rem */
+.gps-settings-row > .gps-settings-column-timeout {
+  flex: 0 0 4rem; /* fixed 4rem */
   text-align: center;
 }
 
@@ -194,13 +187,16 @@
   border-left: 2px dashed var(--color-border-light-2);
   padding-left: 1rem;
 }
+
 .gps-settings-children.show {
   display: flex;
   flex-direction: column;
 }
+
 .gps-settings-children .gps-settings-column-enable {
   padding-left: 0rem;
 }
+
 .gps-settings-row-child {
   display: grid;
   grid-template-columns: 4fr 3rem 5rem;
@@ -217,6 +213,7 @@
   transform: scale(1.2);
   margin: 0;
 }
+
 .gps-settings-column-enable input[type="text"] {
   width: 100%;
   max-width: 100%;
@@ -225,6 +222,7 @@
   border: 1px solid var(--color-border-light-2);
   border-radius: 0.25rem;
 }
+
 .gps-settings-column-timeout input[type="text"] {
   width: 100%;
   max-width: 3.5rem;
@@ -234,10 +232,12 @@
   text-align: center;
   transition: border-color 0.2s;
 }
+
 .gps-settings-column-timeout input[type="text"]:focus {
   border-color: var(--color-border-light-2);
   outline: none;
 }
+
 .gps-settings-small-text {
   font-size: 0.8em;
   margin-top: 0.25rem;
@@ -253,34 +253,245 @@
 /* 6) Chevron arrow stays in the right place */
 .gps-settings-collapse-arrow {
   position: absolute;
-  right: 12.5rem;  /* timeout (4rem) + gap (1rem) */
+  right: 12.5rem; /* timeout (4rem) + gap (1rem) */
   pointer-events: none;
   transition: transform 0.5s ease;
 }
+
 .gps-settings-row-text.open + .gps-settings-collapse-arrow i {
   transform: rotate(180deg);
 }
+
+/* ---------------------------------------------------------
+   Favorite checkbox styling
+   --------------------------------------------------------- */
+
 #gps-favorite-checkbox {
-    position: absolute !important;
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 #gps-favorite-checkbox + label {
-    display: flex !important;
-    align-items: center !important;
-    cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  cursor: pointer !important;
 }
 
 #gps-favorite-checkbox + label::before {
-    content: "☆" !important; /* Unicode empty star (☆) for my remembrance*/
-    font-size: 30px !important;
-    margin-right: 5px !important;
-    line-height: 1 !important;
-    vertical-align: middle !important;
+  content: "☆" !important; /* empty star */
+  font-size: 30px !important;
+  margin-right: 5px !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
 }
 
 #gps-favorite-checkbox:checked + label::before {
-    content: "★" !important; /* Unicode filled star (★) also for my remembrance */
+  content: "★" !important; /* filled star */
+}
+
+.gps-dialog-timer .window-header {
+  position: relative;
+  overflow: hidden;
+
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.gps-dialog-timer {
+  --gps-timer-tail: 6%;
+}
+
+.gps-dialog-timer .gps-titlebar-progress {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(1);
+  pointer-events: none;
+  will-change: transform;
+  z-index: 0;
+
+  background-color: var(--gps-timer-color, rgba(255, 0, 0, 0.35));
+  opacity: 0.85;
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - var(--gps-timer-tail)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - var(--gps-timer-tail)),
+    transparent 100%
+  );
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+
+  transition: background-color 0.25s linear;
+}
+
+.gps-dialog-timer .gps-titlebar-progress--thin {
+  inset: 0;
+  height: auto;
+
+  background: transparent;
+  opacity: 1;
+
+  /* Draw a ring without affecting layout */
+  box-shadow: inset 0 0 0 var(--gps-titlebar-border-w)
+    var(--gps-timer-color, rgba(255, 0, 0, 0.35));
+
+  /* Match rounded corners if the header has them */
+  border-radius: inherit;
+
+  transition: box-shadow 0.25s linear;
+}
+.gps-dialog-timer .gps-titlebar-progress--thin {
+  --gps-timer-tail: 12%;
+}
+
+.gps-dialog-timer.gps-timer-thin .window-header {
+  box-shadow: inset 0 0 0 var(--gps-titlebar-border-w) rgba(0, 0, 0, 0.5);
+}
+
+.gps-dialog-timer .window-title,
+.gps-dialog-timer .window-controls {
+  position: relative;
+  z-index: 1;
+}
+
+.gps-dialog-timer .window-title {
+  font-variant-numeric: tabular-nums;
+}
+
+.gps-dialog-timer .gps-dialog-select {
+  background-color: var(--gps-select-color, inherit);
+  transition: background-color 0.25s linear;
+}
+
+.gps-dialog-timer .gps-dialog-option {
+  background-color: var(--gps-option-color, inherit);
+}
+
+.gps-dialog-timer button[id^="pauseButton_"].paused {
+  background-color: var(--gps-pause-color, inherit);
+  transition: background-color 0.15s linear;
+}
+
+.gps-dialog-timer {
+  --gps-titlebar-border-w: 2px; /* thickness of the thin border ring */
+  --gps-timer-tail: 10%;        /* fade length near the leading edge */
+}
+
+.gps-dialog-timer.gps-timer-thin {
+  --gps-timer-tail: 14%;
+}
+
+.gps-dialog-ability-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 6px;
+  overflow: hidden;
+
+  background: var(--gps-select-color, rgba(181, 99, 69, 0.12));
+}
+
+.gps-dialog-ability-table th {
+  padding: 0.35rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--color-text-light-primary);
+
+  border-bottom: 1px solid var(--color-border-light-2);
+
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.gps-dialog-ability-table td {
+  padding: 0.6rem 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.gps-dialog-radio-cell {
+  position: relative;
+}
+
+.gps-dialog-radio-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 34px;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.gps-dialog-container input.gps-dialog-radio {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
+.gps-dialog-radio-ui {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+  border: 2px solid var(--color-border-light-2);
+  background: rgba(0, 0, 0, 0.20);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.25) inset;
+
+  transition:
+    border-color 0.15s linear,
+    background-color 0.15s linear,
+    box-shadow 0.15s linear;
+}
+
+.gps-dialog-radio-wrap:hover .gps-dialog-radio-ui {
+  border-color: var(--gps-timer-color, var(--color-warm-1));
+}
+
+.gps-dialog-radio:checked + .gps-dialog-radio-ui {
+  border-color: var(--gps-timer-color, var(--color-warm-1));
+  background:
+    radial-gradient(
+      circle at center,
+      var(--gps-timer-color, var(--color-warm-1)) 0 45%,
+      transparent 46%
+    ),
+    rgba(0, 0, 0, 0.20);
+
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.25) inset;
+}
+
+.gps-dialog-radio:focus-visible + .gps-dialog-radio-ui {
+  outline: 2px solid var(--gps-timer-color, var(--color-warm-1));
+  outline-offset: 2px;
+}
+
+@supports selector(td:has(input:checked)) {
+  .gps-dialog-ability-table td:has(input:checked) {
+    background: rgba(0,0,0,0.10);
+  }
+
+  @supports (color: color-mix(in srgb, red, transparent)) {
+    .gps-dialog-ability-table td:has(input:checked) {
+      background: color-mix(in srgb, var(--gps-timer-color, var(--color-warm-1)) 12%, transparent);
+    }
+  }
 }

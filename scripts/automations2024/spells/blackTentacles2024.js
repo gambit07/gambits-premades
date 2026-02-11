@@ -60,27 +60,25 @@ export async function blackTentacles2024({speaker, actor, character, item, args,
             return;
         }
         else if (userDecision) {
-            if (abilityCheck) {
-                const skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: token.document.uuid});
-                if(!skillCheck) return;
+            const skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: token.document.uuid});
+            if(!skillCheck) return;
 
-                if (skillCheck.failedSaves.size === 0) {
-                    await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
-                    let chatData = {
-                    user: browserUser.id,
-                    speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: `You successfully escape from Black Tentacles!`
-                    };
-                    ChatMessage.create(chatData);
-                }
-                else {
-                    let chatData = {
-                    user: browserUser.id,
-                    speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: `You are unable to escape Black Tentacles this turn.`
-                    };
-                    ChatMessage.create(chatData);
-                }
+            if (skillCheck.failedSaves.size === 0) {
+                await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
+                let chatData = {
+                user: browserUser.id,
+                speaker: ChatMessage.getSpeaker({ token: token }),
+                content: `You successfully escape from Black Tentacles!`
+                };
+                ChatMessage.create(chatData);
+            }
+            else {
+                let chatData = {
+                user: browserUser.id,
+                speaker: ChatMessage.getSpeaker({ token: token }),
+                content: `You are unable to escape Black Tentacles this turn.`
+                };
+                ChatMessage.create(chatData);
             }
         }
     
@@ -124,33 +122,31 @@ export async function blackTentacles2024({speaker, actor, character, item, args,
                 return;
             }
             else if (userDecision) {
-                if (abilityCheck) {
-                    const skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: token.document.uuid});
-                    if(!skillCheck && regionScenario === "tokenEnter") {
-                        return await game.gps.stopMovementEnter({token: tokenDocument});
-                    }
-                    else if(!skillCheck) return;
+                const skillCheck = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: token.document.uuid});
+                if(!skillCheck && regionScenario === "tokenEnter") {
+                    return await game.gps.stopMovementEnter({token: tokenDocument});
+                }
+                else if(!skillCheck) return;
 
-                    if (skillCheck.failedSaves.size === 0) {
-                        await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
-                        let chatData = {
-                        user: browserUser.id,
-                        speaker: ChatMessage.getSpeaker({ token: token }),
-                        content: `<span style='text-wrap: wrap;'>You successfully escape from Black Tentacles!</span>`
-                        };
-                        ChatMessage.create(chatData);
-                        await resumeMovement();
-                    }
-                    else {
-                        let chatData = {
-                        user: browserUser.id,
-                        speaker: ChatMessage.getSpeaker({ token: token }),
-                        content: `<span style='text-wrap: wrap;'>You are unable to escape Black Tentacles this turn.</span>`
-                        };
-                        ChatMessage.create(chatData);
+                if (skillCheck.failedSaves.size === 0) {
+                    await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${token.document.uuid}`, status: "restrained", active: false });
+                    let chatData = {
+                    user: browserUser.id,
+                    speaker: ChatMessage.getSpeaker({ token: token }),
+                    content: `<span style='text-wrap: wrap;'>You successfully escape from Black Tentacles!</span>`
+                    };
+                    ChatMessage.create(chatData);
+                    await resumeMovement();
+                }
+                else {
+                    let chatData = {
+                    user: browserUser.id,
+                    speaker: ChatMessage.getSpeaker({ token: token }),
+                    content: `<span style='text-wrap: wrap;'>You are unable to escape Black Tentacles this turn.</span>`
+                    };
+                    ChatMessage.create(chatData);
 
-                        await game.gps.stopMovementEnter({token: tokenDocument});
-                    }
+                    await game.gps.stopMovementEnter({token: tokenDocument});
                 }
             }
         }

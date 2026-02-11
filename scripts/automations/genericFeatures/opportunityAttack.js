@@ -6,6 +6,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     if(!token || !region || !regionScenario) return;
 
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
+    if(!game.gpsSettings.opportunityAttackEnabled) return;
 
     if(game.user.id !== userId) return;
 
@@ -204,7 +205,8 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     const resumeMovement = await token.pauseMovement();
 
     let oaDisadvantage = token.actor.flags["gambits-premades"]?.oaDisadvantage;
-    const originDisadvantage = oaDisadvantage;
+    let oaDisadvantageSource = effectOriginActor.flags["gambits-premades"]?.oaDisadvantageSource;
+    const originDisadvantage = oaDisadvantage || oaDisadvantageSource;
     
     let processedValidOptions = await processValidOptions({actor: effectOriginActor});
     const {hasWarCaster, favoriteWeaponUuid, validWeapons} = processedValidOptions;

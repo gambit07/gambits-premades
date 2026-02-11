@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.32",
+      "custom": "2.1.34",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -64,7 +64,7 @@
       "value": "trinket",
       "baseItem": ""
     },
-    "attuned": true,
+    "attuned": false,
     "activities": {
       "dnd5eactivity000": {
         "_id": "dnd5eactivity000",
@@ -199,7 +199,9 @@
     },
     "identifier": "rod-of-the-pact-keeper-1",
     "container": null,
-    "properties": [],
+    "properties": [
+      "mgc"
+    ],
     "crew": {
       "value": []
     }
@@ -347,7 +349,11 @@
       "toggleEffect": false,
       "ignoreTotalCover": false
     },
-    "dnd5e": {},
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    },
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""

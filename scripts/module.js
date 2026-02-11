@@ -20,6 +20,7 @@ Hooks.once('init', async function() {
         specials["flags.gambits-premades.oaImmunity"] = [new foundry.data.fields.StringField(), 5];
         specials["flags.gambits-premades.oaSuppression"] = [new foundry.data.fields.StringField(), 5];
         specials["flags.gambits-premades.oaDisadvantage"] = [new foundry.data.fields.StringField(), 5];
+        specials["flags.gambits-premades.oaDisadvantageSource"] = [new foundry.data.fields.StringField(), 5];
     });
 
     registerWrapping();

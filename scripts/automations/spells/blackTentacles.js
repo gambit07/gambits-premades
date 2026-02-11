@@ -39,22 +39,65 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
         let dialogContent = `
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
-                    <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Would you like to use your action to make an ability check to escape Black Tentacles?</p>
-                        <div>
-                            <div class="gps-dialog-flex">
-                                <table style="background-color: rgba(181, 99, 69, 0.2);" width="100%"><tbody><tr><th>Strength</th><th>Dexterity</th></tr><tr><td style="text-align: center;vertical-align: middle;"><input type="radio" value="str" id="strength" name="ability-check" style="margin: 0 auto;"></td><td style="text-align: center;vertical-align: middle;"><input type="radio" value="dex" id="dexterity" name="ability-check" style="margin: 0 auto;"></td></tr></tbody></table>
-                                <div id="image-container" class="gps-dialog-image-container">
-                                    <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
-                                </div>
-                            </div>
+                <div class="gps-dialog-content">
+                    <p class="gps-dialog-paragraph">
+                    Would you like to use your action to make an ability check to escape Black Tentacles?
+                    </p>
+
+                    <div>
+                    <div class="gps-dialog-flex">
+                        <table class="gps-dialog-ability-table" width="100%">
+                        <thead>
+                            <tr>
+                            <th>Strength</th>
+                            <th>Dexterity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td class="gps-dialog-radio-cell">
+                                <label class="gps-dialog-radio-wrap" for="strength_${dialogId}">
+                                <input
+                                    type="radio"
+                                    value="str"
+                                    id="strength_${dialogId}"
+                                    name="ability-check"
+                                    class="gps-dialog-radio"
+                                    aria-label="Strength"
+                                >
+                                <span class="gps-dialog-radio-ui" aria-hidden="true"></span>
+                                </label>
+                            </td>
+
+                            <td class="gps-dialog-radio-cell">
+                                <label class="gps-dialog-radio-wrap" for="dexterity_${dialogId}">
+                                <input
+                                    type="radio"
+                                    value="dex"
+                                    id="dexterity_${dialogId}"
+                                    name="ability-check"
+                                    class="gps-dialog-radio"
+                                    aria-label="Dexterity"
+                                >
+                                <span class="gps-dialog-radio-ui" aria-hidden="true"></span>
+                                </label>
+                            </td>
+                            </tr>
+                        </tbody>
+                        </table>
+
+                        <div id="image-container" class="gps-dialog-image-container">
+                        <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                         </div>
                     </div>
+                    </div>
                 </div>
+                </div>
+
                 <div class="gps-dialog-button-container">
-                    <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
-                    </button>
+                <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                </button>
                 </div>
             </div>
         `;

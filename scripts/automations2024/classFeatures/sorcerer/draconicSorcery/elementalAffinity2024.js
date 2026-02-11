@@ -1,5 +1,5 @@
 export async function elementalAffinity2024({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
-    if(args?.[0].macroPass === "postAllRollsComplete") {
+    if(args?.[0].macroPass === "preAllRollsComplete") {
 
         let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
         item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "1c11dbbe-c4f3-4208-9449-c025d6a34218");

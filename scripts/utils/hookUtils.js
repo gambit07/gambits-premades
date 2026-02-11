@@ -235,7 +235,8 @@ export function daeInitFlags() {
     let browserFields = [
         'flags.gambits-premades.oaImmunity',
         'flags.gambits-premades.oaSuppression',
-        'flags.gambits-premades.oaDisadvantage'
+        'flags.gambits-premades.oaDisadvantage',
+        'flags.gambits-premades.oaDisadvantageSource'
     ];
 
     daeFieldBrowserFields.push(...Array.from(new Set(browserFields)).sort());
@@ -256,7 +257,11 @@ export function daeInjectFlags() {
     });
     foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.oaDisadvantage', {
         name: "Opportunity Attack Disadvantage",
-        description: "Grants disadvantage on Opportunity Attacks against a token"
+        description: "Grants disadvantage on Opportunity Attacks against this token"
+    });
+    foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.oaDisadvantageSource', {
+        name: "Opportunity Attack Source Disadvantage",
+        description: "Disadvantage on Opportunity Attacks against a token"
     });
     
     DAE.addAutoFields(daeFieldBrowserFields);
