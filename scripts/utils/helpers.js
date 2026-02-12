@@ -241,7 +241,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
     function filterToken(t) {
         // Check if invalid token on the canvas
         if (!t?.actor) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor ? t.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor ? t.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
             return;
         }
         let checkItem;
@@ -254,48 +254,48 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
 
         // Check if the token has the actual item to use (With some checking for 2014/2024)
         if(!checkItem && sourceRules === "2024") {
-            if(debugEnabled) console.error(`${itemName} 2024 for ${t.actor.name} failed at check if reaction item exists`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} 2024 for ${t.actor.name} failed at check if reaction item exists`);
             return;
         }
 
         else if(!checkItem) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at check if reaction item exists`);
             return;
         }
 
         // Check if the tokens reaction already used
         else if(reactionCheck && MidiQOL.hasUsedReaction(t.actor)) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at reaction available`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at reaction available`);
             return;
         }
 
         // Check if the token is incapacitated
         else if(MidiQOL.checkIncapacitated(t)) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at is incapacitated`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at is incapacitated`);
             return;
         }
 
         // Check if the token is the initiating token or not a qualifying token disposition
         else if(dispositionCheck && (((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at token disposition check`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at token disposition check`);
             return;
         }
 
         // Check if token can see initiating token
         else if(sightCheck && ((sightCheckType === "ally" && !MidiQOL.canSee(t, targetedToken)) || (sightCheckType === "enemy" && !MidiQOL.canSee(t, initiatingToken)))) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at sight check`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at sight check`);
             return;
         }
 
         // Check if token is under an effect preventing reactions
         else if(reactionCheck && hasEffectOrigin) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at spell effect preventing reaction`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at spell effect preventing reaction`);
             return;
         }
 
         // Check if token is within range
         else if(rangeCheck && (measuredDistance === -1 || (measuredDistance > range))) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at range check`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at range check`);
             return;
         }
 
@@ -313,7 +313,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             let checkType = checkItem?.system?.method;
             let hasSpellSlots = false;
             if(checkType === "spell" && !checkItem?.system?.prepared) {
-                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at spell not prepared`);
+                if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at spell not prepared`);
                 return false;
             }
             const cachedForValue = checkItem.flags?.dnd5e?.cachedFor;
@@ -367,7 +367,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             }
     
             if (!hasSpellSlots) {
-                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check valid spell slots/preparation`);
+                if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at check valid spell slots/preparation`);
                 return false;
             }
         }
@@ -384,7 +384,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             else itemExistsWithValue = t.actor.items.some(i => (itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.identifier.toLowerCase())) && i.system.uses?.spent < i.system.uses?.max);
 
             if (!itemExistsWithValue && !resourceExistsWithValue) {
-                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at check valid feature item/resource uses`);
+                if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at check valid feature item/resource uses`);
                 return;
             }
         }
@@ -403,7 +403,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
             });
 
             if (!itemExists) {
-                if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at valid item supporting feature`);
+                if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at valid item supporting feature`);
                 return;
             }
         }
@@ -426,7 +426,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
     if (workflowCombat && !workflowNonCombat) {
         let combat = game.combat;
         if (!combat) {
-            if(debugEnabled) console.error(`${itemName} failed at check if combat active`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} failed at check if combat active`);
             return false;
         }
     }
@@ -434,20 +434,20 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
     let targetedToken = fromUuidSync(targetedTokenUuid);
     targetedToken = targetedToken?.object;
     if(!targetedToken) {
-        if(debugEnabled) console.error(`${itemName} failed no targetedToken found`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} failed no targetedToken found`);
         return false;
     }
 
     let initiatingToken = fromUuidSync(initiatingTokenUuid);
     initiatingToken = initiatingToken?.object;
     if(!initiatingToken) {
-        if(debugEnabled) console.error(`${itemName} failed no initiatingToken found`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} failed no initiatingToken found`);
         return false;
     }
 
     // Check if invalid token on the canvas
     if (!targetedToken?.actor) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor ? targetedToken.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor ? targetedToken.actor.name : "Unknown Actor"} failed at invalid token actor on canvas`);
         return false;
     }
     let checkItem;
@@ -460,48 +460,48 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
 
     // Check if the token has the actual item to use
     if(!checkItem && sourceRules === "2024") {
-        if(debugEnabled) console.error(`${itemName} 2024 for ${targetedToken.actor.name} failed at check if reaction item exists`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} 2024 for ${targetedToken.actor.name} failed at check if reaction item exists`);
         return;
     }
 
     else if(!checkItem) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check if reaction item exists`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at check if reaction item exists`);
         return;
     }
 
     // Check if the tokens reaction already used
     else if(reactionCheck && MidiQOL.hasUsedReaction(targetedToken.actor)) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at reaction available`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at reaction available`);
         return false;
     }
 
     // Check if the token is incapacitated
     else if(MidiQOL.checkIncapacitatedtargetedToken) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at is incapacitated`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at is incapacitated`);
         return false;
     }
 
     // Check if the token is the initiating token or not a qualifying token disposition
     else if(dispositionCheck && ((targetedToken.id === initiatingToken.id && workflowType === "attack") || ((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && targetedToken.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && targetedToken.document.disposition !== initiatingToken.document.disposition))) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at token disposition check`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at token disposition check`);
         return false;
     }
 
     // Check if token can see initiating token
     else if(sightCheck && ((sightCheckType === "ally" && !MidiQOL.canSee(initiatingToken, targetedToken)) || (sightCheckType === "enemy" && !MidiQOL.canSee(targetedToken, initiatingToken)))) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at sight check`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at sight check`);
         return false;
     }
 
     // Check if token is under an effect preventing reactions
     else if(reactionCheck && hasEffectOrigin) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at spell effect preventing reaction`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at spell effect preventing reaction`);
         return false;
     }
 
     // Check if token is within range
     else if(rangeCheck && (measuredDistance === -1 || (measuredDistance > range))) {
-        if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at range check`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at range check`);
         return false;
     }
 
@@ -519,7 +519,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
         let checkType = checkItem?.system?.method;
         let hasSpellSlots = false;
         if(checkType === "spell" && !checkItem?.system?.prepared) {
-            if(debugEnabled) console.error(`${itemName} for ${t.actor.name} failed at spell not prepared`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at spell not prepared`);
             return false;
         }
         if(checkType === "spell")
@@ -559,7 +559,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
         }
 
         if (!hasSpellSlots) {
-            if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check valid spell slots/preparation`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at check valid spell slots/preparation`);
             return false;
         }
     }
@@ -576,7 +576,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
         else itemExistsWithValue = targetedToken.actor.items.some(i => (itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.identifier.toLowerCase())) && i.system.uses?.spent < i.system.uses?.max);
 
         if (!itemExistsWithValue && !resourceExistsWithValue) {
-            if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at check valid feature item/resource uses`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at check valid feature item/resource uses`);
             return false;
         }
     }
@@ -586,7 +586,7 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
         let itemExists = targetedToken.actor.items.some(i => itemNames.includes(i.identifier.toLowerCase()) || itemNames.includes(i.name.toLowerCase()) || itemNames.includes(i.system.actionType?.toLowerCase()));
 
         if (!itemExists) {
-            if(debugEnabled) console.error(`${itemName} for ${targetedToken.actor.name} failed at valid item supporting feature`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at valid item supporting feature`);
             return false;
         }
     }
@@ -906,11 +906,9 @@ export async function process3rdPartyReactionDialog({
         root?.classList.toggle("gps-timer-full", useFullTitleBar);
         root?.classList.toggle("gps-timer-thin", !useFullTitleBar);
 
-        // ---- Mark dialog for CSS targeting ----
         root?.classList.add("gps-dialog-timer");
         if (pauseBtn) pauseBtn.classList.add("gps-pause-btn");
 
-        // ---- Build progress overlay ----
         let barEl = headerEl?.querySelector(":scope > .gps-titlebar-progress");
         if (!barEl && headerEl) {
             barEl = document.createElement("div");
@@ -925,7 +923,6 @@ export async function process3rdPartyReactionDialog({
         const initial = Math.max(Number(initialTimeLeft) || 0, 0);
         const durationMs = initial * 1000;
 
-        // ---- Kill any prior timers/animations (in case of re-render) ----
         if (dialog._uiTicker) clearInterval(dialog._uiTicker);
         if (dialog._rafId) cancelAnimationFrame(dialog._rafId);
         if (dialog._barAnim) {
@@ -934,7 +931,6 @@ export async function process3rdPartyReactionDialog({
         } catch (_) {}
         }
 
-        // ---- Prefer WAAPI (no per-frame JS), fallback to rAF if needed ----
         const canWAAPI = !!barEl && typeof barEl.animate === "function" && durationMs > 0;
 
         dialog.timeLeft = initial;
@@ -964,7 +960,6 @@ export async function process3rdPartyReactionDialog({
             else dialog._barAnim.play();
         };
         } else {
-        // Fallback clock
         dialog._endTime = performance.now() + durationMs;
 
         dialog.getTimeLeft = () => {
@@ -991,7 +986,6 @@ export async function process3rdPartyReactionDialog({
             }
         };
 
-        // rAF only for fallback: drive bar transform + close timing
         const tick = () => {
             if (dialog._closing) return;
 
@@ -1003,7 +997,6 @@ export async function process3rdPartyReactionDialog({
             barEl.style.transform = `scaleX(${ratio})`;
             }
 
-            // close when done
             if (timeLeft <= 0) dialog.close();
             else dialog._rafId = requestAnimationFrame(tick);
         };
@@ -1011,7 +1004,6 @@ export async function process3rdPartyReactionDialog({
         dialog._rafId = requestAnimationFrame(tick);
         }
 
-        // ---- Lightweight UI update: title + icons + CSS variables ----
         let lastSecondShown = -1;
         let lastColorTick = 0;
         let lastPaused = dialog.isPaused;
@@ -1049,13 +1041,11 @@ export async function process3rdPartyReactionDialog({
         if (pauseBtn) pauseBtn.classList.toggle("paused", dialog.isPaused);
         };
 
-        // UI ticker (no bar motion here; WAAPI handles it)
         dialog._uiTicker = setInterval(() => {
         if (dialog._closing) return;
         dialog.updateUI(false);
         }, 200);
 
-        // close exactly when WAAPI finishes (fallback already handles close via rAF)
         if (canWAAPI && dialog._barAnim) {
         dialog._barAnim.finished
             .then(() => {
@@ -1066,10 +1056,8 @@ export async function process3rdPartyReactionDialog({
             });
         }
 
-        // initial paint
         dialog.updateUI(true);
 
-        // IMPORTANT: attach listeners after timer methods exist
         dialog.listeners = attachEventListeners(dialog);
     },
 
@@ -1086,7 +1074,6 @@ export async function process3rdPartyReactionDialog({
 
         dialog.timeLeft = 0;
 
-        // old leftover safety; harmless if undefined
         clearInterval(dialog.timer);
 
         cleanupEventListeners(dialog.listeners);
@@ -1650,9 +1637,9 @@ export async function remoteAbilityTest({spellcasting, actorUuid}) {
 
 export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
     const item = await fromUuid(itemUuid);
-    if(!item) return console.error(`Shame you didn't pass me an itemUuid`);
+    if(!item) return game.gps.logInfo(`Shame you didn't pass me an itemUuid`);
     const activity = item.system.activities.find(a => a.identifier === identifier);
-    if(!activity) return console.error(`You've likely removed the identifier name from a ${item.name} automation activity which will cause failure.`);
+    if(!activity) return game.gps.logInfo(`You've likely removed the identifier name from a ${item.name} automation activity which will cause failure.`);
     let targetUuids = (Array.isArray(targetUuid)) ? targetUuid : [targetUuid];
 
     const options = { midiOptions: { targetUuids: targetUuids, noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMStatus: true, autoRollAttack: true, autoRollDamage: "always", fastForwardAttack: true, fastForwardDamage: true, workflowData: true } };
@@ -1833,4 +1820,16 @@ export async function stopMovementEnter({ token }) {
 export async function gmSetFlag({flagDocumentUuid, key, value}) {
     let flagDocument = await fromUuid(flagDocumentUuid);
     await flagDocument.setFlag("gambits-premades", key, value);
+}
+
+const LOG_PREFIX = "GPS | ";
+const PREFIX_STYLE = "color: #4ea1ff; font-weight: 700;";
+const MSG_STYLE = "color: #ffd24a; font-weight: 700;";
+
+export function logInfo(msg) {
+  console.info(
+    `%c${LOG_PREFIX}%c${msg}`,
+    PREFIX_STYLE,
+    MSG_STYLE
+  );
 }

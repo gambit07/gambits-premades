@@ -82,6 +82,7 @@ Hooks.once('socketlib.ready', async function() {
     game.gps.socket.register("gpsActivityUpdate", helpers.gpsActivityUpdate);
     game.gps.socket.register("gpsUpdateMidiRange", helpers.gpsUpdateMidiRange);
     game.gps.socket.register("gmSetFlag", helpers.gmSetFlag);
+    game.gps.socket.register("gpsApplyTempHp", helpers.gpsApplyTempHp);
 })
 
 Hooks.once('ready', async function() {
@@ -93,6 +94,7 @@ Hooks.once('ready', async function() {
         weaponAnimations,
         disableRegionTeleport: false,
         animation,
+        logInfo: helpers.logInfo
     };
 
     refreshTemplateVisibility();

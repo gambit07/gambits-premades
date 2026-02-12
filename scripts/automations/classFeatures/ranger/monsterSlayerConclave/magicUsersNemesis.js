@@ -9,7 +9,7 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let itemName = "Magic-User's Nemesis";
     if(workflowType !== "teleport" && !workflow?.activity?.consumption.spellSlot) {
-        if(debugEnabled) console.error(`${itemName} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
         return;
     }
     let dialogId = gpsUuid;

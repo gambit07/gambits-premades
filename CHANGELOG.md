@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.1.35] - 2026-02-12
+- Updates:
+  - Updated a number of items to resolve Midi's advantage/check flag deprecations
+  - Updated gps debug logs to use a more unique style, no longer reads with the red error text and instead reads with a blue 'GPS |' prefix and yellow message body
+- Bugfixes:
+  - Elemental Affinity 2024: Fixed damage not applying... again
+  - gpsApplyTempHp: Fix to register functions socket, fixes Motivational Speech so it works as expected
+
 ## [v2.1.34] - 2026-02-10
 - Additions:
   - Opportunity Attacks: Added new DAE flag oaDisadvantageSource. This will cause the actor with the effect to have disadvantage on any opportunity attack they make.

@@ -26,7 +26,7 @@ export async function mageSlayer({workflowData,workflowType,workflowCombat}) {
                     "type": "base",
                     "changes": [
                       {
-                        "key": "flags.midi-qol.advantage.ability.save.all",
+                        "key": "flags.midi-qol.advantage.save.all",
                         "mode": 0,
                         "value": "1",
                         "priority": 20

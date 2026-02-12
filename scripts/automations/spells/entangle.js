@@ -17,7 +17,7 @@ export async function entangle({ tokenUuid, regionUuid, regionScenario, speaker,
 
     if(regionScenario === "tokenTurnStart") {
         if(!tokenUuid || !regionUuid || !regionScenario) {
-            if(debugEnabled) console.error(`No Region or Token found for ${itemName}`);
+            if(debugEnabled) game.gps.logInfo(`No Region or Token found for ${itemName}`);
             return;
         }
 

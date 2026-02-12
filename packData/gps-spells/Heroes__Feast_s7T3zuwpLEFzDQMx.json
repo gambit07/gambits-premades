@@ -236,7 +236,7 @@
       "book": "PHB",
       "page": "",
       "license": "",
-      "custom": "1.0.25",
+      "custom": "2.1.35",
       "rules": "2014",
       "revision": 1
     },
@@ -318,7 +318,7 @@
           "priority": 20
         },
         {
-          "key": "flags.midi-qol.advantage.ability.save.wis",
+          "key": "flags.midi-qol.advantage.save.wis",
           "mode": 5,
           "value": "1",
           "priority": 20

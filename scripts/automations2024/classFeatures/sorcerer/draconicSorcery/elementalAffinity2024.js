@@ -6,7 +6,7 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
         
         if(workflow.item.type !== "spell") return;
         if(!workflow.activity.consumption.spellSlot) {
-            if(debugEnabled) console.error(`${item.name} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
+            if(debugEnabled) game.gps.logInfo(`${item.name} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
             return;
         }
         let damageType = false;
@@ -17,13 +17,13 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
         if(cprConfig.dType) damageType = cprConfig.dType;
 
         if(!damageType) {
-            if(debugEnabled) console.error(`${item.name} no damage type selected in CPR medkit, default Acid used`);
+            if(debugEnabled) game.gps.logInfo(`${item.name} no damage type selected in CPR medkit, default Acid used`);
             damageType = "acid";
         }
         const damageSpell = workflow.damageDetail.map(part => part?.type ?? null);
 
         if (!damageSpell?.some(type => damageType.includes(type))) {
-            if(debugEnabled) console.error(`${item.name} failed, not relevant damage type`);
+            if(debugEnabled) game.gps.logInfo(`${item.name} failed, not relevant damage type`);
             return;
         }
 
@@ -93,6 +93,6 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
             damageParts[0].types.push(damageType);
             await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
         }
-        await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.uuid});
+        await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
     }
 }

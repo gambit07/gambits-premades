@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.38",
+      "custom": "2.1.35",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -279,7 +279,9 @@
         }
       }
     },
-    "core": {},
+    "core": {
+      "sheetClass": "dnd5e.Tidy5eItemSheetQuadrone"
+    },
     "rest-recovery": {
       "data": {
         "recovery": {
@@ -366,7 +368,7 @@
       "system": {},
       "changes": [
         {
-          "key": "flags.midi-qol.advantage.ability.save.wis",
+          "key": "flags.midi-qol.advantage.save.wis",
           "mode": 2,
           "value": "1",
           "priority": 20

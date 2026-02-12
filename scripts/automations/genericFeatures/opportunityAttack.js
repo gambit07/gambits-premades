@@ -68,7 +68,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
     let currentCombatant = canvas.tokens.get(game.combat?.current.tokenId);
     if(currentCombatant?.id !== token.object.id) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed due to not tokens turn in combat`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed due to not tokens turn in combat`);
         return; // Avoid initiating opportunity attack when it's not a token's turn
     }
     
@@ -85,7 +85,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
     // Check if origin token can see token moving
     if(!MidiQOL.canSee(effectOriginToken, token)) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed - ${effectOriginToken.actor.name} cannot see ${token.actor.name}`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed - ${effectOriginToken.actor.name} cannot see ${token.actor.name}`);
         return;
     }
 
@@ -127,59 +127,59 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
 
     // Check if origin token has already used reaction
     if (MidiQOL.hasUsedReaction(effectOriginActor)) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at reaction available`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed at reaction available`);
         return;
     }
 
     if(!MidiQOL.isTargetable(token)) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at token is targetable`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed at token is targetable`);
         return;
     }
 
     // Check if same disposition token
     if(token.disposition === effectOriginToken.disposition) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at token disposition check`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed at token disposition check`);
         return;
     }
 
     // Check if an Opportunity Attack Suppression flag is present
     let oaSuppression = effectOriginActor.flags["gambits-premades"]?.oaSuppression;
     if(oaSuppression) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at oaSuppression effect preventing reactions`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed at oaSuppression effect preventing reactions`);
         return;
     }
 
     // Check if an Opportunity Attack Immunity flag is present
     let oaImmunity = token.actor.flags["gambits-premades"]?.oaImmunity;
     if(oaImmunity) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed at oaImmunity effect preventing reactions against the target`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed at oaImmunity effect preventing reactions against the target`);
         return;
     }
 
     // Check if origin token is incapacitated
     if(MidiQOL.checkIncapacitated(effectOriginToken)) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because origin token is incapacitated`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed because origin token is incapacitated`);
         return;
     }
 
     //Check if token is disengaged and origin token does not have Sentinel
     let isDisengaged = token.actor.effects.some(e => e.name.toLowerCase() === "disengage");
     if(isDisengaged && !hasSentinel) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using disengage`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed because token is using disengage`);
         return;
     }
 
     //Check if token activated mobile feat attack feature
     let isMobileFeat = token.actor.getFlag("midi-qol", "oaMobileFeatAttack");
     if (isMobileFeat && isMobileFeat.includes(effectOriginToken.id)) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using mobile feat`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed because token is using mobile feat`);
         return;
     }
 
     //Check if token activated fancy footwork attack feature
     let isFancyFootwork = token.actor.getFlag("midi-qol", "oaFancyFootworkAttack");
     if (isFancyFootwork && isFancyFootwork.includes(effectOriginToken.id)) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because token is using fancy footwork`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed because token is using fancy footwork`);
         return;
     }
 
@@ -190,14 +190,14 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         let charmer;
         if(charmerItem) charmer = charmerItem.parent.id;
         if(charmer === token.actor.id) {
-            if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because origin token is charmed by token`);
+            if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed because origin token is charmed by token`);
             return;
         }
     }
 
     // Check if Levels believes tokens are on different levels
     if(CONFIG?.Levels?.API?.testCollision?.({x: effectOriginToken.object.center.x, y: effectOriginToken.object.center.y, z: effectOriginToken.object.losHeight},{x: token.object.center.x, y: token.object.center.y, z: token.object.losHeight})) {
-        if(debugEnabled) console.error(`Opportunity Attack for ${effectOriginActor.name} failed because Levels indicates the tokens cannot see each other`);
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed because Levels indicates the tokens cannot see each other`);
         return;
     }
 
@@ -444,7 +444,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                 if (firstRegion.object && firstRegion.object.tooltip) firstRegion.object.tooltip.visible = false;
                 if (oaDisabled) await firstRegion.setFlag("gambits-premades", "regionDisabled", true);
             } catch (error) {
-                console.error('Error during region attachment:', error);
+                game.gps.logInfo('Error during region attachment:', error);
             }
         }
     }

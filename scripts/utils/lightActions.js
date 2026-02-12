@@ -131,6 +131,6 @@ export async function lightThrow({ token, actor, item, filePath, filePathDim, li
     if (effectDataDim) await effectDataDim.delete();
     await item.update({ "system.quantity": item.system.quantity - 1 });
   } catch (error) {
-    console.error("Failed to create item pile:", error);
+    game.gps.logInfo("Failed to create item pile:", error);
   }
 }

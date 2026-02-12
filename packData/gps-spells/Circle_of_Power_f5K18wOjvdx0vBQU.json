@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.0.0",
+      "custom": "2.1.35",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -490,7 +490,11 @@
         }
       }
     },
-    "dnd5e": {},
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    },
     "rest-recovery": {
       "data": {
         "recovery": {
@@ -535,7 +539,7 @@
           "priority": 20
         },
         {
-          "key": "flags.midi-qol.advantage.ability.save.all",
+          "key": "flags.midi-qol.advantage.save.all",
           "mode": 0,
           "value": "item?.type === \"spell\" || item?.flags?.midiProperties?.magiceffect",
           "priority": 20

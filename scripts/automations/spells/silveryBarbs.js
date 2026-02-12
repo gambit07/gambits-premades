@@ -14,9 +14,9 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
     if(workflow.legendaryResistanceUsed) return;
 
     // Check if attack hits
-    if(workflowType === "attack" && workflow.attackTotal < workflow.targets?.first()?.actor.system.attributes.ac.value) return debugEnabled ? console.error(`${itemName} failed due to no valid attack targets`) : "";
+    if(workflowType === "attack" && workflow.attackTotal < workflow.targets?.first()?.actor.system.attributes.ac.value) return debugEnabled ? game.gps.logInfo(`${itemName} failed due to no valid attack targets`) : "";
     // Check if there is a save success
-    if(workflowType === "save" && workflow.saves.size === 0) return debugEnabled ? console.error(`${itemName} failed due to no valid save targets`) : "";
+    if(workflowType === "save" && workflow.saves.size === 0) return debugEnabled ? game.gps.logInfo(`${itemName} failed due to no valid save targets`) : "";
 
     let findValidTokens;
     
@@ -46,7 +46,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
             let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 60);
 
             if(targets.length === 0) {
-                debugEnabled ? console.error(`${itemName} for ${validTokenPrimary.actor.name} failed due to no valid save targets`) : "";
+                debugEnabled ? game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed due to no valid save targets`) : "";
                 continue;
             }
 
@@ -91,11 +91,11 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         }
         else if(workflowType === "attack") {
             if (workflow.token.document.disposition === validTokenPrimary.document.disposition) {
-                debugEnabled ? console.error(`${itemName} for ${validTokenPrimary.actor.name} failed due to no valid attack targets`) : "";
+                debugEnabled ? game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed due to no valid attack targets`) : "";
                 continue;
             }
-            if (homebrewDisableNat20 && workflow.isCritical === true) return debugEnabled ? console.error(`${itemName} failed due to homebrew rule disabling on criticle success`) : "";
-            if (homebrewEnableNat20 && workflow.isCritical !== true) return debugEnabled ? console.error(`${itemName} failed due to homebrew rule enabling only on criticle success`) : "";
+            if (homebrewDisableNat20 && workflow.isCritical === true) return debugEnabled ? game.gps.logInfo(`${itemName} failed due to homebrew rule disabling on criticle success`) : "";
+            if (homebrewEnableNat20 && workflow.isCritical !== true) return debugEnabled ? game.gps.logInfo(`${itemName} failed due to homebrew rule enabling only on criticle success`) : "";
 
             dialogContent = `
                 <div class="gps-dialog-container">
@@ -187,13 +187,13 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                         "priority": 20
                     },
                     {
-                        "key": "flags.midi-qol.advantage.ability.check.all",
+                        "key": "flags.midi-qol.advantage.check.all",
                         "mode": 0,
                         "value": "1",
                         "priority": 20
                     },
                     {
-                        "key": "flags.midi-qol.advantage.ability.save.all",
+                        "key": "flags.midi-qol.advantage.save.all",
                         "mode": 0,
                         "value": "1",
                         "priority": 20

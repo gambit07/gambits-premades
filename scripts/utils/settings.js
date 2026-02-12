@@ -49,7 +49,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -74,7 +74,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -99,7 +99,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -124,7 +124,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -149,7 +149,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -174,7 +174,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -199,7 +199,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -224,7 +224,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -249,7 +249,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -274,7 +274,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -299,7 +299,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -423,7 +423,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -448,7 +448,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -473,7 +473,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -498,7 +498,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -523,7 +523,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -548,7 +548,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -573,7 +573,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -598,7 +598,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -623,7 +623,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -648,7 +648,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -673,7 +673,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -698,7 +698,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                console.error("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
             }
         }
     });
@@ -751,7 +751,7 @@ export function registerSettings() {
         default: 6,
         onChange: value => {
             if (!isNaN(value) && game.settings.get('gambits-premades', 'enableTokenMovementSpeed')) CONFIG.Token.movement.defaultSpeed = value;
-            else console.error("Invalid input for Numeric Setting: Not a number.");
+            else game.gps.logInfo("Invalid input for Numeric Setting: Not a number.");
         }
     });
 
@@ -877,7 +877,7 @@ export class BaseSettingsMenu extends Base {
     const numericValue = Number(inputField.value);
 
     if (isNaN(numericValue)) {
-      console.error("Invalid input: Not a number.");
+      game.gps.logInfo("Invalid input: Not a number.");
       inputField.value = inputField.defaultValue;
     }
   }

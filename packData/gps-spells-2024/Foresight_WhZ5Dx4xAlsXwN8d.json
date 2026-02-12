@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.6",
+      "custom": "2.1.35",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -278,13 +278,13 @@
           "priority": 20
         },
         {
-          "key": "flags.midi-qol.advantage.ability.check.all",
+          "key": "flags.midi-qol.advantage.check.all",
           "mode": 0,
           "value": "1",
           "priority": 20
         },
         {
-          "key": "flags.midi-qol.advantage.ability.save.all",
+          "key": "flags.midi-qol.advantage.save.all",
           "mode": 0,
           "value": "1",
           "priority": 20
@@ -330,6 +330,14 @@
           "hostile": false,
           "onlyOnce": false,
           "wallsBlock": "system"
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        },
+        "core": {
+          "overlay": false
         }
       },
       "_key": "!items.effects!WhZ5Dx4xAlsXwN8d.DaQYicerrenqjSbA"

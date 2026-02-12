@@ -71,7 +71,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
             targetEnemies = targetEnemies.filter(t => workflow.saveRolls?.find(roll => roll.data.actorId === t.actor.id && !roll.formula.includes("kl") && roll.formula.includes("kh")) !== undefined);
 
             if((!targetAllies || targetAllies?.length === 0) && (!targetEnemies || targetEnemies?.length === 0)) {
-                if(debugEnabled) console.error(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
+                if(debugEnabled) game.gps.logInfo(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
                 continue;
             }
 
@@ -141,11 +141,11 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
         }
         else if(workflowType === "attack") {
             if(workflow.token.document.disposition === validTokenPrimary.document.disposition && (!workflow.disadvantage && !workflow.attackRoll.formula.includes("kl") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) {
-                if(debugEnabled) console.error(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
+                if(debugEnabled) game.gps.logInfo(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
                 continue;
             }
             if(workflow.token.document.disposition !== validTokenPrimary.document.disposition && (!workflow.advantage && !workflow.attackRoll.formula.includes("kh") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) {
-                if(debugEnabled) console.error(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
+                if(debugEnabled) game.gps.logInfo(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
                 continue;
             }
 

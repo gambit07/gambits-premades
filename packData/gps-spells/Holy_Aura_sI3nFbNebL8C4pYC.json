@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.1",
+      "custom": "2.1.35",
       "book": "PHB",
       "page": "",
       "license": "",
@@ -425,7 +425,7 @@
       "system": {},
       "changes": [
         {
-          "key": "flags.midi-qol.advantage.ability.save.all",
+          "key": "flags.midi-qol.advantage.save.all",
           "mode": 0,
           "value": "1",
           "priority": 20
@@ -508,6 +508,11 @@
         },
         "gambits-premades": {
           "gpsUuid": "5f7adec6-3c0f-4654-8516-a4a38260ed85"
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
         }
       },
       "_key": "!items.effects!sI3nFbNebL8C4pYC.lztTCZ8yyn1WN8tv"

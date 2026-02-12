@@ -147,7 +147,7 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
     let gmUser = game.gps.getPrimaryGM();
 
     if(!regionUuid || !regionScenario || !tokenUuid) {
-        if(debugEnabled) console.error(`No Region or Token found for ${itemName}`);
+        if(debugEnabled) game.gps.logInfo(`No Region or Token found for ${itemName}`);
         return;
     }
 
@@ -157,11 +157,11 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
     token = tokenDocument?.object;
 
     if (!MidiQOL.isTargetable(token)) {
-        if(debugEnabled) console.error(`Token is not targetable for ${itemName}`);
+        if(debugEnabled) game.gps.logInfo(`Token is not targetable for ${itemName}`);
         return;
     }
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) {
-        if(debugEnabled) console.error(`Token is not a character or creature for ${itemName}`);
+        if(debugEnabled) game.gps.logInfo(`Token is not a character or creature for ${itemName}`);
         return;
     }
 
@@ -169,7 +169,7 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
     let turn = game.combat.round + '-' + game.combat.turn;
     let lastTurn = region.flags['gambits-premades']?.spell?.cloudOfDaggers?.[token.id]?.turn;
     if (turn === lastTurn) {
-        if(debugEnabled) console.error(`Token already damaged this round for ${itemName}`);
+        if(debugEnabled) game.gps.logInfo(`Token already damaged this round for ${itemName}`);
         return;
     }
 

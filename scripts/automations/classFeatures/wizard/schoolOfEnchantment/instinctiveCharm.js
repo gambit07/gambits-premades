@@ -18,7 +18,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
         let targets = canvas.tokens.placeables.filter(t => t.document.uuid !== validTokenPrimary.document.uuid && t.document.uuid !== target.document.uuid && MidiQOL.canSee(target, t) && MidiQOL.computeDistance(target, t, true) <= workflow.item.system.range.value);
 
         if(targets.length === 0) {
-            if(debugEnabled) console.error(`${itemName} for ${validTokenPrimary.actor.name} failed at alternate target within range`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed at alternate target within range`);
             return;
         }
     

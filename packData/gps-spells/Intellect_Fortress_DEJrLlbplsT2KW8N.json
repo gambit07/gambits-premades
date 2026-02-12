@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.1",
+      "custom": "2.1.35",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -279,7 +279,11 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "dnd5e": {},
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    },
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
@@ -311,19 +315,19 @@
           "priority": 20
         },
         {
-          "key": "flags.midi-qol.advantage.ability.save.int",
+          "key": "flags.midi-qol.advantage.save.int",
           "mode": 0,
           "value": "1",
           "priority": 20
         },
         {
-          "key": "flags.midi-qol.advantage.ability.save.wis",
+          "key": "flags.midi-qol.advantage.save.wis",
           "mode": 0,
           "value": "1",
           "priority": 20
         },
         {
-          "key": "flags.midi-qol.advantage.ability.save.cha",
+          "key": "flags.midi-qol.advantage.save.cha",
           "mode": 0,
           "value": "1",
           "priority": 20
@@ -366,6 +370,11 @@
         },
         "core": {
           "overlay": false
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
         }
       },
       "_key": "!items.effects!DEJrLlbplsT2KW8N.1x0dmzyNA4DM8YwN"

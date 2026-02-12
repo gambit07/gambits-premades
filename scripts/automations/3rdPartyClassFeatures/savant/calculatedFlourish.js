@@ -17,7 +17,7 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
     let targetAC = target.actor.system.attributes.ac.value;
     let attackTotal = workflow.attackTotal;
     if (attackTotal >= targetAC) {
-        if(debugEnabled) console.error(`${itemName} failed because attack was a hit`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} failed because attack was a hit`);
         return;
     }
 

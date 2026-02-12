@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.1",
+      "custom": "2.1.35",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -390,34 +390,6 @@
   ],
   "flags": {
     "core": {},
-    "itemacro": {
-      "macro": {
-        "_id": null,
-        "name": "Hideous Laughter",
-        "type": "script",
-        "author": "roRDywD19pu2VxlC",
-        "img": "icons/svg/dice-target.svg",
-        "scope": "global",
-        "command": "if (args[0].macroPass === \"isDamaged\")\n{\nconst activeLaugh = Sequencer.EffectManager.getEffects({ name: \"Laugh\", object: token });\nif(activeLaugh) Sequencer.EffectManager.endEffects({ name: \"Laugh\", object: token });\nconst originItem = await fromUuid(actor.effects.find((eff) => eff.name === \"Hideous Laughter\").origin);\nconst spellDC = originItem.actor.system.attributes.spelldc;\nconst uuid = originItem.actor.uuid;\nconst saveAbility = \"wis\";\n\nlet effectAdv = [{\n\tchanges: [{ key: \"flags.midi-qol.advantage.ability.save.wis\", mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM, value: 1, priority: 20 }],\n\tflags: { \"dae\": { \"token\": actor.uuid, specialDuration: [\"isSave\"] } },\n\tdisabled: false,\n\tname: `Damaged - Advantage on Save`\n}];\nlet checkEffect = actor.effects.find(i => i.name ===  `Damaged - Advantage on Save`);\nif(!checkEffect) await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectAdv });\n\nconst itemData = originItem.clone(\n{\nname: \"Hideous Laughter Saving Throw\",\n  type: \"feat\",\n  effects: [],\nflags: {\n\t\"midi-qol\": {\n\t  noProvokeReaction: true,\n\t  onUseMacroName: null,\n\t  forceCEOff: true\n\t},\n  },\n  system: {\n\tequipped: true,\n\tactionType: \"save\",\n\tsave: { dc: spellDC, ability: saveAbility, scaling: \"flat\" },\n\t\"target.type\": \"self\",\n\tcomponents: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n\tduration: { units: \"inst\", value: undefined },\n  },\n},\n{ keepId:true }\n);\nitemData.system.target.type = \"self\";\nsetProperty(itemData.flags, \"autoanimations.killAnim\", true);\nconst itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: actor });\nconst options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false };\nconst saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\nif (saveResult.failedSaves.size === 0)\n{\n\tconst hasConcApplied = await game.dfreds.effectInterface.hasEffectApplied('Concentrating', uuid);\n\tif (hasConcApplied)\tgame.dfreds.effectInterface.removeEffect({ effectName: 'Concentrating', uuid });\n}\n}\n\nif (args[0].macroPass === \"postSave\")\n{\nconst targetToken = workflow.hitTargets.values().next().value;\nconst targetActor = targetToken.actor;\nconst intScore = targetActor.system.abilities.int.value;\nconst uuid = targetActor.uuid;\n\nif(workflow.failedSaves.size !== 0 && intScore > 4)\n{\nconst hasProneApplied = await game.dfreds.effectInterface.hasEffectApplied('Prone', uuid);\nif (!hasProneApplied) await game.dfreds.effectInterface.addEffect({ effectName: 'Prone', uuid });\n\n//Original Design Author: EskieMoh#2969\n\n//Determine Target facing\nlet facing;\nlet mirrorFace;\n\nif(Tagger.hasTags(targetToken, \"RFace\") && targetToken.document.mirrorX ==  false || !Tagger.hasTags(targetToken, \"RFace\") && targetToken.document.mirrorX ==  true){\n  facing = -1;\n  mirrorFace = false;\n} else {\n  facing = 1;\n  mirrorFace = true;\n}; \n\n//Start Animation\nawait new Sequence()\n\n.sound()\n\t.file(\"assets/sounds/joker-laugh.ogg\")\n\t.fadeInAudio(500)\n\t.fadeOutAudio(500)\n\n.effect()\n.atLocation(token)\n.file(`jb2a.magic_signs.circle.02.enchantment.loop.dark_yellow`)\n.scaleToObject(1.25)\n.rotateIn(180, 600, {ease: \"easeOutCubic\"})\n.scaleIn(0, 600, {ease: \"easeOutCubic\"})\n.loopProperty(\"sprite\", \"rotation\", { from: 0, to: -360, duration: 10000})\n.belowTokens()\n.fadeOut(2000)\n.zIndex(0)\n\n.effect()\n.atLocation(token)\n.file(`jb2a.magic_signs.circle.02.enchantment.loop.dark_yellow`)\n.scaleToObject(1.25)\n.rotateIn(180, 600, {ease: \"easeOutCubic\"})\n.scaleIn(0, 600, {ease: \"easeOutCubic\"})\n.loopProperty(\"sprite\", \"rotation\", { from: 0, to: -360, duration: 10000})\n.belowTokens(true)\n.filter(\"ColorMatrix\", {saturate:-1, brightness:2})\n.filter(\"Blur\", { blurX: 5, blurY: 10 })\n.zIndex(1)\n.duration(1200)\n.fadeIn(200, {ease: \"easeOutCirc\", delay: 500})\n.fadeOut(300, {ease: \"linear\"})\n\n.effect()\n.file(\"jb2a.markers.fear.orange.03\")\n.scaleIn(0, 500, {ease: \"easeOutQuint\"})\n.delay(500)\n.atLocation(token, {offset:{y:-0.2}, gridUnits:true, randomOffset: 1.5})\n.scaleToObject(0.5)\n.zIndex(1)\n.playbackRate(1.5)\n.repeats(5, 200, 200)\n.fadeOut(500)\n.waitUntilFinished(-1500)\n\n.effect()\n.file(\"animated-spell-effects-cartoon.level 01.bless.yellow\")\n.atLocation(targetToken, {randomOffset: 1.2, gridUnits:true})\n.scaleToObject(0.5)\n.repeats(8, 100,100)\n.zIndex(1)\n\n.effect()\n.file(\"animated-spell-effects-cartoon.cantrips.mending.yellow\")\n.atLocation(targetToken)\n.scaleToObject(3)\n.opacity(0.75)\n.filter(\"ColorMatrix\", { saturate: 1,brightness: 1.3, hue: -5 })\n.zIndex(0)\n.waitUntilFinished(-500)\n\n.effect()\n.delay(300)\n.file(\"jb2a.impact.002.orange\")\n.atLocation(targetToken)\n.scaleToObject(2)\n.opacity(1)\n.filter(\"ColorMatrix\", { hue: 6 })\n.zIndex(0)\n\n.effect()\n.file(\"jb2a.particles.inward.white.02.03\")\n.scaleIn(0, 500, {ease: \"easeOutQuint\"})\n.delay(300)\n.fadeOut(1000)\n.atLocation(targetToken)\n.duration(1000)\n.size(1.75, {gridUnits: true})\n.animateProperty(\"spriteContainer\", \"position.y\", {  from:0 , to: -0.5, gridUnits:true, duration: 1000})\n.zIndex(1)\n\n.effect()\n.file(\"animated-spell-effects-cartoon.magic.impact.02\")\n.atLocation(targetToken)\n.scaleToObject(2)\n.opacity(1)\n.zIndex(0)\n.belowTokens()\n\n.play();\n\nnew Sequence()\n\n.effect()\n.name(\"Fear\")\n.file(\"jb2a.markers.fear.dark_orange.03\")\n.attachTo(targetToken,{local: true, bindAlpha: false})\n.scaleToObject(2)\n.opacity(1)\n.zIndex(0)\n.persist()\n\n.animation()\n.on(targetToken)\n.opacity(0)\n\n.effect()\n.name(\"Laugh\")\n.file(\"https://i.imgur.com/SQWSf10.png\")\n.attachTo(targetToken, {offset:{x:0.4*token.document.width, y:-0.45*token.document.width}, gridUnits: true, local: true, bindAlpha: false})\n.loopProperty(\"sprite\", \"rotation\", { from: 0, to: 15, duration: 250, ease: \"easeOutCubic\" })\n.loopProperty(\"sprite\", \"position.y\", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })\n.scaleToObject(0.34)\n.private()\n.persist()\n\n.effect()\n.name(\"Laugh\")\n.file(\"https://i.imgur.com/iWuBQ10.png\")\n.attachTo(targetToken, {offset:{x:0.55*token.document.width, y:0}, gridUnits: true, local: true, bindAlpha: false})\n.loopProperty(\"sprite\", \"rotation\", { from: 0, to: -20, duration: 250,ease: \"easeOutCubic\" })\n.loopProperty(\"sprite\", \"position.y\", { from: 0, to: -0.025, duration: 250, gridUnits: true, pingPong: false })\n.scaleToObject(0.34)\n.private()\n.persist()\n\n.effect()\n.name(\"Laugh\")\n.from(targetToken)\n.scaleToObject(1, {considerTokenScale: true})\n.attachTo(targetToken,{ bindAlpha: false})\n.loopProperty(\"sprite\", \"position.y\", { from: 0, to: 0.01, duration: 150, gridUnits: true, pingPong: true, ease:\"easeOutQuad\" })\n.loopProperty(\"sprite\", \"rotation\", { from: -33, to: 33, duration: 300, ease: \"easeOutCubic\", pingPong: true })\n.rotate(-90*facing)\n.loopProperty(\"sprite\", \"width\", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease:\"easeOutQuad\" })\n.loopProperty(\"sprite\", \"height\", { from: 0, to: 0.015, duration: 150, gridUnits: true, pingPong: true, ease:\"easeOutQuad\"  })\n.persist()\n.waitUntilFinished(-200)\n\n.animation()\n.on(targetToken)\n.opacity(1)\n\n.play()\n}\n}\n\nif(args[0] === \"off\")\n{\n\tconst activeLaugh = Sequencer.EffectManager.getEffects({ name: \"Laugh\", object: token });\n\tconst activeFear = Sequencer.EffectManager.getEffects({ name: \"Fear\", object: token });\n\tif(activeLaugh)\tSequencer.EffectManager.endEffects({ name: \"Laugh\", object: token });\n\tif(activeFear) Sequencer.EffectManager.endEffects({ name: \"Fear\", object: token });\n}\n\nif (args[0].macroPass === \"postActiveEffects\")\n{\nconst targetToken = workflow.hitTargets.values().next().value;\nconst targetActor = targetToken.actor;\nconst intScore = targetActor.system.abilities.int.value;\nconst uuid = actor.uuid;\nif (intScore <= 4) {\n\tui.notifications.warn(\"This creature is not effected, its Intelligence score is too low.\")\n\tawait game.dfreds.effectInterface.removeEffect({ effectName: 'Concentrating', uuid });\n}\n}",
-        "folder": null,
-        "sort": 0,
-        "permission": {
-          "default": 0
-        },
-        "flags": {},
-        "ownership": {
-          "default": 0
-        },
-        "_stats": {
-          "systemId": null,
-          "systemVersion": null,
-          "coreVersion": null,
-          "createdTime": null,
-          "modifiedTime": null,
-          "lastModifiedBy": null
-        }
-      }
-    },
     "midi-qol": {
       "effectActivation": false,
       "forceCEOff": true,
@@ -504,10 +476,6 @@
     "scene-packer": {
       "sourceId": "Actor.w88977HaPVOXN7mP.Item.cuuMI0T9VX1zp8GK",
       "hash": "29a81ef68477e9ad7b4558e10bbcf6018ec33ec5"
-    },
-    "walledtemplates": {
-      "wallsBlock": "globalDefault",
-      "wallRestriction": "globalDefault"
     },
     "dae": {
       "macro": {
@@ -755,15 +723,6 @@
       "isCustomized": false,
       "fromAmmo": false,
       "version": 5
-    },
-    "LocknKey": {
-      "IDKeysFlag": "",
-      "RemoveKeyonUseFlag": false,
-      "LPFormulaFlag": "",
-      "LPFormulaOverrideFlag": false,
-      "LBFormulaFlag": "",
-      "LBFormulaOverrideFlag": false,
-      "ReplacementItemFlag": ""
     },
     "dnd5e": {
       "riders": {

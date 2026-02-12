@@ -6,7 +6,7 @@ export async function counterspell({ workflowData,workflowType,workflowCombat })
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let itemName = "Counterspell";
     if(!workflow.activity.consumption.spellSlot) {
-        if(debugEnabled) console.error(`${itemName} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
+        if(debugEnabled) game.gps.logInfo(`${itemName} failed no activity spell slot consumption (assumed activity is not an initial spell cast)`);
         return;
     }
     let dialogId = gpsUuid;

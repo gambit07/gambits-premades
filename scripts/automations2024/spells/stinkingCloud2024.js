@@ -10,7 +10,7 @@ export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, 
     let itemName = "Stinking Cloud";
 
     if(!tokenUuid || !regionUuid || !regionScenario) {
-        if(debugEnabled) console.error(`No Region or Token found for ${itemName}`);
+        if(debugEnabled) game.gps.logInfo(`No Region or Token found for ${itemName}`);
         return;
     }
 
@@ -19,11 +19,11 @@ export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, 
     let token = tokenDocument?.object;
 
     if (!MidiQOL.isTargetable(token)) {
-        if(debugEnabled) console.error(`Token is not targetable for ${itemName}`);
+        if(debugEnabled) game.gps.logInfo(`Token is not targetable for ${itemName}`);
         return;
     }
     if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) {
-        if(debugEnabled) console.error(`Token is not a character or creature for ${itemName}`);
+        if(debugEnabled) game.gps.logInfo(`Token is not a character or creature for ${itemName}`);
         return;
     }
 
@@ -32,7 +32,7 @@ export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, 
     let turn = game.combat.round + '-' + game.combat.turn;
     let lastTurn = region.flags['gambits-premades']?.spell?.stinkingCloud?.[token.id]?.turn;
     if (turn === lastTurn) {
-        if(debugEnabled) console.error(`Token already made a saving throw this round for ${itemName}`);
+        if(debugEnabled) game.gps.logInfo(`Token already made a saving throw this round for ${itemName}`);
         return;
     }
 

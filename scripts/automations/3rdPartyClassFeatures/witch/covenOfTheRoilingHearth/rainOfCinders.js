@@ -18,7 +18,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
 
     for (const validTokenPrimary of findValidTokens) {
         if(!validTokenPrimary.actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa")) {
-            if(debugEnabled) console.error(`${itemName} for ${validTokenPrimary.actor.name} failed at parent effect active`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed at parent effect active`);
             continue;
         }
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);

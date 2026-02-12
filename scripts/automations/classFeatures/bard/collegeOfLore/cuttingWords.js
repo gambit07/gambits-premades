@@ -106,11 +106,11 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
         }
         else if(workflowType === "attack") {
             if(workflow.token.document.disposition === validTokenPrimary.document.disposition) {
-                if(debugEnabled) console.error(`${itemName} for ${validTokenPrimary.actor.name} failed at failed at token disposition check`);
+                if(debugEnabled) game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed at failed at token disposition check`);
                 continue;
             }
             if(((workflow.attackTotal - bardicNum) >= workflow.targets.first()?.actor.system.attributes.ac.value) && homebrewDisableMaxMiss) {
-                if(debugEnabled) console.error(`${itemName} for ${validTokenPrimary.actor.name} failed at homebrew max bardic die would not effect hit`);
+                if(debugEnabled) game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed at homebrew max bardic die would not effect hit`);
                 continue;
             }
 

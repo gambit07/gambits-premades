@@ -5,7 +5,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         let meleeAttack = ((workflow.activity?.actionType === 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType === 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(), game.gps.convertFromFeet({range:6})).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
         if (!meleeAttack) return;
         if(game.combat?.current.tokenId !== token.id) {
-            if(debugEnabled) console.error(`Shield Bash for ${actor.name} failed due to not tokens turn in combat`);
+            if(debugEnabled) game.gps.logInfo(`Shield Bash for ${actor.name} failed due to not tokens turn in combat`);
             return;
         }
 
@@ -28,22 +28,65 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         let dialogContent = `
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
-                    <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Would you like to use Shield Bash to cause your target to make a saving throw to potentially be Pushed (${pushRangeText}) or to go Prone?</p>
-                        <div>
-                            <div class="gps-dialog-flex">
-                                <table style="background-color: rgba(181, 99, 69, 0.2);" width="100%"><tbody><tr><th>Prone</th><th>Push</th></tr><tr><td style="text-align: center;vertical-align: middle;"><input type="radio" value="prone" id="prone" name="ability-check" style="margin: 0 auto;"></td><td style="text-align: center;vertical-align: middle;"><input type="radio" value="push" id="push" name="ability-check" style="margin: 0 auto;"></td></tr></tbody></table>
-                                <div id="image-container" class="gps-dialog-image-container">
-                                    <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
-                                </div>
-                            </div>
+                <div class="gps-dialog-content">
+                    <p class="gps-dialog-paragraph">
+                    Would you like to use Shield Bash to cause your target to make a saving throw to potentially be Pushed (${pushRangeText}) or to go Prone?
+                    </p>
+
+                    <div>
+                    <div class="gps-dialog-flex">
+                        <table class="gps-dialog-ability-table" width="100%">
+                        <thead>
+                            <tr>
+                            <th>Prone</th>
+                            <th>Push</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td class="gps-dialog-radio-cell">
+                                <label class="gps-dialog-radio-wrap" for="prone_${dialogId}">
+                                <input
+                                    type="radio"
+                                    value="prone"
+                                    id="prone_${dialogId}"
+                                    name="ability-check"
+                                    class="gps-dialog-radio"
+                                    aria-label="Prone"
+                                >
+                                <span class="gps-dialog-radio-ui" aria-hidden="true"></span>
+                                </label>
+                            </td>
+
+                            <td class="gps-dialog-radio-cell">
+                                <label class="gps-dialog-radio-wrap" for="push_${dialogId}">
+                                <input
+                                    type="radio"
+                                    value="push"
+                                    id="push_${dialogId}"
+                                    name="ability-check"
+                                    class="gps-dialog-radio"
+                                    aria-label="Push"
+                                >
+                                <span class="gps-dialog-radio-ui" aria-hidden="true"></span>
+                                </label>
+                            </td>
+                            </tr>
+                        </tbody>
+                        </table>
+
+                        <div id="image-container" class="gps-dialog-image-container">
+                        <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                         </div>
                     </div>
+                    </div>
                 </div>
+                </div>
+
                 <div class="gps-dialog-button-container">
-                    <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
-                    </button>
+                <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                </button>
                 </div>
             </div>
         `;
@@ -82,19 +125,19 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "b32e3d48-034b-4a56-95b4-f392a525f299");
 
         if(workflow.saveActivityDetails?.ability?.first() !== "dex") {
-            if(debugEnabled) console.error(`${item.name} Interpose Shield for ${actor.name} failed because save is not dex`);
+            if(debugEnabled) game.gps.logInfo(`${item.name} Interpose Shield for ${actor.name} failed because save is not dex`);
             return;
         }
         if(!token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) {
-            if(debugEnabled) console.error(`${item.name} Interpose Shield for ${actor.name} failed because shield is not equipped`);
+            if(debugEnabled) game.gps.logInfo(`${item.name} Interpose Shield for ${actor.name} failed because shield is not equipped`);
             return;
         }
         if(MidiQOL.hasUsedReaction(actor)) {
-            if(debugEnabled) console.error(`${item.name} Interpose Shield for ${actor.name} failed at reaction available`);
+            if(debugEnabled) game.gps.logInfo(`${item.name} Interpose Shield for ${actor.name} failed at reaction available`);
             return;
         }
         if(MidiQOL.checkIncapacitated(effectOriginToken)) {
-            if(debugEnabled) console.error(`${item.name} Interpose Shield for ${actor.name} failed because token is incapacitated`);
+            if(debugEnabled) game.gps.logInfo(`${item.name} Interpose Shield for ${actor.name} failed because token is incapacitated`);
             return;
         }
 

@@ -12,17 +12,17 @@ export async function stormsThunder2024({ speaker, actor, token, character, item
         let range = game.gps.convertFromFeet({range: 60});
 
         if(reactionCheck && MidiQOL.hasUsedReaction(actor)) {
-            if(debugEnabled) console.error(`${itemName} for ${token.actor.name} failed at reaction available`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${token.actor.name} failed at reaction available`);
             return;
         }
 
         else if(measuredDistance === -1 || (measuredDistance > range)) {
-            if(debugEnabled) console.error(`${itemName} for ${token.actor.name} failed at range check`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${token.actor.name} failed at range check`);
             return;
         }
 
         else if(MidiQOL.checkIncapacitated(t)) {
-            if(debugEnabled) console.error(`${itemName} for ${token.actor.name} failed at is incapacitated`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${token.actor.name} failed at is incapacitated`);
             return;
         }
 

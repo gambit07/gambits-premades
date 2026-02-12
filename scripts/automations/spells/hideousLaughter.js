@@ -7,7 +7,7 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
 
         if(args[0].macroPass === "isDamaged") {
             let effectAdv = [{
-                changes: [{ key: "flags.midi-qol.advantage.ability.save.wis", mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM, value: 1, priority: 20 }],
+                changes: [{ key: "flags.midi-qol.advantage.save.wis", mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM, value: 1, priority: 20 }],
                 flags: { "dae": { "token": actor.uuid, specialDuration: ["isSave"] } },
                 disabled: false,
                 name: `Damaged - Advantage on Save`

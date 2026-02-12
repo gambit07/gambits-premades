@@ -34,5 +34,5 @@ export async function fireball({ speaker, actor, token, character, item, args, s
         let states = {preActiveEffects, postDamageRoll};
         if (typeof workflow != "undefined") await states[workflow.macroPass]();
         else await states[args[0]]();
-    } catch(e) { console.error(e); }
+    } catch(e) { game.gps.logInfo(e); }
 }

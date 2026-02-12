@@ -559,6 +559,6 @@ export async function weaponAnimations({enableTrail = true, enableImpact = true,
       }
   }
   catch (err) {
-      console.error("Error in weaponAnimations, likely missing JB2A Patreon:", err);
+      game.gps.logInfo("Error in weaponAnimations, likely missing JB2A Patreon:", err);
   }
 }

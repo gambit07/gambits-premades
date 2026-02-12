@@ -12,7 +12,6 @@ export async function sleep2024({ speaker, actor, token, character, item, args, 
     else if (args?.[0] === "off") {
         let gmUser = game.gps.getPrimaryGM();
         item = await fromUuid(args[2]);
-        console.log(token, "token")
         await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
     }
 }
