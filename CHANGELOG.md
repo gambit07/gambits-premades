@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.36] - 2026-02-12
+- Bugfixes:
+  - Resolved an item being duplicated in compendium
+
 ## [v2.1.35] - 2026-02-12
 - Updates:
   - Updated a number of items to resolve Midi's advantage/check flag deprecations
