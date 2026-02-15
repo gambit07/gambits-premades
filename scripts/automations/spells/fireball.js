@@ -22,8 +22,8 @@ export async function fireball({ speaker, actor, token, character, item, args, s
         else if (["slashing", "bludgeoning", "piercing"].includes(damageType)) animColor = "purple";
 
         const templateData = fromUuidSync(workflow.templateUuid);
-        let cast = game.gps.animation.fireball({type: "cast", token, templateData, color: animColor});
-        let explosion = game.gps.animation.fireball({type: "explosion", token, templateData, color: animColor});
+        let cast = game.gps.animation.fireball({type: "cast", token, templateData, color: animColor, sound: {enabled: true, volume: 1.0}});
+        let explosion = game.gps.animation.fireball({type: "explosion", token, templateData, color: animColor, sound: {enabled: true, volume: 1.0}});
 
         await cast.play();
         await explosion.play();
