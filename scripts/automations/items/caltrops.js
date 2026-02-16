@@ -34,7 +34,7 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
                 <div class="gps-dialog-content">
                     <div>
                         <div class="gps-dialog-flex">
-                            <p class="gps-dialog-paragraph">${token.actor.name} moved through caltrops, are they moving at half speed?</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Items.Caltrops.ConfirmHalfSpeed", { actorName: token.actor.name })}</p>
                             <div id="image-container" class="gps-dialog-image-container">
                                 <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                             </div>
@@ -44,7 +44,7 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
             </div>
             <div class="gps-dialog-button-container">
                 <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                 </button>
             </div>
         </div>
@@ -95,7 +95,7 @@ export async function caltrops({tokenUuid, regionUuid, regionScenario, originX, 
                 let chatData = {
                     user: actorPlayer.id,
                     speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: `${token.actor.name} takes 1 point of piercing damage. <div><img src="${token.actor.img}" width="30" height="30" style="border:0px"></div></div>`
+                    content: `${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Items.Caltrops.PiercingDamageTaken", { actorName: token.actor.name, damage: 1 })} <div><img src="${token.actor.img}" width="30" height="30" style="border:0px"></div></div>`
                 };
                 ChatMessage.create(chatData);
             }

@@ -9,7 +9,7 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
             const hasDeafened = target.document.hasStatusEffect("deafened");
             const hasReactionUsed = MidiQOL.hasUsedReaction(target.actor);
             let actorPlayer = MidiQOL.playerForActor(token.actor);
-            let content = `<span style='text-wrap: wrap;'>The target is deafened and automatically suceeds its saving throw.<br><img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+            let content = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.DissonantWhispers.TargetAutoSaveSuccess")}<br><img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
             if (hasDeafened) {
                 let chatData = {

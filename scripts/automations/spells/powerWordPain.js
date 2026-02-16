@@ -3,7 +3,7 @@ export async function powerWordPain({ speaker, actor, token, character, item, ar
         const targets = workflow.targets;
         for(let target of targets) {
             if(target.actor.system.attributes.hp.value > 100 || target.actor.system.traits.ci.value.has("charmed")) {
-                ui.notifications.warn("The target has more than 100 hit points or is immune to Charmed.");
+                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.PowerWordPain.TargetMoreThan100"));
                 continue;
             }
             else {
@@ -103,7 +103,7 @@ export async function powerWordPain({ speaker, actor, token, character, item, ar
         let saveRoll = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: macroItem.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
         if(saveRoll?.failedSaves?.size !== 0) {
             workflow.aborted = true;
-            ui.notifications.warn("You were unable to save, your spell fails and is wasted.");
+            ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.PowerWordPain.UnableSave"));
         }
     }
     else if (args[0] === "each" && args[3].turn === "endTurn") {

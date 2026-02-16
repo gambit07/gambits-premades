@@ -21,7 +21,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent = `
@@ -30,7 +30,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your reaction to use ${itemProperName}?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.TemporalShunt.Prompts.UseYourReaction.Default", { itemName: itemProperName })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
@@ -40,13 +40,13 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a spell or attack triggering ${itemProperName}.</span>`;
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.TemporalShunt.ReactionAvailableAttackTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`;
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -103,7 +103,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                     <div class="gps-dialog-container">
                         <div class="gps-dialog-section">
                             <div class="gps-dialog-content">
-                                <p class="gps-dialog-paragraph">What other targets would you like to be effected by ${itemProperName}? You can select up to ${numTargets} additional ${numTargets === 1 ? 'target' : 'targets'} below.</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.TemporalShunt.SelectAdditionalTargets", { itemProperName: itemProperName, numTargets: numTargets, targetWord: game.i18n.localize(numTargets === 1 ? "GAMBITSPREMADES.UI.Target" : "GAMBITSPREMADES.UI.Targets") })}</p>
                                 <div>
                                     <div class="gps-dialog-flex">
                                         <table style="background-color: rgba(181, 99, 69, 0.2);" width="100%"><tbody>${targetRows}</tbody></table>
@@ -116,7 +116,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                         </div>
                         <div class="gps-dialog-button-container">
                             <button id="pauseButton_${dialogId}-1" type="button" class="gps-dialog-button">
-                                <i class="fas fa-pause" id="pauseIcon_${dialogId}-1" style="margin-right: 5px;"></i>Pause
+                                <i class="fas fa-pause" id="pauseIcon_${dialogId}-1" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                             </button>
                         </div>
                     </div>
@@ -146,7 +146,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                 failedTarget = await fromUuid(failedTarget.document.uuid);
                 failedTarget = failedTarget.object;
 
-                chatContent = `<span style='text-wrap: wrap;'>The targets ${workflowType} roll was successfully interrupted and they disappear.<br><img src="${failedTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.TemporalShunt.TargetRollInterrupted", { workflowType: workflowType })}<br><img src="${failedTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                 await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
                 

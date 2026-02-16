@@ -49,7 +49,7 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
             let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
             let itemProperName = chosenItem?.name;
             const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-            const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+            const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
             
             browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
@@ -61,41 +61,14 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
 
             let dialogContent = `
                 <style>
-                #gps-checkbox {
-                    position: absolute;
-                    opacity: 0;
-                    width: 0;
-                    height: 0;
-                }
-
-                #gps-checkbox + label {
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                }
-
-                #gps-checkbox + label::before {
-                    content: "\\f6a9";
-                    font-family: "Font Awesome 5 Free";
-                    font-weight: 400; /* Regular (outlined) style */
-                    font-size: 20px;
-                    margin-right: 5px;
-                    line-height: 1;
-                    vertical-align: middle;
-                }
-
-                #gps-checkbox:checked + label::before {
-                    content: "\\f6a9";
-                    font-family: "Font Awesome 5 Free";
-                    font-weight: 900; /* Solid (filled) style */
-                }
+                #gps-checkbox { position: absolute; opacity: 0; width: 0; height: 0; } #gps-checkbox + label { display: flex; align-items: center; cursor: pointer; } #gps-checkbox + label::before { content: "\\f6a9"; font-family: "Font Awesome 5 Free"; font-weight: 400; font-size: 20px; margin-right: 5px; line-height: 1; vertical-align: middle; } #gps-checkbox:checked + label::before { content: "\\f6a9"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
                 </style>
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use your reaction to ${itemProperName}?</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations2024.Spells.Counterspell2024.Prompts.UseYourReaction.Default", { itemName: itemProperName })}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
@@ -106,13 +79,13 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
             `;
     
-            let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a spell triggering ${itemProperName}.</span>`;
+            let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableSpellTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`;
             let chatData = { user: gmUser, content: content, roll: false };
             let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
     
@@ -163,10 +136,10 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
                 if(!saveCheck) continue;
                 
                 if (saveCheck.failedSaves.size !== 0) {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature failed its saving throw and was counterspelled.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations2024.Spells.Counterspell2024.CounterspellSuccess")}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 }
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature succeeded its saving throw and was not counterspelled.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations2024.Spells.Counterspell2024.CounterspellFailed")}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     csFailure = true;
                 }
 
@@ -215,7 +188,7 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
                 let chosenItem = validTokenSecondary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
                 let itemProperName = chosenItem?.name;
                 const dialogTitlePrimary = `${validTokenSecondary.actor.name} | ${itemProperName}`;
-                const dialogTitleGM = `Waiting for ${validTokenSecondary.actor.name}'s selection | ${itemProperName}`;
+                const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenSecondary.actor.name, itemName: itemProperName });
                 browserUser = game.gps.getBrowserUser({ actorUuid: validTokenSecondary.actor.uuid });
                 
                 const currentIndex = findValidTokens.indexOf(validTokenSecondary);
@@ -226,41 +199,14 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
 
                 let dialogContent = `
                     <style>
-                    #gps-checkbox {
-                        position: absolute;
-                        opacity: 0;
-                        width: 0;
-                        height: 0;
-                    }
-
-                    #gps-checkbox + label {
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                    }
-
-                    #gps-checkbox + label::before {
-                        content: "\\f6a9";
-                        font-family: "Font Awesome 5 Free";
-                        font-weight: 400; /* Regular (outlined) style */
-                        font-size: 20px;
-                        margin-right: 5px;
-                        line-height: 1;
-                        vertical-align: middle;
-                    }
-
-                    #gps-checkbox:checked + label::before {
-                        content: "\\f6a9";
-                        font-family: "Font Awesome 5 Free";
-                        font-weight: 900; /* Solid (filled) style */
-                    }
+                    #gps-checkbox { position: absolute; opacity: 0; width: 0; height: 0; } #gps-checkbox + label { display: flex; align-items: center; cursor: pointer; } #gps-checkbox + label::before { content: "\\f6a9"; font-family: "Font Awesome 5 Free"; font-weight: 400; font-size: 20px; margin-right: 5px; line-height: 1; vertical-align: middle; } #gps-checkbox:checked + label::before { content: "\\f6a9"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
                     </style>
                     <div class="gps-dialog-container">
                         <div class="gps-dialog-section">
                             <div class="gps-dialog-content">
                                 <div>
                                     <div class="gps-dialog-flex">
-                                        <p class="gps-dialog-paragraph">Would you like to use your reaction to ${itemProperName}?</p>
+                                        <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations2024.Spells.Counterspell2024.Prompts.UseYourReaction.Default", { itemName: itemProperName })}</p>
                                         <div id="image-container" class="gps-dialog-image-container">
                                             <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                         </div>
@@ -271,13 +217,13 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
                         </div>
                         <div class="gps-dialog-button-container">
                             <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                                <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                                <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                             </button>
                         </div>
                     </div>
                 `;
     
-            let content = `<span style='text-wrap: wrap;'><img src="${validTokenSecondary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenSecondary.actor.name} has a reaction available for a spell triggering ${itemProperName}.</span>`;
+            let content = `<span style='text-wrap: wrap;'><img src="${validTokenSecondary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableSpellTrigger", { actorName: validTokenSecondary.actor.name, itemProperName: itemProperName })}</span>`;
             let chatData = { user: gmUser, content: content, roll: false };
             let notificationMessageSecondary = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
     
@@ -329,10 +275,10 @@ export async function counterspell2024({ workflowData,workflowType,workflowComba
                 if(!saveCheck) continue;
                 
                 if (saveCheck.failedSaves.size !== 0) {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature failed its saving throw and was counterspelled.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations2024.Spells.Counterspell2024.CounterspellSuccess")}<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 }
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature succeeded its saving throw and was not counterspelled.<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations2024.Spells.Counterspell2024.CounterspellFailed")}<br><img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     csFailure = true;
                 }
 
@@ -374,11 +320,15 @@ function getSubtleSpell({validToken}) {
     if(subtleSpell) itemSorcery = validToken.actor.items.find(i => (i.identifier === "sorcery-points" || i.identifier === "font-of-magic" || i.identifier === "metamagic-adept") && i.system.uses?.max && i.system.uses?.spent < i.system.uses?.max);
 
     if(itemSorcery) {
+        const pointsRemaining = itemSorcery.system.uses.max - itemSorcery.system.uses.spent;
+        const pointsLabel = game.i18n.localize(pointsRemaining === 1 ? "GAMBITSPREMADES.UI.Point" : "GAMBITSPREMADES.UI.Points");
+        const subtleSpellLabel = game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.Counterspell.SubtleSpellRemaining", { pointsRemaining, pointsLabel });
+
         dialogSubtle = `
             <div style="display: flex; align-items: center;">
                 <input type="checkbox" id="gps-checkbox" style="vertical-align: middle;"/>
                 <label for="gps-checkbox">
-                    Use Subtle Spell? | ${ itemSorcery.system.uses.max - itemSorcery.system.uses.spent } ${ itemSorcery.system.uses.max - itemSorcery.system.uses.spent > 1 ? "Points" : "Point" } Remaining
+                    ${subtleSpellLabel}
                 </label>
             </div>
         `;

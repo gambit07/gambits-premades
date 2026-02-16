@@ -40,7 +40,7 @@ export async function freeSpellUse({ item, actor, activity }) {
     const isActivityUse = !isItemUse && targets.some(t => t.type === "activityUses");
     const isCounterMode = isItemUse || isActivityUse;
 
-    const genericEffectName = `${item.name}: Long Rest Charge Used`;
+    const genericEffectName = game.i18n.format("GAMBITSPREMADES.Effects.Utils.Helpers.LongRestChargeUsed", { itemName: item.name });
 
     const uses = isItemUse ? item?.system?.uses : isActivityUse ? activity?.uses : null;
     const spent = Number(uses?.spent ?? 0);
@@ -49,7 +49,8 @@ export async function freeSpellUse({ item, actor, activity }) {
     const availableUses = isCounterMode ? (max > 0 && spent < max) : false;
 
     const restModeKey = isCounterMode ? (uses?.recovery?.[0]?.period ?? "lr") : "lr";
-    const restModeName = restModeKey === "sr" ? "Short Rest" : restModeKey === "lr" ? "Long Rest" : "Daily";
+    const isDaily = !(restModeKey === "sr" || restModeKey === "lr");
+    const restModeNameLocalized = restModeKey === "sr" ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.ShortRest") : restModeKey === "lr" ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.LongRest") : game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Daily");
     const specialDuration = restModeKey === "sr" ? ["shortRest"] : restModeKey === "lr" ? ["longRest"] : ["newDay"];
 
     if (isCounterMode) {
@@ -59,14 +60,14 @@ export async function freeSpellUse({ item, actor, activity }) {
         if (alreadyGeneric) return false;
     }
 
-    const effectNameCurrent = isCounterMode ? `${item.name}: ${spent}/${max} ${restModeName} Charges Used` : genericEffectName;
+    const effectNameCurrent = isCounterMode ? `${item.name}: ${spent}/${max} ${restModeNameLocalized} Charges Used` : genericEffectName;
 
-    const effectNameNext = isCounterMode ? `${item.name}: ${spent + 1}/${max} ${restModeName} Charges Used` : genericEffectName;
+    const effectNameNext = isCounterMode ? `${item.name}: ${spent + 1}/${max} ${restModeNameLocalized} Charges Used` : genericEffectName;
 
-    const remainingText = isCounterMode ? (remaining > 1 ? `You have ${remaining} uses remaining.` : remaining === 1 ? `You have ${remaining} use remaining.` : ``) : `This grants one free use ${restModeName === "Daily" ? restModeName : `per ${restModeName}`}.`;
+    const remainingText = isCounterMode ? (remaining > 1 ? game.i18n.format("GAMBITSPREMADES.ChatMessages.Utils.Helpers.UsesRemaining", { remaining: remaining }) : remaining === 1 ? game.i18n.format("GAMBITSPREMADES.ChatMessages.Utils.Helpers.Remaining", { remaining: remaining }) : ``) : game.i18n.format("GAMBITSPREMADES.Dialogs.Utils.Helpers.ThisGrantsOneFreeUse", { restModeText: isDaily ? restModeNameLocalized : game.i18n.format("GAMBITSPREMADES.ChatMessages.Utils.Helpers.Per", { restModeName: restModeNameLocalized }) });
 
     const result = await foundry.applications.api.DialogV2.wait({
-        window: { title: `Free ${item.name} Use` },
+        window: { title: game.i18n.format("GAMBITSPREMADES.Dialogs.Common.FreeUse", { itemName: item.name }) },
         content: `
         <div class="gps-dialog-container">
             <div class="gps-dialog-section">
@@ -74,8 +75,7 @@ export async function freeSpellUse({ item, actor, activity }) {
                 <div>
                 <div class="gps-dialog-flex">
                     <p class="gps-dialog-paragraph">
-                    Would you like to activate a free use of ${item.name}? It will be cast at its base level.
-                    ${remainingText}
+                    ${game.i18n.format("GAMBITSPREMADES.Dialogs.Utils.Helpers.PromptFreeUse", { itemName: item.name, remainingText: remainingText })}
                     </p>
                     <div id="image-container" class="gps-dialog-image-container">
                     <img src="${item.img}" class="gps-dialog-image">
@@ -89,7 +89,7 @@ export async function freeSpellUse({ item, actor, activity }) {
         buttons: [
         {
             action: "Yes",
-            label: "Yes",
+            label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Yes"),
             callback: async () => {
             if (isCounterMode) {
                 const prevCount = actor.appliedEffects.find(e => e.name === effectNameCurrent);
@@ -108,7 +108,7 @@ export async function freeSpellUse({ item, actor, activity }) {
                 flags: { dae: { specialDuration } }
             };
 
-            ui.notifications.info(`You used your ${restModeName} cast option to initiate ${item.name} and did not use a spell slot. The spell was cast at its base level.`);
+            ui.notifications.info(game.i18n.format("GAMBITSPREMADES.Notifications.Helpers.CastOptionNoSlotConsumed", { restModeName: restModeName, name: item.name }));
 
             await actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 
@@ -118,7 +118,7 @@ export async function freeSpellUse({ item, actor, activity }) {
             return true;
             }
         },
-        { action: "No", label: "No", callback: async () => false }
+        { action: "No", label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.No"), callback: async () => false }
         ],
         close: async () => false,
         rejectClose: false
@@ -688,7 +688,7 @@ export async function process3rdPartyReactionDialog({
       const checkedBoxes = dialogElement.querySelectorAll("input.enemy-tokens:checked");
       if (checkedBoxes.length > numTargets) {
         event.target.checked = false;
-        ui.notifications.warn(`You can only select up to ${numTargets} targets.`);
+        ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Helpers.CanOnlySelectUp", { numTargets: numTargets }));
       }
     }
 
@@ -788,7 +788,7 @@ export async function process3rdPartyReactionDialog({
     buttons: [
       {
         action: "yes",
-        label: "Yes",
+        label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Yes"),
         icon: "fas fa-check",
         classes: ["default"],
         callback: async (event, button, dialog) => {
@@ -858,7 +858,7 @@ export async function process3rdPartyReactionDialog({
       },
       {
         action: "no",
-        label: `No`,
+        label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.No"),
         icon: "fas fa-times",
         classes: ["default"],
         default: true,
@@ -1446,14 +1446,14 @@ export async function ritualSpellUse({ workflowUuid }) {
     if(!workflow.item.system.properties.has("ritual")) return;
 
     await foundry.applications.api.DialogV2.wait({
-        window: { title: `Ritual ${workflow.item.name} Use` },
+        window: { title: game.i18n.format("GAMBITSPREMADES.Dialogs.Utils.Helpers.RitualUse", { itemName: workflow.item.name }) },
         content: `
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to cast ${workflow.item.name} ritually? This will increase its cast time (${workflow.item.system.activation.cost} ${workflow.item.system.activation.type}) by 10 minutes.</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Utils.Helpers.PromptRitualCast", { itemName: workflow.item.name, activationCost: workflow.item.system.activation.cost, activationType: workflow.item.system.activation.type })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img src="${workflow.item.img}" class="gps-dialog-image">
                                 </div>
@@ -1465,7 +1465,7 @@ export async function ritualSpellUse({ workflowUuid }) {
         `,
         buttons: [{
             action: "Yes",
-            label: "Yes",
+            label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Yes"),
             callback: async (event, button, dialog) => {
                 //workflow.config.spell = workflow.config.spell || {};
                 workflow.config.consume = workflow.config.consume || {};
@@ -1473,7 +1473,7 @@ export async function ritualSpellUse({ workflowUuid }) {
                 workflow.config.consume.spellSlot = false;
                 workflow.config.midiOptions.configureDialog = false;
 
-                let content = `<span style='text-wrap: wrap;'><img src="${workflow.actor.img}" style="width: 25px; height: auto;" /> ${workflow.actor.name} cast ${workflow.item.name} ritually.</span>`
+                let content = `<span style='text-wrap: wrap;'><img src="${workflow.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Utils.Helpers.CastRitually", { actorName: workflow.actor.name, itemName: workflow.item.name })}</span>`
                 let chatData = {
                 user: getPrimaryGM(),
                 content: content,
@@ -1485,7 +1485,7 @@ export async function ritualSpellUse({ workflowUuid }) {
         },
         {
             action: "No",
-            label: "No",
+            label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.No"),
             callback: async () => false
         }],
         close: async (event, dialog) => {

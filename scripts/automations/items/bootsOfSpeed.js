@@ -3,14 +3,14 @@ export async function bootsOfSpeed({ speaker, actor, token, character, item, arg
         if(!actor.appliedEffects.some(e => e.name === "Boots of Speed")) return;
 
         await foundry.applications.api.DialogV2.wait({
-            window: { title: "Boots of Speed" },
+            window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Items.BootsOfSpeed.Windowtitle") },
             content: `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to disable Boots of Speed?</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Items.BootsOfSpeed.Prompt")}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img src="${item.img}" class="gps-dialog-image">
                                     </div>
@@ -23,7 +23,7 @@ export async function bootsOfSpeed({ speaker, actor, token, character, item, arg
             buttons: [
             {
                 action: "Yes",
-                label: "Yes",
+                label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Yes"),
                 callback: async () => {
                     await updateEffect(actor,item);
                     workflow.aborted = true;
@@ -31,7 +31,7 @@ export async function bootsOfSpeed({ speaker, actor, token, character, item, arg
             },
             {
                 action: "No",
-                label: "No",
+                label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.No"),
                 callback: async () => {
                     return false;
                 }

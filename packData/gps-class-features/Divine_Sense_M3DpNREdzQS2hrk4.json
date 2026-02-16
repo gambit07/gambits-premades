@@ -7,9 +7,12 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.1",
+      "custom": "2.1.37",
       "revision": 1,
-      "rules": "2014"
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
     },
     "cover": null,
     "crewed": false,
@@ -524,7 +527,22 @@
       "LBFormulaOverrideFlag": false,
       "ReplacementItemFlag": ""
     },
-    "dnd5e": {}
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    },
+    "chris-premades": {
+      "customConfig": [
+        {
+          "value": "playAnimation",
+          "label": "CHRISPREMADES.Config.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animation"
+        }
+      ]
+    }
   },
   "effects": [],
   "img": "icons/creatures/eyes/human-single-blue.webp",

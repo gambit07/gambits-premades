@@ -1,5 +1,5 @@
 export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, regionStatus, speaker, actor, character, item, args, scope, workflow, options, userId}) {
-    if(!game.combat) return ui.notifications.warn("Cloud of Daggers requires an active combat.")
+    if(!game.combat) return ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Common.RequiresActiveCombat", { effectName: workflow?.item?.name ?? item?.name ?? game.i18n.localize("GAMBITSPREMADES.Notifications.Common.ThisEffect") }))
 
     if(args?.[0]?.macroPass === "templatePlaced") {
         const template = await fromUuid(workflow.templateUuid);

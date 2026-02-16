@@ -12,7 +12,7 @@ export async function staffOfTheRootedHills({ speaker, actor, token, character, 
                 await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${target.document.uuid}`, status: "restrained", active: true });
             }
 
-            let content = `The creature is restrained by the Staff of the Rooted Hills.`
+            let content = game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Items.StaffOfTheRootedHills.RestrainedBy")
             let actorPlayer = MidiQOL.playerForActor(actor);
             let chatData = {
                 user: actorPlayer.id,

@@ -1,9 +1,9 @@
 <div class="gps-settings flexcol">
   <div class="gps-settings-header flexrow">
-    <div class="gps-settings-item-th">Class Features</div>
-    <div class="gps-settings-enable-th">Enable</div>
+    <div class="gps-settings-item-th">{{localize "GAMBITSPREMADES.SettingsMenu.Headers.Feature"}}</div>
+    <div class="gps-settings-enable-th">{{localize "GAMBITSPREMADES.SettingsMenu.Headers.Enable"}}</div>
     {{#if hasTimeoutColumn}}
-    <div class="gps-settings-timeout-th">Timeout (s)</div>
+    <div class="gps-settings-timeout-th">{{localize "GAMBITSPREMADES.SettingsMenu.Headers.TimeoutSeconds"}}</div>
     {{/if}}
   </div>
 
@@ -14,8 +14,8 @@
     >
       <div class="gps-settings-row-text flexrow clickable {{#if this.children}}has-children{{/if}}" data-action="toggleCollapse" data-content-id="collapsible-content-{{this.id}}">
         <label for="enable-{{this.id}}">
-          {{this.name}}
-          <br/><span class="gps-settings-small-text">{{this.description}}</span>
+          {{localize this.name}}
+          <br/><span class="gps-settings-small-text">{{localize this.description}}</span>
         </label>
       </div>
       {{#if this.children}}
@@ -55,7 +55,7 @@
         {{#each this.children}}
           <div class="gps-settings-row-child flexrow">
             <div class="gps-settings-column-item">
-              <label for="enable-{{this.id}}-child">{{this.name}}<br/><span class="gps-settings-small-text">{{this.description}}</span></label>
+              <label for="enable-{{this.id}}-child">{{localize this.name}}<br/><span class="gps-settings-small-text">{{localize this.description}}</span></label>
             </div>
             <div class="gps-settings-column-enable">
               {{#if (eq this.type "String")}}

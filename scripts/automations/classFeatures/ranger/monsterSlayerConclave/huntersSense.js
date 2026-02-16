@@ -1,5 +1,5 @@
 export async function huntersSense({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if (args[0].macroPass == 'preActiveEffects' && workflow.targets.size !== 1) return ui.notifications.warn("Hunter's Sense: Please target only 1 creature and try again");
+    if (args[0].macroPass == 'preActiveEffects' && workflow.targets.size !== 1) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.ClassFeatures.Ranger.MonsterSlayerConclave.HuntersSense.TargetSingleCreature"));
 
     const targetActor = workflow.targets.first().actor;
     const actorPlayer = MidiQOL.playerForActor(actor);
@@ -18,14 +18,16 @@ export async function huntersSense({ speaker, actor, token, character, item, arg
 
     const chatMessage = game.messages.get(args[0].itemCardId);
 
-    const damageImmunities = isImmuneEffect || isImmuneItem ? "None" : capitalizeFirstLetter(Array.from(targetActor.system.traits.di.value)).join(", ") || "None";
-    const damageResistances = isImmuneEffect || isImmuneItem ? "None" : capitalizeFirstLetter(Array.from(targetActor.system.traits.dr.value)).join(", ") || "None";
-    const damageVulnerabilities = isImmuneEffect || isImmuneItem ? "None" : capitalizeFirstLetter(Array.from(targetActor.system.traits.dv.value)).join(", ") || "None";
+    const noneLabel = game.i18n.localize("GAMBITSPREMADES.UI.None");
 
-    const contentUpdate = `${targetActor.name} has the following damage traits:<br/><br/>
-    - Immunities: <b>${damageImmunities}</b><br/><br/>
-    - Resistances: <b>${damageResistances}</b><br/><br/>
-    - Vulnerabilities: <b>${damageVulnerabilities}</b>`;
+    const damageImmunities = isImmuneEffect || isImmuneItem ? noneLabel : capitalizeFirstLetter(Array.from(targetActor.system.traits.di.value)).join(", ") || noneLabel;
+    const damageResistances = isImmuneEffect || isImmuneItem ? noneLabel : capitalizeFirstLetter(Array.from(targetActor.system.traits.dr.value)).join(", ") || noneLabel;
+    const damageVulnerabilities = isImmuneEffect || isImmuneItem ? noneLabel : capitalizeFirstLetter(Array.from(targetActor.system.traits.dv.value)).join(", ") || noneLabel;
+
+    const contentUpdate = `${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Ranger.MonsterSlayerConclave.HuntersSense.FollowingDamageTraits", { targetName: targetActor.name })}<br/><br/>
+    ${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Ranger.MonsterSlayerConclave.HuntersSense.Immunities")} <b>${damageImmunities}</b><br/><br/>
+    ${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Ranger.MonsterSlayerConclave.HuntersSense.Resistances")} <b>${damageResistances}</b><br/><br/>
+    ${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Ranger.MonsterSlayerConclave.HuntersSense.Vulnerabilities")} <b>${damageVulnerabilities}</b>`;
 
     await chatMessage.update({content: contentUpdate, whisper: actorPlayer.id});
 }

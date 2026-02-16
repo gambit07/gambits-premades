@@ -3,14 +3,14 @@ export async function zephyrStrike({ speaker, actor, token, character, item, arg
         if(workflow.activity?.actionType !== "mwak" && workflow.activity?.actionType !== "rwak") return;
         
         await foundry.applications.api.DialogV2.wait({
-            window: { title: 'Zephyr Strike' },
+            window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.ZephyrStrike.Windowtitle") },
             content: `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use Zephyr Strike to give advantage on this attack and increase your speed until the end of this turn?</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.ZephyrStrike.Prompt")}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img src="${item.img}" class="gps-dialog-image">
                                     </div>
@@ -22,9 +22,9 @@ export async function zephyrStrike({ speaker, actor, token, character, item, arg
             `,
             buttons: [{
                 action: "Yes",
-                label: "Yes",
+                label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Yes"),
                 callback: async (event, button, dialog) => {
-                workflow.advantage = true;
+                workflow.tracker.advantage.add(true, "Zephyr Strike");
     
                 let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "507baaea-a55b-43b5-af50-6fefba1b3220");
                 await effectData.setFlag("gambits-premades", "zephyrStrikeUsed", true);
@@ -54,7 +54,7 @@ export async function zephyrStrike({ speaker, actor, token, character, item, arg
             },
             {
                 action: "No",
-                label: "No",
+                label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.No"),
                 callback: async (event, button, dialog) => {return;}
             }],
             close: async (event, dialog) => {

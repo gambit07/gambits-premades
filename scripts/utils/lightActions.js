@@ -1,15 +1,23 @@
 import { animateLightMovement, animateLight } from "./animationUtils.js";
 import { showDialog } from "./dialogUtils.js";
 
+function localizeSafe(key) {
+  return game?.i18n?.localize ? game.i18n.localize(key) : key;
+}
+
+function formatSafe(key, data = {}) {
+  return game?.i18n?.format ? game.i18n.format(key, data) : key;
+}
+
 const ACTION_DEFINITIONS = {
   "light": {
-    label: "Light",
+    labelKey: "GAMBITSPREMADES.Dialogs.Utils.LightActions.Light",
     callback: async ({ token, item, effectName, filePath, lightEffect, animType, gpsUuid, gpsUuidDim }) => {
       await light({ token, item, effectName, filePath, lightEffect, animType, gpsUuid, gpsUuidDim });
     }
   },
   "throw": {
-    label: "Throw",
+    labelKey: "GAMBITSPREMADES.Dialogs.Utils.LightActions.Throw",
     callback: async ({ token, actor, item, filePath, filePathDim, lightEffect, lightEffectDim, effectName, animType, gpsUuid, gpsUuidDim }) => {
       await lightThrow({ token, actor, item, filePath, filePathDim, lightEffect, lightEffectDim, effectName, animType, gpsUuid, gpsUuidDim });
 
@@ -19,13 +27,13 @@ const ACTION_DEFINITIONS = {
     }
   },
   "extinguish": {
-    label: "Extinguish",
+    labelKey: "GAMBITSPREMADES.Dialogs.Utils.LightActions.Extinguish",
     callback: async ({ token, effectName, gpsUuid, gpsUuidDim }) => {
       await lightExtinguish({ token, effectName, gpsUuid, gpsUuidDim });
     }
   },
   "dim": {
-    label: "Dim",
+    labelKey: "GAMBITSPREMADES.Dialogs.Utils.LightActions.Dim",
     callback: async ({ token, item, effectName, filePathDim, lightEffectDim, animType, gpsUuid, gpsUuidDim }) => {
       await light({ token, item, effectName, filePathDim, lightEffect: lightEffectDim, animType, gpsUuid, gpsUuidDim });
     }
@@ -44,7 +52,7 @@ function buildDialogButtons(actionsToUse, context) {
 
     buttons.push({
       action: actionKey,
-      label: def.label,
+      label: localizeSafe(def.labelKey),
       callback: async () => {
         await def.callback(context);
       }
@@ -54,8 +62,8 @@ function buildDialogButtons(actionsToUse, context) {
 }
 
 export async function showLightDialog({ actions, token, item, effectName, filePath, lightEffect, animType, gpsUuid, actor, filePathDim, lightEffectDim, gpsUuidDim = null }) {
-  const dialogTitle = item?.name ?? "Light";
-  const dialogMessage = `What would you like to do with your ${dialogTitle}?`;
+  const dialogTitle = item?.name ?? localizeSafe("GAMBITSPREMADES.Dialogs.Utils.LightActions.Light");
+  const dialogMessage = formatSafe("GAMBITSPREMADES.Dialogs.Utils.LightActions.PromptAction", { dialogTitle: dialogTitle });
 
   const buttons = buildDialogButtons(actions, { token, actor, item, effectName, filePath, lightEffect, animType, gpsUuid, filePathDim, lightEffectDim, gpsUuidDim });
 

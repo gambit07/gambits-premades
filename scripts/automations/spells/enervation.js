@@ -23,7 +23,7 @@ export async function enervation({ speaker, actor, token, character, item, args,
 
             await new MidiQOL.DamageOnlyWorkflow(actor, token, healRoll.total, "healing", [token], healRoll, {itemData: itemData, flavor: "Enervation - Healing"});
 
-            let content = `<span style='text-wrap: wrap;'>You deal ${workflow.damageTotal} points of damage to your target and heal up to ${healAmount} points using Enervation. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`
+            let content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Enervation.DealDamageHeal", { damageTotal: workflow.damageTotal, healAmount: healAmount })} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`
             let actorPlayer = MidiQOL.playerForActor(actor);
             let chatData = {
                 user: actorPlayer.id,
@@ -150,7 +150,7 @@ export async function enervation({ speaker, actor, token, character, item, args,
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your action this round to deal 4d8 necrotic damage to your target via Enervation?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Enervation.Prompts.UseYourAction.Default")}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                 </div>
@@ -160,7 +160,7 @@ export async function enervation({ speaker, actor, token, character, item, args,
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
@@ -198,7 +198,7 @@ export async function enervation({ speaker, actor, token, character, item, args,
 
                 await new MidiQOL.DamageOnlyWorkflow(actor, token, healRoll.total, "healing", [token], healRoll, {itemData: itemDataHealing, flavor: "Enervation - Healing"});
 
-                let content = `<span style='text-wrap: wrap;'>You deal ${damageRoll.total} points of damage to your target and heal up to ${healAmount} points using Enervation. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`
+                let content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Enervation.DealDamageHeal", { damageTotal: damageRoll.total, healAmount: healAmount })} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`
                 let actorPlayer = MidiQOL.playerForActor(actor);
                 let chatData = {
                     user: actorPlayer.id,

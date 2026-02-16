@@ -1,5 +1,5 @@
 export async function blackTentacles2024({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, regionStatus, userId}) {
-    if(!game.combat) return ui.notifications.warn("Black Tentacles requires an active combat.");
+    if(!game.combat) return ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Common.RequiresActiveCombat", { effectName: workflow?.item?.name ?? item?.name ?? game.i18n.localize("GAMBITSPREMADES.Notifications.Common.ThisEffect") }));
     let gmUser = game.gps.getPrimaryGM();
 
     if (args?.[0]?.macroPass === "templatePlaced") {
@@ -40,12 +40,12 @@ export async function blackTentacles2024({speaker, actor, character, item, args,
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Would you like to use your action to make an athletics ability check to escape Black Tentacles?</p>
+                        <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations2024.Spells.BlackTentacles2024.Prompts.UseYourAction.Default")}</p>
                     </div>
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
@@ -102,12 +102,12 @@ export async function blackTentacles2024({speaker, actor, character, item, args,
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your action to make an athletics ability check to escape Black Tentacles?</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations2024.Spells.BlackTentacles2024.Prompts.UseYourAction.Default")}</p>
                         </div>
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
@@ -133,7 +133,7 @@ export async function blackTentacles2024({speaker, actor, character, item, args,
                     let chatData = {
                     user: browserUser.id,
                     speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: `<span style='text-wrap: wrap;'>You successfully escape from Black Tentacles!</span>`
+                    content: `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.BlackTentacles.EscapeSucceeded")}</span>`
                     };
                     ChatMessage.create(chatData);
                     await resumeMovement();
@@ -142,7 +142,7 @@ export async function blackTentacles2024({speaker, actor, character, item, args,
                     let chatData = {
                     user: browserUser.id,
                     speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: `<span style='text-wrap: wrap;'>You are unable to escape Black Tentacles this turn.</span>`
+                    content: `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.BlackTentacles.EscapeFailed")}</span>`
                     };
                     ChatMessage.create(chatData);
 

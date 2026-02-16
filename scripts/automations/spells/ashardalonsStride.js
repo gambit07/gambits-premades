@@ -1,6 +1,6 @@
 export async function ashardalonsStride({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preItemRoll" && !game.combat) {
-        ui.notifications.warn("Ashardalon's Stride requires an active combat.");
+        ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Common.RequiresActiveCombat", { effectName: workflow?.item?.name ?? item?.name ?? game.i18n.localize("GAMBITSPREMADES.Notifications.Common.ThisEffect") }));
         return workflow.aborted = true;
     }
     if(args[0].macroPass === "preActiveEffects") {

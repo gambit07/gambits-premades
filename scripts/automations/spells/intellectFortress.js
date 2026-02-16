@@ -11,14 +11,14 @@ export async function intellectFortress({ speaker, actor, token, character, item
         const currentMax = actor.system.spells[spellSlotKey]?.max;
 
         if(targets.length > castTargets) {
-            ui.notifications.warn("You have selected more tokens than the spell level allows, re-select tokens.");
+            ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.IntellectFortress.SelectedMoreTokensThan"));
             if(currentValue < currentMax) await actor.update({[spellSlotPath]: currentValue + 1})
 
             let targets = Array.from(workflow.targets.values());
             if(targets.length <= 1) return;
 
             if(targets.length > castTargets) {
-                ui.notifications.warn("You have selected more tokens than the spell level allows, re-select tokens.");
+                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.IntellectFortress.SelectedMoreTokensThan"));
                 if(currentValue < currentMax) await actor.update({[spellSlotPath]: currentValue + 1})
                 const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid)
                 if (hasConcApplied)	await hasConcApplied.delete();
@@ -31,7 +31,7 @@ export async function intellectFortress({ speaker, actor, token, character, item
                 if(actor.uuid === target.actor.uuid) continue;
                 let canSee = MidiQOL.canSee(target,token);
                 if(!canSee) {
-                    ui.notifications.warn("You are unable to see a token selected, re-select tokens.");
+                    ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.IntellectFortress.UnableSee"));
                     if(currentValue < currentMax) await actor.update({[spellSlotPath]: currentValue + 1})
                     return workflow.aborted = true;
                 }
@@ -49,7 +49,7 @@ export async function intellectFortress({ speaker, actor, token, character, item
                 }
 
                 if (!isNearby) {
-                    ui.notifications.warn("A token you selected is not within 30 feet of another token you selected. Re-select tokens.");
+                    ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.IntellectFortress.TargetsNotWithinRange"));
                     if(currentValue < currentMax) await actor.update({[spellSlotPath]: currentValue + 1})
                     return workflow.aborted = true;
                 }
@@ -64,7 +64,7 @@ export async function intellectFortress({ speaker, actor, token, character, item
                 if(actor.uuid === target.actor.uuid) continue;
                 let canSee = MidiQOL.canSee(target,token);
                 if(!canSee) {
-                    ui.notifications.warn("You are unable to see a token selected, re-select tokens.");
+                    ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.IntellectFortress.UnableSee"));
                     if(currentValue < currentMax) await actor.update({[spellSlotPath]: currentValue + 1})
                     return workflow.aborted = true;
                 }
@@ -83,7 +83,7 @@ export async function intellectFortress({ speaker, actor, token, character, item
             }
 
             if (!isNearby) {
-                ui.notifications.warn("A token you selected is not within 30 feet of another token you selected. Re-select tokens.");
+                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.IntellectFortress.TargetsNotWithinRange"));
                 if(currentValue < currentMax) await actor.update({[spellSlotPath]: currentValue + 1})
                 return workflow.aborted = true;
             }

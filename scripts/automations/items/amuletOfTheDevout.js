@@ -1,7 +1,7 @@
 export async function amuletOfTheDevout({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(item.system.uses.spent >= item.system.uses.max) {
         workflow.aborted = true;
-        return ui.notifications.warn("You have no Amulet of the Devout charges to use.");
+        return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.AmuletOfTheDevout.NoAmuletCharges"));
     }
 
     let itemExistsWithValue = actor.items.find(i => i.identifier === "channel-divinity" && i.system.uses.spent !== 0);
@@ -9,7 +9,7 @@ export async function amuletOfTheDevout({ speaker, actor, token, character, item
 
     if (!itemExistsWithValue) {
         workflow.aborted = true;
-        return ui.notifications.warn("You have no Channel Divinity charges to recover.");
+        return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.AmuletOfTheDevout.NoChannelDivinityCharges"));
     }
 
     let dialogId = "amuletofthedevout";
@@ -23,7 +23,7 @@ export async function amuletOfTheDevout({ speaker, actor, token, character, item
                 <div class="gps-dialog-content">
                     <div>
                         <div class="gps-dialog-flex">
-                            <p class="gps-dialog-paragraph">Would you like to recover a Channel Divinity charge?</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Items.AmuletOfTheDevout.Prompt")}</p>
                             <div id="image-container" class="gps-dialog-image-container">
                                 <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                             </div>
@@ -33,7 +33,7 @@ export async function amuletOfTheDevout({ speaker, actor, token, character, item
             </div>
             <div class="gps-dialog-button-container">
                 <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                 </button>
             </div>
         </div>
@@ -52,6 +52,6 @@ export async function amuletOfTheDevout({ speaker, actor, token, character, item
             await itemExistsWithValue.update({ "system.uses.spent": currentValue - 1 });
             await item.update({ "system.uses.spent": item.system.uses.spent + 1 });
         }
-        ui.notifications.info("Channel Divinity charge recovered!");
+        ui.notifications.info(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.AmuletOfTheDevout.Recovered"));
     }
 }

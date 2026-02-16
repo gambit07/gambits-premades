@@ -26,7 +26,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
         let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
         const { animEnabled } = cprConfig;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         let baseItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa");
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
@@ -36,7 +36,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">${target.actor.name} has been attacked, would you like to initiate ${itemProperName} to use a Hearth Spirit to try and disrupt it?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.RainOfCinders.AttackedInitiate", { targetName: target.actor.name, itemProperName: itemProperName })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
@@ -46,7 +46,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
@@ -54,7 +54,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
 
         let result;
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableAttackTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -132,7 +132,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                     }
 
                     await baseItem.update({"system.uses.spent" : itemUses + 1})
-                    let content = `The creature attacks one of your soot spirits and hits! You have ${itemUsesRemaining - 1} soot spirits remaining.`
+                    let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.SootSpiritAttackedHit", { sootSpiritsRemaining: itemUsesRemaining - 1 })
                     let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
                     let chatData = {
                         user: actorPlayer.id,
@@ -172,7 +172,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
                     .play();
 
 
-                    let content = `The creature attacks one of your soot spirits and misses! You have ${itemUsesRemaining} soot spirits remaining.`
+                    let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.SootSpiritAttackedMiss", { sootSpiritsRemaining: itemUsesRemaining })
                     let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
                     let chatData = {
                         user: actorPlayer.id,

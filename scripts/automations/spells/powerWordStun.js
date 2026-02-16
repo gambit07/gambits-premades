@@ -3,7 +3,7 @@ export async function powerWordStun({ speaker, actor, token, character, item, ar
         const targets = workflow.targets;
         for(let target of targets) {
             if(target.actor.system.attributes.hp.value > 150) {
-                ui.notifications.warn("The target has more than 150 hit points.");
+                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.PowerWordStun.TargetMoreThan150"));
                 workflow.targets.delete(target);
                 continue;
             }

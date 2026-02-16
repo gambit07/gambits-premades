@@ -31,14 +31,14 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent = `
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName} and add 2 to this saving throw? Choose an ally below.</p>
+                        <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.MonsterFeatures.BurstOfIngenuity.Prompts.UseYourReaction.Default", { itemName: itemProperName })}</p>
                         <div>
                             <div class="gps-dialog-flex">
                                 <label for="ally-token" class="gps-dialog-label">+2:</label>
@@ -54,13 +54,13 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`;
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableSaveTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`;
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -109,13 +109,13 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
             if(newRoll.total >= saveDC && rollFound.total < saveDC) {
                 workflow.failedSaves.delete(allyToken);
                 workflow.saves.add(allyToken);
-                chatContent = `<span style='text-wrap: wrap;'>You added a +2 bonus to ${allyToken.actor.name}'s roll and caused them to succeed their save.<br><img src="${allyToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.BurstOfIngenuity.AddedBonusToRollSaveSucceeded", { allyName: allyToken.actor.name })}<br><img src="${allyToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             }
             else if(rollFound.total < saveDC){
-                chatContent = `<span style='text-wrap: wrap;'>You added a +2 bonus to ${allyToken.actor.name}'s roll but did not cause them to succeed their save.<br><img src="${allyToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.BurstOfIngenuity.AddedBonusToRollSaveStillFailed", { allyName: allyToken.actor.name })}<br><img src="${allyToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             }
             else if(rollFound.total >= saveDC){
-                chatContent = `<span style='text-wrap: wrap;'>You added a +2 bonus to ${allyToken.actor.name}'s roll but they had already succeeded their save.<br><img src="${allyToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.BurstOfIngenuity.AddedBonusToRollSaveAlreadySucceeded", { allyName: allyToken.actor.name })}<br><img src="${allyToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             }
 
             await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: newRoll});

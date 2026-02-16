@@ -1,5 +1,5 @@
 export async function hideousLaughter({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error("You must install the Jack Kerouac's Animated Spell Effects - Cartoon module to use this automation.");
+    if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.MissingDependency"));
     if (args[0].macroPass === "isDamaged" || args[0] === "each")
     {
         let effectOriginActor;
@@ -193,7 +193,7 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
                 .play()
             }
             else if (intScore <= 4) {
-                ui.notifications.warn("This creature is not effected, its Intelligence score is too low.");
+                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.HideousLaughter.TargetNotAffectedIntTooLow"));
                 workflow.failedSaves.delete(target);
             }
         }

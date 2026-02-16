@@ -3,12 +3,12 @@ export async function command({ speaker, actor, token, character, item, args, sc
         let targets = workflow.failedSaves;
 
         await foundry.applications.api.DialogV2.wait({
-            window: { title: '🗣Command🗣' },
+            window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Command.WindowTitle") },
             content: `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">What would you like to command?</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Command.Prompts.SelectCommand")}</p>
                             <div>
                                 <div class="gps-dialog-flex">
                                     <div style='width: 100%; text-align: center;'>
@@ -25,7 +25,7 @@ export async function command({ speaker, actor, token, character, item, args, sc
             `,
             buttons: [{
                 action: "Cast",
-                label: "Cast",
+                label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Cast"),
                 default: true,
                 callback: async (event, button, dialog) => {
                     let wordInput = document.querySelector('#wordInput').value;
@@ -41,7 +41,7 @@ export async function command({ speaker, actor, token, character, item, args, sc
     }
     else if(args[0] === "off") {
         let wordInput = await actor.getFlag("gambits-premades", "commandWord")
-        let content = `${actor.name} must now ${wordInput}.`;
+        let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Command.MustNow", { actorName: actor.name, wordInput: wordInput });
         let actorPlayer = MidiQOL.playerForActor(actor);
         let chatData = {
             user: actorPlayer.id,

@@ -5,7 +5,7 @@ export async function scornfulRebuke({ speaker, actor, token, character, item, a
         const target = workflow.token;
         const isIncapacitated = MidiQOL.checkIncapacitated(token);
 
-        if(isIncapacitated) return ui.notifications.error(`${actor.name} is incapacitated, Scornful Rebuke fails.`);
+        if(isIncapacitated) return ui.notifications.error(game.i18n.format("GAMBITSPREMADES.Notifications.ClassFeatures.Paladin.OathOfConquest.ScornfulRebuke.Incapacitated", { name: actor.name }));
         const damageRoll = await new CONFIG.Dice.DamageRoll(`${reactingDamage}`, {}, {type: "psychic", properties: ["mgc"]}).evaluate();
         await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 

@@ -2,7 +2,7 @@ export async function confusion({ speaker, actor, token, character, item, args, 
     async function updateConfusionEffect(actor, changeType) {
         const findEffect = actor.appliedEffects.find(e => e.name === "Confusion");
         if (!findEffect) {
-            console.log(game.i18n.localize("Confusion effect not found on the actor."));
+            console.log(game.i18n.localize("GAMBITSPREMADES.Debug.Automations.Spells.Confusion.EffectNotFound"));
             return;
         }
     
@@ -48,10 +48,11 @@ export async function confusion({ speaker, actor, token, character, item, args, 
             const directionResult = directionRoll.total;
             const directions = ["North", "South", "East", "West", "Northwest", "Northeast", "Southwest", "Southeast"];
             directionContent = directions[directionResult - 1];
+            const directionLabel = game.i18n.localize(`GAMBITSPREMADES.Directions.${directionContent}`);
             const walkSpeedFeet = token.actor.system.attributes.movement.walk;
             await game.gps.socket.executeAsGM("moveTokenByCardinal", {targetUuid: token.document.uuid, distance: walkSpeedFeet, direction: directionContent });
     
-            content1 = `Your movement roll is ${directionResult} and you travel ${directionContent}: You don't take an action this turn.`
+            content1 = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Confusion.MovementRoll", { rollResult: directionResult, direction: directionLabel });
     
             let actorPlayer = MidiQOL.playerForActor(token.actor);
             let chatData = {
@@ -62,13 +63,13 @@ export async function confusion({ speaker, actor, token, character, item, args, 
             };
             ChatMessage.create(chatData);
         } else if (result < 7) {
-            content = "You can't move or take actions this turn.";
+            content = game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.Confusion.NoMoveOrActions");
             await updateConfusionEffect(token.actor, true)
         } else if (result < 9) {
             const rangeCheck = MidiQOL.findNearby(null, token, token.actor.system.attributes.movement.walk, { includeToken: false });
             if(rangeCheck.length > 0) {
             const randomSelection = rangeCheck[Math.floor(Math.random() * rangeCheck.length)];
-            content = `You must move to ${randomSelection.actor.name} and attack them with a melee attack.`;
+            content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Confusion.MustMoveAndMeleeAttack", { targetName: randomSelection.actor.name });
             let target = randomSelection;
             new Sequence()
             .effect()
@@ -100,10 +101,10 @@ export async function confusion({ speaker, actor, token, character, item, args, 
             .play()
             }
             else {
-            content = `The creature does nothing this turn.`;
+            content = game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.Confusion.NoAction");
             }
         } else {
-            content = "The creature can act and move normally.";
+            content = game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.Confusion.ActNormally");
         }
     
         if(content) {
@@ -111,7 +112,7 @@ export async function confusion({ speaker, actor, token, character, item, args, 
             let chatData = {
                 user: actorPlayer.id,
                 speaker: ChatMessage.getSpeaker({ token: token }),
-                content: game.i18n.localize(`Confusion roll for ${token.actor.name} is ${result}:<br>${content}`)
+                content: `${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Confusion.RollForIs", { actorName: token.actor.name, result: result })}<br>${content}`
             };
             ChatMessage.create(chatData);
         }

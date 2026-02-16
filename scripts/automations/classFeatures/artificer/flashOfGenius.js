@@ -27,17 +27,28 @@ export async function flashOfGenius({workflowData,workflowType,workflowCombat}) 
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
+        let targetPrompt = "";
+        if (targets.length > 1 && casterInTargets) {
+            targetPrompt = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Artificer.FlashOfGenius.TargetPrompt.ChooseSelfOrAlly");
+        } else if (targets.length > 1) {
+            targetPrompt = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Artificer.FlashOfGenius.TargetPrompt.ChooseAlly");
+        } else if (casterInTargets) {
+            targetPrompt = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Artificer.FlashOfGenius.ForYourself");
+        } else {
+            targetPrompt = game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Artificer.FlashOfGenius.For", { targetName: targetNames[0] });
+        }
+
 
         let dialogContent = `
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName}${targets.length > 1 && casterInTargets ? "? Choose yourself or an ally below" : targets.length > 1 ? "? Choose an ally below" : casterInTargets ? ` for yourself?` : ` for ${targetNames[0]}?`}</p>
+                        <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Artificer.FlashOfGenius.Prompts.UseYourReaction.Default", { itemName: itemProperName, targetPrompt })}</p>
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <label for="ally-token" class="gps-dialog-label">Target:</label>
+                                    <label for="ally-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Target")}</label>
                                     <select id="ally-token" class="gps-dialog-select">
                                         ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
                                     </select>
@@ -50,14 +61,14 @@ export async function flashOfGenius({workflowData,workflowType,workflowCombat}) 
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
 
         let result;
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has an option available for a save triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.OptionAvailableSaveTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -99,7 +110,7 @@ export async function flashOfGenius({workflowData,workflowType,workflowCombat}) 
             let saveBonus = await new CONFIG.Dice.DamageRoll(`${intMod}`).evaluate();
             let newRoll = await MidiQOL.addRollTo(rollFound, saveBonus);
 
-            let chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used ${chosenItem.name} and added ${intMod} to ${target.actor.name}'s roll.<img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+            let chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Artificer.FlashOfGenius.UsedAddedSRoll", { actorName: validTokenPrimary.actor.name, itemName: chosenItem.name, intMod: intMod, targetName: target.actor.name })}<img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
             await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: newRoll});
             return;

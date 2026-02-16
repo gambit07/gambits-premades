@@ -33,7 +33,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
         let itemProperName = chosenItem?.name;
         if(target.actor.appliedEffects.some(e => e.name === `${itemProperName} - Immunity`)) return;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent = `
@@ -42,7 +42,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use ${itemProperName} to try and force the attacker to choose a different target?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Wizard.SchoolOfEnchantment.InstinctiveCharm.Prompt", { itemProperName: itemProperName })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
@@ -52,13 +52,13 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has an option available for an attack triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Wizard.SchoolOfEnchantment.InstinctiveCharm.OptionAvailableAttackTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -138,10 +138,10 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                     <div class="gps-dialog-container">
                         <div class="gps-dialog-section">
                             <div class="gps-dialog-content">
-                                <p class="gps-dialog-paragraph">${itemProperName} has forced you to select a new target for your attack. Choose from the list below.</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Wizard.SchoolOfEnchantment.InstinctiveCharm.ForcedSelectNew", { itemProperName: itemProperName })}</p>
                                 <div>
                                     <div class="gps-dialog-flex">
-                                        <label for="enemy-token" class="gps-dialog-label">Target:</label>
+                                        <label for="enemy-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Target")}</label>
                                         <select id="enemy-token" class="gps-dialog-select">
                                             ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
                                         </select>
@@ -156,7 +156,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                         </div>
                         <div class="gps-dialog-button-container">
                             <button id="pauseButton_${dialogIdTarget}" type="button" class="gps-dialog-button">
-                                <i class="fas fa-pause" id="pauseIcon_${dialogIdTarget}" style="margin-right: 5px;"></i>Pause
+                                <i class="fas fa-pause" id="pauseIcon_${dialogIdTarget}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                             </button>
                         </div>
                     </div>
@@ -182,7 +182,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                 return;
             }
             else {
-                if(hasCharmImmunity) ui.notifications.warn("The creature is unaffected because they have Charm Immunity");
+                if(hasCharmImmunity) ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.ClassFeatures.Wizard.SchoolOfEnchantment.InstinctiveCharm.CharmImmunity"));
                 let effectData = [
                     {
                         "icon": `${chosenItem.img}`,

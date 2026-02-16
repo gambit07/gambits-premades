@@ -4,7 +4,7 @@ export async function matalotok({ speaker, actor, token, character, item, args, 
         let targets = workflow.hitTargets;
         
         if (!targets || targets?.size === 0) {
-            return ui.notifications.warn("Please target at least one token")
+            return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.Matalotok.TargetAtLeastOneToken"))
         }
                 
         const weapon = 'jb2a.melee_attack.03.maul.01';

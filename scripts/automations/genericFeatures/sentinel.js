@@ -21,7 +21,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         let browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         // Check valid weapons
@@ -51,38 +51,15 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
 
         let dialogContent = `
             <style>
-            #gps-favorite-checkbox {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-            }
-
-            #gps-favorite-checkbox + label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            }
-
-            #gps-favorite-checkbox + label::before {
-            content: "\\2606"; /* Unicode empty star (☆) for my remembrance*/
-            font-size: 30px;
-            margin-right: 5px;
-            line-height: 1;
-            vertical-align: middle;
-            }
-
-            #gps-favorite-checkbox:checked + label::before {
-                content: "\\2605"; /* Unicode filled star (★) also for my remembrance */
-            }
+            #gps-favorite-checkbox { position: absolute; opacity: 0; width: 0; height: 0; } #gps-favorite-checkbox + label { display: flex; align-items: center; cursor: pointer; } #gps-favorite-checkbox + label::before { content: "\\2606"; font-size: 30px; margin-right: 5px; line-height: 1; vertical-align: middle; } #gps-favorite-checkbox:checked + label::before { content: "\\2605"; }
             </style>
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Would you like to use your reaction to attack using Sentinel? Choose your weapon below.</p>
+                        <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.Sentinel.Prompts.UseYourReaction.Default")}</p>
                         <div>
                             <div class="gps-dialog-flex">
-                                <label for="item-select_${dialogId}" class="gps-dialog-label">Weapon:</label>
+                                <label for="item-select_${dialogId}" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Weapon")}</label>
                                 <select id="item-select_${dialogId}" class="gps-dialog-select">
                                     ${validWeapons.map(item => `<option name="${item.img}" value="${item.uuid}" class="gps-dialog-option">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""}</option>`).join('')}
                                 </select>
@@ -92,20 +69,20 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
                             </div>
                             <div style="display: flex; align-items: center; margin-top: 12px;">
                                 <input type="checkbox" id="gps-favorite-checkbox" style="vertical-align: middle;"/>
-                                <label for="gps-favorite-checkbox">Favorite this Option?</label>
+                                <label for="gps-favorite-checkbox">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.FavoriteThisOption")}</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableAttackTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 

@@ -36,16 +36,16 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
             let initialTimeLeft = 15;
             let dialogId = "elementalaffinity";
             const dialogTitlePrimary = `${actor.name} | ${item.name}`;
-            const dialogTitleGM = `Waiting for ${actor.name}'s selection | ${item.name}`;
+            const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: actor.name, itemName: item.name });
 
             let dialogContent = `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Choose the enemy to receive additional ${damageType} damage from your Elemental Affinity below:</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations2024.ClassFeatures.Sorcerer.DraconicSorcery.ElementalAffinity2024.SelectEnemyForBonusDamage", { damageType: damageType })}</p>
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <label for="enemy-token" class="gps-dialog-label">Target:</label>
+                                    <label for="enemy-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Target")}</label>
                                     <select id="enemy-token" class="gps-dialog-select">
                                         ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
                                     </select>
@@ -58,7 +58,7 @@ export async function elementalAffinity2024({ speaker, actor, token, character, 
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>

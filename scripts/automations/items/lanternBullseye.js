@@ -4,7 +4,7 @@ import {
 } from "../../utils/lightActions.js";
   
 export async function lanternBullseye({ speaker, actor, token, item, args, workflow }) {
-  if(!game.modules.get("ATL")?.active) return ui.notifications.warn("The Active Token Effects module must be active");
+  if(!game.modules.get("ATL")?.active) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.Candle.MissingDependency"));
   const effectName = `${token.document.id} Bullseye Lantern`;
   const gpsUuid = "c11cf151-f1aa-4ba1-bab6-1c483fcfa3c9";
   const filePath = "modules/gambits-premades/assets/images/bullseyeLantern.webp";
@@ -58,7 +58,7 @@ export async function lanternBullseye({ speaker, actor, token, item, args, workf
 
   if (!activeLight) {
     if (!hasRemaining) {
-      ui.notifications.warn(`You do not have any ${animType}s remaining.`);
+      ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Items.Candle.DoNotAnyS", { animType: animType }));
       workflow.aborted = true;
       return;
     }

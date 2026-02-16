@@ -5,7 +5,7 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
             const hasEffectApplied = target.document.hasStatusEffect("deafened");
             if(hasEffectApplied) {
                 workflow.targets.delete(target);
-                ui.notifications.warn("A creature is not effected because it cannot hear you.");
+                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.ViciousMockery.TargetCannotHearYou"));
             }
         }
 
@@ -13,7 +13,7 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
     }
 
     if(args[0].macroPass === "postSavesComplete") {
-        if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error("You must install the Jack Kerouac's Animated Spell Effects - Cartoon module to use this automation.");
+        if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.MissingDependency"));
         let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
         const { animEnabled } = cprConfig;
 
@@ -98,7 +98,7 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
                     <div class="gps-dialog-container">
                         <div class="gps-dialog-section">
                             <div class="gps-dialog-content">
-                                <p class="gps-dialog-paragraph">What do you say?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.ViciousMockery.WhatDoYouSay")}</p>
                                 <div>
                                     <div class="gps-dialog-flex">
                                         <select id="wordSelect" class="gps-dialog-select" style="background-color: rgba(181, 99, 69, 0.2);">
@@ -121,7 +121,7 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
                             <div class="gps-dialog-content">
                                 <div>
                                     <div class="gps-dialog-flex">
-                                        <p class="gps-dialog-paragraph">What do you say?</p>
+                                        <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.ViciousMockery.WhatDoYouSay")}</p>
                                         <div style='width: 100%; text-align: center;'>
                                             <input type="text" name="wordInput" id="wordInput" maxlength = "50" autofocus>
                                         </div>
@@ -137,11 +137,11 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
             }
 
             await foundry.applications.api.DialogV2.wait({
-                window: { title: '🗣Vicious Mockery😜️' },
+                window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.ViciousMockery.Windowtitle") },
                 content: content,
                 buttons: [{
                     action: "Cast",
-                    label: "Cast",
+                    label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Cast"),
                     default: true,
                     callback: async (event, button, dialog) => {
                         let wordInput = document.querySelector('#wordInput');

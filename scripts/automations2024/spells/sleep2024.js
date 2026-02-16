@@ -4,7 +4,7 @@ export async function sleep2024({ speaker, actor, token, character, item, args, 
             if(target.actor.system.traits.ci.custom.includes("Magical Sleep") || target.actor.system.traits.ci.value.has("exhaustion")) {
                 workflow.failedSaves.delete(target);
                 workflow.saves.add(target);
-                ui.notifications.warn("Creature is immune to Magical Sleep and/or being Exhausted")
+                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Automations2024.Spells.Sleep2024.TargetImmuneToSleepOrExhaustion"))
             }
         }
     }

@@ -119,7 +119,7 @@ export function registerHooks() {
     if(!game.modules.get("gambitsIdentificationInhibitor")?.active) {
         Hooks.on("preUpdateItem", (item, update, options) => {
             if (!game.user.isGM && !item.system?.identified && "identified" in (update.system ?? {}) && game.gpsSettings.identifyRestrictionEnabled && !options?.isAdvancement) {
-                ui.notifications.error(`${game.gpsSettings.identifyRestrictionMessage}`);
+                ui.notifications.error(game.i18n.format("GAMBITSPREMADES.Notifications.Hooks.Msg", { message: game.gpsSettings.identifyRestrictionMessage }));
                 return false;
             }
         });
@@ -187,13 +187,13 @@ export function registerHooks() {
     
     Hooks.on('deleteCombat', async (combat) => {
         if(game.user.id !== game.gps.getPrimaryGM()) return;
-        if(game.gpsSettings.opportunityAttackEnabled) await game.gps.disableOpportunityAttack(combat, "endCombat");
+        await game.gps.disableOpportunityAttack(combat, "endCombat");
     });
     
     Hooks.on("deleteCombatant", async (combatant, options, userId) => {
         if(game.user.id !== game.gps.getPrimaryGM()) return;
         let combat = game.combat;
-        if (combat && combat.started && game.gpsSettings.opportunityAttackEnabled) {
+        if (combat && combat.started) {
             await game.gps.disableOpportunityAttack(combatant, "exitCombat");
         }
     });

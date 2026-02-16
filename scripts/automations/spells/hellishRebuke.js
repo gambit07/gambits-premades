@@ -12,7 +12,7 @@ export async function hellishRebuke({ speaker, actor, token, character, item, ar
         if(!findValidToken) return;
 
         let dialogId = gpsUuid;
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${item.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: item.name });
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
@@ -25,7 +25,7 @@ export async function hellishRebuke({ speaker, actor, token, character, item, ar
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate Hellish Rebuke on the creature who damaged you?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.HellishRebuke.Prompts.UseYourReaction.Default")}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                 </div>
@@ -35,7 +35,7 @@ export async function hellishRebuke({ speaker, actor, token, character, item, ar
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>

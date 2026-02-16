@@ -22,15 +22,15 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Who would you like to move Fizban's Platinum Shield to?</p>
+                        <p class="gps-dialog-paragraph">\${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.FizbansPlatinumShield.PromptSelectTarget")}</p>
                         <div>
                         <div class="gps-dialog-flex">
-                            <label for="ally-token" class="gps-dialog-label">Advantage:</label>
+                            <label for="ally-token" class="gps-dialog-label">\${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Target")}</label>
                             \${withinRange.length >= 1
                             ? \`<select id="ally-token" class="gps-dialog-select">
                                 \${withinRange.map(friendly => \`<option class="gps-dialog-option" value="\${friendly.document.uuid}">\${friendly.actor.name}</option>\`).join('')}
                                 </select>\`
-                            : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
+                            : \`<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;">\${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.NoValidAlliesInRange")}</div>\`
                             }
                             <div id="image-container" class="gps-dialog-image-container">
                             <img id="img_\${dialogId}" src="\${macroItem.img}" class="gps-dialog-image">
@@ -41,7 +41,7 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
                     </div>
                     <div class="gps-dialog-button-container">
                     <button id="pauseButton_\${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_\${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_\${dialogId}" style="margin-right: 5px;"></i>\${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                     </div>
                 </div>

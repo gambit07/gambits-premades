@@ -5,7 +5,8 @@ export async function shroomOfDoom({ speaker, actor, token, character, item, arg
         let shroomRoll = await new CONFIG.Dice.DamageRoll(`1d8`).evaluate();
         await MidiQOL.displayDSNForRoll(shroomRoll, 'damageRoll');
         let shroomTotal = shroomRoll.total;
-        let content = `The creature has ${shroomTotal} mushroom${shroomTotal > 1 ? "s" : ""} created on their body with Shroom of Doom.`
+        const messageKey = shroomTotal === 1 ? "GAMBITSPREMADES.ChatMessages.Automations.ThirdPartySpells.ShroomOfDoom.MushroomCreatedOnBody" : "GAMBITSPREMADES.ChatMessages.Automations.ThirdPartySpells.ShroomOfDoom.MushroomsCreatedOnBody";
+        let content = game.i18n.format(messageKey, { mushroomCount: shroomTotal });
         let actorPlayer = MidiQOL.playerForActor(actor);
 
         let chatData = {

@@ -30,7 +30,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemName });
         
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
@@ -45,37 +45,38 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
 
             const enemyTargetUuids = enemyTargets.map(t => t.document.uuid);
             const enemyTargetNames = enemyTargets.map(t => t.document.name);
-            const allyTargetUuids = enemyTargets.map(t => t.document.uuid);
-            const allyTargetNames = enemyTargets.map(t => t.document.name);
-            let dialogDescription;
+            const allyTargetUuids = allyTargets.map(t => t.document.uuid);
+            const allyTargetNames = allyTargets.map(t => t.document.name);
+            let detailsKey;
 
-            if(enemyTargets.length > 0 && allyTargets.length > 0) dialogDescription = "Enemies succeeded and Allies failed their saving throws. Choose an Enemy or Ally to re-roll below. If both are chosen, the reroll will apply to an enemy.";
-            else if(enemyTargets.length > 0 && allyTargets.length === 0) dialogDescription = "Enemies succeeded their saving throws. Choose an Enemy to re-roll below.";
-            else if(enemyTargets.length === 0 && allyTargets.length > 0) dialogDescription = "Allies failed their saving throws. Choose an Ally to re-roll below.";
+            if (enemyTargets.length > 0 && allyTargets.length > 0) detailsKey = "GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.Details.EnemiesSucceededAlliesFailed";
+            else if (enemyTargets.length > 0 && allyTargets.length === 0) detailsKey = "GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.Details.EnemiesSucceeded";
+            else if (enemyTargets.length === 0 && allyTargets.length > 0) detailsKey = "GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.Details.AlliesFailed";
+            const dialogDescription = detailsKey ? game.i18n.localize(detailsKey) : "";
         
             dialogContent = `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName}? ${dialogDescription}</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.Prompts.UseYourReaction.Initiate", { itemName: itemProperName, details: dialogDescription })}</p>
                             <div class="gps-dialog-flex-wrapper">
                                 <div class="gps-dialog-select-container">
                                     <div class="gps-dialog-flex">
-                                    <label for="enemy-token" class="gps-dialog-label">Enemy Target:</label>
+                                    <label for="enemy-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.EnemyTarget")}</label>
                                     ${enemyTargetNames.length >= 1 ? 
                                         `<select id="enemy-token" class="gps-dialog-select">
-                                            <option value="">-- Select Enemy --</option>
+                                            <option value="">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.SelectEnemy")}</option>
                                             ${enemyTargetNames.map((name, index) => `<option class="gps-dialog-option" value="${enemyTargetUuids[index]}">${name}</option>`).join('')}
-                                        </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid enemies in range.</div>'
+                                        </select>` : `<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.NoValidEnemiesInRange")}</div>`
                                     }
                                     </div>
                                     <div class="gps-dialog-flex">
-                                    <label for="ally-token" class="gps-dialog-label">Ally Target:</label>
+                                    <label for="ally-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AllyTarget")}</label>
                                     ${allyTargetNames.length >= 1 ? 
                                         `<select id="ally-token" class="gps-dialog-select">
-                                            <option value="">-- Select Ally --</option>
+                                            <option value="">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.SelectAlly")}</option>
                                             ${allyTargetNames.map((name, index) => `<option class="gps-dialog-option" value="${allyTargetUuids[index]}">${name}</option>`).join('')}
-                                        </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
+                                        </select>` : `<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.NoValidAlliesInRange")}</div>`
                                     }
                                     </div>
                                 </div>
@@ -87,7 +88,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
@@ -102,7 +103,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? ${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `An enemy successfully hit your ally with a ${workflow.attackTotal}.` : "An enemy successfully hit your ally."}</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.Prompts.UseYourReaction.Cast", { itemName: itemProperName, triggerDetails: ["none", "detailsDSN", "details"].includes(rollDetailSetting) ? game.i18n.format("GAMBITSPREMADES.Dialogs.Common.EnemyHitsAllyWithAttackTotal", { attackTotal: workflow.attackTotal }) : game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.EnemyHitsAlly") })}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
@@ -112,14 +113,14 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
             `;
         }
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableSaveTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
         
@@ -181,12 +182,12 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                     if(enemyTokenUuid) {
                         workflow.saves.delete(workflowTarget);
                         workflow.failedSaves.add(workflowTarget);
-                        chatContent = `<span style='text-wrap: wrap;'>Your enemy was chronally shifted and failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.EnemySaveFailed")} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
                     else {
                         workflow.failedSaves.delete(workflowTarget);
                         workflow.saves.add(workflowTarget);
-                        chatContent = `<span style='text-wrap: wrap;'>Your ally was chronally shifted and succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AllySaveSucceeded")} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
 
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
@@ -195,10 +196,10 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
 
                 else {
                     if(enemyTokenUuid) {
-                        chatContent = `<span style='text-wrap: wrap;'>Your enemy was chronally shifted but still succeeded their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.EnemySaveSucceeded")} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
                     else {
-                        chatContent = `<span style='text-wrap: wrap;'>Your ally was chronally shifted but still failed their save. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AllySaveFailed")} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
 
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
@@ -218,13 +219,13 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                 workflow.options.noOnUseMacro = saveSetting;
 
                 if(workflow.attackTotal < targetAC) {                    
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was chronally shifted, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AttackFailed")} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     return;
                 }
 
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was chronally shifted, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AttackHitAnyway")} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     continue;
                 }

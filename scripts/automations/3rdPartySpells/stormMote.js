@@ -13,7 +13,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
         <div class="gps-dialog-container">
             <div class="gps-dialog-section">
                 <div class="gps-dialog-content">
-                    <p class="gps-dialog-paragraph">Assign the ${numMotes} motes you have available:</p>
+                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.StormMote.AssignMotes", { numMotes: numMotes })}</p>
                     <div class="gps-dialog-flex">
                         <div style="margin-bottom: 10px;">
                             ${Array.from(workflow.targets).map(target => `
@@ -39,11 +39,11 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
         `;
 
         await foundry.applications.api.DialogV2.wait({
-            window: { title: 'Assign Motes' },
+            window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.StormMote.Windowtitle") },
             content: content,
             buttons: [{
                 action: "Confirm",
-                label: "Confirm",
+                label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.StormMote.Confirm"),
                 callback: async (event, button, dialog) => {
                     for (const target of workflow.targets) {
                         let assignedCount = parseInt(document.querySelector(`#moteDisplay-${target.id}`).textContent, 10);
@@ -53,7 +53,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                 }
             }, {
                 action: "Cancel",
-                label: "Cancel",
+                label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.StormMote.Cancel"),
                 callback: async (event, button, dialog) => {
                     workflow.aborted = true;
                 }

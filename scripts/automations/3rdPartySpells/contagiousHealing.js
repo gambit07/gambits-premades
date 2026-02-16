@@ -23,7 +23,7 @@ export async function contagiousHealing({ speaker, actor, token, character, item
                 await target.actor.unsetFlag("gambits-premades", "contagiousHealingApplied");
             }
 
-            let content = `<span style='text-wrap: wrap;'>There are no additional allies within 10 feet, your Contagious Healing subsides.</span>`;
+            let content = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartySpells.ContagiousHealing.NoAdditionalAlliesInRange")}</span>`;
             let actorPlayer = MidiQOL.playerForActor(effectOriginToken.actor);
 
             let chatData = {

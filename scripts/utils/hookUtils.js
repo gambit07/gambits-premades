@@ -199,7 +199,7 @@ export function updateSettings(settingKey = null) {
         'hideTemplates': 'hideTemplates',
         'debugEnabled': 'debugEnabled',
         'Enable Identify Restrictions': 'identifyRestrictionEnabled',
-        'Identify Restriction Message': 'identifyRestrictionMessage',
+        'Identify Restriction Message': 'message',
         'enableMageSlayer': 'mageSlayerEnabled',
         'enableInstinctiveCharm': 'instinctiveCharmEnabled',
         'enableRainOfCinders': 'rainOfCindersEnabled',
@@ -248,20 +248,20 @@ export function daeAddFlags(fieldData) {
 
 export function daeInjectFlags() {
     foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.oaImmunity', {
-        name: "Opportunity Attack Immunity",
-        description: "Prevents token from receiving any Opportunity Attacks"
+        name: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OAImmunity.Name"),
+        description: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OAImmunity.Description")
     });
     foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.oaSuppression', {
-        name: "Opportunity Attack Suppression",
-        description: "Prevents token from making any Opportunity Attacks"
+        name: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OASuppression.Name"),
+        description: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OASuppression.Description")
     });
     foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.oaDisadvantage', {
-        name: "Opportunity Attack Disadvantage",
-        description: "Grants disadvantage on Opportunity Attacks against this token"
+        name: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OADisadvantage.Name"),
+        description: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OADisadvantage.Description")
     });
     foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.oaDisadvantageSource', {
-        name: "Opportunity Attack Source Disadvantage",
-        description: "Disadvantage on Opportunity Attacks against a token"
+        name: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OADisadvantageSource.Name"),
+        description: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OADisadvantageSource.Description")
     });
     
     DAE.addAutoFields(daeFieldBrowserFields);

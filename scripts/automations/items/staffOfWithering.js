@@ -1,7 +1,7 @@
 export async function staffOfWithering({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preDamageRollComplete") {
         let remainingCharges = item.system.uses.max - item.system.uses.spent;
-        if(!remainingCharges) return ui.notifications.warn("You have no uses remaining for the Staff of Withering");
+        if(!remainingCharges) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.StaffOfWithering.NotAvailable"));
         let chargesText;
         if(remainingCharges > 1) chargesText = "charges";
         else chargesText = "charge";
@@ -17,7 +17,7 @@ export async function staffOfWithering({ speaker, actor, token, character, item,
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use a charge to deal additional damage and possibly disadvantage the target? You have <b>${remainingCharges}</b> ${chargesText} remaining.</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Items.StaffOfWithering.Prompt")} <b>${remainingCharges}</b> ${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Items.StaffOfWithering.Remaining", { chargesText: chargesText })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                 </div>
@@ -27,7 +27,7 @@ export async function staffOfWithering({ speaker, actor, token, character, item,
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>

@@ -5,7 +5,7 @@ export async function entropicWard({ speaker, actor, token, character, item, arg
         let chosenItem = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         if(chosenItem.system.uses.spent >= chosenItem.system.uses.max) return;
         let dialogId = "entropicward";
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${chosenItem.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: chosenItem.name });
         let dialogTitlePrimary = `${token.actor.name} | ${chosenItem.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
@@ -18,7 +18,7 @@ export async function entropicWard({ speaker, actor, token, character, item, arg
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your reaction to disadvantage the attack against you and potentially gain advantage against the attacker?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Warlock.GreatOldOne.EntropicWard.Prompts.UseYourReaction.Default")}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
@@ -28,7 +28,7 @@ export async function entropicWard({ speaker, actor, token, character, item, arg
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
@@ -50,7 +50,7 @@ export async function entropicWard({ speaker, actor, token, character, item, arg
             return;
         }
         else if (userDecision) {
-            workflow.disadvantage = true;
+            workflow.tracker.disadvantage.add(userDecision, "Entropic Ward");
             await actor.setFlag("gambits-premades", "entropicWardUsed", true);
             MidiQOL.setReactionUsed(actor);
             await chosenItem.update({"system.uses.spent" : chosenItem.system.uses.spent + 1})

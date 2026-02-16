@@ -12,14 +12,14 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
 
         if(!activity.save?.dc?.calculation && !activity.save?.dc?.formula) {
             await foundry.applications.api.DialogV2.wait({
-                window: { title: 'Gift of the Gem Dragon Ability' },
+                window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.Windowtitle") },
                 content: `
                     <div class="gps-dialog-container">
                         <div class="gps-dialog-section">
                             <div class="gps-dialog-content">
                                 <div>
                                     <div class="gps-dialog-flex">
-                                        <p class="gps-dialog-paragraph">Which ability score did you increase with Gift of the Gem Dragon?</p>
+                                        <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.SelectAbilityScore")}</p>
                                         <div id="image-container" class="gps-dialog-image-container">
                                             <img src="${item.img}" class="gps-dialog-image">
                                         </div>
@@ -31,21 +31,21 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
                 `,
                 buttons: [{
                     action: "Intelligence",
-                    label: "Intelligence",
+                    label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.Intelligence"),
                     callback: async (event, button, dialog) => {
                         await activity.update({"save.dc.calculation": "int"});
                     }
                 },
                 {
                     action: "Wisdom",
-                    label: "Wisdom",
+                    label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.Wisdom"),
                     callback: async (event, button, dialog) => {
                         await activity.update({"save.dc.calculation": "wis"});
                     }
                 },
                 {
                     action: "Charisma",
-                    label: "Charisma",
+                    label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.Charisma"),
                     callback: async (event, button, dialog) => {
                         await activity.update({"save.dc.calculation": "cha"});
                     }
@@ -59,7 +59,7 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
         let initialTimeLeft = 15;
         let dialogId = "giftofthegemdragon";
         const dialogTitlePrimary = `${actor.name} | ${item.name}`;
-        const dialogTitleGM = `Waiting for ${actor.name}'s selection | ${item.name}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: actor.name, itemName: item.name });
 
         let dialogContent = `
             <div class="gps-dialog-container">
@@ -67,7 +67,7 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">You have been damaged, would you like use your reaction to initiate <b>Telekinetic Reprisal</b> to damage and potentially push the attacker?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.Damaged")} <b>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.TelekineticReprisal")}</b> ${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.PromptDamageAndPush")}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                 </div>
@@ -77,7 +77,7 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>

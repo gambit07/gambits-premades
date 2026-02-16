@@ -1,5 +1,5 @@
 export async function blackTentacles({speaker, actor, character, item, args, scope, workflow, options, tokenUuid, regionUuid, regionScenario, regionStatus, userId}) {
-    if(!game.combat) return ui.notifications.warn("Black Tentacles requires an active combat.");
+    if(!game.combat) return ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Common.RequiresActiveCombat", { effectName: workflow?.item?.name ?? item?.name ?? game.i18n.localize("GAMBITSPREMADES.Notifications.Common.ThisEffect") }));
     let gmUser = game.gps.getPrimaryGM();
 
     if (args?.[0]?.macroPass === "templatePlaced") {
@@ -41,7 +41,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                 <div class="gps-dialog-section">
                 <div class="gps-dialog-content">
                     <p class="gps-dialog-paragraph">
-                    Would you like to use your action to make an ability check to escape Black Tentacles?
+                    ${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.BlackTentacles.Prompts.UseYourAction.Default")}
                     </p>
 
                     <div>
@@ -49,8 +49,8 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                         <table class="gps-dialog-ability-table" width="100%">
                         <thead>
                             <tr>
-                            <th>Strength</th>
-                            <th>Dexterity</th>
+                            <th>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.BlackTentacles.Strength")}</th>
+                            <th>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.BlackTentacles.Dexterity")}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,7 +63,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                                     id="strength_${dialogId}"
                                     name="ability-check"
                                     class="gps-dialog-radio"
-                                    aria-label="Strength"
+                                    aria-label="${game.i18n.localize(CONFIG.DND5E.abilities.str)}"
                                 >
                                 <span class="gps-dialog-radio-ui" aria-hidden="true"></span>
                                 </label>
@@ -77,7 +77,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                                     id="dexterity_${dialogId}"
                                     name="ability-check"
                                     class="gps-dialog-radio"
-                                    aria-label="Dexterity"
+                                    aria-label="${game.i18n.localize(CONFIG.DND5E.abilities.dex)}"
                                 >
                                 <span class="gps-dialog-radio-ui" aria-hidden="true"></span>
                                 </label>
@@ -96,7 +96,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
 
                 <div class="gps-dialog-button-container">
                 <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                 </button>
                 </div>
             </div>
@@ -158,10 +158,10 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your action to make an ability check to escape Black Tentacles?</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.BlackTentacles.Prompts.UseYourAction.Default")}</p>
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <table style="background-color: rgba(181, 99, 69, 0.2);" width="100%"><tbody><tr><th>Strength</th><th>Dexterity</th></tr><tr><td style="text-align: center;vertical-align: middle;"><input type="radio" value="str" id="strength" name="ability-check" style="margin: 0 auto;"></td><td style="text-align: center;vertical-align: middle;"><input type="radio" value="dex" id="dexterity" name="ability-check" style="margin: 0 auto;"></td></tr></tbody></table>
+                                    <table style="background-color: rgba(181, 99, 69, 0.2);" width="100%"><tbody><tr><th>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.BlackTentacles.Strength")}</th><th>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.BlackTentacles.Dexterity")}</th></tr><tr><td style="text-align: center;vertical-align: middle;"><input type="radio" value="str" id="strength" name="ability-check" style="margin: 0 auto;"></td><td style="text-align: center;vertical-align: middle;"><input type="radio" value="dex" id="dexterity" name="ability-check" style="margin: 0 auto;"></td></tr></tbody></table>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
@@ -171,7 +171,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
@@ -200,7 +200,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                         let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),
-                        content: `<span style='text-wrap: wrap;'>You successfully escape from Black Tentacles!</span>`
+                        content: `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.BlackTentacles.EscapeSucceeded")}</span>`
                         };
                         ChatMessage.create(chatData);
                         await resumeMovement();
@@ -209,7 +209,7 @@ export async function blackTentacles({speaker, actor, character, item, args, sco
                         let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),
-                        content: `<span style='text-wrap: wrap;'>You are unable to escape Black Tentacles this turn.</span>`
+                        content: `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.BlackTentacles.EscapeFailed")}</span>`
                         };
                         ChatMessage.create(chatData);
 

@@ -32,7 +32,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
     });
 
     await wait(300);
-    let the_message = `<table border="1" style="text-align:center;"><thead><tr><th>Type</th><th>Found</th></tr></thead><tbody><tr><td>Undead</td><td>${is_undead.length}</td></tr><tr><td>Fiends</td><td>${is_fiend.length}</td></tr><tr><td>Celestials</td><td>${is_celestial.length}</td></tr></tbody><tbody style="background: rgba(0, 0, 0, 0.5);color: #f0f0e0;text-shadow: 1px 1px #000;border-bottom: 1px solid #000;"><tr><td>Total Sensed</td><td>${totalCount.length}</td></tr></tbody></table>`;
+    let the_message = `<table border="1" style="text-align:center;"><thead><tr><th>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Type")}</th><th>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Found")}</th></tr></thead><tbody><tr><td>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Undead")}</td><td>${is_undead.length}</td></tr><tr><td>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Fiends")}</td><td>${is_fiend.length}</td></tr><tr><td>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Celestials")}</td><td>${is_celestial.length}</td></tr></tbody><tbody style="background: rgba(0, 0, 0, 0.5);color: #f0f0e0;text-shadow: 1px 1px #000;border-bottom: 1px solid #000;"><tr><td>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.TotalSensed")}</td><td>${totalCount.length}</td></tr></tbody></table>`;
     let chatMessage = await fromUuid(workflow.itemCardUuid);
     let content = foundry.utils.duplicate(chatMessage.content);
     let searchString = /<div class="midi-qol-saves-display">[\s\S]*<div class="end-midi-qol-saves-display">/g;
@@ -42,17 +42,22 @@ export async function divineSense({ speaker, actor, token, character, item, args
     await wait(300);
     ui.chat.scrollBottom();
 
-    new Sequence()
+    let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
+    const { animEnabled } = cprConfig;
 
-    .effect()
-    .file("jb2a.detect_magic.circle.yellow")
-    .atLocation(token)
-    .size(25, {gridUnits:true})
-    .fadeOut(4000)
-    .opacity(0.75)
-    .belowTokens()
+    if(animEnabled) {
+        new Sequence()
 
-    .play()
+        .effect()
+        .file("jb2a.detect_magic.circle.yellow")
+        .atLocation(token)
+        .size(25, {gridUnits:true})
+        .fadeOut(4000)
+        .opacity(0.75)
+        .belowTokens()
+
+        .play()
+    }
 
     let effectData = [{
         "icon": item.img,
@@ -76,153 +81,155 @@ export async function divineSense({ speaker, actor, token, character, item, args
     }, timeoutValue * 1000);
 
     targets.forEach(target => {
-    if (target.name !== token.name){
-    let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(token, target, {type:"move", mode:"any"});
-    if (collisionDetected) return;
+        if (target.name !== token.name) {
+            let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(token, target, {type:"move", mode:"any"});
+            if (collisionDetected) return;
 
-    const distance = Math.sqrt(
-    Math.pow(target.x - token.x, 2) + Math.pow(target.y - token.y, 2)
-    );
+            const distance = Math.sqrt(
+            Math.pow(target.x - token.x, 2) + Math.pow(target.y - token.y, 2)
+            );
 
-    const gridDistance = distance/canvas.grid.size
+            const gridDistance = distance/canvas.grid.size
 
-    new Sequence()
+            if(animEnabled) {
+                new Sequence()
 
-    .effect()
-    .delay(gridDistance*125)
-    .file("jb2a.detect_magic.circle.yellow")
-    .atLocation(token)
-    .scaleToObject(2.5)
-    .mask(token)
+                .effect()
+                .delay(gridDistance*125)
+                .file("jb2a.detect_magic.circle.yellow")
+                .atLocation(token)
+                .scaleToObject(2.5)
+                .mask(token)
 
-    .wait(500)
+                .wait(500)
 
-    .effect()
-    .delay(gridDistance*125)
-    .copySprite(target)
-    .belowTokens()
-    .attachTo(target, {locale: true})
-    .scaleToObject(1, {considerTokenScale:true})
-    .spriteRotation(target.rotation*-1)
-    .filter("Glow", { color: 0xFFFFFF, distance: 15 })
-    .duration(3000)
-    .fadeIn(500, {delay:0})
-    .fadeOut(1000, {ease: "easeInCubic"})
-    .zIndex(0.2)
-    .opacity(1)
-    .playIf(() => {
-    return target.actor.system.details.type.value == "fiend" || "celestial" || "undead";
-    })
+                .effect()
+                .delay(gridDistance*125)
+                .copySprite(target)
+                .belowTokens()
+                .attachTo(target, {locale: true})
+                .scaleToObject(1, {considerTokenScale:true})
+                .spriteRotation(target.rotation*-1)
+                .filter("Glow", { color: 0xFFFFFF, distance: 15 })
+                .duration(3000)
+                .fadeIn(500, {delay:0})
+                .fadeOut(1000, {ease: "easeInCubic"})
+                .zIndex(0.2)
+                .opacity(1)
+                .playIf(() => {
+                return target.actor.system.details.type.value == "fiend" || "celestial" || "undead";
+                })
 
-    //Fiend Effect
-    .effect()
-    .delay(gridDistance*125)
-    .copySprite(target)
-    .belowTokens()
-    .attachTo(target, {locale: true})
-    .scaleToObject(1, {considerTokenScale:true})
-    .spriteRotation(target.rotation*-1)
-    .filter("Glow", { color: 0x911a1a, distance: 15 })
-    .duration(timeoutValue * 1000)
-    .fadeIn(2000, {delay:1000})
-    .fadeOut(3500, {ease: "easeInSine"})
-    .opacity(0.8)
-    .zIndex(0.1)
-    .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
-    .playIf(() => {
-    return target.actor.system.details.type.value == "fiend";
-    })
+                //Fiend Effect
+                .effect()
+                .delay(gridDistance*125)
+                .copySprite(target)
+                .belowTokens()
+                .attachTo(target, {locale: true})
+                .scaleToObject(1, {considerTokenScale:true})
+                .spriteRotation(target.rotation*-1)
+                .filter("Glow", { color: 0x911a1a, distance: 15 })
+                .duration(timeoutValue * 1000)
+                .fadeIn(2000, {delay:1000})
+                .fadeOut(3500, {ease: "easeInSine"})
+                .opacity(0.8)
+                .zIndex(0.1)
+                .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
+                .playIf(() => {
+                return target.actor.system.details.type.value == "fiend";
+                })
 
-    .effect()
-    .delay(gridDistance*125)
-    .file("jb2a.extras.tmfx.outflow.circle.01")
-    .attachTo(target, {locale: true})
-    .scaleToObject(1.5, {considerTokenScale:false})
-    .randomRotation()
-    .duration(timeoutValue * 1000)
-    .fadeIn(5000, {delay:0})
-    .fadeOut(3500, {ease: "easeInSine"})
-    .scaleIn(0, 3500, {ease: "easeInOutCubic"})
-    .tint(0x870101)
-    .opacity(0.5)
-    .belowTokens()
-    .playIf(() => {
-    return target.actor.system.details.type.value == "fiend";
-    })
+                .effect()
+                .delay(gridDistance*125)
+                .file("jb2a.extras.tmfx.outflow.circle.01")
+                .attachTo(target, {locale: true})
+                .scaleToObject(1.5, {considerTokenScale:false})
+                .randomRotation()
+                .duration(timeoutValue * 1000)
+                .fadeIn(5000, {delay:0})
+                .fadeOut(3500, {ease: "easeInSine"})
+                .scaleIn(0, 3500, {ease: "easeInOutCubic"})
+                .tint(0x870101)
+                .opacity(0.5)
+                .belowTokens()
+                .playIf(() => {
+                return target.actor.system.details.type.value == "fiend";
+                })
 
-    //Celestial Effect
-    .effect()
-    .delay(gridDistance*125)
-    .copySprite(target)
-    .belowTokens()
-    .attachTo(target, {locale: true})
-    .scaleToObject(1, {considerTokenScale:true})
-    .spriteRotation(target.rotation*-1)
-    .filter("Glow", { color: 0xffd000, distance: 15 })
-    .duration(timeoutValue * 1000)
-    .fadeIn(2000, {delay:1000})
-    .fadeOut(3500, {ease: "easeInSine"})
-    .opacity(0.5)
-    .zIndex(0.1)
-    .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
-    .playIf(() => {
-    return target.actor.system.details.type.value == "celestial";
-    })
+                //Celestial Effect
+                .effect()
+                .delay(gridDistance*125)
+                .copySprite(target)
+                .belowTokens()
+                .attachTo(target, {locale: true})
+                .scaleToObject(1, {considerTokenScale:true})
+                .spriteRotation(target.rotation*-1)
+                .filter("Glow", { color: 0xffd000, distance: 15 })
+                .duration(timeoutValue * 1000)
+                .fadeIn(2000, {delay:1000})
+                .fadeOut(3500, {ease: "easeInSine"})
+                .opacity(0.5)
+                .zIndex(0.1)
+                .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
+                .playIf(() => {
+                return target.actor.system.details.type.value == "celestial";
+                })
 
-    .effect()
-    .delay(gridDistance*125)
-    .file("jb2a.extras.tmfx.outflow.circle.01")
-    .attachTo(target, {locale: true})
-    .scaleToObject(1.5, {considerTokenScale:false})
-    .randomRotation()
-    .duration(timeoutValue * 1000)
-    .fadeIn(5000, {delay:0})
-    .fadeOut(3500, {ease: "easeInSine"})
-    .scaleIn(0, 3500, {ease: "easeInOutCubic"})
-    .tint(0xf3d877)
-    .opacity(0.75)
-    .belowTokens()
-    .playIf(() => {
-    return target.actor.system.details.type.value == "celestial";
-    })
+                .effect()
+                .delay(gridDistance*125)
+                .file("jb2a.extras.tmfx.outflow.circle.01")
+                .attachTo(target, {locale: true})
+                .scaleToObject(1.5, {considerTokenScale:false})
+                .randomRotation()
+                .duration(timeoutValue * 1000)
+                .fadeIn(5000, {delay:0})
+                .fadeOut(3500, {ease: "easeInSine"})
+                .scaleIn(0, 3500, {ease: "easeInOutCubic"})
+                .tint(0xf3d877)
+                .opacity(0.75)
+                .belowTokens()
+                .playIf(() => {
+                return target.actor.system.details.type.value == "celestial";
+                })
 
-    //Undead Effect
-    .effect()
-    .delay(gridDistance*125)
-    .copySprite(target)
-    .belowTokens()
-    .attachTo(target, {locale: true})
-    .scaleToObject(1, {considerTokenScale:true})
-    .spriteRotation(target.rotation*-1)
-    .filter("Glow", { color: 0x111111, distance: 15 })
-    .duration(timeoutValue * 1000)
-    .fadeIn(2000, {delay:1000})
-    .fadeOut(3500, {ease: "easeInSine"})
-    .opacity(0.8)
-    .zIndex(0.1)
-    .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
-    .playIf(() => {
-    return target.actor.system.details.type.value == "undead";
-    })
+                //Undead Effect
+                .effect()
+                .delay(gridDistance*125)
+                .copySprite(target)
+                .belowTokens()
+                .attachTo(target, {locale: true})
+                .scaleToObject(1, {considerTokenScale:true})
+                .spriteRotation(target.rotation*-1)
+                .filter("Glow", { color: 0x111111, distance: 15 })
+                .duration(timeoutValue * 1000)
+                .fadeIn(2000, {delay:1000})
+                .fadeOut(3500, {ease: "easeInSine"})
+                .opacity(0.8)
+                .zIndex(0.1)
+                .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
+                .playIf(() => {
+                return target.actor.system.details.type.value == "undead";
+                })
 
-    .effect()
-    .delay(gridDistance*125)
-    .file("jb2a.extras.tmfx.outflow.circle.01")
-    .attachTo(target, {locale: true})
-    .scaleToObject(1.5, {considerTokenScale:false})
-    .randomRotation()
-    .duration(timeoutValue * 1000)
-    .fadeIn(5000, {delay:0})
-    .fadeOut(3500, {ease: "easeInSine"})
-    .scaleIn(0, 3500, {ease: "easeInOutCubic"})
-    .tint(0x121212)
-    .opacity(0.5)
-    .belowTokens()
-    .playIf(() => {
-    return target.actor.system.details.type.value == "undead";
-    })
+                .effect()
+                .delay(gridDistance*125)
+                .file("jb2a.extras.tmfx.outflow.circle.01")
+                .attachTo(target, {locale: true})
+                .scaleToObject(1.5, {considerTokenScale:false})
+                .randomRotation()
+                .duration(timeoutValue * 1000)
+                .fadeIn(5000, {delay:0})
+                .fadeOut(3500, {ease: "easeInSine"})
+                .scaleIn(0, 3500, {ease: "easeInOutCubic"})
+                .tint(0x121212)
+                .opacity(0.5)
+                .belowTokens()
+                .playIf(() => {
+                return target.actor.system.details.type.value == "undead";
+                })
 
-    .play()
-    }
+                .play()
+            }
+        }
     })
 }

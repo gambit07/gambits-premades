@@ -11,7 +11,7 @@ export async function infestation({ speaker, actor, token, character, item, args
             const walkSpeedFeet = 5;
             await game.gps.socket.executeAsUser("moveTokenByCardinal", gmUser, {targetUuid: target.document.uuid, distance: walkSpeedFeet, direction: directionContent });
 
-            let content = `<span style='text-wrap: wrap;'>The movement roll for ${target.actor.name} is ${directionResult}: ${target.actor.name} moves ${directionContent} using up to 5 feet of their movement. This does not provoke Opportunity Attacks.</span>`
+            let content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Infestation.MovementRollMovesUsingUp", { targetName: target.actor.name, directionResult: directionResult, directionContent: directionContent })}</span>`
 
             await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: actor.uuid, itemUuid: workflow.item.uuid, chatContent: content, rollData: directionRoll});
         }

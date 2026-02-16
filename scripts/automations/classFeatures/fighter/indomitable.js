@@ -22,13 +22,13 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
         
         let indomitableHomebrew = MidiQOL.safeGetGameSetting('gambits-premades', 'enableAutoSucceedIndomitable');
         let contentQuestion;
-        if(indomitableHomebrew) contentQuestion = `Would you like to use ${itemProperName} to succeed on your saving throw?`;
-        else contentQuestion = `Would you like to use ${itemProperName} to re-roll your saving throw?`;
+        if(indomitableHomebrew) contentQuestion = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.PromptAutoSaveSuccess", { itemProperName: itemProperName });
+        else contentQuestion = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.PromptRerollSave", { itemProperName: itemProperName });
 
         let dialogContent = `
             <div class="gps-dialog-container">
@@ -46,14 +46,14 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
 
         let result;
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has an option available for a save triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.OptionAvailableSaveTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -103,15 +103,15 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
                 workflow.saves.add(validTokenPrimary);
                 workflow.failedSaves.delete(validTokenPrimary);
 
-                if(indomitableHomebrew) chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable and auto-succeeded their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                else chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable and succeeded their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                if(indomitableHomebrew) chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.Indomitable.AutoSuccess", { actorName: validTokenPrimary.actor.name })} <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                else chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.Indomitable.Success", { actorName: validTokenPrimary.actor.name })} <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                 await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: !indomitableHomebrew ? reroll.saveRolls : null});
                 return;
             }
 
             else {
-                chatContent = `<span style='text-wrap: wrap;'>${validTokenPrimary.actor.name} used indomitable but still failed their save. <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.Indomitable.Failure", { actorName: validTokenPrimary.actor.name })} <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                 await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
                 return;

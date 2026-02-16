@@ -15,7 +15,7 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">You've missed your attack, would you like to use Stroke of Luck to succeed instead?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Rogue.StrokeOfLuck.VeMissedAttack")}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                 </div>
@@ -25,13 +25,13 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
         
-        let content = `<span style='text-wrap: wrap;'><img src="${token.actor.img}" style="width: 25px; height: auto;" /> ${token.actor.name} has a reaction available for a save triggering ${macroItem.name}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${token.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Rogue.StrokeOfLuck.ReactionAvailableSaveTrigger", { actorName: token.actor.name, itemName: macroItem.name })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -90,7 +90,7 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use Stroke of Luck to change your ability check roll to a 20?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Rogue.StrokeOfLuck.Prompt")}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                 </div>
@@ -100,13 +100,13 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
 
-        let content = `<span style='text-wrap: wrap;'><img src="${token.actor.img}" style="width: 25px; height: auto;" /> ${token.actor.name} has a reaction available for a save triggering ${macroItem.name}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${token.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Rogue.StrokeOfLuck.ReactionAvailableSaveTrigger", { actorName: token.actor.name, itemName: macroItem.name })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -133,7 +133,7 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
                 let abilityType = chatMessage?.flags?.dnd5e.roll.abilityId;
                 let abilityScore = actor.system.abilities[abilityType].mod;
                 const newTotal = abilityScore + 20;
-                let content = `You used Stroke of Luck to change your ability check to a ${newTotal}`
+                let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Rogue.StrokeOfLuck.ChangedAbilityCheck", { newTotal: newTotal })
 
                 let actorPlayer = MidiQOL.playerForActor(actor);
                 let chatData = {
@@ -152,7 +152,7 @@ export async function strokeOfLuck({ speaker, actor, token, character, item, arg
                 let abilityType = chatMessage?.flags?.dnd5e.roll.skillId;
                 let abilityScore = actor.system.skills[abilityType].mod;
                 const newTotal = abilityScore + 20;
-                let content = `You used Stroke of Luck to change your skill check to a ${newTotal}`
+                let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Rogue.StrokeOfLuck.ChangedSkillCheck", { newTotal: newTotal })
 
                 let actorPlayer = MidiQOL.playerForActor(actor);
                 let chatData = {

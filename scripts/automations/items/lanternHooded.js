@@ -4,7 +4,7 @@ import {
 } from "../../utils/lightActions.js";
   
 export async function lanternHooded({ speaker, actor, token, item, args, workflow }) {
-  if(!game.modules.get("ATL")?.active) return ui.notifications.warn("The Active Token Effects module must be active");
+  if(!game.modules.get("ATL")?.active) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.Candle.MissingDependency"));
   const effectName = `${token.document.id} Hooded Lantern`;
   const gpsUuid = "4d035518-5171-42fb-94e0-2f68f1208e55";
   const gpsUuidDim = "16b82105-df43-4489-89ac-d20b4915e601";
@@ -94,7 +94,7 @@ export async function lanternHooded({ speaker, actor, token, item, args, workflo
 
   if (!activeLight && !activeLightDim) {
     if (!hasRemaining) {
-      ui.notifications.warn(`You do not have any ${animType}s remaining.`);
+      ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Items.Candle.DoNotAnyS", { animType: animType }));
       workflow.aborted = true;
       return;
     }

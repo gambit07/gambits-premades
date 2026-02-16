@@ -1,0 +1,1407 @@
+{
+  "GAMBITSPREMADES": {
+    "ChatMessages": {
+      "Common": {
+        "OptionAvailableSaveTrigger": "{actorName} has an option available for a save triggering {itemProperName}.",
+        "ReactionAvailableAttackTrigger": "{actorName} has a reaction available for an attack triggering {itemProperName}.",
+        "ReactionAvailableRollTrigger": "{actorName} has a reaction available for a roll triggering {itemProperName}.",
+        "ReactionAvailableSaveTrigger": "{actorName} has a reaction available for a save triggering {itemProperName}.",
+        "ReactionAvailableSpellTrigger": "{actorName} has a reaction available for a spell triggering {itemProperName}."
+      },
+      "Automations": {
+        "ThirdPartyClassFeatures": {
+          "Witch": {
+            "WitchesHex": {
+              "HexReducedAttackHit": "The creature was hexed reducing their attack by {reduction}, but were still able to hit their target.",
+              "HexReducedAttackMiss": "The creature was hexed reducing their attack by {reduction}, and were unable to hit their target.",
+              "SaveFailed": "The creature was hexed and failed their save.",
+              "SaveSucceeded": "The creature was hexed but still succeeded their save."
+            },
+            "CovenOfTheRoilingHearth": {
+              "SootSpiritAttackedHit": "The creature attacks one of your soot spirits and hits! You have {sootSpiritsRemaining} soot spirits remaining.",
+              "SootSpiritAttackedMiss": "The creature attacks one of your soot spirits and misses! You have {sootSpiritsRemaining} soot spirits remaining."
+            }
+          },
+          "Wizard": {
+            "Chronurgist": {
+              "ChronalShift": {
+                "AllySaveFailed": "Your ally was chronally shifted but still failed their save.",
+                "AllySaveSucceeded": "Your ally was chronally shifted and succeeded their save.",
+                "AttackFailed": "The creature was chronally shifted, and failed their attack.",
+                "AttackHitAnyway": "The creature was chronally shifted, but were still able to hit their target.",
+                "EnemySaveFailed": "Your enemy was chronally shifted and failed their save.",
+                "EnemySaveSucceeded": "Your enemy was chronally shifted but still succeeded their save."
+              }
+            }
+          }
+        },
+        "ThirdPartySpells": {
+          "ContagiousHealing": {
+            "NoAdditionalAlliesInRange": "There are no additional allies within 10 feet, your Contagious Healing subsides."
+          },
+          "DrafynsBaneOfExcellence": {
+            "Natural20CancelledAttack": "Your natural 20 was cancelled due to Drafyn's Bane of Excellence and you fail the attack.",
+            "Natural20CancelledSave": "Your natural 20 was cancelled due to Drafyn's Bane of Excellence and you fail your saving throw."
+          },
+          "ShroomOfDoom": {
+            "MushroomCreatedOnBody": "The creature has {mushroomCount} mushroom created on their body with Shroom of Doom.",
+            "MushroomsCreatedOnBody": "The creature has {mushroomCount} mushrooms created on their body with Shroom of Doom."
+          }
+        },
+        "ClassFeatures": {
+          "Artificer": {
+            "FlashOfGenius": {
+              "UsedAddedSRoll": "{actorName} used {itemName} and added {intMod} to {targetName}'s roll."
+            }
+          },
+          "Bard": {
+            "CollegeOfLore": {
+              "CuttingWords": {
+                "CuttingWordsReducedAttackHit": "The creature takes a cutting word reducing their attack by {reduction}, but were still able to hit their target.",
+                "CuttingWordsReducedAttackMiss": "The creature takes a cutting word reducing their attack by {reduction}, and were unable to hit their target.",
+                "DamageReduced": "The creature takes a cutting word, and their damage is reduced by {reduction}.",
+                "ReactionAvailable": "{actorName} has a reaction available for a {workflowType} triggering {itemProperName}.",
+                "SeemsNotBeEffectedBy": "The creature seems to not be affected by your {itemProperName}."
+              }
+            },
+            "CollegeOfTragedy": {
+              "PoetryInMisery": {
+                "SoliloquizeOverRegain": "You use {itemProperName} to soliloquize over {typeText} and regain a use of Bardic Inspiration."
+              },
+              "TaleOfHubris": {
+                "IncreaseCriticalThreshold": "You use {itemProperName} to increase the critical threshold on the creature due to its nat 20."
+              }
+            }
+          },
+          "Fighter": {
+            "ArcaneArcher": {
+              "BeguilingArrow": {
+                "TargetCharmedByAlly": "You use Beguiling Arrow and cause the target to be Charmed by {allyName}.",
+                "TargetCharmedByYou": "{actorName} used Beguiling Arrow and caused their target to be Charmed by you. This effect ends if you attack it, deal damage to it, or force it to make a saving throw."
+              },
+              "GraspingArrow": {
+                "RemoveVinesFail": "You were unable to remove the vines from the target using your action.",
+                "RemoveVinesSuccess": "You successfully remove the vines from the target using your action."
+              }
+            },
+            "Indomitable": {
+              "AutoSuccess": "{actorName} used indomitable and auto-succeeded their save.",
+              "Success": "{actorName} used indomitable and succeeded their save.",
+              "Failure": "{actorName} used indomitable but still failed their save."
+            }
+          },
+          "Interception": {
+            "ReduceDamageTakenBy": "You use {itemProperName} and reduce damage taken for {targetName} by {reduction}."
+          },
+          "Paladin": {
+            "DivineSense": {
+              "Celestials": "Celestials",
+              "Fiends": "Fiends",
+              "Found": "Found",
+              "TotalSensed": "Total Sensed",
+              "Type": "Type",
+              "Undead": "Undead"
+            }
+          },
+          "Protection": {
+            "AttackHitAnyway": "You use your Fighting Style - Protection but the target still hits {targetName}.",
+            "FightingStyleCause": "You use your Fighting Style - Protection and cause the target to miss {targetName}.",
+            "TurnAdvantageToStraightRollHit": "You use your Fighting Style - Protection to turn the advantage roll into a straight roll, but the target still hits {targetName}.",
+            "TurnAdvantageToStraightRollMiss": "You use your Fighting Style - Protection to turn the advantage roll into a straight roll, and cause the target to miss {targetName}."
+          },
+          "Ranger": {
+            "MonsterSlayerConclave": {
+              "HuntersSense": {
+                "FollowingDamageTraits": "{targetName} has the following damage traits:",
+                "Immunities": "- Immunities:",
+                "Resistances": "- Resistances:",
+                "Vulnerabilities": "- Vulnerabilities:"
+              },
+              "MagicUsersNemesis": {
+                "SaveFailed": "The creature failed its saving throw and was affected by Magic User's Nemesis.",
+                "SaveSucceeded": "The creature succeeded its saving throw and was not affected by Magic User's Nemesis."
+              }
+            }
+          },
+          "Rogue": {
+            "StrokeOfLuck": {
+              "ChangedAbilityCheck": "You used Stroke of Luck to change your ability check to a {newTotal}",
+              "ChangedSkillCheck": "You used Stroke of Luck to change your skill check to a {newTotal}",
+              "ReactionAvailableSaveTrigger": "{actorName} has a reaction available for a save triggering {itemName}."
+            }
+          },
+          "Sorcerer": {
+            "ClockworkSoul": {
+              "RestoreBalance": {
+                "AllyDisadvantageRemovedAttackHit": "Your ally had their source of disadvantage removed and were able to hit their target with a {attackResult}.",
+                "AllyDisadvantageRemovedAttackMiss": "Your ally had their source of disadvantage removed but were still unable to hit their target with a {attackResult}.",
+                "AllyDisadvantageRemovedCriticalHit": "Your ally had their source of disadvantage removed and were able to hit their target with a critical hit.",
+                "AllyDisadvantageRemovedCriticalMiss": "Your ally had their source of disadvantage removed but were still unable to hit their target with a critical miss.",
+                "AllyDisadvantageRemovedSaveFailure": "Your ally had their source of disadvantage removed but were still unable to save against the effect with a {saveResult}.",
+                "AllyDisadvantageRemovedSaveSuccess": "Your ally had their source of disadvantage removed and were able to save against the effect with a {saveResult}.",
+                "EnemyAdvantageRemovedAttackHit": "Your enemy had their source of advantage removed but were still able to hit their target with a {attackResult}.",
+                "EnemyAdvantageRemovedAttackMiss": "Your enemy had their source of advantage removed and were unable to hit their target with a {attackResult}.",
+                "EnemyAdvantageRemovedCriticalHit": "Your enemy had their source of advantage removed but were still able to hit their target with a critical hit.",
+                "EnemyAdvantageRemovedCriticalMiss": "Your enemy had their source of advantage removed and were unable to hit their target with a critical miss.",
+                "EnemyAdvantageRemovedSaveFailure": "Your enemy had their source of advantage removed and were unable to save against the effect with a {saveResult}.",
+                "EnemyAdvantageRemovedSaveSuccess": "Your enemy had their source of advantage removed but were still able to save against the effect with a {saveResult}."
+              }
+            }
+          },
+          "Wizard": {
+            "SchoolOfDivination": {
+              "Portent": {
+                "PortentApplied": "You used {portentLabel} and changed the dice result to {roll}.",
+                "PortentRoll": "- Portent Roll {i}:"
+              }
+            },
+            "SchoolOfEnchantment": {
+              "InstinctiveCharm": {
+                "OptionAvailableAttackTrigger": "{actorName} has an option available for an attack triggering {itemProperName}."
+              }
+            }
+          }
+        },
+        "GenericFeatures": {
+          "OpportunityAttack": {
+            "ReactionAvailableOpportunityAttack": "{actorName} has a reaction available for an Opportunity Attack."
+          }
+        },
+        "Items": {
+          "Caltrops": {
+            "PiercingDamageTaken": "{actorName} takes {damage} piercing damage."
+          },
+          "RodOfThePactKeeper": {
+            "SpellSlotRecovered": "Spell slot recovered! You now have {spellLevelNew} pact spells remaining."
+          },
+          "StaffOfTheRootedHills": {
+            "RestrainedBy": "The creature is restrained by the Staff of the Rooted Hills."
+          }
+        },
+        "MonsterFeatures": {
+          "BurstOfIngenuity": {
+            "AddedBonusToRollSaveAlreadySucceeded": "You added a +2 bonus to {allyName}'s roll but they had already succeeded their save.",
+            "AddedBonusToRollSaveStillFailed": "You added a +2 bonus to {allyName}'s roll but did not cause them to succeed their save.",
+            "AddedBonusToRollSaveSucceeded": "You added a +2 bonus to {allyName}'s roll and caused them to succeed their save."
+          },
+          "DreadCounterspell": {
+            "DreadCounterspellAutoSuccess": "The creature was dread counterspelled because you used {itemProperName} on a spell that was 4th level or lower.",
+            "DreadCounterspellFailed": "The creature was not dread counterspelled, you rolled a {skillTotal} on your {skillFlavor} ability check and needed a {spellThreshold}.{spellPenetrationChat}",
+            "DreadCounterspellSuccess": "The creature was dread counterspelled, you rolled a {skillTotal} on your {skillFlavor} ability check."
+          }
+        },
+        "Spells": {
+          "Counterspell": {
+            "CounterspellAutoSuccess": "The creature was counterspelled because you cast {itemProperName} at an equal or higher level.",
+            "CounterspellFailed": "The creature was not counterspelled, you rolled a {skillTotal} on your {skillFlavor} ability check{abjurationChat} and needed a {spellThreshold}.{spellPenetrationChat}",
+            "CounterspellSuccess": "The creature was counterspelled, you rolled a {skillTotal} on your {skillFlavor} ability check{abjurationChat}."
+          },
+          "DissonantWhispers": {
+            "TargetAutoSaveSuccess": "The target is deafened and automatically succeeds its saving throw."
+          },
+          "Enervation": {
+            "DealDamageHeal": "You deal {damageTotal} points of damage to your target and heal up to {healAmount} points using Enervation."
+          },
+          "Identify": {
+            "Identify": "Identify {timeToCast}",
+            "PromptRitualCast": "Would you like to cast Identify ritually?"
+          },
+          "Infestation": {
+            "MovementRollMovesUsingUp": "The movement roll for {targetName} is {directionResult}: {targetName} moves {directionContent} using up to 5 feet of their movement. This does not provoke Opportunity Attacks."
+          },
+          "KineticJaunt": {
+            "EndTurnAnotherCreaturesSpace": "You end your turn in another creatures space and take {damageTotal} points of force damage and are moved to your last position before entering that creatures space."
+          },
+          "SilveryBarbs": {
+            "AttackFailed": "The creature was silvery barbed, and failed their attack.",
+            "AttackHitAnyway": "The creature was silvery barbed, but were still able to hit their target.",
+            "FailedSaveCheck": "The creature was silvery barbed and failed their {rollType} for {itemName}.",
+            "Succeeded": "The creature was silvery barbed but still succeeded their {rollType} for {itemName}."
+          },
+          "StinkingCloud": {
+            "Content": "You are asphyxiated by the noxious gas and lose your action this turn retching and reeling."
+          },
+          "TemporalShunt": {
+            "ReactionAvailableAttackTrigger": "{actorName} has a reaction available for a spell or attack triggering {itemProperName}.",
+            "TargetRollInterrupted": "The targets {workflowType} roll was successfully interrupted and they disappear."
+          },
+          "Web": {
+            "Escape": "You successfully escape from the {itemName}!",
+            "UnableEscapeTurn": "You are unable to escape the {itemName} this turn."
+          },
+          "Confusion": {
+            "ActNormally": "The creature can act and move normally.",
+            "MovementRoll": "Your movement roll is {rollResult} and you travel {direction}: You don't take an action this turn.",
+            "NoMoveOrActions": "You can't move or take actions this turn.",
+            "RollForIs": "Confusion roll for {actorName} is {result}:",
+            "MustMoveAndMeleeAttack": "You must move to {targetName} and attack them with a melee attack.",
+            "NoAction": "The creature does nothing this turn."
+          },
+          "BlackTentacles": {
+            "EscapeFailed": "You are unable to escape Black Tentacles this turn.",
+            "EscapeSucceeded": "You successfully escape from Black Tentacles!"
+          },
+          "Command": {
+            "MustNow": "{actorName} must now {wordInput}."
+          }
+        }
+      },
+      "Automations2024": {
+        "GenericFeatures": {
+          "MageSlayer2024": {
+            "SaveSucceeded": "{actorName} used {itemProperName} and succeeded their save."
+          }
+        },
+        "Spells": {
+          "Counterspell2024": {
+            "CounterspellFailed": "The creature succeeded its saving throw and was not counterspelled.",
+            "CounterspellSuccess": "The creature failed its saving throw and was counterspelled."
+          },
+          "StinkingCloud2024": {
+            "Content": "You are asphyxiated by the noxious gas and lose your action and bonus action this turn retching and reeling."
+          }
+        }
+      },
+      "Utils": {
+        "Helpers": {
+          "CastRitually": "{actorName} cast {itemName} ritually.",
+          "Per": "per {restModeName}",
+          "Remaining": "You have {remaining} use remaining.",
+          "UsesRemaining": "You have {remaining} uses remaining."
+        }
+      }
+    },
+    "DAE": {
+      "Flags": {
+        "OADisadvantage": {
+          "Description": "Grants disadvantage on Opportunity Attacks against this token",
+          "Name": "Opportunity Attack Disadvantage"
+        },
+        "OADisadvantageSource": {
+          "Description": "Disadvantage on Opportunity Attacks against a token",
+          "Name": "Opportunity Attack Source Disadvantage"
+        },
+        "OAImmunity": {
+          "Description": "Prevents token from receiving any Opportunity Attacks",
+          "Name": "Opportunity Attack Immunity"
+        },
+        "OASuppression": {
+          "Description": "Prevents token from making any Opportunity Attacks",
+          "Name": "Opportunity Attack Suppression"
+        }
+      }
+    },
+    "Debug": {
+      "Automations": {
+        "Spells": {
+          "Confusion": {
+            "EffectNotFound": "Confusion effect not found on the actor."
+          }
+        }
+      }
+    },
+    "Dialogs": {
+      "Common": {
+        "Advantage": "Advantage:",
+        "Cast": "Cast",
+        "Close": "Close",
+        "Daily": "Daily",
+        "DamageLabel": "Damage:",
+        "EnemyHitsAlly": "An enemy successfully hit your ally.",
+        "EnemyHitsAllyWithAttackTotal": "An enemy successfully hit your ally with a {attackTotal}.",
+        "FavoriteThisOption": "Favorite this Option?",
+        "FreeUse": "Free {itemName} Use",
+        "LongRest": "Long Rest",
+        "No": "No",
+        "NoValidAlliesInRange": "No valid allies in range.",
+        "NoValidEnemiesInRange": "No valid enemies in range.",
+        "Pause": "Pause",
+        "PointsAbbrev": "pts",
+        "PromptAutoSaveSuccess": "Would you like to use {itemProperName} to succeed on your saving throw?",
+        "PromptRerollSave": "Would you like to use {itemProperName} to re-roll your saving throw?",
+        "Resume": "Resume",
+        "ShortRest": "Short Rest",
+        "Target": "Target:",
+        "WaitingForSelection": "Waiting for {actorName}'s selection | {itemName}",
+        "Weapon": "Weapon:",
+        "Yes": "Yes"
+      },
+      "Automations": {
+        "ThirdPartyClassFeatures": {
+          "Savant": {
+            "CalculatedFlourish": {
+              "Prompts": {
+                "UseYourReaction": {
+                  "Default": "Would you like to use your reaction to attack? This will initiate a use of your Superiority Die for the Riposte maneuver. Choose your weapon below."
+                }
+              }
+            }
+          },
+          "Witch": {
+            "CovenOfTheRoilingHearth": {
+              "RainOfCinders": {
+                "AttackedInitiate": "{targetName} has been attacked, would you like to initiate {itemProperName} to use a Hearth Spirit to try and disrupt it?"
+              }
+            },
+            "WitchesHex": {
+              "Prompts": {
+                "UseYourReaction": {
+                  "ReduceAttack": "Would you like to use your reaction to initiate {itemName} to try and reduce the enemies attack roll?",
+                  "ReduceSave": "Would you like to use your reaction to cast {itemName} to try and reduce an enemies saving throw? Choose an enemy to target below."
+                }
+              }
+            }
+          },
+          "Wizard": {
+            "Chronurgist": {
+              "ChronalShift": {
+                "AllyTarget": "Ally Target:",
+                "Details": {
+                  "AlliesFailed": "Allies failed their saving throws. Choose an ally to re-roll below.",
+                  "EnemiesSucceeded": "Enemies succeeded their saving throws. Choose an enemy to re-roll below.",
+                  "EnemiesSucceededAlliesFailed": "Enemies succeeded and allies failed their saving throws. Choose an enemy or ally to re-roll below. If both are chosen, the re-roll will apply to an enemy."
+                },
+                "EnemyTarget": "Enemy Target:",
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Cast": "Would you like to use your reaction to cast {itemName}? {triggerDetails}",
+                    "Initiate": "Would you like to use your reaction to initiate {itemName}? {details}"
+                  }
+                },
+                "SelectAlly": "-- Select Ally --",
+                "SelectEnemy": "-- Select Enemy --"
+              }
+            }
+          }
+        },
+        "ThirdPartySpells": {
+          "GrimSiphon": {
+            "Heal": "Heal",
+            "HealLabel": "Heal:",
+            "SelectHealingTarget": "Who would you like to heal?",
+            "Windowtitle": "Grim Siphon Healing"
+          },
+          "PowerWordRebound": {
+            "HitByAttack": "{targetName} has been hit by an attack and is under half health, would you like to use {itemProperName} to deflect it?"
+          },
+          "StormMote": {
+            "AssignMotes": "Assign the {numMotes} motes you have available:",
+            "Cancel": "Cancel",
+            "Confirm": "Confirm",
+            "Windowtitle": "Assign Motes"
+          }
+        },
+        "ClassFeatures": {
+          "Artificer": {
+            "FlashOfGenius": {
+              "For": "for {targetName}?",
+              "ForYourself": "for yourself?",
+              "Prompts": {
+                "UseYourReaction": {
+                  "Default": "Would you like to use your reaction to initiate {itemName} {targetPrompt}"
+                }
+              },
+              "TargetPrompt": {
+                "ChooseAlly": "for an ally? Choose below.",
+                "ChooseSelfOrAlly": "for yourself or an ally? Choose below."
+              }
+            }
+          },
+          "Bard": {
+            "CollegeOfLore": {
+              "CuttingWords": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Would you like to use your reaction to initiate {itemName} for this {rollType} roll?",
+                    "WithDetails": "{details}Would you like to use your reaction to use {itemName} for this {rollType} roll?"
+                  }
+                },
+                "Pts": "- {points} pts",
+                "TargetRolledAttack": "The target rolled a {attackTotal} to attack. "
+              }
+            },
+            "CollegeOfTragedy": {
+              "PoetryInMisery": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Would you like to use your reaction to initiate {itemName} for this nat 1 {rollType} roll?"
+                  }
+                }
+              },
+              "TaleOfHubris": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Would you like to use your reaction to initiate {itemName} for this nat 20 {rollType} roll?"
+                  }
+                }
+              }
+            }
+          },
+          "Druid": {
+            "CircleOfStars": {
+              "StarMap": {
+                "Prompt": "Would you like to use Circle of Stars to initiate a free use of {itemName}? It will be cast at its base level. You have {freeUses} uses remaining."
+              }
+            }
+          },
+          "Fighter": {
+            "ArcaneArcher": {
+              "BeguilingArrow": {
+                "SelectAllyForCharm": "Select which ally you would like the target to be Charmed by:"
+              }
+            },
+            "BattleMaster": {
+              "Riposte": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Would you like to use your reaction to attack? This will initiate a use of your Superiority Die for the Riposte maneuver. Choose your weapon below."
+                  }
+                }
+              }
+            }
+          },
+          "Interception": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to initiate {itemName} for this {rollType} roll?"
+              }
+            },
+            "PtsOf": "{points} pts of"
+          },
+          "Protection": {
+            "Prompt": "Would you like to use",
+            "ToDisadvantageTheAttackAgainst": "to disadvantage the attack against"
+          },
+          "Ranger": {
+            "MonsterSlayerConclave": {
+              "MagicUsersNemesis": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Would you like to use your reaction to initiate {itemName}?"
+                  }
+                }
+              }
+            }
+          },
+          "Rogue": {
+            "StrokeOfLuck": {
+              "Prompt": "Would you like to use Stroke of Luck to change your ability check roll to a 20?",
+              "VeMissedAttack": "You've missed your attack, would you like to use Stroke of Luck to succeed instead?"
+            }
+          },
+          "Sorcerer": {
+            "ClockworkSoul": {
+              "RestoreBalance": {
+                "Ally": "Ally:",
+                "Enemy": "Enemy:",
+                "OnchangeResetallyselect": "onchange=\"resetAllySelect()\">",
+                "OnchangeResetenemyselect": "onchange=\"resetEnemySelect()\">",
+                "Prompts": {
+                  "UseYourReaction": {
+                    "SelectTarget": "Would you like to use your reaction to initiate {itemName}? {selectionHint}",
+                    "TargetDisposition": "Would you like to use your reaction to initiate {itemName} {targetHint}"
+                  }
+                },
+                "SelectAlly": "Select Ally:",
+                "SelectEnemy": "Select Enemy:",
+                "SelectionHint": {
+                  "ChooseAlly": "Choose an ally to remove disadvantage from below.",
+                  "ChooseAllyOrEnemy": "Choose an ally to remove disadvantage from, or an enemy to remove advantage from below.",
+                  "ChooseEnemy": "Choose an enemy to remove advantage from below."
+                },
+                "TargetHint": {
+                  "RemoveAdvantageFromEnemy": "to remove advantage from your enemy?",
+                  "RemoveDisadvantageFromAlly": "to remove disadvantage from your ally?"
+                }
+              }
+            }
+          },
+          "Warlock": {
+            "GreatOldOne": {
+              "EntropicWard": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Would you like to use your reaction to disadvantage the attack against you and potentially gain advantage against the attacker?"
+                  }
+                }
+              }
+            },
+            "Hexblade": {
+              "ArmorOfHexes": {
+                "Prompt": "Would you like to use Armor of Hexes to try and avoid this attack?"
+              }
+            }
+          },
+          "Wizard": {
+            "SchoolOfDivination": {
+              "Portent": {
+                "SelectPortentRoll": "Which portent roll would you like to use?",
+                "Windowtitle": "Portent Roll Selection"
+              }
+            },
+            "SchoolOfEnchantment": {
+              "InstinctiveCharm": {
+                "ForcedSelectNew": "{itemProperName} has forced you to select a new target for your attack. Choose from the list below.",
+                "Prompt": "Would you like to use {itemProperName} to try and force the attacker to choose a different target?"
+              }
+            }
+          },
+          "Barbarian": {
+            "RecklessAttack": {
+              "Prompts": {
+                "UseRecklessAttack": "Would you like to use your Reckless Attack this turn?"
+              }
+            }
+          }
+        },
+        "GenericFeatures": {
+          "GiftOfTheGemDragon": {
+            "Charisma": "Charisma",
+            "Damaged": "You have been damaged, would you like use your reaction to initiate",
+            "Intelligence": "Intelligence",
+            "PromptDamageAndPush": "to damage and potentially push the attacker?",
+            "SelectAbilityScore": "Which ability score did you increase with Gift of the Gem Dragon?",
+            "TelekineticReprisal": "Telekinetic Reprisal",
+            "Windowtitle": "Gift of the Gem Dragon Ability",
+            "Wisdom": "Wisdom"
+          },
+          "MageSlayer": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to attack using Mage Slayer? Choose your weapon below."
+              }
+            }
+          },
+          "OpportunityAttack": {
+            "BraceHint": " This will initiate a use of your Superiority Die for the Brace maneuver.",
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to attack?{warCasterHint}{braceHint}"
+              }
+            },
+            "Title": "Opportunity Attack",
+            "TitleBrace": "Maneuvers: Brace Opportunity Attack",
+            "TitleDeadlyReach": "Deadly Reach Opportunity Attack",
+            "TitlePolearm": "Polearm Opportunity Attack",
+            "WarCasterHint": " If using War Caster to cast a spell, it must affect only the creature who triggered this Opportunity Attack."
+          },
+          "Sentinel": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to attack using Sentinel? Choose your weapon below."
+              }
+            }
+          }
+        },
+        "Items": {
+          "AmuletOfTheDevout": {
+            "Prompt": "Would you like to recover a Channel Divinity charge?"
+          },
+          "BallBearings": {
+            "ConfirmHalfSpeed": "{actorName} moved through ball bearings, are they moving at half speed?"
+          },
+          "BootsOfSpeed": {
+            "Prompt": "Would you like to disable Boots of Speed?",
+            "Windowtitle": "Boots of Speed"
+          },
+          "Caltrops": {
+            "ConfirmHalfSpeed": "{actorName} moved through caltrops, are they moving at half speed?"
+          },
+          "RodOfThePactKeeper": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Would you like to use your action to recover a spell slot?"
+              }
+            }
+          },
+          "StaffOfWithering": {
+            "Prompt": "Would you like to use a charge to deal additional damage and possibly disadvantage the target? You have",
+            "Remaining": "{chargesText} remaining."
+          }
+        },
+        "MonsterFeatures": {
+          "BurstOfIngenuity": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to cast {itemName} and add 2 to this saving throw? Choose an ally below."
+              }
+            }
+          },
+          "DreadCounterspell": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to initiate {itemName}?"
+              }
+            }
+          },
+          "LegendaryResistance": {
+            "PromptUseLegendaryResistance": "{actorName} failed a saving throw. Would you like to use {itemName} to succeed?"
+          }
+        },
+        "Spells": {
+          "BlackTentacles": {
+            "Dexterity": "Dexterity",
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Would you like to use your action to make an ability check to escape Black Tentacles?"
+              }
+            },
+            "Strength": "Strength"
+          },
+          "Counterspell": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to {itemName}?"
+              }
+            },
+            "SubtleSpellRemaining": "Use Subtle Spell? | {pointsRemaining} {pointsLabel} Remaining"
+          },
+          "Enervation": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Would you like to use your action this round to deal 4d8 necrotic damage to your target via Enervation?"
+              }
+            }
+          },
+          "Entangle": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Would you like to use your action to make a Strength ability check to escape being Restrained?"
+              }
+            }
+          },
+          "FizbansPlatinumShield": {
+            "PromptSelectTarget": "Who would you like to move Fizban's Platinum Shield to?"
+          },
+          "FortunesFavor": {
+            "PromptRerollAttackRoll": "Use {itemName} to reroll the attack roll d20:",
+            "ReplaceRoll": "Replace {oldRoll} with {newRoll}?"
+          },
+          "HellishRebuke": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to initiate Hellish Rebuke on the creature who damaged you?"
+              }
+            }
+          },
+          "Identify": {
+            "Level": "{levelWithOrdinal} Level ({spellSlot})",
+            "WindowTitle": "Identify Items",
+            "WindowTitleRitual": "Identify Items Ritually",
+            "Windowtitle": "Identify Cast Type"
+          },
+          "PowerWordHeal": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to get up from Prone?"
+              }
+            }
+          },
+          "SilveryBarbs": {
+            "Prompts": {
+              "UseYourReaction": {
+                "AfterAttack": "Would you like to use your reaction to cast {itemName}? {triggerDetails} Choose an ally to give advantage to below.",
+                "AfterSave": {
+                  "Multiple": "Would you like to use your reaction to cast {itemName}? Enemies succeeded their saving throw. Choose an enemy to target and an ally to give advantage to below.",
+                  "Single": "Would you like to use your reaction to cast {itemName}? An enemy succeeded their saving throw. Choose an enemy to target and an ally to give advantage to below."
+                }
+              }
+            }
+          },
+          "TemporalShunt": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to use {itemName}?"
+              }
+            },
+            "SelectAdditionalTargets": "What other targets would you like to be affected by {itemProperName}? You can select up to {numTargets} additional {targetWord} below."
+          },
+          "ViciousMockery": {
+            "WhatDoYouSay": "What do you say?",
+            "Windowtitle": "🗣Vicious Mockery😜️"
+          },
+          "Web": {
+            "Prompts": {
+              "UseYourAction": {
+                "AthleticsCheck": "Would you like to use your action to make an Athletics skill check to escape the {itemName}?",
+                "StrengthCheck": "Would you like to use your action to make a Strength ability check to escape the {itemName}?"
+              }
+            }
+          },
+          "ZephyrStrike": {
+            "Prompt": "Would you like to use Zephyr Strike to give advantage on this attack and increase your speed until the end of this turn?",
+            "Windowtitle": "Zephyr Strike"
+          },
+          "Command": {
+            "WindowTitle": "🗣Command🗣",
+            "Prompts": {
+              "SelectCommand": "What would you like to command?"
+            }
+          }
+        }
+      },
+      "Automations2024": {
+        "ClassFeatures": {
+          "Sorcerer": {
+            "DraconicSorcery": {
+              "ElementalAffinity2024": {
+                "SelectEnemyForBonusDamage": "Choose the enemy to receive additional {damageType} damage from your Elemental Affinity below:"
+              }
+            }
+          }
+        },
+        "GenericFeatures": {
+          "Sentinel2024": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to attack using Sentinel? Choose your weapon below."
+              }
+            }
+          },
+          "ShieldMaster2024": {
+            "Prompt": "Would you like to use Shield Bash to cause your target to make a saving throw to potentially be Pushed ({pushRangeText}) or to go Prone?",
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to potentially take no damage on a save success with Interpose Shield?"
+              }
+            },
+            "Prone": "Prone",
+            "Push": "Push"
+          }
+        },
+        "RaceFeatures": {
+          "FiresBurn2024": {
+            "Prompt": "Would you like to deal additional damage using {itemName}?"
+          },
+          "FrostsChill2024": {
+            "Prompt": "Would you like to deal additional damage and reduce the creatures speed using {itemName}?"
+          },
+          "HillsTumble2024": {
+            "Prompt": "Would you like to cause the creature to fall Prone using {itemName}?"
+          },
+          "StormsThunder2024": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to deal damage to the creature that damaged you using {itemName}?"
+              }
+            }
+          }
+        },
+        "Spells": {
+          "BlackTentacles2024": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Would you like to use your action to make an Athletics ability check to escape Black Tentacles?"
+              }
+            }
+          },
+          "Command2024": {
+            "Approach": "Approach",
+            "Drop": "Drop",
+            "Flee": "Flee",
+            "Grovel": "Grovel",
+            "Halt": "Halt"
+          },
+          "Counterspell2024": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to {itemName}?"
+              }
+            }
+          },
+          "Entangle2024": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Would you like to use your action to make an Athletics ability check to escape being Restrained?"
+              }
+            }
+          },
+          "PowerWordHeal2024": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Would you like to use your reaction to get up from Prone?"
+              }
+            }
+          }
+        }
+      },
+      "Utils": {
+        "Helpers": {
+          "PromptFreeUse": "Would you like to activate a free use of {itemName}? It will be cast at its base level. {remainingText}",
+          "PromptRitualCast": "Would you like to cast {itemName} ritually? This will increase its cast time ({activationCost} {activationType}) by 10 minutes.",
+          "RitualUse": "Ritual {itemName} Use",
+          "ThisGrantsOneFreeUse": "This grants one free use {restModeText}."
+        },
+        "LightActions": {
+          "Dim": "Dim",
+          "Extinguish": "Extinguish",
+          "Light": "Light",
+          "PromptAction": "What would you like to do with your {dialogTitle}?",
+          "Throw": "Throw"
+        }
+      }
+    },
+    "Directions": {
+      "East": "East",
+      "North": "North",
+      "Northeast": "Northeast",
+      "Northwest": "Northwest",
+      "South": "South",
+      "Southeast": "Southeast",
+      "Southwest": "Southwest",
+      "West": "West"
+    },
+    "Effects": {
+      "Utils": {
+        "Helpers": {
+          "LongRestChargeUsed": "{itemName}: Long Rest Charge Used"
+        }
+      }
+    },
+    "Menus": {
+      "ClassFeatures": {
+        "Hint": "Cutting Words, Interception, Poetry in Misery, etc",
+        "Label": "Enable Class Features",
+        "Name": "Class Features"
+      },
+      "GeneralSettings": {
+        "Hint": "Mirror Dialog, Identify Restriction, etc",
+        "Label": "General Settings",
+        "Name": "General Settings"
+      },
+      "GenericFeatures": {
+        "Hint": "Opportunity Attack, Sentinel, etc",
+        "Label": "Enable Generic Features",
+        "Name": "Generic Features"
+      },
+      "MonsterFeatures": {
+        "Hint": "Monster Features",
+        "Label": "Enable Monster Features",
+        "Name": "Monster Features"
+      },
+      "PatreonSupport": {
+        "Hint": "If you'd like to support me, Gambit! Subscribing helps support development of this and my other free modules, and also gets you access to my premium modules Gambit's FXMaster+, Gambit's Asset Previewer, and Gambit's Image Viewer!",
+        "Label": "Gambit's Lounge",
+        "Name": "Patreon Support"
+      },
+      "Spells": {
+        "Hint": "Counterspell, Silvery Barbs, etc",
+        "Label": "Enable Spells",
+        "Name": "Spells"
+      }
+    },
+    "Notifications": {
+      "ThirdPartyClassFeatures": {
+        "Witch": {
+          "WitchesHex": {
+            "MustScale": "You must have a Witch scale for this actor named 'kp-witch'"
+          }
+        }
+      },
+      "Common": {
+        "RequiresActiveCombat": "{effectName} requires an active combat.",
+        "ThisEffect": "This effect"
+      },
+      "Automations2024": {
+        "Spells": {
+          "CloudOfDaggers2024": {
+            "MoveFeatureItemCreated": "Feature item \"{name} - Move\" created. Use this item to move your {name} when needed."
+          },
+          "PowerWordStun2024": {
+            "TargetMoreThan150": "The target has more than 150 hit points and is not stunned, but its speed is reduced to 0 until the start of the casters next turn."
+          },
+          "Sleep2024": {
+            "TargetImmuneToSleepOrExhaustion": "Creature is immune to magical sleep and/or being exhausted."
+          }
+        }
+      },
+      "ClassFeatures": {
+        "Bard": {
+          "CollegeOfLore": {
+            "CuttingWords": {
+              "MissingBardicInspirationScale": "You must have a Bard or Ambassador scale for this actor named 'bardic-inspiration' or 'inspiration'"
+            }
+          }
+        },
+        "Druid": {
+          "CircleOfStars": {
+            "StarMap": {
+              "NoSpellSlotConsumed": "You used Circle of Stars to initiate {name} and did not use a spell slot"
+            }
+          }
+        },
+        "Fighter": {
+          "ArcaneArcher": {
+            "GraspingArrow": {
+              "MissingDependency": "You must install the Jinkers Animated Art Pack module to use this automation."
+            }
+          }
+        },
+        "Paladin": {
+          "OathOfConquest": {
+            "ScornfulRebuke": {
+              "Incapacitated": "{name} is incapacitated, Scornful Rebuke fails."
+            }
+          }
+        },
+        "Ranger": {
+          "MonsterSlayerConclave": {
+            "HuntersSense": {
+              "TargetSingleCreature": "Hunter's Sense: Please target only 1 creature and try again."
+            }
+          }
+        },
+        "Wizard": {
+          "SchoolOfEnchantment": {
+            "InstinctiveCharm": {
+              "CharmImmunity": "The creature is unaffected because they have Charm Immunity"
+            }
+          }
+        }
+      },
+      "GenericFeatures": {
+        "OpportunityAttack": {
+          "NoValidOptions": "No Valid Melee options found, cancelling Opportunity Attack options for {name}"
+        }
+      },
+      "Helpers": {
+        "CanOnlySelectUp": "You can only select up to {numTargets} targets.",
+        "CastOptionNoSlotConsumed": "You used your {restModeName} cast option to initiate {name} and did not use a spell slot. The spell was cast at its base level."
+      },
+      "Hooks": {
+        "Msg": "{message}"
+      },
+      "Items": {
+        "AmuletOfTheDevout": {
+          "NoAmuletCharges": "You have no Amulet of the Devout charges to use.",
+          "NoChannelDivinityCharges": "You have no Channel Divinity charges to recover.",
+          "Recovered": "Channel Divinity charge recovered!"
+        },
+        "Candle": {
+          "DoNotAnyS": "You do not have any {animType}s remaining.",
+          "MissingDependency": "The Active Token Effects module must be active"
+        },
+        "Matalotok": {
+          "TargetAtLeastOneToken": "Please target at least one token."
+        },
+        "RodOfThePactKeeper": {
+          "NotAvailable": "You have no appropriate spell slot to recover"
+        },
+        "StaffOfWithering": {
+          "NotAvailable": "You have no uses remaining for the Staff of Withering"
+        },
+        "Torch": {
+          "DoNotAnyEs": "You do not have any {animType}es remaining."
+        }
+      },
+      "Spells": {
+        "DimensionDoor": {
+          "CanOnlySelectOne": "You can only select one creature to teleport along with yourself",
+          "MissingDependency": "You must install the Jack Kerouac's Animated Spell Effects - Cartoon module to use this automation.",
+          "MustBeWithin5Feet": "You must be within 5 feet of the ally you are trying to teleport",
+          "TooLarge": "Your target is too large to teleport with you"
+        },
+        "EnemiesAbound": {
+          "TargetImmuneCannotBeFrightened": "{name} is immune to Enemies Abound because it cannot be frightened."
+        },
+        "HideousLaughter": {
+          "TargetNotAffectedIntTooLow": "This creature is not affected; its Intelligence score is too low."
+        },
+        "Identify": {
+          "Identified": "Identified: {name}",
+          "NoSpellSlots": "You have no spell slots available",
+          "NoUnidentifiedItems": "You have no unidentified items",
+          "RitualOnly": "Casting ritually: You are only able to cast Identify ritually."
+        },
+        "IntellectFortress": {
+          "SelectedMoreTokensThan": "You have selected more tokens than the spell level allows, re-select tokens.",
+          "TargetsNotWithinRange": "A token you selected is not within 30 feet of another token you selected. Re-select tokens.",
+          "UnableSee": "You are unable to see a token selected, re-select tokens."
+        },
+        "MentalPrison": {
+          "TargetsImmune": "Targets are immune to being charmed"
+        },
+        "PowerWordHeal": {
+          "TargetUndead": "The target is an undead or construct and is not affected"
+        },
+        "PowerWordPain": {
+          "TargetMoreThan100": "The target has more than 100 hit points or is immune to Charmed.",
+          "UnableSave": "You were unable to save, your spell fails and is wasted."
+        },
+        "PowerWordStun": {
+          "TargetMoreThan150": "The target has more than 150 hit points."
+        },
+        "ViciousMockery": {
+          "TargetCannotHearYou": "A creature is not affected because it cannot hear you."
+        }
+      }
+    },
+    "Settings": {
+      "BurstOfIngenuityTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Burst of Ingenuity Timeout"
+      },
+      "ChronalShiftTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Chronal Shift Timeout"
+      },
+      "CounterspellTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Counterspell Timeout"
+      },
+      "CuttingWordsTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        "Name": "Cutting Words Timeout"
+      },
+      "EnableCounterspell": {
+        "Hint": "If enabled, this will present an appropriate dialog to users with counterspell, and automate counterspell application when used.",
+        "Name": "Enable Counterspell"
+      },
+      "EnableCuttingWords": {
+        "Hint": "If enabled, this will present an appropriate dialog to users with cutting words, and automate cutting words application when used.",
+        "Name": "Enable Cutting Words"
+      },
+      "EnableIdentifyRestrictions": {
+        "Hint": "If enabled, this will prevent player characters from Identifying unidentified items except through the use of my Identify spell automation.",
+        "Name": "Enable Identify Restrictions"
+      },
+      "EnableIndomitable": {
+        "Hint": "",
+        "Name": "Enable Indomitable"
+      },
+      "EnableInterception": {
+        "Hint": "If enabled, this will present an appropriate dialog to users with fighting style: interception, and automate interception application when used.",
+        "Name": "Enable Interception"
+      },
+      "EnableOpportunityAttack": {
+        "Hint": "If enabled, automatically adds 'Opportunity Attack' item to appropriate combatants on combat start and removes 'Opportunity Attack' item on combat end.",
+        "Name": "Enable Opportunity Attack"
+      },
+      "EnablePoetryInMisery": {
+        "Hint": "If enabled, this will present an appropriate dialog to users with bards Poetry in Misery feature, and automate application when used.",
+        "Name": "Enable Poetry in Misery"
+      },
+      "EnablePowerWordRebound": {
+        "Hint": "If enabled, this will present an appropriate dialog to users with the power word rebound spell, and automate application when used.",
+        "Name": "Enable Power Word Rebound"
+      },
+      "EnableProtection": {
+        "Hint": "",
+        "Name": "Enable Protection"
+      },
+      "EnableRiposte": {
+        "Hint": "",
+        "Name": "Enable Riposte"
+      },
+      "EnableSentinel": {
+        "Hint": "",
+        "Name": "Enable Sentinel"
+      },
+      "EnableSilveryBarbs": {
+        "Hint": "If enabled, this will present an appropriate dialog to users with silvery barbs, and automate silvery barbs application when used.",
+        "Name": "Enable Silvery Barbs"
+      },
+      "EnableWitchesHex": {
+        "Hint": "If enabled, this will present an appropriate dialog to users with the witches Hex feature, and automate application when used.",
+        "Name": "Enable Witches Hex"
+      },
+      "FlashOfGeniusTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Flash of Genius Timeout"
+      },
+      "IdentifyRestrictionMessage": {
+        "Hint": "This is the message that will display to users if they are restricted.",
+        "Name": "Identify Restriction Message"
+      },
+      "IndomitableTimeout": {
+        "Hint": "",
+        "Name": "Indomitable Timeout"
+      },
+      "InstinctiveCharmTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Instinctive Charm Timeout"
+      },
+      "InterceptionTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        "Name": "Interception Timeout"
+      },
+      "LegendaryResistanceTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Legendary Resistance Timeout"
+      },
+      "MageSlayerTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Mage Slayer Timeout"
+      },
+      "MirrorThirdPartyDialogForGMs": {
+        "Hint": "If enabled, 3rd party dialog's will be sent to the GM as well as the player. Either party can interact with the dialog to use/dismiss/pause it.",
+        "Name": "Mirror 3rd Party Dialog for GMs"
+      },
+      "OpportunityAttackTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Opportunity Attack Timeout"
+      },
+      "PoetryInMiseryTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Poetry in Misery Timeout"
+      },
+      "PowerWordReboundTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        "Name": "Power Word Rebound Timeout"
+      },
+      "ProtectionTimeout": {
+        "Hint": "",
+        "Name": "Protection Timeout"
+      },
+      "RainOfCindersTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Rain of Cinders Timeout"
+      },
+      "RestoreBalanceTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Restore Balance Timeout"
+      },
+      "RiposteTimeout": {
+        "Hint": "",
+        "Name": "Riposte Timeout"
+      },
+      "SentinelTimeout": {
+        "Hint": "",
+        "Name": "Sentinel Timeout"
+      },
+      "SilveryBarbsTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        "Name": "Silvery Barbs Timeout"
+      },
+      "TaleOfHubrisTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Tale of Hubris Timeout"
+      },
+      "TemporalShuntTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        "Name": "Temporal Shunt Timeout"
+      },
+      "WitchesHexTimeout": {
+        "Hint": "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        "Name": "Witches Hex Timeout"
+      },
+      "DebugEnabled": {
+        "Hint": "If enabled, this will output console logs for the reaction validation process for troubleshooting.",
+        "Name": "Enable Debug"
+      },
+      "Enable3prNoCombat": {
+        "Hint": "If enabled, this will allow 3rd party reactions to function while combat is not active.",
+        "Name": "Enable 3rd Party Reactions Outside Combat"
+      },
+      "EnableTimerFullAnim": {
+        "Hint": "If enabled, this will cause the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.",
+        "Name": "Enable Timer Full Bar Animation"
+      },
+      "HideTemplates": {
+        "Hint": "This option is always enabled for Opportunity Attacks. If this setting is enabled, it will fully hide templates for other automations that use templates in my module. It will NOT hide templates for automations or templates created outside of my module.",
+        "Name": "Hide Templates"
+      },
+      "PrimaryGM": {
+        "Hint": "",
+        "Name": "primaryGM"
+      },
+      "TokenMovementSpeed": {
+        "Hint": "",
+        "Name": "tokenMovementSpeed"
+      }
+    },
+    "SettingsMenu": {
+      "Headers": {
+        "Feature": "Feature",
+        "Enable": "Enable",
+        "TimeoutSeconds": "Timeout (s)"
+      },
+      "ClassFeatures": {
+        "ChronalShift": {
+          "Description": "Dialog for Chronurgy Wizards' Chronal Shift.",
+          "Name": "Chronal Shift"
+        },
+        "CuttingWords": {
+          "Description": "Dialog for College of Lore Bards' Cutting Words.",
+          "Name": "Cutting Words"
+        },
+        "DisableCuttingWordsMaxMiss": {
+          "Description": "Skip prompt if max bardic die wouldn't effect hit.",
+          "Name": "Disable Cutting Words Max Miss"
+        },
+        "EnableAutoSucceedIndomitable": {
+          "Description": "Auto-succeed on use.",
+          "Name": "Enable Auto Succeed Indomitable"
+        },
+        "EnableProtectionOnSuccess": {
+          "Description": "Only trigger on a successful attack.",
+          "Name": "Enable Protection On Success"
+        },
+        "FlashOfGenius": {
+          "Description": "Dialog for Artificers Flash of Genius.",
+          "Name": "Flash of Genius"
+        },
+        "Indomitable": {
+          "Description": "Dialog for Fighters' Indomitable.",
+          "Name": "Indomitable"
+        },
+        "InstinctiveCharm": {
+          "Description": "Dialog for Enchantment Wizards' Instinctive Charm.",
+          "Name": "Instinctive Charm"
+        },
+        "Interception": {
+          "Description": "Dialog for Paladins/Fighters' Interception.",
+          "Name": "Interception"
+        },
+        "MagicUsersNemesis": {
+          "Description": "Dialog for Monster Slayer Rangers'.",
+          "Name": "Magic-User's Nemesis"
+        },
+        "PoetryInMisery": {
+          "Description": "Dialog for College of Tragedy Bards'.",
+          "Name": "Poetry in Misery"
+        },
+        "Protection": {
+          "Description": "Dialog for Paladins/Fighters' Protection.",
+          "Name": "Protection"
+        },
+        "RainOfCinders": {
+          "Description": "Dialog for Roiling Hearth Witches'.",
+          "Name": "Rain of Cinders"
+        },
+        "RestoreBalance": {
+          "Description": "Dialog for Clockwork Soul Sorcerers'.",
+          "Name": "Restore Balance"
+        },
+        "Riposte": {
+          "Description": "Dialog for Battle Master Fighters' Riposte.",
+          "Name": "Riposte"
+        },
+        "TaleOfHubris": {
+          "Description": "Dialog for College of Tragedy Bards'.",
+          "Name": "Tale of Hubris"
+        },
+        "WitchesHex": {
+          "Description": "Dialog for Roiling Hearth Witches' Hex.",
+          "Name": "Witches Hex"
+        }
+      },
+      "GenericFeatures": {
+        "OpportunityAttack": {
+          "Description": "Automatically enables Opportunity Attacks for combatants in combat.",
+          "Name": "Opportunity Attack"
+        },
+        "Sentinel": {
+          "Description": "Presents a dialog to players with the Sentinel feat when an enemy attacks an ally within range.",
+          "Name": "Sentinel"
+        },
+        "MageSlayer": {
+          "Description": "Presents a dialog to players with the Mage Slayer feat.",
+          "Name": "Mage Slayer"
+        },
+        "LegendaryResistance": {
+          "Description": "Presents a dialog for monsters Legendary Resistance feature.",
+          "Name": "Legendary Resistance"
+        }
+      },
+      "Spells": {
+        "Counterspell": {
+          "Description": "Presents a dialog to players with Counterspell.",
+          "Name": "Counterspell"
+        },
+        "SilveryBarbs": {
+          "Description": "Presents a dialog to players with Silvery Barbs.",
+          "Name": "Silvery Barbs"
+        },
+        "CounterspellSpellPenetration": {
+          "Description": "Enable optional Bloodied & Bruised feature Spell Penetration.",
+          "Name": "Spell Penetration"
+        },
+        "DisableSilveryBarbsOnNat20": {
+          "Description": "Disable on a Critical Attack Roll.",
+          "Name": "Disable on Critical"
+        },
+        "EnableSilveryBarbsOnNat20": {
+          "Description": "Enable only on a Critical Attack Roll.",
+          "Name": "Enable on Critical"
+        },
+        "PowerWordRebound": {
+          "Description": "Presents a dialog to players with Power Word Rebound.",
+          "Name": "Power Word Rebound"
+        },
+        "TemporalShunt": {
+          "Description": "Presents a dialog to players with Temporal Shunt.",
+          "Name": "Temporal Shunt"
+        }
+      },
+      "MonsterFeatures": {
+        "BurstOfIngenuity": {
+          "Description": "Presents a dialog for monsters with Burst of Ingenuity.",
+          "Name": "Burst of Ingenuity"
+        },
+        "DreadCounterspell": {
+          "Name": "Dread Counterspell",
+          "Description": "Presents a dialog for Vecna's Dread Counterspell."
+        }
+      },
+      "General": {
+        "Enable3prNoCombat": {
+          "Description": "Allows 3rd party reactions to function while combat is not active.",
+          "Name": "Enable 3rd Party Reactions Outside Combat"
+        },
+        "EnableIdentifyRestrictions": {
+          "Description": "Prevents players from Identifying items except through the use of my Identify spell.",
+          "Name": "Enable Identify Restrictions"
+        },
+        "IdentifyRestrictionMessage": {
+          "Description": "Custom message that will display to users if they are restricted.",
+          "Name": "Identify Restriction Message"
+        },
+        "EnableRegionWrapping": {
+          "Description": "Replaces Foundry default region behavior testing token center points only with multi-point tests to better match the 5e ruleset (Requires Reload).",
+          "Name": "Enable Region Wrapping"
+        },
+        "EnableTimerFullAnim": {
+          "Description": "Modify the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.",
+          "Name": "Enable Timer Full Bar Animation"
+        },
+        "HideTemplates": {
+          "Description": "Hide templates after placement.",
+          "Name": "Hide Templates"
+        },
+        "TokenMovementSpeed": {
+          "Description": "Numeric value for token movement animation speed. Default Foundry speed is 6.",
+          "Name": "Token Movement Speed"
+        },
+        "DebugEnabled": {
+          "Description": "Enable console logs for the reaction validation process for troubleshooting.",
+          "Name": "Enable Debugging"
+        },
+        "MirrorThirdPartyDialogForGMs": {
+          "Name": "Mirror 3rd Party Dialog for GMs",
+          "Description": "If enabled, 3rd party dialog's will be sent to the GM as well as the player. Either party can interact with the dialog to use/dismiss/pause it."
+        }
+      }
+    },
+    "UI": {
+      "InvalidInputNotNumber": "Invalid input: Not a number.",
+      "InvalidInputNotNumberExample": "Invalid input for Numeric Setting Example: Not a number.",
+      "None": "None",
+      "Prone": "Prone",
+      "Push": "Push",
+      "SaveSettings": "Save Settings",
+      "Point": "Point",
+      "Points": "Points",
+      "Target": "target",
+      "Targets": "targets"
+    },
+    "Windows": {
+      "EnableClassFeatures": "Enable Class Features",
+      "EnableGenericFeatures": "Enable Generic Features",
+      "EnableMonsterFeatures": "Enable Monster Features",
+      "EnableSpells": "Enable Spells",
+      "GeneralSettings": "General Settings",
+      "PatreonSupport": "Patreon Support"
+    }
+  }
+}

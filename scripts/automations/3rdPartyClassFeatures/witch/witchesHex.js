@@ -28,11 +28,11 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
         const { animEnabled } = cprConfig;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
         let hexDie = validTokenPrimary.actor.system.scale["kp-witch"]["hex-die"]?.die;
         if(!hexDie) {
-            ui.notifications.error("You must have a Witch scale for this actor named 'kp-witch'")
+            ui.notifications.error(game.i18n.localize("GAMBITSPREMADES.Notifications.ThirdPartyClassFeatures.Witch.WitchesHex.MustScale"))
             continue;
         }
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
@@ -54,10 +54,10 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName} to try and reduce an enemies saving throw? Choose an enemy to target below.</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Witch.WitchesHex.Prompts.UseYourReaction.ReduceSave", { itemName: itemProperName })}</p>
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <label for="enemy-token" class="gps-dialog-label">Target:</label>
+                                    <label for="enemy-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Target")}</label>
                                     <select id="enemy-token" class="gps-dialog-select">
                                         ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
                                     </select>
@@ -70,13 +70,13 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
             `;
 
-            content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
+            content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableSaveTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         }
 
         if(workflowType === "attack") {
@@ -86,7 +86,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName} to try and reduce the enemies attack roll?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Witch.WitchesHex.Prompts.UseYourReaction.ReduceAttack", { itemName: itemProperName })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
@@ -96,13 +96,13 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
             `;
 
-            content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
+            content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableAttackTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         }
             
         let chatData = { user: gmUser, content: content, roll: false };
@@ -207,12 +207,12 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                     workflow.saves.delete(target);
                     workflow.failedSaves.add(target);
 
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was hexed and failed their save. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.WitchesHex.SaveFailed")} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: modifiedRoll});
                     return;
                 }
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was hexed but still succeeded their save. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.WitchesHex.SaveSucceeded")} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: modifiedRoll});
                     continue;
                 }
@@ -230,12 +230,12 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 workflow.workflowOptions.noOnUseMacro = saveSetting;
 
                 if(rerollNew.total < targetAC) {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, and were unable to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.WitchesHex.HexReducedAttackMiss", { reduction: reroll.total })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
                     return;
                 }
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was hexed reducing their attack by ${reroll.total}, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.WitchesHex.HexReducedAttackHit", { reduction: reroll.total })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
                     continue;
                 }

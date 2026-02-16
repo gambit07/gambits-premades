@@ -8,19 +8,19 @@ export async function grimSiphon({ speaker, actor, token, character, item, args,
         let damageTotal = workflow.damageTotal;
     
         await foundry.applications.api.DialogV2.wait({
-        window: { title: 'Grim Siphon Healing' },
+        window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.GrimSiphon.Windowtitle") },
         content: `
             <div class="gps-dialog-container">
                 <div class="gps-dialog-section">
                     <div class="gps-dialog-content">
-                        <p class="gps-dialog-paragraph">Who would you like to heal?</p>
+                        <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.GrimSiphon.SelectHealingTarget")}</p>
                         <div>
                             <div class="gps-dialog-flex">
-                                <label for="ally-token" class="gps-dialog-label">Heal:</label>
+                                <label for="ally-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.GrimSiphon.HealLabel")}</label>
                                 ${validFriendlies.length >= 1 ? 
                                 `<select id="ally-token" class="gps-dialog-select">
                                     ${validFriendlies.map(friendly => `<option class="gps-dialog-option" value="${friendly.document.uuid}">${friendly.actor.name}</option>`).join('')}
-                                </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
+                                </select>` : `<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.NoValidAlliesInRange")}</div>`
                                 }
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img src="${item.img}" class="gps-dialog-image">
@@ -33,7 +33,7 @@ export async function grimSiphon({ speaker, actor, token, character, item, args,
         `,
         buttons: [{
             action: "Heal",
-            label: "Heal",
+            label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.GrimSiphon.Heal"),
             callback: async (event, button, dialog) => {
                 const tokenUuid = document.querySelector('#ally-token').value;
                 const tokenToHeal = await fromUuid(tokenUuid);

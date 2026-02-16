@@ -16,7 +16,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         let target = workflow.hitTargets.first();
         let dialogId = "shieldmastershieldbash";
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${item.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: item.name });
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let initialTimeLeft = 30;
         let gmUser = game.gps.getPrimaryGM();
@@ -30,7 +30,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
                 <div class="gps-dialog-section">
                 <div class="gps-dialog-content">
                     <p class="gps-dialog-paragraph">
-                    Would you like to use Shield Bash to cause your target to make a saving throw to potentially be Pushed (${pushRangeText}) or to go Prone?
+                    ${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations2024.GenericFeatures.ShieldMaster2024.Prompt", { pushRangeText: pushRangeText })}
                     </p>
 
                     <div>
@@ -38,8 +38,8 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
                         <table class="gps-dialog-ability-table" width="100%">
                         <thead>
                             <tr>
-                            <th>Prone</th>
-                            <th>Push</th>
+                            <th>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations2024.GenericFeatures.ShieldMaster2024.Prone")}</th>
+                            <th>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations2024.GenericFeatures.ShieldMaster2024.Push")}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +52,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
                                     id="prone_${dialogId}"
                                     name="ability-check"
                                     class="gps-dialog-radio"
-                                    aria-label="Prone"
+                                    aria-label="${game.i18n.localize("GAMBITSPREMADES.UI.Prone")}"
                                 >
                                 <span class="gps-dialog-radio-ui" aria-hidden="true"></span>
                                 </label>
@@ -66,7 +66,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
                                     id="push_${dialogId}"
                                     name="ability-check"
                                     class="gps-dialog-radio"
-                                    aria-label="Push"
+                                    aria-label="${game.i18n.localize("GAMBITSPREMADES.UI.Push")}"
                                 >
                                 <span class="gps-dialog-radio-ui" aria-hidden="true"></span>
                                 </label>
@@ -85,7 +85,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
 
                 <div class="gps-dialog-button-container">
                 <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                 </button>
                 </div>
             </div>
@@ -142,7 +142,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         }
 
         let dialogId = "shieldmasterinterposeshield";
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${item.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: item.name });
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
@@ -155,7 +155,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your reaction to potentially take no damage on a save success with Interpose Shield?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations2024.GenericFeatures.ShieldMaster2024.Prompts.UseYourReaction.Default")}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                 </div>
@@ -165,7 +165,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>

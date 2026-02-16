@@ -10,7 +10,7 @@ export async function frostsChill2024({ speaker, actor, token, character, item, 
         if(itemUsesRemaining === 0) return;
 
         let dialogId = "7e40eafe-d2d3-4211-8fc9-6eb3a8965f81";
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${macroItem.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: macroItem.name });
         let dialogTitlePrimary = `${token.actor.name} | ${macroItem.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
@@ -23,7 +23,7 @@ export async function frostsChill2024({ speaker, actor, token, character, item, 
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to deal additional damage and reduce the creatures speed using ${itemName}?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations2024.RaceFeatures.FrostsChill2024.Prompt", { itemName: itemName })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${macroItem.img}" class="gps-dialog-image">
                                 </div>
@@ -33,7 +33,7 @@ export async function frostsChill2024({ speaker, actor, token, character, item, 
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>

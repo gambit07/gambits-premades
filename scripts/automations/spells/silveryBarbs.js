@@ -33,7 +33,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemName });
         
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
@@ -57,21 +57,21 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? ${targets.length > 1 ? "Enemies succeeded their saving throw. Choose an enemy to target and" : "An enemy succeeded their saving throw. Choose"} an ally to give advantage to below.</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.format(targets.length > 1 ? "GAMBITSPREMADES.Dialogs.Automations.Spells.SilveryBarbs.Prompts.UseYourReaction.AfterSave.Multiple" : "GAMBITSPREMADES.Dialogs.Automations.Spells.SilveryBarbs.Prompts.UseYourReaction.AfterSave.Single", { itemName: itemProperName })}</p>
                             <div class="gps-dialog-flex-wrapper">
                                 <div class="gps-dialog-select-container">
                                     <div class="gps-dialog-flex">
-                                    <label for="enemy-token" class="gps-dialog-label">Target:</label>
+                                    <label for="enemy-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Target")}</label>
                                     <select id="enemy-token" class="gps-dialog-select">
                                         ${targetNames.map((name, index) => `<option class="gps-dialog-option" value="${targetUuids[index]}">${name}</option>`).join('')}
                                     </select>
                                     </div>
                                     <div class="gps-dialog-flex">
-                                    <label for="ally-token" class="gps-dialog-label">Advantage:</label>
+                                    <label for="ally-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Advantage")}</label>
                                     ${validFriendlies.length >= 1 ? 
                                     `<select id="ally-token" class="gps-dialog-select">
                                         ${validFriendlies.map(friendly => `<option class="gps-dialog-option" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
-                                    </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
+                                    </select>` : `<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.NoValidAlliesInRange")}</div>`
                                     }
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
@@ -101,14 +101,14 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to cast ${itemProperName}? ${["none", "detailsDSN", "details"].includes(rollDetailSetting) ? `An enemy successfully hit your ally with a ${workflow.attackTotal}.` : "An enemy successfully hit your ally."} Choose an ally to give advantage to below.</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.SilveryBarbs.Prompts.UseYourReaction.AfterAttack", { itemName: itemProperName, triggerDetails: ["none", "detailsDSN", "details"].includes(rollDetailSetting) ? game.i18n.format("GAMBITSPREMADES.Dialogs.Common.EnemyHitsAllyWithAttackTotal", { attackTotal: workflow.attackTotal }) : game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.EnemyHitsAlly") })}</p>
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <label for="ally-token" class="gps-dialog-label">Advantage:</label>
+                                    <label for="ally-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Advantage")}</label>
                                     ${validFriendlies.length >= 1 ? 
                                     `<select id="ally-token" class="gps-dialog-select">
                                         ${validFriendlies.map(friendly => `<option class="gps-dialog-option" value="${friendly.document.uuid}">${friendly.document.name}</option>`).join('')}
-                                    </select>` : '<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;"> No valid allies in range.</div>'
+                                    </select>` : `<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.NoValidAlliesInRange")}</div>`
                                     }
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
@@ -119,14 +119,14 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
             `;
         }
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableSaveTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
         
@@ -255,13 +255,13 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                     workflow.saves.delete(workflowTarget);
                     workflow.failedSaves.add(workflowTarget);
 
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed and failed their ${isSave ? "save" : "check"} for ${workflow.item.name}. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.SilveryBarbs.FailedSaveCheck", { rollType: isSave ? "save" : "check", itemName: workflow.item.name })} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     return;
                 }
 
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed but still succeeded their ${isSave ? "save" : "check"} for ${workflow.item.name}. <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.SilveryBarbs.Succeeded", { rollType: isSave ? "save" : "check", itemName: workflow.item.name })} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     continue;
                 }
@@ -279,13 +279,13 @@ export async function silveryBarbs({workflowData,workflowType,workflowCombat}) {
                 workflow.workflowOptions.noOnUseMacro = saveSetting;
 
                 if(workflow.attackTotal < targetAC) {                    
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed, and failed their attack. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.SilveryBarbs.AttackFailed")} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     return;
                 }
 
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was silvery barbed, but were still able to hit their target. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.SilveryBarbs.AttackHitAnyway")} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     continue;
                 }

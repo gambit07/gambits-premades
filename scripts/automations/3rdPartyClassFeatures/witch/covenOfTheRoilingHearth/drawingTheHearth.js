@@ -81,7 +81,7 @@ export async function drawingTheHearth({ speaker, actor, token, character, item,
 
                 await macroItem.update({"system.uses.spent" : itemUses + 1})
                 
-                let content = `The creature attacks one of your soot spirits and hits! You have ${itemUsesRemaining - 1} soot spirits remaining.`
+                let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.SootSpiritAttackedHit", { sootSpiritsRemaining: itemUsesRemaining - 1 })
                 let actorPlayer = MidiQOL.playerForActor(actor);
                 let chatData = {
                     user: actorPlayer.id,
@@ -99,7 +99,7 @@ export async function drawingTheHearth({ speaker, actor, token, character, item,
                 }
             }
             else {
-                let content = `The creature attacks one of your soot spirits and misses! You have ${itemUsesRemaining} soot spirits remaining.`
+                let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.SootSpiritAttackedMiss", { sootSpiritsRemaining: itemUsesRemaining })
                 let actorPlayer = MidiQOL.playerForActor(actor);
                 let chatData = {
                     user: actorPlayer.id,

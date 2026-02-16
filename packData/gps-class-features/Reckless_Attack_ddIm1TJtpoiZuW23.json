@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.9",
+      "custom": "2.1.37",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -167,7 +167,7 @@
         {
           "key": "flags.midi-qol.onUseMacroName",
           "mode": 0,
-          "value": "function.game.gps.recklessAttack, preAttackRoll",
+          "value": "function.game.gps.recklessAttack, preAttackRollConfig",
           "priority": 20
         },
         {

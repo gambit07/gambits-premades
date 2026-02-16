@@ -11,7 +11,7 @@ export async function mentalPrison({ speaker, actor, token, character, item, arg
 
         if((!targets || checkEqual) && hasConcApplied) {
             await hasConcApplied.delete();
-            ui.notifications.warn("Targets are immune to being charmed");
+            ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.MentalPrison.TargetsImmune"));
             return;
         }
     }

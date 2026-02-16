@@ -1,10 +1,9 @@
-// Create a Base class mixing in Handlebars support onto V2 Application
 const Base = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
 
 export function registerSettings() {
     game.settings.register('gambits-premades', 'Mirror 3rd Party Dialog for GMs', {
-        name: "Mirror 3rd Party Dialog for GMs",
-        hint: "If enabled, 3rd party dialog's will be sent to the GM as well as the player. Either party can interact with the dialog to use/dismiss/pause it.",
+        name: "GAMBITSPREMADES.Settings.MirrorThirdPartyDialogForGMs.Name",
+        hint: "GAMBITSPREMADES.Settings.MirrorThirdPartyDialogForGMs.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -12,8 +11,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Enable Opportunity Attack', {
-        name: "Enable Opportunity Attack",
-        hint: "If enabled, automatically adds 'Opportunity Attack' item to appropriate combatants on combat start and removes 'Opportunity Attack' item on combat end.",
+        name: "GAMBITSPREMADES.Settings.EnableOpportunityAttack.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableOpportunityAttack.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -21,8 +20,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Opportunity Attack Timeout', {
-        name: "Opportunity Attack Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.OpportunityAttackTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.OpportunityAttackTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -30,8 +29,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Enable Counterspell', {
-        name: "Enable Counterspell",
-        hint: "If enabled, this will present an appropriate dialog to users with counterspell, and automate counterspell application when used.",
+        name: "GAMBITSPREMADES.Settings.EnableCounterspell.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableCounterspell.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -39,8 +38,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Counterspell Timeout', {
-        name: "Counterspell Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.CounterspellTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.CounterspellTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -49,14 +48,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Silvery Barbs', {
-        name: "Enable Silvery Barbs",
-        hint: "If enabled, this will present an appropriate dialog to users with silvery barbs, and automate silvery barbs application when used.",
+        name: "GAMBITSPREMADES.Settings.EnableSilveryBarbs.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableSilveryBarbs.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -64,8 +63,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Silvery Barbs Timeout', {
-        name: "Silvery Barbs Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        name: "GAMBITSPREMADES.Settings.SilveryBarbsTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.SilveryBarbsTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -74,14 +73,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Cutting Words', {
-        name: "Enable Cutting Words",
-        hint: "If enabled, this will present an appropriate dialog to users with cutting words, and automate cutting words application when used.",
+        name: "GAMBITSPREMADES.Settings.EnableCuttingWords.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableCuttingWords.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -89,8 +88,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Cutting Words Timeout', {
-        name: "Cutting Words Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        name: "GAMBITSPREMADES.Settings.CuttingWordsTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.CuttingWordsTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -99,14 +98,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Interception', {
-        name: "Enable Interception",
-        hint: "If enabled, this will present an appropriate dialog to users with fighting style: interception, and automate interception application when used.",
+        name: "GAMBITSPREMADES.Settings.EnableInterception.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableInterception.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -114,8 +113,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Interception Timeout', {
-        name: "Interception Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        name: "GAMBITSPREMADES.Settings.InterceptionTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.InterceptionTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -124,14 +123,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Indomitable', {
-        name: "Enable Indomitable",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.EnableIndomitable.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableIndomitable.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -139,8 +138,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Indomitable Timeout', {
-        name: "Indomitable Timeout",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.IndomitableTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.IndomitableTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -149,14 +148,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Protection', {
-        name: "Enable Protection",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.EnableProtection.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableProtection.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -164,8 +163,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Protection Timeout', {
-        name: "Protection Timeout",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.ProtectionTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.ProtectionTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -174,14 +173,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Sentinel', {
-        name: "Enable Sentinel",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.EnableSentinel.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableSentinel.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -189,8 +188,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Sentinel Timeout', {
-        name: "Sentinel Timeout",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.SentinelTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.SentinelTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -199,14 +198,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Riposte', {
-        name: "Enable Riposte",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.EnableRiposte.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableRiposte.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -214,8 +213,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Riposte Timeout', {
-        name: "Riposte Timeout",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.RiposteTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.RiposteTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -224,14 +223,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Poetry in Misery', {
-        name: "Enable Poetry in Misery",
-        hint: "If enabled, this will present an appropriate dialog to users with bards Poetry in Misery feature, and automate application when used.",
+        name: "GAMBITSPREMADES.Settings.EnablePoetryInMisery.Name",
+        hint: "GAMBITSPREMADES.Settings.EnablePoetryInMisery.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -239,8 +238,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Poetry in Misery Timeout', {
-        name: "Poetry in Misery Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.PoetryInMiseryTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.PoetryInMiseryTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -249,14 +248,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Witches Hex', {
-        name: "Enable Witches Hex",
-        hint: "If enabled, this will present an appropriate dialog to users with the witches Hex feature, and automate application when used.",
+        name: "GAMBITSPREMADES.Settings.EnableWitchesHex.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableWitchesHex.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -264,8 +263,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Witches Hex Timeout', {
-        name: "Witches Hex Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        name: "GAMBITSPREMADES.Settings.WitchesHexTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.WitchesHexTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -274,14 +273,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Power Word Rebound', {
-        name: "Enable Power Word Rebound",
-        hint: "If enabled, this will present an appropriate dialog to users with the power word rebound spell, and automate application when used.",
+        name: "GAMBITSPREMADES.Settings.EnablePowerWordRebound.Name",
+        hint: "GAMBITSPREMADES.Settings.EnablePowerWordRebound.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -289,8 +288,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Power Word Rebound Timeout', {
-        name: "Power Word Rebound Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 30 seconds.",
+        name: "GAMBITSPREMADES.Settings.PowerWordReboundTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.PowerWordReboundTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -299,14 +298,14 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
 
     game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
-        name: "Enable Identify Restrictions",
-        hint: "If enabled, this will prevent player characters from Identifying unidentified items except through the use of my Identify spell automation.",
+        name: "GAMBITSPREMADES.Settings.EnableIdentifyRestrictions.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableIdentifyRestrictions.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -314,8 +313,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Identify Restriction Message', {
-        name: "Identify Restriction Message",
-        hint: "This is the message that will display to users if they are restricted.",
+        name: "GAMBITSPREMADES.Settings.IdentifyRestrictionMessage.Name",
+        hint: "GAMBITSPREMADES.Settings.IdentifyRestrictionMessage.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -323,8 +322,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'enableTimerFullAnim', {
-        name: "Enable Timer Full Bar Animation",
-        hint: "If enabled, this will cause the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.",
+        name: "GAMBITSPREMADES.Settings.EnableTimerFullAnim.Name",
+        hint: "GAMBITSPREMADES.Settings.EnableTimerFullAnim.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -332,8 +331,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'enable3prNoCombat', {
-        name: "Enable 3rd Party Reactions Outside Combat",
-        hint: "If enabled, this will allow 3rd party reactions to function while combat is not active.",
+        name: "GAMBITSPREMADES.Settings.Enable3prNoCombat.Name",
+        hint: "GAMBITSPREMADES.Settings.Enable3prNoCombat.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -341,8 +340,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'hideTemplates', {
-        name: "Hide Templates",
-        hint: "This option is always enabled for Opportunity Attacks. If this setting is enabled, it will fully hide templates for other automations that use templates in my module. It will NOT hide templates for automations or templates created outside of my module.",
+        name: "GAMBITSPREMADES.Settings.HideTemplates.Name",
+        hint: "GAMBITSPREMADES.Settings.HideTemplates.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -350,8 +349,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'debugEnabled', {
-        name: "Enable Debug",
-        hint: "If enabled, this will output console logs for the reaction validation process for troubleshooting.",
+        name: "GAMBITSPREMADES.Settings.DebugEnabled.Name",
+        hint: "GAMBITSPREMADES.Settings.DebugEnabled.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -413,8 +412,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Mage Slayer Timeout', {
-        name: "Mage Slayer Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.MageSlayerTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.MageSlayerTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -423,7 +422,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -438,8 +437,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Instinctive Charm Timeout', {
-        name: "Instinctive Charm Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.InstinctiveCharmTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.InstinctiveCharmTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -448,7 +447,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -463,8 +462,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Rain of Cinders Timeout', {
-        name: "Rain of Cinders Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.RainOfCindersTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.RainOfCindersTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -473,7 +472,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -488,8 +487,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Restore Balance Timeout', {
-        name: "Restore Balance Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.RestoreBalanceTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.RestoreBalanceTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -498,7 +497,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -513,8 +512,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Legendary Resistance Timeout', {
-        name: "Legendary Resistance Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.LegendaryResistanceTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.LegendaryResistanceTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -523,7 +522,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -538,8 +537,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Burst of Ingenuity Timeout', {
-        name: "Burst of Ingenuity Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.BurstOfIngenuityTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.BurstOfIngenuityTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -548,7 +547,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -563,8 +562,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Temporal Shunt Timeout', {
-        name: "Temporal Shunt Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.TemporalShuntTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.TemporalShuntTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -573,7 +572,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -588,8 +587,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Chronal Shift Timeout', {
-        name: "Chronal Shift Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.ChronalShiftTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.ChronalShiftTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -598,7 +597,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -623,7 +622,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -648,7 +647,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -663,8 +662,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Tale of Hubris Timeout', {
-        name: "Tale of Hubris Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.TaleOfHubrisTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.TaleOfHubrisTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -673,7 +672,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -688,8 +687,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'Flash of Genius Timeout', {
-        name: "Flash of Genius Timeout",
-        hint: "Enter custom number (in seconds). Default timeout value is 15 seconds.",
+        name: "GAMBITSPREMADES.Settings.FlashOfGeniusTimeout.Name",
+        hint: "GAMBITSPREMADES.Settings.FlashOfGeniusTimeout.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -698,7 +697,7 @@ export function registerSettings() {
             const numericValue = Number(value);
             if (!isNaN(numericValue)) {
             } else {
-                game.gps.logInfo("Invalid input for Numeric Setting Example: Not a number.");
+                game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumberExample"));
             }
         }
     });
@@ -722,8 +721,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'primaryGM', {
-        name: "primaryGM",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.PrimaryGM.Name",
+        hint: "GAMBITSPREMADES.Settings.PrimaryGM.Hint",
         scope: 'world',
         config: false,
         type: String,
@@ -743,8 +742,8 @@ export function registerSettings() {
     });
 
     game.settings.register('gambits-premades', 'tokenMovementSpeed', {
-        name: "tokenMovementSpeed",
-        hint: "",
+        name: "GAMBITSPREMADES.Settings.TokenMovementSpeed.Name",
+        hint: "GAMBITSPREMADES.Settings.TokenMovementSpeed.Hint",
         scope: 'world',
         config: false,
         type: Number,
@@ -756,9 +755,9 @@ export function registerSettings() {
     });
 
     game.settings.registerMenu('gambits-premades', 'patreonSupport', {
-        name: "Patreon Support",
-        label: "Gambit's Lounge",
-        hint: "If you'd like to support me, Gambit! Subscribing helps support development of this and my other free modules, and also gets you access to my premium modules Gambit's FXMaster+, Gambit's Asset Previewer, and Gambit's Image Viewer!",
+        name: "GAMBITSPREMADES.Menus.PatreonSupport.Name",
+        label: "GAMBITSPREMADES.Menus.PatreonSupport.Label",
+        hint: "GAMBITSPREMADES.Menus.PatreonSupport.Hint",
         icon: "fas fa-card-spade",
         scope: 'world',
         config: true,
@@ -767,9 +766,9 @@ export function registerSettings() {
     });
 
     game.settings.registerMenu('gambits-premades', 'generalSettings', {
-        name: game.i18n.localize("General Settings"),
-        label: game.i18n.localize("General Settings"),
-        hint: game.i18n.localize("Mirror Dialog, Identify Restriction, etc"),
+        name: "GAMBITSPREMADES.Menus.GeneralSettings.Name",
+        label: "GAMBITSPREMADES.Menus.GeneralSettings.Label",
+        hint: "GAMBITSPREMADES.Menus.GeneralSettings.Hint",
         icon: 'fas fa-cogs',
         scope: 'world',
         config: true,
@@ -778,9 +777,9 @@ export function registerSettings() {
     });
 
     game.settings.registerMenu('gambits-premades', 'spells', {
-        name: game.i18n.localize("Spells"),
-        label: game.i18n.localize("Enable Spells"),
-        hint: game.i18n.localize("Counterspell, Silvery Barbs, etc"),
+        name: "GAMBITSPREMADES.Menus.Spells.Name",
+        label: "GAMBITSPREMADES.Menus.Spells.Label",
+        hint: "GAMBITSPREMADES.Menus.Spells.Hint",
         icon: 'fas fa-magic',
         scope: 'world',
         config: true,
@@ -789,9 +788,9 @@ export function registerSettings() {
     });
 
     game.settings.registerMenu('gambits-premades', 'classFeatures', {
-        name: game.i18n.localize("Class Features"),
-        label: game.i18n.localize("Enable Class Features"),
-        hint: game.i18n.localize("Cutting Words, Interception, Poetry in Misery, etc"),
+        name: "GAMBITSPREMADES.Menus.ClassFeatures.Name",
+        label: "GAMBITSPREMADES.Menus.ClassFeatures.Label",
+        hint: "GAMBITSPREMADES.Menus.ClassFeatures.Hint",
         icon: 'fas fa-book',
         scope: 'world',
         config: true,
@@ -800,9 +799,9 @@ export function registerSettings() {
     });
 
     game.settings.registerMenu('gambits-premades', 'genericFeatures', {
-        name: game.i18n.localize("Generic Features"),
-        label: game.i18n.localize("Enable Generic Features"),
-        hint: game.i18n.localize("Opportunity Attack, Sentinel, etc"),
+        name: "GAMBITSPREMADES.Menus.GenericFeatures.Name",
+        label: "GAMBITSPREMADES.Menus.GenericFeatures.Label",
+        hint: "GAMBITSPREMADES.Menus.GenericFeatures.Hint",
         icon: 'fas fa-globe',
         scope: 'world',
         config: true,
@@ -812,9 +811,9 @@ export function registerSettings() {
 
     
     game.settings.registerMenu('gambits-premades', 'monsterFeatures', {
-        name: game.i18n.localize("Monster Features"),
-        label: game.i18n.localize("Enable Monster Features"),
-        hint: game.i18n.localize("Monster Features"),
+        name: "GAMBITSPREMADES.Menus.MonsterFeatures.Name",
+        label: "GAMBITSPREMADES.Menus.MonsterFeatures.Label",
+        hint: "GAMBITSPREMADES.Menus.MonsterFeatures.Hint",
         icon: 'fas fa-dragon',
         scope: 'world',
         config: true,
@@ -842,6 +841,19 @@ export class BaseSettingsMenu extends Base {
       height: "auto",
     }
   };
+
+  constructor(options = {}) {
+    super(options);
+
+    try {
+      const titleKey = this.options?.window?.title;
+      if (typeof titleKey === "string" && titleKey.startsWith("GAMBITSPREMADES.")) {
+        const localized = game?.i18n?.localize ? game.i18n.localize(titleKey) : titleKey;
+        if (this.options?.window) this.options.window.title = localized;
+      }
+    } catch (_err) {
+    }
+  }
 
   static PARTS =
     {
@@ -877,7 +889,7 @@ export class BaseSettingsMenu extends Base {
     const numericValue = Number(inputField.value);
 
     if (isNaN(numericValue)) {
-      game.gps.logInfo("Invalid input: Not a number.");
+      game.gps.logInfo(game.i18n.localize("GAMBITSPREMADES.UI.InvalidInputNotNumber"));
       inputField.value = inputField.defaultValue;
     }
   }
@@ -903,7 +915,6 @@ export class BaseSettingsMenu extends Base {
       }
     }
 
-    // Resize window to fit expanded content
     const app = form.closest(".window-app");
     if ( app ) app.style.height = `${form.scrollHeight}px`;
   }
@@ -920,7 +931,7 @@ export class ClassFeaturesSettingsMenu extends BaseSettingsMenu {
   static DEFAULT_OPTIONS = {
     id: "classFeaturesSettingsMenu",
     window: {
-      title: "Enable Class Features"
+      title: "GAMBITSPREMADES.Windows.EnableClassFeatures"
     }
   };
 
@@ -931,123 +942,123 @@ export class ClassFeaturesSettingsMenu extends BaseSettingsMenu {
     const definitions = [
       {
         id: "chronalShift",
-        name: "Chronal Shift",
-        description: "Dialog for Chronurgy Wizards' Chronal Shift.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.ChronalShift.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.ChronalShift.Description",
         boolKey: "enableChronalShift",
         timeoutKey: "Chronal Shift Timeout"
       },
       {
         id: "cuttingWords",
-        name: "Cutting Words",
-        description: "Dialog for College of Lore Bards' Cutting Words.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.CuttingWords.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.CuttingWords.Description",
         boolKey: "Enable Cutting Words",
         timeoutKey: "Cutting Words Timeout",
         children: [
           {
             id: "disableCuttingWordsMaxMiss",
-            name: "Disable Cutting Words Max Miss",
-            description: "Skip prompt if max bardic die wouldn't effect hit.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.DisableCuttingWordsMaxMiss.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.DisableCuttingWordsMaxMiss.Description",
             boolKey: "disableCuttingWordsMaxMiss"
           }
         ]
       },
       {
         id: "interception",
-        name: "Interception",
-        description: "Dialog for Paladins/Fighters' Interception.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.Interception.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.Interception.Description",
         boolKey: "Enable Interception",
         timeoutKey: "Interception Timeout"
       },
       {
         id: "protection",
-        name: "Protection",
-        description: "Dialog for Paladins/Fighters' Protection.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.Protection.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.Protection.Description",
         boolKey: "Enable Protection",
         timeoutKey: "Protection Timeout",
         children: [
           {
             id: "enableProtectionOnSuccess",
-            name: "Enable Protection On Success",
-            description: "Only trigger on a successful attack.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.EnableProtectionOnSuccess.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.EnableProtectionOnSuccess.Description",
             boolKey: "enableProtectionOnSuccess"
           }
         ]
       },
       {
         id: "flashOfGenius",
-        name: "Flash of Genius",
-        description: "Dialog for Artificers Flash of Genius.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.FlashOfGenius.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.FlashOfGenius.Description",
         boolKey: "enableFlashOfGenius",
         timeoutKey: "Flash of Genius Timeout"
       },
       {
         id: "indomitable",
-        name: "Indomitable",
-        description: "Dialog for Fighters' Indomitable.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.Indomitable.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.Indomitable.Description",
         boolKey: "Enable Indomitable",
         timeoutKey: "Indomitable Timeout",
         children: [
           {
             id: "enableAutoSucceedIndomitable",
-            name: "Enable Auto Succeed Indomitable",
-            description: "Auto-succeed on use.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.EnableAutoSucceedIndomitable.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.EnableAutoSucceedIndomitable.Description",
             boolKey: "enableAutoSucceedIndomitable"
           }
         ]
       },
       {
         id: "instinctiveCharm",
-        name: "Instinctive Charm",
-        description: "Dialog for Enchantment Wizards' Instinctive Charm.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.InstinctiveCharm.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.InstinctiveCharm.Description",
         boolKey: "enableInstinctiveCharm",
         timeoutKey: "Instinctive Charm Timeout"
       },
       {
         id: "magicUsersNemesis",
-        name: "Magic-User's Nemesis",
-        description: "Dialog for Monster Slayer Rangers'.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.MagicUsersNemesis.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.MagicUsersNemesis.Description",
         boolKey: "enableMagicUsersNemesis",
         timeoutKey: "Magic-User's Nemesis Timeout"
       },
       {
         id: "poetryInMisery",
-        name: "Poetry in Misery",
-        description: "Dialog for College of Tragedy Bards'.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.PoetryInMisery.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.PoetryInMisery.Description",
         boolKey: "Enable Poetry in Misery",
         timeoutKey: "Poetry in Misery Timeout"
       },
       {
         id: "rainOfCinders",
-        name: "Rain of Cinders",
-        description: "Dialog for Roiling Hearth Witches'.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.RainOfCinders.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.RainOfCinders.Description",
         boolKey: "enableRainOfCinders",
         timeoutKey: "Rain of Cinders Timeout"
       },
       {
         id: "restoreBalance",
-        name: "Restore Balance",
-        description: "Dialog for Clockwork Soul Sorcerers'.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.RestoreBalance.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.RestoreBalance.Description",
         boolKey: "enableRestoreBalance",
         timeoutKey: "Restore Balance Timeout"
       },
       {
         id: "riposte",
-        name: "Riposte",
-        description: "Dialog for Battle Master Fighters' Riposte.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.Riposte.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.Riposte.Description",
         boolKey: "Enable Riposte",
         timeoutKey: "Riposte Timeout"
       },
       {
         id: "taleOfHubris",
-        name: "Tale of Hubris",
-        description: "Dialog for College of Tragedy Bards'.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.TaleOfHubris.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.TaleOfHubris.Description",
         boolKey: "enableTaleOfHubris",
         timeoutKey: "Tale of Hubris Timeout"
       },
       {
         id: "witchesHex",
-        name: "Witches Hex",
-        description: "Dialog for Roiling Hearth Witches' Hex.",
+        name: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.WitchesHex.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.ClassFeatures.WitchesHex.Description",
         boolKey: "Enable Witches Hex",
         timeoutKey: "Witches Hex Timeout"
       }
@@ -1079,7 +1090,7 @@ export class ClassFeaturesSettingsMenu extends BaseSettingsMenu {
       features,
       hasTimeoutColumn,
       buttons: [
-        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+        { type: "submit", icon: "fa-solid fa-save", label: game.i18n.localize("GAMBITSPREMADES.UI.SaveSettings") }
       ]
     });
   }
@@ -1092,7 +1103,7 @@ export class GenericFeatureSettingsMenu extends BaseSettingsMenu {
   static DEFAULT_OPTIONS = {
     id: "genericFeatureSettingsMenu",
     window: {
-      title: "Enable Generic Features"
+      title: "GAMBITSPREMADES.Windows.EnableGenericFeatures"
     },
   };
 
@@ -1101,10 +1112,10 @@ export class GenericFeatureSettingsMenu extends BaseSettingsMenu {
     let hasTimeoutColumn = true;
 
     const definitions = [
-      { id: "opportunityAttack", name: "Opportunity Attack", description: "Automatically enables Opportunity Attacks for combatants in combat.", boolKey: "Enable Opportunity Attack", timeoutKey: "Opportunity Attack Timeout" },
-      { id: "sentinel", name: "Sentinel", description: "Presents a dialog to players with the Sentinel feat when an enemy attacks an ally within range.", boolKey: "Enable Sentinel", timeoutKey: "Sentinel Timeout" },
-      { id: "mageSlayer", name: "Mage Slayer", description: "Presents a dialog to players with the Mage Slayer feat.", boolKey: "enableMageSlayer", timeoutKey: "Mage Slayer Timeout" },
-      { id: "legendaryResistance", name: "Legendary Resistance", description: "Presents a dialog for monsters Legendary Resistance feature.", boolKey: "enableLegendaryResistance", timeoutKey: "Legendary Resistance Timeout" }
+      { id: "opportunityAttack", name: "GAMBITSPREMADES.SettingsMenu.GenericFeatures.OpportunityAttack.Name", description: "GAMBITSPREMADES.SettingsMenu.GenericFeatures.OpportunityAttack.Description", boolKey: "Enable Opportunity Attack", timeoutKey: "Opportunity Attack Timeout" },
+      { id: "sentinel", name: "GAMBITSPREMADES.SettingsMenu.GenericFeatures.Sentinel.Name", description: "GAMBITSPREMADES.SettingsMenu.GenericFeatures.Sentinel.Description", boolKey: "Enable Sentinel", timeoutKey: "Sentinel Timeout" },
+      { id: "mageSlayer", name: "GAMBITSPREMADES.SettingsMenu.GenericFeatures.MageSlayer.Name", description: "GAMBITSPREMADES.SettingsMenu.GenericFeatures.MageSlayer.Description", boolKey: "enableMageSlayer", timeoutKey: "Mage Slayer Timeout" },
+      { id: "legendaryResistance", name: "GAMBITSPREMADES.SettingsMenu.GenericFeatures.LegendaryResistance.Name", description: "GAMBITSPREMADES.SettingsMenu.GenericFeatures.LegendaryResistance.Description", boolKey: "enableLegendaryResistance", timeoutKey: "Legendary Resistance Timeout" }
     ];
 
     const features = definitions.map(def => ({
@@ -1121,7 +1132,7 @@ export class GenericFeatureSettingsMenu extends BaseSettingsMenu {
       features: features,
       hasTimeoutColumn,
       buttons:  [
-        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+        { type: "submit", icon: "fa-solid fa-save", label: game.i18n.localize("GAMBITSPREMADES.UI.SaveSettings") }
       ]
     });
   }
@@ -1134,7 +1145,7 @@ export class SpellSettingsMenu extends BaseSettingsMenu {
   static DEFAULT_OPTIONS = {
     id: "spellSettingsMenu",
     window: {
-      title: "Enable Spells"
+      title: "GAMBITSPREMADES.Windows.EnableSpells"
     }
   };
 
@@ -1145,25 +1156,25 @@ export class SpellSettingsMenu extends BaseSettingsMenu {
     const definitions = [
       {
         id: "counterspell",
-        name: "Counterspell",
-        description: "Presents a dialog to players with Counterspell.",
+        name: "GAMBITSPREMADES.SettingsMenu.Spells.Counterspell.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.Spells.Counterspell.Description",
         boolKey: "Enable Counterspell",
         timeoutKey: "Counterspell Timeout",
-        children: [ { id: "counterspellSpellPenetration", name: "Spell Penetration", description: "Enable optional Bloodied & Bruised feature Spell Penetration.", boolKey: "enableCounterspellSpellPenetration" } ]
+        children: [ { id: "counterspellSpellPenetration", name: "GAMBITSPREMADES.SettingsMenu.Spells.CounterspellSpellPenetration.Name", description: "GAMBITSPREMADES.SettingsMenu.Spells.CounterspellSpellPenetration.Description", boolKey: "enableCounterspellSpellPenetration" } ]
       },
       {
         id: "silveryBarbs",
-        name: "Silvery Barbs",
-        description: "Presents a dialog to players with Silvery Barbs.",
+        name: "GAMBITSPREMADES.SettingsMenu.Spells.SilveryBarbs.Name",
+        description: "GAMBITSPREMADES.SettingsMenu.Spells.SilveryBarbs.Description",
         boolKey: "Enable Silvery Barbs",
         timeoutKey: "Silvery Barbs Timeout",
         children: [
-          { id: "disableSilveryBarbsOnNat20", name: "Disable on Critical", description: "Disable on a Critical Attack Roll.", boolKey: "disableSilveryBarbsOnNat20" },
-          { id: "enableSilveryBarbsOnNat20", name: "Enable on Critical", description: "Enable only on a Critical Attack Roll.", boolKey: "enableSilveryBarbsOnNat20" }
+          { id: "disableSilveryBarbsOnNat20", name: "GAMBITSPREMADES.SettingsMenu.Spells.DisableSilveryBarbsOnNat20.Name", description: "GAMBITSPREMADES.SettingsMenu.Spells.DisableSilveryBarbsOnNat20.Description", boolKey: "disableSilveryBarbsOnNat20" },
+          { id: "enableSilveryBarbsOnNat20", name: "GAMBITSPREMADES.SettingsMenu.Spells.EnableSilveryBarbsOnNat20.Name", description: "GAMBITSPREMADES.SettingsMenu.Spells.EnableSilveryBarbsOnNat20.Description", boolKey: "enableSilveryBarbsOnNat20" }
         ]
       },
-      { id: "powerWordRebound", name: "Power Word Rebound", description: "Presents a dialog to players with Power Word Rebound.", boolKey: "Enable Power Word Rebound", timeoutKey: "Power Word Rebound Timeout" },
-      { id: "temporalShunt", name: "Temporal Shunt", description: "Presents a dialog to players with Temporal Shunt.", boolKey: "enableTemporalShunt", timeoutKey: "Temporal Shunt Timeout" }
+      { id: "powerWordRebound", name: "GAMBITSPREMADES.SettingsMenu.Spells.PowerWordRebound.Name", description: "GAMBITSPREMADES.SettingsMenu.Spells.PowerWordRebound.Description", boolKey: "Enable Power Word Rebound", timeoutKey: "Power Word Rebound Timeout" },
+      { id: "temporalShunt", name: "GAMBITSPREMADES.SettingsMenu.Spells.TemporalShunt.Name", description: "GAMBITSPREMADES.SettingsMenu.Spells.TemporalShunt.Description", boolKey: "enableTemporalShunt", timeoutKey: "Temporal Shunt Timeout" }
     ];
 
     const features = definitions.map(def => {
@@ -1192,7 +1203,7 @@ export class SpellSettingsMenu extends BaseSettingsMenu {
       features,
       hasTimeoutColumn,
       buttons: [
-        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+        { type: "submit", icon: "fa-solid fa-save", label: game.i18n.localize("GAMBITSPREMADES.UI.SaveSettings") }
       ]
     });
   }
@@ -1205,7 +1216,7 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
   static DEFAULT_OPTIONS = {
     id: "generalSettingsMenu",
     window: {
-      title: "General Settings"
+      title: "GAMBITSPREMADES.Windows.GeneralSettings"
     }
   };
 
@@ -1213,14 +1224,14 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
     let context = await super._prepareContext(options);
 
     const definitions = [
-      { id: "enable3prNoCombat", name: "Enable 3rd Party Reactions Outside Combat", description: "Allows 3rd party reactions to function while combat is not active.", boolKey: "enable3prNoCombat" },
-      { id: "enableIdentifyRestrictions", name: "Enable Identify Restrictions", description: "Prevents players from Identifying items except through the use of my Identify spell.", boolKey: "Enable Identify Restrictions", children: [{ id: "identifyRestrictionMessage", name: "Identify Restriction Message", description: "Custom message that will display to users if they are restricted.", type: "String", boolKey: "Identify Restriction Message" }] },
-      { id: "enableRegionWrapping", name: "Enable Region Wrapping", description: "Replaces Foundry default region behavior testing token center points only with multi-point tests to better match the 5e ruleset (Requires Reload).", boolKey: "enableRegionWrapping" },
-      { id: "enableTimerFullAnim", name: "Enable Timer Full Bar Animation", description: "Modify the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.", boolKey: "enableTimerFullAnim" },
-      { id: "hideTemplates", name: "Hide Templates", description: "Hide templates after placement.", boolKey: "hideTemplates" },
-      { id: "mirror3rdPartyDialogForGMs", name: "Mirror 3rd Party Dialog for GMs", description: "3rd party dialog's will be sent to the GM and the player so that either party can interact with the dialog to use/dismiss/pause it.", boolKey: "Mirror 3rd Party Dialog for GMs" },
-      { id: "tokenMovementSpeed", name: "Token Movement Speed", description: "Numeric value for token movement animation speed. Default Foundry speed is 6.", boolKey: "enableTokenMovementSpeed", timeoutKey: "tokenMovementSpeed" },
-      { id: "debugEnabled", name: "Enable Debugging", description: "Enable console logs for the reaction validation process for troubleshooting.", boolKey: "debugEnabled" }
+      { id: "enable3prNoCombat", name: "GAMBITSPREMADES.SettingsMenu.General.Enable3prNoCombat.Name", description: "GAMBITSPREMADES.SettingsMenu.General.Enable3prNoCombat.Description", boolKey: "enable3prNoCombat" },
+      { id: "enableIdentifyRestrictions", name: "GAMBITSPREMADES.SettingsMenu.General.EnableIdentifyRestrictions.Name", description: "GAMBITSPREMADES.SettingsMenu.General.EnableIdentifyRestrictions.Description", boolKey: "Enable Identify Restrictions", children: [{ id: "message", name: "GAMBITSPREMADES.SettingsMenu.General.IdentifyRestrictionMessage.Name", description: "GAMBITSPREMADES.SettingsMenu.General.IdentifyRestrictionMessage.Description", type: "String", boolKey: "Identify Restriction Message" }] },
+      { id: "enableRegionWrapping", name: "GAMBITSPREMADES.SettingsMenu.General.EnableRegionWrapping.Name", description: "GAMBITSPREMADES.SettingsMenu.General.EnableRegionWrapping.Description", boolKey: "enableRegionWrapping" },
+      { id: "enableTimerFullAnim", name: "GAMBITSPREMADES.SettingsMenu.General.EnableTimerFullAnim.Name", description: "GAMBITSPREMADES.SettingsMenu.General.EnableTimerFullAnim.Description", boolKey: "enableTimerFullAnim" },
+      { id: "hideTemplates", name: "GAMBITSPREMADES.SettingsMenu.General.HideTemplates.Name", description: "GAMBITSPREMADES.SettingsMenu.General.HideTemplates.Description", boolKey: "hideTemplates" },
+      { id: "mirror3rdPartyDialogForGMs", name: "GAMBITSPREMADES.SettingsMenu.General.MirrorThirdPartyDialogForGMs.Name", description: "GAMBITSPREMADES.SettingsMenu.General.MirrorThirdPartyDialogForGMs.Description", boolKey: "Mirror 3rd Party Dialog for GMs" },
+      { id: "tokenMovementSpeed", name: "GAMBITSPREMADES.SettingsMenu.General.TokenMovementSpeed.Name", description: "GAMBITSPREMADES.SettingsMenu.General.TokenMovementSpeed.Description", boolKey: "enableTokenMovementSpeed", timeoutKey: "tokenMovementSpeed" },
+      { id: "debugEnabled", name: "GAMBITSPREMADES.SettingsMenu.General.DebugEnabled.Name", description: "GAMBITSPREMADES.SettingsMenu.General.DebugEnabled.Description", boolKey: "debugEnabled" }
     ];
 
     const hasTimeoutColumn = definitions.some(d => !!d.timeoutKey);
@@ -1257,7 +1268,7 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
       features,
       hasTimeoutColumn,
       buttons: [
-        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+        { type: "submit", icon: "fa-solid fa-save", label: game.i18n.localize("GAMBITSPREMADES.UI.SaveSettings") }
       ]
     });
   }
@@ -1270,7 +1281,7 @@ export class MonsterFeaturesSettingsMenu extends BaseSettingsMenu {
   static DEFAULT_OPTIONS = {
     id: "monsterFeaturesSettingsMenu",
     window: {
-      title: "Enable Monster Features"
+      title: "GAMBITSPREMADES.Windows.EnableMonsterFeatures"
     }
   };
 
@@ -1279,8 +1290,8 @@ export class MonsterFeaturesSettingsMenu extends BaseSettingsMenu {
     let hasTimeoutColumn = true;
 
     const definitions = [
-      { id: "burstOfIngenuity", name: "Burst of Ingenuity", description: "Presents a dialog for monsters with Burst of Ingenuity.", boolKey: "enableBurstOfIngenuity", timeoutKey: "Burst of Ingenuity Timeout" },
-      { id: "dreadCounterspell", name: "Dread Counterspell", description: "Presents a dialog for Vecna's Dread Counterspell.", boolKey: "enableDreadCounterspell", timeoutKey: "Dread Counterspell Timeout" }
+      { id: "burstOfIngenuity", name: "GAMBITSPREMADES.SettingsMenu.MonsterFeatures.BurstOfIngenuity.Name", description: "GAMBITSPREMADES.SettingsMenu.MonsterFeatures.BurstOfIngenuity.Description", boolKey: "enableBurstOfIngenuity", timeoutKey: "Burst of Ingenuity Timeout" },
+      { id: "dreadCounterspell", name: "GAMBITSPREMADES.SettingsMenu.MonsterFeatures.DreadCounterspell.Name", description: "GAMBITSPREMADES.SettingsMenu.MonsterFeatures.DreadCounterspell.Description", boolKey: "enableDreadCounterspell", timeoutKey: "Dread Counterspell Timeout" }
     ];
 
     const features = definitions.map(def => {
@@ -1309,7 +1320,7 @@ export class MonsterFeaturesSettingsMenu extends BaseSettingsMenu {
       features,
       hasTimeoutColumn,
       buttons: [
-        { type: "submit", icon: "fa-solid fa-save", label: "Save Settings" }
+        { type: "submit", icon: "fa-solid fa-save", label: game.i18n.localize("GAMBITSPREMADES.UI.SaveSettings") }
       ]
     });
   }
@@ -1319,7 +1330,7 @@ class PatreonSupportMenu extends foundry.applications.api.HandlebarsApplicationM
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "gambits-patreon-support",
-      title: "Patreon Support",
+      title: game?.i18n?.localize ? game.i18n.localize("GAMBITSPREMADES.Windows.PatreonSupport") : "GAMBITSPREMADES.Windows.PatreonSupport",
       template: "templates/blank.hbs",
       width: 1,
       height: 1,

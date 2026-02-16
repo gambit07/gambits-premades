@@ -34,7 +34,7 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
             let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
             let itemProperName = chosenItem?.name;
             const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-            const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+            const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
             
             let castType = workflow.item?.system?.method;
             if(castType === "innate" || castType === "atwill") castLevel = workflow.castData.baseLevel;
@@ -50,7 +50,7 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName}?</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.MonsterFeatures.DreadCounterspell.Prompts.UseYourReaction.Default", { itemName: itemProperName })}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
@@ -60,13 +60,13 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
             `;
     
-            let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a spell triggering ${itemProperName}.</span>`;
+            let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableSpellTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`;
             let chatData = { user: gmUser, content: content, roll: false };
             let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
     
@@ -126,15 +126,15 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                     let skillFlavor = validTokenPrimary.actor.system.attributes.spell.abilityLabel;
                     
                     if (skillTotal >= spellThreshold) {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was dread counterspelled, you rolled a ${skillTotal} on your ${skillFlavor} ability check.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.DreadCounterspell.DreadCounterspellSuccess", { skillTotal: skillTotal, skillFlavor: skillFlavor })}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
                     else {
-                        chatContent = `<span style='text-wrap: wrap;'>The creature was not dread counterspelled, you rolled a ${skillTotal} on your ${skillFlavor} ability check and needed a ${spellThreshold}.${spellPenetrationChat}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.DreadCounterspell.DreadCounterspellFailed", { skillTotal: skillTotal, skillFlavor: skillFlavor, spellThreshold: spellThreshold, spellPenetrationChat: spellPenetrationChat })}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         csFailure = true;
                     }
                 }
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>The creature was dread counterspelled because you used ${itemProperName} on a spell that was 4th level or lower.<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.DreadCounterspell.DreadCounterspellAutoSuccess", { itemName: itemProperName })}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 }
 
                 if(!csFailure) {

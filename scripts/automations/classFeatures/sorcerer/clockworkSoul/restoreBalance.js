@@ -25,10 +25,10 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                     workflow.failedSaves.delete(target);
                     workflow.saves.add(target)
 
-                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.AllyDisadvantageRemovedSaveSuccess", { saveResult: saveResult })} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 }
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.AllyDisadvantageRemovedSaveFailure", { saveResult: saveResult })} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 }
                 await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
             }
@@ -37,10 +37,10 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                     workflow.failedSaves.add(target);
                     workflow.saves.delete(target)
 
-                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.EnemyAdvantageRemovedSaveFailure", { saveResult: saveResult })} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 }
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to save against the effect with a ${saveResult}. <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.EnemyAdvantageRemovedSaveSuccess", { saveResult: saveResult })} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 }
                 await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
             }
@@ -57,7 +57,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
@@ -91,15 +91,15 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName}? ${targetAllyUuids.length >= 1 && targetEnemyUuids.length === 0 ? 'Choose an ally to remove disadvantage from below.' : targetAllyUuids.length === 0 && targetEnemyUuids.length >= 1 ? 'Choose an enemy to remove advantage from below.' : targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? 'Choose an ally to remove disadvantage from, or an enemy to remove advantage from below.' : ""}</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.Prompts.UseYourReaction.SelectTarget", { itemName: itemProperName, selectionHint: targetAllyUuids.length >= 1 && targetEnemyUuids.length === 0 ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.SelectionHint.ChooseAlly") : targetAllyUuids.length === 0 && targetEnemyUuids.length >= 1 ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.SelectionHint.ChooseEnemy") : targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.SelectionHint.ChooseAllyOrEnemy") : "" })}</p>
                             <div class="gps-dialog-flex-wrapper">
                                 <div class="gps-dialog-select-container">
                                     ${targetAllyUuids.length >= 1 ? 
                                         `<div class="gps-dialog-flex">
-                                            <label for="ally-token" class="gps-dialog-label">Ally:</label>
+                                            <label for="ally-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.Ally")}</label>
                                             <select id="ally-token" class="gps-dialog-select"
                                                 ${targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? 
-                                                    `onchange="resetEnemySelect()"> <option class="gps-dialog-option" value="" selected>Select Ally:</option>` : 
+                                                    `${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.OnchangeResetenemyselect")} <option class="gps-dialog-option" value="" selected>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.SelectAlly")}</option>` : 
                                                     '>'
                                                 }
                                                 ${targetAllyNames.map((name, index) => 
@@ -111,10 +111,10 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                                     }
                                     ${targetEnemyUuids.length >= 1 ? 
                                         `<div class="gps-dialog-flex">
-                                            <label for="enemy-token" class="gps-dialog-label">Enemy:</label>
+                                            <label for="enemy-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.Enemy")}</label>
                                             <select id="enemy-token" class="gps-dialog-select"
                                                 ${targetAllyUuids.length >= 1 && targetEnemyUuids.length >= 1 ? 
-                                                    `onchange="resetAllySelect()"> <option class="gps-dialog-option" value="" selected>Select Enemy:</option>` : 
+                                                    `${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.OnchangeResetallyselect")} <option class="gps-dialog-option" value="" selected>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.SelectEnemy")}</option>` : 
                                                     '>'
                                                 }
                                                 ${targetEnemyNames.map((name, index) => 
@@ -133,18 +133,18 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
             `;
         }
         else if(workflowType === "attack") {
-            if(workflow.token.document.disposition === validTokenPrimary.document.disposition && (!workflow.disadvantage && !workflow.attackRoll.formula.includes("kl") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) {
+            if(workflow.token.document.disposition === validTokenPrimary.document.disposition && (!workflow.tracker.hasDisadvantage && !workflow.attackRoll.formula.includes("kl") || (workflow.tracker.hasAdvantage === true && workflow.tracker.hasDisadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) {
                 if(debugEnabled) game.gps.logInfo(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
                 continue;
             }
-            if(workflow.token.document.disposition !== validTokenPrimary.document.disposition && (!workflow.advantage && !workflow.attackRoll.formula.includes("kh") || (workflow.advantage === true && workflow.disadvantage === true) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) {
+            if(workflow.token.document.disposition !== validTokenPrimary.document.disposition && (!workflow.tracker.hasAdvantage && !workflow.attackRoll.formula.includes("kh") || (workflow.tracker.hasAdvantage && workflow.tracker.hasDisadvantage) || (workflow.attackRoll.formula.includes("kl") && workflow.attackRoll.formula.includes("kh")))) {
                 if(debugEnabled) game.gps.logInfo(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
                 continue;
             }
@@ -155,21 +155,21 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use your reaction to initiate ${itemProperName} ${workflow.token.document.disposition === validTokenPrimary.document.disposition ? 'to remove disadvantage from your Ally?' : workflow.token.document.disposition !== validTokenPrimary.document.disposition ? 'to remove advantage from your Enemy?' : ""}</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.Prompts.UseYourReaction.TargetDisposition", { itemName: itemProperName, targetHint: workflow.token.document.disposition === validTokenPrimary.document.disposition ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.TargetHint.RemoveDisadvantageFromAlly") : workflow.token.document.disposition !== validTokenPrimary.document.disposition ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.TargetHint.RemoveAdvantageFromEnemy") : "" })}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
             `;
         }
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for a save triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableSaveTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
         
@@ -258,24 +258,24 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
 
                 if(workflow.token.document.disposition === validTokenPrimary.document.disposition) {
                     if(attackResult >= targetAC) {
-                        if(criticalSuccess) chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to hit their target with a critical hit. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                        else chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed and were able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        if(criticalSuccess) chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.AllyDisadvantageRemovedCriticalHit")} <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.AllyDisadvantageRemovedAttackHit", { attackResult: attackResult })} <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
                     else {
-                        if(criticalFailure) chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to hit their target with a critical miss. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                        else chatContent = `<span style='text-wrap: wrap;'>Your ally had their source of disadvantage removed but were still unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        if(criticalFailure) chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.AllyDisadvantageRemovedCriticalMiss")} <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.AllyDisadvantageRemovedAttackMiss", { attackResult: attackResult })} <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: totalRoll});
                     return;
                 }
                 else{
                     if(attackResult < targetAC) {
-                        if(criticalFailure) chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a critical miss. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                        else chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed and were unable to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        if(criticalFailure) chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.EnemyAdvantageRemovedCriticalMiss")} <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.EnemyAdvantageRemovedAttackMiss", { attackResult: attackResult })} <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
                     else {
-                        if(criticalSuccess) chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to hit their target with a critical hit. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                        else chatContent = `<span style='text-wrap: wrap;'>Your enemy had their source of advantage removed but were still able to hit their target with a ${attackResult}. <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        if(criticalSuccess) chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.EnemyAdvantageRemovedCriticalHit")} <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        else chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Sorcerer.ClockworkSoul.RestoreBalance.EnemyAdvantageRemovedAttackHit", { attackResult: attackResult })} <img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
                     await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: totalRoll});
                     return;

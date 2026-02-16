@@ -1,5 +1,5 @@
 export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, regionStatus, speaker, actor, character, item, args, scope, workflow, options}) {
-    if(!game.combat) return ui.notifications.warn("Stinking Cloud requires an active combat.")
+    if(!game.combat) return ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Common.RequiresActiveCombat", { effectName: workflow?.item?.name ?? item?.name ?? game.i18n.localize("GAMBITSPREMADES.Notifications.Common.ThisEffect") }))
 
     if(args?.[0]?.macroPass === "templatePlaced") {
         const template = await fromUuid(workflow.templateUuid);
@@ -46,7 +46,7 @@ export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, 
         let chatData = {
             user: browserUser.id,
             speaker: ChatMessage.getSpeaker({ token: token }),
-            content: "You are asphyxiated by the noxious gas and lose your action and bonus action this turn retching and reeling.",
+            content: game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations2024.Spells.StinkingCloud2024.Content"),
         };
         ChatMessage.create(chatData);
     }

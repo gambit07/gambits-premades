@@ -95,7 +95,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         let dragonTurtleShield = effectOriginActor.items.getName("Dragon Turtle Dueling Shield");
         if(dragonTurtleShield) await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
         
-        dialogTitle = "Opportunity Attack";
+        dialogTitle = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.Title");
         dialogId = "opportunityattack";
     }
     else if(regionScenario === "onEnter") {
@@ -104,18 +104,18 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
             let weaponNames = ["glaive","halberd","pike","quarterstaff","spear"];
             let hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.type?.baseItem && weaponNames.includes(item.system?.type?.baseItem.toLowerCase()) && item.system.equipped === true);
             if(!hasPolearmWeapon) return;
-            dialogTitle = "Polearm Opportunity Attack";
+            dialogTitle = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.TitlePolearm");
             dialogId = "polearmopportunityattack";
         }
         else if(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === "Battle Master") {
             let braceItem = effectOriginActor.items.getName("Maneuvers: Brace");
             if(!braceItem) return;
             braceItemUuid = braceItem.uuid;
-            dialogTitle = "Maneuvers: Brace Opportunity Attack";
+            dialogTitle = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.TitleBrace");
             dialogId = "maneuversbraceopportunityattack";
         }
         else if (hasDeadlyReachReaction) {
-            dialogTitle = "Deadly Reach Opportunity Attack";
+            dialogTitle = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.TitleDeadlyReach");
             dialogId = "deadlyreachopportunityattack";
         }
         else {
@@ -216,10 +216,10 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         <div class="gps-dialog-container">
             <div class="gps-dialog-section">
                 <div class="gps-dialog-content">
-                    <p class="gps-dialog-paragraph">Would you like to use your reaction to attack?${hasWarCaster ? " If using War Caster to cast a spell, it must effect only the creature who triggered this Opportunity Attack." : ""}${braceItemUuid ? " This will initiate a use of your Superiority Die for the Brace maneuver." : ""}</p>
+                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.Prompts.UseYourReaction.Default", { warCasterHint: hasWarCaster ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.WarCasterHint") : "", braceHint: braceItemUuid ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.BraceHint") : "" })}</p>
                     <div>
                         <div class="gps-dialog-flex">
-                            <label for="item-select_${dialogId}" class="gps-dialog-label">Weapon:</label>
+                            <label for="item-select_${dialogId}" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Weapon")}</label>
                             <select id="item-select_${dialogId}" class="gps-dialog-select">
                                 ${validWeapons.map(item => `<option data-img="${item.img}" value="${item.uuid}" class="gps-dialog-option">${item.name} ${favoriteWeaponUuid === item.uuid ? "&#9733;" : ""} ${((act) => act ? (act.actionType==="msak" ? "(Melee)" : act.actionType==="rsak" ? "(Ranged)" : act.actionType==="save" ? "(Save)" : "") : "")(item.system.activities?.find(a => ["msak","rsak","save"].includes(a.actionType)))}</option>`).join('')}
                             </select>
@@ -229,23 +229,23 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
                         </div>
                         <div style="display: flex; align-items: center; margin-top: 12px;">
                             <input type="checkbox" id="gps-favorite-checkbox" style="vertical-align: middle;"/>
-                            <label for="gps-favorite-checkbox">Favorite this Option?</label>
+                            <label for="gps-favorite-checkbox">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.FavoriteThisOption")}</label>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="gps-dialog-button-container">
                 <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                 </button>
             </div>
         </div>
     `;
 
     let dialogTitlePrimary = `${effectOriginActor.name} | ${dialogTitle}`;
-    let dialogTitleGM = `Waiting for ${effectOriginActor.name}'s selection | ${dialogTitle}`;
+    let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: effectOriginActor.name, itemName: dialogTitle });
 
-    let content = `<span style='text-wrap: wrap;'><img src="${effectOriginToken.actor.img}" style="width: 25px; height: auto;" /> ${effectOriginToken.actor.name} has a reaction available for an Opportunity Attack.</span>`
+    let content = `<span style='text-wrap: wrap;'><img src="${effectOriginToken.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.GenericFeatures.OpportunityAttack.ReactionAvailableOpportunityAttack", { actorName: effectOriginToken.actor.name })}</span>`
     let chatData = { user: gmUser, content: content, roll: false };
     let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
@@ -472,10 +472,10 @@ export async function enableOpportunityAttack(combat, combatEvent) {
 };
 
 export async function disableOpportunityAttack(combat, combatEvent) {
-    if (game.settings.get('gambits-premades', 'Enable Opportunity Attack') === false) return;
-
     async function processCombatant(combatant) {
         const { actor } = combatant;
+        let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
+        if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
 
         let regionFlag = await combatant.getFlag("gambits-premades", "opportunityAttackRegion");
         let attachedRegions = actor.getFlag('gambits-premades', 'attachedRegions') || [];
@@ -484,7 +484,7 @@ export async function disableOpportunityAttack(combat, combatEvent) {
             await actor.setFlag('gambits-premades', 'attachedRegions', attachedRegions);
         }
         else {
-            await actor.unsetFlag('gambits-premades', 'attachedRegions');
+            return await actor.unsetFlag('gambits-premades', 'attachedRegions');
         }
 
         let regionData = null;
@@ -498,8 +498,6 @@ export async function disableOpportunityAttack(combat, combatEvent) {
         } catch (error) {
             console.warn(`Error deleting region data: ${error.message}`);
         }
-        let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
-        if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
     }
 
     if (combatEvent === "endCombat") {
@@ -691,7 +689,7 @@ async function processValidRange({actor, token}) {
 
     let oaDisabled;
     if (!validWeapons.length && !validSpells.length) {
-        ui.notifications.warn(`No Valid Melee options found, cancelling Opportunity Attack options for ${actor.name}`);
+        ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.GenericFeatures.OpportunityAttack.NoValidOptions", { name: actor.name }));
         oaDisabled = true;
     }
 

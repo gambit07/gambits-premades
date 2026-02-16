@@ -21,7 +21,7 @@ export async function hillsTumble2024({ speaker, actor, token, character, item, 
         if (!Object.prototype.hasOwnProperty.call(sizeMap, sizeKey)) return;
 
         let dialogId = "193b8577-2ecd-4341-8cb4-3b421bffec28";
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${macroItem.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: macroItem.name });
         let dialogTitlePrimary = `${token.actor.name} | ${macroItem.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
@@ -34,7 +34,7 @@ export async function hillsTumble2024({ speaker, actor, token, character, item, 
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to cause the creature to fall Prone using ${itemName}?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations2024.RaceFeatures.HillsTumble2024.Prompt", { itemName: itemName })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${macroItem.img}" class="gps-dialog-image">
                                 </div>
@@ -44,7 +44,7 @@ export async function hillsTumble2024({ speaker, actor, token, character, item, 
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>

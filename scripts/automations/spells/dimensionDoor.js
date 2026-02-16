@@ -1,11 +1,11 @@
 export async function dimensionDoor({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error("You must install the Jack Kerouac's Animated Spell Effects - Cartoon module to use this automation.");
+    if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.MissingDependency"));
     if (args[0].macroPass === "preActiveEffects") {
-        if (workflow.targets.size > 1) return ui.notifications.warn("You can only select one creature to teleport along with yourself");
+        if (workflow.targets.size > 1) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.CanOnlySelectOne"));
         let target = workflow.targets.first() ?? null;
         if(target) {
             let targetDistance = MidiQOL.computeDistance(target,token, {wallsBlock: true, includeCover: true})
-            if(targetDistance > game.gps.convertFromFeet({range:6})) return ui.notifications.warn("You must be within 5 feet of the ally you are trying to teleport");
+            if(targetDistance > game.gps.convertFromFeet({range:6})) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.MustBeWithin5Feet"));
 
             const sizeMap = {
                 tiny: 1,
@@ -17,7 +17,7 @@ export async function dimensionDoor({ speaker, actor, token, character, item, ar
             };
             let targetValue = sizeMap[target.actor.system.traits.size];
             let initiatingValue = sizeMap[actor.system.traits.size];
-            if(targetValue > (initiatingValue + 1)) return ui.notifications.warn("Your target is too large to teleport with you");
+            if(targetValue > (initiatingValue + 1)) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.TooLarge"));
         }
         const portalScale = token?.w / canvas.grid.size * 0.7;
 

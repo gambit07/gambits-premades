@@ -1,12 +1,12 @@
 export async function enemiesAbound({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(!game.modules.get("jaamod")?.active) return ui.notifications.error("You must install the Jinkers Animated Art Pack module to use this automation.");
+    if(!game.modules.get("jaamod")?.active) return ui.notifications.error(game.i18n.localize("GAMBITSPREMADES.Notifications.ClassFeatures.Fighter.ArcaneArcher.GraspingArrow.MissingDependency"));
     if(args[0].macroPass === "postActiveEffects") {
         const targets = workflow.targets;
         for(let target of targets) {
             const immunity = target.actor.system.traits?.ci?.value?.has("frightened");
 
             if (immunity) {
-                ui.notifications.notify(`${target.actor.name} is immune to Enemies Abound because it cannot be Frightened.`);
+                ui.notifications.notify(game.i18n.format("GAMBITSPREMADES.Notifications.Spells.EnemiesAbound.TargetImmuneCannotBeFrightened", { name: target.actor.name }));
                 
                 const hasConcApplied = await MidiQOL.getConcentrationEffect(actor, item.uuid)
                 

@@ -4,7 +4,7 @@ export async function powerWordHeal({ speaker, actor, token, character, item, ar
         let gmUser = game.gps.getPrimaryGM();
         for(let target of targets) {
             if(target.actor.system.details?.type?.value === "construct" || target.actor.system.details?.type?.value === "undead") {
-                ui.notifications.warn("The target is an undead or construct and is not effected");
+                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.PowerWordHeal.TargetUndead"));
                 workflow.targets.delete(target);
                 continue;
             }
@@ -36,7 +36,7 @@ export async function powerWordHeal({ speaker, actor, token, character, item, ar
             if(!isProne) return;
 
             let dialogId = "powerwordheal";
-            let dialogTitleGM = `Waiting for ${target.actor.name}'s selection | ${item.name}`;
+            let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: target.actor.name, itemName: item.name });
             let dialogTitlePrimary = `${target.actor.name} | ${item.name}`;
             let browserUser = game.gps.getBrowserUser({ actorUuid: target.actor.uuid });
             let result;
@@ -48,7 +48,7 @@ export async function powerWordHeal({ speaker, actor, token, character, item, ar
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use your reaction to get up from Prone?</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.PowerWordHeal.Prompts.UseYourReaction.Default")}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                     </div>
@@ -58,7 +58,7 @@ export async function powerWordHeal({ speaker, actor, token, character, item, ar
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>

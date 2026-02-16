@@ -1,5 +1,5 @@
 export async function recklessAttack({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "preAttackRoll") {
+    if(args[0].macroPass === "preAttackRollConfig") {
         if(!game.combat) return;
         let meleeAttack = (workflow.activity?.ability === 'str' && workflow.activity?.actionType === 'mwak' && ((!workflow.item.system?.properties?.has('thr')) || MidiQOL.checkDistance(token, workflow.targets.first(), game.gps.convertFromFeet({ range: 6 })))) ? true : false;
         if (!meleeAttack) return;
@@ -11,7 +11,7 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
 
         let dialogId = "recklessattack";
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${item.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: item.name });
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let initialTimeLeft = 30;
         let gmUser = game.gps.getPrimaryGM();
@@ -23,7 +23,7 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your Reckless Attack this turn?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Barbarian.RecklessAttack.Prompts.UseRecklessAttack")}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                                 </div>
@@ -33,7 +33,7 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
@@ -56,7 +56,11 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
             return;
         }
         else if (userDecision) {
-            workflow.advantage = true;
+            workflow.tracker.advantage.add(userDecision, "Reckless Attack");
+            console.log(workflow)
+            console.log(workflow.tracker)
+            console.log("Advantage:", workflow.tracker.hasAdvantage);
+
             await actor.setFlag("midi-qol", "checkRecklessAttack", true);
 
             let effectData = [{
@@ -69,7 +73,7 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
                     },
                     {
                         "key": "flags.midi-qol.advantage.attack.all",
-                        "value": "activity?.ability === 'str' && activity?.actionType === 'mwak' && (!item?.properties.has('thr') || checkDistance(token, workflow.targets.first(), game.gps.convertFromFeet({ range: 6 })))",
+                        "value": "activity?.ability === 'str' && activity?.actionType === 'mwak'",
                         "mode": 0,
                         "priority": 20
                     },

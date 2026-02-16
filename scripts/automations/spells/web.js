@@ -39,7 +39,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your action to make an athletics skill check to escape the ${chosenItem.name}?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.Web.Prompts.UseYourAction.AthleticsCheck", { itemName: chosenItem.name })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
@@ -49,7 +49,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
@@ -74,7 +74,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                 let chatData = {
                     user: browserUser.id,
                     speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: `<span style='text-wrap: wrap;'>You successfully escape from the ${chosenItem.name}!</span>`
+                    content: `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Web.Escape", { itemName: chosenItem.name })}</span>`
                 };
                 ChatMessage.create(chatData);
             }
@@ -82,7 +82,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                 let chatData = {
                     user: browserUser.id,
                     speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: `<span style='text-wrap: wrap;'>You are unable to escape the ${chosenItem.name} this turn.</span>`
+                    content: `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Web.UnableEscapeTurn", { itemName: chosenItem.name })}</span>`
                 };
                 ChatMessage.create(chatData);
             }
@@ -110,7 +110,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Would you like to use your action to make an strength ability check to escape the ${chosenItem.name}?</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.Web.Prompts.UseYourAction.StrengthCheck", { itemName: chosenItem.name })}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>
@@ -120,7 +120,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                     </div>
                     <div class="gps-dialog-button-container">
                         <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                            <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                         </button>
                     </div>
                 </div>
@@ -145,7 +145,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                         let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),
-                        content: `<span style='text-wrap: wrap;'>You successfully escape from the ${chosenItem.name}!</span>`
+                        content: `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Web.Escape", { itemName: chosenItem.name })}</span>`
                     };
                     ChatMessage.create(chatData);
                     await resumeMovement();
@@ -154,7 +154,7 @@ export async function web({tokenUuid, regionUuid, regionScenario, originX, origi
                     let chatData = {
                         user: browserUser.id,
                         speaker: ChatMessage.getSpeaker({ token: token }),
-                        content: `<span style='text-wrap: wrap;'>You are unable to escape the ${chosenItem.name} this turn.</span>`
+                        content: `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Web.UnableEscapeTurn", { itemName: chosenItem.name })}</span>`
                     };
                     ChatMessage.create(chatData);
 

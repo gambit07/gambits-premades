@@ -4,7 +4,7 @@ import {
 } from "../../utils/lightActions.js";
   
 export async function candle({ speaker, actor, token, item, args, workflow }) {
-  if(!game.modules.get("ATL")?.active) return ui.notifications.warn("The Active Token Effects module must be active");
+  if(!game.modules.get("ATL")?.active) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.Candle.MissingDependency"));
   const effectName = `${token.document.id} Candle`;
   const gpsUuid = "3c2adfee-50c0-4393-8ed3-b6ac53a53fe2";
   const filePath = "modules/gambits-premades/assets/images/candle.webp";
@@ -58,7 +58,7 @@ export async function candle({ speaker, actor, token, item, args, workflow }) {
 
   if (!activeLight) {
     if (!hasRemaining) {
-      ui.notifications.warn(`You do not have any ${animType}s remaining.`);
+      ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Items.Candle.DoNotAnyS", { animType: animType }));
       workflow.aborted = true;
       return;
     }

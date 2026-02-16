@@ -4,7 +4,7 @@ export async function rodOfThePactKeeper({ speaker, actor, token, character, ite
 
 
     if (spellLevel === spellMax) {
-    ui.notifications.warn("You have no appropriate spell slot to recover");
+    ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.RodOfThePactKeeper.NotAvailable"));
     await item.update({ "system.uses.spent": 0 });
     return;
     }
@@ -22,7 +22,7 @@ export async function rodOfThePactKeeper({ speaker, actor, token, character, ite
                 <div class="gps-dialog-content">
                     <div>
                         <div class="gps-dialog-flex">
-                            <p class="gps-dialog-paragraph">Would you like to use your action to recover a spell slot?</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Items.RodOfThePactKeeper.Prompts.UseYourAction.Default")}</p>
                             <div id="image-container" class="gps-dialog-image-container">
                                 <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
                             </div>
@@ -32,7 +32,7 @@ export async function rodOfThePactKeeper({ speaker, actor, token, character, ite
             </div>
             <div class="gps-dialog-button-container">
                 <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                 </button>
             </div>
         </div>
@@ -47,7 +47,7 @@ export async function rodOfThePactKeeper({ speaker, actor, token, character, ite
     }
     else if (userDecision) {
         await actor.update({ "system.spells.pact.value": spellLevelNew });
-        const message = spellLevelNew === 1 ? "Spell slot recovered! You now have 1 pact spell remaining." : `Spell slot recovered! You now have ${spellLevelNew} pact spells remaining.`;
+        const message = spellLevelNew === 1 ? "Spell slot recovered! You now have 1 pact spell remaining." : game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Items.RodOfThePactKeeper.SpellSlotRecovered", { spellLevelNew: spellLevelNew });
         ui.notifications.info(message);
     }
 }

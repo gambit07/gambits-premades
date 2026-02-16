@@ -44,7 +44,7 @@ export async function portent({ speaker, actor, token, character, item, args, sc
                     const chatMessage = MidiQOL.getCachedChatMessage(workflow.itemCardUuid);
                     let content = foundry.utils.duplicate(chatMessage.content);
                     let searchString = /<div class="midi-qol-attack-roll">[\s\S]*<div class="end-midi-qol-attack-roll">/g;
-                    let replaceString = `<div class="midi-qol-attack-roll"><span style='text-wrap: wrap;'>You used ${divContent.id} and changed the dice result to ${roll}.</span><div class="end-midi-qol-attack-roll">`;
+                    let replaceString = `<div class="midi-qol-attack-roll"><span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.PortentApplied", { portentLabel: divContent.id, roll: roll })}</span><div class="end-midi-qol-attack-roll">`;
                     content = content.replace(searchString, replaceString);
                     await chatMessage.update({ content: content });
                 }
@@ -54,14 +54,14 @@ export async function portent({ speaker, actor, token, character, item, args, sc
         }
 
         await foundry.applications.api.DialogV2.wait({
-            window: { title: 'Portent Roll Selection' },
+            window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.Windowtitle") },
             content: `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">Which portent roll would you like to use?</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.SelectPortentRoll")}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img src="${item.img}" class="gps-dialog-image">
                                     </div>
@@ -87,7 +87,7 @@ export async function portent({ speaker, actor, token, character, item, args, sc
 
             let result = roll?.utilityRolls?.total;
             
-            diceResult += `<div id="Portent Roll ${i}">- Portent Roll ${i}: <b><span id="portentRoll${i}">${result}</span></b></div>`;
+            diceResult += `<div id="Portent Roll ${i}">${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.PortentRoll", { i: i })} <b><span id="portentRoll${i}">${result}</span></b></div>`;
         }
 
         diceResult += '<br><div id="endPortentRolls"></div>';

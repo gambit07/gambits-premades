@@ -7,7 +7,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     let dialogId = gpsUuid;
     let target = workflow.targets.first();
     let enableProtectionOnSuccess = MidiQOL.safeGetGameSetting('gambits-premades', 'enableProtectionOnSuccess');
-    if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kl")) || (!enableProtectionOnSuccess && workflow.disadvantage === true)) return;
+    if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kl")) || (!enableProtectionOnSuccess && workflow.tracker.hasDisadvantage)) return;
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Protection Timeout`));
 
@@ -21,7 +21,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = `Waiting for ${validTokenPrimary.actor.name}'s selection | ${itemProperName}`;
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         if (target.document.uuid === validTokenPrimary.document.uuid) continue;
@@ -32,7 +32,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use <b>${itemProperName}</b> to disadvantage the attack against <b>${target.actor.name}</b>?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Protection.Prompt")} <b>${itemProperName}</b> ${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Protection.ToDisadvantageTheAttackAgainst")} <b>${target.actor.name}</b>?</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
@@ -42,13 +42,13 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
         `;
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${validTokenPrimary.actor.name} has a reaction available for an attack triggering ${itemProperName}.</span>`
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Common.ReactionAvailableAttackTrigger", { actorName: validTokenPrimary.actor.name, itemProperName: itemProperName })}</span>`
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
         let result;
@@ -88,7 +88,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
                 .fadeOut(250)
                 .play();
     
-            if(!enableProtectionOnSuccess) workflow.disadvantage = true;
+            if(!enableProtectionOnSuccess) workflow.tracker.disadvantage.add(!enableProtectionOnSuccess, "Protection");
             else if(enableProtectionOnSuccess) {
                 let straightRoll = workflow.attackRoll.dice[0].results[0].result;
                 let straightRollBonus = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
@@ -99,8 +99,8 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
                     await workflow.setAttackRoll(reroll);
                     workflow.workflowOptions.noOnUseMacro = saveSetting;
     
-                    if(target.actor.system.attributes.ac.value > reroll.total) content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection to turn the advantage roll into a straight roll, and cause the target to miss ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    else content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection to turn the advantage roll into a straight roll, but the target still hits ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    if(target.actor.system.attributes.ac.value > reroll.total) content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Protection.TurnAdvantageToStraightRollMiss", { targetName: target.actor.name })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    else content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Protection.TurnAdvantageToStraightRollHit", { targetName: target.actor.name })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
             
                     let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
                     let chatData = {
@@ -121,8 +121,8 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
             
                     let content;
             
-                    if(target.actor.system.attributes.ac.value > reroll.total) content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection and cause the target to miss ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    else content = `<span style='text-wrap: wrap;'>You use your Fighting Style - Protection but the target still hits ${target.actor.name}. <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    if(target.actor.system.attributes.ac.value > reroll.total) content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Protection.FightingStyleCause", { targetName: target.actor.name })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    else content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Protection.AttackHitAnyway", { targetName: target.actor.name })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
             
                     let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
                     let chatData = {

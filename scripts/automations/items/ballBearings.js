@@ -36,7 +36,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
                 <div class="gps-dialog-content">
                     <div>
                         <div class="gps-dialog-flex">
-                            <p class="gps-dialog-paragraph">${token.actor.name} moved through ball bearings, are they moving at half speed?</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Items.BallBearings.ConfirmHalfSpeed", { actorName: token.actor.name })}</p>
                             <div id="image-container" class="gps-dialog-image-container">
                                 <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                             </div>
@@ -46,7 +46,7 @@ export async function ballBearings({tokenUuid, regionUuid, regionScenario, origi
             </div>
             <div class="gps-dialog-button-container">
                 <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                    <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                 </button>
             </div>
         </div>

@@ -10,7 +10,7 @@ export async function firesBurn2024({ speaker, actor, token, character, item, ar
         if(itemUsesRemaining === 0) return;
 
         let dialogId = "e4bed97c-3e72-4f3a-b3f6-916d5e87d0de";
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${itemName}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: itemName });
         let dialogTitlePrimary = `${token.actor.name} | ${itemName}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
@@ -23,7 +23,7 @@ export async function firesBurn2024({ speaker, actor, token, character, item, ar
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to deal additional damage using ${itemName}?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations2024.RaceFeatures.FiresBurn2024.Prompt", { itemName: itemName })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${macroItem.img}" class="gps-dialog-image">
                                 </div>
@@ -33,7 +33,7 @@ export async function firesBurn2024({ speaker, actor, token, character, item, ar
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>

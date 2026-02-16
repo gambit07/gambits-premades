@@ -3,14 +3,14 @@ export async function identify({ speaker, actor, token, character, item, args, s
     usage.consume = usage.consume || {};
     usage.consume.spellSlot = false;
     const items = actor.items.contents.filter(i => i.system.identified === false);
-    if (items.length === 0) return ui.notifications.warn("You have no unidentified items");
+    if (items.length === 0) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.Identify.NoUnidentifiedItems"));
 
     await foundry.applications.api.DialogV2.wait({
-        window: { title: "Identify Cast Type" },
-        content: `<p>Would you like to cast Identify ritually?</p>`,
+        window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Identify.Windowtitle") },
+        content: `<p>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.Identify.PromptRitualCast")}</p>`,
         buttons: [{
             action: "Yes",
-            label: "Yes",
+            label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Yes"),
             callback: async () => {
                 workflow.aborted = true;
                 listUnidentifiedItems(true);
@@ -18,7 +18,7 @@ export async function identify({ speaker, actor, token, character, item, args, s
         },
         {
             action: "No",
-            label: "No",
+            label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.No"),
             default: true,
             callback: async () => {
                 const spells = actor.system.spells;
@@ -50,11 +50,11 @@ export async function identify({ speaker, actor, token, character, item, args, s
                 else if(checkType === "ritual") {
                     workflow.aborted = true;
                     listUnidentifiedItems(true);
-                    return ui.notifications.info("Casting Ritually: You are only able to cast Identify ritually")
+                    return ui.notifications.info(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.Identify.RitualOnly"))
                 }
 
                 if (!hasSpellSlots) {
-                    return ui.notifications.warn("You have no spell slots available");
+                    return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.Identify.NoSpellSlots"));
                 }
                 else {
                     workflow.aborted = true;
@@ -74,7 +74,7 @@ export async function identify({ speaker, actor, token, character, item, args, s
                 let spellSlot = actor.system.spells[`spell${level}`].value;
                 if (spellSlot > 0) {
                     let levelWithOrdinal = getOrdinalNumber(level);
-                    dropdownOptions += `<option class="gps-dialog-option" value="${level}">${levelWithOrdinal} Level (${spellSlot})</option>`;
+                    dropdownOptions += `<option class="gps-dialog-option" value="${level}">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.Identify.Level", { levelWithOrdinal: levelWithOrdinal, spellSlot: spellSlot })}</option>`;
                 }
             }
         }
@@ -84,32 +84,7 @@ export async function identify({ speaker, actor, token, character, item, args, s
 
         let content = `
             <style>
-                .dialog {
-                    width: 550px !important;
-                }
-                .identify-btn:hover {
-                    box-shadow: 0 0 8px #333; /* Stronger grey glow on hover */
-                }
-                .item-list {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 4px;
-                    height: 50px; /* Ensure consistent height */
-                }
-                .item-list div {
-                    flex-grow: 1;
-                    display: flex;
-                    align-items: center;
-                }
-                .item-list img {
-                    border: 0;
-                    margin-right: 10px;
-                    vertical-align: middle; /* Ensure the image is aligned vertically */
-                }
-                .item-list span {
-                    margin-left: 5px;
-                }
+                .dialog { width: 550px !important; } .identify-btn:hover { box-shadow: 0 0 8px #333; } .item-list { display: flex; justify-content: space-between; align-items: center; padding: 4px; height: 50px; } .item-list div { flex-grow: 1; display: flex; align-items: center; } .item-list img { border: 0; margin-right: 10px; vertical-align: middle; } .item-list span { margin-left: 5px; }
             </style>
             <ul style='list-style-type: none; padding: 0;'>
         `;
@@ -121,18 +96,18 @@ export async function identify({ speaker, actor, token, character, item, args, s
                         <span>${item.name} (${item.system.quantity})</span>
                     </div>
                     <span id="spellLevelSelect_${item.id}">${spellLevelDropdown}</span>
-                    <button type="button" class="identify-btn" data-item-id="${item.id}" style="width: 25%; margin-left: 10px;">Identify ${timeToCast}</button>
+                    <button type="button" class="identify-btn" data-item-id="${item.id}" style="width: 25%; margin-left: 10px;">${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Identify.Identify", { timeToCast: timeToCast })}</button>
                 </li>
             `;
         });
         content += "</ul>";
 
         await foundry.applications.api.DialogV2.wait({
-            window: { title: (ritual) ? "Identify Items Ritually" : "Identify Items" },
+            window: { title: ritual ? game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Identify.WindowTitleRitual") : game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Identify.WindowTitle") },
             content: content,
             buttons: [{
                 action: "Close",
-                label: "<i class='fas fa-times' style='margin-right: 5px;'></i>Close",
+                label: `<i class="fas fa-times" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Close")}`,
             }],
             render: (event) => {
                 let dialogElement = event.target.element;
@@ -166,7 +141,7 @@ export async function identify({ speaker, actor, token, character, item, args, s
             } else {
                 await itemData.update({ "system.identified": true });
             }
-            ui.notifications.info(`Identified: ${itemData.name}`);
+            ui.notifications.info(game.i18n.format("GAMBITSPREMADES.Notifications.Spells.Identify.Identified", { name: itemData.name }));
 
             const itemText = `
                 <div style="display: flex; align-items: center;">
@@ -191,7 +166,7 @@ export async function identify({ speaker, actor, token, character, item, args, s
             let spellSlot = actor.system.spells[`spell${level}`]?.value;
             if (spellSlot > 0) {
                 let levelWithOrdinal = getOrdinalNumber(level);
-                dropdownOptions += `<option class="gps-dialog-option" value="${level}">${levelWithOrdinal} Level (${spellSlot})</option>`;
+                dropdownOptions += `<option class="gps-dialog-option" value="${level}">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.Identify.Level", { levelWithOrdinal: levelWithOrdinal, spellSlot: spellSlot })}</option>`;
             }
         }
 

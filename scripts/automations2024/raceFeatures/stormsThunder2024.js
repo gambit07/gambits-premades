@@ -27,7 +27,7 @@ export async function stormsThunder2024({ speaker, actor, token, character, item
         }
 
         let dialogId = "0110149a-6f47-4a69-8e5e-34b33da48ec0";
-        let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${macroItem.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: macroItem.name });
         let dialogTitlePrimary = `${token.actor.name} | ${macroItem.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
@@ -40,7 +40,7 @@ export async function stormsThunder2024({ speaker, actor, token, character, item
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">Would you like to use your reaction to deal damage to the creature that damaged you using ${itemName}?</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations2024.RaceFeatures.StormsThunder2024.Prompts.UseYourReaction.Default", { itemName: itemName })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${macroItem.img}" class="gps-dialog-image">
                                 </div>
@@ -50,7 +50,7 @@ export async function stormsThunder2024({ speaker, actor, token, character, item
                 </div>
                 <div class="gps-dialog-button-container">
                     <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>Pause
+                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
                     </button>
                 </div>
             </div>
