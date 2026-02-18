@@ -364,7 +364,6 @@
                 "EnemyTarget": "Enemy Target:",
                 "Prompts": {
                   "UseYourReaction": {
-                    "Cast": "Would you like to use your reaction to cast {itemName}? {triggerDetails}",
                     "Initiate": "Would you like to use your reaction to initiate {itemName}? {details}"
                   }
                 },

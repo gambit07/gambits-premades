@@ -61,25 +61,25 @@ export async function staffOfWithering({ speaker, actor, token, character, item,
                     "name": "Staff of Withering",
                     "changes": [
                         {
-                        "key": "flags.midi-qol.disadvantage.ability.check.str",
+                        "key": "flags.midi-qol.disadvantage.check.str",
                         "mode": 0,
                         "value": "1",
                         "priority": 20
                         },
                         {
-                        "key": "flags.midi-qol.disadvantage.ability.check.con",
+                        "key": "flags.midi-qol.disadvantage.check.con",
                         "mode": 0,
                         "value": "1",
                         "priority": 20
                         },
                         {
-                        "key": "flags.midi-qol.disadvantage.ability.save.str",
+                        "key": "flags.midi-qol.disadvantage.save.str",
                         "mode": 0,
                         "value": "1",
                         "priority": 20
                         },
                         {
-                        "key": "flags.midi-qol.disadvantage.ability.save.con",
+                        "key": "flags.midi-qol.disadvantage.save.con",
                         "mode": 0,
                         "value": "1",
                         "priority": 20

@@ -103,7 +103,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                         <div class="gps-dialog-content">
                             <div>
                                 <div class="gps-dialog-flex">
-                                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.Prompts.UseYourReaction.Cast", { itemName: itemProperName, triggerDetails: ["none", "detailsDSN", "details"].includes(rollDetailSetting) ? game.i18n.format("GAMBITSPREMADES.Dialogs.Common.EnemyHitsAllyWithAttackTotal", { attackTotal: workflow.attackTotal }) : game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.EnemyHitsAlly") })}</p>
+                                    <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.Prompts.UseYourReaction.Initiate", { itemName: itemProperName, details: ["none", "detailsDSN", "details"].includes(rollDetailSetting) ? game.i18n.format("GAMBITSPREMADES.Dialogs.Common.EnemyHitsAllyWithAttackTotal", { attackTotal: workflow.attackTotal }) : game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.EnemyHitsAlly") })}</p>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                     </div>

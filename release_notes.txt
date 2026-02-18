@@ -1,11 +1,5 @@
 - Additions:
-  - Localizations: Added localizations for all user facing strings... probably. There may be bugs, if you see any missing strings let me know!
+  - Localizations: CN localization added, thanks ddrr666!
 - Updates:
-  - Midi: Updated various automations to use the new Midi workflow.tracker handling for advantage and disadvantage set in the workflow.
-  - Divine Sense: Added CPR Medkit option to disable animation
-  - Fireball: Added some sound handling in from Bakana which I believe allows for modifying the max volume. Thanks bakana!
-- Bugfixes:
-  - Resolved an item being duplicated in compendium
-  - Reckless Attack: Switched to preAttackRollConfig so initial advantage works
-  - Reckless Attack 2024: Switched to preAttackRollConfig so initial advantage works
-  - Opportunity Attack: Accidentally removed disabling OA during combat a while back. Instead of restoring that, OA's are now prevented if disabled during combat. Updated combat end functionality to check for current OA regions and remove them regardless of whether the global setting is on/off
+  - Cleaned up some more midi advantage/disadvantage keys. Those have been completely removed now so report a bug if you see any additional
+  - Cleaned up all compendium items to remove old world flags that existed (things like itemmacro, etc)

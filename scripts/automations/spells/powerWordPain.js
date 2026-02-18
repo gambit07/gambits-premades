@@ -37,37 +37,37 @@ export async function powerWordPain({ speaker, actor, token, character, item, ar
                             "priority": 20
                         },
                         {
-                            "key": "flags.midi-qol.disadvantage.ability.check.all",
+                            "key": "flags.midi-qol.disadvantage.check.all",
                             "mode": 2,
                             "value": "1",
                             "priority": 20
                         },
                         {
-                            "key": "flags.midi-qol.disadvantage.ability.save.cha",
+                            "key": "flags.midi-qol.disadvantage.save.cha",
                             "mode": 2,
                             "value": "1",
                             "priority": 20
                         },
                         {
-                            "key": "flags.midi-qol.disadvantage.ability.save.dex",
+                            "key": "flags.midi-qol.disadvantage.save.dex",
                             "mode": 2,
                             "value": "1",
                             "priority": 20
                         },
                         {
-                            "key": "flags.midi-qol.disadvantage.ability.save.int",
+                            "key": "flags.midi-qol.disadvantage.save.int",
                             "mode": 2,
                             "value": "1",
                             "priority": 20
                         },
                         {
-                            "key": "flags.midi-qol.disadvantage.ability.save.str",
+                            "key": "flags.midi-qol.disadvantage.save.str",
                             "mode": 2,
                             "value": "1",
                             "priority": 20
                         },
                         {
-                            "key": "flags.midi-qol.disadvantage.ability.save.wis",
+                            "key": "flags.midi-qol.disadvantage.save.wis",
                             "mode": 2,
                             "value": "1",
                             "priority": 20
