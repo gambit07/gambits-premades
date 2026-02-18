@@ -1,0 +1,15 @@
+{
+  "name": "Wizard",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "V34ReQTzBaAlEule",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "5db71b4babe99e72865030c908e0bef59a7c76e2"
+    }
+  },
+  "description": "",
+  "_key": "!folders!V34ReQTzBaAlEule"
+}

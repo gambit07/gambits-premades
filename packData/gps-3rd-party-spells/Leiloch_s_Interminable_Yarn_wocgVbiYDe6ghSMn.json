@@ -1,0 +1,337 @@
+{
+  "name": "Leiloch’s Interminable Yarn",
+  "type": "spell",
+  "img": "icons/skills/trades/music-singing-voice-blue.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires MidiQOL, DAE. This item comes from Kobold Press' Deep Magic 2, purchase at </em><a href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" title=\"Deep Magic 2\"><em>https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/</em></a></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "activation": {
+      "type": "action",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "10",
+      "units": "minute"
+    },
+    "target": {
+      "affects": {
+        "type": "creature",
+        "count": "3",
+        "choice": false
+      },
+      "template": {
+        "units": "m",
+        "contiguous": false
+      }
+    },
+    "range": {
+      "value": "20",
+      "units": "ft"
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "ability": "",
+    "level": 5,
+    "school": "enc",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal",
+      "material",
+      "concentration",
+      "mgc"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "save",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "Nl1fac5sPmrnI9rj",
+            "onSave": false
+          }
+        ],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "damage": {
+          "onSave": "half",
+          "parts": [],
+          "critical": {
+            "allow": false
+          }
+        },
+        "save": {
+          "ability": [
+            ""
+          ],
+          "dc": {
+            "calculation": "spellcasting",
+            "formula": ""
+          }
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "friendlySave": "default"
+      }
+    },
+    "identifier": "leilochs-interminable-yarn",
+    "method": "spell",
+    "prepared": 1
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-3rd-party-spells.Item.bntrnUZ7NRmWduPG",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 3600,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Leiloch’s Interminable Yarn",
+      "img": "icons/skills/trades/music-singing-voice-blue.webp",
+      "_id": "Nl1fac5sPmrnI9rj",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.fail.skill.inv",
+          "mode": 0,
+          "value": "1",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.fail.skill.ins",
+          "mode": 0,
+          "value": "1",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.fail.skill.prc",
+          "mode": 0,
+          "value": "1",
+          "priority": 20
+        },
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "_key": "!items.effects!wocgVbiYDe6ghSMn.Nl1fac5sPmrnI9rj"
+    }
+  ],
+  "flags": {
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "core": {},
+    "midi-qol": {
+      "AoETargetType": "any",
+      "AoETargetTypeIncludeSelf": true,
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[postActiveEffects]ItemMacro"
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "scene-packer": {
+      "hash": "d2bc638d3ce306fb269d789c06466744a6df8aa7",
+      "sourceId": "Compendium.world.gps-spells.Item.DOOwUsMS2tIM69Ab"
+    },
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "dae": {
+      "macro": {
+        "name": "Leiloch’s Interminable Yarn",
+        "img": "icons/skills/trades/music-singing-voice-blue.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    let itemData = {\n        \"name\": \"Leiloch’s Interminable Yarn - Pull Away\",\n        \"type\": \"feat\",\n        \"img\": macroItem.img,\n        \"system\": {\n            \"activation\": {\n                \"type\": \"special\",\n                \"cost\": null,\n                \"condition\": \"\"\n            },\n            \"target\": {\n                \"value\": null,\n                \"width\": null,\n                \"units\": \"\",\n                \"type\": \"self\",\n                \"prompt\": true\n            },\n            \"range\": {\n                \"value\": null,\n                \"long\": null,\n                \"units\": \"self\"\n            },\n            \"actionType\": \"save\",\n            \"save\": {\n                \"ability\": \"wis\",\n                \"dc\": actor.system.attributes.spelldc,\n                \"scaling\": \"flat\"\n            }\n        },\n        \"effects\": [\n            {\n                \"icon\": macroItem.img,\n                \"duration\": {\n                    \"seconds\": 60\n                },\n                \"disabled\": false,\n                \"name\": \"Leiloch’s Interminable Yarn - Unconscious\",\n                \"changes\": [\n                    {\n                        \"key\": \"macro.StatusEffect\",\n                        \"mode\": 0,\n                        \"value\": \"Convenient Effect: Unconscious\",\n                        \"priority\": 20\n                    }\n                ],\n                \"transfer\": false\n            }\n        ],\n        \"flags\": {\n            \"midiProperties\": {\n                \"magiceffect\": true\n            },\n            \"midi-qol\": {\n                \"onUseMacroName\": \"[postActiveEffects]ItemMacro\"\n            },\n            \"dae\": {\n                \"macro\": {\n                    \"name\": \"Leiloch’s Interminable Yarn - Pull Away\",\n                    \"img\": macroItem.img,\n                    \"type\": \"script\",\n                    \"scope\": \"global\",\n                    \"command\": \"let effectData = actor.appliedEffects.find(e => e.name === 'Leiloch’s Interminable Yarn'); await effectData.delete(); await macroItem.delete();\"\n                }\n            }\n        }\n    }\n\n    for (let target of workflow.targets) {\n        await target.actor.createEmbeddedDocuments(\"Item\", [itemData]);\n    }\n}\n\nif(args[0] === \"off\") {\n    let itemData = actor.items.getName(\"Leiloch’s Interminable Yarn - Pull Away\");\n    await itemData.delete();\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "3.2.1",
+          "coreVersion": "12.328",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    }
+  },
+  "folder": null,
+  "_id": "wocgVbiYDe6ghSMn",
+  "_key": "!items!wocgVbiYDe6ghSMn"
+}

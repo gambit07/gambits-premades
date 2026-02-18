@@ -1,0 +1,399 @@
+{
+  "name": "Tentacles",
+  "type": "weapon",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "attunement": "",
+    "rarity": "",
+    "identified": true,
+    "cover": null,
+    "crewed": false,
+    "range": {
+      "value": 5,
+      "long": null,
+      "units": "ft",
+      "reach": null
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "damage": {
+      "versatile": {
+        "number": null,
+        "denomination": null,
+        "bonus": "",
+        "types": [],
+        "custom": {
+          "enabled": false,
+          "formula": ""
+        },
+        "scaling": {
+          "mode": "",
+          "number": null,
+          "formula": ""
+        }
+      },
+      "base": {
+        "number": null,
+        "denomination": null,
+        "bonus": "",
+        "types": [
+          "psychic"
+        ],
+        "custom": {
+          "enabled": true,
+          "formula": "2d10[psychic] + @mod"
+        },
+        "scaling": {
+          "mode": "",
+          "number": null,
+          "formula": ""
+        }
+      }
+    },
+    "armor": {
+      "value": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": [
+      "rch"
+    ],
+    "unidentified": {
+      "description": ""
+    },
+    "type": {
+      "value": "natural",
+      "baseItem": ""
+    },
+    "container": null,
+    "magicalBonus": null,
+    "attuned": false,
+    "equipped": true,
+    "proficient": null,
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "attack",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "b3OjzPWvIMChk5t4"
+          }
+        ],
+        "range": {
+          "value": "5",
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "attack": {
+          "ability": "",
+          "bonus": "",
+          "critical": {
+            "threshold": null
+          },
+          "flat": false,
+          "type": {
+            "value": "melee",
+            "classification": "weapon"
+          }
+        },
+        "damage": {
+          "critical": {
+            "bonus": ""
+          },
+          "includeBase": true,
+          "parts": []
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "attackMode": "oneHanded",
+        "ammunition": "",
+        "otherActivityUuid": "",
+        "attackRollPerTarget": "default",
+        "fumbleThreshold": 1
+      }
+    },
+    "identifier": "tentacles",
+    "ammunition": {},
+    "mastery": ""
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-monster-features.Item.htzHae9YqHvUyLD6",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 60,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Tentacles",
+      "img": "icons/commodities/biological/tentacle-purple-white.webp",
+      "_id": "b3OjzPWvIMChk5t4",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "startEveryTurn",
+          "specialDuration": []
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "_key": "!items.effects!htzHae9YqHvUyLD6.b3OjzPWvIMChk5t4"
+    }
+  ],
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {},
+      "parentId": "28zMxya0ktR17WWY"
+    },
+    "monsterMunch": {
+      "titleHTML": "<strong>Tentacles.</strong>",
+      "fullName": "Tentacles.",
+      "actionCopy": false
+    },
+    "midiProperties": {
+      "fulldam": false,
+      "nodam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": true,
+      "magiceffect": true,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "never",
+      "noConcentrationCheck": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "core": {},
+    "scene-packer": {
+      "hash": "8080ee585a8953bab78e804558569c889922d7ac",
+      "sourceId": "Item.bBWhZ1Yh2WHpsz1x"
+    },
+    "midi-qol": {
+      "fumbleThreshold": null,
+      "effectActivation": false,
+      "onUseMacroName": "[preDamageRoll]ItemMacro",
+      "removeAttackDamageButtons": "default",
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": ""
+    },
+    "dae": {
+      "macro": {
+        "name": "Tentacles",
+        "img": "icons/commodities/biological/tentacle-purple-white.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"preDamageRoll\") {\n\tconst target = workflow.hitTargets.first();\n\tif(target)\n\t{\n\t\tconst actorSize = target.actor.system.traits.size;\n\t\tif(actorSize === \"med\" || actorSize === \"sm\" || actorSize === \"tiny\")\n\t\t{\n\t\t\tlet effectData = [{\n                disabled: false,\n                name: \"Tentacles - Grappled\",\n                duration: {\n                \tseconds: 60\n                },\n                transfer: false,\n                icon: \"systems/dnd5e/icons/svg/statuses/grappled.svg\",\n                origin: macroItem.uuid,\n\t\t\t\tchanges: [\n\t\t\t\t\t{\n\t\t\t\t\t\tkey: 'system.attributes.movement.all',\n\t\t\t\t\t\tmode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n\t\t\t\t\t\tvalue: '0',\n\t\t\t\t\t\tpriority: 25,\n\t\t\t\t\t},\n\t\t\t\t]\n            }];\n            await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n\n\t\t\tconst spellDC = 15;\n\t\t\tlet saveAbility = \"int\";\n\t\t\tconst skillCheck = await target.actor.rollAbilitySave(saveAbility);\n\t\t\tif (skillCheck.total < spellDC) {\n\t\t\t\tlet effectDataStunned = [{\n\t\t\t\t\tdisabled: false,\n\t\t\t\t\tname: \"Tentacles - Stunned\",\n\t\t\t\t\tduration: {\n\t\t\t\t\t\tseconds: 60\n\t\t\t\t\t},\n\t\t\t\t\ttransfer: false,\n\t\t\t\t\ticon: \"systems/dnd5e/icons/svg/statuses/stunned.svg\",\n\t\t\t\t\torigin: macroItem.uuid,\n\t\t\t\t\tchanges: [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `flags.midi-qol.fail.ability.save.dex`,\n\t\t\t\t\t\t\tmode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n\t\t\t\t\t\t\tvalue: '1',\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `flags.midi-qol.fail.ability.save.str`,\n\t\t\t\t\t\t\tmode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n\t\t\t\t\t\t\tvalue: '1',\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `flags.midi-qol.grants.advantage.attack.all`,\n\t\t\t\t\t\t\tmode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n\t\t\t\t\t\t\tvalue: '1',\n\t\t\t\t\t\t},\n\t\t\t\t\t]\n\t\t\t\t}];\n\t\t\t\tawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectDataStunned });\n\t\t\t}\n\t\t}\n\t}\n}\nelse if(args[0] === \"off\") {\n\tlet effectData = actor.effects.find(e => e.name === \"Tentacles - Grappled\");\n\tlet effectDataStunned = actor.effects.find(e => e.name === \"Tentacles - Stunned\");\n\n\tif (effectData) {  \n\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: effectData.id });\n\t}\n\tif (effectDataStunned) {\n\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: effectDataStunned.id });\n\t}\n}\nelse if(args[0] === \"each\") {\n\tconst spellDC = 15;\n\tconst hasEffectApplied = actor.appliedEffects.find(e => e.name === \"Tentacles - Grappled\")\n\tconst hasEffectAppliedStun = actor.appliedEffects.find(e => e.name === \"Tentacles - Stunned\")\n\tif(hasEffectApplied && !hasEffectAppliedStun)\n\t{\n\t\tlet dialogId = \"tentacles\";\n\t\tlet dialogTitlePrimary = `${token.actor.name} | ${item.name}`;\n\t\tlet browserUser = MidiQOL.playerForActor(token.actor);\n\t\tif (!browserUser.active) {\n\t\t\tbrowserUser = game.users?.activeGM;\n\t\t}\n\t\tlet dialogContent = `\n\t\t\t<div class=\"gps-dialog-container\">\n\t\t\t\t<div class=\"gps-dialog-section\">\n\t\t\t\t\t<div class=\"gps-dialog-content\">\n\t\t\t\t\t\t<p class=\"gps-dialog-paragraph\">Would you like to use your action to make an ability check to escape being grappled by Tentacles?</p>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div class=\"gps-dialog-flex\">\n\t\t\t\t\t\t\t\t<table style=\"background-color: rgba(181, 99, 69, 0.2);\" width=\"100%\"><tbody><tr><th>Athletics</th><th>Acrobatics</th></tr><tr><td style=\"text-align: center;vertical-align: middle;\"><input type=\"radio\" value=\"ath\" id=\"ability-check\" name=\"ability-check\" style=\"margin: 0 auto;\"></td><td style=\"text-align: center;vertical-align: middle;\"><input type=\"radio\" value=\"acr\" id=\"ability-check\" name=\"ability-check\" style=\"margin: 0 auto;\"></td></tr></tbody></table>\n\t\t\t\t\t\t\t\t<div id=\"image-container\" class=\"gps-dialog-image-container\">\n\t\t\t\t\t\t\t\t\t<img id=\"img_${dialogId}\" src=\"${item.img}\" class=\"gps-dialog-image\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"gps-dialog-button-container\">\n\t\t\t\t\t<button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n\t\t\t\t\t\t<i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>Pause\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t`;\n\n\t\tlet result = await game.gps.socket.executeAsUser(\"process3rdPartyReactionDialog\", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:browserUser.isGM ? \"gm\" : \"user\",type:\"singleDialog\"});\n\t\t\t\n\t\tconst { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;\n\n\t\tif (!userDecision) {\n\t\t\treturn;\n\t\t}\n\t\telse if (userDecision) {\n\t\t\tif (abilityCheck) {\n\t\t\t\tconst skillCheck = await actor.rollSkill(abilityCheck);\n\t\t\t\tif (skillCheck.total >= spellDC) {\n\t\t\t\t\tlet effectData = actor.effects.find(e => e.name === \"Tentacles\");\n\n\t\t\t\t\tif (effectData) {  \n\t\t\t\t\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: effectData.id });\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "3.2.1",
+          "coreVersion": "12.328",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "img": "icons/commodities/biological/tentacle-purple-white.webp",
+  "folder": "lnw9tXzkLBQkl6kF",
+  "_id": "htzHae9YqHvUyLD6",
+  "_key": "!items!htzHae9YqHvUyLD6"
+}

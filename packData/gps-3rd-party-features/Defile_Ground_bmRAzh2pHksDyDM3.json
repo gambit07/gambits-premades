@@ -1,0 +1,433 @@
+{
+  "name": "Defile Ground",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "1",
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 0
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "Circle of the Blighted 2",
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "bonus",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [
+            {
+              "type": "itemUses",
+              "value": "1",
+              "target": ""
+            }
+          ],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "1",
+          "units": "minute",
+          "special": "",
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "P5i3KrGHjOygstb6"
+          }
+        ],
+        "range": {
+          "value": "60",
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "radius",
+            "size": "10",
+            "width": "",
+            "height": "",
+            "units": "ft"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true,
+        "img": "",
+        "flags": {
+          "region-attacher": {
+            "attachRegionToTemplate": true
+          }
+        },
+        "appliedEffects": [
+          "P5i3KrGHjOygstb6"
+        ]
+      }
+    },
+    "identifier": "defile-ground",
+    "enchant": {},
+    "prerequisites": {
+      "level": null,
+      "repeatable": false,
+      "items": []
+    },
+    "properties": [],
+    "advancement": []
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 8470339,
+      "data": {
+        "id": 8470339,
+        "name": "Defile Ground",
+        "prerequisite": null,
+        "description": "<p>Starting at 2nd level when you choose this circle, you can use a bonus action to corrupt a patch of land or an area of water in a 10-foot radius centered on a point within 60 feet of you. This corruption lasts for 1 minute. The corrupted area is [rule]difficult terrain[/rule] for creatures that are hostile to you. Additionally, when a creature in the area takes damage from an attack or spell for the first time on a turn, it takes an extra 1d4 necrotic damage. You can move this patch of corruption up to 30 feet as a bonus action. Flying creatures are unaffected by the corruption.</p>\r\n<p>Starting at 10th level, the area of your defiled ground increases to a 20-foot radius. Additionally, the extra damage dealt by your defiled ground increases to 1d6 when you reach 10th level in this class, and 1d8 at 14th level.</p>\r\n<p>Once you use this feature, you can’t use it again until you finish a short or long rest.</p>",
+        "requiredLevel": 2,
+        "displayOrder": 1
+      },
+      "version": "3.4.63",
+      "featureId": 8470339,
+      "featureName": "Defile Ground",
+      "requiredLevel": 2,
+      "prerequisite": null,
+      "class": "Druid",
+      "classId": 1805538,
+      "subClass": "Circle of the Blighted",
+      "parentClassId": 3
+    },
+    "scene-packer": {
+      "sourceId": "Item.12IYRd1pQX1UD5At",
+      "hash": "9552b0fc31d2f51e3a6cec5e275750314c05b72b"
+    },
+    "core": {},
+    "dae": {
+      "macro": {
+        "name": "Defile Ground",
+        "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]function.game.gps.defileGround",
+      "AoETargetType": "any",
+      "AoETargetTypeIncludeSelf": true,
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "removeAttackDamageButtons": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "never",
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "region-attacher": {
+      "attachRegionToTemplate": {
+        "dnd5eactivity000": true
+      },
+      "regionBehaviors": {
+        "dnd5eactivity000": [
+          {
+            "name": "tokenEnter",
+            "type": "executeScript",
+            "_id": "wAQAb8MPKwaHJhRh",
+            "system": {
+              "events": [
+                "tokenEnter"
+              ],
+              "source": "if(game.user.id !== event.user.id) return;\n\nlet effectData = event.data.token.actor.appliedEffects.find(e => e.name === \"Defile Ground\");\n\nif(!effectData) {\n  effectData = [{\n        \"disabled\": false,\n        \"name\": \"Defile Ground\",\n        \"img\": \"icons/magic/nature/root-vine-entangled-humanoid.webp\",\n        \"changes\": [\n          { \n            \"key\": \"flags.midi-qol.onUseMacroName\", \n            \"mode\": CONST.ACTIVE_EFFECT_MODES.CUSTOM, \n            \"value\": \"function.game.gps.defileGround,isDamaged\", \n            \"priority\": 20 \n          }\n        ],\n        \"transfer\": false\n  }];\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: event.data.token.actor.uuid, effects: effectData });\n}"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.348",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.9",
+              "lastModifiedBy": null
+            }
+          },
+          {
+            "name": "tokenExit",
+            "type": "executeScript",
+            "_id": "IeX3U4zjhmutMFiF",
+            "system": {
+              "events": [
+                "tokenExit"
+              ],
+              "source": "if(game.user.id !== event.user.id) return;\n\nlet effectData = event.data.token.actor.appliedEffects.find(e => e.name === \"Defile Ground\");\n\nif(effectData) await effectData.delete();"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.348",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.9",
+              "lastModifiedBy": null
+            }
+          },
+          {
+            "name": "Modify Movement Cost",
+            "type": "modifyMovementCost",
+            "_id": "rbmEKZgPCHu0XJeo",
+            "system": {
+              "difficulties": {
+                "walk": 2,
+                "fly": 1,
+                "swim": 1,
+                "burrow": 1
+              }
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.348",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.9",
+              "lastModifiedBy": null
+            }
+          }
+        ]
+      }
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    },
+    "crux": {
+      "trayVisibility": "default"
+    }
+  },
+  "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
+  "effects": [
+    {
+      "name": "Defile Ground Template",
+      "origin": "Actor.mMXv7VFWRU8zfbGg.Item.11Sixq2TYrE7dGVk",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 60,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
+      "_id": "P5i3KrGHjOygstb6",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "function.game.gps.defileGround @actorUuid",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "multi",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "enableCondition": "",
+          "selfTarget": true,
+          "selfTargetAlways": true,
+          "dontApply": false
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        }
+      },
+      "_key": "!items.effects!bmRAzh2pHksDyDM3.P5i3KrGHjOygstb6"
+    }
+  ],
+  "folder": "4Ecsdk7k1FvMs9OF",
+  "_id": "bmRAzh2pHksDyDM3",
+  "_key": "!items!bmRAzh2pHksDyDM3"
+}

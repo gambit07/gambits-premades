@@ -1,0 +1,15 @@
+{
+  "name": "Bard",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "bX8XDLjtdwvTXwGH",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "7bb5d90acbdb91e33433bd66cc21379d8e4c99aa"
+    }
+  },
+  "description": "",
+  "_key": "!folders!bX8XDLjtdwvTXwGH"
+}

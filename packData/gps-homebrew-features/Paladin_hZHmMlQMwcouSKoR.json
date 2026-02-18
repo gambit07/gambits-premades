@@ -1,0 +1,15 @@
+{
+  "name": "Paladin",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "hZHmMlQMwcouSKoR",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "515a55b0c7d594952b1f58bc78137af55bec9cfa"
+    }
+  },
+  "description": "",
+  "_key": "!folders!hZHmMlQMwcouSKoR"
+}

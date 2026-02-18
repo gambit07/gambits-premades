@@ -1,0 +1,191 @@
+{
+  "name": "Heated Body",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "type": {
+      "value": "monster",
+      "subtype": ""
+    },
+    "requirements": "",
+    "properties": [],
+    "activities": {},
+    "identifier": "heated-body",
+    "enchant": {},
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "advancement": []
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-monster-features.Item.xuhA2x0QRYTdh0h5",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Heated Body",
+      "img": "icons/creatures/unholy/demon-fanged-horned-yellow.webp",
+      "_id": "R3pGjs5rpS7vWiSd",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro,isHit",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "_key": "!items.effects!xuhA2x0QRYTdh0h5.R3pGjs5rpS7vWiSd"
+    }
+  ],
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {},
+      "parentId": "nwDZ5hcE3Q6lLA6c"
+    },
+    "monsterMunch": {
+      "titleHTML": "<em><strong>Heated Body.</strong></em>",
+      "fullName": "Heated Body.",
+      "actionCopy": false
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "",
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": ""
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": true,
+      "magiceffect": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": false,
+      "noConcentrationCheck": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "dae": {
+      "macro": {
+        "name": "Heated Body",
+        "img": "icons/creatures/unholy/demon-fanged-horned-yellow.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"isHit\") {\n\tif(workflow.activity.actionType === \"mwak\" || workflow.activity.actionType === \"msak\")\n\t{\n\t\tlet measuredDistance = MidiQOL.computeDistance(token,workflow.token, {wallsBlock: true, includeCover: true});\n\t\tlet range = game.gps.convertFromFeet({range: 5});\n\t\tif (measuredDistance > range) return;\n\t\tconst damageDice = \"3d6\"; // Change damage dice here\n\t\tconst damageType = \"fire\"; // Change damage type here\n\n\t\tlet damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}`, {}, {type: damageType, properties: [\"mgc\"]}).evaluate();\n\t\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n\t\tconst itemData = {\n\t\t\tname: \"Heated Body - Damage (Fire)\",\n\t\t\ttype: \"feat\",\n\t\t\timg: macroItem.img\n      \t}\n\n\t\tnew MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, damageType, workflow.token ? [workflow.token] : [], damageRoll, {itemData: itemData, flavor: \"Heated Body - Damage (Fire)\"});\n\t}\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "5.0.4",
+          "coreVersion": "13.346",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null,
+          "exportSource": null
+        }
+      }
+    },
+    "core": {},
+    "scene-packer": {
+      "hash": "fe278c96849f6b6cdbc0acad063fc8e2019035c9",
+      "sourceId": "Item.Djq2jf1sPavj5lt6"
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "img": "icons/creatures/unholy/demon-fanged-horned-yellow.webp",
+  "folder": "9HGxNm4TJjviBOcn",
+  "_id": "xuhA2x0QRYTdh0h5",
+  "_key": "!items!xuhA2x0QRYTdh0h5"
+}

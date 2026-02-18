@@ -1,0 +1,15 @@
+{
+  "name": "Sphinx of Wonder",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "OAr1bo0tvaoZnzaf",
+  "description": "",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "2dff489616045325dd4fb093da36a3ccb7a55a2d"
+    }
+  },
+  "_key": "!folders!OAr1bo0tvaoZnzaf"
+}

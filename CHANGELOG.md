@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.1.38] - 2026-02-18
+- Additions:
+  - Localizations: CN localization added, thanks ddrr666!
+- Updates:
+  - Cleaned up some more midi advantage/disadvantage keys. Those have been completely removed now so report a bug if you see any additional
+  - Cleaned up all compendium items to remove old world flags that existed (things like itemmacro, etc)
+
 ## [v2.1.37] - 2026-02-16
 - Additions:
   - Localizations: Added localizations for all user facing strings... probably. There may be bugs, if you see any missing strings let me know!

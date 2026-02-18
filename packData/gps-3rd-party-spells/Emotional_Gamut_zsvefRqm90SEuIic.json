@@ -1,0 +1,371 @@
+{
+  "name": "Emotional Gamut",
+  "type": "spell",
+  "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>This item comes from Kobold Press' Deep Magic 2, purchase at </em><a href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" title=\"Deep Magic 2\"><em>https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/</em></a></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "0.5.40",
+      "book": "Deep Magic Vol. 2, page 176",
+      "page": "",
+      "license": "",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "activation": {
+      "type": "action",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "1",
+      "units": "minute"
+    },
+    "target": {
+      "affects": {
+        "type": "creature",
+        "count": "1",
+        "choice": false
+      },
+      "template": {
+        "units": "m",
+        "contiguous": false
+      }
+    },
+    "range": {
+      "value": "30",
+      "units": "ft"
+    },
+    "uses": {
+      "max": "1",
+      "recovery": [],
+      "spent": 0
+    },
+    "ability": "",
+    "level": 1,
+    "school": "enc",
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "properties": [
+      "vocal",
+      "somatic",
+      "material",
+      "concentration",
+      "mgc"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "save",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [
+            {
+              "type": "itemUses",
+              "target": "",
+              "value": "1",
+              "scaling": {
+                "mode": "",
+                "formula": ""
+              }
+            }
+          ],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "tRBWoyAIFXz3MkXY",
+            "onSave": false,
+            "level": {}
+          }
+        ],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "damage": {
+          "onSave": "half",
+          "parts": [],
+          "critical": {
+            "allow": false
+          }
+        },
+        "save": {
+          "ability": [
+            "wis"
+          ],
+          "dc": {
+            "calculation": "spellcasting",
+            "formula": ""
+          }
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "friendlySave": "default",
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
+      }
+    },
+    "identifier": "emotional-gamut",
+    "method": "atwill",
+    "prepared": 0
+  },
+  "effects": [
+    {
+      "origin": "Actor.qCpb5H6vLrBeOWAO.Item.sThpi5EmN1Xud6vZ",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 60,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Emotional Gamut",
+      "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+      "_id": "tRBWoyAIFXz3MkXY",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "system.attributes.movement.all",
+          "mode": 0,
+          "value": "-10",
+          "priority": 20
+        },
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "@actorUuid",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.OverTime",
+          "mode": 0,
+          "value": "turn=end,\nname=Emotional Gamut Damage,\ndamageRoll=1d4,\ndamageType=psychic,\nsaveRemove=true,\nsaveDC=@attributes.spelldc,\nsaveAbility=wis,\nsaveDamage=nodamage,\nkillAnim=true,\nfastForwardDamage=true",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "enableCondition": "",
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "startEveryTurn",
+          "specialDuration": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "_key": "!items.effects!zsvefRqm90SEuIic.tRBWoyAIFXz3MkXY"
+    }
+  ],
+  "flags": {
+    "midi-qol": {
+      "effectActivation": false,
+      "rollAttackPerTarget": "default",
+      "removeAttackDamageButtons": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[postPreambleComplete]ItemMacro,[postActiveEffects]ItemMacro"
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "default",
+      "saveDamage": "default",
+      "bonusSaveDamage": "default",
+      "noConcentrationCheck": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "dnd5e": {
+      "dependents": [
+        {
+          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.68iUqDH2S8mHnElA"
+        }
+      ],
+      "riders": {
+        "activity": []
+      }
+    },
+    "core": {},
+    "scene-packer": {
+      "hash": "a7d9cee962387f1935a05087d0369b1503300896",
+      "sourceId": "Item.Hj3VEFeU37v5LsdE"
+    },
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "dae": {
+      "macro": {
+        "name": "Emotional Gamut",
+        "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"postPreambleComplete\") {\n    let target = workflow.targets.first();\n    if(target.actor.system.traits.ci.value.has(\"charmed\")) {\n        ui.notifications.warn(\"The target is immune to being charmed.\");\n        const hasConcApplied = MidiQOL.getConcentrationEffect(actor, macroItem.uuid)\n\t\tif (hasConcApplied)\tawait hasConcApplied.delete();\n        return workflow.aborted = true;\n    }\n}\n\nasync function applyDisadvantage(target, itemData, effectOriginActor) {\n    let effectData = [\n        {\n            \"icon\": `${itemData.img}`,\n            \"origin\": `${effectOriginActor.uuid}`,\n            \"disabled\": false,\n            \"name\": \"Emotional Gamut - Disadvantage\",\n            \"changes\": [\n            {\n                \"key\": \"flags.midi-qol.disadvantage.attack.all\",\n                \"mode\": 0,\n                \"value\": \"1\",\n                \"priority\": 20\n            }\n            ],\n            \"transfer\": false,\n            \"flags\": {\n            \"dae\": {\n                \"specialDuration\": [\n                    \"1Attack\",\n                    \"turnEndSource\"\n                ]\n            }\n            }\n        }\n    ];\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}\n\nif(args[0].macroPass === \"postActiveEffects\") {\n    let target = workflow.failedSaves.first();\n    if(!target) {\n        const hasConcApplied = MidiQOL.getConcentrationEffect(actor, macroItem.uuid)\n\t\tif (hasConcApplied)\tawait hasConcApplied.delete();\n        return;\n    }\n    let itemData = macroItem;\n    let effectOriginActor = actor;\n    await applyDisadvantage(target,itemData,effectOriginActor)\n}\n\nif(args[0] === \"each\") {\n    let target = token;\n    if(!target) return;\n    let itemData = item;\n    let effectOriginActor = await fromUuid(args[1]);\n    await applyDisadvantage(target,itemData,effectOriginActor)\n}\n\nif(args[0] === \"off\") {\n    let effectData = token.actor.appliedEffects.find(e => e.name === \"Emotional Gamut - Disadvantage\");\n    if(effectData) await effectData.delete();\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.1",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    }
+  },
+  "folder": null,
+  "_id": "zsvefRqm90SEuIic",
+  "_key": "!items!zsvefRqm90SEuIic"
+}

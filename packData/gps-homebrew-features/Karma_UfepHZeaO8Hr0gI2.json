@@ -1,0 +1,377 @@
+{
+  "name": "Karma",
+  "type": "feat",
+  "img": "modules/gambits-premades/assets/images/karma.webp",
+  "effects": [
+    {
+      "_id": "GrZ2AlujZEWCppJt",
+      "changes": [
+        {
+          "key": "flags.midi-qol.optional.Karma.attack.all",
+          "mode": 5,
+          "value": "1d6",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.optional.Karma.save.all",
+          "mode": 5,
+          "value": "1d6",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.optional.Karma.check.all",
+          "mode": 5,
+          "value": "1d6",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.optional.Karma.label",
+          "mode": 5,
+          "value": "Karma",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.optional.Karma.skill.all",
+          "mode": 2,
+          "value": "1d6",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.optional.Karma.damage.all",
+          "mode": 2,
+          "value": "1d6",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "origin": "Item.dQvh9dejF0s0d9nk",
+      "transfer": false,
+      "flags": {
+        "dae": {
+          "stackable": "none",
+          "macroRepeat": "none",
+          "specialDuration": [
+            "longRest"
+          ],
+          "transfer": false,
+          "durationExpression": "",
+          "selfTarget": true,
+          "selfTargetAlways": true,
+          "enableCondition": "",
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "dontApply": false,
+          "showIcon": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "radius": "",
+          "aura": "None",
+          "alignment": "",
+          "type": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "displayTemp": false,
+          "nameOverride": "",
+          "customCheck": "",
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "dnd5e-helpers": {
+          "rest-effect": "Ignore"
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "tint": "#ffffff",
+      "name": "Karma",
+      "description": "",
+      "statuses": [],
+      "img": "modules/gambits-premades/assets/images/karma.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!UfepHZeaO8Hr0gI2.GrZ2AlujZEWCppJt"
+    }
+  ],
+  "flags": {
+    "core": {},
+    "midi-qol": {
+      "onUseMacroName": "",
+      "effectActivation": false,
+      "forceCEOff": true,
+      "forceCEOn": false,
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "AoETargetType": "any",
+      "AoETargetTypeIncludeSelf": true,
+      "autoTarget": "default",
+      "removeAttackDamageButtons": "default"
+    },
+    "magicitems": {
+      "enabled": false,
+      "equipped": false,
+      "attuned": false,
+      "charges": "0",
+      "chargeType": "c1",
+      "destroy": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t1",
+      "rechargeUnit": "r1",
+      "sorting": "l"
+    },
+    "cf": {
+      "id": "temp_qt0kn9os0vl"
+    },
+    "favtab": {
+      "isFavorite": true
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "rollOther": false,
+      "critOther": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "toggleEffect": false,
+      "selfEffect": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "offHandWeapon": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "default",
+      "noConcentrationCheck": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "scene-packer": {
+      "sourceId": "Item.7xFPEKTL9nGsRvtI",
+      "hash": "c71820d219a2e34c5def824fa9bece1a81c060ba"
+    },
+    "spellTemplateManager": {
+      "stmData": {
+        "ignoreDuration": false,
+        "spellTexture": "",
+        "useTexture": false,
+        "alpha": 50,
+        "coneOrigin": 1,
+        "loopAnimations": true
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "dnd5e": {
+      "dependents": [
+        {
+          "uuid": "Scene.GO63mgFDMhBfPVWf.Token.iELiDIqKyq03oDVK.Actor.CUd9btBTjzY0Pdd4.ActiveEffect.bRJSW34eNyUjNoYv"
+        }
+      ],
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    }
+  },
+  "system": {
+    "description": {
+      "value": "<p>You have a number of Karma points per long rest equal to your proficiency bonus and the bonus for the prime ability of your class.</p><p>As a free action, you can activate a karma point. It will stay activated till you use it or take a long rest.</p><p>While you have Karma activated you can add a d6 to one attack roll, saving throw, ability check, damage roll, or healing roll.</p><p>All Karma points are restored after a long rest.</p><p></p><p>NOTE:</p><p>Use @prof + @abilities.str.mod with the appropriate primary ability mod in the Max Usage field for non-spellcasting classes.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "uses": {
+      "max": "@attributes.spellmod + @prof",
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 0
+    },
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "requirements": "",
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "special",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [
+            {
+              "type": "itemUses",
+              "value": "1",
+              "target": "",
+              "scaling": {}
+            }
+          ],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "10",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "GrZ2AlujZEWCppJt"
+          }
+        ],
+        "range": {
+          "value": "60",
+          "units": "self",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "ft"
+          },
+          "affects": {
+            "count": "1",
+            "type": "self",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "confirmTargets": "default",
+          "automationOnly": false,
+          "identifier": "",
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "otherActivityCompatible": true,
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "useConditionReason": "",
+        "otherActivityId": "",
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "name": "",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "karma-class-feature",
+    "enchant": {},
+    "prerequisites": {
+      "level": null,
+      "repeatable": false,
+      "items": []
+    },
+    "properties": [],
+    "advancement": [],
+    "cover": null,
+    "crewed": false
+  },
+  "folder": null,
+  "_id": "UfepHZeaO8Hr0gI2",
+  "_key": "!items!UfepHZeaO8Hr0gI2"
+}

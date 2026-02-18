@@ -1,0 +1,329 @@
+{
+  "name": "Dragon Turtle Dueling Shield",
+  "type": "equipment",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires MidiQOL, DAE</em></p><p>While holding this shield, you have a +1 bonus to AC. This bonus is in addition to the shield's normal bonus to AC. This shield grants you the ability to attack your enemies as well as defend against them. While holding this shield, you can angle the blades at the top downwards to slash your enemies. When used in this way, this shield deals 3d6 magical <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.sz2XKQ5lgsdPEJOa\" data-id=\"sz2XKQ5lgsdPEJOa\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">slashing</a> damage.</p><p>Additionally, when an enemy within 5 feet of you attempts to leave your melee range, you can use a reaction to Shield Strike them. On a successful hit, the creature takes 3d6 magical <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.39LFrlef94JIYO8m\" data-id=\"39LFrlef94JIYO8m\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">bludgeoning</a> damage and must succeed on a DC 16 <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a> saving throw or fall <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.y0TkcdyoZlOTmAFT\" data-id=\"y0TkcdyoZlOTmAFT\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">prone</a></p>",
+      "chat": ""
+    },
+    "source": {
+      "page": "",
+      "license": "",
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "identified": true,
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "quantity": 1,
+    "weight": {
+      "value": 6,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "veryRare",
+    "attunement": "",
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "armor": {
+      "value": 3,
+      "dex": null,
+      "magicalBonus": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "type": {
+      "value": "shield",
+      "baseItem": "shield"
+    },
+    "properties": [
+      "mgc"
+    ],
+    "speed": {
+      "value": null,
+      "conditions": ""
+    },
+    "strength": 15,
+    "equipped": true,
+    "proficient": null,
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "attack",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "value": "5",
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "attack": {
+          "ability": "",
+          "bonus": "",
+          "critical": {
+            "threshold": null
+          },
+          "flat": false,
+          "type": {
+            "value": "melee",
+            "classification": "weapon"
+          }
+        },
+        "damage": {
+          "critical": {
+            "bonus": ""
+          },
+          "includeBase": true,
+          "parts": [
+            {
+              "number": 3,
+              "denomination": 6,
+              "bonus": "",
+              "types": [
+                "piercing"
+              ],
+              "custom": {
+                "enabled": false,
+                "formula": ""
+              },
+              "scaling": {
+                "mode": "whole",
+                "number": null,
+                "formula": ""
+              }
+            }
+          ]
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "attackMode": "oneHanded",
+        "ammunition": "",
+        "otherActivityUuid": "",
+        "attackRollPerTarget": "default",
+        "fumbleThreshold": 1
+      }
+    },
+    "identifier": "dragon-turtle-dueling-shield",
+    "attuned": false
+  },
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {
+        "type": null,
+        "alternativeNames": [
+          "Dragon Turtle Dueling Shield Armor"
+        ],
+        "avatarUrl": "https://www.dndbeyond.com/avatars/40852/561/638472515906293225.png",
+        "largeAvatarUrl": "https://www.dndbeyond.com/avatars/40852/562/638472515908773232.png",
+        "filterType": "Armor",
+        "isConsumable": false,
+        "isContainer": false,
+        "isCustomItem": false,
+        "isHomebrew": true,
+        "isMonkWeapon": false,
+        "isPack": false,
+        "levelInfusionGranted": null,
+        "tags": [
+          "Combat",
+          "Warding"
+        ],
+        "sources": [],
+        "pictureUrl": "https://www.dndbeyond.com/avatars/40852/562/638472515908773232.png"
+      },
+      "id": 0,
+      "entityTypeId": 0,
+      "definitionEntityTypeId": 112130694,
+      "definitionId": 8239820,
+      "originalName": "Dragon Turtle Dueling Shield",
+      "version": "5.0.1",
+      "keepIcon": true
+    },
+    "midi-qol": {
+      "removeAttackDamageButtons": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "fumbleThreshold": null,
+      "onUseMacroName": "[postDamageRoll]ItemMacro,[preItemRoll]ItemMacro"
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": true,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "scene-packer": {
+      "sourceId": "Scene.1mkVNeOdyVIlDdH7.Token.M458Wy7Wr8H3Q7ps.Actor.SNZJsEKbROB1q6bT.Item.sMl3jLAO8la9Mpt1",
+      "hash": "b041178d6118cad7e22fb4331f373179d4607d07"
+    },
+    "core": {},
+    "rest-recovery": {
+      "data": {
+        "recovery": {
+          "enabled": false
+        }
+      }
+    },
+    "dae": {
+      "macro": {
+        "name": "Dragon Turtle Dueling Shield",
+        "img": "icons/equipment/shield/kite-steel-boss-gold.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"postDamageRoll\") {\n    let oaFlag = await actor.getFlag(\"gambits-premades\", \"dragonTurtleShieldOA\")\n    let target = workflow.hitTargets.first();\n\n    if(oaFlag && target) {\n        const itemData = {\n        name: \"Dragon Turtle Dueling Shield Save\",\n        type: \"feat\",\n            img: \"https://www.dndbeyond.com/avatars/40852/561/638472515906293225.png\",\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            }\n        },\n        system: {\n            equipped: true,\n            actionType: \"save\",\n            save: { dc: 16, ability: \"dex\", scaling: \"flat\" },\n            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n            duration: { units: \"inst\", value: undefined }\n        }\n        };\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: actor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n        const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n        if(saveResult.failedSaves.size === 1) {\n            const hasEffectApplied = target.actor.appliedEffects.find(e => e.name === \"Prone\");\n            if (!hasEffectApplied) {\n                await game.gps.socket.executeAsGM(\"gmToggleStatus\", {tokenUuid: `${target.document.uuid}`, status: \"prone\", active: true });\n            }\n        }\n\n        let updatedType = foundry.utils.duplicate(macroItem.system.damage.parts);\n        updatedType[0][1] = \"piercing\";\n        await macroItem.update({\"system.damage.parts\" : updatedType});\n        await actor.unsetFlag(\"gambits-premades\", \"dragonTurtleShieldOA\");\n    }\n}\nif(args[0].macroPass === \"preItemRoll\") {\n    let oaFlag = await actor.getFlag(\"gambits-premades\", \"dragonTurtleShieldOA\")\n    if(oaFlag) {\n        let updatedType = foundry.utils.duplicate(macroItem.system.damage.parts);\n        updatedType[0][1] = \"bludgeoning\";\n        await macroItem.update({\"system.damage.parts\" : updatedType});\n    }\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.0",
+          "coreVersion": "12.329",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    }
+  },
+  "effects": [],
+  "img": "icons/equipment/shield/kite-steel-boss-gold.webp",
+  "folder": null,
+  "_id": "JAZN8TicVFvkYdqw",
+  "_key": "!items!JAZN8TicVFvkYdqw"
+}

@@ -1,0 +1,93 @@
+{
+  "name": "Poetry in Misery",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><em>Make sure to Enable Poetry in Misery in the module settings.</em></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "rules": "2014",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "College of Tragedy 3",
+    "properties": [],
+    "identifier": "poetry-in-misery",
+    "activities": {},
+    "advancement": [],
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    }
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 8470344,
+      "data": {
+        "id": 8470344,
+        "name": "Poetry in Misery",
+        "prerequisite": null,
+        "description": "<p>When you join the College of Tragedy at 3rd level, you learn to harness the beauty in failure, finding inspiration in even the direst twists of fate. Whenever you or an ally within 30 feet of you rolls a 1 on the d20 for an attack roll, an ability check, or a saving throw, you can use your reaction to soliloquize and regain one expended use of your Bardic Inspiration feature.</p>",
+        "requiredLevel": 3,
+        "displayOrder": 1
+      },
+      "version": "3.4.63",
+      "featureId": 8470344,
+      "featureName": "Poetry in Misery",
+      "requiredLevel": 3,
+      "prerequisite": null,
+      "class": "Bard",
+      "classId": 1805539,
+      "subClass": "College of Tragedy",
+      "parentClassId": 1
+    },
+    "scene-packer": {
+      "sourceId": "Actor.w88977HaPVOXN7mP.Item.D81x7YIamg6JbJdY",
+      "hash": "6d14ca8ebc9fcb000a86383519110e68bdd7ca38"
+    },
+    "core": {},
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "midi-qol": {
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": ""
+    },
+    "gambits-premades": {
+      "gpsUuid": "f4b6923a-eda4-4c29-a6fb-a1728f6e71e3"
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/skills/trades/academics-book-study-runes.webp",
+  "effects": [],
+  "folder": "bX8XDLjtdwvTXwGH",
+  "_id": "Kgnyn4JR7qeoFG0L",
+  "_key": "!items!Kgnyn4JR7qeoFG0L"
+}

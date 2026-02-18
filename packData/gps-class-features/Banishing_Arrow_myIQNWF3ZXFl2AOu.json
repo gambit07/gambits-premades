@@ -1,0 +1,110 @@
+{
+  "_id": "myIQNWF3ZXFl2AOu",
+  "name": "Banishing Arrow",
+  "type": "feat",
+  "effects": [],
+  "system": {
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "identifier": "arcane-shot-options-banishing-arrow-legacy",
+    "source": {
+      "book": "XGtE",
+      "page": "",
+      "license": "",
+      "custom": "1.0.14",
+      "rules": "2014",
+      "revision": 1
+    },
+    "advancement": [],
+    "cover": null,
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "level": 3,
+      "repeatable": false,
+      "items": []
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "class",
+      "subtype": "arcaneShot"
+    }
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 682,
+      "type": "class",
+      "entityTypeId": 12168134,
+      "is2014": true,
+      "is2024": false,
+      "originalName": "Arcane Shot Options: Banishing Arrow",
+      "dndbeyond": {
+        "requiredLevel": 3,
+        "displayOrder": 600,
+        "featureType": 1,
+        "class": "Fighter",
+        "classId": 101,
+        "entityType": "class-feature",
+        "choice": {
+          "parentName": "Arcane Shot Options",
+          "label": "Banishing Arrow",
+          "choiceId": "3-32-427811134",
+          "componentId": 682,
+          "componentTypeId": 12168134,
+          "parentChoiceId": null,
+          "subType": null,
+          "wasOption": false,
+          "type": "class"
+        }
+      },
+      "summons": {
+        "folder": "Arcane Shot Options"
+      },
+      "class": "Fighter",
+      "classId": 10,
+      "subClass": "Arcane Archer",
+      "subClassId": 101,
+      "initialFeature": {
+        "value": "<p class=\"Core-Styles_Core-Body\">You use &Reference[abj]{abjuration} magic to try to temporarily banish your target to a harmless location in the Feywild. The creature hit by the arrow must also succeed on a [[/save cha format=long]] or be banished. While banished in this way, the target’s speed is 0, and it is&nbsp;incapacitated. At the end of its next turn, the target reappears in the space it vacated or in the nearest unoccupied space if that space is occupied.</p>\r\n<p class=\"Core-Styles_Core-Body\">After you reach 18th level in this class, a target also takes 2d6 force damage when the arrow hits it.</p>",
+        "chat": ""
+      },
+      "defaultAdditionalActivities": {
+        "enabled": true,
+        "data": {
+          "featureName": "Seeking Arrow",
+          "activityCount": 1,
+          "activityKeys": [
+            "saveSeekArrclNe3"
+          ],
+          "nameMap": {
+            "saveSeekArrclNe3": [
+              "Seeking Arrow"
+            ]
+          }
+        }
+      },
+      "importId": "nSCclcNYfBrMS8mN"
+    },
+    "dnd5e": {
+      "advancementOrigin": "zRvU6AF4sgOuQCpG",
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "gambits-premades": {
+      "gpsUuid": "227991d1-e640-4f94-9a8b-9873ad694f15"
+    }
+  },
+  "img": "icons/weapons/ammunition/arrowhead-glowing-blue.webp",
+  "folder": "PmXgZSJ8c2PqKenQ",
+  "_key": "!items!myIQNWF3ZXFl2AOu"
+}

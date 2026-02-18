@@ -1,0 +1,283 @@
+{
+  "name": "Cutting Words",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires MidiQOL, DAE. Make sure to Enable Cutting Words in the module settings.</em></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "College of Lore 3",
+    "properties": [],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "reaction",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "value": "60",
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "1",
+            "type": "creature",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "name": "",
+        "useConditionText": "false",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true,
+        "img": "",
+        "appliedEffects": []
+      }
+    },
+    "identifier": "cutting-words",
+    "enchant": {},
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "advancement": []
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 96,
+      "data": {
+        "id": 96,
+        "name": "Cutting Words",
+        "prerequisite": null,
+        "description": "<p>Also at 3rd level, you learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature’s roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can’t hear you or if it’s immune to being charmed.</p>",
+        "requiredLevel": 3,
+        "displayOrder": 2
+      },
+      "version": "3.4.63",
+      "featureId": 96,
+      "featureName": "Cutting Words",
+      "requiredLevel": 3,
+      "prerequisite": null,
+      "class": "Bard",
+      "classId": 18,
+      "subClass": "College of Lore",
+      "parentClassId": 1
+    },
+    "scene-packer": {
+      "sourceId": "Item.Pf6ioODOfWhVXI48",
+      "hash": "5874a5db2dfce85f54c8e4e16faf219ecd73dd9d"
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "reactionCondition": "false"
+    },
+    "core": {},
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "gambits-premades": {
+      "gpsUuid": "b352241e-5042-44a4-b632-3168ded51946"
+    },
+    "chris-premades": {
+      "customConfig": [
+        {
+          "value": "playAnimation",
+          "label": "CHRISPREMADES.Config.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animation"
+        },
+        {
+          "value": "color",
+          "label": "CHRISPREMADES.Config.Color",
+          "type": "select",
+          "default": "red",
+          "category": "animation",
+          "options": [
+            {
+              "value": "blue",
+              "label": "CHRISPREMADES.Config.Colors.Blue",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "green",
+              "label": "CHRISPREMADES.Config.Colors.Green",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "pink",
+              "label": "CHRISPREMADES.Config.Colors.Pink",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "purple",
+              "label": "CHRISPREMADES.Config.Colors.Purple",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "orange",
+              "label": "CHRISPREMADES.Config.Colors.Orange",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            },
+            {
+              "value": "yellow",
+              "label": "CHRISPREMADES.Config.Colors.Yellow",
+              "requiredModules": [
+                "jb2a_patreon"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    }
+  },
+  "img": "icons/skills/wounds/injury-face-impact-orange.webp",
+  "effects": [],
+  "folder": "bX8XDLjtdwvTXwGH",
+  "_id": "fvz5HSHjDnvWTfmR",
+  "_key": "!items!fvz5HSHjDnvWTfmR"
+}

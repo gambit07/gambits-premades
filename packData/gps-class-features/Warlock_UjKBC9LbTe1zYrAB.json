@@ -1,0 +1,15 @@
+{
+  "name": "Warlock",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "UjKBC9LbTe1zYrAB",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "733dfef03f57129dc692efd2dbd7178b88d24126"
+    }
+  },
+  "description": "",
+  "_key": "!folders!UjKBC9LbTe1zYrAB"
+}

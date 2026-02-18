@@ -1,0 +1,221 @@
+{
+  "name": "Cold Aura",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "book": "Storm King's Thunder",
+      "page": "128",
+      "custom": "2.1.38",
+      "license": "",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": [],
+    "requirements": "",
+    "activities": {},
+    "identifier": "cold-aura",
+    "enchant": {},
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "advancement": []
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-monster-features.Item.CKxCw7cGpg51EGHE",
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Cold Aura",
+      "_id": "KlWCEzJ2sd6ZJQjJ",
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "@actorUuid",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "transfer": true,
+      "statuses": [],
+      "flags": {
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "startEveryTurn",
+          "specialDuration": [],
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": true,
+          "aura": "Enemy",
+          "nameOverride": "",
+          "radius": "5",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": true,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "effectmacro": {},
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        },
+        "core": {
+          "overlay": false
+        },
+        "auraeffects": {
+          "originalType": "base"
+        }
+      },
+      "tint": "#ffffff",
+      "img": "icons/magic/water/snowflake-ice-snow-white.webp",
+      "type": "auraeffects.aura",
+      "system": {
+        "showRadius": false,
+        "applyToSelf": false,
+        "bestFormula": "",
+        "canStack": false,
+        "collisionTypes": [
+          "move"
+        ],
+        "color": null,
+        "combatOnly": true,
+        "disableOnHidden": false,
+        "distanceFormula": "5",
+        "disposition": -1,
+        "evaluatePreApply": false,
+        "opacity": 0.25,
+        "overrideName": "",
+        "script": "",
+        "stashedChanges": [],
+        "stashedStatuses": []
+      },
+      "sort": 0,
+      "_key": "!items.effects!CKxCw7cGpg51EGHE.KlWCEzJ2sd6ZJQjJ"
+    }
+  ],
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {},
+      "parentId": "Fy41piBbWSU2KTwI"
+    },
+    "monsterMunch": {
+      "titleHTML": "<em><strong>Cold Aura.</strong></em>",
+      "fullName": "Cold Aura.",
+      "actionCopy": false,
+      "type": "special"
+    },
+    "midi-qol": {
+      "removeAttackDamageButtons": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "core": {},
+    "scene-packer": {
+      "hash": "7d7ef37f600ca598f6aaaa9ea41842f7ff7f36ea",
+      "sourceId": "Item.jAkC7rjZAdhta1Sh"
+    },
+    "dae": {
+      "macro": {
+        "name": "Cold Aura",
+        "img": "icons/magic/water/snowflake-ice-snow-white.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0] === \"each\") {\n    let effectOriginActor = await fromUuid(args[1]);\n    let effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n    if(effectOriginActor.uuid === actor.uuid) return;\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`2d4`, {}, {type: \"cold\", properties: [\"mgc\"]}).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        name: \"Cold Aura - Damage (Cold)\",\n        type: \"feat\",\n        img: item.img,\n    }\n\n    await new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, \"cold\", token ? [token] : [], damageRoll, {itemData: itemData, flavor: \"Cold Aura - Damage (Cold)\"});\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "4.2.2",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    }
+  },
+  "img": "icons/magic/water/snowflake-ice-snow-white.webp",
+  "folder": "XqMtQp0XF5d2ej2I",
+  "_id": "CKxCw7cGpg51EGHE",
+  "_key": "!items!CKxCw7cGpg51EGHE"
+}

@@ -1,0 +1,664 @@
+{
+  "name": "Doom",
+  "type": "weapon",
+  "system": {
+    "description": {
+      "value": "<div class=\"ddb\"><div class=\"item-attunement\"><p><em>(Requires attunement - Can only be attuned by an Evil Rogue)</em></p></div><p>This Shortsword carries with it a feeling of dread and despair.  By itself it appears to be a Shortsword +1, but once attuned its true power can be used.  When attuned it has a +3 to attack and damage rolls.  If the user is also wielding Gloom when attacking, they may make an attack with both weapons as 1 Action.</p><p>When the weapon is unsheathed those within a 15 foot radius of the wielder get the feeling of impending Doom and have Disadvantage on Saving throws, the wielder is not effected.  If the user rolls a natural 20 on an attack, a surge of negative energy enters the target inflicting an additional <span>18 (</span><span class=\"roll-link\" data-type=\"damage\" data-average=\"true\" data-formula=\"4d8\" data-damage-type=\"necrotic\"><a data-action=\"roll\">4d8</a></span>) necrotic damage. This becomes 6d8 <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.klOVUV5G1U7iaKoG\" data-id=\"klOVUV5G1U7iaKoG\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">necrotic</a></span> if the wielder is also using Gloom.</p></div>",
+      "chat": ""
+    },
+    "source": {
+      "page": "",
+      "license": "",
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014",
+      "book": ""
+    },
+    "identified": true,
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "quantity": 1,
+    "weight": {
+      "value": 2,
+      "units": "lb"
+    },
+    "price": {
+      "value": 200000,
+      "denomination": "gp"
+    },
+    "rarity": "legendary",
+    "attunement": "required",
+    "cover": null,
+    "crewed": false,
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft",
+      "reach": null
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "damage": {
+      "versatile": {
+        "number": null,
+        "denomination": null,
+        "bonus": "",
+        "types": [],
+        "custom": {
+          "enabled": false,
+          "formula": ""
+        },
+        "scaling": {
+          "mode": "",
+          "number": null,
+          "formula": ""
+        }
+      },
+      "base": {
+        "number": null,
+        "denomination": null,
+        "bonus": "",
+        "types": [
+          "piercing"
+        ],
+        "custom": {
+          "enabled": true,
+          "formula": "1d6[piercing] + @mod + 3"
+        },
+        "scaling": {
+          "mode": "",
+          "number": null,
+          "formula": ""
+        }
+      }
+    },
+    "armor": {
+      "value": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "type": {
+      "value": "martialM",
+      "baseItem": "shortsword"
+    },
+    "magicalBonus": 3,
+    "properties": [
+      "fin",
+      "lgt",
+      "mgc"
+    ],
+    "attuned": true,
+    "equipped": true,
+    "proficient": null,
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "attack",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "attack": {
+          "ability": "",
+          "bonus": "+3",
+          "critical": {
+            "threshold": null
+          },
+          "flat": false,
+          "type": {
+            "value": "melee",
+            "classification": "weapon"
+          }
+        },
+        "damage": {
+          "critical": {
+            "bonus": ""
+          },
+          "includeBase": true,
+          "parts": []
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "attackMode": "oneHanded",
+        "ammunition": "",
+        "otherActivityUuid": "",
+        "attackRollPerTarget": "default",
+        "fumbleThreshold": 1
+      }
+    },
+    "identifier": "doom",
+    "ammunition": {}
+  },
+  "flags": {
+    "ddbimporter": {
+      "dndbeyond": {
+        "type": "Shortsword",
+        "damage": {
+          "parts": []
+        },
+        "classFeatures": [],
+        "ability": "dex",
+        "restrictions": [],
+        "avatarUrl": "https://www.dndbeyond.com/avatars/44187/142/638616786384500661.png",
+        "largeAvatarUrl": "https://www.dndbeyond.com/avatars/44187/143/638616786387720834.png",
+        "filterType": "Weapon",
+        "isConsumable": false,
+        "isContainer": false,
+        "isCustomItem": false,
+        "isHomebrew": true,
+        "isMonkWeapon": true,
+        "isPack": false,
+        "levelInfusionGranted": null,
+        "isLegacy": false,
+        "tags": [],
+        "sources": [],
+        "pictureUrl": "ddb-images/other/item-Doom.png"
+      },
+      "id": 0,
+      "entityTypeId": 0,
+      "isLegacy": false,
+      "definitionEntityTypeId": 112130694,
+      "definitionId": 9003323,
+      "originalName": "Doom",
+      "version": "5.2.36",
+      "keepIcon": true,
+      "effectsApplied": true,
+      "chrisEffectsApplied": true,
+      "chrisPreEffectName": "Doom",
+      "price": {
+        "xgte": true,
+        "value": 200000
+      }
+    },
+    "magicitems": {
+      "enabled": true,
+      "charges": "0",
+      "chargeType": "c1",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t2",
+      "rechargeUnit": "r1",
+      "destroy": false,
+      "destroyCheck": "d1",
+      "spells": {},
+      "feats": {},
+      "tables": {},
+      "equipped": true,
+      "attuned": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "sorting": "l",
+      "default": ""
+    },
+    "midi-qol": {
+      "removeAttackDamageButtons": "default",
+      "fumbleThreshold": null,
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[postDamageRoll]ItemMacro"
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": true,
+      "magiceffect": true,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "scene-packer": {
+      "hash": "36f6fac90349bc84a6472ef452b25cf81fef9138",
+      "sourceId": "Actor.edtGqNIYfHYowUUr.Item.SGUHfBmpD4D2oUiv"
+    },
+    "dae": {
+      "macro": {
+        "name": "Doom",
+        "img": "icons/weapons/swords/sword-broad-crystal-paired.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"postDamageRoll\") {\n    if(workflow.hitTargets.first()) {\n        const gridSize = canvas.grid.size;\n        const scaleFactor = gridSize / 100;\n\n        let source = token;\n        let targets = workflow.hitTargets;\n\n        // just in case the user hasn't targetted a token, let's add a quick warning\n        if (!targets || targets?.length === 0) {\n            return ui.notifications.warn(\"Please target at least one token\")\n        }\n\n        const enableTrail = true;\n        const enableImpact = false;\n        const enableSound = false;\n        const enableSwitchDistance = false;\n        const enableReturn = false;\n        const enableBlood = true;\n        const enableShake = false;\n        const debug = false;\n\n        const weaponGroup = 'melee_attack.01';\n        const weapon = 'shortsword.01';\n        const trail = 'trail.01';\n        const color = 'pinkpurple';\n        const impact = 'jb2a.impact.004.yellow';\n        const impactScale = 1.5;\n        const soundFileMelee = \"modules/dnd5e-animations/assets/sounds/Weapons/Melee_Bludgeoning/bludgeoning-swing-impact-blunt-1.mp3\";\n        const soundFileRange = \"modules/dnd5e-animations/assets/sounds/Weapons/Melee_Bludgeoning/bludgeoning-swing-impact-blunt-1.mp3\";\n        const delaySound = 300;\n        const switchDistanceFt = 5;\n        const range = \"\";\n        const returnFile = \"\";\n        const delayBetweenAttacks = 1000;\n\n        function log(string, variable){\n            return console.log(`%c ${string}`, 'color: #bada55', variable)\n        }\n\n\n\n        // Let's reconstruct the database path and fetch the array of all the variations for the chosen weapon\n        const dbPath = `jb2a.${weaponGroup}.${weapon}`;\n        const entries = Sequencer.Database.getEntry(dbPath) ?? null;\n\n        // The length of the array will represent how many entries there are, \n        // which we'll use later on to randomly pick the appropriate one.\n        const entriesLength = entries.length;\n\n        if(debug){\n            log(\"source: \", source);\n            log(\"targets: \", targets);\n            log(\"weapon group: \", weaponGroup);\n            log(\"weapon: \", weapon);\n            log(\"trail: \", trail);\n            log(\"color: \", color);\n            log(\"impact: \", impact);\n            log(\"soundFileMelee: \", soundFileMelee);\n            log(\"soundFileRange: \", soundFileRange);\n            log(\"enableBlood: \", enableBlood);\n            log(\"enableSound: \", enableSound);\n            log(\"enableShake: \", enableShake);\n            log(\"enableTrail: \", enableTrail);\n            log(\"dbPath: \", dbPath);\n            log(\"entries: \", entries);\n            log(\"entries length: \", entriesLength);\n        }\n\n\n        /******************************************\n         * MAIN ANIMATION FUNCTIONS INITIALIZATION*\n         * ****************************************/\n\n        async function meleeAttack(target, randMelee, randTrail, impact, isMirrored, targetScale, within5ft) {\n            const sourceScale = { x: source?.document?.texture?.scaleX ?? 1, y: source?.document?.texture?.scaleY ?? 1 }\n            \n            // Here is some Maths that we use for the \"Shake\" animation of the targets, move along... nothing to see here :D\n            const amplitude = Sequencer.Helpers.random_float_between(0.0, 0.2);\n            let hitRay = new Ray(source, target);\n            const shakeDirection = { x: Math.sign(hitRay.dx), y: Math.sign(hitRay.dy) };\n            const values = {\n                x: [0, -amplitude * shakeDirection.y, amplitude * shakeDirection.y, (-amplitude * shakeDirection.y) / 4, (amplitude * shakeDirection.y) / 4, 0],\n                y: [0, amplitude * shakeDirection.x, -amplitude * shakeDirection.x, (amplitude * shakeDirection.x) / 4, (-amplitude * shakeDirection.x) / 4, 0]\n            }\n            const interval = 50;\n            const easeOption = \"easeInOutSine\";\n\n            if(debug){\n                log(\"THIS IS A: \", \"MELEE ATTACK\")\n                log(\"within 5 feet?: \", within5ft)\n                log(\"randow melee: \", randMelee)\n                log(\"random trail: \", randTrail)\n                log(\"target scale: \", targetScale)\n                log(\"source scale: \", sourceScale)\n            }\n\n            // Below is the Sequencer code for all the animations\n            // The wiki for Sequencer is the best resource to learn about it: \n            // https://fantasycomputer.works/FoundryVTT-Sequencer/#/\n            // check it out, follow the tutorials from Wasp, the developer, everything is there!\n            new Sequence()\n\n                .effect()\n                .from(source)\n                .scale({ x: sourceScale.x, y: sourceScale.y })\n                .anchor(0.5)\n                .rotate(0)\n                .rotateTowards(target, {rotationOffset: -90})\n                .duration(1500)\n                .fadeOut(500)\n                .zIndex(5)\n                .playIf(within5ft)\n\n                .effect()\n                .from(source)\n                .scale({ x: sourceScale.x, y: sourceScale.y })\n                .anchor(0.5)\n                .rotate(0)\n                .rotateTowards(target, {rotationOffset: -90})\n                .animateProperty(\"sprite\", \"position.y\", { from: 0, to: hitRay.distance -gridSize, duration: 500+hitRay.distance, ease: \"easeOutQuint\"})\n                .duration(1500)\n                .fadeOut(500)\n                .zIndex(5)\n                .playIf(!within5ft)\n\n                .animation()\n                .on(source)\n                .fadeOut(50)\n\n                .effect()\n                .file(\"jb2a.gust_of_wind.veryfast\")\n                .atLocation(source, {cacheLocation: true})\n                .stretchTo(target)\n                .randomizeMirrorY()\n                .belowTokens()\n                .playIf(!within5ft)\n\n                .effect()\n                .file(`${randTrail}`)\n                .atLocation(target)\n                .rotateTowards(source)\n                .rotate(180)\n                .animateProperty(\"sprite\", \"position.x\", { from: -(2.5*gridSize + hitRay.distance), to: -2.5*gridSize, duration: 500+hitRay.distance, ease: \"easeOutQuint\"})\n                .scale(1)\n                .mirrorY(isMirrored)\n                .zIndex(11)\n                .playbackRate(0.9)\n                .playIf(enableTrail)\n\n                .effect()\n                .file(`${randMelee}`)\n                .atLocation(target)\n                .rotateTowards(source)\n                .rotate(180)\n                .animateProperty(\"sprite\", \"position.x\", { from: -(2.5*gridSize + hitRay.distance), to: -2.5*gridSize, duration: 500+hitRay.distance, ease: \"easeOutQuint\"})\n                .scale(1)\n                .mirrorY(isMirrored)\n                .zIndex(10)\n                .playbackRate(0.9)\n                .waitUntilFinished(-1000) // By design, The hit should always be 1 second from the end of the weapon attack and the trail animations\n\n\n                .animation()\n                .on(source)\n                .fadeIn(500)\n\n                .sound()\n                .file(soundFileMelee)\n                .playIf(enableSound)\n\n                .effect()\n                .file(`${impact}`)\n                .atLocation(target)\n                .scaleToObject(impactScale, { uniform: true })\n                .zIndex(12)\n                .playbackRate(0.9)\n                .playIf(enableImpact)\n\n                //START - BLOOD SPLATTER EFFECT\n                .effect()\n                .file('jb2a.liquid.splash_side.red')\n                .atLocation(target)\n                .rotateTowards(source)\n                .randomRotation()\n                .scaleToObject(1.5, { uniform: true })\n                .playIf(enableBlood)\n                .zIndex(12)\n                //END - BLOOD SPLATTER EFFECT\n\n                // START OF SHAKE SECTION\n                .animation()\n                .on(target)\n                .fadeOut(50)\n                .playIf(enableShake)\n\n                .effect()\n                .from(target)\n                .loopProperty(\"spriteContainer\", \"position.x\", {\n                    values: values.x,\n                    duration: interval - ((interval * amplitude) / 2),\n                    gridUnits: true,\n                    ease: easeOption\n                })\n                .loopProperty(\"spriteContainer\", \"position.y\", {\n                    values: values.y,\n                    duration: interval - ((interval * amplitude) / 2),\n                    gridUnits: true,\n                    ease: easeOption\n                })\n                .scale({ x: targetScale.x, y: targetScale.y })\n                .duration(interval * 9)\n                .playIf(enableShake)\n                .zIndex(1)\n                .waitUntilFinished(-150)\n\n                .animation()\n                .on(target)\n                .fadeIn(50)\n                .playIf(enableShake)\n                // END OF SHAKE SECTION\n\n                .play();\n        };\n\n        async function rangedAttack(target, targetScale) {\n            if(debug){\n                log(\"THIS IS A: \", \"RANGED ATTACK\")\n                log(\"target scale: \", targetScale)\n            }\n\n            const amplitude = Sequencer.Helpers.random_float_between(0.0, 0.2);\n            let hitRay = new Ray(source, target);\n            const shakeDirection = { x: Math.sign(hitRay.dx), y: Math.sign(hitRay.dy) };\n            const values = {\n                x: [0, -amplitude * shakeDirection.y, amplitude * shakeDirection.y, (-amplitude * shakeDirection.y) / 4, (amplitude * shakeDirection.y) / 4, 0],\n                y: [0, amplitude * shakeDirection.x, -amplitude * shakeDirection.x, (amplitude * shakeDirection.x) / 4, (-amplitude * shakeDirection.x) / 4, 0]\n            }\n            const interval = 50;\n            const easeOption = \"easeInOutSine\";\n\n            new Sequence()\n\n                .sound()\n                .file(soundFileRange)\n                .playIf(enableSound)\n                .delay(delaySound)\n\n                .effect()\n                .file(range)\n                .atLocation(source)\n                .stretchTo(target)\n                .waitUntilFinished(-800)\n                .zIndex(10)\n\n                .effect()\n                .file(`${impact}`)\n                .atLocation(target)\n                .scaleToObject(1.2, { uniform: true })\n                .zIndex(12)\n                .playIf(enableImpact)\n\n                .effect()\n                .file(returnFile)\n                .atLocation(source)\n                .stretchTo(target)\n                .zIndex(10)\n                .playIf(enableReturn)\n\n                //START - BLOOD SPLATTER EFFECT\n                .effect()\n                .file('jb2a.liquid.splash_side.red')\n                .atLocation(target)\n                .rotateTowards(source)\n                .randomRotation()\n                .scaleToObject(1.5, { uniform: true })\n                .zIndex(11)\n                .playIf(enableBlood)\n                //END - BLOOD SPLATTER EFFECT\n\n                // START OF SHAKE SECTION\n                .animation()\n                .on(target)\n                .fadeOut(50)\n                .playIf(enableShake)\n\n                .effect()\n                .from(target)\n                .loopProperty(\"spriteContainer\", \"position.x\", {\n                    values: values.x,\n                    duration: interval - ((interval * amplitude) / 2),\n                    gridUnits: true,\n                    ease: easeOption\n                })\n                .loopProperty(\"spriteContainer\", \"position.y\", {\n                    values: values.y,\n                    duration: interval - ((interval * amplitude) / 2),\n                    gridUnits: true,\n                    ease: easeOption\n                })\n                .scale({ x: targetScale.x, y: targetScale.y })\n                .duration(interval * 9)\n                .playIf(enableShake)\n                .zIndex(1)\n                .waitUntilFinished(-150)\n\n                .animation()\n                .on(target)\n                .fadeIn(50)\n                .playIf(enableShake)\n                // END OF SHAKE SECTION\n\n                .play()\n        }\n\n        /**************************\n         * ANIMATION CALL AND LOOP*\n         **************************/\n\n        // We will loop through this code for each targeted token and \n        // pick a different random number each loop in order to have more\n        // probability to pick a different animation everytime\n        for (let target of targets) {\n\n\n            let targetScale = { x: target?.document?.texture?.scaleX ?? 1, y: target?.document?.texture?.scaleY ?? 1 }\n            // Arrays start at 0. This will return a random integer which we'll use to pick a random attack variation\n            // and its corresponding trail.\n            //let rand = Sequencer.Helpers.random_int_between(0, entriesLength - 1);\n            let rand = Math.floor(Math.random() * ((entriesLength -1) + 1))\n            // Here, we rebuild the database paths and pass them along to the animation function.\n            let randMelee = `${dbPath}.${rand}`;\n            let randTrail;\n            enableTrail? randTrail =`jb2a.${weaponGroup}.${trail}.${color}.${rand}` : randTrail = 'jb2a.antilife_shell.blue_no_circle'\n            //let randTrail = `jb2a.${weaponGroup}.${trail}.${color}.${rand}`;\n            \n            // Let's add to the randomisation by mirroring the animation half the time, on top of the random attack variation.\n            let isMirrored = Math.random() < 0.5; // 50% probability. 0.1 would make it 10%, 0.2 20%...etc\n\n            // let switchDistanceFt = switchDistanceFt ?? 1000; // Placeholder\n            const targetBounds = target.bounds.pad(gridSize * (switchDistanceFt / 5 - 1 + 0.5), gridSize * (switchDistanceFt / 5 - 1 + 0.5));\n            const sourceBounds = source.bounds;\n            const within5ft = (target.bounds.pad(gridSize * (0.5), gridSize * (0.5))).intersects(sourceBounds);\n            const withinSwitchDistance = targetBounds.intersects(sourceBounds);\n\n            // This is the code which actually calls the animation function.\n            if (withinSwitchDistance || !enableSwitchDistance) {\n                await meleeAttack(target, randMelee, randTrail, impact, isMirrored, targetScale, within5ft)\n                await Sequencer.Helpers.wait(delayBetweenAttacks)\n            }\n            else {\n                await rangedAttack(target, targetScale)\n                await Sequencer.Helpers.wait(delayBetweenAttacks)\n            }\n\n            if(debug){\n                log(\"random integer: \", rand)\n                log(\"randow melee: \", randMelee)\n                log(\"random trail: \", randTrail)\n                log(\"target scale: \", targetScale)\n                log(\"switch Distance\", switchDistanceFt)\n                log(\"within switch distance: \", withinSwitchDistance)\n            }\n        }\n    }\n\n    if(workflow.attackRoll.dice[0].total !== 20) return;\n    let target = workflow.hitTargets.first();\n    new Sequence()\n    .effect()\n        .file(\"jb2a.impact.003.dark_purple\")\n        .fadeIn(500)\n        .fadeOut(500)\n        .atLocation(target)\n        .scaleToObject(4)\n    .play()\n\n    let hasGloom = actor.items.some(i => i.name === \"Gloom\" && i.system.equipped && i.system.attuned);\n    let numDice = hasGloom ? 6 : 4;\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDice}d8`, {}, {type: \"necrotic\", properties: [\"mgc\"]}).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        name: \"Doom - Damage (Necrotic)\",\n        type: \"feat\",\n        img: macroItem.img\n    }\n\n    await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"necrotic\", [target], damageRoll, {itemData: itemData});\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.1",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "dnd5e": {
+      "dependents": [
+        {
+          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.khikVA7je9dqdiM0.Actor.SNZJsEKbROB1q6bT.ActiveEffect.DGb344KwVUaCXhPV"
+        }
+      ],
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "autoanimations": {
+      "id": "b1beb383-89e3-4f33-811a-56955ea7c380",
+      "label": "Doom",
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      },
+      "macro": {
+        "enable": false
+      },
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular"
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "club",
+          "variant": "01",
+          "color": "white",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": false,
+      "isCustomized": false,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [
+    {
+      "name": "Doom",
+      "origin": "Compendium.world.gps-homebrew-items.Item.Pl0vhabdk4fmlQ7S",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        },
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "enableCondition": "",
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": true,
+          "aura": "All",
+          "nameOverride": "",
+          "radius": "15",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": true,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        }
+      },
+      "img": "icons/weapons/swords/sword-broad-crystal-paired.webp",
+      "_id": "k5Y4eM72Ue7m1pfY",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.disadvantage.save.all",
+          "mode": 0,
+          "value": "1",
+          "priority": 20
+        }
+      ],
+      "description": "<div class=\"ddb\"><div class=\"item-attunement\"><p><em>(Requires attunement by a can only be attuned by an Evil Rogue)</em></p></div><p>This Shortsword carries with it a feeling of dread and despair.  By itself it appears to be a Shortsword +1, but once attuned its true power can be used.  Once attuned it has a +3 to hit and damage bonus.  When the weapon is unsheathed those within 5' r of the wielder get the feeling of impending Doom and have Disadvantage on Saves, the weilder is not affected.  If the 'to hit' roll comes up a natural 20 a surge of negative energy surges forth into the target inflicting the wielders [[/damage 4d8 type=necrotic average=true]] damage in addition to the Critical Damage, this becomes 6d8 &amp;Reference[necrotic]{necrotic} if the wielder is also using Gloom.  If the wielder also is wielding Gloom, they may make an attack with both weapons as 1 Action.  </p><p><br /></p><section class=\"secret\" id=\"secret-rFNomVi3L8kpUxMF\"><hr /><h5>Automation notes - Chris's Premades (CPR):</h5><div class=\"ddb\"><div class=\"item-attunement\"><p><em>(Requires attunement by a can only be attuned by an Evil Rogue)</em></p></div><p>This Shortsword carries with it a feeling of dread and despair.  By itself it appears to be a Shortsword +1, but once attuned its true power can be used.  Once attuned it has a +3 to hit and damage bonus.  When the weapon is unsheathed those within 5' r of the wielder get the feeling of impending Doom and have Disadvantage on Saves, the weilder is not affected.  If the 'to hit' roll comes up a natural 20 a surge of negative energy surges forth into the target inflicting the wielders [[/damage 4d8 type=necrotic average=true]] damage in addition to the Critical Damage, this becomes 6d8 &amp;Reference[necrotic]{necrotic} if the wielder is also using Gloom.  If the wielder also is wielding Gloom, they may make an attack with both weapons as 1 Action.  </p></div></section></div>",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "_key": "!items.effects!Pl0vhabdk4fmlQ7S.k5Y4eM72Ue7m1pfY"
+    }
+  ],
+  "img": "icons/weapons/swords/sword-broad-crystal-paired.webp",
+  "folder": null,
+  "_id": "Pl0vhabdk4fmlQ7S",
+  "_key": "!items!Pl0vhabdk4fmlQ7S"
+}

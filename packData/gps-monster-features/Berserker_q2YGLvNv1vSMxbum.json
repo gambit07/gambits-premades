@@ -1,0 +1,15 @@
+{
+  "name": "Berserker",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "q2YGLvNv1vSMxbum",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "ab4fbeba96ae73d3f9e0913c89ef842971d09af8"
+    }
+  },
+  "description": "",
+  "_key": "!folders!q2YGLvNv1vSMxbum"
+}

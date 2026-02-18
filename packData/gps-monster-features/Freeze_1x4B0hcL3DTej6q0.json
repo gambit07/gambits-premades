@@ -1,0 +1,194 @@
+{
+  "name": "Freeze",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "book": "Basic Rules (2014)",
+      "page": "158",
+      "custom": "1.0.0",
+      "license": "",
+      "rules": "2014",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "monster",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "identifier": "freeze",
+    "activities": {},
+    "advancement": [],
+    "enchant": {}
+  },
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-monster-features.Item.1x4B0hcL3DTej6q0",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Freeze",
+      "img": "icons/commodities/gems/gem-rough-rectangular-teal.webp",
+      "_id": "aCt9V5pEjTYigv2S",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro, isDamaged",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        }
+      },
+      "_key": "!items.effects!1x4B0hcL3DTej6q0.aCt9V5pEjTYigv2S"
+    }
+  ],
+  "flags": {
+    "ddbimporter": {
+      "levelBonus": false,
+      "dndbeyond": {},
+      "parentId": "4HFBNZu5tynxphlk"
+    },
+    "monsterMunch": {
+      "titleHTML": "<em><strong>Freeze.</strong></em>",
+      "fullName": "Freeze.",
+      "actionCopy": false,
+      "type": "special",
+      "actionInfo": {
+        "damage": {
+          "parts": [],
+          "versatile": ""
+        },
+        "baseAbility": null,
+        "toHit": 0,
+        "proficient": false,
+        "extraAttackBonus": 0
+      }
+    },
+    "midi-qol": {
+      "removeAttackDamageButtons": "default",
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "AoETargetType": "any",
+      "autoTarget": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "dae": {
+      "macro": {
+        "name": "Freeze",
+        "img": "icons/commodities/gems/gem-rough-rectangular-teal.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0].macroPass === \"isDamaged\") {\n    let coldDamage = workflow.damageDetail.some(roll => roll.type === \"cold\");\n    if(!coldDamage) return;\n    let gmUser = game.gps.getPrimaryGM();\n    \n    let effectData = [{\n      \"origin\": macroItem.uuid,\n      \"duration\": {\n        \"seconds\": 12\n      },\n      \"disabled\": false,\n      \"name\": \"Frozen\",\n      \"img\": macroItem.img,\n      \"changes\": [\n        {\n          \"key\": \"system.attributes.movement.all\",\n          \"mode\": 0,\n          \"value\": \"-20\",\n          \"priority\": 20\n        }\n      ],\n      \"transfer\": false,\n      \"flags\": {\n        \"dae\": {\n          \"specialDuration\": [\n            \"turnEnd\"\n          ]\n        }\n      }\n    }];\n\n    await MidiQOL.socket().executeAsUser(\"createEffects\", gmUser, { actorUuid: actor.uuid, effects: effectData });\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.1",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/commodities/gems/gem-rough-rectangular-teal.webp",
+  "folder": "dmdJH1U4FRBdRxa0",
+  "_id": "1x4B0hcL3DTej6q0",
+  "_key": "!items!1x4B0hcL3DTej6q0"
+}

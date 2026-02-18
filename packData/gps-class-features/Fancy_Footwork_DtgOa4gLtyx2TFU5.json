@@ -1,0 +1,195 @@
+{
+  "name": "Fancy Footwork",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "rules": "2014",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "Swashbuckler 3",
+    "identifier": "fancy-footwork",
+    "activities": {},
+    "advancement": [],
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": []
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 507,
+      "data": {
+        "id": 507,
+        "name": "Fancy Footwork",
+        "prerequisite": null,
+        "description": "<p>When you choose this archetype at 3rd level, you learn how to land a strike and then slip away without reprisal. During your turn, if you make a melee attack against a creature, that creature can’t make opportunity attacks against you for the rest of your turn.</p>",
+        "requiredLevel": 3,
+        "displayOrder": 1
+      },
+      "version": "3.4.63",
+      "featureId": 507,
+      "featureName": "Fancy Footwork",
+      "requiredLevel": 3,
+      "prerequisite": null,
+      "class": "Rogue",
+      "classId": 80,
+      "subClass": "Swashbuckler",
+      "parentClassId": 12
+    },
+    "scene-packer": {
+      "sourceId": "Item.qLwMgdWjEgCzJdqc",
+      "hash": "6879e24827eef2cfd8fc813c0daf9fb83a612d5f"
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "rollAttackPerTarget": "default",
+      "effectActivation": false,
+      "itemCondition": "",
+      "effectCondition": ""
+    },
+    "core": {},
+    "dae": {
+      "macro": {
+        "name": "Fancy Footwork",
+        "img": "icons/equipment/feet/shoes-simple-leaf-green.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/equipment/feet/shoes-simple-leaf-green.webp",
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-class-features.Item.DtgOa4gLtyx2TFU5",
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Fancy Footwork",
+      "_id": "MKnb2Fy2BWJPLI5r",
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.fancyFootwork, preWaitForAttackRoll",
+          "priority": 20
+        },
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "function.game.gps.fancyFootwork",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "transfer": true,
+      "statuses": [],
+      "flags": {
+        "times-up": {},
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "endEveryTurn",
+          "specialDuration": [],
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "effectmacro": {},
+        "core": {
+          "overlay": false
+        }
+      },
+      "tint": "#ffffff",
+      "img": "icons/equipment/feet/shoes-simple-leaf-green.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!DtgOa4gLtyx2TFU5.MKnb2Fy2BWJPLI5r"
+    }
+  ],
+  "folder": "SwLnJgSodyHN3SI2",
+  "_id": "DtgOa4gLtyx2TFU5",
+  "_key": "!items!DtgOa4gLtyx2TFU5"
+}

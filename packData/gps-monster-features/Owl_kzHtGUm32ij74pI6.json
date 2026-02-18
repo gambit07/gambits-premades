@@ -1,0 +1,15 @@
+{
+  "name": "Owl",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "kzHtGUm32ij74pI6",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "b4121ee44380400c482e305b2c6a939559075dd9"
+    }
+  },
+  "description": "",
+  "_key": "!folders!kzHtGUm32ij74pI6"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Fighter",
+  "sorting": "a",
+  "folder": null,
+  "type": "Item",
+  "_id": "PmXgZSJ8c2PqKenQ",
+  "color": null,
+  "flags": {
+    "scene-packer": {
+      "hash": "dcea419ed16088874efe472f66a4879b0a0c823a"
+    }
+  },
+  "description": "",
+  "_key": "!folders!PmXgZSJ8c2PqKenQ"
+}

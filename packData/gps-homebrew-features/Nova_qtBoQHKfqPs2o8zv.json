@@ -1,0 +1,510 @@
+{
+  "name": "Nova",
+  "type": "feat",
+  "img": "icons/magic/symbols/triangle-glow-purple.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires Midi QOL, DAE</em></p><p><span style=\"font-family:'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Symbols'\">At 1st level, you can unleash your Star's fury in earnest. However, if you channel its energy for too long, it will consume your mortal body. You can use your bonus action to enter a Nova. When you enter a Nova, and each subsequent turn you begin while your Nova is active, you take special radiant damage called Nova damage. This damage begins at 1d6 when you enter your Nova, and increases to 2d6 the following turn, 3d6 the turn after, and so on. This damage can't be reduced or avoided. You don't make Constitution saving throws to maintain your concentration as a result of taking this damage. Your Nova ends if you drop to 0 hit points or if you use your bonus action to end it.</span></p><p><span style=\"font-family:'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Symbols'\">While your Nova is active, you can add bonus d6s of damage, up to a maximum of twice the number of Nova damage dice you have taken on your turn, when you damage a creature with an attack or saving throw on your turn. You can choose to add all the damage dice to the roll of a single attack, or divide up the damage among multiple attacks.</span></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "requirements": "",
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "bonus",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "tRB7OZrfYO4wXdrY"
+          }
+        ],
+        "range": {
+          "units": "self",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "",
+            "type": "self",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "nova",
+    "enchant": {},
+    "prerequisites": {
+      "level": null,
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "advancement": []
+  },
+  "effects": [
+    {
+      "name": "Nova",
+      "origin": "Item.3cUI96gq3xUYgMb0",
+      "duration": {
+        "startTime": null,
+        "seconds": 100000,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "transfer": false,
+      "disabled": false,
+      "_id": "tRB7OZrfYO4wXdrY",
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "startEveryTurn",
+          "priority": 20
+        },
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "ItemMacro,postDamageRoll",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "statuses": [],
+      "flags": {
+        "times-up": {
+          "isPassive": true
+        },
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "startEveryTurn",
+          "specialDuration": []
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system"
+        },
+        "core": {}
+      },
+      "tint": "#ffffff",
+      "img": "icons/magic/symbols/triangle-glow-purple.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!qtBoQHKfqPs2o8zv.tRB7OZrfYO4wXdrY"
+    }
+  ],
+  "folder": null,
+  "flags": {
+    "midi-qol": {
+      "fumbleThreshold": null,
+      "effectActivation": false,
+      "feature": {},
+      "onUseMacroName": "[postActiveEffects]ItemMacro",
+      "itemCondition": "",
+      "reactionCondition": "",
+      "otherCondition": "",
+      "effectCondition": "",
+      "rollAttackPerTarget": "default"
+    },
+    "midiProperties": {
+      "nodam": false,
+      "fulldam": false,
+      "halfdam": false,
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "confirmTargets": "never"
+    },
+    "dae": {
+      "macro": {
+        "name": "Nova",
+        "img": "icons/magic/symbols/triangle-glow-purple.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if (args[0] === 'on') {\n\tlet itemData = [{\n\t\t\"name\": \"Nova - End Nova\",\n\t\t\"type\": \"feat\",\n\t\t\"img\": item.img,\n\t\t\"system\": {\n\t\t\"activation\": {\n\t\t  \"type\": \"bonus\",\n\t\t  \"cost\": 1,\n\t\t  \"condition\": \"\"\n\t\t},\n\t\t\"target\": {\n\t\t  \"type\": \"self\"\n\t\t},\n\t\t\"range\": {\n\t\t  \"units\": \"self\"\n\t\t},\n\t\t\"actionType\": \"other\",\n\t\t\"type\": {\n\t\t  \"value\": \"feat\"\n\t\t}\n\t\t},\n\t\t\"flags\": {\n\t\t\t\"midi-qol\": {\n\t\t\t\"effectActivation\": false,\n\t\t\t\"onUseMacroName\": \"[preActiveEffects]ItemMacro\"\n\t\t\t},\n\t\t\t\"dae\": {\n\t\t\t\"macro\": {\n\t\t\t\t\"name\": \"Nova - End Nova\",\n\t\t\t\t\"img\": item.img,\n\t\t\t\t\"type\": \"script\",\n\t\t\t\t\"scope\": \"global\",\n\t\t\t\t\"command\": \"let originItem = actor.items.find(i => i.name === \\\"Nova\\\");\\n\\tlet effectData = actor.appliedEffects.find(e => e.name === \\\"Nova\\\");\\n\\tif(effectData) {\\n\\t\\tawait effectData.delete();\\n\\t\\treturn ui.notifications.warn(\\\"You have ended the Nova state.\\\");\\n\\t}\"\n\t\t\t}\n\t\t\t}\n\t\t}\n\t\t}];\n\tlet itemCheck = actor.items.find(i => i.name === \"Nova - End Nova\");\n\tif (!itemCheck) await actor.createEmbeddedDocuments(\"Item\", itemData);\n\t\n\tlet diceAvailable = 0;\n\tlet selfDamage = 1;\n\tdiceAvailable = selfDamage * 2;\n\tawait item.setFlag('midi-qol', 'feature.nova.' + token.id + '.selfDamage', selfDamage);\n\tawait item.setFlag('midi-qol', 'feature.nova.' + token.id + '.diceAvailable', diceAvailable);\n\tlet damageRoll = await new CONFIG.Dice.DamageRoll(`${selfDamage}d6`).evaluate();\n\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')\n\n\tconst itemDataChat = {\n        name: \"Nova - Damage (Self)\",\n        type: \"feat\",\n        img: item.img\n    }\n\n    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"none\", token ? [token] : [], damageRoll, {itemData: itemDataChat, forceApply: false, noConcentrationCheck: true});\n\n\tnew Sequence()\n\t.effect()\n\t\t.atLocation(token)\n\t\t.file(\"jb2a.explosion.03.purplepink\")\n\t\t.scale(0.5)\n\t.play()\n}\n\nif (args[0] === 'each' && args[1] === 'startEveryTurn') {\n\tlet diceList = [];\n\tlet selfDamageValue = await item.getFlag('midi-qol', 'feature.nova.' + token.id + '.selfDamage');\n\tlet selfDamage = Number.isNaN(parseInt(selfDamageValue)) ? 0 : parseInt(selfDamageValue);\n\tlet diceAvailable = 0;\n\tif(selfDamage === 0) return;\n\tselfDamage = selfDamage + 1;\n\tdiceAvailable = selfDamage * 2;\n\tawait item.setFlag('midi-qol', 'feature.nova.' + token.id + '.selfDamage', selfDamage);\n\tawait item.setFlag('midi-qol', 'feature.nova.' + token.id + '.diceAvailable', diceAvailable);\n\tlet damageRoll = await new CONFIG.Dice.DamageRoll(`${selfDamage}d6`).evaluate();\n\tdamageRoll.dice.forEach(die => {die.results.forEach(rollResult => {diceList.push(`<li class=\"roll die d6\">${rollResult.result}</li>`);});});\n\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')\n\n\tconst itemData = {\n        name: \"Nova - Damage (Self)\",\n        type: \"feat\",\n        img: item.img\n    }\n\n    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"none\", token ? [token] : [], damageRoll, {itemData: itemData, forceApply: false, noConcentrationCheck: true});\n\n\tnew Sequence()\n\t.effect()\n\t\t.atLocation(token)\n\t\t.file(\"jb2a.explosion.03.purplepink\")\n\t\t.scale(0.5)\n\t.play()\n}\n\nif (args[0] === 'off') {\n\tawait item.unsetFlag('midi-qol', 'feature.nova');\n\tlet itemCheck = actor.items.find(i => i.name === \"Nova - End Nova\");\n\tif (itemCheck) await itemCheck.delete();\n}\n\nif(args[0].macroPass === \"postDamageRoll\") {\n\tif(workflow.targets.size > 1) return;\n\tif(workflow.saves.size > 0 && workflow.flags.midiProperties.nodam === true) return;\n\tconst target = workflow.targets.first();\n\tlet tokenId = token.id;\n\tlet diceAvailable = parseInt(await macroItem.getFlag('midi-qol', `feature.nova.${tokenId}.diceAvailable`));\n\tif(diceAvailable === 0) return;\n\tlet diceRollType = 'd6';\n\n\tlet content = `<p>Select the number of dice to use:</p>\n\t<form>\n\t\t<div class=\"form-group\">\n\t\t\t<label style=\"flex: 0 0 auto; margin: 0 10px; text-align: left;\">Nova Damage Available: <b>${diceAvailable}${diceRollType}</b></label>\n\t\t\t<div class=\"form-fields\">\n\t\t\t\t<button type=\"button\" class=\"dice-decrement\">-</button>\n\t\t\t\t<span id=\"diceDisplay\" style=\"flex: 0 0 auto; margin: 0 10px; text-align: center;\">0</span>\n\t\t\t\t<button type=\"button\" class=\"dice-increment\">+</button>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\t`;\n\n\tawait new Dialog({\n\t\ttitle: `Use Nova Damage`,\n\t\tcontent: content,\n\t\tbuttons: {\n\t\trecover: {\n\t\t\tlabel: \"Continue\",\n\t\t\tcallback: async (html) => {\n\t\t\t\tlet diceUsed = false;\n\t\t\t\tconst display = html.find(`#diceDisplay`)[0];\n\t\t\t\tif (!display) return;\n\n\t\t\t\tconst diceToUse = parseInt(display.textContent);\n\t\t\t\tif (!isNaN(diceToUse) && diceToUse > 0) {\n\t\t\t\tdiceUsed = true;\n\t\t\t\t}\n\n\t\t\t\t//Exit if no dice selected\n\t\t\t\tif (!diceUsed) {\n\t\t\t\t  ui.notifications.warn(\"You did not use any additional damage.\");\n\t\t\t\t  return;\n\t\t\t\t}\n\t\t\t\t\n\t\t\t\tlet damageRoll;\n\t\t\t\t//Roll damage dice\n\t\t\t\tif(workflow.saves.size > 0 && workflow.flags.midiProperties.halfdam === true) {\n\t\t\t\t\tdamageRoll = await new CONFIG.Dice.DamageRoll(`${diceToUse}d6 / 2`).evaluate();\n\t\t\t\t}\n\t\t\t\telse {\n\t\t\t\t\tdamageRoll = await new CONFIG.Dice.DamageRoll(`${diceToUse}d6`).evaluate();\n\t\t\t\t}\n\t\t\t\tlet damageRollTotal = Math.floor(damageRoll.total);\n\t\t\t\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')\n\n\t\t\t\tconst itemData = {\n\t\t\t\t\tname: \"Nova - Damage (Radiant)\",\n\t\t\t\t\ttype: \"feat\",\n\t\t\t\t\timg: item.img\n\t\t\t\t}\n\n\t\t\t\tnew MidiQOL.DamageOnlyWorkflow(actor, token, damageRollTotal, \"radiant\", target ? [target] : [], damageRoll, {itemData: itemData});\n\t\t\t\t\n\t\t\t\tnew Sequence()\n\t\t\t\t.effect()\n\t\t\t\t\t.atLocation(target)\n\t\t\t\t\t.file(\"jb2a.template_circle.out_pulse.02.burst.purplepink\")\n\t\t\t\t\t.scale(0.5)\n\t\t\t\t.play()\n\t\t\t\n\t\t\t\t//Update the actor with the new diceUsed value per class\n\t\t\t\tconst diceRemaining = diceAvailable - diceToUse;\n\t\t\t\tawait macroItem.setFlag('midi-qol', 'feature.nova.' + token.id + '.diceAvailable', diceRemaining);\n\t\t\t}\n\t\t},\n\t\t\tcancel: {\n\t\t\t\tlabel: \"Cancel\",\n\t\t\t\tcallback: () => false\n\t\t\t}\n\t\t},\n\t\t\tdefault: \"cancel\",\n\trender: (html) => {\n\t\t//Implement clickable buttons in the dialog box and prevent going over max/min values\n\t\thtml[0].addEventListener('click', event => {\n\t\t\tconst targetClick = event.target;\n\t\t\tconst isIncrement = targetClick.classList.contains('dice-increment');\n\t\t\tconst isDecrement = targetClick.classList.contains('dice-decrement');\n\n\t\t\tif (isIncrement || isDecrement) {\n\t\t\t\tconst key = targetClick.dataset.key;\n\t\t\t\tconst spanDisplay = html[0].querySelector(`#diceDisplay`);\n\t\t\t\tlet currentValue = parseInt(spanDisplay.textContent);\n\t\t\t\tconst maxValue = diceAvailable;\n\n\t\t\t\tif (isIncrement && currentValue < maxValue) {\n\t\t\t\tspanDisplay.textContent = currentValue + 1;\n\t\t\t\t} else if (isDecrement && currentValue > 0) {\n\t\t\t\tspanDisplay.textContent = currentValue - 1;\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\t}).render(true);\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.1",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "core": {},
+    "autoanimations": {
+      "id": "26af7db1-5f03-4fe3-ad1b-ac50499c2c89",
+      "label": "Nova",
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      },
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "generic",
+          "animation": "explosion",
+          "variant": "01",
+          "color": "purplepink",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": false,
+          "opacity": 1,
+          "persistent": false,
+          "playbackRate": 1,
+          "playOn": "default",
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": false,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    },
+    "scene-packer": {
+      "sourceId": "Item.dlKvq07UrJHvE2sA",
+      "hash": "dd6259d4c00b160331e52e77bbda45616899a1c2"
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    }
+  },
+  "_id": "qtBoQHKfqPs2o8zv",
+  "_key": "!items!qtBoQHKfqPs2o8zv"
+}

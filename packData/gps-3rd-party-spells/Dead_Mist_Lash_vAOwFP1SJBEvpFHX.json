@@ -1,0 +1,264 @@
+{
+  "name": "Dead Mist Lash",
+  "type": "spell",
+  "img": "icons/magic/control/debuff-energy-hold-levitate-green.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>Requires MidiQOL, DAE. This item comes from Valda's Spire of Secrets, purchase at </em><a href=\"https://magehandpress.com/valdas\" title=\"Mage Hand Press\"><em>https://magehandpress.com/valdas</em></a></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014"
+    },
+    "activation": {
+      "type": "action",
+      "condition": "",
+      "value": 1
+    },
+    "duration": {
+      "value": "",
+      "units": "inst"
+    },
+    "target": {
+      "affects": {
+        "type": "enemy",
+        "count": "1",
+        "choice": false
+      },
+      "template": {
+        "units": "m",
+        "contiguous": false
+      }
+    },
+    "range": {
+      "value": "60",
+      "units": "ft"
+    },
+    "uses": {
+      "max": "",
+      "recovery": [],
+      "spent": 0
+    },
+    "level": 1,
+    "school": "nec",
+    "properties": [
+      "vocal",
+      "somatic"
+    ],
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "attack",
+        "activation": {
+          "type": "action",
+          "value": null,
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "override": false,
+          "units": "self"
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "attack": {
+          "ability": "",
+          "bonus": "",
+          "critical": {
+            "threshold": null
+          },
+          "flat": false,
+          "type": {
+            "value": "ranged",
+            "classification": "spell"
+          }
+        },
+        "damage": {
+          "critical": {
+            "bonus": ""
+          },
+          "includeBase": true,
+          "parts": [
+            {
+              "number": 3,
+              "denomination": 8,
+              "bonus": "",
+              "types": [
+                "necrotic"
+              ],
+              "custom": {
+                "enabled": false,
+                "formula": ""
+              },
+              "scaling": {
+                "mode": "whole",
+                "number": 1,
+                "formula": ""
+              }
+            }
+          ]
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "attackMode": "oneHanded",
+        "ammunition": "",
+        "otherActivityUuid": "",
+        "attackRollPerTarget": "default",
+        "fumbleThreshold": 1
+      }
+    },
+    "identifier": "dead-mist-lash",
+    "method": "spell",
+    "prepared": 1
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": true,
+      "magiceffect": true,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false,
+      "idr": false,
+      "idi": false,
+      "idv": false,
+      "ida": false
+    },
+    "midi-qol": {
+      "rollAttackPerTarget": "default",
+      "itemCondition": "",
+      "effectCondition": "",
+      "fumbleThreshold": null,
+      "removeAttackDamageButtons": "default",
+      "onUseMacroName": "[postPreambleComplete]ItemMacro"
+    },
+    "dae": {
+      "macro": {
+        "name": "Dead Mist Lash",
+        "img": "icons/magic/control/debuff-energy-hold-levitate-green.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "function getOrdinalSuffix(number) {\n    switch (number % 10) {\n        case 1:\n            return `${number}st`;\n        case 2:\n            return `${number}nd`;\n        case 3:\n            return `${number}rd`;\n        default:\n            return `${number}th`;\n    }\n}\n\nif(args[0].macroPass === \"postPreambleComplete\") {\n    let dialogId = \"deadmistlash\";\n    let dialogTitlePrimary = `${token.actor.name} | ${macroItem.name}`;\n    let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });\n    let gmUser = game.gps.getPrimaryGM();\n    const optionBackground = (document.body.classList.contains(\"theme-dark\")) ? 'black' : 'var(--color-bg)';\n    let result;\n\n\n    let castLevel = workflow.castData.castLevel;\n\n    let optionsContent = \"\";\n    for (let upcastValue = 1; upcastValue <= 3; upcastValue++) {\n        let newCastLevel = castLevel + upcastValue;\n        if (newCastLevel > 9) break;\n\n        let selfDamageTotal = upcastValue * 5;\n        optionsContent += `\n            <option name=\"${macroItem.img}\" value=\"${upcastValue}\" class=\"gps-dialog-option\" style=\"background-color: ${optionBackground};\">\n                +${upcastValue} (Cast Level: ${newCastLevel} | Self Damage: ${selfDamageTotal})\n            </option>\n        `;\n    }\n\n    let dialogContent = `\n        <div class=\"gps-dialog-container\">\n            <div class=\"gps-dialog-section\">\n                <div class=\"gps-dialog-content\">\n                    <p class=\"gps-dialog-paragraph\">Would you like to consume some of your life force to empower this spell and cast it at a higher level?</p>\n                    <div>\n                        <div class=\"gps-dialog-flex\">\n                            <label for=\"item-select_${dialogId}\" class=\"gps-dialog-label\">Level:</label>\n                            <select id=\"item-select_${dialogId}\" class=\"gps-dialog-select\">\n                                ${optionsContent}\n                            </select>\n                            <div id=\"image-container\" class=\"gps-dialog-image-container\">\n                                <img id=\"img_${dialogId}\" src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"gps-dialog-button-container\">\n                <button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n                    <i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>Pause\n                </button>\n            </div>\n        </div>\n    `;\n    \n    result = await game.gps.socket.executeAsUser(\"process3rdPartyReactionDialog\", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? \"gm\" : \"user\",type:\"singleDialog\"});\n            \n    const { userDecision, selectedItemUuid } = result;\n\n    if (!userDecision) {\n        return;\n    }\n    else if (userDecision) {\n        let selfDamage;\n        (+selectedItemUuid === 1) ? selfDamage = 5 : (+selectedItemUuid === 2) ? selfDamage = 10 : selfDamage = 15;\n\n        let selfDamageRoll = await new CONFIG.Dice.DamageRoll(`${selfDamage}`).evaluate();\n\n        const itemDataChat = {\n            name: \"Dead Mist Lash - Damage (Self)\",\n            type: \"feat\",\n            img: macroItem.img\n        }\n\n        new MidiQOL.DamageOnlyWorkflow(actor, token, selfDamageRoll.total, \"none\", token ? [token] : [], selfDamageRoll, {itemData: itemDataChat});\n\n        let newCastLevel = +selectedItemUuid + +castLevel;\n        await game.messages.get(workflow.itemCardId).setFlag('dnd5e','use.spellLevel', newCastLevel);\n        workflow.castData.castLevel = newCastLevel;\n    }\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "coreVersion": "12.331",
+          "systemId": "dnd5e",
+          "systemVersion": "3.3.1",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    }
+  },
+  "_id": "vAOwFP1SJBEvpFHX",
+  "_key": "!items!vAOwFP1SJBEvpFHX"
+}

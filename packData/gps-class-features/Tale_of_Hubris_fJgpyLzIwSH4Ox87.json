@@ -1,0 +1,284 @@
+{
+  "name": "Tale of Hubris",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><em>Make sure to Enable Tale of Hubris in the module settings.</em></p>",
+      "chat": ""
+    },
+    "source": {
+      "page": "",
+      "license": "",
+      "custom": "2.1.38",
+      "rules": "2014",
+      "revision": 1,
+      "book": ""
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "College of Tragedy 6",
+    "identifier": "tale-of-hubris",
+    "activities": {
+      "qPmo1metfeKZACYI": {
+        "type": "utility",
+        "_id": "qPmo1metfeKZACYI",
+        "sort": 0,
+        "activation": {
+          "type": "reaction",
+          "value": null,
+          "override": false,
+          "condition": ""
+        },
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "dB8JqVuRW2YroKII"
+          }
+        ],
+        "range": {
+          "override": false,
+          "units": "any",
+          "special": ""
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft",
+            "type": ""
+          },
+          "affects": {
+            "choice": false,
+            "type": "any",
+            "count": "",
+            "special": ""
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false,
+          "name": "",
+          "formula": ""
+        },
+        "useConditionText": "false",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": false,
+          "identifier": "syntheticUse",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "name": "",
+        "useConditionReason": "",
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true,
+        "img": "",
+        "appliedEffects": [
+          "dB8JqVuRW2YroKII"
+        ]
+      }
+    },
+    "advancement": [],
+    "enchant": {},
+    "prerequisites": {
+      "level": null,
+      "repeatable": false,
+      "items": []
+    },
+    "properties": []
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 8470346,
+      "data": {
+        "id": 8470346,
+        "name": "Tale of Hubris",
+        "prerequisite": null,
+        "description": "<p>At 6th level, you learn to weave a magical narrative that draws out the fatal arrogance of your foes. When a creature scores a critical hit against you or an ally within 60 feet of you that you can see, you can use your reaction and expend one use of your Bardic Inspiration to target the attacking creature and evoke the story of their downfall. For 1 minute or until the target suffers a critical hit, any weapon attack against the target scores a critical hit on a roll of 18&ndash;20.</p>\r\n<p>At 14th level, the critical hit range of this feature increases to 17&ndash;20.</p>",
+        "requiredLevel": 6,
+        "displayOrder": 3
+      },
+      "version": "5.2.36",
+      "featureId": 8470346,
+      "featureName": "Tale of Hubris",
+      "requiredLevel": 6,
+      "prerequisite": null,
+      "class": "Bard",
+      "classId": 1805539,
+      "subClass": "College of Tragedy",
+      "parentClassId": 1,
+      "effectsApplied": true,
+      "chrisEffectsApplied": true,
+      "chrisPreEffectName": "Tale of Hubris"
+    },
+    "scene-packer": {
+      "sourceId": "Item.",
+      "hash": "bcbdea883e203fd3790ddf3b63b4053616fce6d5"
+    },
+    "midi-qol": {
+      "onUseMacroName": ""
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    },
+    "gambits-premades": {
+      "gpsUuid": "476f9e94-ea67-4413-aade-ea2bab60fcdd"
+    }
+  },
+  "img": "icons/creatures/abilities/wings-birdlike-blue.webp",
+  "effects": [
+    {
+      "origin": "Actor.Q7GcFBwAbXgQX9Yv.Item.qWiv28Gjy6Da4SDd",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 60,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Tale of Hubris",
+      "img": "icons/creatures/abilities/wings-birdlike-blue.webp",
+      "_id": "dB8JqVuRW2YroKII",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "flags.midi-qol.grants.criticalThreshold",
+          "mode": 2,
+          "value": "@classes.bard.levels >= 14 ? (flags?.dnd5e?.weaponCriticalThreshold ? (flags?.dnd5e?.weaponCriticalThreshold - 3) : (20 - 3)) : (flags?.dnd5e?.weaponCriticalThreshold ? (flags?.dnd5e?.weaponCriticalThreshold - 2) : (20 - 2))",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "multi",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [
+            "isHitCritical"
+          ],
+          "enableCondition": "",
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          },
+          "dependents": [
+            {
+              "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.UMWyWvd1z7UY2kPa.Actor.SNZJsEKbROB1q6bT.ActiveEffect.aLpNIPKDsaqZ0lxs"
+            }
+          ]
+        },
+        "core": {
+          "overlay": false
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        }
+      },
+      "_key": "!items.effects!fJgpyLzIwSH4Ox87.dB8JqVuRW2YroKII"
+    }
+  ],
+  "folder": "bX8XDLjtdwvTXwGH",
+  "_id": "fJgpyLzIwSH4Ox87",
+  "_key": "!items!fJgpyLzIwSH4Ox87"
+}

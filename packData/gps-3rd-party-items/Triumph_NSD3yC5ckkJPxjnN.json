@@ -1,0 +1,365 @@
+{
+  "name": "Triumph",
+  "type": "equipment",
+  "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Triumph.webp",
+  "system": {
+    "description": {
+      "value": "<p><em>This item comes from the Abyssal Brews patreon, subscribe to the Abyssal Brews patreon at </em><a href=\"https://www.patreon.com/abyssalbrews\" title=\"Abyssal Brews\"><em>https://www.patreon.com/abyssalbrews</em></a></p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "revision": 1,
+      "rules": "2014",
+      "book": "",
+      "page": "",
+      "license": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "attunement": "required",
+    "equipped": true,
+    "rarity": "",
+    "identified": true,
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "1",
+      "recovery": [
+        {
+          "period": "dawn",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 0
+    },
+    "armor": {
+      "value": null,
+      "dex": null,
+      "magicalBonus": null
+    },
+    "hp": {
+      "value": null,
+      "max": null,
+      "dt": null,
+      "conditions": ""
+    },
+    "speed": {
+      "value": null,
+      "conditions": ""
+    },
+    "strength": null,
+    "proficient": null,
+    "unidentified": {
+      "description": ""
+    },
+    "type": {
+      "value": "trinket",
+      "baseItem": ""
+    },
+    "container": null,
+    "properties": [],
+    "attuned": true,
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "special",
+          "value": 1,
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [
+            {
+              "type": "itemUses",
+              "target": "",
+              "value": "1",
+              "scaling": {
+                "mode": "",
+                "formula": ""
+              }
+            }
+          ],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [
+          {
+            "_id": "vc8x4tsb975JUGNN"
+          }
+        ],
+        "range": {
+          "value": "60",
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "ft"
+          },
+          "affects": {
+            "count": "5",
+            "type": "creature",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "identifier": "",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "otherActivityAsParentType": true,
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "useConditionReason": "",
+        "otherActivityId": "none",
+        "otherActivityAsParentType": true
+      }
+    },
+    "identifier": "triumph"
+  },
+  "effects": [
+    {
+      "origin": "Item.8CxlGFmyw9RVq16D",
+      "duration": {
+        "rounds": null,
+        "startTime": null,
+        "seconds": 1,
+        "combat": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Triumph - Rally to Glory",
+      "_id": "vc8x4tsb975JUGNN",
+      "changes": [
+        {
+          "key": "macro.itemMacro",
+          "mode": 0,
+          "value": "",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "transfer": false,
+      "statuses": [],
+      "flags": {
+        "times-up": {},
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "enableCondition": "",
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "effectmacro": {},
+        "dnd5e": {
+          "dependents": [
+            {
+              "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.P88yZhPknDdGwq1j"
+            }
+          ],
+          "riders": {
+            "statuses": []
+          }
+        },
+        "core": {
+          "overlay": false
+        }
+      },
+      "tint": "#ffffff",
+      "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Triumph.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!NSD3yC5ckkJPxjnN.vc8x4tsb975JUGNN"
+    }
+  ],
+  "flags": {
+    "scene-packer": {
+      "hash": "8b414699663531ef635868a08cf6bd5967186db1",
+      "sourceId": "Compendium.world.gps-homebrew-items.Item.v1YGBsvBzIUQ7BpM"
+    },
+    "core": {
+      "sheetClass": ""
+    },
+    "midiProperties": {
+      "confirmTargets": "default",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "midi-qol": {
+      "rollAttackPerTarget": "default",
+      "effectActivation": false,
+      "itemCondition": "",
+      "effectCondition": "",
+      "onUseMacroName": "[postActiveEffects]ItemMacro",
+      "removeAttackDamageButtons": "default",
+      "reactionCondition": "",
+      "otherCondition": ""
+    },
+    "dae": {
+      "macro": {
+        "name": "Triumph",
+        "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Triumph.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "if(args[0] === \"on\") {\n    const target = token;\n    const actorClasses = target.actor.classes;\n    const classKeys = Object.keys(actorClasses);\n\n    //Check if there are any hit dice left before creating the dialog else exit\n    const totalHitDice = classKeys.reduce((acc, key) => acc + (parseInt(actorClasses[key].system.levels) - parseInt(actorClasses[key].system.hd.spent)), 0);\n    if (totalHitDice === 0) {\n        return ui.notifications.warn(\"You have no hit dice remaining.\");\n    }\n\n    let content = `<p>Select the number of hit dice to use:</p><form>`;\n\n    for (const key of classKeys) {\n        const cls = actorClasses[key];\n        const hitDiceAvailable = parseInt(cls.system.levels) - parseInt(cls.system.hd.spent);\n        let hitDiceRollType = cls.system.hd.denomination;\n\n        //Skip the class if no hit dice are available\n        if (hitDiceAvailable === 0) continue;\n\n    content += `\n    <div class=\"form-group\">\n        <label style=\"flex: 0 0 auto; margin: 0 10px; text-align: left;\">${cls.name} - Available: <b>${hitDiceAvailable}${hitDiceRollType}</b></label>\n        <div class=\"form-fields\">\n            <button type=\"button\" class=\"hit-dice-decrement\" data-key=\"${key}\">-</button>\n            <span id=\"hitDiceDisplay-${key}\" style=\"flex: 0 0 auto; margin: 0 10px; text-align: center;\">0</span>\n            <button type=\"button\" class=\"hit-dice-increment\" data-key=\"${key}\">+</button>\n        </div>\n    </div>\n    `;\n    }\n\n    content += `</form>`;\n\n    await foundry.applications.api.DialogV2.wait({\n        window: { title: `${target.actor.name} | Triumph: Select Hit Dice` },\n        content: content,\n        buttons: [{\n                action: \"continue\",\n                label: \"Continue\",\n                default: true,\n                callback: async (event, button, dialog) => {\n                  for (const key of classKeys) {\n                      const display = dialog.element.querySelector(`#hitDiceDisplay-${key}`);\n                      if (!display) continue;\n          \n                      const hitDiceToUse = parseInt(display?.textContent ?? \"0\");\n                      const hitDiceRollType = actorClasses[key].system.hd.denomination;\n                      \n                      if (!hitDiceToUse || hitDiceToUse === 0) {\n                          continue;\n                      }\n          \n                      for (let i = 0; i < hitDiceToUse; i++) {\n                          await actor.rollHitDie({ denomination: hitDiceRollType });\n                      }\n                  }\n                }\n            },\n            {\n                action: \"cancel\",\n                label: \"Cancel\",\n                callback: () => false\n            }],\n            default: \"cancel\",\n    render: (event) => {\n        let globalHitDiceSelected = 0;\n        const dialog = event.target;\n        const dialogElement = dialog?.element;\n\n        dialogElement.addEventListener('click', event2 => {\n            const targetClick = event2.target;\n            const isIncrement = targetClick.classList.contains('hit-dice-increment');\n            const isDecrement = targetClick.classList.contains('hit-dice-decrement');\n\n            if (isIncrement || isDecrement) {\n                const key = targetClick.dataset.key;\n                const spanDisplay = dialogElement.querySelector(`#hitDiceDisplay-${key}`);\n                let currentValue = parseInt(spanDisplay.textContent);\n\n                let totalLevels = classKeys.reduce((acc, key) => acc + parseInt(actorClasses[key].system.levels), 0);\n                let totalAllowedHitDice;\n                if(actor.system.attributes.hp.value > 0) totalAllowedHitDice = Math.floor(totalLevels / 2);\n                else totalAllowedHitDice = totalLevels;\n\n                // Determine how many hit dice have been selected across all classes\n                globalHitDiceSelected = classKeys.reduce((total, classKey) => {\n                    const display = dialogElement.querySelector(`#hitDiceDisplay-${classKey}`);\n                    return total + (display ? parseInt(display.textContent) : 0);\n                }, 0);\n\n                let classAvailableHitDice = parseInt(actorClasses[key].system.levels) - parseInt(actorClasses[key].system.hd.spent);\n\n                let remainingAllowedHitDice = totalAllowedHitDice - globalHitDiceSelected + (isDecrement ? 1 : 0);\n\n                let maxValue = isIncrement ? Math.min(classAvailableHitDice, remainingAllowedHitDice + currentValue) : classAvailableHitDice;\n\n                if (isIncrement && currentValue < maxValue) {\n                    spanDisplay.textContent = currentValue + 1;\n                } else if (isDecrement && currentValue > 0) {\n                    spanDisplay.textContent = currentValue - 1;\n                }\n            }\n        });\n    }\n    })\n}\n\nif(args[0].macroPass === \"postActiveEffects\") {\n    await new Sequence()\n    .sound()\n        .file(\"assets/sounds/horn-sound.ogg\") //Change sound here\n        .fadeInAudio(500)\n        .fadeOutAudio(500)\n        .play()\n}",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "5.1.9",
+          "coreVersion": "13.348",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null,
+          "exportSource": null
+        }
+      }
+    },
+    "ddbimporter": {
+      "effectsApplied": true,
+      "chrisEffectsApplied": true,
+      "chrisPreEffectName": "Triumph"
+    },
+    "chris-premades": {
+      "info": {
+        "source": "gambits-premades",
+        "version": "0.1.0"
+      }
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": [],
+        "effect": []
+      }
+    }
+  },
+  "folder": null,
+  "_id": "NSD3yC5ckkJPxjnN",
+  "_key": "!items!NSD3yC5ckkJPxjnN"
+}

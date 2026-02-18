@@ -1,0 +1,187 @@
+{
+  "name": "Scornful Rebuke",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "source": {
+      "custom": "2.1.38",
+      "rules": "2014",
+      "revision": 1
+    },
+    "cover": null,
+    "crewed": false,
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "type": {
+      "value": "class",
+      "subtype": ""
+    },
+    "requirements": "Oath of Conquest 15",
+    "identifier": "scornful-rebuke",
+    "properties": [
+      "mgc"
+    ],
+    "activities": {},
+    "advancement": [],
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    }
+  },
+  "flags": {
+    "ddbimporter": {
+      "id": 709,
+      "data": {
+        "id": 709,
+        "name": "Scornful Rebuke",
+        "prerequisite": null,
+        "description": "<p>Starting at 15th level, those who dare to strike you are psychically punished for their audacity. Whenever a creature hits you with an attack, that creature takes psychic damage equal to your Charisma modifier (minimum of 1) if you’re not incapacitated.</p>",
+        "requiredLevel": 15,
+        "displayOrder": 4
+      },
+      "version": "3.4.63",
+      "featureId": 709,
+      "featureName": "Scornful Rebuke",
+      "requiredLevel": 15,
+      "prerequisite": null,
+      "class": "Paladin",
+      "classId": 106,
+      "subClass": "Oath of Conquest",
+      "parentClassId": 4
+    },
+    "scene-packer": {
+      "sourceId": "Item.rYrhsjs7HWxG8Ty7",
+      "hash": "64341c026ba47ac9b71be9fda68821ae65931720"
+    },
+    "midi-qol": {
+      "onUseMacroName": ""
+    },
+    "core": {},
+    "dae": {
+      "macro": {
+        "name": "Scornful Rebuke",
+        "img": "icons/skills/melee/weapons-crossed-swords-yellow.webp",
+        "type": "script",
+        "scope": "global",
+        "command": "",
+        "author": "roRDywD19pu2VxlC",
+        "ownership": {
+          "default": 3
+        },
+        "_id": null,
+        "folder": null,
+        "sort": 0,
+        "flags": {},
+        "_stats": {
+          "systemId": "dnd5e",
+          "systemVersion": "4.1.2",
+          "coreVersion": "12.331",
+          "createdTime": null,
+          "modifiedTime": null,
+          "lastModifiedBy": null,
+          "compendiumSource": null,
+          "duplicateSource": null
+        }
+      }
+    },
+    "midiProperties": {
+      "confirmTargets": "never",
+      "autoFailFriendly": false,
+      "autoSaveFriendly": false,
+      "rollOther": false,
+      "critOther": false,
+      "offHandWeapon": false,
+      "magicdam": false,
+      "magiceffect": false,
+      "concentration": false,
+      "noConcentrationCheck": false,
+      "toggleEffect": false,
+      "ignoreTotalCover": false
+    },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    }
+  },
+  "img": "icons/skills/melee/weapons-crossed-swords-yellow.webp",
+  "effects": [
+    {
+      "origin": "Compendium.world.gps-class-features.Item.4FIlEdNlAY78XCap",
+      "duration": {
+        "startTime": null,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": null,
+        "startTurn": null
+      },
+      "disabled": false,
+      "name": "Scornful Rebuke",
+      "_id": "dNyVYLbGpztKomkw",
+      "changes": [
+        {
+          "key": "flags.midi-qol.onUseMacroName",
+          "mode": 0,
+          "value": "function.game.gps.scornfulRebuke,isHit",
+          "priority": 20
+        }
+      ],
+      "description": "",
+      "transfer": true,
+      "statuses": [],
+      "flags": {
+        "times-up": {},
+        "dae": {
+          "disableIncapacitated": false,
+          "selfTarget": false,
+          "selfTargetAlways": false,
+          "dontApply": false,
+          "stackable": "noneName",
+          "showIcon": false,
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "disableCondition": ""
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "nameOverride": "",
+          "radius": "",
+          "alignment": "",
+          "type": "",
+          "customCheck": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false,
+          "wallsBlock": "system",
+          "statuses": []
+        },
+        "core": {
+          "overlay": false
+        }
+      },
+      "tint": "#ffffff",
+      "img": "icons/skills/melee/weapons-crossed-swords-yellow.webp",
+      "type": "base",
+      "system": {},
+      "sort": 0,
+      "_key": "!items.effects!4FIlEdNlAY78XCap.dNyVYLbGpztKomkw"
+    }
+  ],
+  "folder": "Rr6FA73OqipfG65M",
+  "_id": "4FIlEdNlAY78XCap",
+  "_key": "!items!4FIlEdNlAY78XCap"
+}
