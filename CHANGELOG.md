@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.1.39] - 2026-02-25
+- Updates:
+  - Localizations: Actually added the cn.json to module.js languages
+  - Localizations: Added pt-br translation, thanks Kharmans!
+- Bugfixes:
+  - Entangle 2024: Resolve a restrained lookup not using hasStatusEffect
+  - Cloak of Displacement: Added some validation checks for Token to prevent extraneous errors
+
 ## [v2.1.38] - 2026-02-18
 - Additions:
   - Localizations: CN localization added, thanks ddrr666!

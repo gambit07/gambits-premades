@@ -1,0 +1,1406 @@
+{
+  "GAMBITSPREMADES": {
+    "ChatMessages": {
+      "Common": {
+        "OptionAvailableSaveTrigger": "{actorName} possui uma opção disponível para uma salvaguarda que aciona {itemProperName}.",
+        "ReactionAvailableAttackTrigger": "{actorName} possui uma reação disponível para um ataque que aciona {itemProperName}.",
+        "ReactionAvailableRollTrigger": "{actorName} possui uma reação disponível para uma jogada que aciona {itemProperName}.",
+        "ReactionAvailableSaveTrigger": "{actorName} possui uma reação disponível para uma salvaguarda que aciona {itemProperName}.",
+        "ReactionAvailableSpellTrigger": "{actorName} possui uma reação disponível para uma magia que aciona {itemProperName}."
+      },
+      "Automations": {
+        "ThirdPartyClassFeatures": {
+          "Witch": {
+            "WitchesHex": {
+              "HexReducedAttackHit": "A criatura está amaldiçoada, reduzindo seu ataque em {reduction}, mas ainda conseguiu atingir o alvo.",
+              "HexReducedAttackMiss": "A criatura está amaldiçoada, reduzindo seu ataque em {reduction}, e não conseguiu atingir o alvo.",
+              "SaveFailed": "A criatura está amaldiçoada e falhou na salvaguarda.",
+              "SaveSucceeded": "A criatura está amaldiçoada, mas mesmo assim foi bem-sucedida na salvaguarda."
+            },
+            "CovenOfTheRoilingHearth": {
+              "SootSpiritAttackedHit": "A criatura ataca um dos seus Soot Spirits e acerta! Você ainda tem {sootSpiritsRemaining} Soot Spirits restantes.",
+              "SootSpiritAttackedMiss": "A criatura ataca um dos seus Soot Spirits e erra! Você ainda tem {sootSpiritsRemaining} Soot Spirits restantes."
+            }
+          },
+          "Wizard": {
+            "Chronurgist": {
+              "ChronalShift": {
+                "AllySaveFailed": "Seu aliado ficou sob efeito de Chronal Shift, mas mesmo assim falhou na salvaguarda.",
+                "AllySaveSucceeded": "Seu aliado ficou sob efeito de Chronal Shift e foi bem-sucedido na salvaguarda.",
+                "AttackFailed": "A criatura ficou sob efeito de Chronal Shift e errou o ataque.",
+                "AttackHitAnyway": "A criatura ficou sob efeito de Chronal Shift, mas ainda conseguiu atingir o alvo.",
+                "EnemySaveFailed": "Seu inimigo ficou sob efeito de Chronal Shift e falhou na salvaguarda.",
+                "EnemySaveSucceeded": "Seu inimigo ficou sob efeito de Chronal Shift, mas ainda assim foi bem-sucedido na salvaguarda."
+              }
+            }
+          }
+        },
+        "ThirdPartySpells": {
+          "ContagiousHealing": {
+            "NoAdditionalAlliesInRange": "Não há aliados adicionais a menos de 10 pés, sua Contagious Healing diminui."
+          },
+          "DrafynsBaneOfExcellence": {
+            "Natural20CancelledAttack": "Seu 20 natural foi anulado devido à Drafyn's Bane of Excellence e você errou o ataque.",
+            "Natural20CancelledSave": "Seu 20 natural foi anulado devido à Drafyn's Bane of Excellence e você falhou na salvaguarda."
+          },
+          "ShroomOfDoom": {
+            "MushroomCreatedOnBody": "A criatura possui {mushroomCount} cogumelo criados em seu corpo com Shroom of Doom.",
+            "MushroomsCreatedOnBody": "A criatura possui {mushroomCount} cogumelos criados em seu corpo com Shroom of Doom."
+          }
+        },
+        "ClassFeatures": {
+          "Artificer": {
+            "FlashOfGenius": {
+              "UsedAddedSRoll": "{actorName} usou {itemName} e adicionou {intMod} à jogada de {targetName}."
+            }
+          },
+          "Bard": {
+            "CollegeOfLore": {
+              "CuttingWords": {
+                "CuttingWordsReducedAttackHit": "A criatura sofre o efeito de Cutting Words, reduzindo seu ataque em {reduction}, mas ainda consegue atingir o alvo.",
+                "CuttingWordsReducedAttackMiss": "A criatura sofre o efeito de Cutting Words, reduzindo seu ataque em {reduction} e não consegue atingir o alvo.",
+                "DamageReduced": "A criatura sofre o efeito de Cutting Words e o dano é reduzido em {reduction}.",
+                "ReactionAvailable": "{actorName} tem uma reação disponível para um {workflowType} que aciona {itemProperName}.",
+                "SeemsNotBeEffectedBy": "A criatura parece não ser afetada pelo seu {itemProperName}."
+              }
+            },
+            "CollegeOfTragedy": {
+              "PoetryInMisery": {
+                "SoliloquizeOverRegain": "Você usa {itemProperName} para fazer um solilóquio sobre {typeText} e recuperar um uso de Bardic Inspiration."
+              },
+              "TaleOfHubris": {
+                "IncreaseCriticalThreshold": "Você usa {itemProperName} para aumentar o limite crítico da criatura devido ao seu 20 natural."
+              }
+            }
+          },
+          "Fighter": {
+            "ArcaneArcher": {
+              "BeguilingArrow": {
+                "TargetCharmedByAlly": "Você usa Beguiling Arrow e faz com que o alvo fique Enfeitiçado por {allyName}.",
+                "TargetCharmedByYou": "{actorName} usou Beguiling Arrow e fez com que o alvo ficasse Enfeitiçado por você. Esse efeito termina se você atacá-lo, causar dano a ele ou forçá-lo a fazer uma salvaguarda."
+              },
+              "GraspingArrow": {
+                "RemoveVinesFail": "Você não conseguiu remover as vinhas do alvo usando sua ação.",
+                "RemoveVinesSuccess": "Você removeu com sucesso as vinhas do alvo usando sua ação."
+              }
+            },
+            "Indomitable": {
+              "AutoSuccess": "{actorName} usou Indomitable e foi automaticamente bem-sucedido na salvaguarda.",
+              "Success": "{actorName} usou Indomitable e foi bem-sucedido na salvaguarda.",
+              "Failure": "{actorName} usou Indomitable mas ainda falhou na salvaguarda."
+            }
+          },
+          "Interception": {
+            "ReduceDamageTakenBy": "Você usa {itemProperName} e reduz o dano sofrido por {targetName} em {reduction}."
+          },
+          "Paladin": {
+            "DivineSense": {
+              "Celestials": "Celestials",
+              "Fiends": "Fiends",
+              "Found": "Encontrado",
+              "TotalSensed": "Total Sentido",
+              "Type": "Tipo",
+              "Undead": "Undead"
+            }
+          },
+          "Protection": {
+            "AttackHitAnyway": "Você usa seu Fighting Style - Protection, mas o alvo ainda acerta {targetName}.",
+            "FightingStyleCause": "Você usa seu Fighting Style - Protection e faz com que o alvo erre {targetName}.",
+            "TurnAdvantageToStraightRollHit": "Você usa seu Fighting Style - Protection para transformar a jogada com vantagem em uma jogada normal, mas o alvo ainda acerta {targetName}.",
+            "TurnAdvantageToStraightRollMiss": "Você usa seu Fighting Style - Protection para transformar a jogada com vantagem em uma jogada normal, fazendo com que o alvo erre {targetName}."
+          },
+          "Ranger": {
+            "MonsterSlayerConclave": {
+              "HuntersSense": {
+                "FollowingDamageTraits": "{targetName} possui os seguintes traços de dano:",
+                "Immunities": "- Imunidades:",
+                "Resistances": "- Resistências:",
+                "Vulnerabilities": "- Vulnerabilidades:"
+              },
+              "MagicUsersNemesis": {
+                "SaveFailed": "A criatura falhou na salvaguarda e foi afetada pelo Magic User's Nemesis.",
+                "SaveSucceeded": "A criatura foi bem-sucedida na salvaguarda e não foi afetada pelo Magic User's Nemesis."
+              }
+            }
+          },
+          "Rogue": {
+            "StrokeOfLuck": {
+              "ChangedAbilityCheck": "Você usou Stroke of Luck para alterar seu teste de atributo para {newTotal}",
+              "ChangedSkillCheck": "Você usou Stroke of Luck para alterar seu teste de perícia para {newTotal}",
+              "ReactionAvailableSaveTrigger": "{actorName} tem uma reação disponível para uma salvaguarda que aciona {itemName}."
+            }
+          },
+          "Sorcerer": {
+            "ClockworkSoul": {
+              "RestoreBalance": {
+                "AllyDisadvantageRemovedAttackHit": "Seu aliado teve a desvantagem removida e conseguiu atingir o alvo com um {attackResult}.",
+                "AllyDisadvantageRemovedAttackMiss": "Seu aliado teve a fonte de desvantagem removida, mas ainda assim não conseguiu atingir o alvo com um {attackResult}.",
+                "AllyDisadvantageRemovedCriticalHit": "Seu aliado teve a desvantagem removida e conseguiu acertar o alvo com um acerto crítico.",
+                "AllyDisadvantageRemovedCriticalMiss": "Seu aliado teve a desvantagem removida, mas ainda assim não conseguiu atingir o alvo, rolando um erro crítico.",
+                "AllyDisadvantageRemovedSaveFailure": "Seu aliado teve a fonte de desvantagem removida, mas ainda assim não conseguiu ser bem-sucedido contra o efeito com um {saveResult}.",
+                "AllyDisadvantageRemovedSaveSuccess": "Seu aliado teve a fonte de desvantagem removida e conseguiu ser bem-sucedido contra o efeito com um {saveResult}.",
+                "EnemyAdvantageRemovedAttackHit": "Seu inimigo teve a fonte de vantagem removida, mas ainda conseguiu atingir o alvo com um {attackResult}.",
+                "EnemyAdvantageRemovedAttackMiss": "Seu inimigo teve a fonte de vantagem removida e não conseguiu atingir o alvo com um {attackResult}.",
+                "EnemyAdvantageRemovedCriticalHit": "Seu inimigo teve a fonte de vantagem removida, mas ainda conseguiu atingir o alvo com um acerto crítico.",
+                "EnemyAdvantageRemovedCriticalMiss": "Seu inimigo teve a fonte de vantagem removida e não conseguiu atingir o alvo, rolando um erro crítico.",
+                "EnemyAdvantageRemovedSaveFailure": "Seu inimigo teve a fonte de vantagem removida e não conseguiu ser bem-sucedido contra o efeito com um {saveResult}.",
+                "EnemyAdvantageRemovedSaveSuccess": "Seu inimigo teve a fonte de vantagem removida, mas ainda conseguiu ser bem-sucedido ao efeito com um {saveResult}."
+              }
+            }
+          },
+          "Wizard": {
+            "SchoolOfDivination": {
+              "Portent": {
+                "PortentApplied": "Você usou {portentLabel} e alterou o resultado do dado para {roll}.",
+                "PortentRoll": "- Portent Roll {i}:"
+              }
+            },
+            "SchoolOfEnchantment": {
+              "InstinctiveCharm": {
+                "OptionAvailableAttackTrigger": "{actorName} possui uma opção disponível para um ataque que aciona {itemProperName}."
+              }
+            }
+          }
+        },
+        "GenericFeatures": {
+          "OpportunityAttack": {
+            "ReactionAvailableOpportunityAttack": "{actorName} tem uma reação disponível para um Ataque de Oportunidade."
+          }
+        },
+        "Items": {
+          "Caltrops": {
+            "PiercingDamageTaken": "{actorName} sofre {damage} de dano Perfurante."
+          },
+          "RodOfThePactKeeper": {
+            "SpellSlotRecovered": "Espaço de Magia recuperado! Agora você tem {spellLevelNew} magias de pacto restantes."
+          },
+          "StaffOfTheRootedHills": {
+            "RestrainedBy": "A criatura está Contida pelo Staff of the Rooted Hills."
+          }
+        },
+        "MonsterFeatures": {
+          "BurstOfIngenuity": {
+            "AddedBonusToRollSaveAlreadySucceeded": "Você adicionou um bônus de +2 à rolagem de {allyName}, mas ele(a) já havia sido bem-sucedido(a) na salvaguarda.",
+            "AddedBonusToRollSaveStillFailed": "Você adicionou um bônus de +2 à rolagem de {allyName}, mas não fez com que ele(a) fosse bem-sucedido(a) na salvaguarda.",
+            "AddedBonusToRollSaveSucceeded": "Você adicionou um bônus de +2 à rolagem de {allyName} e fez com que ele(a) fosse bem-sucedido(a) na salvaguarda."
+          },
+          "DreadCounterspell": {
+            "DreadCounterspellAutoSuccess": "A criatura foi afetada por Dread Counterspell porque você usou {itemProperName} em uma magia de 4º nível ou inferior.",
+            "DreadCounterspellFailed": "A criatura não foi afetada por Dread Counterspell. Você rolou {skillTotal} no seu teste de {skillFlavor} e precisava de {spellThreshold}.{spellPenetrationChat}",
+            "DreadCounterspellSuccess": "A criatura foi afetada por Dread Counterspell. Você rolou {skillTotal} em seu teste de {skillFlavor}."
+          }
+        },
+        "Spells": {
+          "Counterspell": {
+            "CounterspellAutoSuccess": "A criatura foi afetada por Counterspell porque você conjurou {itemProperName} em um nível igual ou superior.",
+            "CounterspellFailed": "A criatura não foi afetada por Counterspell. Você rolou {skillTotal} no seu teste de {skillFlavor}{abjurationChat} e precisava de um {spellThreshold}.{spellPenetrationChat}",
+            "CounterspellSuccess": "A criatura foi afetada por Counterspell. Você rolou {skillTotal} em seu teste de {skillFlavor}{abjurationChat}."
+          },
+          "DissonantWhispers": {
+            "TargetAutoSaveSuccess": "O alvo está Surdo e é automaticamente bem-sucedido na salvaguarda."
+          },
+          "Enervation": {
+            "DealDamageHeal": "Você causa {damageTotal} pontos de dano no alvo e cura até {healAmount} pontos usando Enervation."
+          },
+          "Identify": {
+            "Identify": "Identificar {timeToCast}",
+            "PromptRitualCast": "Você quer conjurar Identify como um ritual?"
+          },
+          "Infestation": {
+            "MovementRollMovesUsingUp": "O resultado da rolagem de movimento para {targetName} é {directionResult}: {targetName} move-se {directionContent} usando até 5 pés do seu deslocamento. Isso não provoca Ataques de Oportunidade."
+          },
+          "KineticJaunt": {
+            "EndTurnAnotherCreaturesSpace": "Você termina seu turno no espaço de outra criatura e sofre {damageTotal} pontos de dano Energético e é movido para sua última posição antes de entrar no espaço daquela criatura."
+          },
+          "SilveryBarbs": {
+            "AttackFailed": "A criatura foi afetada por Silvery Barbs e falhou no ataque.",
+            "AttackHitAnyway": "A criatura foi afetada por Silvery Barbs, mas ainda assim conseguiu atingir o alvo.",
+            "FailedSaveCheck": "A criatura foi afetada por Silvery Barbs e falhou em {rollType} para {itemName}.",
+            "Succeeded": "A criatura foi afetada por Silvery Barbs, mas mesmo assim conseguiu realizar seu {rollType} para {itemName}."
+          },
+          "StinkingCloud": {
+            "Content": "Você é asfixiado pelo gás tóxico e perde sua ação neste turno, vomitando e cambaleando."
+          },
+          "TemporalShunt": {
+            "ReactionAvailableAttackTrigger": "{actorName} tem uma reação disponível para uma magia ou ataque que aciona {itemProperName}.",
+            "TargetRollInterrupted": "A jogada de {workflowType} dos alvos foi interrompido com sucesso e eles desapareceram."
+          },
+          "Web": {
+            "Escape": "Você conseguiu escapar da {itemName}!",
+            "UnableEscapeTurn": "Você não consegue escapar da {itemName} neste turno."
+          },
+          "Confusion": {
+            "ActNormally": "A criatura pode agir e se mover normalmente.",
+            "MovementRoll": "Seu resultado no dado de movimento é {rollResult} e você se desloca na direção {direction}: Você não realiza nenhuma ação neste turno.",
+            "NoMoveOrActions": "Você não pode se mover nem realizar ações neste turno.",
+            "RollForIs": "A jogada de Confusion de {actorName} é {result}:",
+            "MustMoveAndMeleeAttack": "Você deve se mover até {targetName} e atacá-lo com um ataque corpo a corpo.",
+            "NoAction": "A criatura não faz nada neste turno."
+          },
+          "BlackTentacles": {
+            "EscapeFailed": "Você não consegue escapar do Black Tentacles neste turno.",
+            "EscapeSucceeded": "Você conseguiu escapar do Black Tentacles!"
+          },
+          "Command": {
+            "MustNow": "{actorName} deve {wordInput}."
+          }
+        }
+      },
+      "Automations2024": {
+        "GenericFeatures": {
+          "MageSlayer2024": {
+            "SaveSucceeded": "{actorName} usou {itemProperName} e foi bem-sucedido(a) na salvaguarda."
+          }
+        },
+        "Spells": {
+          "Counterspell2024": {
+            "CounterspellFailed": "A criatura foi bem-sucedida na salvaguarda e não foi afetada por Counterspell.",
+            "CounterspellSuccess": "A criatura falhou na salvaguarda e foi afetada por Counterspell."
+          },
+          "StinkingCloud2024": {
+            "Content": "Você está asfixiado pelo gás tóxico e perde sua ação e ação bônus neste turno, vomitando e cambaleando."
+          }
+        }
+      },
+      "Utils": {
+        "Helpers": {
+          "CastRitually": "{actorName} conjura {itemName} como ritual.",
+          "Per": "por {restModeName}",
+          "Remaining": "Você tem {remaining} uso restante.",
+          "UsesRemaining": "Você tem {remaining} usos restantes."
+        }
+      }
+    },
+    "DAE": {
+      "Flags": {
+        "OADisadvantage": {
+          "Description": "Concede desvantagem em Ataques de Oportunidade contra este token",
+          "Name": "Desvantagem em Ataque de Oportunidade"
+        },
+        "OADisadvantageSource": {
+          "Description": "Desvantagem em Ataques de Oportunidade contra um token",
+          "Name": "Desvantagem em Ataque de Oportunidade da Origem"
+        },
+        "OAImmunity": {
+          "Description": "Impede que o token sofra Ataques de Oportunidade",
+          "Name": "Imunidade a Ataque de Oportunidade"
+        },
+        "OASuppression": {
+          "Description": "Impede que o token realize Ataques de Oportunidade",
+          "Name": "Supressão de Ataque de Oportunidade"
+        }
+      }
+    },
+    "Debug": {
+      "Automations": {
+        "Spells": {
+          "Confusion": {
+            "EffectNotFound": "O efeito Confusion não foi encontrado no ator."
+          }
+        }
+      }
+    },
+    "Dialogs": {
+      "Common": {
+        "Advantage": "Vantagem:",
+        "Cast": "Conjurar",
+        "Close": "Fechar",
+        "Daily": "Diariamente",
+        "DamageLabel": "Dano:",
+        "EnemyHitsAlly": "Um inimigo conseguiu atingir seu aliado.",
+        "EnemyHitsAllyWithAttackTotal": "Um inimigo conseguiu atingir seu aliado com {attackTotal} de ataque.",
+        "FavoriteThisOption": "Favoritar esta Opção?",
+        "FreeUse": "Uso Livre de {itemName}",
+        "LongRest": "Descanso Longo",
+        "No": "Não",
+        "NoValidAlliesInRange": "Nenhum aliado válido ao alcance.",
+        "NoValidEnemiesInRange": "Nenhum inimigo válido ao alcance.",
+        "Pause": "Pausa",
+        "PointsAbbrev": "pts",
+        "PromptAutoSaveSuccess": "Você quer usar {itemProperName} para ter sucesso na salvaguarda?",
+        "PromptRerollSave": "Você quer usar {itemProperName} para rolar novamente a salvaguarda?",
+        "Resume": "Retomar",
+        "ShortRest": "Descanso Curto",
+        "Target": "Alvo:",
+        "WaitingForSelection": "Aguardando a seleção de {actorName} | {itemName}",
+        "Weapon": "Arma:",
+        "Yes": "Sim"
+      },
+      "Automations": {
+        "ThirdPartyClassFeatures": {
+          "Savant": {
+            "CalculatedFlourish": {
+              "Prompts": {
+                "UseYourReaction": {
+                  "Default": "Deseja usar sua reação para atacar? Isso iniciará o uso do seu Superiority Die para a manobra Riposte. Escolha sua arma abaixo."
+                }
+              }
+            }
+          },
+          "Witch": {
+            "CovenOfTheRoilingHearth": {
+              "RainOfCinders": {
+                "AttackedInitiate": "{targetName} foi atacado. Deseja iniciar um ataque com {itemProperName} usando um Hearth Spirit para tentar detê-lo?"
+              }
+            },
+            "WitchesHex": {
+              "Prompts": {
+                "UseYourReaction": {
+                  "ReduceAttack": "Você quer usar sua reação para iniciar {itemName} e tentar reduzir a jogada de ataque do inimigo?",
+                  "ReduceSave": "Você quer usar sua reação para conjurar {itemName} e tentar reduzir a salvaguarda de um inimigo? Escolha abaixo um inimigo como alvo."
+                }
+              }
+            }
+          },
+          "Wizard": {
+            "Chronurgist": {
+              "ChronalShift": {
+                "AllyTarget": "Alvo Aliado:",
+                "Details": {
+                  "AlliesFailed": "Aliados falharam nas salvaguardas. Escolha abaixo um aliado para rolar novamente.",
+                  "EnemiesSucceeded": "Inimigos foram bem-sucedidos nas salvaguardas. Escolha abaixo um inimigo para rolar novamente.",
+                  "EnemiesSucceededAlliesFailed": "Inimigos foram bem-sucedidos e aliados falharam nas salvaguardas. Escolha abaixo um inimigo ou aliado para rolar novamente. Se ambos forem escolhidos, a nova rolagem será aplicada a um inimigo."
+                },
+                "EnemyTarget": "Alvo Inimigo:",
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Initiate": "Você quer usar sua reação para iniciar {itemName}? {details}"
+                  }
+                },
+                "SelectAlly": "-- Selecionar Aliado --",
+                "SelectEnemy": "-- Selecionar Inimigo --"
+              }
+            }
+          }
+        },
+        "ThirdPartySpells": {
+          "GrimSiphon": {
+            "Heal": "Curar",
+            "HealLabel": "Curar:",
+            "SelectHealingTarget": "Quem você quer curar?",
+            "Windowtitle": "Cura do Grim Siphon"
+          },
+          "PowerWordRebound": {
+            "HitByAttack": "{targetName} foi atingido por um ataque e está com menos da metade da vida. Deseja usar {itemProperName} para desviá-lo?"
+          },
+          "StormMote": {
+            "AssignMotes": "Atribua os {numMotes} motes que você tem disponíveis:",
+            "Cancel": "Cancelar",
+            "Confirm": "Confirmar",
+            "Windowtitle": "Atribuir Motes"
+          }
+        },
+        "ClassFeatures": {
+          "Artificer": {
+            "FlashOfGenius": {
+              "For": "para {targetName}?",
+              "ForYourself": "para você mesmo?",
+              "Prompts": {
+                "UseYourReaction": {
+                  "Default": "Você quer usar sua reação para iniciar {itemName} {targetPrompt}"
+                }
+              },
+              "TargetPrompt": {
+                "ChooseAlly": "para um aliado? Escolha abaixo.",
+                "ChooseSelfOrAlly": "para você ou um aliado? Escolha abaixo."
+              }
+            }
+          },
+          "Bard": {
+            "CollegeOfLore": {
+              "CuttingWords": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Você quer usar sua reação para iniciar {itemName} para esta rolagem de {rollType}?",
+                    "WithDetails": "{details}Você quer usar sua reação para usar {itemName} para esta rolagem de {rollType}?"
+                  }
+                },
+                "Pts": "- {points} pts",
+                "TargetRolledAttack": "O alvo rolou um {attackTotal} para atacar. "
+              }
+            },
+            "CollegeOfTragedy": {
+              "PoetryInMisery": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Você quer usar sua reação para iniciar {itemName} para esta rolagem de {rollType} de 1 natural?"
+                  }
+                }
+              },
+              "TaleOfHubris": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Você quer usar sua reação para iniciar {itemName} para esta rolagem de {rollType} de 20 natural?"
+                  }
+                }
+              }
+            }
+          },
+          "Druid": {
+            "CircleOfStars": {
+              "StarMap": {
+                "Prompt": "Deseja usar Circle of Stars para iniciar um uso gratuito de {itemName}? Ela será conjurada em seu nível base. Você tem {freeUses} usos restantes."
+              }
+            }
+          },
+          "Fighter": {
+            "ArcaneArcher": {
+              "BeguilingArrow": {
+                "SelectAllyForCharm": "Selecione por qual aliado você quer que o alvo fique Enfeitiçado:"
+              }
+            },
+            "BattleMaster": {
+              "Riposte": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Deseja usar sua reação para atacar? Isso iniciará o uso do seu Superiority Die para a manobra de Riposte. Escolha sua arma abaixo."
+                  }
+                }
+              }
+            }
+          },
+          "Interception": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para iniciar {itemName} para esta rolagem de {rollType}?"
+              }
+            },
+            "PtsOf": "{points} pts de"
+          },
+          "Protection": {
+            "Prompt": "Você quer usar",
+            "ToDisadvantageTheAttackAgainst": "para dar desvantagem no ataque contra"
+          },
+          "Ranger": {
+            "MonsterSlayerConclave": {
+              "MagicUsersNemesis": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Você quer usar sua reação para iniciar {itemName}?"
+                  }
+                }
+              }
+            }
+          },
+          "Rogue": {
+            "StrokeOfLuck": {
+              "Prompt": "Você quer usar Stroke of Luck para alterar o resultado do seu teste de atributo para 20?",
+              "VeMissedAttack": "Você errou o ataque. Quer usar Stroke of Luck para ter sucesso?"
+            }
+          },
+          "Sorcerer": {
+            "ClockworkSoul": {
+              "RestoreBalance": {
+                "Ally": "Aliado:",
+                "Enemy": "Inimigo:",
+                "OnchangeResetallyselect": "onchange=\"resetAllySelect()\">",
+                "OnchangeResetenemyselect": "onchange=\"resetEnemySelect()\">",
+                "Prompts": {
+                  "UseYourReaction": {
+                    "SelectTarget": "Você quer usar sua reação para iniciar {itemName}? {selectionHint}",
+                    "TargetDisposition": "Você quer usar sua reação para iniciar {itemName} {targetHint}"
+                  }
+                },
+                "SelectAlly": "Selecionar Aliado:",
+                "SelectEnemy": "Selecionar Inimigo:",
+                "SelectionHint": {
+                  "ChooseAlly": "Escolha abaixo um aliado para remover a desvantagem.",
+                  "ChooseAllyOrEnemy": "Escolha abaixo um aliado para remover a desvantagem ou um inimigo para remover a vantagem.",
+                  "ChooseEnemy": "Escolha abaixo um inimigo para remover a vantagem."
+                },
+                "TargetHint": {
+                  "RemoveAdvantageFromEnemy": "para remover a vantagem do seu inimigo?",
+                  "RemoveDisadvantageFromAlly": "para remover a desvantagem do seu aliado?"
+                }
+              }
+            }
+          },
+          "Warlock": {
+            "GreatOldOne": {
+              "EntropicWard": {
+                "Prompts": {
+                  "UseYourReaction": {
+                    "Default": "Você quer usar sua reação para dar desvantagem ao ataque contra você e potencialmente obter vantagem contra o atacante?"
+                  }
+                }
+              }
+            },
+            "Hexblade": {
+              "ArmorOfHexes": {
+                "Prompt": "Você gostaria de usar Armor of Hexes para tentar evitar este ataque?"
+              }
+            }
+          },
+          "Wizard": {
+            "SchoolOfDivination": {
+              "Portent": {
+                "SelectPortentRoll": "Qual rolagem Portent você quer usar?",
+                "Windowtitle": "Seleção de Rolagem Portent"
+              }
+            },
+            "SchoolOfEnchantment": {
+              "InstinctiveCharm": {
+                "ForcedSelectNew": "{itemProperName} forçou você a selecionar um novo alvo para o ataque. Escolha na lista abaixo.",
+                "Prompt": "Você quer usar {itemProperName} para tentar forçar o atacante a escolher um alvo diferente?"
+              }
+            }
+          },
+          "Barbarian": {
+            "RecklessAttack": {
+              "Prompts": {
+                "UseRecklessAttack": "Você quer usar seu Reckless Attack neste turno?"
+              }
+            }
+          }
+        },
+        "GenericFeatures": {
+          "GiftOfTheGemDragon": {
+            "Charisma": "Carisma",
+            "Damaged": "Você foi ferido(a), quer sua reação para iniciar",
+            "Intelligence": "Inteligência",
+            "PromptDamageAndPush": "para causar danos e potencialmente empurrar o atacante?",
+            "SelectAbilityScore": "Qual atributo você aumentou com Gift of the Gem Dragon?",
+            "TelekineticReprisal": "Telekinetic Reprisal",
+            "Windowtitle": "Atributo de Gift of the Gem Dragon",
+            "Wisdom": "Sabedoria"
+          },
+          "MageSlayer": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para atacar com Mage Slayer? Escolha sua arma abaixo."
+              }
+            }
+          },
+          "OpportunityAttack": {
+            "BraceHint": " Isso dará início ao uso do seu Superiority Die para a manobra Brace.",
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para atacar?{warCasterHint}{braceHint}"
+              }
+            },
+            "Title": "Ataque de Oportunidade",
+            "TitleBrace": "Manobras: Ataque de Oportunidade de Brace",
+            "TitleDeadlyReach": "Ataque de Oportunidade de Deadly Reach",
+            "TitlePolearm": "Ataque de Oportunidade de Polearm",
+            "WarCasterHint": " Se usar War Caster para conjurar uma magia, ela deverá afetar apenas a criatura que provocou este Ataque de Oportunidade."
+          },
+          "Sentinel": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para atacar usando o Sentinel? Escolha sua arma abaixo."
+              }
+            }
+          }
+        },
+        "Items": {
+          "AmuletOfTheDevout": {
+            "Prompt": "Você quer recuperar uma carga de Channel Divinity?"
+          },
+          "BallBearings": {
+            "ConfirmHalfSpeed": "{actorName} passou por cima de Esferas de Metal. Ele(a) está se movendo com metade do deslocamento?"
+          },
+          "BootsOfSpeed": {
+            "Prompt": "Deseja desativar o Boots of Speed?",
+            "Windowtitle": "Boots of Speed"
+          },
+          "Caltrops": {
+            "ConfirmHalfSpeed": "{actorName} passou por cima de Estrepes. Ele(a) está se movendo com metade do deslocamento?"
+          },
+          "RodOfThePactKeeper": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Você quer usar sua ação para recuperar um espaço de magia?"
+              }
+            }
+          },
+          "StaffOfWithering": {
+            "Prompt": "Você quer usar uma carga para causar dano adicional e possivelmente dar desvantagem ao alvo? Você tem",
+            "Remaining": "{chargesText} restantes."
+          }
+        },
+        "MonsterFeatures": {
+          "BurstOfIngenuity": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para conjurar {itemName} e adicionar 2 a esta salvaguarda? Escolha um aliado abaixo."
+              }
+            }
+          },
+          "DreadCounterspell": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para iniciar {itemName}?"
+              }
+            }
+          },
+          "LegendaryResistance": {
+            "PromptUseLegendaryResistance": "{actorName} falhou na salvaguarda. Deseja usar {itemName} para ter sucesso?"
+          }
+        },
+        "Spells": {
+          "BlackTentacles": {
+            "Dexterity": "Destreza",
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Você quer usar sua ação para fazer um teste de atributo para escapar do Black Tentacles?"
+              }
+            },
+            "Strength": "Força"
+          },
+          "Counterspell": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação em {itemName}?"
+              }
+            },
+            "SubtleSpellRemaining": "Usar Subtle Spell? | {pointsRemaining} {pointsLabel} Restantes"
+          },
+          "Enervation": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Você quer usar sua ação nesta rodada para causar 4d8 de dano Necrótico no seu alvo por meio de Enervation?"
+              }
+            }
+          },
+          "Entangle": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Você quer usar sua ação para fazer um teste de Força para escapar do Contido?"
+              }
+            }
+          },
+          "FizbansPlatinumShield": {
+            "PromptSelectTarget": "Para quem você gostaria de transferir o Fizban's Platinum Shield?"
+          },
+          "FortunesFavor": {
+            "PromptRerollAttackRoll": "Use {itemName} para rolar novamente o dado de ataque d20:",
+            "ReplaceRoll": "Substituir {oldRoll} por {newRoll}?"
+          },
+          "HellishRebuke": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para iniciar Hellish Rebuke contra a criatura que lhe causou dano?"
+              }
+            }
+          },
+          "Identify": {
+            "Level": "{levelWithOrdinal} Nível ({spellSlot})",
+            "WindowTitle": "Identificar Itens",
+            "WindowTitleRitual": "Identificar Itens por Ritual",
+            "Windowtitle": "Tipo de Conjuração de Identify"
+          },
+          "PowerWordHeal": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para se levantar da condição Caído?"
+              }
+            }
+          },
+          "SilveryBarbs": {
+            "Prompts": {
+              "UseYourReaction": {
+                "AfterAttack": "Você quer usar sua reação para conjurar {itemName}? {triggerDetails} Escolha abaixo um aliado para conceder vantagem.",
+                "AfterSave": {
+                  "Multiple": "Você quer usar sua reação para conjurar {itemName}? Inimigos foram bem-sucedidos na salvaguarda. Escolha abaixo um inimigo como alvo e um aliado para conceder vantagem.",
+                  "Single": "Você quer usar sua reação para conjurar {itemName}? Um inimigo foi bem-sucedido na salvaguarda. Escolha abaixo um inimigo como alvo e um aliado para conceder vantagem."
+                }
+              }
+            }
+          },
+          "TemporalShunt": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para usar {itemName}?"
+              }
+            },
+            "SelectAdditionalTargets": "Quais outros alvos você quer afetar com {itemProperName}? Você pode selecionar abaixo até {numTargets} {targetWord} adicionais."
+          },
+          "ViciousMockery": {
+            "WhatDoYouSay": "O que você diz?",
+            "Windowtitle": "🗣Vicious Mockery😜️"
+          },
+          "Web": {
+            "Prompts": {
+              "UseYourAction": {
+                "AthleticsCheck": "Você quer usar sua ação para fazer um teste de Atletismo para escapar do {itemName}?",
+                "StrengthCheck": "Você quer usar sua ação para fazer um teste de Força para escapar do {itemName}?"
+              }
+            }
+          },
+          "ZephyrStrike": {
+            "Prompt": "Você quer usar Zephyr Strike para ganhar vantagem neste ataque e aumentar seu deslocamento até o final deste turno?",
+            "Windowtitle": "Zephyr Strike"
+          },
+          "Command": {
+            "WindowTitle": "🗣Command🗣",
+            "Prompts": {
+              "SelectCommand": "O que você quer comandar?"
+            }
+          }
+        }
+      },
+      "Automations2024": {
+        "ClassFeatures": {
+          "Sorcerer": {
+            "DraconicSorcery": {
+              "ElementalAffinity2024": {
+                "SelectEnemyForBonusDamage": "Escolha abaixo o inimigo que sofrerá dano {damageType} adicional da sua Elemental Affinity:"
+              }
+            }
+          }
+        },
+        "GenericFeatures": {
+          "Sentinel2024": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para atacar usando Sentinel? Escolha sua arma abaixo."
+              }
+            }
+          },
+          "ShieldMaster2024": {
+            "Prompt": "Você quer usar Shield Bash para fazer com que seu alvo faça uma salvaguarda para potencialmente ser Empurrado ({pushRangeText}) ou ficar Caído?",
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para potencialmente não sofrer dano em um sucesso na salvaguarda com Interpose Shield?"
+              }
+            },
+            "Prone": "Caído",
+            "Push": "Empurrar"
+          }
+        },
+        "RaceFeatures": {
+          "FiresBurn2024": {
+            "Prompt": "Você quer causar dano adicional usando {itemName}?"
+          },
+          "FrostsChill2024": {
+            "Prompt": "Você quer causar dano adicional e reduzir o deslocamento das criaturas usando {itemName}?"
+          },
+          "HillsTumble2024": {
+            "Prompt": "Você quer fazer com que a criatura fique Caída usando {itemName}?"
+          },
+          "StormsThunder2024": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para causar dano à criatura que lhe causou dano usando {itemName}?"
+              }
+            }
+          }
+        },
+        "Spells": {
+          "BlackTentacles2024": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Você quer usar sua ação para fazer um teste de Atletismo para escapar do Black Tentacles?"
+              }
+            }
+          },
+          "Command2024": {
+            "Approach": "Aproximar",
+            "Drop": "Largar",
+            "Flee": "Fugir",
+            "Grovel": "Abaixar",
+            "Halt": "Parar"
+          },
+          "Counterspell2024": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação com {itemName}?"
+              }
+            }
+          },
+          "Entangle2024": {
+            "Prompts": {
+              "UseYourAction": {
+                "Default": "Você quer usar sua ação para fazer um teste de Atletismo para escapar da condição Contido?"
+              }
+            }
+          },
+          "PowerWordHeal2024": {
+            "Prompts": {
+              "UseYourReaction": {
+                "Default": "Você quer usar sua reação para se levantar da condição Caído?"
+              }
+            }
+          }
+        }
+      },
+      "Utils": {
+        "Helpers": {
+          "PromptFreeUse": "Deseja ativar o uso gratuito de {itemName}? Ele será conjurado no seu nível base. {remainingText}",
+          "PromptRitualCast": "Deseja conjurar {itemName} como ritual? Isso aumentará seu tempo de conjuração ({activationCost} {activationType}) em 10 minutos.",
+          "RitualUse": "Usar {itemName} como Ritual",
+          "ThisGrantsOneFreeUse": "Isso concede um uso gratuito de {restModeText}."
+        },
+        "LightActions": {
+          "Dim": "Penumbra",
+          "Extinguish": "Extinguir",
+          "Light": "Acender",
+          "PromptAction": "O que você quer fazer com seu {dialogTitle}?",
+          "Throw": "Arremessar"
+        }
+      }
+    },
+    "Directions": {
+      "East": "Leste",
+      "North": "Norte",
+      "Northeast": "Nordeste",
+      "Northwest": "Noroeste",
+      "South": "Sul",
+      "Southeast": "Sudeste",
+      "Southwest": "Sudoeste",
+      "West": "Oeste"
+    },
+    "Effects": {
+      "Utils": {
+        "Helpers": {
+          "LongRestChargeUsed": "{itemName}: Carga de Descanso Longo Usada"
+        }
+      }
+    },
+    "Menus": {
+      "ClassFeatures": {
+        "Hint": "Cutting Words, Interception, Poetry in Misery, etc",
+        "Label": "Habilitar Características de Classe",
+        "Name": "Características de Classe"
+      },
+      "GeneralSettings": {
+        "Hint": "Diálogo Espelhado, Restrição de Identify, etc",
+        "Label": "Configurações Gerais",
+        "Name": "Configurações Gerais"
+      },
+      "GenericFeatures": {
+        "Hint": "Ataque de Oportunidade, Sentinel, etc",
+        "Label": "Habilitar Características Genéricas",
+        "Name": "Características Genéricas"
+      },
+      "MonsterFeatures": {
+        "Hint": "Características de Monstros",
+        "Label": "Habilitar Características de Monstros",
+        "Name": "Características de Monstros"
+      },
+      "PatreonSupport": {
+        "Hint": "Se você quiser me apoiar, Gambit! Assinar ajuda a financiar o desenvolvimento deste e dos meus outros módulos gratuitos, além de dar acesso aos meus módulos premium: Gambit's FXMaster+, Gambit's Asset Previewer e Gambit's Image Viewer!",
+        "Label": "Gambit's Lounge",
+        "Name": "Suporte Patreon"
+      },
+      "Spells": {
+        "Hint": "Counterspell, Silvery Barbs, etc",
+        "Label": "Habilitar Magias",
+        "Name": "Magias"
+      }
+    },
+    "Notifications": {
+      "ThirdPartyClassFeatures": {
+        "Witch": {
+          "WitchesHex": {
+            "MustScale": "Você deve ter uma escala Witch para este ator chamado 'kp-witch'"
+          }
+        }
+      },
+      "Common": {
+        "RequiresActiveCombat": "{effectName} requer um combate ativo.",
+        "ThisEffect": "Este efeito"
+      },
+      "Automations2024": {
+        "Spells": {
+          "CloudOfDaggers2024": {
+            "MoveFeatureItemCreated": "Item de característica \"{name} - Mover\" criado. Use este item para mover {name} quando necessário."
+          },
+          "PowerWordStun2024": {
+            "TargetMoreThan150": "O alvo tem mais de 150 pontos de vida e não ficou Atordoado, mas seu deslocamento é reduzido a 0 até o início do próximo turno do conjurador."
+          },
+          "Sleep2024": {
+            "TargetImmuneToSleepOrExhaustion": "A criatura é imune à sono mágico e/ou Exaustão."
+          }
+        }
+      },
+      "ClassFeatures": {
+        "Bard": {
+          "CollegeOfLore": {
+            "CuttingWords": {
+              "MissingBardicInspirationScale": "Você precisa ter uma escala de Bard ou Ambassador para este ator chamada 'bardic-inspiration' ou 'inspiration'"
+            }
+          }
+        },
+        "Druid": {
+          "CircleOfStars": {
+            "StarMap": {
+              "NoSpellSlotConsumed": "Você usou Circle of Stars para iniciar {name} e não usou um espaço de magia"
+            }
+          }
+        },
+        "Fighter": {
+          "ArcaneArcher": {
+            "GraspingArrow": {
+              "MissingDependency": "Você precisa instalar o módulo Jinkers Animated Art Pack para usar esta automação."
+            }
+          }
+        },
+        "Paladin": {
+          "OathOfConquest": {
+            "ScornfulRebuke": {
+              "Incapacitated": "{name} está Incapacitado, o Scornful Rebuke falhou."
+            }
+          }
+        },
+        "Ranger": {
+          "MonsterSlayerConclave": {
+            "HuntersSense": {
+              "TargetSingleCreature": "Hunter's Sense: Por favor, selecione apenas 1 criatura e tente novamente."
+            }
+          }
+        },
+        "Wizard": {
+          "SchoolOfEnchantment": {
+            "InstinctiveCharm": {
+              "CharmImmunity": "A criatura não é afetada porque possui Imunidade a Enfeitiçado"
+            }
+          }
+        }
+      },
+      "GenericFeatures": {
+        "OpportunityAttack": {
+          "NoValidOptions": "Nenhuma opção válida de ataque corpo a corpo encontrada, cancelando as opções de Ataque de Oportunidade para {name}"
+        }
+      },
+      "Helpers": {
+        "CanOnlySelectUp": "Você pode selecionar até {numTargets} alvos.",
+        "CastOptionNoSlotConsumed": "Você usou sua opção de conjuração {restModeName} para iniciar {name} e não usou um espaço de magia. A magia foi conjurada em seu nível base."
+      },
+      "Hooks": {
+        "Msg": "{message}"
+      },
+      "Items": {
+        "AmuletOfTheDevout": {
+          "NoAmuletCharges": "Você não possui cargas do Amulet of the Devout para usar.",
+          "NoChannelDivinityCharges": "Você não tem cargas do Channel Divinity para recuperar.",
+          "Recovered": "Carga de Channel Divinity recuperada!"
+        },
+        "Candle": {
+          "DoNotAnyS": "Você não tem mais nenhum {animType} disponível.",
+          "MissingDependency": "O módulo Active Token Effects deve estar habilitado"
+        },
+        "Matalotok": {
+          "TargetAtLeastOneToken": "Por favor, selecione pelo menos um token."
+        },
+        "RodOfThePactKeeper": {
+          "NotAvailable": "Você não possui nenhum espaço de magia apropriado para recuperar"
+        },
+        "StaffOfWithering": {
+          "NotAvailable": "Você não tem mais nenhum uso do Staff of Withering"
+        },
+        "Torch": {
+          "DoNotAnyEs": "Você não tem mais nenhum {animType} disponível."
+        }
+      },
+      "Spells": {
+        "DimensionDoor": {
+          "CanOnlySelectOne": "Você só pode selecionar uma criatura para se teletransportar junto com você",
+          "MissingDependency": "Você precisa instalar o módulo Jack Kerouac's Animated Spell Effects - Cartoon para usar esta automação.",
+          "MustBeWithin5Feet": "Você precisa estar a menos de 5 pés do aliado que está tentando teletransportar",
+          "TooLarge": "Seu alvo é grande demais para se teletransportar com você"
+        },
+        "EnemiesAbound": {
+          "TargetImmuneCannotBeFrightened": "{name} é imune a Enemies Abound porque não pode ser Amedrontado."
+        },
+        "HideousLaughter": {
+          "TargetNotAffectedIntTooLow": "Essa criatura não é afetada. Seu valor de Inteligência é muito baixo."
+        },
+        "Identify": {
+          "Identified": "Identificado: {name}",
+          "NoSpellSlots": "Você não possui espaços de magia disponíveis",
+          "NoUnidentifiedItems": "Você não possui itens não identificados",
+          "RitualOnly": "Conjurar como ritual: Você só pode conjurar Identify como ritual."
+        },
+        "IntellectFortress": {
+          "SelectedMoreTokensThan": "Você selecionou mais tokens do que o nível da magia permite. Selecione os tokens novamente.",
+          "TargetsNotWithinRange": "O token selecionado não está a menos de 30 pés de outro token selecionado. Selecione os tokens novamente.",
+          "UnableSee": "Não é possível visualizar o token selecionado. Selecione os tokens novamente."
+        },
+        "MentalPrison": {
+          "TargetsImmune": "Os alvos são imunes a serem Enfeitiçados"
+        },
+        "PowerWordHeal": {
+          "TargetUndead": "O alvo é um Undead ou Construct e não é afetado"
+        },
+        "PowerWordPain": {
+          "TargetMoreThan100": "O alvo tem mais de 100 pontos de vida ou é imune a Enfeitiçado.",
+          "UnableSave": "Você não conseguiu ser bem-sucedido na salvaguarda. Sua magia falhou e foi desperdiçada."
+        },
+        "PowerWordStun": {
+          "TargetMoreThan150": "O alvo tem mais de 150 pontos de vida."
+        },
+        "ViciousMockery": {
+          "TargetCannotHearYou": "Uma criatura não é afetada porque não consegue te ouvir."
+        }
+      }
+    },
+    "Settings": {
+      "BurstOfIngenuityTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Burst of Ingenuity"
+      },
+      "ChronalShiftTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Chronal Shift"
+      },
+      "CounterspellTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Counterspell"
+      },
+      "CuttingWordsTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 30 segundos.",
+        "Name": "Tempo de Cutting Words"
+      },
+      "EnableCounterspell": {
+        "Hint": "Se ativada, esta opção exibirá uma caixa de diálogo apropriada para os usuários com a magia Counterspell e automatizará a aplicação do Counterspell quando utilizado.",
+        "Name": "Habilitar Counterspell"
+      },
+      "EnableCuttingWords": {
+        "Hint": "Se ativada, esta opção exibirá uma caixa de diálogo apropriada para os usuários com Cutting Words e automatizará a aplicação de Cutting Words quando utilizado.",
+        "Name": "Habilitar Cutting Words"
+      },
+      "EnableIdentifyRestrictions": {
+        "Hint": "Se ativada, esta opção impedirá que os personagens dos jogadores identifiquem itens não identificados, exceto por meio da minha automação da magia Identify.",
+        "Name": "Habilitar Restrições de Identificação"
+      },
+      "EnableIndomitable": {
+        "Hint": "",
+        "Name": "Habilitar Indomitable"
+      },
+      "EnableInterception": {
+        "Hint": "Se ativada, esta opção exibirá uma caixa de diálogo apropriada para os usuários com Fighting Style: Interception, e automatizará a aplicação do Interception quando utilizado.",
+        "Name": "Habilitar Interception"
+      },
+      "EnableOpportunityAttack": {
+        "Hint": "Se ativado, adiciona automaticamente o item 'Ataque de Oportunidade' aos combatentes apropriados no início do combate e remove o item 'Ataque de Oportunidade' ao término do combate.",
+        "Name": "Habilitar Ataque de Oportunidade"
+      },
+      "EnablePoetryInMisery": {
+        "Hint": "Se ativada, esta opção exibirá uma caixa de diálogo apropriada para os usuários com a característica Poetry in Misery do Bard e automatizará a aplicação quando utilizada.",
+        "Name": "Habilitar Poetry in Misery"
+      },
+      "EnablePowerWordRebound": {
+        "Hint": "Se ativada, esta opção exibirá uma caixa de diálogo apropriada para os usuários com a magia Power Word Rebound e automatizará a aplicação quando utilizada.",
+        "Name": "Habilitar Power Word Rebound"
+      },
+      "EnableProtection": {
+        "Hint": "",
+        "Name": "Habilitar Protection"
+      },
+      "EnableRiposte": {
+        "Hint": "",
+        "Name": "Habilitar Riposte"
+      },
+      "EnableSentinel": {
+        "Hint": "",
+        "Name": "Habilitar Sentinel"
+      },
+      "EnableSilveryBarbs": {
+        "Hint": "Se ativada, esta opção exibirá uma caixa de diálogo apropriada para os usuários com a magia Silvery Barbs e automatizará a aplicação de Silvery Barbs quando utilizada.",
+        "Name": "Habilitar Silvery Barbs"
+      },
+      "EnableWitchesHex": {
+        "Hint": "Se ativada, esta opção exibirá uma caixa de diálogo apropriada para os usuários com a característica Witches Hex e automatizará a aplicação quando utilizada.",
+        "Name": "Habilitar Witches Hex"
+      },
+      "FlashOfGeniusTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Flash of Genius"
+      },
+      "IdentifyRestrictionMessage": {
+        "Hint": "Esta é a mensagem que será exibida aos usuários caso eles estejam com restrições.",
+        "Name": "Mensagem de Restrição de Identificação"
+      },
+      "IndomitableTimeout": {
+        "Hint": "",
+        "Name": "Tempo de Indomitable"
+      },
+      "InstinctiveCharmTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Instinctive Charm"
+      },
+      "InterceptionTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 30 segundos.",
+        "Name": "Tempo de Interception"
+      },
+      "LegendaryResistanceTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Resistência Lendária"
+      },
+      "MageSlayerTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Mage Slayer"
+      },
+      "MirrorThirdPartyDialogForGMs": {
+        "Hint": "Se ativada, a opção de diálogos com terceiros será enviada tanto para o Mestre quanto para o jogador. Qualquer um poderá interagir com o diálogo para usá-lo, fechá-lo ou pausá-lo.",
+        "Name": "Espelhar Diálogo de Terceiros para Mestre"
+      },
+      "OpportunityAttackTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Ataque de Oportunidade"
+      },
+      "PoetryInMiseryTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Poetry in Misery"
+      },
+      "PowerWordReboundTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 30 segundos.",
+        "Name": "Tempo de Power Word Rebound"
+      },
+      "ProtectionTimeout": {
+        "Hint": "",
+        "Name": "Tempo de Protection"
+      },
+      "RainOfCindersTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Rain of Cinders"
+      },
+      "RestoreBalanceTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Restore Balance"
+      },
+      "RiposteTimeout": {
+        "Hint": "",
+        "Name": "Tempo de Riposte"
+      },
+      "SentinelTimeout": {
+        "Hint": "",
+        "Name": "Tempo de Sentinel"
+      },
+      "SilveryBarbsTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 30 segundos.",
+        "Name": "Tempo de Silvery Barbs"
+      },
+      "TaleOfHubrisTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Tale of Hubris"
+      },
+      "TemporalShuntTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 15 segundos.",
+        "Name": "Tempo de Temporal Shunt"
+      },
+      "WitchesHexTimeout": {
+        "Hint": "Insira um número personalizado (em segundos). O valor do tempo limite padrão é de 30 segundos.",
+        "Name": "Tempo de Witches Hex"
+      },
+      "DebugEnabled": {
+        "Hint": "Se ativada, esta opção exibirá os registros do console referentes ao processo de validação da reação para fins de solução de problemas.",
+        "Name": "Habilitar Debug"
+      },
+      "Enable3prNoCombat": {
+        "Hint": "Se ativada, essa opção permitirá que reações de terceiros funcionem mesmo quando o combate não estiver ativo.",
+        "Name": "Habilitar Reações de Terceiros Fora de Combate"
+      },
+      "EnableTimerFullAnim": {
+        "Hint": "Se ativada, essa opção fará com que a animação do cronômetro de contagem regressiva das caixas de diálogo cubra toda a barra de título, em vez da borda da barra de título.",
+        "Name": "Habilitar Animação Completa da Barra de Tempo"
+      },
+      "HideTemplates": {
+        "Hint": "Essa opção está sempre habilitada para Ataques de Oportunidade. Se essa configuração estiver habilitada, ela ocultará completamente os modelos de outras automações que usam modelos no meu módulo. Ela NÃO ocultará modelos de automações ou modelos criados fora do meu módulo.",
+        "Name": "Esconder Modelos"
+      },
+      "PrimaryGM": {
+        "Hint": "",
+        "Name": "primaryGM"
+      },
+      "TokenMovementSpeed": {
+        "Hint": "",
+        "Name": "tokenMovementSpeed"
+      }
+    },
+    "SettingsMenu": {
+      "Headers": {
+        "Feature": "Característica",
+        "Enable": "Habilitar",
+        "TimeoutSeconds": "Tempo (s)"
+      },
+      "ClassFeatures": {
+        "ChronalShift": {
+          "Description": "Diálogo para Chronal Shift do Chronurgy Wizard.",
+          "Name": "Chronal Shift"
+        },
+        "CuttingWords": {
+          "Description": "Diálogo para Cutting Words do College of Lore Bard.",
+          "Name": "Cutting Words"
+        },
+        "DisableCuttingWordsMaxMiss": {
+          "Description": "Ignore o aviso se o dado máximo de Bardic Inspiration não afetar o acerto.",
+          "Name": "Desabilitar Cutting Words com Erro Máx"
+        },
+        "EnableAutoSucceedIndomitable": {
+          "Description": "Sucesso automático ao usar.",
+          "Name": "Habilitar Sucesso Automático com Indomitable"
+        },
+        "EnableProtectionOnSuccess": {
+          "Description": "Acionar somente em caso de ataque bem-sucedido.",
+          "Name": "Habilitar Protection em Sucesso"
+        },
+        "FlashOfGenius": {
+          "Description": "Diálogo para Flash of Genius do Artificer.",
+          "Name": "Flash of Genius"
+        },
+        "Indomitable": {
+          "Description": "Diálogo para Indomitable do Fighter.",
+          "Name": "Indomitable"
+        },
+        "InstinctiveCharm": {
+          "Description": "Diálogo para Instinctive Charm do Enchantment Wizard.",
+          "Name": "Instinctive Charm"
+        },
+        "Interception": {
+          "Description": "Diálogo para Interception do Paladin/Fighter.",
+          "Name": "Interception"
+        },
+        "MagicUsersNemesis": {
+          "Description": "Diálogo para Monster Slayer do Ranger.",
+          "Name": "Magic-User's Nemesis"
+        },
+        "PoetryInMisery": {
+          "Description": "Diálogo para College of Tragedy Bard.",
+          "Name": "Poetry in Misery"
+        },
+        "Protection": {
+          "Description": "Diálogo para Protection do Paladin/Fighter.",
+          "Name": "Protection"
+        },
+        "RainOfCinders": {
+          "Description": "Diálogo para Roiling Hearth Witches'.",
+          "Name": "Rain of Cinders"
+        },
+        "RestoreBalance": {
+          "Description": "Diálogo para Clockwork Soul do Sorcerer'.",
+          "Name": "Restore Balance"
+        },
+        "Riposte": {
+          "Description": "Diálogo para Riposte do Battle Master Fighter.",
+          "Name": "Riposte"
+        },
+        "TaleOfHubris": {
+          "Description": "Diálogo para College of Tragedy Bards'.",
+          "Name": "Tale of Hubris"
+        },
+        "WitchesHex": {
+          "Description": "Diálogo para Roiling Hearth Witches' Hex.",
+          "Name": "Witches Hex"
+        }
+      },
+      "GenericFeatures": {
+        "OpportunityAttack": {
+          "Description": "Habilita automaticamente Ataques de Oportunidade para combatentes em combate.",
+          "Name": "Ataque de Oportunidade"
+        },
+        "Sentinel": {
+          "Description": "Apresenta um diálogo aos jogadores com o talento Sentinel quando um inimigo ataca um aliado dentro do alcance.",
+          "Name": "Sentinel"
+        },
+        "MageSlayer": {
+          "Description": "Apresenta um diálogo aos jogadores com o talento Mage Slayer.",
+          "Name": "Mage Slayer"
+        },
+        "LegendaryResistance": {
+          "Description": "Apresenta um diálogo para monstros com o traço Resistência Lendária.",
+          "Name": "Resistência Lendária"
+        }
+      },
+      "Spells": {
+        "Counterspell": {
+          "Description": "Apresenta um diálogo aos jogadores com Counterspell.",
+          "Name": "Counterspell"
+        },
+        "SilveryBarbs": {
+          "Description": "Apresenta um diálogo aos jogadores com Silvery Barbs.",
+          "Name": "Silvery Barbs"
+        },
+        "CounterspellSpellPenetration": {
+          "Description": "Ative o recurso opcional Bloodied & Bruised de Spell Penetration.",
+          "Name": "Spell Penetration"
+        },
+        "DisableSilveryBarbsOnNat20": {
+          "Description": "Desativa em uma Jogada de Ataque Crítico.",
+          "Name": "Desabilitar em Crítico"
+        },
+        "EnableSilveryBarbsOnNat20": {
+          "Description": "Ativa apenas em uma Jogada de Ataque Crítico.",
+          "Name": "Habilitar em Crítico"
+        },
+        "PowerWordRebound": {
+          "Description": "Apresenta um diálogo aos jogadores com Power Word Rebound.",
+          "Name": "Power Word Rebound"
+        },
+        "TemporalShunt": {
+          "Description": "Apresenta um diálogo aos jogadores com Temporal Shunt.",
+          "Name": "Temporal Shunt"
+        }
+      },
+      "MonsterFeatures": {
+        "BurstOfIngenuity": {
+          "Description": "Apresenta um diálogo para monstros com Burst of Ingenuity.",
+          "Name": "Burst of Ingenuity"
+        },
+        "DreadCounterspell": {
+          "Name": "Dread Counterspell",
+          "Description": "Apresenta um diálogo para o Dread Counterspell do Vecna."
+        }
+      },
+      "General": {
+        "Enable3prNoCombat": {
+          "Description": "Permite que reações de terceiros funcionem mesmo quando o combate não estiver ativo.",
+          "Name": "Habilitar Reações de Terceiros Fora de Combate"
+        },
+        "EnableIdentifyRestrictions": {
+          "Description": "Impede que os jogadores identifiquem itens, exceto através do uso da minha magia Identify.",
+          "Name": "Habilitar Restrições de Identificação"
+        },
+        "IdentifyRestrictionMessage": {
+          "Description": "Mensagem personalizada que será exibida aos usuários caso estejam restritos.",
+          "Name": "Mensagem de Restrição de Identificação"
+        },
+        "EnableRegionWrapping": {
+          "Description": "Substitui o comportamento padrão de região do Foundry, que testam apenas os pontos centrais dos tokens, por testes de múltiplos pontos para melhor se adequar ao conjunto de regras da 5ª edição (Necessário Recarregar).",
+          "Name": "Habilitar Alteração de Região"
+        },
+        "EnableTimerFullAnim": {
+          "Description": "Modifique a animação do cronômetro de contagem regressiva para diálogos para que cubra toda a barra de título em vez da borda da barra de título.",
+          "Name": "Habilitar Animação Completa da Barra de Tempo"
+        },
+        "HideTemplates": {
+          "Description": "Oculta modelos após posicionamento.",
+          "Name": "Esconder Modelos"
+        },
+        "TokenMovementSpeed": {
+          "Description": "Valor numérico para a velocidade da animação de movimento do token. A velocidade padrão do Foundry é 6.",
+          "Name": "Velocidade de Movimento do Token"
+        },
+        "DebugEnabled": {
+          "Description": "Ative os registros do console para o processo de validação de reações para fins de solução de problemas.",
+          "Name": "Habilitar Debugging"
+        },
+        "MirrorThirdPartyDialogForGMs": {
+          "Name": "Espelhar Diálogo de Terceiros para Mestre",
+          "Description": "Se ativada, a opção de diálogos com terceiros será enviada tanto para o Mestre quanto para o jogador. Qualquer um poderá interagir com o diálogo para usá-lo, fechá-lo ou pausá-lo."
+        }
+      }
+    },
+    "UI": {
+      "InvalidInputNotNumber": "Entrada inválida: Não é um número.",
+      "InvalidInputNotNumberExample": "Entrada inválida para Exemplo de Configuração Numérica: Não é um número.",
+      "None": "Nenhum(a)",
+      "Prone": "Caído",
+      "Push": "Empurrar",
+      "SaveSettings": "Salvar Configurações",
+      "Point": "Ponto",
+      "Points": "Pontos",
+      "Target": "alvo",
+      "Targets": "alvos"
+    },
+    "Windows": {
+      "EnableClassFeatures": "Habilitar Características de Classe",
+      "EnableGenericFeatures": "Habilitar Características Genéricas",
+      "EnableMonsterFeatures": "Habilitar Características de Monstros",
+      "EnableSpells": "Habilitar Magias",
+      "GeneralSettings": "Configurações Gerais",
+      "PatreonSupport": "Suporte Patreon"
+    }
+  }
+}
