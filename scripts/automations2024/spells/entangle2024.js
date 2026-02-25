@@ -28,7 +28,7 @@ export async function entangle2024({ tokenUuid, regionUuid, regionScenario, spea
         actor = tokenDocument.actor;
         item = await fromUuid(region.flags["region-attacher"].itemUuid);
 
-        const hasEffectApplied = actor.appliedEffects.find(e => e.name === "Restrained");
+        const hasEffectApplied = tokenDocument.hasStatusEffect("restrained");
         if(!hasEffectApplied) return;
 
         let dialogId = "entangle";

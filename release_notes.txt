@@ -1,5 +1,4 @@
-- Additions:
-  - Localizations: CN localization added, thanks ddrr666!
 - Updates:
-  - Cleaned up some more midi advantage/disadvantage keys. Those have been completely removed now so report a bug if you see any additional
-  - Cleaned up all compendium items to remove old world flags that existed (things like itemmacro, etc)
+  - Localizations: Actually added the cn.json to module.js languages
+- Bugfixes:
+  - Entangle 2024: Resolve a restrained lookup not using hasStatusEffect

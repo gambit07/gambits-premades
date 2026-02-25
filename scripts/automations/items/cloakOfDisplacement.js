@@ -37,18 +37,20 @@ export async function cloakOfDisplacement({ speaker, actor, token, character, it
     }
 
     else if(args[0] === "on" && args[2] === "startEnd") {
+        if(!token) return;
         let effectData = await actor.allApplicableEffects().find(e => e.name === item.name)
         if(effectData.disabled) await effectData.update({"disabled" : false});
         let effectOrigin = await fromUuid(args[3].effectUuid);
         await effectOrigin.update({"disabled" : false});
         actor.unsetFlag("gambits-premades", "codTurnSuppressed");
-        let currentSeq = Sequencer.EffectManager.getEffects({ name: `${token.id}-cloakOfDisplacement` });
+        let currentSeq = Sequencer.EffectManager.getEffects({ name: `${token?.id}-cloakOfDisplacement` });
         if(currentSeq.length >= 1) return;
         processSequencer({token: token});
     }
 
     else if(args[0] === "on") {
-        let currentSeq = Sequencer.EffectManager.getEffects({ name: `${token.id}-cloakOfDisplacement` });
+        if(!token) return;
+        let currentSeq = Sequencer.EffectManager.getEffects({ name: `${token?.id}-cloakOfDisplacement` });
         if(currentSeq.length >= 1) return;
         processSequencer({token: token});
     }
