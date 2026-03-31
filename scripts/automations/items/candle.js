@@ -14,7 +14,7 @@ export async function candle({ speaker, actor, token, item, args, workflow }) {
     await lightExtinguish({ token, actor, effectName, gpsUuid, scenario: "off" });
     return;
   }
-  else if(args[0] === "on") return;
+  else if(args[0] === "on" || args[0] === "init") return;
 
   let rangeDim = game.gps.convertFromFeet({range: 10});
   let rangeBright = game.gps.convertFromFeet({range: 5});

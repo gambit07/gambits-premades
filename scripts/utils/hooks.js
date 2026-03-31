@@ -11,6 +11,10 @@ export function registerHooks() {
     });
 
     Hooks.on("midi-qol.preItemRollV2", async ({workflow, usage, dialog, message}) => {
+        console.log(workflow, "workflow")
+        console.log(usage, "usage")
+        console.log(dialog, "dialog")
+        console.log(message, "message")
         if (!((workflow.item.type === "spell" && workflow.activity?.description?.chatFlavor?.includes("gpsFreeSpellUse")) || (workflow.item?.identifier === "guiding-bolt" && workflow.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "62cd752b-7c9c-42ff-9e73-cd7b707aad66")) || (workflow.item.identifier === "identify" && workflow.item.flags["gambits-premades"]?.gpsUuid === "2cc1f50d-cdb8-4f17-a532-2532f74440ae"))) return;
         let freeSpellUsed;
 
@@ -60,7 +64,7 @@ export function registerHooks() {
         if (game.gpsSettings.chronalShiftEnabled) await executeWorkflow({ workflowItem: "chronalShift", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
-    Hooks.on("midi-qol.preAttackRoll", async (workflow) => {
+    Hooks.on("midi-qol.preAttackRollConfig", async (workflow) => {
         if(!workflow.activity.hasAttack) return;
         let workflowItemUuid = workflow.itemCardUuid;
         if (game.gpsSettings.protectionEnabled && !game.gpsSettings.enableProtectionOnSuccess) await executeWorkflow({ workflowItem: "protection", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });

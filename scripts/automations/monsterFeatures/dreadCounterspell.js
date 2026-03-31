@@ -16,6 +16,7 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
     let selectedToken = workflow.token;
     let skillRoll;
+    let skillCheck;
     let castLevel;
     let itemRoll = false;
     let chatContent = [];
@@ -121,7 +122,7 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                     if(source && source === "user") skillCheck = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
                     else if(source && source === "gm") skillCheck = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
                     if(!skillCheck) continue;
-                    let skillRoll = skillCheck.saveRolls;
+                    skillRoll = skillCheck.saveRolls;
                     let skillTotal = skillRoll.total;
                     let skillFlavor = validTokenPrimary.actor.system.attributes.spell.abilityLabel;
                     
@@ -129,7 +130,7 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                         chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.DreadCounterspell.DreadCounterspellSuccess", { skillTotal: skillTotal, skillFlavor: skillFlavor })}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     }
                     else {
-                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.DreadCounterspell.DreadCounterspellFailed", { skillTotal: skillTotal, skillFlavor: skillFlavor, spellThreshold: spellThreshold, spellPenetrationChat: spellPenetrationChat })}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.DreadCounterspell.DreadCounterspellFailed", { skillTotal: skillTotal, skillFlavor: skillFlavor, spellThreshold: spellThreshold })}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                         csFailure = true;
                     }
                 }
@@ -160,7 +161,7 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                     .play()
                 }
 
-                return workflow.aborted = true;
+                return workflow.aborted = !csFailure;
             }
         }
     }

@@ -16,7 +16,7 @@ export async function lanternHooded({ speaker, actor, token, item, args, workflo
     await lightExtinguish({ token, actor, effectName, gpsUuid, scenario: "off" });
     return;
   }
-  else if(args[0] === "on") return;
+  else if(args[0] === "on" || args[0] === "init") return;
 
   let rangeDim = game.gps.convertFromFeet({range: 60});
   let rangeBright = game.gps.convertFromFeet({range: 30});

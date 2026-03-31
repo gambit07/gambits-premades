@@ -51,6 +51,7 @@ export async function entropicWard({ speaker, actor, token, character, item, arg
         }
         else if (userDecision) {
             workflow.tracker.disadvantage.add(userDecision, "Entropic Ward");
+            workflow.workflowOptions.disadvantage = true
             await actor.setFlag("gambits-premades", "entropicWardUsed", true);
             MidiQOL.setReactionUsed(actor);
             await chosenItem.update({"system.uses.spent" : chosenItem.system.uses.spent + 1})

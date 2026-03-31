@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "2.1.40",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -183,21 +183,21 @@
         "otherActivityAsParentType": true,
         "friendlySave": "default"
       },
-      "7uVi7FfgOFhCyjx8": {
+      "ee7lHABChqLCvz77": {
         "type": "save",
+        "_id": "ee7lHABChqLCvz77",
+        "sort": 0,
         "activation": {
           "type": "special",
-          "value": null,
           "override": true,
           "condition": ""
         },
         "consumption": {
-          "targets": [],
           "scaling": {
-            "allowed": false,
-            "max": ""
+            "allowed": false
           },
-          "spellSlot": false
+          "spellSlot": false,
+          "targets": []
         },
         "description": {
           "chatFlavor": ""
@@ -208,13 +208,13 @@
           "override": true
         },
         "effects": [],
+        "flags": {},
         "range": {
-          "override": true,
           "units": "any",
+          "override": true,
           "special": ""
         },
         "target": {
-          "prompt": true,
           "template": {
             "contiguous": false,
             "units": "ft",
@@ -222,22 +222,31 @@
           },
           "affects": {
             "choice": false,
-            "count": "",
             "type": ""
           },
-          "override": true
+          "override": true,
+          "prompt": false
         },
         "uses": {
-          "spent": null,
-          "max": "",
-          "recovery": []
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "visibility": {
+          "level": {
+            "min": null,
+            "max": null
+          },
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
         },
         "damage": {
           "onSave": "none",
-          "parts": [],
           "critical": {
             "allow": false
-          }
+          },
+          "parts": []
         },
         "save": {
           "ability": [
@@ -245,12 +254,11 @@
           ],
           "dc": {
             "calculation": "spellcasting",
-            "formula": "13"
+            "formula": ""
           }
         },
-        "sort": 0,
-        "name": "Save: Automation",
         "useConditionText": "",
+        "useConditionReason": "",
         "effectConditionText": "",
         "macroData": {
           "name": "",
@@ -269,17 +277,19 @@
           "triggeredActivityConditionText": "",
           "triggeredActivityTargets": "targets",
           "triggeredActivityRollAs": "self",
-          "confirmTargets": "default",
-          "automationOnly": true,
-          "identifier": "syntheticSave",
-          "otherActivityCompatible": false,
+          "triggeredActivityConsume": true,
+          "triggeredActivityConfigure": true,
           "autoConsume": false,
           "forceConsumeDialog": "default",
           "forceRollDialog": "default",
           "forceDamageDialog": "default",
+          "confirmTargets": "default",
           "autoTargetType": "any",
           "autoTargetAction": "default",
+          "automationOnly": true,
+          "otherActivityCompatible": false,
           "otherActivityAsParentType": true,
+          "identifier": "syntheticSave",
           "displayActivityName": false,
           "rollMode": "default",
           "chooseEffects": false,
@@ -289,19 +299,21 @@
           "magicEffect": false,
           "magicDamage": false,
           "noConcentrationCheck": false,
+          "skipConcentrationCheck": false,
           "autoCEEffects": "default"
         },
-        "_id": "7uVi7FfgOFhCyjx8",
-        "useConditionReason": "",
         "isOverTimeFlag": false,
         "overTimeProperties": {
           "saveRemoves": true,
+          "rollAs": "target",
           "preRemoveConditionText": "",
           "postRemoveConditionText": ""
         },
         "otherActivityId": "",
-        "otherActivityAsParentType": true,
-        "friendlySave": "default"
+        "otherActivityAsParentType": false,
+        "friendlySave": "default",
+        "name": "Save: Automation",
+        "img": ""
       }
     },
     "identifier": "enemies-abound",
@@ -378,6 +390,9 @@
         },
         "core": {
           "overlay": false
+        },
+        "gambits-premades": {
+          "gpsUuid": "4ad56aaf-b9b4-40ce-9869-ff62b999b7be"
         }
       },
       "_key": "!items.effects!pqtD79Rxet5ixIk2.Z0VUoc72t335ye47"
@@ -719,8 +734,7 @@
     },
     "dnd5e": {
       "riders": {
-        "activity": [],
-        "effect": []
+        "activity": []
       }
     },
     "tidy5e-sheet": {

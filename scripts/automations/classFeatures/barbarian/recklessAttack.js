@@ -57,10 +57,6 @@ export async function recklessAttack({ speaker, actor, token, character, item, a
         }
         else if (userDecision) {
             workflow.tracker.advantage.add(userDecision, "Reckless Attack");
-            console.log(workflow)
-            console.log(workflow.tracker)
-            console.log("Advantage:", workflow.tracker.hasAdvantage);
-
             await actor.setFlag("midi-qol", "checkRecklessAttack", true);
 
             let effectData = [{

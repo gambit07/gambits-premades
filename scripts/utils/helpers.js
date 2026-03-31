@@ -108,7 +108,7 @@ export async function freeSpellUse({ item, actor, activity }) {
                 flags: { dae: { specialDuration } }
             };
 
-            ui.notifications.info(game.i18n.format("GAMBITSPREMADES.Notifications.Helpers.CastOptionNoSlotConsumed", { restModeName: restModeName, name: item.name }));
+            ui.notifications.info(game.i18n.format("GAMBITSPREMADES.Notifications.Helpers.CastOptionNoSlotConsumed", { restModeName: restModeNameLocalized, name: item.name }));
 
             await actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
 

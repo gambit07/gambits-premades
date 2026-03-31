@@ -1,5 +1,5 @@
 export async function recklessAttack2024({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "preAttackRoll") {
+    if(args[0].macroPass === "preAttackRollConfig") {
         if(!game.combat) return;
         let meleeAttack = (workflow.activity?.ability === 'str') ? true : false;
         if (!meleeAttack) return;

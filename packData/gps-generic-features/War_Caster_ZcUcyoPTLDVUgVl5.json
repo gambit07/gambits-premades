@@ -122,7 +122,7 @@
   "img": "icons/weapons/wands/wand-carved-fire.webp",
   "effects": [
     {
-      "origin": "Compendium.world.gps-generic-features.Item.0XoQ7lGPSwjM8Gw4",
+      "origin": "Compendium.world.gps-generic-features.Item.ZcUcyoPTLDVUgVl5",
       "duration": {
         "startTime": null,
         "seconds": null,
@@ -156,7 +156,8 @@
           "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": []
+          "specialDuration": [],
+          "disableCondition": ""
         },
         "ActiveAuras": {
           "isAura": false,
@@ -173,6 +174,14 @@
           "hostile": false,
           "onlyOnce": false,
           "wallsBlock": "system"
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        },
+        "core": {
+          "overlay": false
         }
       },
       "tint": "#ffffff",

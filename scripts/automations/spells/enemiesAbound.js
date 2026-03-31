@@ -1,7 +1,7 @@
-export async function enemiesAbound({ speaker, actor, token, character, item, args, scope, workflow, options }) {
+export async function enemiesAbound({ speaker, actor, token, character, item, macroItem, args, scope, workflow, options }) {
     if(!game.modules.get("jaamod")?.active) return ui.notifications.error(game.i18n.localize("GAMBITSPREMADES.Notifications.ClassFeatures.Fighter.ArcaneArcher.GraspingArrow.MissingDependency"));
     if(args[0].macroPass === "postActiveEffects") {
-        const targets = workflow.targets;
+        const targets = workflow.failedSaves;
         for(let target of targets) {
             const immunity = target.actor.system.traits?.ci?.value?.has("frightened");
 
@@ -33,11 +33,6 @@ export async function enemiesAbound({ speaker, actor, token, character, item, ar
             const { animEnabled } = cprConfig;
             if(animEnabled) {            
                 new Sequence()
-                .sound()
-                    .file("modules/dnd5e-animations/assets/sounds/Spells/Debuff/spell-whispers-2.mp3")
-                    .fadeInAudio(500)
-                    .fadeOutAudio(500)
-                    .delay(1000)
                 .effect()
                     .atLocation(token)
                     .stretchTo(target)
@@ -70,10 +65,10 @@ export async function enemiesAbound({ speaker, actor, token, character, item, ar
     }
 
     if(args[0].macroPass === "isDamaged") {
-        const effect = token.actor.appliedEffects.find(e => e.name === item?.name);
+        const effect = token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "4ad56aaf-b9b4-40ce-9869-ff62b999b7be");
         if(!effect) return;
 
-        const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
+        const saveResult = await game.gps.gpsActivityUse({itemUuid: effect.flags["midi-qol"].castData.itemUuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
 
         if (saveResult.failedSaves.size === 0) {
             await effect.delete();

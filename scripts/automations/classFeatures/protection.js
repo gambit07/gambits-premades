@@ -87,8 +87,10 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
                 .fadeIn(250)
                 .fadeOut(250)
                 .play();
-    
-            if(!enableProtectionOnSuccess) workflow.tracker.disadvantage.add(!enableProtectionOnSuccess, "Protection");
+
+            if(!enableProtectionOnSuccess) {
+                workflow.tracker.disadvantage.add(true, "Protection");
+            }            
             else if(enableProtectionOnSuccess) {
                 let straightRoll = workflow.attackRoll.dice[0].results[0].result;
                 let straightRollBonus = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
@@ -114,7 +116,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
                     const saveSetting = workflow.workflowOptions.noOnUseMacro;
                     let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
                     workflow.workflowOptions.noOnUseMacro = true;
-                    let reroll = await new CONFIG.Dice.D20Roll(`1d20 + ${rerollAddition}`).evaluate();
+                    let reroll = await new CONFIG.Dice.BasicRoll(`1d20 + ${rerollAddition}`).evaluate();
                     if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
                     await MidiQOL.displayDSNForRoll(reroll, 'damageRoll');
                     workflow.workflowOptions.noOnUseMacro = saveSetting;
