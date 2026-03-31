@@ -1,5 +1,21 @@
 # Changelog
 
+## [v2.1.41] - 2026-03-31
+- Updates:
+  - War Caster: Allow creatureOrObject types for the Opportunity Attack integration so they show up as valid spells
+- Bugfixes:
+  - Dread Counterspell: A number of bugfixes, should now work for spells cast at or over 5th level
+  - Reckless Attack 2024: Fix the macropass check not being updated to preAttackRollConfig even though the effect was
+  - Protection: Resolved disadvantage not being applied when homebrew rule was off
+  - Instinctive Charm: Resolved disadvantage not being applied
+  - Enemies Abound: Resolved macroItem not resolving the effects item and switched to a different method to allow damaged saves to work
+  - gpsFreeSpellUse: Resolved an invalid variable name post-localization causing the function to fail
+  - Torch: Resolved Midi's new ItemMacro Init hook pushing dialogs when it shouldn't
+  - Candle: Resolved Midi's new ItemMacro Init hook pushing dialogs when it shouldn't
+  - Lamp: Resolved Midi's new ItemMacro Init hook pushing dialogs when it shouldn't
+  - Bullseye Lantern: Resolved Midi's new ItemMacro Init hook pushing dialogs when it shouldn't
+  - Hooded Lantern: Resolved Midi's new ItemMacro Init hook pushing dialogs when it shouldn't
+
 ## [v2.1.40] - 2026-03-31
 - Updates:
   - War Caster: Allow creatureOrObject types for the Opportunity Attack integration so they show up as valid spells
