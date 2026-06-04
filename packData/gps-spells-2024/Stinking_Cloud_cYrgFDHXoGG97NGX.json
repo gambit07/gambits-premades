@@ -703,7 +703,7 @@
               "events": [
                 "tokenEnter"
               ],
-              "source": "let effectData = event.data.token.actor.appliedEffects.some(e => e.name === \"Stinking Cloud\");\n\nif(!effectData) {\neffectData = [{\n      \"disabled\": false,\n      \"name\": \"Stinking Cloud\",\n      \"img\": \"icons/commodities/materials/glass-orb-green.webp\",\n      \"transfer\": false\n}];\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: event.data.token.actor.uuid, effects: effectData });\n}"
+              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nlet effectData = event.data.token.actor.appliedEffects.some(e => e.name === \"Stinking Cloud\");\n\nif(!effectData) {\neffectData = [{\n      \"disabled\": false,\n      \"name\": \"Stinking Cloud\",\n      \"img\": \"icons/commodities/materials/glass-orb-green.webp\",\n      \"transfer\": false,\n      \"flags.dae.showIcon\": true\n}];\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: event.data.token.actor.uuid, effects: effectData });\n}"
             },
             "disabled": false,
             "flags": {},
@@ -725,7 +725,7 @@
               "events": [
                 "tokenExit"
               ],
-              "source": "let effectData = event.data.token.actor.appliedEffects.find(e => e.name === \"Stinking Cloud\");\n\nif(effectData) effectData.delete();"
+              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nlet effectData = event.data.token.actor.appliedEffects.find(e => e.name === \"Stinking Cloud\");\n\nif(effectData) effectData.delete();"
             },
             "disabled": false,
             "flags": {},
