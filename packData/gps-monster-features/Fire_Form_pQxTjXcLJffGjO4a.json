@@ -80,22 +80,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!pQxTjXcLJffGjO4a.mSyMADxeNUdhaAxr"
@@ -162,23 +146,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": true,
-          "aura": "Enemy",
-          "nameOverride": "",
-          "radius": "2",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": true,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -192,36 +159,6 @@
     }
   ],
   "flags": {
-    "ddbimporter": {
-      "levelBonus": false,
-      "dndbeyond": {},
-      "parentId": "s8A0kj3weZNpV5FW"
-    },
-    "monsterMunch": {
-      "titleHTML": "<em><strong>Fire Form.</strong></em>",
-      "fullName": "Fire Form.",
-      "actionCopy": false,
-      "type": "special",
-      "actionInfo": {
-        "damage": {
-          "parts": [
-            [
-              "1d10[fire]",
-              "fire"
-            ],
-            [
-              "1d10[fire]",
-              "fire"
-            ]
-          ],
-          "versatile": ""
-        },
-        "baseAbility": null,
-        "toHit": 0,
-        "proficient": false,
-        "extraAttackBonus": 0
-      }
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -231,22 +168,6 @@
       "autoTarget": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dae": {
       "macro": {

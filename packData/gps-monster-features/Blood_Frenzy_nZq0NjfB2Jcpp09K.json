@@ -66,30 +66,6 @@
         }
       }
     },
-    "scene-packer": {
-      "hash": "0930a8090d41eeb20dc525aae7b43f3f0c66d698",
-      "sourceId": "Item.HODH6eWAaEnrxvIe"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "itemCondition": "",
@@ -151,22 +127,6 @@
           "macroRepeat": "none",
           "specialDuration": [],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         },
         "core": {
           "overlay": false

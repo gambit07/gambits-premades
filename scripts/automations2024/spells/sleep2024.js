@@ -9,9 +9,17 @@ export async function sleep2024({ speaker, actor, token, character, item, args, 
         }
     }
     
-    else if (args?.[0] === "off") {
+    else if(args?.[0] === "each") {
+        console.log(args, "args")
         let gmUser = game.gps.getPrimaryGM();
         item = await fromUuid(args[2]);
-        await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
+        let saveCheck = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
+        const effectData = await token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "12518587-9f13-41c9-aff9-a5bf885aed32");
+        if (saveCheck.failedSaves.size !== 0) {
+            await effectData.update({"flags.dae.macroRepeat": ""});
+        }
+        else {
+            await effectData.delete();
+        }
     }
 }

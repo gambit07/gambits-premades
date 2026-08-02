@@ -176,50 +176,6 @@
   },
   "name": "Fizban's Platinum Shield",
   "flags": {
-    "ddbimporter": {
-      "id": 9603627,
-      "definitionId": 1183864,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Fizban's Platinum Shield",
-      "sources": [
-        {
-          "sourceId": 81,
-          "pageNumber": 20,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Warding"
-      ],
-      "version": "5.0.1",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Actor.Q7GcFBwAbXgQX9Yv.Item.vvqHOzXtcfxJf6gi",
-      "hash": "ae353eb68454933eb8e009d29d4a002bacf8b733"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],
@@ -598,23 +554,6 @@
           "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

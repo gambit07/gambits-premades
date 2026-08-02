@@ -155,10 +155,6 @@
   "effects": [],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "c09b39799a70fc6b68f913503e44f8b30a62487e",
-      "sourceId": "Item.pQ7BpXhCsPB7vbWX"
-    },
     "dae": {
       "macro": {
         "name": "Transient Healing",
@@ -185,9 +181,6 @@
       }
     },
     "core": {},
-    "character-actions-list-5e": {
-      "filter-override": true
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "[postActiveEffects]ItemMacro",
@@ -197,23 +190,6 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never"
     },
     "dnd5e": {
       "riders": {

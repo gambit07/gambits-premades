@@ -200,59 +200,6 @@
   },
   "name": "Vicious Mockery",
   "flags": {
-    "ddbimporter": {
-      "id": 138907,
-      "definitionId": 2290,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Vicious Mockery",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 285,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Damage",
-        "Debuff"
-      ],
-      "version": "5.2.29",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false,
-      "saveDamage": "nodam",
-      "bonusSaveDamage": "default"
-    },
     "midi-qol": {
       "forceCEOff": true,
       "effectActivation": false,
@@ -266,10 +213,6 @@
       "autoTarget": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "sourceId": "Actor.w88977HaPVOXN7mP.Item.CxSb3LlEnJ1BKk5s",
-      "hash": "bd2a8e14871a1e2858557f6af7ed791dadaaf091"
     },
     "dnd5e": {
       "riders": {
@@ -530,12 +473,6 @@
       }
     },
     "core": {},
-    "character-actions-list-5e": {
-      "filter-override": true
-    },
-    "tidy5e-sheet-kgar": {
-      "action-filter-override": true
-    },
     "chris-premades": {
       "info": {
         "source": "gambits-premades",

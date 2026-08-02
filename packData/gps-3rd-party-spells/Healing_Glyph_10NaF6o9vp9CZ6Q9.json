@@ -174,10 +174,6 @@
   "effects": [],
   "flags": {
     "core": {},
-    "scene-packer": {
-      "hash": "4b59032fd5260501a929ec67a28e06a9a463f38d",
-      "sourceId": "Compendium.world.gps-homebrew-spells.Item.zm1K9ygQkfP0RsQn"
-    },
     "dae": {
       "macro": {
         "name": "Healing Glyph",
@@ -217,23 +213,6 @@
       "onUseMacroName": "[templatePlaced]ItemMacro",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "tidy5e-sheet": {
       "action-filter-override": true,

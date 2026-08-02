@@ -1,5 +1,10 @@
 # Changelog
 
+## [v2.1.44] - 2026-08-02
+- Bugfixes:
+  - Resolved a couple issues with the Sleep 2024 spell
+  - Resolved a few issues with the Stinking Cloud spell, thanks Bacon!
+
 ## [v2.1.43] - 2026-05-27
 - Bugfixes:
   - Removed some oopsies console logs

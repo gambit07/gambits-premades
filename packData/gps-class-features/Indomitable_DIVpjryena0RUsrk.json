@@ -299,30 +299,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 197,
-      "data": {
-        "id": 197,
-        "name": "Indomitable",
-        "prerequisite": null,
-        "description": "<p>Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can’t use this feature again until you finish a long rest.</p>\r\n<p>You can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level.</p>",
-        "requiredLevel": 9,
-        "displayOrder": 11
-      },
-      "version": "3.4.63",
-      "featureId": 197,
-      "featureName": "Indomitable",
-      "requiredLevel": 9,
-      "prerequisite": null,
-      "class": "Fighter",
-      "classId": 10,
-      "subClass": "",
-      "parentClassId": null
-    },
-    "scene-packer": {
-      "sourceId": "Actor.DX6KebS1bvxIkQlQ.Item.P2MVhvNT6XEYe646",
-      "hash": "ad73804fe1bfd59e784f3da9fd56bbd88ef41772"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -355,19 +331,6 @@
           "lastModifiedBy": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "gambits-premades": {
       "gpsUuid": "75e0633f-3973-4ea7-9246-da3e6d0da457"

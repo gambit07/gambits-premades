@@ -247,38 +247,12 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!EsTKgX9NWxhXqfaQ.LRmBdBBDFtzfZjew"
     }
   ],
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {},
-      "parentId": "vl1VO6jx82F0y4iM"
-    },
-    "monsterMunch": {
-      "titleHTML": "<strong>Otherworldly Melody (Recharge 5–6).</strong>",
-      "fullName": "Otherworldly Melody (Recharge 5–6).",
-      "actionCopy": false,
-      "type": "action"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -289,29 +263,7 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "saveDamage": "default",
-      "bonusSaveDamage": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "core": {},
-    "scene-packer": {
-      "sourceId": "Scene.1mkVNeOdyVIlDdH7.Token.IN9g3OfNajtRsfi1.Actor.xY4y0YufiTyf14Xo.Item.qDvvQBetZvuZtpqR",
-      "hash": "4af927fe6d93a29d62c05f73581569eff8f7814e"
-    },
     "rest-recovery": {
       "data": {
         "recovery": {

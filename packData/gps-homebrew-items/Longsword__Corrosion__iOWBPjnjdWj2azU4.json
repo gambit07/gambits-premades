@@ -233,72 +233,11 @@
     "magicalBonus": null
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Longsword",
-        "damage": {
-          "parts": []
-        },
-        "classFeatures": [],
-        "restrictions": [],
-        "filterType": "Weapon",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Damage",
-          "Combat"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ]
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 1782728300,
-      "definitionId": 4,
-      "originalName": "Longsword",
-      "version": "3.5.7"
-    },
-    "scene-packer": {
-      "sourceId": "Item.Ccsf7i8aZ2JntYN7",
-      "hash": "857a9fceb6232e6f14b9279caae3f609b95f3231"
-    },
     "midi-qol": {
       "onUseMacroName": "[preDamageApplication]ItemMacro",
       "fumbleThreshold": null,
       "effectActivation": false,
       "removeAttackDamageButtons": "default"
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "never"
     },
     "core": {},
     "dae": {

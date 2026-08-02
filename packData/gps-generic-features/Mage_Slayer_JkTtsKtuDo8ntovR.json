@@ -35,15 +35,6 @@
     "enchant": {}
   },
   "flags": {
-    "ddbimporter": {
-      "featId": 30,
-      "version": "3.4.63",
-      "prerequisites": []
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "1b56897e8a613a609ee6cdf25534f357bd730591"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -79,22 +70,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "gambits-premades": {
       "gpsUuid": "fc0e0473-038b-4e68-abd5-538b8fbbb4a5"
@@ -152,22 +127,6 @@
           "selfTarget": false,
           "selfTargetAlways": false,
           "dontApply": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!JkTtsKtuDo8ntovR.A2TnuwjVXETHP1rO"

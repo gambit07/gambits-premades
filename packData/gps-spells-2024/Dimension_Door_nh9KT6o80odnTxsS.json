@@ -168,60 +168,6 @@
   },
   "name": "Dimension Door",
   "flags": {
-    "ddbimporter": {
-      "id": 136603,
-      "definitionId": 2068,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Dimension Door",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 233,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Teleportation"
-      ],
-      "version": "3.5.7",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "default",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "722658415d4daae679142db329cc9cb983790c9b"
-    },
     "rest-recovery": {
       "data": {
         "recovery": {
@@ -552,9 +498,6 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "effects": [],

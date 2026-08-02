@@ -37,15 +37,6 @@
     "properties": []
   },
   "flags": {
-    "ddbimporter": {
-      "featId": 34,
-      "version": "3.4.63",
-      "prerequisites": []
-    },
-    "scene-packer": {
-      "sourceId": "Item.u57F94lxzHSRpIYn",
-      "hash": "a5a0af56f1a8340e5939ee2f4f3f0a5a0237f8bd"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -83,19 +74,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "dnd5e": {
       "riders": {
@@ -160,23 +138,6 @@
           "specialDuration": [],
           "disableCondition": "",
           "enableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "effectmacro": {},
         "core": {

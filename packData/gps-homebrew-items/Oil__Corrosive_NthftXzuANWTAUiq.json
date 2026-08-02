@@ -257,22 +257,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!NthftXzuANWTAUiq.eQudwYP9NznzaSiV"
@@ -280,10 +264,6 @@
   ],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "f6ad34d4b1803ae072abfe589659c536c63c7b37",
-      "sourceId": "Item.qk20uDj8J9wiQxYI"
-    },
     "dae": {
       "macro": {
         "name": "Oil, Corrosive",
@@ -312,19 +292,6 @@
       }
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "effectActivation": false,

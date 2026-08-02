@@ -76,23 +76,6 @@
           "specialDuration": [],
           "disableCondition": ""
         },
-        "ActiveAuras": {
-          "isAura": true,
-          "aura": "Enemy",
-          "nameOverride": "",
-          "radius": "5",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": true,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "effectmacro": {},
         "dnd5e": {
           "riders": {
@@ -134,16 +117,6 @@
     }
   ],
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {},
-      "parentId": "Fy41piBbWSU2KTwI"
-    },
-    "monsterMunch": {
-      "titleHTML": "<em><strong>Cold Aura.</strong></em>",
-      "fullName": "Cold Aura.",
-      "actionCopy": false,
-      "type": "special"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -154,28 +127,7 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "core": {},
-    "scene-packer": {
-      "hash": "7d7ef37f600ca598f6aaaa9ea41842f7ff7f36ea",
-      "sourceId": "Item.jAkC7rjZAdhta1Sh"
-    },
     "dae": {
       "macro": {
         "name": "Cold Aura",

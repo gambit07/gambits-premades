@@ -212,22 +212,6 @@
           "selfTarget": false,
           "selfTargetAlways": false,
           "dontApply": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!xNe2ghMwU8IvI6hG.C05Eou5Snf4u9O4B"
@@ -235,30 +219,9 @@
   ],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "14cf236afdd4a39ae95d4f243b0c694def54f62b",
-      "sourceId": "Item.UjL0hcmnj8UsdAqN"
-    },
     "core": {},
     "midi-qol": {
       "effectActivation": false
-    },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "nodam": true,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "dae": {
       "macro": {

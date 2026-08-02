@@ -251,22 +251,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!pUFAwdOtAvLTiWFt.sPbS18OFzyix9Nsf"
@@ -274,10 +258,6 @@
   ],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "9a5a70e4d1f867306204fee009415b3b0fbe5c2a",
-      "sourceId": "Scene.1mkVNeOdyVIlDdH7.Token.cw3oQyX2wv1KU3Ye.Actor.SNZJsEKbROB1q6bT.Item.nOENu09pRyWzo7Gi"
-    },
     "dae": {
       "macro": {
         "name": "Oil, Anti-Demon",
@@ -306,19 +286,6 @@
       }
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "effectActivation": false,

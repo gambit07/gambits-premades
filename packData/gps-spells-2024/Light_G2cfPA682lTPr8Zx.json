@@ -192,38 +192,6 @@
   },
   "name": "Light",
   "flags": {
-    "ddbimporter": {
-      "id": 138400,
-      "definitionId": 2166,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Light",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 255,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Creation",
-        "Utility"
-      ],
-      "version": "5.2.30",
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Light"
-    },
     "rest-recovery": {
       "data": {
         "recovery": {
@@ -243,39 +211,11 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": true,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "default",
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "custom-character-sheet-sections": {
-      "sectionName": ""
-    },
     "dnd5e": {
       "riders": {
         "activity": [],
         "effect": []
       }
-    },
-    "scene-packer": {
-      "sourceId": "Item.ozOlF4GLXGHDPNSR",
-      "hash": "1e6d40b82c2bb9f3d9b66dc5156817ac07c2db49"
     },
     "dae": {
       "macro": {
@@ -303,9 +243,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "effects": [
@@ -397,23 +334,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "dnd5e": {
           "riders": {
@@ -517,23 +437,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -636,23 +539,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -750,23 +636,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -863,23 +732,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "dnd5e": {
           "riders": {
@@ -983,23 +835,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -1102,23 +937,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -1215,23 +1033,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "dnd5e": {
           "riders": {

@@ -269,26 +269,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "1044",
-      "entityTypeId": "222216831",
-      "componentId": 426,
-      "componentTypeId": 12168134,
-      "type": "class",
-      "class": "Wizard",
-      "subclass": "School of Divination",
-      "dndbeyond": {
-        "levelScale": null,
-        "levelScales": [],
-        "limitedUse": [
-          {
-            "level": null,
-            "uses": 1
-          }
-        ]
-      },
-      "importId": "9GJQhDTA72qYufop"
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "[preActiveEffects]function.game.gps.portent",
@@ -298,24 +278,6 @@
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "hash": "558d38b93d02d4f926a6a684c9c4649b2c0fdc57",
-      "sourceId": "Actor.edtGqNIYfHYowUUr.Item.GXRTNQSjwPLyUete"
-    },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "dae": {
       "macro": {
@@ -392,23 +354,6 @@
             "longRest"
           ],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "effectmacro": {
           "dnd5e": {}

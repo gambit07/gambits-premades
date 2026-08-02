@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.0",
+      "custom": "2.1.44",
       "rules": "2024",
       "revision": 1,
       "book": "",
@@ -79,7 +79,7 @@
           "chatFlavor": ""
         },
         "duration": {
-          "units": "round",
+          "units": "minute",
           "override": true,
           "concentration": true,
           "value": "1"
@@ -88,7 +88,10 @@
           {
             "_id": "NQLLac7vAxeaoUOx",
             "onSave": false,
-            "level": {}
+            "level": {
+              "min": null,
+              "max": null
+            }
           }
         ],
         "range": {
@@ -186,13 +189,21 @@
         "name": "",
         "otherActivityAsParentType": true,
         "friendlySave": "default",
-        "flags": {},
+        "flags": {
+          "region-attacher": {
+            "attachRegionToTemplate": false
+          }
+        },
         "visibility": {
-          "level": {},
+          "level": {
+            "min": null,
+            "max": null
+          },
           "requireAttunement": false,
           "requireIdentification": false,
           "requireMagic": false
-        }
+        },
+        "img": ""
       },
       "r6dQ6EGSYvYyjajt": {
         "type": "save",
@@ -212,12 +223,12 @@
           "targets": []
         },
         "description": {
-          "chatFlavor": ""
+          "chatFlavor": "[noaa]"
         },
         "duration": {
           "units": "inst",
           "concentration": false,
-          "override": false
+          "override": true
         },
         "effects": [
           {
@@ -349,7 +360,7 @@
       "duration": {
         "rounds": null,
         "startTime": null,
-        "seconds": 12,
+        "seconds": 60,
         "combat": null,
         "turns": null,
         "startRound": null,
@@ -379,12 +390,12 @@
         "dae": {
           "disableCondition": "",
           "disableIncapacitated": false,
-          "stackable": "multi",
+          "stackable": "noneName",
           "showIcon": false,
           "durationExpression": "",
-          "macroRepeat": "none",
+          "macroRepeat": "endEveryTurn",
           "specialDuration": [
-            "turnEnd"
+            "None"
           ],
           "enableCondition": "",
           "selfTarget": false,
@@ -404,22 +415,8 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
+        "gambits-premades": {
+          "gpsUuid": "12518587-9f13-41c9-aff9-a5bf885aed32"
         }
       },
       "_key": "!items.effects!nqi4SCtZKIvLk5Rd.NQLLac7vAxeaoUOx"
@@ -472,23 +469,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!nqi4SCtZKIvLk5Rd.uYzQNfTFL7dNlQRM"
@@ -509,18 +489,6 @@
       "otherCondition": "",
       "effectCondition": "",
       "onUseMacroName": "[preSavesComplete]function.game.gps.sleep2024"
-    },
-    "midiProperties": {
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
-    "crux": {
-      "trayVisibility": "default"
     },
     "chris-premades": {
       "info": {

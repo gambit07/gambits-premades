@@ -76,37 +76,12 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!xuhA2x0QRYTdh0h5.R3pGjs5rpS7vWiSd"
     }
   ],
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {},
-      "parentId": "nwDZ5hcE3Q6lLA6c"
-    },
-    "monsterMunch": {
-      "titleHTML": "<em><strong>Heated Body.</strong></em>",
-      "fullName": "Heated Body.",
-      "actionCopy": false
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "",
@@ -118,27 +93,6 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": false,
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dae": {
       "macro": {
@@ -169,10 +123,6 @@
       }
     },
     "core": {},
-    "scene-packer": {
-      "hash": "fe278c96849f6b6cdbc0acad063fc8e2019035c9",
-      "sourceId": "Item.Djq2jf1sPavj5lt6"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],

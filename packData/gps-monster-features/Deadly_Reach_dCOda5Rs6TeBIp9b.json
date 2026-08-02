@@ -157,16 +157,6 @@
   },
   "effects": [],
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {},
-      "parentId": "jU2FmmOJfpkioZRv"
-    },
-    "monsterMunch": {
-      "titleHTML": "<strong>Deadly Reach.</strong>",
-      "fullName": "Deadly Reach.",
-      "actionCopy": false,
-      "type": "reaction"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -177,31 +167,7 @@
       "autoTarget": "default",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "core": {},
-    "scene-packer": {
-      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-monsters.Actor.jU2FmmOJfpkioZRv.Item.RO7OQdDmYKVvCwdU",
-      "hash": "744e094fd5b5c6aa08323cc2ddb78d2273bf8d29"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],

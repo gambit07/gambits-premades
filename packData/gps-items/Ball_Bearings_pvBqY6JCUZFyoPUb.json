@@ -304,46 +304,6 @@
     "equipped": false
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Adventuring Gear",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Control",
-          "Utility",
-          "Combat"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ],
-        "stackable": true
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 2103445194,
-      "definitionId": 21,
-      "originalName": "Ball Bearings (bag of 1,000)",
-      "version": "5.0.1"
-    },
-    "scene-packer": {
-      "sourceId": "Actor.YUmZSq6NsdZkLNi9.Item.Bsa0bs9EfYjnJInh",
-      "hash": "3206925f5557623502f264d8a260ac7b17a10bb7"
-    },
     "midi-qol": {
       "onUseMacroName": "[templatePlaced]function.game.gps.ballBearings",
       "AoETargetType": "any",
@@ -355,22 +315,6 @@
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "core": {},
     "dae": {

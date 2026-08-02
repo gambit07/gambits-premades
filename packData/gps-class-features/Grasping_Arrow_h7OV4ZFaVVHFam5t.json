@@ -37,18 +37,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "64227",
-      "entityTypeId": "222216831",
-      "action": true,
-      "componentId": 225,
-      "componentTypeId": 258900837,
-      "originalName": "Grasping Arrow",
-      "type": "class",
-      "class": "Fighter",
-      "subclass": "Arcane Archer",
-      "importId": "L7e4qLWSLQDQQThB"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -58,32 +46,12 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "dnd5e": {
       "advancementOrigin": "RUVuq6gnFP7iNwLn",
       "riders": {
         "activity": [],
         "effect": []
       }
-    },
-    "scene-packer": {
-      "hash": "c7532a27dc5a09831b4d6276ed08a13906935337",
-      "sourceId": "Actor.dRkumHG7EPFVm0Vz.Item.s6UnfOqNxhTO7omq"
     },
     "dae": {
       "macro": {

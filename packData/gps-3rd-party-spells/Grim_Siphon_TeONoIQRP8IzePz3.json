@@ -199,29 +199,6 @@
   "effects": [],
   "flags": {
     "core": {},
-    "scene-packer": {
-      "hash": "a0c250f8e8485389b36413412f8138a48784ffe9",
-      "sourceId": "Compendium.world.gps-homebrew-spells.Item.uAxKbQWbv7Tl72UK"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "saveDamage": "nodam",
-      "bonusSaveDamage": "nodam",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "removeAttackDamageButtons": "default",

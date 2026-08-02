@@ -338,23 +338,6 @@
           "macroRepeat": "none",
           "specialDuration": []
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "autoanimations": {
           "id": "75319998-ffff-4e0e-b529-645b72c968ca",
           "label": "Drawing the Hearth",
@@ -523,37 +506,12 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "default",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "dnd5e": {
       "sourceId": "Compendium.kp-deep-magic-volume-2.deep-magic-2-subclass-features.Item.vHCdNgNKc8sxZ8uV",
       "advancementOrigin": "lQQ9pO1utfZk9ktz.zpcvNEANdLOmhVQJ",
       "riders": {
         "activity": []
       }
-    },
-    "scene-packer": {
-      "hash": "6842e3845842e911de4d28dd55deb23f89d7f247",
-      "sourceId": "Actor.1xFtQVMnMyuFm2w2.Item.ybDP18NjUAZt7IZZ"
     },
     "dae": {
       "macro": {

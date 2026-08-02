@@ -158,27 +158,12 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "56805",
-      "entityTypeId": "222216831",
-      "action": true,
-      "componentId": 5,
-      "componentTypeId": 258900837,
-      "originalName": "Fighting Style: Protection",
-      "type": "class",
-      "class": "Fighter",
-      "importId": "BcgPloZXoiKVTOgJ"
-    },
     "dnd5e": {
       "advancementOrigin": "NakTv4FdwLR7l0x8",
       "riders": {
         "activity": [],
         "effect": []
       }
-    },
-    "scene-packer": {
-      "hash": "020e2a85de44b27ce0ece9e917fd36380b6b8c79",
-      "sourceId": "Item.0HZwhbzXfBvC2ivV"
     },
     "core": {},
     "dae": {
@@ -205,19 +190,6 @@
           "lastModifiedBy": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "midi-qol": {
       "rollAttackPerTarget": "default",

@@ -36,18 +36,6 @@
     "crewed": false
   },
   "flags": {
-    "ddbimporter": {
-      "id": "64224",
-      "entityTypeId": "222216831",
-      "action": true,
-      "componentId": 222,
-      "componentTypeId": 258900837,
-      "originalName": "Beguiling Arrow",
-      "type": "class",
-      "class": "Fighter",
-      "subclass": "Arcane Archer",
-      "importId": "ISJMuDJAGah2PvZr"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -57,31 +45,12 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "saveDamage": "default",
-      "bonusSaveDamage": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "dnd5e": {
       "advancementOrigin": "RUVuq6gnFP7iNwLn",
       "riders": {
         "activity": [],
         "effect": []
       }
-    },
-    "scene-packer": {
-      "hash": "85b98f610e25f255a9b6491e1d07656cce6551fc",
-      "sourceId": "Item.VgtzRZ9iip79pUTe"
     },
     "dae": {
       "macro": {

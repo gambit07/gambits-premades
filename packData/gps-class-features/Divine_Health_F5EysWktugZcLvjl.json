@@ -35,51 +35,11 @@
     "enchant": {}
   },
   "flags": {
-    "ddbimporter": {
-      "id": 265,
-      "data": {
-        "id": 265,
-        "name": "Divine Health",
-        "prerequisite": null,
-        "description": "<p class=\"Core-Styles_Core-Body\">By 3rd level, the divine magic flowing through you makes you immune to disease.</p>",
-        "requiredLevel": 3,
-        "displayOrder": 8
-      },
-      "version": "3.4.63",
-      "featureId": 265,
-      "featureName": "Divine Health",
-      "requiredLevel": 3,
-      "prerequisite": null,
-      "class": "Paladin",
-      "classId": 4,
-      "subClass": "",
-      "parentClassId": null
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "fd0d342d88715a6505ba9f62788a768d3f35b10a"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
       "itemCondition": "",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dnd5e": {
       "riders": {
@@ -131,23 +91,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "dnd5e": {
           "riders": {

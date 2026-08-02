@@ -263,22 +263,6 @@
           "enableCondition": "",
           "disableCondition": ""
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
-        },
         "core": {
           "overlay": false
         }
@@ -288,10 +272,6 @@
   ],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "2f122eeb43c8c84e9625efd4510fa82bdd3b5467",
-      "sourceId": "Actor.edtGqNIYfHYowUUr.Item.UGnQQ2m7FUCzZ2Wq"
-    },
     "dae": {
       "macro": {
         "name": "Fortune's Favour",
@@ -320,27 +300,6 @@
       }
     },
     "core": {},
-    "character-actions-list-5e": {
-      "filter-override": true
-    },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "dnd5e": {
       "riders": {
         "activity": []

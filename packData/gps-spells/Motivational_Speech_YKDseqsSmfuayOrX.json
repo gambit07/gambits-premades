@@ -172,73 +172,6 @@
   },
   "name": "Motivational Speech",
   "flags": {
-    "ddbimporter": {
-      "id": 1665826,
-      "definitionId": 188142,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "classSpell",
-        "class": "Bard",
-        "level": 8,
-        "characterClassId": 115283842,
-        "spellLevel": 3,
-        "ability": "cha",
-        "mod": 4,
-        "dc": 15,
-        "cantripBoost": false,
-        "overrideDC": false,
-        "id": 1665826,
-        "entityTypeId": 435869154,
-        "healingBoost": 0,
-        "usesSpellSlot": true,
-        "forceMaterial": false
-      },
-      "originalName": "Motivational Speech",
-      "sources": [
-        {
-          "sourceId": 44,
-          "pageNumber": 77,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Buff"
-      ],
-      "version": "3.4.63",
-      "effectsApplied": true,
-      "importId": "x1EYutCogYK0iGcS",
-      "pack": "world.ddb-spelljammer-adventures-in-space-ddb-override",
-      "originalItemName": "Motivational Speech",
-      "replaced": true
-    },
-    "midiProperties": {
-      "magicdam": false,
-      "magiceffect": true,
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "never",
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "hash": "be33ff93f4abf1cc1661cfc6f4b4eb3205cce95d",
-      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-override.Item.ezVoasOw8qwxbYh6"
-    },
-    "character-actions-list-5e": {
-      "filter-override": true
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "[preActiveEffects]function.game.gps.motivationalSpeech",
@@ -363,23 +296,6 @@
           "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

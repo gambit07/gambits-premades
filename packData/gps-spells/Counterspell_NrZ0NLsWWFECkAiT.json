@@ -290,56 +290,6 @@
   },
   "name": "Counterspell",
   "flags": {
-    "ddbimporter": {
-      "id": 136448,
-      "definitionId": 2051,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Counterspell",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 228,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Negation"
-      ],
-      "version": "3.5.7",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-spells.Item.kkejunSmxWT2eZUj",
-      "hash": "7c4f1fe343d3b19d51d73884567436f60e1d6b7c"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],

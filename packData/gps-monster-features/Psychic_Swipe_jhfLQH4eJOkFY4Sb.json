@@ -239,32 +239,6 @@
   },
   "effects": [],
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {},
-      "parentId": "vl1VO6jx82F0y4iM"
-    },
-    "monsterMunch": {
-      "titleHTML": "<strong>Psychic Swipe.</strong>",
-      "fullName": "Psychic Swipe.",
-      "actionCopy": false,
-      "type": "action"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "fumbleThreshold": null,
@@ -277,10 +251,6 @@
       "otherCondition": ""
     },
     "core": {},
-    "scene-packer": {
-      "sourceId": "Scene.1mkVNeOdyVIlDdH7.Token.IN9g3OfNajtRsfi1.Actor.xY4y0YufiTyf14Xo.Item.L6guYkgkacd0tRzp",
-      "hash": "55c48f0484b8ea28c08e8ace92ec3f654df6dd2e"
-    },
     "rest-recovery": {
       "data": {
         "recovery": {

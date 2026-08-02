@@ -296,15 +296,6 @@
   },
   "img": "icons/magic/holy/barrier-shield-winged-cross.webp",
   "flags": {
-    "plutonium": {
-      "page": "spells.html",
-      "source": "PHB",
-      "hash": "holy%20aura_phb",
-      "propDroppable": "spell"
-    },
-    "custom-character-sheet-sections": {
-      "sectionName": ""
-    },
     "rest-recovery": {
       "data": {
         "recovery": {
@@ -325,32 +316,7 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": true,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "core": {},
-    "scene-packer": {
-      "hash": "2d9eab251a547f3e913256ee0c829f1aa4808a7b",
-      "sourceId": "Item.vS5boXojQAQy06pT"
-    },
     "dae": {
       "macro": {
         "name": "Holy Aura",
@@ -472,23 +438,6 @@
           "dontApply": false,
           "enableCondition": "",
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": true,
-          "aura": "Allies",
-          "nameOverride": "",
-          "radius": "30",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": true,
-          "hidden": false,
-          "displayTemp": true,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

@@ -251,22 +251,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!nG19wNDsveBN44rA.pdLI8545fAY1YBAM"
@@ -274,10 +258,6 @@
   ],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "2d448cc88c36e6c9654cd3e5c5b4b81b96cb51a0",
-      "sourceId": "Item.mKRHL6UVY5PJ4Ddr"
-    },
     "dae": {
       "macro": {
         "name": "Oil, Flame",
@@ -306,19 +286,6 @@
       }
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "effectActivation": false,

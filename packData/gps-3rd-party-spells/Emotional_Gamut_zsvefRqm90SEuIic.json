@@ -262,22 +262,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!zsvefRqm90SEuIic.tRBWoyAIFXz3MkXY"
@@ -292,29 +276,6 @@
       "effectCondition": "",
       "onUseMacroName": "[postPreambleComplete]ItemMacro,[postActiveEffects]ItemMacro"
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "default",
-      "saveDamage": "default",
-      "bonusSaveDamage": "default",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "dnd5e": {
       "dependents": [
         {
@@ -326,10 +287,6 @@
       }
     },
     "core": {},
-    "scene-packer": {
-      "hash": "a7d9cee962387f1935a05087d0369b1503300896",
-      "sourceId": "Item.Hj3VEFeU37v5LsdE"
-    },
     "rest-recovery": {
       "data": {
         "recovery": {

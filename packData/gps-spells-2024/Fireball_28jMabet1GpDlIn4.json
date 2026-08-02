@@ -213,71 +213,6 @@
   },
   "name": "Fireball",
   "flags": {
-    "ddbimporter": {
-      "id": 136817,
-      "definitionId": 2102,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "classSpell",
-        "class": "Wizard",
-        "level": 8,
-        "characterClassId": 129265972,
-        "spellLevel": 3,
-        "ability": "int",
-        "mod": 4,
-        "dc": 15,
-        "cantripBoost": false,
-        "overrideDC": false,
-        "id": 136817,
-        "entityTypeId": 435869154,
-        "healingBoost": 0,
-        "usesSpellSlot": true,
-        "forceMaterial": false
-      },
-      "originalName": "Fireball",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 241,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Damage"
-      ],
-      "version": "3.4.63",
-      "effectsApplied": true,
-      "importId": "tZJFKeB7hv0Diptu"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "never",
-      "saveDamage": "default",
-      "bonusSaveDamage": "default",
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "hash": "51be3c061a4ea2a4476c95561ff8951fd73d2cc3",
-      "sourceId": "Actor.edtGqNIYfHYowUUr.Item.QGMxY90szEd23to2"
-    },
     "dae": {
       "macro": {
         "name": "Fireball",
@@ -602,9 +537,6 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "effects": [],

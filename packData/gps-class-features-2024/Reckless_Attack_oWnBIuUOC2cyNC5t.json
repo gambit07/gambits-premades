@@ -38,22 +38,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 53,
-      "type": "class",
-      "dndbeyond": {
-        "requiredLevel": 2,
-        "displayOrder": 5,
-        "levelScale": null,
-        "levelScales": [],
-        "limitedUse": [],
-        "class": "Barbarian"
-      },
-      "class": "Barbarian",
-      "subclass": "Path of the Totem Warrior",
-      "effectsApplied": true,
-      "importId": "LqcaPoeCikRHYH6K"
-    },
     "midi-qol": {
       "forceCEOff": true,
       "rollAttackPerTarget": "default",
@@ -65,10 +49,6 @@
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "hash": "84ae7569f161446d66fbe44d85e0f4882e699e63",
-      "sourceId": "Actor.DX6KebS1bvxIkQlQ.Item.b4xUUAxHOA23hFhU"
     },
     "core": {},
     "dae": {
@@ -97,23 +77,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dnd5e": {
       "riders": {
@@ -173,23 +136,6 @@
             "None"
           ],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "effectmacro": {},
         "core": {

@@ -180,59 +180,11 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "9112638",
-      "entityTypeId": "222216831",
-      "action": true,
-      "componentId": 9998203,
-      "componentTypeId": 12168134,
-      "originalName": "Mark of the Heretic",
-      "type": "class",
-      "class": "Paladin",
-      "classId": 4,
-      "subclass": "Oath of Zeal",
-      "subclassId": 2128783,
-      "dndbeyond": {
-        "levelScale": null,
-        "levelScales": [],
-        "limitedUse": [
-          {
-            "level": null,
-            "uses": 1
-          },
-          {
-            "level": null,
-            "uses": 1
-          },
-          {
-            "level": null,
-            "uses": 1
-          }
-        ]
-      },
-      "importId": "8RgFnU0fv27Kz6qA"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
       "itemCondition": "",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dnd5e": {
       "advancementOrigin": "obNWLTT236ILqch8",
@@ -335,23 +287,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!avRdV3vncVg8lVFa.8CiXpIuTA3ibBGsT"

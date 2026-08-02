@@ -175,29 +175,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "1026",
-      "entityTypeId": "222216831",
-      "componentId": 260,
-      "componentTypeId": 12168134,
-      "type": "class",
-      "class": "Paladin",
-      "subclass": "Oath of Conquest",
-      "dndbeyond": {
-        "levelScale": null,
-        "levelScales": [],
-        "limitedUse": [
-          {
-            "level": null,
-            "uses": 1
-          }
-        ]
-      },
-      "importId": "M0brEkdGfGMah5nH",
-      "pack": "world.ddb-spelljammer-adventures-in-space-ddb-override",
-      "originalItemName": "Divine Sense",
-      "replaced": true
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "[postActiveEffects]function.game.gps.divineSense",
@@ -207,27 +184,6 @@
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "hash": "067e4a445b77456ea66dcb81f7adc5841003afec",
-      "sourceId": "Actor.Kog50Edwvg7saBS5.Item.JUhRl7XjXwwHPLQS"
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "never"
     },
     "core": {},
     "dae": {

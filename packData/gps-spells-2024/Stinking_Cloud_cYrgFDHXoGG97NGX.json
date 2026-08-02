@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "2.1.44",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -179,7 +179,13 @@
             "attachRegionToTemplate": true
           }
         },
-        "appliedEffects": []
+        "appliedEffects": [],
+        "visibility": {
+          "level": {
+            "min": null,
+            "max": null
+          }
+        }
       },
       "rXxdWAADxapJqp2j": {
         "type": "save",
@@ -380,27 +386,6 @@
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never",
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dae": {
       "macro": {
@@ -650,17 +635,9 @@
       "version": 5
     },
     "core": {},
-    "character-actions-list-5e": {
-      "filter-override": true
-    },
-    "scene-packer": {
-      "sourceId": "Item.tzWEc6Yn33lJlyer",
-      "hash": "261d5d33244aea44e752b17da057ea09237c8200"
-    },
     "dnd5e": {
       "riders": {
-        "activity": [],
-        "effect": []
+        "activity": []
       }
     },
     "tidy5e-sheet": {
@@ -689,9 +666,9 @@
               "compendiumSource": null,
               "duplicateSource": null,
               "exportSource": null,
-              "coreVersion": "13.348",
+              "coreVersion": "13.351",
               "systemId": "dnd5e",
-              "systemVersion": "5.1.4",
+              "systemVersion": "5.2.5",
               "lastModifiedBy": null
             }
           },
@@ -703,7 +680,7 @@
               "events": [
                 "tokenEnter"
               ],
-              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nlet effectData = event.data.token.actor.appliedEffects.some(e => e.name === \"Stinking Cloud\");\n\nif(!effectData) {\neffectData = [{\n      \"disabled\": false,\n      \"name\": \"Stinking Cloud\",\n      \"img\": \"icons/commodities/materials/glass-orb-green.webp\",\n      \"transfer\": false,\n      \"flags.dae.showIcon\": true\n}];\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: event.data.token.actor.uuid, effects: effectData });\n}"
+              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\n\nlet effectData = event.data.token.actor.appliedEffects.some(e => e.name === \"Stinking Cloud\");\n\nif(!effectData) {\neffectData = [{\n      \"disabled\": false,\n      \"name\": \"Stinking Cloud\",\n      \"img\": \"icons/commodities/materials/glass-orb-green.webp\",\n      \"transfer\": false,\n  \"flags.dae.showIcon\": true\n}];\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: event.data.token.actor.uuid, effects: effectData });\n}"
             },
             "disabled": false,
             "flags": {},
@@ -711,9 +688,9 @@
               "compendiumSource": null,
               "duplicateSource": null,
               "exportSource": null,
-              "coreVersion": "13.348",
+              "coreVersion": "13.351",
               "systemId": "dnd5e",
-              "systemVersion": "5.1.4",
+              "systemVersion": "5.2.5",
               "lastModifiedBy": null
             }
           },
@@ -725,7 +702,7 @@
               "events": [
                 "tokenExit"
               ],
-              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nlet effectData = event.data.token.actor.appliedEffects.find(e => e.name === \"Stinking Cloud\");\n\nif(effectData) effectData.delete();"
+              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\n\nlet effectData = event.data.token.actor.appliedEffects.find(e => e.name === \"Stinking Cloud\");\n\nif(effectData) effectData.delete();"
             },
             "disabled": false,
             "flags": {},
@@ -733,9 +710,9 @@
               "compendiumSource": null,
               "duplicateSource": null,
               "exportSource": null,
-              "coreVersion": "13.348",
+              "coreVersion": "13.351",
               "systemId": "dnd5e",
-              "systemVersion": "5.1.4",
+              "systemVersion": "5.2.5",
               "lastModifiedBy": null
             }
           }

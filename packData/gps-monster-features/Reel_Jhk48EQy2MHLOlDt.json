@@ -156,27 +156,6 @@
   },
   "effects": [],
   "flags": {
-    "ddbimporter": {
-      "levelBonus": false,
-      "dndbeyond": {},
-      "parentId": "HEuUjYbuzL7ku34L"
-    },
-    "monsterMunch": {
-      "titleHTML": "<em>Reel.</em>",
-      "fullName": "Reel.",
-      "actionCopy": false,
-      "type": "action",
-      "actionInfo": {
-        "damage": {
-          "parts": [],
-          "versatile": ""
-        },
-        "baseAbility": null,
-        "toHit": 0,
-        "proficient": false,
-        "extraAttackBonus": 0
-      }
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -187,22 +166,6 @@
       "autoTarget": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dae": {
       "macro": {
@@ -230,10 +193,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "scene-packer": {
-      "hash": "0b8229ca8815bdc3504a4b2f12f9f186086a8ebc",
-      "sourceId": "Item.fG6VijKiDxL5Ftsg"
     },
     "autoanimations": {
       "id": "d42fc0c6-cc82-4d27-83b4-03d7b090ca03",

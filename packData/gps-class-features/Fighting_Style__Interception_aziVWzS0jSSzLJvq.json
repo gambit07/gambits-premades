@@ -158,27 +158,12 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "2426984",
-      "entityTypeId": "222216831",
-      "action": true,
-      "componentId": 1301086,
-      "componentTypeId": 258900837,
-      "originalName": "Fighting Style: Interception",
-      "type": "class",
-      "class": "Fighter",
-      "importId": "KxZXSnW8eq2hyTlg"
-    },
     "dnd5e": {
       "advancementOrigin": "NakTv4FdwLR7l0x8",
       "riders": {
         "activity": [],
         "effect": []
       }
-    },
-    "scene-packer": {
-      "hash": "f0f4b31d88072e2cb6928f37056f899249af81d6",
-      "sourceId": "Item.gQl2JJkyncic19aa"
     },
     "core": {},
     "dae": {
@@ -205,19 +190,6 @@
           "lastModifiedBy": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "midi-qol": {
       "rollAttackPerTarget": "default",

@@ -171,30 +171,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 353,
-      "data": {
-        "id": 353,
-        "name": "Stroke of Luck",
-        "prerequisite": null,
-        "description": "<p class=\"compendium-hr\">At 20th level, you have an uncanny knack for succeeding when you need to. If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the d20 roll as a 20.</p>\r\n<p class=\"Core-Styles_Core-Body\">Once you use this feature, you can’t use it again until you finish a short or long rest.</p>",
-        "requiredLevel": 20,
-        "displayOrder": 20
-      },
-      "version": "3.4.63",
-      "featureId": 353,
-      "featureName": "Stroke of Luck",
-      "requiredLevel": 20,
-      "prerequisite": null,
-      "class": "Rogue",
-      "classId": 12,
-      "subClass": "",
-      "parentClassId": null
-    },
-    "scene-packer": {
-      "sourceId": "Actor.d1ZIxDStcGdZPoYU.Item.Hha4m7aehTml1uwG",
-      "hash": "4d54e2240ce017eabd8ab56ff75e71c1e9b484cc"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -228,24 +204,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "tidy5e-sheet": {},
     "dnd5e": {
@@ -303,23 +261,6 @@
             "isSkill"
           ],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "effectmacro": {
           "dnd5e": {}

@@ -67,51 +67,6 @@
     "activities": {}
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Clothing",
-        "avatarUrl": "https://www.dndbeyond.com/avatars/19/216/636382363396040957.jpeg",
-        "largeAvatarUrl": "https://www.dndbeyond.com/avatars/7/164/636284722823230171.jpeg",
-        "filterType": "Wondrous item",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Deception",
-          "Warding",
-          "Outerwear"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": 158,
-            "sourceType": 1
-          }
-        ],
-        "pictureUrl": "ddb-images/other/item/equipment/cloak-of-displacement-large.webp",
-        "isLegacy": false
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 112130694,
-      "definitionId": 4605,
-      "originalName": "Cloak of Displacement",
-      "version": "5.2.36",
-      "effectsApplied": true,
-      "keepIcon": true,
-      "isLegacy": false,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Cloak of Displacement"
-    },
     "dae": {
       "alwaysActive": false,
       "activeEquipped": true,
@@ -151,24 +106,6 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
-    },
-    "scene-packer": {
-      "sourceId": "Actor.edtGqNIYfHYowUUr.Item.MUTykrhFRFOEFseW",
-      "hash": "21969d3d87b0fbdd1a18ac8508841634a38d39d8"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "chris-premades": {
       "customConfig": [
@@ -237,31 +174,11 @@
           "durationExpression": "",
           "specialDuration": []
         },
-        "ddbimporter": {
-          "disabled": false
-        },
         "midi-qol": {
           "forceCEOff": true
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "effectmacro": {},
         "dnd5e": {
@@ -325,23 +242,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!G0WyymrUet7baO97.ldOYJlb9eTpZAfJj"

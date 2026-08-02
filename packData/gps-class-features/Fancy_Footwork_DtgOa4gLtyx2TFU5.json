@@ -34,30 +34,6 @@
     "properties": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 507,
-      "data": {
-        "id": 507,
-        "name": "Fancy Footwork",
-        "prerequisite": null,
-        "description": "<p>When you choose this archetype at 3rd level, you learn how to land a strike and then slip away without reprisal. During your turn, if you make a melee attack against a creature, that creature can’t make opportunity attacks against you for the rest of your turn.</p>",
-        "requiredLevel": 3,
-        "displayOrder": 1
-      },
-      "version": "3.4.63",
-      "featureId": 507,
-      "featureName": "Fancy Footwork",
-      "requiredLevel": 3,
-      "prerequisite": null,
-      "class": "Rogue",
-      "classId": 80,
-      "subClass": "Swashbuckler",
-      "parentClassId": 12
-    },
-    "scene-packer": {
-      "sourceId": "Item.qLwMgdWjEgCzJdqc",
-      "hash": "6879e24827eef2cfd8fc813c0daf9fb83a612d5f"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -92,19 +68,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "dnd5e": {
       "riders": {
@@ -158,23 +121,6 @@
           "macroRepeat": "endEveryTurn",
           "specialDuration": [],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "effectmacro": {},
         "core": {

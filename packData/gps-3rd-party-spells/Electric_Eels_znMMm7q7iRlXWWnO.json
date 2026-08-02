@@ -220,22 +220,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": true,
-          "aura": "Allies",
-          "nameOverride": "",
-          "radius": "5",
-          "alignment": "",
-          "type": "",
-          "customCheck": "token.actor.name === 'Electric Eel'",
-          "ignoreSelf": true,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!znMMm7q7iRlXWWnO.sC8LPNOsmlare51n"
@@ -243,10 +227,6 @@
   ],
   "flags": {
     "core": {},
-    "scene-packer": {
-      "hash": "ce3a2256378c282f1a3480e0ed773118399f7a7c",
-      "sourceId": "Compendium.world.gps-homebrew-spells.Item.DNMd8aCqnoIToyuT"
-    },
     "dae": {
       "macro": {
         "name": "Electric Eels",
@@ -287,23 +267,6 @@
       "autoTarget": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "tidy5e-sheet": {
       "action-filter-override": true,

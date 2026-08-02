@@ -182,49 +182,11 @@
   },
   "name": "Freedom of Movement",
   "flags": {
-    "ddbimporter": {
-      "id": 137889,
-      "definitionId": 2116,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Freedom of Movement",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 244,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Buff",
-        "Movement"
-      ],
-      "version": "5.2.36",
-      "effectsApplied": true,
-      "isLegacy": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Freedom of Movement"
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
     },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default"
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "9b8ef2f73f9b48053029680789639748115d97ca"
-    },
-    "dnd5e": {},
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "onUseMacroName": "[postActiveEffects]function.game.gps.freedomOfMovement"

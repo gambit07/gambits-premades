@@ -46,22 +46,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "tint": "#ffffff",
@@ -74,23 +58,6 @@
   ],
   "flags": {
     "core": {},
-    "scene-packer": {
-      "hash": "34e13030c037e552dc9e3c005ed1c2ee5a9e23f1",
-      "sourceId": "Compendium.world.gps-homebrew-items.Item.nN8SbUV8n3Mt40c1"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "effectActivation": false,
       "itemCondition": "",

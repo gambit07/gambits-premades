@@ -233,23 +233,6 @@
           "enableCondition": "",
           "disableCondition": ""
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -272,10 +255,6 @@
   ],
   "flags": {
     "core": {},
-    "scene-packer": {
-      "hash": "4de78a189b2f129e568848d90dc3d414d01ecb3d",
-      "sourceId": "Compendium.world.gps-homebrew-spells.Item.npIog4jAEUFz5c5r"
-    },
     "dae": {
       "macro": {
         "name": "Contagious Healing",
@@ -302,23 +281,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "critOther": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "midi-qol": {
       "rollAttackPerTarget": "default",

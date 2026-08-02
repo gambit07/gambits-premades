@@ -284,63 +284,13 @@
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!htzHae9YqHvUyLD6.b3OjzPWvIMChk5t4"
     }
   ],
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {},
-      "parentId": "28zMxya0ktR17WWY"
-    },
-    "monsterMunch": {
-      "titleHTML": "<strong>Tentacles.</strong>",
-      "fullName": "Tentacles.",
-      "actionCopy": false
-    },
-    "midiProperties": {
-      "fulldam": false,
-      "nodam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "core": {},
-    "scene-packer": {
-      "hash": "8080ee585a8953bab78e804558569c889922d7ac",
-      "sourceId": "Item.bBWhZ1Yh2WHpsz1x"
-    },
     "midi-qol": {
       "fumbleThreshold": null,
       "effectActivation": false,

@@ -37,60 +37,11 @@
     "enchant": {}
   },
   "flags": {
-    "ddbimporter": {
-      "id": 388,
-      "type": "class",
-      "dndbeyond": {
-        "requiredLevel": 2,
-        "displayOrder": 5,
-        "levelScale": null,
-        "levelScales": [],
-        "limitedUse": [],
-        "choice": {
-          "label": "Eldritch Mind",
-          "choiceId": "3-1-261409312",
-          "componentId": 388,
-          "componentTypeId": 12168134,
-          "parentChoiceId": null,
-          "subType": null,
-          "wasOption": false,
-          "type": "class"
-        },
-        "class": "Warlock"
-      },
-      "class": "Warlock",
-      "subclass": "The Great Old One",
-      "importId": "r3U7b2PnBEc98MxS",
-      "overrideId": "NONE",
-      "ignoreIcon": false,
-      "ignoreItemImport": true,
-      "retainResourceConsumption": false
-    },
-    "scene-packer": {
-      "hash": "d5f199c36f459aeba3e22c5f15294156e3700adf",
-      "sourceId": "Actor.PpeGTVYvVoFsdZZD.Item.dYhkczIikAuzpwwP"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
       "itemCondition": "",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "core": {},
     "dnd5e": {
@@ -124,9 +75,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "flags": {
-        "dfreds-convenient-effects": {
-          "description": ""
-        },
         "dae": {
           "selfTarget": false,
           "selfTargetAlways": false,
@@ -140,22 +88,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "radius": "undefined",
-          "alignment": "",
-          "type": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "nameOverride": "",
-          "customCheck": "",
-          "wallsBlock": "system"
         }
       },
       "name": "Eldritch Invocations: Eldritch Mind",

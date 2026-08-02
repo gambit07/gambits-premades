@@ -273,33 +273,6 @@
     ]
   },
   "flags": {
-    "ddbimporter": {
-      "id": 1810355,
-      "data": {
-        "id": 1810355,
-        "name": "Chronal Shift",
-        "prerequisite": null,
-        "description": "<p><em>2nd-level Chronurgy Magic feature</em></p>\r\n<p>You can magically exert limited control over the flow of time around a creature. As a reaction, after you or a creature you can see within 30 feet of you makes an attack roll, an ability check, or a saving throw, you can force the creature to reroll. You make this decision after you see whether the roll succeeds or fails. The target must use the result of the second roll.</p>\r\n<p>You can use this ability twice, and you regain any expended uses when you finish a long rest.</p>",
-        "requiredLevel": 2,
-        "displayOrder": 1
-      },
-      "version": "5.2.36",
-      "featureId": 1810355,
-      "featureName": "Chronal Shift",
-      "requiredLevel": 2,
-      "prerequisite": null,
-      "class": "Wizard",
-      "classId": 400659,
-      "subClass": "Chronurgy Magic",
-      "parentClassId": 8,
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Chronal Shift"
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "2308d4b29ef3cb67d2fdf0758cadab2ece5fd838"
-    },
     "midi-qol": {
       "onUseMacroName": ""
     },

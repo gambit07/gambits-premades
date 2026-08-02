@@ -177,7 +177,13 @@
             "attachRegionToTemplate": true
           }
         },
-        "appliedEffects": []
+        "appliedEffects": [],
+        "visibility": {
+          "level": {
+            "min": null,
+            "max": null
+          }
+        }
       },
       "546i5jBV6ZGlojj4": {
         "type": "damage",
@@ -572,27 +578,6 @@
   "effects": [],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "13d4f0c6e1af6440820bffb927bad0d3be5e1b9d",
-      "sourceId": "Item.UxYKSPw3NknFP5kH"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "concentration": true,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "effectActivation": false,
@@ -860,8 +845,7 @@
     },
     "dnd5e": {
       "riders": {
-        "activity": [],
-        "effect": []
+        "activity": []
       }
     },
     "region-attacher": {
@@ -886,11 +870,10 @@
               "compendiumSource": null,
               "duplicateSource": null,
               "exportSource": null,
-              "coreVersion": "13.348",
+              "coreVersion": "13.351",
               "systemId": "dnd5e",
-              "systemVersion": "5.1.4",
-              "lastModifiedBy": "roRDywD19pu2VxlC",
-              "modifiedTime": 1756620586339
+              "systemVersion": "5.2.5",
+              "lastModifiedBy": null
             }
           },
           {
@@ -909,9 +892,9 @@
               "compendiumSource": null,
               "duplicateSource": null,
               "exportSource": null,
-              "coreVersion": "13.348",
+              "coreVersion": "13.351",
               "systemId": "dnd5e",
-              "systemVersion": "5.1.4",
+              "systemVersion": "5.2.5",
               "lastModifiedBy": null
             }
           },
@@ -931,11 +914,10 @@
               "compendiumSource": null,
               "duplicateSource": null,
               "exportSource": null,
-              "coreVersion": "13.348",
+              "coreVersion": "13.351",
               "systemId": "dnd5e",
-              "systemVersion": "5.1.4",
-              "lastModifiedBy": "roRDywD19pu2VxlC",
-              "modifiedTime": 1756620578802
+              "systemVersion": "5.2.5",
+              "lastModifiedBy": null
             }
           },
           {
@@ -953,9 +935,9 @@
               "compendiumSource": null,
               "duplicateSource": null,
               "exportSource": null,
-              "coreVersion": "13.348",
+              "coreVersion": "13.351",
               "systemId": "dnd5e",
-              "systemVersion": "5.1.4",
+              "systemVersion": "5.2.5",
               "lastModifiedBy": null
             }
           }
@@ -976,9 +958,6 @@
           "category": "animation"
         }
       ]
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "_id": "uqWiaUp7GPJWiHMv",

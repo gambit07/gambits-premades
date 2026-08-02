@@ -1,4 +1,3 @@
 - Bugfixes:
-  - Removed some oopsies console logs
-  - Updated ball bearings to resolve param not passed into function
-  - Updated Identify to remove invalid button html
+  - Resolved a couple issues with the Sleep 2024 spell
+  - Resolved a few issues with the Stinking Cloud spell, thanks Bacon!

@@ -214,22 +214,6 @@
           "specialDuration": [],
           "disableIncapacitated": false,
           "dontApply": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "nameOverride": "",
-          "customCheck": "",
-          "wallsBlock": "system"
         }
       },
       "tint": "#ffffff",
@@ -250,23 +234,6 @@
       "reactionCondition": "false",
       "effectCondition": "",
       "onUseMacroName": ""
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "default",
-      "noConcentrationCheck": false
     },
     "dnd5e": {
       "sourceId": "Compendium.world.pugilist-class.Item.AclO1ro8VTMy5YnM",
@@ -512,27 +479,8 @@
         }
       }
     },
-    "scene-packer": {
-      "hash": "fd10a8ae6a4ed505780cf8f47ad434b99273ee1f",
-      "sourceId": "Item.x5X2f7Ne20pKwO0J"
-    },
     "tidy5e-sheet": {
       "favorite": true
-    },
-    "magicitems": {
-      "enabled": false,
-      "default": "",
-      "equipped": false,
-      "attuned": false,
-      "charges": "0",
-      "chargeType": "c1",
-      "destroy": false,
-      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
-      "rechargeable": false,
-      "recharge": "0",
-      "rechargeType": "t1",
-      "rechargeUnit": "r1",
-      "sorting": "l"
     }
   },
   "_id": "2hIGowCxQJ68BQhi",

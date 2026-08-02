@@ -184,51 +184,6 @@
   },
   "name": "Temporal Shunt",
   "flags": {
-    "ddbimporter": {
-      "id": 3489931,
-      "definitionId": 416809,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Temporal Shunt",
-      "sources": [
-        {
-          "sourceId": 59,
-          "pageNumber": 189,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Banishment",
-        "Dunamancy"
-      ],
-      "version": "5.2.29",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Item.sL8RpF6SmrkoETXF",
-      "hash": "3ab336314cf97d223857e7ecade14ba40874de1f"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],
@@ -318,23 +273,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!nWMHG3NrwtqX7bHK.rdC3uUBNsljBstEx"

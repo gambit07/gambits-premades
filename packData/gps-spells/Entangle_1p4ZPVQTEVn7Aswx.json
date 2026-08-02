@@ -309,92 +309,6 @@
   },
   "name": "Entangle",
   "flags": {
-    "ddbimporter": {
-      "id": 3218,
-      "definitionId": 2014,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "classSpell",
-        "class": "Warlock",
-        "level": 7,
-        "characterClassId": 116570746,
-        "spellLevel": 4,
-        "ability": "cha",
-        "mod": 4,
-        "dc": 15,
-        "cantripBoost": false,
-        "overrideDC": false,
-        "id": 3218,
-        "entityTypeId": 435869154,
-        "healingBoost": 0,
-        "usesSpellSlot": true
-      },
-      "originalName": "Black Tentacles",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": null,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Damage",
-        "Control"
-      ],
-      "version": "3.4.23",
-      "effect": {
-        "applyStart": true,
-        "handleStartRoll": true,
-        "autoDamageIfCondition": true,
-        "applyEnd": false,
-        "applyEntry": true,
-        "applyImmediate": true,
-        "everyEntry": false,
-        "conditionEffect": true,
-        "damageEffect": true,
-        "removeOnOff": true,
-        "allowVsRemoveCondition": true,
-        "removalCheck": [
-          "str",
-          "dex"
-        ],
-        "removalSave": null,
-        "saveRemoves": false,
-        "condition": "Restrained",
-        "dice": "3d6[bludgeoning]",
-        "damageType": "bludgeoning",
-        "save": "dex",
-        "sequencerFile": "jb2a.black_tentacles.dark_purple"
-      },
-      "effectsApplied": true,
-      "importId": "LcPaJ2JvQf4Nz6op"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "onUseMacroName": "[preActiveEffects]function.game.gps.entangle,[postSave]function.game.gps.entangle",
       "forceCEOff": true,
@@ -408,10 +322,6 @@
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "hash": "f178727f56c0b250228240a835ebae2cdbfd8c62",
-      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-override.Item.LhcXHYzUuvHo5MUo"
     },
     "core": {},
     "rest-recovery": {

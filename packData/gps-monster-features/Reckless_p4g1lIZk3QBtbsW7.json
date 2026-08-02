@@ -156,10 +156,6 @@
   },
   "flags": {
     "core": {},
-    "scene-packer": {
-      "hash": "15e5c2fa12c486767d385f8d929f4f7704af13ac",
-      "sourceId": "Item.6eTbWHMQBHPoEJAN"
-    },
     "dae": {
       "macro": {
         "name": "Reckless",
@@ -187,23 +183,6 @@
         }
       }
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "effectActivation": false,
@@ -224,9 +203,6 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "img": "icons/skills/social/intimidation-impressing.webp",
@@ -275,23 +251,6 @@
           "macroRepeat": "startEveryTurn",
           "specialDuration": [],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "effectmacro": {},
         "core": {

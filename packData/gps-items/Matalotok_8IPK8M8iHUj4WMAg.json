@@ -365,45 +365,6 @@
     "equipped": true
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Warhammer",
-        "damage": {
-          "parts": []
-        },
-        "classFeatures": [],
-        "restrictions": [
-          "30-foot-radius sphere"
-        ],
-        "avatarUrl": "https://www.dndbeyond.com/avatars/6757/62/637006868113141825.jpeg",
-        "largeAvatarUrl": "https://www.dndbeyond.com/avatars/6757/63/637006868114343045.jpeg",
-        "filterType": "Weapon",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [],
-        "sources": [
-          {
-            "sourceId": 48,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ],
-        "pictureUrl": "https://www.dndbeyond.com/avatars/6757/63/637006868114343045.jpeg"
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 112130694,
-      "definitionId": 842273,
-      "originalName": "Matalotok",
-      "version": "5.0.1",
-      "effectsApplied": true,
-      "keepIcon": true
-    },
     "dae": {
       "alwaysActive": false,
       "activeEquipped": true,
@@ -443,26 +404,6 @@
       "otherCondition": "",
       "onUseMacroName": "[preDamageRollComplete]function.game.gps.matalotok",
       "reactionCondition": ""
-    },
-    "scene-packer": {
-      "sourceId": "Actor.YUmZSq6NsdZkLNi9.Item.bz5TxkYwr74aZr06",
-      "hash": "f6ee65cd1be13d921766877b25fdd960dc4bbd28"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "core": {},
     "autoanimations": {
@@ -730,33 +671,11 @@
           "specialDuration": [],
           "disableCondition": ""
         },
-        "ddbimporter": {
-          "disabled": false,
-          "itemId": 0,
-          "itemEntityTypeId": 0
-        },
         "midi-qol": {
           "forceCEOff": true
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "name": "Matalotok - Constant",

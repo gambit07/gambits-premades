@@ -184,49 +184,6 @@
   },
   "name": "Phantasmal Killer",
   "flags": {
-    "ddbimporter": {
-      "id": 138547,
-      "definitionId": 2202,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Phantasmal Killer",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 265,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Damage",
-        "Control"
-      ],
-      "version": "5.2.36",
-      "effectsApplied": true,
-      "isLegacy": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Phantasmal Killer"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "forceCEOff": true,
       "removeAttackDamageButtons": "default",
@@ -236,18 +193,11 @@
       "otherCondition": "",
       "effectCondition": ""
     },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "554146e2c0871ce8f058775a980523104ba0521a"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],
         "effect": []
       }
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "effects": [
@@ -294,9 +244,6 @@
           "macroRepeat": "none",
           "specialDuration": []
         },
-        "ddbimporter": {
-          "disabled": false
-        },
         "midi-qol": {
           "forceCEOff": true
         },
@@ -307,23 +254,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "Enemy",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "name": "Phantasmal Killer",

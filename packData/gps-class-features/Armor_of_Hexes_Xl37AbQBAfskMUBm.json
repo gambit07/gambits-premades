@@ -34,30 +34,6 @@
     }
   },
   "flags": {
-    "ddbimporter": {
-      "id": 759,
-      "data": {
-        "id": 759,
-        "name": "Armor of Hexes",
-        "prerequisite": null,
-        "description": "<p>At 10th level, your hex grows more powerful. If the target cursed by your Hexblade’s Curse hits you with an attack roll, you can use your reaction to roll a d6. On a 4 or higher, the attack instead misses you, regardless of its roll.</p>",
-        "requiredLevel": 10,
-        "displayOrder": 5
-      },
-      "version": "3.4.63",
-      "featureId": 759,
-      "featureName": "Armor of Hexes",
-      "requiredLevel": 10,
-      "prerequisite": null,
-      "class": "Warlock",
-      "classId": 115,
-      "subClass": "The Hexblade",
-      "parentClassId": 7
-    },
-    "scene-packer": {
-      "sourceId": "Actor.PpeGTVYvVoFsdZZD.Item.iJLgVp6UkrkbxHx1",
-      "hash": "451413512899afb18ece6afd7f04c85e7e3ebcb2"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -91,19 +67,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "dnd5e": {
       "riders": {
@@ -150,23 +113,6 @@
           "macroRepeat": "none",
           "specialDuration": [],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

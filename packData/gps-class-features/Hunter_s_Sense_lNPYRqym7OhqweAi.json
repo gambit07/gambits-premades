@@ -160,30 +160,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 729,
-      "data": {
-        "id": 729,
-        "name": "Hunter’s Sense",
-        "prerequisite": null,
-        "description": "<p class=\"Core-Styles_Core-Body\">At 3rd level, you gain the ability to peer at a creature and magically discern how best to hurt it. As an action, choose one creature you can see within 60 feet of you. You immediately learn whether the creature has any damage immunities, resistances, or vulnerabilities and what they are. If the creature is hidden from divination magic, you sense that it has no damage immunities, resistances, or vulnerabilities.</p>\r\n<p class=\"Core-Styles_Core-Body\">You can use this feature a number of times equal to your Wisdom modifier (minimum of once). You regain all expended uses of it when you finish a long rest.</p>",
-        "requiredLevel": 3,
-        "displayOrder": 2
-      },
-      "version": "3.4.63",
-      "featureId": 729,
-      "featureName": "Hunter’s Sense",
-      "requiredLevel": 3,
-      "prerequisite": null,
-      "class": "Ranger",
-      "classId": 110,
-      "subClass": "Monster Slayer",
-      "parentClassId": 5
-    },
-    "scene-packer": {
-      "sourceId": "Actor.YUmZSq6NsdZkLNi9.Item.mKfTQwPRAv2MkNsl",
-      "hash": "77b2f8cf4acf70a0afdf15862412f87108319bcc"
-    },
     "midi-qol": {
       "onUseMacroName": "[preActiveEffects]ItemMacro",
       "effectActivation": false
@@ -215,23 +191,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "dnd5e": {
       "riders": {

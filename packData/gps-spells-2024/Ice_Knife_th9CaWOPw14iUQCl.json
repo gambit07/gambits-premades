@@ -384,22 +384,6 @@
       "effectCondition": "",
       "onUseMacroName": "[postAttackRollComplete]function.game.gps.iceKnife,[postPreambleComplete]function.game.gps.iceKnife,[postDamageRollComplete]function.game.gps.iceKnife"
     },
-    "midiProperties": {
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "crux": {
-      "trayVisibility": "default"
-    },
     "dae": {
       "macro": {
         "name": "Ice Knife",

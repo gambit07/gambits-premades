@@ -174,57 +174,6 @@
   },
   "name": "Foresight",
   "flags": {
-    "ddbimporter": {
-      "id": 137885,
-      "definitionId": 2115,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Foresight",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 244,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Buff",
-        "Debuff",
-        "Foreknowledge"
-      ],
-      "version": "3.5.7",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "a39316aea6f9e27c9f81bfe0fc9128d56f6e8158"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],
@@ -314,22 +263,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         },
         "dnd5e": {
           "riders": {

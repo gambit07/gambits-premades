@@ -55,23 +55,6 @@
           "enableCondition": "",
           "disableCondition": ""
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "dependents": [
             {
@@ -91,27 +74,6 @@
   ],
   "flags": {
     "core": {},
-    "scene-packer": {
-      "hash": "d58864462b60dfc0b058ade090b97b853ffc4d3a",
-      "sourceId": "Item.78OKrJrFCi6Nq7Y1"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": true,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "effectActivation": false,
       "itemCondition": "",

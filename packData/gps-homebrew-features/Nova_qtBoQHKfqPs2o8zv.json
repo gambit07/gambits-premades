@@ -202,22 +202,6 @@
           "macroRepeat": "startEveryTurn",
           "specialDuration": []
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
-        },
         "core": {}
       },
       "tint": "#ffffff",
@@ -240,23 +224,6 @@
       "otherCondition": "",
       "effectCondition": "",
       "rollAttackPerTarget": "default"
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never"
     },
     "dae": {
       "macro": {
@@ -493,10 +460,6 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
-    },
-    "scene-packer": {
-      "sourceId": "Item.dlKvq07UrJHvE2sA",
-      "hash": "dd6259d4c00b160331e52e77bbda45616899a1c2"
     },
     "dnd5e": {
       "riders": {

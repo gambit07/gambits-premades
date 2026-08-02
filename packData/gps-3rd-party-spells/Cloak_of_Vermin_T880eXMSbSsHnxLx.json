@@ -233,23 +233,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!T880eXMSbSsHnxLx.8tw03CXz3eslo1Hi"
@@ -263,19 +246,6 @@
       }
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "removeAttackDamageButtons": "default",
@@ -283,10 +253,6 @@
       "effectCondition": "",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "hash": "dee8b3ac461bc28623bf7c40f5fcbe2b9dd96bd8",
-      "sourceId": "Item.S0B8h5sBVt2hkPzA"
     },
     "dae": {
       "macro": {

@@ -37,30 +37,6 @@
     "enchant": {}
   },
   "flags": {
-    "ddbimporter": {
-      "id": 408,
-      "data": {
-        "id": 408,
-        "name": "Thought Shield",
-        "prerequisite": null,
-        "description": "<p class=\"Core-Styles_Core-Body\">Starting at 10th level, your thoughts can’t be read by telepathy or other means unless you allow it. You also have resistance to psychic damage, and whenever a creature deals psychic damage to you, that creature takes the same amount of damage that you do.</p>",
-        "requiredLevel": 10,
-        "displayOrder": 4
-      },
-      "version": "3.4.63",
-      "featureId": 408,
-      "featureName": "Thought Shield",
-      "requiredLevel": 10,
-      "prerequisite": null,
-      "class": "Warlock",
-      "classId": 49,
-      "subClass": "The Great Old One",
-      "parentClassId": 7
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "7a107458df1bea31e410d456b79f6b4f49c90422"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -100,22 +76,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     }
   },
   "img": "icons/magic/unholy/orb-swirling-teal.webp",
@@ -165,23 +125,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

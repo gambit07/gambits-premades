@@ -157,52 +157,12 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 432,
-      "data": {
-        "id": 432,
-        "name": "Instinctive Charm",
-        "prerequisite": null,
-        "description": "<p class=\"Core-Styles_Core-Body\">Beginning at 6th level, when a creature you can see within 30 feet of you makes an attack roll against you, you can use your reaction to divert the attack, provided that another creature is within the attack’s range. The attacker must make a Wisdom saving throw against your wizard spell save DC. On a failed save, the attacker must target the creature that is closest to it, not including you or itself. If multiple creatures are closest, the attacker chooses which one to target. On a successful save, you can’t use this feature on the attacker again until you finish a long rest.</p>\r\n<p class=\"Core-Styles_Core-Body\">You must choose to use this feature before knowing whether the attack hits or misses. Creatures that can’t be charmed are immune to this effect.</p>",
-        "requiredLevel": 6,
-        "displayOrder": 3
-      },
-      "version": "3.4.63",
-      "featureId": 432,
-      "featureName": "Instinctive Charm",
-      "requiredLevel": 6,
-      "prerequisite": null,
-      "class": "Wizard",
-      "classId": 53,
-      "subClass": "School of Enchantment",
-      "parentClassId": 8
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "0406b18e23aa42bcc7cc5761770a3a9d5142ed44"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
       "itemCondition": "",
       "reactionCondition": "false",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "gambits-premades": {
       "gpsUuid": "b9a797f2-3262-4a89-9b32-d8482a0c5f29"

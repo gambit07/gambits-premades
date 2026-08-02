@@ -65,47 +65,6 @@
     "activities": {}
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Shield",
-        "filterType": "Armor",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Warding"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ],
-        "alternativeNames": [
-          "Shield Armor"
-        ]
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 701257905,
-      "definitionId": 8,
-      "originalName": "Shield",
-      "version": "3.5.7"
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "0201c6ba5b20cf12a1408a3c3ab701439933f6e3"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -138,22 +97,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dnd5e": {
       "riders": {
@@ -204,22 +147,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!cx7msQIJvDBGRPTy.rdCztK1Tsmy0bGcC"

@@ -251,64 +251,6 @@
     "magicalBonus": null
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Greatsword",
-        "damage": {
-          "parts": []
-        },
-        "classFeatures": [],
-        "restrictions": [],
-        "filterType": "Weapon",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Damage",
-          "Combat"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ]
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 112130694,
-      "definitionId": 5238,
-      "originalName": "Greatsword, +1",
-      "version": "3.4.62"
-    },
-    "magicitems": {
-      "enabled": true,
-      "charges": 0,
-      "chargeType": "c1",
-      "rechargeable": false,
-      "recharge": "0",
-      "rechargeType": "t2",
-      "rechargeUnit": "",
-      "destroy": false,
-      "destroyCheck": "d1",
-      "spells": {},
-      "feats": {},
-      "tables": {},
-      "equipped": true,
-      "attuned": false,
-      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
-      "sorting": "l"
-    },
     "core": {},
     "midi-qol": {
       "fumbleThreshold": null,
@@ -318,30 +260,12 @@
       "itemCondition": "",
       "effectCondition": ""
     },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "rest-recovery": {
       "data": {
         "recovery": {
           "enabled": false
         }
       }
-    },
-    "scene-packer": {
-      "hash": "69b42cc8667351bcb1b800c58708ce7a2e7386de",
-      "sourceId": "Item.x5JuWHpO7xFx9rJR"
     },
     "dae": {
       "macro": {
@@ -415,22 +339,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "tint": "#ffffff",

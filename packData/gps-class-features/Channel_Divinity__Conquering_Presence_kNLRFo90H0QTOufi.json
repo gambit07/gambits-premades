@@ -217,42 +217,12 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!kNLRFo90H0QTOufi.eAmrp3t0nbjRDhVd"
     }
   ],
   "flags": {
-    "magicitems": {
-      "enabled": false,
-      "equipped": false,
-      "attuned": false,
-      "charges": "0",
-      "chargeType": "c1",
-      "destroy": false,
-      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
-      "rechargeable": false,
-      "recharge": "0",
-      "rechargeType": "t1",
-      "rechargeUnit": "r1",
-      "sorting": "l"
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "",
@@ -260,55 +230,7 @@
       "itemCondition": "",
       "effectCondition": ""
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "rollOther": false,
-      "critOther": false,
-      "magicdam": false,
-      "magiceffect": true,
-      "concentration": false,
-      "toggleEffect": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "offHandWeapon": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "never"
-    },
     "core": {},
-    "scene-packer": {
-      "sourceId": "Actor.4rgwJtcvBFEmAQ4A.Item.nPsgqBvk01B6wCRu",
-      "hash": "34e95a65d436e4998061b54c3ffcb1653285cf99"
-    },
-    "ddbimporter": {
-      "pack": "world.ddb-spelljammer-adventures-in-space-ddb-override",
-      "id": "53481",
-      "entityTypeId": "222216831",
-      "componentId": 707,
-      "componentTypeId": 12168134,
-      "type": "class",
-      "class": "Paladin",
-      "subclass": "Oath of Conquest",
-      "dndbeyond": {
-        "levelScale": null,
-        "levelScales": [],
-        "limitedUse": [
-          {
-            "level": null,
-            "uses": 1
-          },
-          {
-            "level": null,
-            "uses": 1
-          }
-        ]
-      },
-      "importId": "M0brEkdGfGMah5nH",
-      "originalItemName": "Channel Divinity: Conquering Presence",
-      "replaced": true
-    },
     "dae": {
       "macro": {
         "name": "Channel Divinity: Conquering Presence",

@@ -160,16 +160,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "5119105",
-      "entityTypeId": "222216831",
-      "action": true,
-      "componentId": 8429478,
-      "componentTypeId": 1960452172,
-      "originalName": "Nimble Escape: Disengage",
-      "type": "race",
-      "importId": "hclqiLsJgMNH6l1x"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -178,23 +168,6 @@
       "effectCondition": "",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
-    "scene-packer": {
-      "hash": "27aade5b55ae9182eaf8130087e9f57160e2e4bc",
-      "sourceId": "Actor.1xFtQVMnMyuFm2w2.Item.t4OyiaPhW814t6PU"
     },
     "core": {},
     "dnd5e": {
@@ -248,22 +221,6 @@
           "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         },
         "dnd5e": {
           "riders": {

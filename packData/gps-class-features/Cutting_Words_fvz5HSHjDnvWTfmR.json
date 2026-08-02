@@ -158,30 +158,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 96,
-      "data": {
-        "id": 96,
-        "name": "Cutting Words",
-        "prerequisite": null,
-        "description": "<p>Also at 3rd level, you learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature’s roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can’t hear you or if it’s immune to being charmed.</p>",
-        "requiredLevel": 3,
-        "displayOrder": 2
-      },
-      "version": "3.4.63",
-      "featureId": 96,
-      "featureName": "Cutting Words",
-      "requiredLevel": 3,
-      "prerequisite": null,
-      "class": "Bard",
-      "classId": 18,
-      "subClass": "College of Lore",
-      "parentClassId": 1
-    },
-    "scene-packer": {
-      "sourceId": "Item.Pf6ioODOfWhVXI48",
-      "hash": "5874a5db2dfce85f54c8e4e16faf219ecd73dd9d"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -190,19 +166,6 @@
       "reactionCondition": "false"
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "gambits-premades": {
       "gpsUuid": "b352241e-5042-44a4-b632-3168ded51946"
     },

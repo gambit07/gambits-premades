@@ -266,22 +266,6 @@
           "specialDuration": [
             "turnEnd"
           ]
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!Oc2Fl4SwU4VxEFrH.Ka4crf96KPf0p7Uc"
@@ -289,10 +273,6 @@
   ],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "cd4328ba6e59dd1cfa885be26caeed7fd0b434ba",
-      "sourceId": "Compendium.world.gps-spells.Item.lmqTPHauaoQ2pNHj"
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "",
@@ -303,40 +283,7 @@
       "effectCondition": "",
       "rollAttackPerTarget": "default"
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "never",
-      "saveDamage": "default",
-      "bonusSaveDamage": "default",
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "core": {},
-    "items-with-spells-5e": {
-      "parent-item": "Actor.edtGqNIYfHYowUUr.Item.4qzrxSqtNx6DWorP"
-    },
-    "ddbimporter": {
-      "overrideId": "NONE",
-      "ignoreIcon": false,
-      "ignoreItemImport": true,
-      "ignoreItemForChrisPremades": false,
-      "retainResourceConsumption": false
-    },
     "dnd5e": {
       "riders": {
         "activity": []

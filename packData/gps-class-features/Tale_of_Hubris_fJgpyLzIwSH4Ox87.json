@@ -156,33 +156,6 @@
     "properties": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 8470346,
-      "data": {
-        "id": 8470346,
-        "name": "Tale of Hubris",
-        "prerequisite": null,
-        "description": "<p>At 6th level, you learn to weave a magical narrative that draws out the fatal arrogance of your foes. When a creature scores a critical hit against you or an ally within 60 feet of you that you can see, you can use your reaction and expend one use of your Bardic Inspiration to target the attacking creature and evoke the story of their downfall. For 1 minute or until the target suffers a critical hit, any weapon attack against the target scores a critical hit on a roll of 18&ndash;20.</p>\r\n<p>At 14th level, the critical hit range of this feature increases to 17&ndash;20.</p>",
-        "requiredLevel": 6,
-        "displayOrder": 3
-      },
-      "version": "5.2.36",
-      "featureId": 8470346,
-      "featureName": "Tale of Hubris",
-      "requiredLevel": 6,
-      "prerequisite": null,
-      "class": "Bard",
-      "classId": 1805539,
-      "subClass": "College of Tragedy",
-      "parentClassId": 1,
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Tale of Hubris"
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "bcbdea883e203fd3790ddf3b63b4053616fce6d5"
-    },
     "midi-qol": {
       "onUseMacroName": ""
     },
@@ -256,23 +229,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!fJgpyLzIwSH4Ox87.dB8JqVuRW2YroKII"

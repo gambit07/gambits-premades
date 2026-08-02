@@ -587,23 +587,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "All",
-          "nameOverride": "",
-          "radius": "5",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": true,
-          "height": false,
-          "hidden": false,
-          "displayTemp": true,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -619,72 +602,6 @@
   ],
   "name": "Ashardalon's Stride",
   "flags": {
-    "ddbimporter": {
-      "id": 327,
-      "definitionId": 1183862,
-      "entityTypeId": 420821570,
-      "dndbeyond": {
-        "class": "Bard",
-        "lookup": "classFeature",
-        "lookupName": "Magical Secrets",
-        "lookupId": 592,
-        "level": 12,
-        "ability": "cha",
-        "mod": 4,
-        "dc": 16,
-        "overrideDC": false,
-        "id": 327,
-        "entityTypeId": 420821570,
-        "healingBoost": 0,
-        "cantripBoost": false,
-        "usesSpellSlot": true,
-        "forceMaterial": false,
-        "homebrew": false,
-        "forcePact": false
-      },
-      "originalName": "Ashardalon's Stride",
-      "sources": [
-        {
-          "sourceId": 81,
-          "pageNumber": 19,
-          "sourceType": 1
-        }
-      ],
-      "tags": [],
-      "version": "6.0.79",
-      "is2014": true,
-      "is2024": false,
-      "addSpellEffects": true,
-      "legacy": false,
-      "defaultAdditionalActivities": {
-        "enabled": true,
-        "data": {}
-      },
-      "effectsApplied": true,
-      "importId": "ba73cG5fIlErYVTQ",
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Ashardalon's Stride"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Actor.qCpb5H6vLrBeOWAO.Item.iILheTQXE5lAlhQU",
-      "hash": "287798da9315ea058714300411e3271375900c88"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],

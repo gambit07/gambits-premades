@@ -567,27 +567,6 @@
   "effects": [],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "13d4f0c6e1af6440820bffb927bad0d3be5e1b9d",
-      "sourceId": "Item.UxYKSPw3NknFP5kH"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "concentration": true,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "effectActivation": false,
@@ -968,9 +947,6 @@
           "category": "animation"
         }
       ]
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "_id": "b51TjlOij5U4490N",

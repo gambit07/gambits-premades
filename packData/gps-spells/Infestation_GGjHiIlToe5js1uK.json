@@ -209,66 +209,6 @@
   },
   "name": "Infestation",
   "flags": {
-    "ddbimporter": {
-      "id": 254,
-      "definitionId": 14878,
-      "entityTypeId": 420821570,
-      "dndbeyond": {
-        "class": "Warlock",
-        "lookup": "classFeature",
-        "lookupName": "Pact of the Tome",
-        "lookupId": 132,
-        "level": 9,
-        "ability": "cha",
-        "mod": 5,
-        "dc": 17,
-        "overrideDC": false,
-        "id": 254,
-        "entityTypeId": 420821570,
-        "healingBoost": 0,
-        "usesSpellSlot": false,
-        "forceMaterial": false
-      },
-      "originalName": "Infestation",
-      "sources": [
-        {
-          "sourceId": 27,
-          "pageNumber": 158,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Summoning",
-        "Damage",
-        "Control"
-      ],
-      "version": "3.6.0",
-      "effectsApplied": true,
-      "importId": "xvboe5BGmoLA2QUv"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "saveDamage": "default",
-      "bonusSaveDamage": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "hash": "92a57393d95ec8f308704318272e4c2ca8ac84c0",
-      "sourceId": "Actor.PpeGTVYvVoFsdZZD.Item.YXszBDQFBUYTzN3r"
-    },
     "dae": {
       "macro": {
         "name": "Infestation",

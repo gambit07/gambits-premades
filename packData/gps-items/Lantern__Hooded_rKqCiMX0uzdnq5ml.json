@@ -183,45 +183,6 @@
     "magicalBonus": null
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Adventuring Gear",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Utility",
-          "Exploration"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ],
-        "stackable": true
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 2103445194,
-      "definitionId": 57,
-      "originalName": "Lantern, Hooded",
-      "version": "3.5.7"
-    },
-    "scene-packer": {
-      "sourceId": "Item.asiKPjd6htu1ANLJ",
-      "hash": "bca30c22ae37870f62f96eaa886c4d939ef83b07"
-    },
     "midi-qol": {
       "onUseMacroName": "[preApplyDynamicEffects]function.game.gps.lanternHooded",
       "effectActivation": false,
@@ -233,20 +194,6 @@
       "removeAttackDamageButtons": "default"
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "never",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "dae": {
       "macro": {
         "name": "Lantern, Hooded",
@@ -493,9 +440,6 @@
       "isCustomized": false,
       "fromAmmo": false,
       "version": 5
-    },
-    "universalAnimations": {
-      "override": "neverPlay"
     },
     "dnd5e": {
       "riders": {

@@ -176,52 +176,12 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 2986374,
-      "data": {
-        "id": 2986374,
-        "name": "Restore Balance",
-        "prerequisite": null,
-        "description": "<p><em>1st-level Clockwork Soul feature </em></p>\r\n<p>Your connection to the plane of absolute order allows you to equalize chaotic moments. When a creature you can see within 60 feet of you is about to roll a d20 with advantage or disadvantage, you can use your reaction to prevent the roll from being affected by advantage and disadvantage.</p>\r\n<p>You can use this feature a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p>",
-        "requiredLevel": 1,
-        "displayOrder": 2
-      },
-      "version": "3.4.63",
-      "featureId": 2986374,
-      "featureName": "Restore Balance",
-      "requiredLevel": 1,
-      "prerequisite": null,
-      "class": "Sorcerer",
-      "classId": 652403,
-      "subClass": "Clockwork Soul",
-      "parentClassId": 6
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "0b927bae081c9a0f2d02c18dfe21393f5051ee90"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
       "itemCondition": "",
       "reactionCondition": "false",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "gambits-premades": {
       "gpsUuid": "6a8cd8d0-7a6b-42b1-9da7-d9d4aa54a7c1"

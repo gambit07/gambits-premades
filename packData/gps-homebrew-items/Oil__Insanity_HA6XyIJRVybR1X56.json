@@ -251,22 +251,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!HA6XyIJRVybR1X56.1qk8GyaMvc7FkaDi"
@@ -274,10 +258,6 @@
   ],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "344ff44d511ece2d75b3a1ff7b4de28ba24c15a6",
-      "sourceId": "Item.3iZPvyzCKUXiwWkW"
-    },
     "dae": {
       "macro": {
         "name": "Oil, Insanity",
@@ -306,19 +286,6 @@
       }
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "effectActivation": false,

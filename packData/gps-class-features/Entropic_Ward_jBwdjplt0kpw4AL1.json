@@ -45,26 +45,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "1040",
-      "entityTypeId": "222216831",
-      "componentId": 407,
-      "componentTypeId": 12168134,
-      "type": "class",
-      "class": "Warlock",
-      "subclass": "The Great Old One",
-      "dndbeyond": {
-        "levelScale": null,
-        "levelScales": [],
-        "limitedUse": [
-          {
-            "level": null,
-            "uses": 1
-          }
-        ]
-      },
-      "importId": "xvboe5BGmoLA2QUv"
-    },
     "dae": {
       "macro": {
         "name": "Entropic Ward",
@@ -98,25 +78,6 @@
       "itemCondition": "",
       "reactionCondition": "false",
       "effectCondition": ""
-    },
-    "scene-packer": {
-      "hash": "7dba4523174a790486e525c315519fc00f1b281c"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": true,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dnd5e": {
       "riders": {
@@ -173,23 +134,6 @@
           "macroRepeat": "none",
           "specialDuration": [],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

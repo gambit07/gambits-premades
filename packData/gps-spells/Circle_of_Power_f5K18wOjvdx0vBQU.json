@@ -181,53 +181,6 @@
   },
   "name": "Circle of Power",
   "flags": {
-    "ddbimporter": {
-      "id": 136206,
-      "definitionId": 2353,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Circle of Power",
-      "sources": [
-        {
-          "sourceId": 2,
-          "pageNumber": 221,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Buff",
-        "Warding"
-      ],
-      "version": "3.5.7",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "rollOther": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Actor.4rgwJtcvBFEmAQ4A.Item.x09oyjOQPzBDQc1A",
-      "hash": "8fbe7c04510da81e4d339bd6114da586427c3122"
-    },
     "core": {},
     "midi-qol": {
       "AoETargetType": "any",
@@ -546,23 +499,6 @@
           "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "Allies",
-          "nameOverride": "",
-          "radius": "30",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": true,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "autoanimations": {
           "id": "f9feca38-6223-47c1-8049-08057627dabf",

@@ -219,22 +219,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "tint": "#ffffff",
@@ -247,10 +231,6 @@
   ],
   "folder": "hZHmMlQMwcouSKoR",
   "flags": {
-    "scene-packer": {
-      "hash": "4476567cc9843b15e87409645e7d17575422cfb7",
-      "sourceId": "Actor.YUmZSq6NsdZkLNi9.Item.sYaxvhLRDdM4ljOQ"
-    },
     "dae": {
       "macro": {
         "name": "Channel Divinity: Rebuke the Damned",
@@ -279,18 +259,6 @@
       }
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "itemCondition": "",
@@ -332,9 +300,6 @@
           }
         }
       }
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "_id": "C054FNKAAX6REcEE",

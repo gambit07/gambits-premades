@@ -357,40 +357,6 @@
     "mastery": ""
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Staff",
-        "filterType": "Staff",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Control",
-          "Communication"
-        ],
-        "sources": [
-          {
-            "sourceId": 110,
-            "pageNumber": 116,
-            "sourceType": 1
-          }
-        ]
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 112130694,
-      "definitionId": 7102440,
-      "originalName": "Staff of the Rooted Hills",
-      "version": "3.5.7"
-    },
-    "scene-packer": {
-      "sourceId": "Item.pwnE7o1IDWPcmTw1",
-      "hash": "b36352d1a4f2a96e25a04689a1447d7627e4f69c"
-    },
     "midi-qol": {
       "onUseMacroName": "[postDamageRoll]function.game.gps.staffOfTheRootedHills",
       "fumbleThreshold": null,
@@ -403,19 +369,6 @@
       "effectCondition": ""
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "dae": {
       "macro": {
         "name": "Staff of the Rooted Hills",
@@ -442,16 +395,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "items-with-spells-5e": {
-      "item-spells": [
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.cw3oQyX2wv1KU3Ye.Actor.SNZJsEKbROB1q6bT.Item.jkOdHFdNOxnsYBRg"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.cw3oQyX2wv1KU3Ye.Actor.SNZJsEKbROB1q6bT.Item.ppC6Wu63ZoDevLNe"
-        }
-      ]
     },
     "dnd5e": {
       "riders": {
@@ -504,23 +447,6 @@
           "macroRepeat": "startEveryTurn",
           "specialDuration": [],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "effectmacro": {},
         "core": {

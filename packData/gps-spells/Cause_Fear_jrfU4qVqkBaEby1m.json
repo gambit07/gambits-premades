@@ -186,38 +186,6 @@
   },
   "name": "Cause Fear",
   "flags": {
-    "ddbimporter": {
-      "definitionId": 14758,
-      "entityTypeId": 420821570,
-      "dndbeyond": {
-        "lookup": "feat",
-        "lookupName": "Shadow Touched",
-        "lookupId": 456446,
-        "level": null,
-        "ability": "cha",
-        "mod": 4,
-        "dc": 14,
-        "overrideDC": false,
-        "entityTypeId": 420821570,
-        "healingBoost": 0,
-        "usesSpellSlot": true,
-        "granted": true
-      },
-      "originalName": "Cause Fear",
-      "sources": [
-        {
-          "sourceId": 27,
-          "pageNumber": 151,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Debuff"
-      ],
-      "version": "3.7.15",
-      "effectsApplied": true,
-      "importId": "hclqiLsJgMNH6l1x"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "effectActivation": false,
@@ -230,27 +198,6 @@
       "AoETargetType": "any",
       "AoETargetTypeIncludeSelf": true,
       "autoTarget": "default"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "magicdam": true,
-      "magiceffect": true,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "hash": "1adf2754b147b6d4b6a2c5914de2f58f01e0e62a",
-      "sourceId": "Item.0zhb111SuODWM6ZF"
     },
     "dae": {
       "macro": {
@@ -333,22 +280,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "tint": "#ffffff",

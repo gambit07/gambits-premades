@@ -43,22 +43,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "radius": "undefined",
-          "alignment": "",
-          "type": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "nameOverride": "",
-          "customCheck": "",
-          "wallsBlock": "system"
-        },
         "effectmacro": {}
       },
       "tint": "#ffffff",
@@ -74,22 +58,6 @@
     }
   ],
   "flags": {
-    "dynamiceffects": {
-      "effects": [
-        {
-          "modSpecKey": "flags.dnd5e.conditions",
-          "value": "Charmed",
-          "mode": "+",
-          "targetSpecific": false,
-          "id": 1,
-          "itemId": "Rkamxk5rL0RQpiYv",
-          "active": true,
-          "_targets": []
-        }
-      ],
-      "equipActive": true,
-      "alwaysActive": false
-    },
     "dae": {
       "activeEquipped": false,
       "alwaysActive": false,
@@ -135,27 +103,6 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "rollOther": false,
-      "critOther": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "concentration": false,
-      "toggleEffect": false,
-      "autoFailFriendly": false,
-      "offHandWeapon": false,
-      "ignoreTotalCover": false,
-      "autoSaveFriendly": false,
-      "confirmTargets": "default",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "rest-recovery": {
       "data": {
         "recovery": {
@@ -168,10 +115,6 @@
         "activity": [],
         "effect": []
       }
-    },
-    "scene-packer": {
-      "hash": "7d55f25feef5aae08d5364ab9b93414f6f97036c",
-      "sourceId": "Actor.4rgwJtcvBFEmAQ4A.Item.gOUR1XR033WOhu2f"
     },
     "tidy5e-sheet": {
       "section": "",

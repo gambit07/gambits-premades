@@ -251,22 +251,6 @@
           "macroRepeat": "none",
           "specialDuration": []
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
-        },
         "effectmacro": {}
       },
       "tint": "#ffffff",
@@ -279,17 +263,7 @@
   ],
   "folder": null,
   "flags": {
-    "archon": {
-      "uuid": "Item.e4iAhRoZr1qxIhRq"
-    },
     "core": {},
-    "scene-packer": {
-      "hash": "ed01ea02d7528322e8aca479e557c70f07c7f50e",
-      "sourceId": "Compendium.world.gps-homebrew-items.Item.zU5rb6IHhnrk4kHv"
-    },
-    "character-actions-list-5e": {
-      "filter-override": true
-    },
     "midi-qol": {
       "onUseMacroName": "[isAttacked]ItemMacro",
       "effectActivation": false,
@@ -298,31 +272,6 @@
       "otherCondition": "",
       "effectCondition": "",
       "rollAttackPerTarget": "default"
-    },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
-    "ddbimporter": {
-      "overrideId": "NONE",
-      "ignoreIcon": false,
-      "ignoreItemImport": true,
-      "ignoreItemForChrisPremades": false,
-      "retainResourceConsumption": false,
-      "ignoreItemUpdate": false
     },
     "dae": {
       "macro": {

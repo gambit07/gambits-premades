@@ -84,63 +84,13 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!urTSnlB2CnUIP67u.9M4bgUxvj86v7Ps5"
     }
   ],
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {},
-      "parentId": "uNpTt1Y56g0yT2ih"
-    },
-    "monsterMunch": {
-      "titleHTML": "<em><strong>Flyby.</strong></em>",
-      "fullName": "Flyby.",
-      "actionCopy": false
-    },
     "core": {},
-    "scene-packer": {
-      "sourceId": "Actor.zIZTPPvKDCaB0FjK.Item.6CaDH9HlTlb82bGX",
-      "hash": "3c191b6593688bf269e07e1501dc235bc9bad1cd"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "itemCondition": "",

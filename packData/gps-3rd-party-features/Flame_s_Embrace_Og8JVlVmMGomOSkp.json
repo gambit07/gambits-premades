@@ -357,23 +357,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "gambits-premades": {
           "gpsUuid": "c87befde-c36f-4237-b645-e98e1526de42"
         }
@@ -385,21 +368,6 @@
     "midi-qol": {
       "effectActivation": false
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "dnd5e": {
       "sourceId": "Compendium.kp-deep-magic-volume-2.deep-magic-2-subclass-features.Item.8m2fwOObtveUWkpw",
       "advancementOrigin": "lQQ9pO1utfZk9ktz.X4RkGfF9x2xbsznK",
@@ -407,9 +375,6 @@
         "activity": [],
         "effect": []
       }
-    },
-    "scene-packer": {
-      "hash": "2084e027d2153bf809cf9ba58313d7af1ca4669f"
     },
     "tidy5e-sheet": {
       "actionSection": "Other",

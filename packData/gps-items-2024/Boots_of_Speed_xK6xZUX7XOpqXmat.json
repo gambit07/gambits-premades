@@ -188,52 +188,6 @@
     "equipped": true
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Clothing",
-        "avatarUrl": "https://www.dndbeyond.com/avatars/18/916/636381772747258603.jpeg",
-        "largeAvatarUrl": "https://www.dndbeyond.com/avatars/7/136/636284714256851023.jpeg",
-        "filterType": "Wondrous item",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": 14,
-        "tags": [
-          "Buff",
-          "Movement",
-          "Utility",
-          "Footwear"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": 155,
-            "sourceType": 1
-          }
-        ],
-        "pictureUrl": "ddb-images/other/item/equipment/boots-of-speed-large.webp",
-        "isLegacy": false
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 112130694,
-      "definitionId": 4589,
-      "originalName": "Boots of Speed",
-      "version": "5.2.36",
-      "effectsApplied": true,
-      "keepIcon": true,
-      "isLegacy": false,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Boots of Speed"
-    },
     "dae": {
       "alwaysActive": false,
       "activeEquipped": true,
@@ -272,26 +226,6 @@
       "onUseMacroName": "[preItemRoll]function.game.gps.bootsOfSpeed",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "sourceId": "Actor.edtGqNIYfHYowUUr.Item.bggT4B6y6ERVW98x",
-      "hash": "09e2ad33f3bc0577bbae0871a63808624bfcc563"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dnd5e": {
       "dependents": [
@@ -355,33 +289,11 @@
             "combatEnd"
           ]
         },
-        "ddbimporter": {
-          "disabled": false,
-          "itemId": 0,
-          "itemEntityTypeId": 0
-        },
         "midi-qol": {
           "forceCEOff": true
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "gambits-premades": {
           "gpsUuid": "61bf2fcd-bc81-4b38-a4bb-41bc2159c9cf"
@@ -460,23 +372,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "gambits-premades": {
           "gpsUuid": "6274a76f-2c25-4f80-8cc0-70e02f8d880c"

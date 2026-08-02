@@ -293,47 +293,9 @@
   "effects": [],
   "name": "Power Word Pain",
   "flags": {
-    "ddbimporter": {
-      "id": 138210,
-      "definitionId": 14520,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null,
-        "homebrew": false
-      },
-      "originalName": "Power Word Pain",
-      "sources": [
-        {
-          "sourceId": 27,
-          "pageNumber": 163,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Debuff"
-      ],
-      "version": "6.0.54",
-      "is2014": false,
-      "is2024": true,
-      "addSpellEffects": false,
-      "legacy": false,
-      "effectsApplied": true
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "onUseMacroName": "[postPreambleComplete]function.game.gps.powerWordPain"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "magicdam": true,
-      "magiceffect": true
-    },
-    "scene-packer": {
-      "sourceId": "Item.PowerWordPainIII",
-      "hash": "311143d1f44ef0ad26ff6b8cb06a162693e21a93"
     },
     "dnd5e": {
       "riders": {

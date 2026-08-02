@@ -305,67 +305,6 @@
   },
   "name": "Dissonant Whispers",
   "flags": {
-    "ddbimporter": {
-      "id": 136624,
-      "definitionId": 2314,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "classSpell",
-        "class": "Bard",
-        "level": 9,
-        "characterClassId": 115283842,
-        "spellLevel": 1,
-        "ability": "cha",
-        "mod": 4,
-        "dc": 16,
-        "cantripBoost": false,
-        "overrideDC": false,
-        "id": 136624,
-        "entityTypeId": 435869154,
-        "healingBoost": 0,
-        "usesSpellSlot": true,
-        "forceMaterial": false
-      },
-      "originalName": "Dissonant Whispers",
-      "sources": [
-        {
-          "sourceId": 2,
-          "pageNumber": 234,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Damage",
-        "Control"
-      ],
-      "version": "3.6.0",
-      "effectsApplied": true,
-      "importId": "cnFbt2Z7bN7kvfb9",
-      "pack": "world.ddb-spelljammer-adventures-in-space-ddb-override",
-      "originalItemName": "Dissonant Whispers",
-      "replaced": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "never",
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "[postActiveEffects]function.game.gps.dissonantWhispers2024",
@@ -380,13 +319,6 @@
       "otherCondition": ""
     },
     "core": {},
-    "scene-packer": {
-      "hash": "80054828ccdf67e9b4b79d6b5076d71b0e02703e",
-      "sourceId": "Actor.w88977HaPVOXN7mP.Item.ytyxvhhGlGUYAZiq"
-    },
-    "character-actions-list-5e": {
-      "filter-override": true
-    },
     "dae": {
       "macro": {
         "name": "Dissonant Whispers",
@@ -413,9 +345,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "tidy5e-sheet-kgar": {
-      "action-filter-override": true
     },
     "dnd5e": {
       "riders": {

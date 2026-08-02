@@ -168,33 +168,6 @@
     "properties": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": 1131856,
-      "data": {
-        "id": 1131856,
-        "name": "Flash of Genius",
-        "prerequisite": null,
-        "description": "<p class=\"Core-Styles_Core-Body\">Starting at 7th level, you gain the ability to come up with solutions under pressure. When you or another creature you can see within 30 feet of you makes an ability check or a saving throw, you can use your reaction to add your Intelligence modifier to the roll.</p>\r\n<p class=\"Core-Styles_Core-Body\">You can use this feature a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a long rest.</p>",
-        "requiredLevel": 7,
-        "displayOrder": 12
-      },
-      "version": "5.2.36",
-      "featureId": 1131856,
-      "featureName": "Flash of Genius",
-      "requiredLevel": 7,
-      "prerequisite": null,
-      "class": "Artificer",
-      "classId": 252717,
-      "subClass": "",
-      "parentClassId": null,
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Flash of Genius"
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "8f7aa696c73d430b90e49f31b2c642c6b200f28e"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "effectActivation": false,
@@ -210,30 +183,6 @@
           "enabled": false
         }
       }
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": true,
-      "confirmTargets": "never",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "custom-character-sheet-sections": {
-      "sectionName": ""
     },
     "dae": {
       "macro": {

@@ -179,45 +179,6 @@
     "identifier": "lantern-bullseye"
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Adventuring Gear",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Utility",
-          "Exploration"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ],
-        "stackable": true
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 2103445194,
-      "definitionId": 57,
-      "originalName": "Lantern, Hooded",
-      "version": "3.5.7"
-    },
-    "scene-packer": {
-      "sourceId": "Item.hjahTGg3IYIgRxdy",
-      "hash": "7f63683069ac1fd3a39a36a810bbcb82c26c767c"
-    },
     "midi-qol": {
       "onUseMacroName": "[preApplyDynamicEffects]function.game.gps.lanternBullseye",
       "effectActivation": false,
@@ -229,20 +190,6 @@
       "removeAttackDamageButtons": "default"
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "never",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "dae": {
       "macro": {
         "name": "Lantern, Bullseye",
@@ -489,9 +436,6 @@
       "isCustomized": false,
       "fromAmmo": false,
       "version": 5
-    },
-    "universalAnimations": {
-      "override": "neverPlay"
     },
     "dnd5e": {
       "riders": {

@@ -256,23 +256,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!RlUSwec1E7MuK6YB.YHKgdj2KIbQRBZWW"
@@ -324,23 +307,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!RlUSwec1E7MuK6YB.xIHCGomLrpyg1Nh0"
@@ -354,9 +320,6 @@
         "effect": []
       }
     },
-    "crux": {
-      "trayVisibility": "default"
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "removeAttackDamageButtons": "default",
@@ -364,15 +327,6 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     }
   },
   "_id": "RlUSwec1E7MuK6YB",

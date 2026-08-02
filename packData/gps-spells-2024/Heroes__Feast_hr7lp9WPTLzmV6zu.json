@@ -351,10 +351,6 @@
           "macroRepeat": "none",
           "specialDuration": []
         },
-        "ddbimporter": {
-          "disabled": false,
-          "activityMatch": "Consume Feast"
-        },
         "midi-qol": {
           "forceCEOff": true
         },
@@ -373,23 +369,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "description": "",
@@ -403,53 +382,6 @@
   ],
   "name": "Heroes' Feast",
   "flags": {
-    "ddbimporter": {
-      "id": 138070,
-      "definitionId": 2143,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "classSpell",
-        "class": "Druid",
-        "level": 12,
-        "characterClassId": 123887919,
-        "spellLevel": 6,
-        "ability": "wis",
-        "mod": 5,
-        "dc": 17,
-        "cantripBoost": false,
-        "overrideDC": false,
-        "id": 138070,
-        "entityTypeId": 435869154,
-        "healingBoost": 0,
-        "usesSpellSlot": true,
-        "forceMaterial": false,
-        "homebrew": false
-      },
-      "originalName": "Heroes' Feast",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 250,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Buff",
-        "Social"
-      ],
-      "version": "6.1.10",
-      "is2014": true,
-      "is2024": false,
-      "addSpellEffects": true,
-      "legacy": true,
-      "effectsApplied": true,
-      "importId": "9U8PMC6BXZCoArbM"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "onUseMacroName": "[postActiveEffects]function.DDBImporter.lib.DDBMacros.macroFunction.spell(\"heroesFeast.js\")",
@@ -459,16 +391,6 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "magicdam": true,
-      "magiceffect": true,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "tidy5e-sheet": {
       "parentClass": "druid"

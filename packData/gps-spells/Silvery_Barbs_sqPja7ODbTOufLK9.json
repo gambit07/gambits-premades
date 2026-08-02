@@ -172,56 +172,6 @@
   },
   "name": "Silvery Barbs",
   "flags": {
-    "ddbimporter": {
-      "id": 10075687,
-      "definitionId": 1239804,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Silvery Barbs",
-      "sources": [
-        {
-          "sourceId": 80,
-          "pageNumber": 38,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Buff",
-        "Debuff"
-      ],
-      "version": "3.5.7",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "default",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-spells.Item.zn0gEciPsNGH8k0M",
-      "hash": "a9444ea0952bb1df7d5ba6a01731238b69198ba0"
-    },
     "midi-qol": {
       "effectActivation": false,
       "rollAttackPerTarget": "default",

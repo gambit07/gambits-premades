@@ -324,57 +324,6 @@
   },
   "name": "Confusion",
   "flags": {
-    "ddbimporter": {
-      "id": 136256,
-      "definitionId": 2038,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Confusion",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 224,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Control"
-      ],
-      "version": "3.4.63",
-      "effectsApplied": true,
-      "parentId": "xv827vqMjxeP1iGS"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "midi-qol": {
       "forceCEOff": true,
       "effectActivation": false,
@@ -388,10 +337,6 @@
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "sourceId": "Actor.qCpb5H6vLrBeOWAO.Item.xr9znH4YRxh5WKCr",
-      "hash": "1bd446286e3ad357eacd97939eca38242a49b8ce"
     },
     "dae": {
       "macro": {
@@ -720,23 +665,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "dnd5e": {
           "riders": {

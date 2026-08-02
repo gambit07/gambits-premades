@@ -191,10 +191,6 @@
   "effects": [],
   "flags": {
     "core": {},
-    "scene-packer": {
-      "hash": "2d275ae34b381bbc7eaf48bcb585a58a7093c9eb",
-      "sourceId": "Compendium.world.gps-homebrew-spells.Item.bjEtU4YvPhtShbMg"
-    },
     "midi-qol": {
       "fumbleThreshold": null,
       "rollAttackPerTarget": "default",
@@ -205,19 +201,6 @@
       "otherCondition": "",
       "effectCondition": "",
       "onUseMacroName": "[postAttackRoll]function.game.gps.cecilysStormshot"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "dae": {
       "macro": {

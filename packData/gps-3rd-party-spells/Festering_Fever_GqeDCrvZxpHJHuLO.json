@@ -211,22 +211,6 @@
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": []
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "_key": "!items.effects!GqeDCrvZxpHJHuLO.QVjYYIpry4j5zgop"
@@ -242,32 +226,7 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "default",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "core": {},
-    "scene-packer": {
-      "hash": "5f787136d965aab65676f7f23d6fbbeac84541aa",
-      "sourceId": "Compendium.world.gps-homebrew-spells.Item.6QBzihrPx5u059k4"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],

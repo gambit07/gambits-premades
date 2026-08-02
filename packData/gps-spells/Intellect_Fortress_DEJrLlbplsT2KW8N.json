@@ -181,51 +181,6 @@
   },
   "name": "Intellect Fortress",
   "flags": {
-    "ddbimporter": {
-      "id": 5833334,
-      "definitionId": 718549,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Intellect Fortress",
-      "sources": [
-        {
-          "sourceId": 67,
-          "pageNumber": 107,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Buff"
-      ],
-      "version": "3.5.7",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": true,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Item.4li6mxi6pevuODXr",
-      "hash": "b197890a1d724860205e2ed4314357a70edeb4e6"
-    },
     "core": {},
     "dae": {
       "macro": {
@@ -338,22 +293,6 @@
           "selfTarget": false,
           "selfTargetAlways": false,
           "dontApply": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         },
         "core": {
           "overlay": false

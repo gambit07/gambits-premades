@@ -60,23 +60,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!HXiUB8b13hEHEdsp.ODWwJEZO2OfbPZCX"
@@ -134,23 +117,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!HXiUB8b13hEHEdsp.O4qMbR0ctOVrVzmh"
@@ -213,23 +179,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!HXiUB8b13hEHEdsp.3jbcLQeq7xscB7Zx"
@@ -287,23 +236,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!HXiUB8b13hEHEdsp.rwfjw7ZdrE79qnv9"
@@ -361,23 +293,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!HXiUB8b13hEHEdsp.sHvO3h6X0O0ohneV"
@@ -435,23 +350,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!HXiUB8b13hEHEdsp.vTTq7IsEpwHNoR1H"
@@ -2034,50 +1932,6 @@
     }
   },
   "flags": {
-    "ddbimporter": {
-      "id": 675,
-      "type": "class",
-      "entityTypeId": 12168134,
-      "is2014": true,
-      "is2024": false,
-      "originalName": "Arcane Shot",
-      "dndbeyond": {
-        "requiredLevel": 3,
-        "displayOrder": 200,
-        "featureType": 1,
-        "class": "Fighter",
-        "classId": 101,
-        "entityType": "class-feature",
-        "levelScale": null,
-        "levelScales": [],
-        "limitedUse": [
-          {
-            "level": null,
-            "uses": 1
-          }
-        ]
-      },
-      "class": "Fighter",
-      "classId": 10,
-      "subClass": "Arcane Archer",
-      "subClassId": 101,
-      "defaultAdditionalActivities": {
-        "enabled": true,
-        "data": {
-          "featureName": "Arcane Shot",
-          "activityCount": 1,
-          "activityKeys": [
-            "utilityArShclNe0"
-          ],
-          "nameMap": {
-            "utilityArShclNe0": [
-              "Arcane Shot"
-            ]
-          }
-        }
-      },
-      "importId": "nSCclcNYfBrMS8mN"
-    },
     "dnd5e": {
       "advancementOrigin": "zRvU6AF4sgOuQCpG",
       "riders": {
@@ -2100,15 +1954,6 @@
       "otherCondition": "",
       "effectCondition": "",
       "onUseMacroName": "[postPreambleComplete]function.game.gps.arcaneShot,[preActiveEffects]function.game.gps.arcaneShot,[postSave]function.game.gps.arcaneShot"
-    },
-    "midiProperties": {
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "magicdam": true,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "gambits-premades": {
       "gpsUuid": "f9a050c1-e755-4428-b523-90969df6c799"

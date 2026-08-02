@@ -979,23 +979,17 @@
       "folder": null,
       "sort": 0,
       "flags": {
-        "scene-packer": {
-          "hash": "6a44a0e6061423c1f30c2b78d3711a462aefc811"
-        },
-        "walledtemplates": {
-          "wallsBlock": "globalDefault",
-          "wallRestriction": "globalDefault"
-        },
         "dnd5e": {}
       },
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "13.348",
+        "coreVersion": "13.351",
         "systemId": "dnd5e",
         "systemVersion": "5.1.4",
-        "lastModifiedBy": null
+        "lastModifiedBy": "roRDywD19pu2VxlC",
+        "modifiedTime": 1776232259525
       },
       "ownership": {
         "default": 0
@@ -1096,23 +1090,17 @@
       ],
       "folder": null,
       "flags": {
-        "core": {},
-        "scene-packer": {
-          "hash": "a1b19dd53b220497bfc297fe86d3a5137d15a816"
-        },
-        "walledtemplates": {
-          "wallsBlock": "globalDefault",
-          "wallRestriction": "globalDefault"
-        }
+        "core": {}
       },
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
         "exportSource": null,
-        "coreVersion": "13.348",
+        "coreVersion": "13.351",
         "systemId": "dnd5e",
         "systemVersion": "5.1.4",
-        "lastModifiedBy": null
+        "lastModifiedBy": "roRDywD19pu2VxlC",
+        "modifiedTime": 1776232259534
       },
       "_id": "icorevoMIkBVXL37",
       "sort": 1700000,
@@ -1181,10 +1169,6 @@
   ],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "96cb68050034f0b969cf466235d24393de46761b",
-      "sourceId": "Actor.WtxYMcamQptpNnjX"
-    },
     "midi-qol": {
       "concentration-damage": 0
     },

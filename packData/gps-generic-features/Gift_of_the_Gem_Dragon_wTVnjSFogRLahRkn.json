@@ -183,15 +183,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "featId": 766450,
-      "version": "3.4.63",
-      "prerequisites": []
-    },
-    "scene-packer": {
-      "sourceId": "Item.akTa9czz5Ax2W1JX",
-      "hash": "ef714853ec57738b444c18cf79ca8613f85f35a2"
-    },
     "midi-qol": {
       "onUseMacroName": "[all]ItemMacro",
       "rollAttackPerTarget": "default",
@@ -202,18 +193,6 @@
       "otherCondition": ""
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "dae": {
       "macro": {
         "name": "Gift of the Gem Dragon",
@@ -301,23 +280,6 @@
           "macroRepeat": "none",
           "specialDuration": [],
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

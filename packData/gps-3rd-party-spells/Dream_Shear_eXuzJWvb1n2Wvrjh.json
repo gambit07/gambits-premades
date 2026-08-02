@@ -258,22 +258,6 @@
           "enableCondition": "",
           "disableCondition": ""
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
-        },
         "dnd5e": {
           "riders": {
             "statuses": []
@@ -294,21 +278,6 @@
       }
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "saveDamage": "halfdam",
-      "bonusSaveDamage": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "removeAttackDamageButtons": "default",
@@ -316,10 +285,6 @@
       "effectCondition": "",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "hash": "ff250b12fca7d1d59e1eee567c384475d00e0ac2",
-      "sourceId": "Compendium.world.gps-spells.Item.Hh5F3K3tYIh68ich"
     },
     "rest-recovery": {
       "data": {

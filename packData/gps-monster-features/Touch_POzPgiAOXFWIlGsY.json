@@ -237,32 +237,6 @@
   },
   "effects": [],
   "flags": {
-    "ddbimporter": {
-      "levelBonus": false,
-      "dndbeyond": {},
-      "parentId": "s8A0kj3weZNpV5FW"
-    },
-    "monsterMunch": {
-      "titleHTML": "<strong>Touch.</strong>",
-      "fullName": "Touch.",
-      "actionCopy": false,
-      "type": "action",
-      "actionInfo": {
-        "damage": {
-          "parts": [
-            [
-              "2d6[fire] + @mod",
-              "fire"
-            ]
-          ],
-          "versatile": ""
-        },
-        "baseAbility": "dex",
-        "toHit": 6,
-        "proficient": true,
-        "extraAttackBonus": 0
-      }
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "fumbleThreshold": null,
@@ -274,22 +248,6 @@
       "AoETargetType": "any",
       "autoTarget": "default",
       "reactionCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dnd5e": {
       "dependents": [
@@ -525,10 +483,6 @@
     },
     "core": {
       "sheetClass": ""
-    },
-    "scene-packer": {
-      "sourceId": "Scene.1mkVNeOdyVIlDdH7.Token.v9QygRJvQdT9vF19.Actor.Lp5OiwQHOuiEX8Q3.Item.H38uGfgE2UI4oQ5g",
-      "hash": "2c9e83849594ec20d7833ec63ab62282caa7df20"
     },
     "dae": {
       "macro": {

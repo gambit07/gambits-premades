@@ -295,23 +295,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "autoanimations": {
           "id": "f8dbc81b-43a4-4d14-84e5-be5750c0ae5d",
           "label": "Web Strand",
@@ -459,27 +442,6 @@
     }
   ],
   "flags": {
-    "ddbimporter": {
-      "levelBonus": false,
-      "dndbeyond": {},
-      "parentId": "HEuUjYbuzL7ku34L"
-    },
-    "monsterMunch": {
-      "titleHTML": "<em>Web Strand.</em>",
-      "fullName": "Web Strand.",
-      "actionCopy": false,
-      "type": "action",
-      "actionInfo": {
-        "damage": {
-          "parts": [],
-          "versatile": ""
-        },
-        "baseAbility": "str",
-        "toHit": 13,
-        "proficient": true,
-        "extraAttackBonus": 0
-      }
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "fumbleThreshold": null,
@@ -491,22 +453,6 @@
       "autoTarget": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dae": {
       "macro": {
@@ -849,10 +795,6 @@
           }
         }
       }
-    },
-    "scene-packer": {
-      "hash": "c1bb5b6a67be6fe2c1f8a42361f6801d0dc69617",
-      "sourceId": "Item.adVVmLmsHAQDsHXE"
     },
     "tidy5e-sheet": {
       "section": "",

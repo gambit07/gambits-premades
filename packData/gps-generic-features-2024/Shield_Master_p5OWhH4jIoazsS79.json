@@ -155,18 +155,6 @@
     "properties": []
   },
   "flags": {
-    "ddbimporter": {
-      "featId": 43,
-      "version": "5.2.36",
-      "prerequisites": [],
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Shield Master"
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "2c9f1998514b6b5c85fa0a2408acaa5a52e805ce"
-    },
     "midi-qol": {
       "onUseMacroName": ""
     },
@@ -239,23 +227,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "All",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!p5OWhH4jIoazsS79.XyI4nE0eHeDIWriN"
@@ -307,23 +278,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "All",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "gambits-premades": {}
       },
@@ -379,23 +333,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "All",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "gambits-premades": {
           "gpsUuid": "2109c2b7-7640-4649-ad3c-26b5a84d5646"

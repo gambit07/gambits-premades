@@ -238,65 +238,6 @@
     "ammunition": {}
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Shortsword",
-        "damage": {
-          "parts": []
-        },
-        "classFeatures": [],
-        "ability": "dex",
-        "restrictions": [],
-        "avatarUrl": "https://www.dndbeyond.com/avatars/44187/142/638616786384500661.png",
-        "largeAvatarUrl": "https://www.dndbeyond.com/avatars/44187/143/638616786387720834.png",
-        "filterType": "Weapon",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": true,
-        "isMonkWeapon": true,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "isLegacy": false,
-        "tags": [],
-        "sources": [],
-        "pictureUrl": "ddb-images/other/item-Doom.png"
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "isLegacy": false,
-      "definitionEntityTypeId": 112130694,
-      "definitionId": 9003323,
-      "originalName": "Doom",
-      "version": "5.2.36",
-      "keepIcon": true,
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Doom",
-      "price": {
-        "xgte": true,
-        "value": 200000
-      }
-    },
-    "magicitems": {
-      "enabled": true,
-      "charges": "0",
-      "chargeType": "c1",
-      "rechargeable": false,
-      "recharge": "0",
-      "rechargeType": "t2",
-      "rechargeUnit": "r1",
-      "destroy": false,
-      "destroyCheck": "d1",
-      "spells": {},
-      "feats": {},
-      "tables": {},
-      "equipped": true,
-      "attuned": false,
-      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
-      "sorting": "l",
-      "default": ""
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "fumbleThreshold": null,
@@ -304,26 +245,6 @@
       "itemCondition": "",
       "effectCondition": "",
       "onUseMacroName": "[postDamageRoll]ItemMacro"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "hash": "36f6fac90349bc84a6472ef452b25cf81fef9138",
-      "sourceId": "Actor.edtGqNIYfHYowUUr.Item.SGUHfBmpD4D2oUiv"
     },
     "dae": {
       "macro": {
@@ -619,22 +540,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": true,
-          "aura": "All",
-          "nameOverride": "",
-          "radius": "15",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": true,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         }
       },
       "img": "icons/weapons/swords/sword-broad-crystal-paired.webp",

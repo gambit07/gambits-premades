@@ -157,15 +157,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "featId": 41,
-      "version": "3.4.63",
-      "prerequisites": []
-    },
-    "scene-packer": {
-      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-feats.Item.poULSBFd8LDoL3ep",
-      "hash": "88d21a21ec6b3a56feea4790b7036c0f8b466e61"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -176,22 +167,6 @@
       "otherCondition": ""
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "gambits-premades": {
       "gpsUuid": "35e47204-cb58-405f-8231-2a945aa9a52d"
     },
@@ -204,9 +179,6 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "img": "icons/magic/symbols/runes-etched-steel-blade.webp",

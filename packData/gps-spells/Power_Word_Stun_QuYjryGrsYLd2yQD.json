@@ -173,63 +173,6 @@
   },
   "name": "Power Word Stun",
   "flags": {
-    "ddbimporter": {
-      "id": 138581,
-      "definitionId": 2211,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Power Word Stun",
-      "sources": [
-        {
-          "sourceId": 1,
-          "pageNumber": null,
-          "sourceType": 2
-        },
-        {
-          "sourceId": 2,
-          "pageNumber": 267,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Control"
-      ],
-      "version": "5.2.36",
-      "effectsApplied": true,
-      "isLegacy": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Power Word Stun"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "c68d7e0bb234c227b91ffe4717c0bcd82e4c5488"
-    },
     "midi-qol": {
       "effectActivation": false,
       "removeAttackDamageButtons": "default",
@@ -546,22 +489,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
         },
         "autoanimations": {
           "id": "23a2098b-742e-452a-a9e0-d5e53d4dee93",

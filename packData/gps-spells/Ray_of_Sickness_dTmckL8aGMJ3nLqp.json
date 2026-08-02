@@ -381,23 +381,6 @@
           "enableCondition": "",
           "disableCondition": ""
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "core": {
           "overlay": false
         }
@@ -407,34 +390,6 @@
   ],
   "folder": null,
   "flags": {
-    "ddbimporter": {
-      "id": 138636,
-      "definitionId": 2318,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "sources": [
-        {
-          "sourceId": 2,
-          "pageNumber": 271,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Damage",
-        "Debuff"
-      ],
-      "overrideId": "NONE",
-      "ignoreIcon": false,
-      "ignoreItemImport": true,
-      "ignoreItemForChrisPremades": false,
-      "retainResourceConsumption": false,
-      "ignoreItemUpdate": false
-    },
     "midi-qol": {
       "criticalThreshold": "20",
       "onUseMacroName": "",
@@ -451,33 +406,6 @@
       "otherCondition": ""
     },
     "core": {},
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": true,
-      "halfdam": false,
-      "rollOther": false,
-      "critOther": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "offHandWeapon": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "confirmTargets": "never",
-      "saveDamage": "fulldam",
-      "bonusSaveDamage": "default",
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Actor.qCpb5H6vLrBeOWAO.Item.mb4ZdQwYR7qk5Itr",
-      "hash": "6ee2af6ec2cfabce300c8f3f9147c90833ab130f"
-    },
     "autoanimations": {
       "id": "63e5e600-57ac-4ac8-b63f-dddae23afcb6",
       "isEnabled": true,

@@ -262,36 +262,6 @@
     }
   ],
   "flags": {
-    "ddbimporter": {
-      "levelBonus": false,
-      "dndbeyond": {},
-      "parentId": "3s8e9olCY94K6bOi"
-    },
-    "monsterMunch": {
-      "titleHTML": "<strong>Whirlwind (Recharge 4–6).</strong>",
-      "fullName": "Whirlwind (Recharge 4–6).",
-      "actionCopy": false,
-      "type": "action",
-      "actionInfo": {
-        "damage": {
-          "parts": [
-            [
-              "3d8[bludgeoning] + 2",
-              "bludgeoning"
-            ],
-            [
-              "1d6[bludgeoning]",
-              "bludgeoning"
-            ]
-          ],
-          "versatile": ""
-        },
-        "baseAbility": null,
-        "toHit": 0,
-        "proficient": false,
-        "extraAttackBonus": 0
-      }
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -303,24 +273,6 @@
       "autoTarget": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "saveDamage": "default",
-      "bonusSaveDamage": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dae": {
       "macro": {

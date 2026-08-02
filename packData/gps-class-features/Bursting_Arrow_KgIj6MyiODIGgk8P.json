@@ -37,18 +37,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "64225",
-      "entityTypeId": "222216831",
-      "action": true,
-      "componentId": 223,
-      "componentTypeId": 258900837,
-      "originalName": "Bursting Arrow",
-      "type": "class",
-      "class": "Fighter",
-      "subclass": "Arcane Archer",
-      "importId": "ISJMuDJAGah2PvZr"
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -58,29 +46,12 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "dnd5e": {
       "advancementOrigin": "RUVuq6gnFP7iNwLn",
       "riders": {
         "activity": [],
         "effect": []
       }
-    },
-    "scene-packer": {
-      "hash": "69b0b9b279ddc6e88a79eb1f600a4529a3ed57c7",
-      "sourceId": "Actor.dRkumHG7EPFVm0Vz.Item.ATFrmcmAbQzzaylZ"
     },
     "dae": {
       "macro": {

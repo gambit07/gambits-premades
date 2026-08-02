@@ -1,9 +1,6 @@
 {
   "name": "Gravity Well",
   "flags": {
-    "bkit": {
-      "anchorId": "80kb8dtubo8"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],
@@ -47,26 +44,6 @@
       "onUseMacroName": "[postDamageRoll]ItemMacro",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
-    "scene-packer": {
-      "hash": "17fb6e916cc144ec563abacb1ae5e841793abb94",
-      "sourceId": "Item.AsB9TR0yekx8MIEr"
     },
     "tidy5e-sheet": {
       "section": "",

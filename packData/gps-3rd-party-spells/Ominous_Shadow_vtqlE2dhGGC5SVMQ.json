@@ -260,22 +260,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system"
-        },
         "autoanimations": {
           "id": "a5967ac2-5610-4988-b591-843eecabb09c",
           "label": "Ominous Shadow",
@@ -440,29 +424,6 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "default",
-      "saveDamage": "default",
-      "bonusSaveDamage": "default",
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "dnd5e": {
       "dependents": [
         {
@@ -514,10 +475,6 @@
       }
     },
     "core": {},
-    "scene-packer": {
-      "hash": "7ffe9b25b9feea530aff98569edffe4ed84b820d",
-      "sourceId": "Item.hpfpYCAJkHau5Juo"
-    },
     "autoanimations": {
       "id": "182a377f-475c-400f-936b-a51269bcc1aa",
       "label": "Ominous Shadow",

@@ -180,46 +180,6 @@
     "equipped": false
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Adventuring Gear",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Damage",
-          "Utility",
-          "Exploration",
-          "Combat"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ],
-        "stackable": true
-      },
-      "id": 976664155,
-      "entityTypeId": 1439493548,
-      "containerEntityId": 976664150,
-      "containerEntityTypeId": 1439493548,
-      "definitionEntityTypeId": 2103445194,
-      "definitionId": 91,
-      "originalName": "Torch",
-      "version": "3.6.0",
-      "importId": "LqcaPoeCikRHYH6K"
-    },
     "dae": {
       "macro": {
         "name": "Candle",
@@ -259,24 +219,6 @@
       "effectCondition": "",
       "rollAttackPerTarget": "default",
       "removeAttackDamageButtons": "default"
-    },
-    "scene-packer": {
-      "hash": "5059d02a4bb80ff81a038c57df5581471214dd94",
-      "sourceId": "Item.k1Xsuy6O9DL6VXhs"
-    },
-    "midiProperties": {
-      "confirmTargets": "never",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "core": {},
     "autoanimations": {
@@ -498,9 +440,6 @@
       "isCustomized": false,
       "fromAmmo": false,
       "version": 5
-    },
-    "universalAnimations": {
-      "override": "neverPlay"
     },
     "dnd5e": {
       "dependents": [

@@ -158,10 +158,6 @@
   "effects": [],
   "folder": null,
   "flags": {
-    "scene-packer": {
-      "hash": "b2b275ea4eec57949eb019038f9293d48fb8184a",
-      "sourceId": "Item.2O9Pa22WvNcXYxRL"
-    },
     "dae": {
       "macro": {
         "name": "Healing Surge",
@@ -191,9 +187,6 @@
       }
     },
     "core": {},
-    "character-actions-list-5e": {
-      "filter-override": true
-    },
     "midi-qol": {
       "effectActivation": false,
       "onUseMacroName": "[postActiveEffects]ItemMacro",
@@ -203,23 +196,6 @@
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
-    },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never"
     },
     "dnd5e": {
       "riders": {

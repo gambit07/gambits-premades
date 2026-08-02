@@ -334,46 +334,6 @@
     "magicalBonus": null
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Adventuring Gear",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Damage",
-          "Movement",
-          "Combat"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ],
-        "stackable": true
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 2103445194,
-      "definitionId": 30,
-      "originalName": "Caltrops (bag of 20)",
-      "version": "3.5.7"
-    },
-    "scene-packer": {
-      "sourceId": "Actor.DX6KebS1bvxIkQlQ.Item.yoiEnR4hwxc9Hnt7",
-      "hash": "5efc1af1f27bdc3a8efeb8d31bac23120fd3c054"
-    },
     "midi-qol": {
       "onUseMacroName": "[templatePlaced]function.game.gps.caltrops",
       "AoETargetType": "any",
@@ -388,23 +348,6 @@
     },
     "core": {
       "sheetClass": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dae": {
       "macro": {

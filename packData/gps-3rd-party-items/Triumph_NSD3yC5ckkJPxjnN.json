@@ -242,23 +242,6 @@
           "enableCondition": "",
           "disableCondition": ""
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "effectmacro": {},
         "dnd5e": {
           "dependents": [
@@ -283,25 +266,8 @@
     }
   ],
   "flags": {
-    "scene-packer": {
-      "hash": "8b414699663531ef635868a08cf6bd5967186db1",
-      "sourceId": "Compendium.world.gps-homebrew-items.Item.v1YGBsvBzIUQ7BpM"
-    },
     "core": {
       "sheetClass": ""
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     },
     "midi-qol": {
       "rollAttackPerTarget": "default",
@@ -340,11 +306,6 @@
           "exportSource": null
         }
       }
-    },
-    "ddbimporter": {
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Triumph"
     },
     "chris-premades": {
       "info": {

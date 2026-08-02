@@ -219,37 +219,6 @@
     "attuned": false
   },
   "flags": {
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": null,
-        "alternativeNames": [
-          "Dragon Turtle Dueling Shield Armor"
-        ],
-        "avatarUrl": "https://www.dndbeyond.com/avatars/40852/561/638472515906293225.png",
-        "largeAvatarUrl": "https://www.dndbeyond.com/avatars/40852/562/638472515908773232.png",
-        "filterType": "Armor",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": true,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Combat",
-          "Warding"
-        ],
-        "sources": [],
-        "pictureUrl": "https://www.dndbeyond.com/avatars/40852/562/638472515908773232.png"
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 112130694,
-      "definitionId": 8239820,
-      "originalName": "Dragon Turtle Dueling Shield",
-      "version": "5.0.1",
-      "keepIcon": true
-    },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
       "rollAttackPerTarget": "default",
@@ -257,27 +226,6 @@
       "effectCondition": "",
       "fumbleThreshold": null,
       "onUseMacroName": "[postDamageRoll]ItemMacro,[preItemRoll]ItemMacro"
-    },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Scene.1mkVNeOdyVIlDdH7.Token.M458Wy7Wr8H3Q7ps.Actor.SNZJsEKbROB1q6bT.Item.sMl3jLAO8la9Mpt1",
-      "hash": "b041178d6118cad7e22fb4331f373179d4607d07"
     },
     "core": {},
     "rest-recovery": {

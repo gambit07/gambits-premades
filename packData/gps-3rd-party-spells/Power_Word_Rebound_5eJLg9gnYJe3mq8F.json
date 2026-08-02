@@ -181,19 +181,6 @@
       }
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "itemCondition": "",
@@ -201,10 +188,6 @@
       "effectCondition": "",
       "removeAttackDamageButtons": "default",
       "otherCondition": ""
-    },
-    "scene-packer": {
-      "hash": "a7fe44b00e60c804818fd4864b2e73f27eb56b4d",
-      "sourceId": "Actor.1xFtQVMnMyuFm2w2.Item.SAI3GQb7tj2pVTEw"
     },
     "tidy5e-sheet": {
       "actionSection": "",

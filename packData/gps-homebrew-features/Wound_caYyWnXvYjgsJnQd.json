@@ -239,23 +239,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "gambits-premades": {
           "gpsUuid": "7186eac1-010a-4fb4-bd22-699d06839162"
         }
@@ -309,23 +292,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!caYyWnXvYjgsJnQd.5lN7yVKA5sdsrcMN"
@@ -382,23 +348,6 @@
         "core": {
           "overlay": false
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "gambits-premades": {
           "gpsUuid": "a6e73d28-8fac-4aad-a30a-4d992217a710"
         }
@@ -408,9 +357,6 @@
   ],
   "folder": null,
   "flags": {
-    "crux": {
-      "trayVisibility": "default"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],
@@ -459,15 +405,6 @@
       "otherCondition": "",
       "effectCondition": "",
       "onUseMacroName": ""
-    },
-    "midiProperties": {
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     }
   },
   "_id": "caYyWnXvYjgsJnQd",

@@ -181,15 +181,6 @@
     }
   },
   "flags": {
-    "ddbimporter": {
-      "featId": 38,
-      "version": "3.4.63",
-      "prerequisites": []
-    },
-    "scene-packer": {
-      "sourceId": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-feats.Item.nJh5Xo05XIFjVYHK",
-      "hash": "58b0b4aa4747c57f65facccd8b79b2ee957331f2"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "rollAttackPerTarget": "default",
@@ -201,22 +192,6 @@
       "fumbleThreshold": null
     },
     "core": {},
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
-    },
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""

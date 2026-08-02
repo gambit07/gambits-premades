@@ -38,18 +38,6 @@
     "enchant": {}
   },
   "flags": {
-    "ddbimporter": {
-      "entityRaceId": 29,
-      "version": "3.4.63",
-      "baseName": "Celestial Resistance",
-      "spellListIds": [],
-      "definitionKey": "racial-trait:394003",
-      "race": "Variant Aasimar"
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "ed35bd694a7b516c10091139cf0b768de70042c2"
-    },
     "midi-qol": {
       "onUseMacroName": "",
       "AoETargetType": "any",
@@ -64,19 +52,6 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
-    },
-    "midiProperties": {
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
     },
     "dnd5e": {
       "riders": {
@@ -134,23 +109,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "dnd5e": {
           "riders": {

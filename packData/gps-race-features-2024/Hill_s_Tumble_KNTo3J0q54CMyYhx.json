@@ -209,23 +209,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         }
       },
       "_key": "!items.effects!KNTo3J0q54CMyYhx.HYcIwoIXwVwGSv7W"
@@ -239,9 +222,6 @@
         "effect": []
       }
     },
-    "crux": {
-      "trayVisibility": "default"
-    },
     "midi-qol": {
       "rollAttackPerTarget": "default",
       "removeAttackDamageButtons": "default",
@@ -249,15 +229,6 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
-    },
-    "midiProperties": {
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false
     }
   },
   "_id": "KNTo3J0q54CMyYhx",

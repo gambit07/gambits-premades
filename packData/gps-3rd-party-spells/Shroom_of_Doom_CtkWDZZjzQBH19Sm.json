@@ -232,23 +232,6 @@
           "enableCondition": "",
           "disableCondition": ""
         },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
-        },
         "effectmacro": {},
         "dnd5e": {
           "riders": {
@@ -278,28 +261,7 @@
       "onUseMacroName": "[postSave]function.game.gps.shroomOfDoom",
       "removeAttackDamageButtons": "default"
     },
-    "midiProperties": {
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": false,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "default",
-      "noConcentrationCheck": false
-    },
     "core": {},
-    "scene-packer": {
-      "hash": "db03584fffa8929259f0c65235ed3e6bf462984f",
-      "sourceId": "Compendium.world.gps-homebrew-spells.Item.wgxEnTAtpKObANny"
-    },
     "dae": {
       "macro": {
         "name": "Shroom of Doom",

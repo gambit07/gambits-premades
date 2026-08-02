@@ -207,72 +207,6 @@
   },
   "name": "Enervation",
   "flags": {
-    "ddbimporter": {
-      "id": 138091,
-      "definitionId": 14869,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "classSpell",
-        "class": "Warlock",
-        "level": 10,
-        "characterClassId": 116570746,
-        "spellLevel": 5,
-        "ability": "cha",
-        "mod": 5,
-        "dc": 17,
-        "cantripBoost": false,
-        "overrideDC": false,
-        "id": 138091,
-        "entityTypeId": 435869154,
-        "healingBoost": 0,
-        "usesSpellSlot": true,
-        "forceMaterial": false
-      },
-      "originalName": "Enervation",
-      "sources": [
-        {
-          "sourceId": 27,
-          "pageNumber": 155,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Healing",
-        "Damage"
-      ],
-      "version": "5.1.26",
-      "effectsApplied": true,
-      "importId": "Ddw8UKKIO0u2aLsH",
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Enervation"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "confirmTargets": "never",
-      "saveDamage": "halfdam",
-      "bonusSaveDamage": "default",
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "hash": "1592f9eed91db65cfcae4a7b0678dcb63233820e",
-      "sourceId": "Actor.Q7GcFBwAbXgQX9Yv.Item.Xx0PEjFdqoQCpjjl"
-    },
     "dae": {
       "macro": {
         "name": "Enervation",
@@ -620,23 +554,6 @@
           ],
           "enableCondition": "",
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

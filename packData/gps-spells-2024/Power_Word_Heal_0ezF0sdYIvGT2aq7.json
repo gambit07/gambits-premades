@@ -176,54 +176,6 @@
   },
   "name": "Power Word Heal",
   "flags": {
-    "ddbimporter": {
-      "id": 138575,
-      "definitionId": 2366,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Power Word Heal",
-      "sources": [
-        {
-          "sourceId": 2,
-          "pageNumber": 266,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Healing",
-        "Buff"
-      ],
-      "version": "5.2.36",
-      "effectsApplied": true,
-      "isLegacy": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Power Word Heal"
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Item.",
-      "hash": "d47124b2f5842414292b04f4cf7d1f385d60ac7e"
-    },
     "dnd5e": {
       "riders": {
         "activity": [],

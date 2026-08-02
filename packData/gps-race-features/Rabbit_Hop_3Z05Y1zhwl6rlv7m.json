@@ -179,19 +179,6 @@
     "advancement": []
   },
   "flags": {
-    "ddbimporter": {
-      "id": "3874418",
-      "entityTypeId": "222216831",
-      "action": true,
-      "componentId": 6747000,
-      "componentTypeId": 1960452172,
-      "originalName": "Rabbit Hop",
-      "type": "race",
-      "importId": "evncRxMQWL5CRV8I",
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Rabbit Hop"
-    },
     "dnd5e": {
       "advancementOrigin": "Y5DZ1xX8PbQhTEaW",
       "dependents": [
@@ -752,10 +739,6 @@
         "activity": []
       }
     },
-    "scene-packer": {
-      "hash": "bd946826828cad3517b2387e8e420e14f94eeeda",
-      "sourceId": "Item.r0mPZjrUQ5vIKpHL"
-    },
     "midi-qol": {
       "onUseMacroName": "[postActiveEffects]function.game.gps.rabbitHop",
       "rollAttackPerTarget": "default",
@@ -774,22 +757,6 @@
         }
       }
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": false,
-      "magiceffect": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "core": {
       "sheetClass": ""
     },
@@ -807,21 +774,6 @@
           "category": "animation"
         }
       ]
-    },
-    "magicitems": {
-      "enabled": false,
-      "default": "",
-      "equipped": false,
-      "attuned": false,
-      "charges": "0",
-      "chargeType": "c1",
-      "destroy": false,
-      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
-      "rechargeable": false,
-      "recharge": "0",
-      "rechargeType": "t1",
-      "rechargeUnit": "r1",
-      "sorting": "l"
     },
     "dae": {
       "macro": {
@@ -849,58 +801,6 @@
           "duplicateSource": null
         }
       }
-    },
-    "dscryb": {
-      "sfx": [
-        {
-          "id": 131230,
-          "date": "2024-07-10T00:00:00",
-          "modified": "2024-07-15T10:28:11",
-          "status": "publish",
-          "link": "https://dscryb.com/sonic/cartoon-boing-modern-sfx/",
-          "title": {
-            "rendered": "Cartoon Boing"
-          },
-          "content": {
-            "rendered": "<p><i>Summary coming soon.</i></p>\n",
-            "protected": false
-          },
-          "nearby": [
-            3046,
-            2921,
-            4518,
-            4452
-          ],
-          "audio_category": [
-            3277
-          ],
-          "audio_genre": [
-            4422
-          ],
-          "ogg_file": "15461",
-          "composer": "Michael Ghelfi",
-          "playableUrl": "https://corsnomore.azurewebsites.net/audio/15461.ogg",
-          "nearbyTags": [
-            {
-              "id": 3046,
-              "name": "circus"
-            },
-            {
-              "id": 2921,
-              "name": "entertainment"
-            },
-            {
-              "id": 4518,
-              "name": "Retro"
-            },
-            {
-              "id": 4452,
-              "name": "Wholesome"
-            }
-          ],
-          "hasNearbyTags": true
-        }
-      ]
     },
     "autoanimations": {
       "id": "ccc0647e-d71a-40ad-a10b-660161e5bee4",
@@ -1171,23 +1071,6 @@
           "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false

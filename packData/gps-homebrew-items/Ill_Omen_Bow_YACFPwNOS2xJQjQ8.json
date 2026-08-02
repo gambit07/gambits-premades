@@ -242,63 +242,7 @@
   },
   "effects": [],
   "flags": {
-    "archon": {
-      "uuid": "Item.dh6ZTgnE1aMbM8K0"
-    },
     "core": {},
-    "ddbimporter": {
-      "dndbeyond": {
-        "type": "Longbow",
-        "damage": {
-          "parts": []
-        },
-        "classFeatures": [],
-        "restrictions": [],
-        "filterType": "Weapon",
-        "isConsumable": false,
-        "isContainer": false,
-        "isCustomItem": false,
-        "isHomebrew": false,
-        "isMonkWeapon": false,
-        "isPack": false,
-        "levelInfusionGranted": null,
-        "tags": [
-          "Damage",
-          "Combat"
-        ],
-        "sources": [
-          {
-            "sourceId": 1,
-            "pageNumber": null,
-            "sourceType": 2
-          },
-          {
-            "sourceId": 2,
-            "pageNumber": null,
-            "sourceType": 1
-          }
-        ]
-      },
-      "id": 0,
-      "entityTypeId": 0,
-      "definitionEntityTypeId": 1782728300,
-      "definitionId": 37,
-      "originalName": "Longbow",
-      "version": "3.4.42",
-      "overrideId": "NONE",
-      "ignoreIcon": false,
-      "ignoreItemImport": true,
-      "ignoreItemForChrisPremades": false,
-      "retainResourceConsumption": false,
-      "ignoreItemUpdate": false,
-      "effectsApplied": true,
-      "chrisEffectsApplied": true,
-      "chrisPreEffectName": "Longbow"
-    },
-    "scene-packer": {
-      "sourceId": "Actor.PpeGTVYvVoFsdZZD.Item.lQaqA7Hq2Z9KlAng",
-      "hash": "ad6d440b84d6fdeb96c1d1244224b8dddf29ca81"
-    },
     "autoanimations": {
       "id": "087c42b0-4af3-4eda-9528-2b3a359ae438",
       "label": "Ill Omen Bow",
@@ -530,27 +474,6 @@
       "effectCondition": "",
       "rollAttackPerTarget": "default"
     },
-    "midiProperties": {
-      "confirmTargets": "default",
-      "nodam": false,
-      "fulldam": false,
-      "halfdam": false,
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "rollOther": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "magicdam": true,
-      "magiceffect": true,
-      "concentration": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "noConcentrationCheck": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
     "dae": {
       "macro": {
         "name": "Ill Omen Bow",
@@ -597,9 +520,6 @@
         "activity": [],
         "effect": []
       }
-    },
-    "crux": {
-      "trayVisibility": "default"
     }
   },
   "folder": null,

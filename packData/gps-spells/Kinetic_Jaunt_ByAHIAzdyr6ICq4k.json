@@ -180,51 +180,6 @@
   },
   "name": "Kinetic Jaunt",
   "flags": {
-    "ddbimporter": {
-      "id": 10075683,
-      "definitionId": 1239803,
-      "entityTypeId": 435869154,
-      "dndbeyond": {
-        "lookup": "generic",
-        "lookupName": "generic",
-        "level": null,
-        "castAtLevel": null
-      },
-      "originalName": "Kinetic Jaunt",
-      "sources": [
-        {
-          "sourceId": 80,
-          "pageNumber": 37,
-          "sourceType": 1
-        }
-      ],
-      "tags": [
-        "Buff"
-      ],
-      "version": "3.5.7",
-      "effectsApplied": true
-    },
-    "midiProperties": {
-      "magicdam": true,
-      "magiceffect": true,
-      "confirmTargets": "default",
-      "autoFailFriendly": false,
-      "autoSaveFriendly": false,
-      "critOther": false,
-      "offHandWeapon": false,
-      "concentration": false,
-      "noConcentrationCheck": false,
-      "toggleEffect": false,
-      "ignoreTotalCover": false,
-      "idr": false,
-      "idi": false,
-      "idv": false,
-      "ida": false
-    },
-    "scene-packer": {
-      "sourceId": "Item.QzSarNtutKSOvdwS",
-      "hash": "85a5502fb7c874062775fd931f5281ec32dbfe35"
-    },
     "core": {},
     "midi-qol": {
       "rollAttackPerTarget": "default",
@@ -330,23 +285,6 @@
           "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "nameOverride": "",
-          "radius": "",
-          "alignment": "",
-          "type": "",
-          "customCheck": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false,
-          "wallsBlock": "system",
-          "statuses": []
         },
         "core": {
           "overlay": false
