@@ -96,7 +96,7 @@ jobs:
                 "manifest": "'"${FOUNDRY_MANIFEST}"'",
                 "download": "'"${FOUNDRY_DOWNLOAD}"'",
                 "notes": "https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}",
-                "compatibility": { "minimum": "13.346", "verified": "13.351", "maximum": "13" }
+                "compatibility": { "minimum": "14.369", "verified": "14", "maximum": "14" }
               }
             }'
 
