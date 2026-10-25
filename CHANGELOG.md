@@ -1,5 +1,26 @@
 # Changelog
 
+## [v3.0.1] - 2026-10-25
+Offical V14 and DND5e V6 release! Tons of updates, fixes, changes, etc with high level overviews below. If you have issues please report them on the Discord. Make sure you are on the Beta releases for Midi QOL and DAE if you want to use this update.
+- Additions:
+  - Fury of the Small (2014)
+  - Region visiblity options for relevant GPS automations via CAT medkit
+  - Animation sources for relevant GPS automations, should help when trying to identify why an animation may not play
+  - Added module setting Skip Resolved Reaction Prompts. This option can reduce dialog prompts by suppressing dialogs when the outcome of a previous reaction already resolved the interaction.
+  - Added module setting Contextual Focus Pulse Color. This option changes each users pulse around tokens. The pulse acts as an indicator for dialog prompts of which token is being referenced on canvas.
+- Updates:
+  - Updated all socket based automations to Foundrys native query system, dropped socketlib requirement (though Midi still uses it so kinda a moot point)
+  - Updated all Region Attacher automations to native Region deployment, dropped Region Attacher requirement
+  - Updated custom token region attachment handling to use Foundry native region token attachment
+  - Updated dialogs from their custom dialogV2 implementations to custom appV2 implementations with more consistent and pleasing theming
+  - Updated tons of animations to remove Jack Kerouac as a dependency. Eskies Effects/BLFX/Jb2a/etc were primarily used as a replacement where possible, big shout out to Eskie for recommending some replacements. When I couldn't find a replacement animation I liked, specific automations received custom Pixi effects.
+  - Almost all automations now include a medkit 'Enable Animation' toggle to disable animations
+  - Made improvements to the medkit integrations generally, big thanks to everyone working on CAT and CPR 
+- Bugfixes:
+  - Corrected numerous issues across the board with a small sampling being accidentally canceled workflows, repeated reactions, and mechanics accidentally depending on animations being enabled.
+  - Removed a few pieces of obsolete Levels module integrations
+  - A bunch of legacy cleanup for old stuff that was no longer relevant
+
 ## [v2.1.44] - 2026-08-02
 - Bugfixes:
   - Resolved a couple issues with the Sleep 2024 spell

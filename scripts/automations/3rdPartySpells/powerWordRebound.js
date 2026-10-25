@@ -1,6 +1,6 @@
 export async function powerWordRebound({workflowData,workflowType,workflowCombat}) {
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
-    if(!workflow) return;
+    if(!workflow || workflow.item.flags["gambits-premades"]?.reboundId) return;
     const gpsUuid = "b8949110-fd25-4d67-a65f-1bdc3d03b36e";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Power Word Rebound";
@@ -19,6 +19,7 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
+        if(!game.gps.reactionCanChangeOutcome(workflow, {target})) return;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
@@ -54,13 +55,13 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -78,39 +79,34 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
             };
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            if(!itemRoll) continue;
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
+            if(!itemRoll || itemRoll.aborted) continue;
 
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            let diceConfig = game.settings.get("core", "diceConfiguration");
-            const diceConfigOrig = diceConfig.d20;
-            diceConfig.d20 = '';
-            await game.settings.set("core", "diceConfiguration", diceConfig);
-            let rerollNew = await new CONFIG.Dice.D20Roll(`${workflow.attackRoll.result}`).evaluate();
-            await rerollNew.dice.forEach(d => d.results.forEach(r => foundry.utils.setProperty(r, "hidden", true)));
-            diceConfig.d20 = diceConfigOrig;
-            await game.settings.set("core", "diceConfiguration", diceConfig);
-
-            let newItemData = workflow.item;
-
-            const optionsNew = {
-                showFullCard: false,
-                createWorkflow: false,
-                versatile: false,
-                configureDialog: true,
-                targetUuids: [workflow.token.document.uuid],
-                workflowOptions: {autoRollDamage: 'always', autoFastDamage: true, autoRollAttack: true, autoFastAttack: true}
-            };
-
-            workflow.aborted = true;
-
-            Hooks.once("midi-qol.preAttackRollComplete", async (workflow) => {
-                await workflow.setAttackRoll(rerollNew);
+            const reboundId = foundry.utils.randomID();
+            const originalRoll = Roll.fromJSON(JSON.stringify(workflow.attackRoll));
+            const cloned = workflow.item.toObject();
+            foundry.utils.setProperty(cloned, "flags.gambits-premades.reboundId", reboundId);
+            const reboundItem = new CONFIG.Item.documentClass(cloned, {parent: workflow.actor});
+            const hookId = Hooks.on("midi-qol.preAttackRollComplete", async reboundWorkflow => {
+                if(reboundWorkflow.item.flags["gambits-premades"]?.reboundId !== reboundId) return;
+                await game.gps.setAttackResult(reboundWorkflow, originalRoll);
             });
-            
-            await MidiQOL.completeItemUse(newItemData, {}, optionsNew);
+            try {
+                const rebound = await MidiQOL.completeItemUse(reboundItem, {
+                    consume: false,
+                    midiOptions: {showFullCard: false, createWorkflow: true, configureDialog: false, noOnUseMacro: true,
+                        targetUuids: [workflow.token.document.uuid], ignoreUserTargets: true,
+                        workflowOptions: {autoRollDamage: "always", autoFastDamage: true, autoRollAttack: true, autoFastAttack: true}}
+                }, {}, {});
+                if(rebound && !rebound.aborted) {
+                    workflow.aborted = true;
+                    return;
+                }
+            } finally { Hooks.off("midi-qol.preAttackRollComplete", hookId); }
+
         }
     }
 }

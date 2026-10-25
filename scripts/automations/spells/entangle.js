@@ -1,14 +1,14 @@
-export async function entangle({ tokenUuid, regionUuid, regionScenario, speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args?.[0].macroPass === "postSave")
+export async function entangle({ tokenUuid, regionUuid, regionScenario, speaker, actor, token, character, item, args, scope, workflow, options, turnKey }) {
+    if(args?.[0]?.macroPass === "postSave")
     {
         const template = await fromUuid(workflow.templateUuid);
         const targets = Array.from(workflow.failedSaves);
 
         for (let target of targets) {
-            const hasEffectApplied = target.document.hasStatusEffect("restrained");
+            const hasEffectApplied = game.gps.regionStatusEffects(target, template.uuid).length > 0;
 
             if (!hasEffectApplied) {
-                await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${target.document.uuid}`, status: "restrained", active: true });
+                await game.gps.queryGM("setRegionStatus", {tokenUuid: target.document.uuid, regionUuid: template.uuid, active: true });
             }
         }
 
@@ -16,78 +16,12 @@ export async function entangle({ tokenUuid, regionUuid, regionScenario, speaker,
     }
 
     if(regionScenario === "tokenTurnStart") {
-        if(!tokenUuid || !regionUuid || !regionScenario) {
-            if(debugEnabled) game.gps.logInfo(`No Region or Token found for ${itemName}`);
-            return;
-        }
-
-        let region = await fromUuid(regionUuid);
-        let tokenDocument = await fromUuid(tokenUuid);
-        let token = tokenDocument?.object;
-        actor = tokenDocument.actor;
-        item = await fromUuid(region.flags["region-attacher"].itemUuid);
-
-        const hasEffectApplied = actor.appliedEffects.find(e => e.name === "Restrained");
-        if(!hasEffectApplied) return;
-
-        let dialogId = "entangle";
-        let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
-        let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
-        let gmUser = game.gps.getPrimaryGM();
-
-        let dialogContent = `
-            <div class="gps-dialog-container">
-                <div class="gps-dialog-section">
-                    <div class="gps-dialog-content">
-                        <div>
-                            <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Entangle.Prompts.UseYourAction.Default")}</p>
-                                <div id="image-container" class="gps-dialog-image-container">
-                                    <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="gps-dialog-button-container">
-                    <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        let result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: tokenDocument.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
-                
-        const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
-
-        if (!userDecision) {
-            return;
-        }
-        else if (userDecision) {
-            const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: tokenDocument.uuid});
-
-            if (saveResult.failedSaves.size === 0)
-            {
-                const hasEffectApplied = tokenDocument.hasStatusEffect("restrained");
-
-                if (hasEffectApplied) {
-                    await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${tokenDocument.uuid}`, status: "restrained", active: false });
-                }
-
-                Sequencer.EffectManager.endEffects({ name: `${tokenDocument.id}Entangle`, object: token });
-            }
-        }
+        if(game.user.id !== game.gps.getPrimaryGM()) return;
+        await game.gps.promptRegionEscape({tokenUuid, regionUuid, turnKey: turnKey ?? game.gps.regionTurnKey(), regionScenario});
     }
 
     if(regionScenario === "tokenExits") {
-        let tokenDocument = await fromUuid(tokenUuid);
-        const hasEffectApplied = tokenDocument.hasStatusEffect("restrained");
-
-        if (hasEffectApplied) {
-            await game.gps.socket.executeAsGM("gmToggleStatus", {tokenUuid: `${tokenDocument.uuid}`, status: "restrained", active: false });
-        }
-
-        Sequencer.EffectManager.endEffects({ name: `${tokenDocument.id}Entangle`, object: token });
+        let tokenDocument = fromUuidSync(tokenUuid);
+        Sequencer.EffectManager.endEffects({ name: `${tokenDocument.id}Entangle`, object: tokenDocument.object });
     }
 }

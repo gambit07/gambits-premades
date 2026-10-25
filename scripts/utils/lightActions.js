@@ -20,10 +20,6 @@ const ACTION_DEFINITIONS = {
     labelKey: "GAMBITSPREMADES.Dialogs.Utils.LightActions.Throw",
     callback: async ({ token, actor, item, filePath, filePathDim, lightEffect, lightEffectDim, effectName, animType, gpsUuid, gpsUuidDim }) => {
       await lightThrow({ token, actor, item, filePath, filePathDim, lightEffect, lightEffectDim, effectName, animType, gpsUuid, gpsUuidDim });
-
-      if (item.system.quantity >= 1) {
-        await item.update({ "system.quantity": item.system.quantity - 1 });
-      }
     }
   },
   "extinguish": {
@@ -81,7 +77,7 @@ export async function light({ token, item, effectName, filePath, lightEffect, an
   if (effectData) await effectData.delete();
   if (effectDataDim) await effectDataDim.delete();
   
-  await animateLight({ tokenData: token, effectName, filePath, animType, filePathDim });
+  if(game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) await animateLight({ tokenData: token, effectName, filePath, animType, filePathDim });
 
   if (lightEffect?.[0]) {
     lightEffect[0].origin = item.uuid;
@@ -104,6 +100,7 @@ export async function lightExtinguish({ token, effectName, gpsUuid, gpsUuidDim, 
 }
 
 export async function lightThrow({ token, actor, item, filePath, filePathDim, lightEffect, lightEffectDim, effectName, animType, gpsUuid, gpsUuidDim }) {
+  if (item.system.quantity < 1) return;
   if(animType === "lanternHooded") {
     let effectDataDim = token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === gpsUuidDim);
     if(effectDataDim) {
@@ -111,6 +108,18 @@ export async function lightThrow({ token, actor, item, filePath, filePathDim, li
       lightEffect = lightEffectDim;
     }
   }
+  await actor.sheet.minimize();
+  let position;
+  try {
+    position = await Sequencer.Crosshair.show({
+      gridHighlight: true,
+      icon: { texture: filePath, borderVisible: true },
+      location: { obj: token, limitMaxRange: 60, showRange: true, wallBehavior: Sequencer.Crosshair.PLACEMENT_RESTRICTIONS.NO_COLLIDABLES }
+    });
+  } finally {
+    await actor.sheet.maximize();
+  }
+  if (!position || item.system.quantity < 1) return;
   const itemData = item.toObject();
   itemData.system.quantity = 1;
 
@@ -130,14 +139,13 @@ export async function lightThrow({ token, actor, item, filePath, filePathDim, li
     let tokenData = await fromUuid(tokenUuid);
     tokenData = tokenData.object;
 
-    await Sequencer.EffectManager.endEffects({ name: effectName, object: token });
-    await animateLightMovement({ tokenData, actor, effectName, filePath, animType });
-
     const effectData = token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === gpsUuid);
     const effectDataDim = token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === gpsUuidDim);
     if (effectData) await effectData.delete();
     if (effectDataDim) await effectDataDim.delete();
     await item.update({ "system.quantity": item.system.quantity - 1 });
+    await Sequencer.EffectManager.endEffects({ name: effectName, object: token });
+    await animateLightMovement({ tokenData, position, effectName, filePath, animType, animEnabled: game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled });
   } catch (error) {
     game.gps.logInfo("Failed to create item pile:", error);
   }

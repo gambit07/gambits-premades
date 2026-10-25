@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "book": "",
       "page": "",
@@ -40,28 +40,21 @@
     {
       "name": "Flyby",
       "origin": "Compendium.world.gps-monster-features.Item.urTSnlB2CnUIP67u",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",
       "_id": "9M4bgUxvj86v7Ps5",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.gambits-premades.oaImmunity",
-          "mode": 5,
-          "value": "1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.gambits-premades.oaImmunity",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -72,7 +65,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -84,8 +76,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!urTSnlB2CnUIP67u.9M4bgUxvj86v7Ps5"
     }
   ],
@@ -112,6 +109,16 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",

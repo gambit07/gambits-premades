@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -159,11 +159,7 @@
         "otherActivityId": "none",
         "otherActivityAsParentType": true,
         "img": "",
-        "flags": {
-          "region-attacher": {
-            "attachRegionToTemplate": true
-          }
-        },
+        "flags": {},
         "appliedEffects": [
           "P5i3KrGHjOygstb6"
         ]
@@ -221,10 +217,12 @@
       "reactionCondition": "",
       "otherCondition": ""
     },
-    "region-attacher": {
-      "attachRegionToTemplate": {
-        "dnd5eactivity000": true
-      },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    },
+    "gambits-premades": {
       "regionBehaviors": {
         "dnd5eactivity000": [
           {
@@ -235,7 +233,7 @@
               "events": [
                 "tokenEnter"
               ],
-              "source": "if(game.user.id !== event.user.id) return;\n\nlet effectData = event.data.token.actor.appliedEffects.find(e => e.name === \"Defile Ground\");\n\nif(!effectData) {\n  effectData = [{\n        \"disabled\": false,\n        \"name\": \"Defile Ground\",\n        \"img\": \"icons/magic/nature/root-vine-entangled-humanoid.webp\",\n        \"changes\": [\n          { \n            \"key\": \"flags.midi-qol.onUseMacroName\", \n            \"mode\": CONST.ACTIVE_EFFECT_MODES.CUSTOM, \n            \"value\": \"function.game.gps.defileGround,isDamaged\", \n            \"priority\": 20 \n          }\n        ],\n        \"transfer\": false\n  }];\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: event.data.token.actor.uuid, effects: effectData });\n}"
+              "source": "if(game.user.id !== event.user.id) return;\n\nlet effectData = event.data.token.actor.appliedEffects.find(e => e.name === \"Defile Ground\");\n\nif(!effectData) {\n  effectData = [{\n        \"disabled\": false,\n        \"name\": \"Defile Ground\",\n        \"img\": \"icons/magic/nature/root-vine-entangled-humanoid.webp\",\n        system: { changes: [\n          { \n            \"key\": \"flags.midi-qol.onUseMacroName\", \n            type: \"custom\", \n            \"value\": \"function.game.gps.defileGround,isDamaged\", \n            \"priority\": 20 \n          }\n        ] },\n        \"transfer\": false\n  }];\n\nawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: event.data.token.actor.uuid, effects: effectData });\n}"
             },
             "disabled": false,
             "flags": {},
@@ -296,11 +294,65 @@
             }
           }
         ]
+      },
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        },
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
       }
     },
-    "dnd5e": {
-      "riders": {
-        "activity": []
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },
@@ -310,27 +362,23 @@
       "name": "Defile Ground Template",
       "origin": "Actor.mMXv7VFWRU8zfbGg.Item.11Sixq2TYrE7dGVk",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
       "_id": "P5i3KrGHjOygstb6",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.defileGround @actorUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.defileGround @actorUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -341,7 +389,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -357,8 +404,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!bmRAzh2pHksDyDM3.P5i3KrGHjOygstb6"
     }
   ],

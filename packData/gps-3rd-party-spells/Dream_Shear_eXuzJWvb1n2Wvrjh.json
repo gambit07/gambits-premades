@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -209,34 +209,30 @@
     {
       "origin": "Compendium.world.gps-3rd-party-spells.Item.nVVby1Jb2eweB2RR",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "expiry": "targetEnd",
+        "value": null
       },
       "disabled": false,
       "name": "Dream Shear",
       "img": "icons/magic/unholy/orb-stone-pink.webp",
       "_id": "6FU01X1VTpdrcmw8",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.disadvantage.attack.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.disadvantage.save.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "attack",
+            "value": "-1",
+            "priority": 100,
+            "type": "dnd5e.advantage"
+          },
+          {
+            "key": "save",
+            "value": "-1",
+            "priority": 100,
+            "type": "dnd5e.advantage"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -249,12 +245,9 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnEnd"
-          ],
+          "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
         },
@@ -265,8 +258,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!eXuzJWvb1n2Wvrjh.6FU01X1VTpdrcmw8"
     }
   ],
@@ -296,6 +294,26 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "folder": null,

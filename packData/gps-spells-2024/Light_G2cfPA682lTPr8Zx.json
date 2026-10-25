@@ -2,14 +2,14 @@
   "type": "spell",
   "system": {
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> Select a token as the light-emitting object or carried-object proxy. The casting dialog validates object eligibility and retains the color selector. For a loose object without a token, use an object token or place an Ambient Light manually. Disable the Light effect while an opaque covering blocks it; enable it when uncovered.</p>",
       "chat": ""
     },
     "source": {
       "book": "PHB 2024",
       "page": "255",
       "license": "",
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2024"
     },
@@ -26,7 +26,8 @@
       "affects": {
         "type": "creature",
         "count": "1",
-        "choice": false
+        "choice": false,
+        "special": "Object represented by the selected token; confirm eligibility in the casting dialog."
       },
       "template": {
         "units": "ft",
@@ -203,7 +204,7 @@
       "effectActivation": false,
       "forceCEOff": true,
       "forceCEOn": false,
-      "onUseMacroName": "",
+      "onUseMacroName": "[preActiveEffects]function.game.gps.lightSpell",
       "rollAttackPerTarget": "default",
       "itemCondition": "",
       "effectCondition": "",
@@ -243,78 +244,106 @@
           "duplicateSource": null
         }
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "E84yHqO0hKJXzlhr": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Light",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "name": "Light - Pink",
-      "changes": [
-        {
-          "key": "ATL.light.bright",
-          "mode": 4,
-          "value": "20",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 4,
-          "value": "40",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.color",
-          "mode": 5,
-          "value": "#ff00f7",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.animation.type",
-          "mode": 5,
-          "value": "torch",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.alpha",
-          "mode": 5,
-          "value": "0.25",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.luminosity",
-          "mode": 5,
-          "value": "0.5",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.contrast",
-          "mode": 5,
-          "value": "0.15",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.shadows",
-          "mode": 5,
-          "value": "0.2",
-          "priority": 20
-        }
-      ],
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
       "_id": "g0bxlhO8QKHjDIGd",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "token.light.bright",
+            "value": 20,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 40,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.color",
+            "value": "#ff00f7",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.type",
+            "value": "torch",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.speed",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.intensity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.alpha",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.luminosity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.contrast",
+            "value": 0.15,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.shadows",
+            "value": 0.2,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
-      "description": "<div class=\"ddb\"><p>You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a></span> saving throw to avoid the spell.</p></div>",
-      "origin": "Item.EZJaJKFIxtUFlYe6",
+      "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "statuses": [],
       "sort": 0,
@@ -327,7 +356,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "none",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -338,85 +366,93 @@
         "dnd5e": {
           "riders": {
             "statuses": []
-          },
-          "dependents": [
-            {
-              "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.Ct9wAPpQAERU5Bng.Actor.SNZJsEKbROB1q6bT.ActiveEffect.kmWPEB3ZvbM5LxTl"
-            }
-          ]
+          }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G2cfPA682lTPr8Zx.g0bxlhO8QKHjDIGd"
     },
     {
       "name": "Light - Purple",
-      "changes": [
-        {
-          "key": "ATL.light.bright",
-          "mode": 4,
-          "value": "20",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 4,
-          "value": "40",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.color",
-          "mode": 5,
-          "value": "#a600ff",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.animation.type",
-          "mode": 5,
-          "value": "torch",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.alpha",
-          "mode": 5,
-          "value": "0.25",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.luminosity",
-          "mode": 5,
-          "value": "0.5",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.contrast",
-          "mode": 5,
-          "value": "0.15",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.shadows",
-          "mode": 5,
-          "value": "0.2",
-          "priority": 20
-        }
-      ],
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
       "_id": "8KIkxyPVv7PzB0fL",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "token.light.bright",
+            "value": 20,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 40,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.color",
+            "value": "#a600ff",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.type",
+            "value": "torch",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.speed",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.intensity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.alpha",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.luminosity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.contrast",
+            "value": 0.15,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.shadows",
+            "value": 0.2,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
-      "description": "<div class=\"ddb\"><p>You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a></span> saving throw to avoid the spell.</p></div>",
-      "origin": "Item.EZJaJKFIxtUFlYe6",
+      "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "statuses": [],
       "sort": 0,
@@ -429,7 +465,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "none",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -440,85 +475,93 @@
         "dnd5e": {
           "riders": {
             "statuses": []
-          },
-          "dependents": [
-            {
-              "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.Ct9wAPpQAERU5Bng.Actor.SNZJsEKbROB1q6bT.ActiveEffect.JR0QQK7RyGUGjR2k"
-            }
-          ]
+          }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G2cfPA682lTPr8Zx.8KIkxyPVv7PzB0fL"
     },
     {
       "name": "Light - Blue",
-      "changes": [
-        {
-          "key": "ATL.light.bright",
-          "mode": 4,
-          "value": "20",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 4,
-          "value": "40",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.color",
-          "mode": 5,
-          "value": "#0400ff",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.animation.type",
-          "mode": 5,
-          "value": "torch",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.alpha",
-          "mode": 5,
-          "value": "0.25",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.luminosity",
-          "mode": 5,
-          "value": "0.5",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.contrast",
-          "mode": 5,
-          "value": "0.15",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.shadows",
-          "mode": 5,
-          "value": "0.2",
-          "priority": 20
-        }
-      ],
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
       "_id": "YkRhbxQESDDSLMs9",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "token.light.bright",
+            "value": 20,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 40,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.color",
+            "value": "#0400ff",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.type",
+            "value": "torch",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.speed",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.intensity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.alpha",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.luminosity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.contrast",
+            "value": 0.15,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.shadows",
+            "value": 0.2,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
-      "description": "<div class=\"ddb\"><p>You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a></span> saving throw to avoid the spell.</p></div>",
-      "origin": "Item.EZJaJKFIxtUFlYe6",
+      "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "statuses": [],
       "sort": 0,
@@ -531,7 +574,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "none",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -543,79 +585,92 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G2cfPA682lTPr8Zx.YkRhbxQESDDSLMs9"
     },
     {
       "name": "Light - Cyan",
-      "changes": [
-        {
-          "key": "ATL.light.bright",
-          "mode": 4,
-          "value": "20",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 4,
-          "value": "40",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.color",
-          "mode": 5,
-          "value": "#00fbff",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.animation.type",
-          "mode": 5,
-          "value": "torch",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.alpha",
-          "mode": 5,
-          "value": "0.25",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.luminosity",
-          "mode": 5,
-          "value": "0.5",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.contrast",
-          "mode": 5,
-          "value": "0.15",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.shadows",
-          "mode": 5,
-          "value": "0.2",
-          "priority": 20
-        }
-      ],
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
       "_id": "nLVYhbMU19Vhr6S7",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "token.light.bright",
+            "value": 20,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 40,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.color",
+            "value": "#00fbff",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.type",
+            "value": "torch",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.speed",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.intensity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.alpha",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.luminosity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.contrast",
+            "value": 0.15,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.shadows",
+            "value": 0.2,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
-      "description": "<div class=\"ddb\"><p>You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a></span> saving throw to avoid the spell.</p></div>",
-      "origin": "Item.EZJaJKFIxtUFlYe6",
+      "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "statuses": [],
       "sort": 0,
@@ -628,7 +683,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "none",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -640,79 +694,92 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G2cfPA682lTPr8Zx.nLVYhbMU19Vhr6S7"
     },
     {
       "name": "Light - Green",
-      "changes": [
-        {
-          "key": "ATL.light.bright",
-          "mode": 4,
-          "value": "20",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 4,
-          "value": "40",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.color",
-          "mode": 5,
-          "value": "#00ff2a",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.animation.type",
-          "mode": 5,
-          "value": "torch",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.alpha",
-          "mode": 5,
-          "value": "0.25",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.luminosity",
-          "mode": 5,
-          "value": "0.5",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.contrast",
-          "mode": 5,
-          "value": "0.15",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.shadows",
-          "mode": 5,
-          "value": "0.2",
-          "priority": 20
-        }
-      ],
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
       "_id": "Pwdk9vQoyF1BB0eU",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "token.light.bright",
+            "value": 20,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 40,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.color",
+            "value": "#00ff2a",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.type",
+            "value": "torch",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.speed",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.intensity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.alpha",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.luminosity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.contrast",
+            "value": 0.15,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.shadows",
+            "value": 0.2,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
-      "description": "<div class=\"ddb\"><p>You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a></span> saving throw to avoid the spell.</p></div>",
-      "origin": "Item.EZJaJKFIxtUFlYe6",
+      "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "statuses": [],
       "sort": 0,
@@ -725,7 +792,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "none",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -736,85 +802,93 @@
         "dnd5e": {
           "riders": {
             "statuses": []
-          },
-          "dependents": [
-            {
-              "uuid": "Actor.i22vevIkyrH7NDdq.ActiveEffect.sO9DDsljoQTkjg37"
-            }
-          ]
+          }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G2cfPA682lTPr8Zx.Pwdk9vQoyF1BB0eU"
     },
     {
       "name": "Light - Yellow",
-      "changes": [
-        {
-          "key": "ATL.light.bright",
-          "mode": 4,
-          "value": "20",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 4,
-          "value": "40",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.color",
-          "mode": 5,
-          "value": "#fbff00",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.animation.type",
-          "mode": 5,
-          "value": "torch",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.alpha",
-          "mode": 5,
-          "value": "0.25",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.luminosity",
-          "mode": 5,
-          "value": "0.5",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.contrast",
-          "mode": 5,
-          "value": "0.15",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.shadows",
-          "mode": 5,
-          "value": "0.2",
-          "priority": 20
-        }
-      ],
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
       "_id": "Hh76KTeT9k4vVFwk",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "token.light.bright",
+            "value": 20,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 40,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.color",
+            "value": "#fbff00",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.type",
+            "value": "torch",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.speed",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.intensity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.alpha",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.luminosity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.contrast",
+            "value": 0.15,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.shadows",
+            "value": 0.2,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
-      "description": "<div class=\"ddb\"><p>You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a></span> saving throw to avoid the spell.</p></div>",
-      "origin": "Item.EZJaJKFIxtUFlYe6",
+      "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "statuses": [],
       "sort": 0,
@@ -827,7 +901,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "none",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -838,85 +911,93 @@
         "dnd5e": {
           "riders": {
             "statuses": []
-          },
-          "dependents": [
-            {
-              "uuid": "Actor.i22vevIkyrH7NDdq.ActiveEffect.s2ZWvVUxYARzATSM"
-            }
-          ]
+          }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G2cfPA682lTPr8Zx.Hh76KTeT9k4vVFwk"
     },
     {
       "name": "Light - Orange",
-      "changes": [
-        {
-          "key": "ATL.light.bright",
-          "mode": 4,
-          "value": "20",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 4,
-          "value": "40",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.color",
-          "mode": 5,
-          "value": "#ff9500",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.animation.type",
-          "mode": 5,
-          "value": "torch",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.alpha",
-          "mode": 5,
-          "value": "0.25",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.luminosity",
-          "mode": 5,
-          "value": "0.5",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.contrast",
-          "mode": 5,
-          "value": "0.15",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.shadows",
-          "mode": 5,
-          "value": "0.2",
-          "priority": 20
-        }
-      ],
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
       "_id": "StxGZzIWNq085IGH",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "token.light.bright",
+            "value": 20,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 40,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.color",
+            "value": "#ff9500",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.type",
+            "value": "torch",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.speed",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.intensity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.alpha",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.luminosity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.contrast",
+            "value": 0.15,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.shadows",
+            "value": 0.2,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
-      "description": "<div class=\"ddb\"><p>You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a></span> saving throw to avoid the spell.</p></div>",
-      "origin": "Item.EZJaJKFIxtUFlYe6",
+      "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "statuses": [],
       "sort": 0,
@@ -929,7 +1010,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "none",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -941,79 +1021,92 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G2cfPA682lTPr8Zx.StxGZzIWNq085IGH"
     },
     {
       "name": "Light - Red",
-      "changes": [
-        {
-          "key": "ATL.light.bright",
-          "mode": 4,
-          "value": "20",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 4,
-          "value": "40",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.color",
-          "mode": 5,
-          "value": "#ff0000",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.animation.type",
-          "mode": 5,
-          "value": "torch",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.alpha",
-          "mode": 5,
-          "value": "0.25",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.luminosity",
-          "mode": 5,
-          "value": "0.5",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.contrast",
-          "mode": 5,
-          "value": "0.15",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.shadows",
-          "mode": 5,
-          "value": "0.2",
-          "priority": 20
-        }
-      ],
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
       "_id": "27to9ID5NwkNG5g1",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "token.light.bright",
+            "value": 20,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 40,
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "token.light.color",
+            "value": "#ff0000",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.type",
+            "value": "torch",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.speed",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.animation.intensity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.alpha",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.luminosity",
+            "value": 0.5,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.contrast",
+            "value": 0.15,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "token.light.shadows",
+            "value": 0.2,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
-      "description": "<div class=\"ddb\"><p>You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.</p><p>If you target an object held or worn by a hostile creature, that creature must succeed on a <span class=\"reference-link\"><a class=\"content-link\" draggable=\"true\" data-link data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a></span> saving throw to avoid the spell.</p></div>",
-      "origin": "Actor.sCgl6dVvhYdWYIDo.Item.tCP5hXKoa1gGiPP2",
+      "description": "",
+      "origin": null,
       "tint": "#ffffff",
       "statuses": [],
       "sort": 0,
@@ -1026,7 +1119,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "none",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -1038,8 +1130,13 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G2cfPA682lTPr8Zx.27to9ID5NwkNG5g1"
     }
   ],

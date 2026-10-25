@@ -1,0 +1,293 @@
+.gps-automation-dialog {
+  --gps-accent: var(--color-warm-2, #b56345);
+  --gps-timer-color: var(--gps-accent);
+  --gps-prompt-surface: color-mix(in srgb, var(--color-text-primary, #ddd) 5%, transparent);
+  max-width: calc(100vw - 24px);
+  max-height: calc(100dvh - 40px);
+  border: 1px solid color-mix(in srgb, var(--gps-accent) 60%, transparent);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px #0006;
+}
+
+.gps-automation-dialog .window-header {
+  min-height: 44px;
+  flex: 0 0 auto;
+  padding-inline: 14px;
+}
+
+.gps-automation-dialog .window-title {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gps-automation-dialog .window-header > :not(.gps-titlebar-progress) {
+  z-index: 1;
+}
+
+.gps-automation-dialog .window-content {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  gap: 0;
+}
+
+.gps-automation-dialog .gps-prompt-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 18px;
+  scrollbar-gutter: stable;
+}
+
+.gps-automation-dialog .gps-prompt-body > :first-child {
+  margin-top: 0;
+}
+
+.gps-automation-dialog .gps-prompt-body > :last-child {
+  margin-bottom: 0;
+}
+
+.gps-automation-dialog p,
+.gps-automation-dialog .gps-dialog-paragraph {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+}
+
+.gps-automation-dialog .gps-dialog-container {
+  width: 100%;
+  padding: 0;
+  align-items: stretch;
+}
+
+.gps-automation-dialog .gps-dialog-section,
+.gps-automation-dialog .gps-dialog-flex {
+  gap: 14px;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.gps-automation-dialog .gps-dialog-content,
+.gps-automation-dialog .gps-dialog-select-container {
+  min-width: 0;
+}
+
+.gps-automation-dialog .gps-dialog-image-container {
+  margin-left: 0;
+  flex-shrink: 0;
+}
+
+.gps-automation-dialog .gps-dialog-image {
+  width: 56px;
+  height: 56px;
+  max-width: 56px;
+  max-height: 56px;
+  object-fit: cover;
+  border: 1px solid color-mix(in srgb, var(--gps-accent) 60%, transparent);
+  border-radius: 8px;
+}
+
+.gps-automation-dialog label {
+  line-height: 1.4;
+}
+
+.gps-automation-dialog select,
+.gps-automation-dialog input:not([type=checkbox], [type=radio]),
+.gps-automation-dialog textarea {
+  min-width: 0;
+  max-width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--color-border-light-2, #7778);
+}
+
+.gps-automation-dialog select {
+  width: 100%;
+  min-height: 34px;
+  padding-inline: 8px;
+  background-color: var(--gps-select-color, transparent);
+  color: var(--color-text-primary, inherit);
+}
+
+.gps-automation-dialog select option,
+.gps-automation-dialog select optgroup {
+  background-color: var(--gps-option-color, #4a2330);
+  color: var(--gps-option-text-color, #fff);
+}
+
+.gps-automation-dialog input[type=checkbox],
+.gps-automation-dialog input[type=radio] {
+  accent-color: var(--gps-accent);
+}
+
+.gps-automation-dialog .gps-prompt-footer {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--color-border-light-2, #7775);
+  background: var(--gps-prompt-surface);
+}
+
+.gps-automation-dialog .gps-prompt-timer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.gps-automation-dialog .gps-pause-btn {
+  width: auto;
+  height: 28px;
+  padding-inline: 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.gps-automation-dialog .gps-pause-btn[aria-pressed=true] {
+  border-color: var(--gps-accent);
+  background: var(--gps-pause-color, color-mix(in srgb, var(--gps-accent) 60%, transparent));
+}
+
+.gps-automation-dialog .gps-prompt-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr));
+  gap: 8px;
+}
+
+.gps-automation-dialog .gps-prompt-choice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: auto;
+  min-height: 38px;
+  padding: 8px 12px;
+  white-space: normal;
+  line-height: 1.3;
+  border-radius: 7px;
+  transition: background-color 150ms, border-color 150ms;
+}
+
+.gps-automation-dialog .gps-prompt-choice:hover,
+.gps-automation-dialog .gps-prompt-choice:focus-visible {
+  border-color: var(--gps-accent);
+  background: color-mix(in srgb, var(--gps-accent) 18%, transparent);
+}
+
+.gps-automation-dialog .gps-prompt-choice img {
+  width: 26px;
+  height: 26px;
+  object-fit: cover;
+  border: 0;
+  border-radius: 4px;
+}
+
+.gps-automation-dialog .gps-choice-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.gps-automation-dialog .gps-choice-description {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.gps-automation-dialog .gps-prompt-actions-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.gps-automation-dialog .gps-prompt-actions-list .gps-prompt-choice {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 12px 14px;
+  gap: 12px;
+}
+
+.gps-automation-dialog .gps-prompt-actions-list .gps-choice-label {
+  font-weight: 700;
+}
+
+.gps-automation-dialog .gps-prompt-actions-list .gps-prompt-choice > i {
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.gps-automation-dialog .gps-prompt-actions-list .gps-choice-secondary {
+  justify-self: end;
+  justify-content: center;
+  width: auto;
+  min-width: 100px;
+  padding: 8px 14px;
+}
+
+.gps-automation-dialog.gps-dialog-untimed .gps-titlebar-progress {
+  animation: gps-title-idle 5s ease-in-out infinite;
+}
+
+@keyframes gps-title-idle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gps-automation-dialog.gps-dialog-untimed .gps-titlebar-progress {
+    animation: none;
+    opacity: 0.3;
+  }
+}
+
+.gps-automation-dialog .gps-identify-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.gps-automation-dialog .gps-identify-item,
+.gps-automation-dialog .gps-identify-item > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.gps-automation-dialog .gps-identify-item {
+  justify-content: space-between;
+  padding-block: 8px;
+}
+
+.gps-automation-dialog .gps-identify-item > div {
+  flex: 1;
+}
+
+.gps-automation-dialog .gps-identify-item img {
+  flex: 0 0 30px;
+  border: 0;
+}
+
+.gps-automation-dialog .identify-btn {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.gps-automation-dialog .gps-choice-label,
+.gps-automation-dialog .gps-choice-description,
+.gps-automation-dialog .gps-identify-item span {
+  overflow-wrap: anywhere;
+}

@@ -1,212 +1,239 @@
-export async function enervation({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "postActiveEffects") {
-        let targets = Array.from(workflow.failedSaves);
-        let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "9c513478-ffd9-4d5a-9e39-3d72bf0518ab");
+const controllerId = "9c513478-ffd9-4d5a-9e39-3d72bf0518ab";
+const pendingTurns = new Set();
+const endingCasts = new Set();
+const targetUpdates = new Map();
+const stateOf = effect => effect?.flags?.["gambits-premades"]?.enervation;
+const beamName = (castUuid, targetUuid) => `Enervation:${castUuid}:${targetUuid}`;
 
-        if(!targets || targets.length >= 3) {
-            const concEffect = MidiQOL.getConcentrationEffect(actor, item.uuid);
-            if (concEffect)	await concEffect.delete();
+export async function deleteEnervationEffect({effectUuid}) {
+    const effect = await fromUuid(effectUuid);
+    if(effect?.documentName === "ActiveEffect" && !effect.transfer) await effect.delete();
+}
+
+async function removeEffect(effect) {
+    if(effect) await game.gps.queryGM("deleteEnervationEffect", {effectUuid: effect.uuid});
+}
+
+async function endCast(state) {
+    if(!state?.castUuid || endingCasts.has(state.castUuid)) return;
+    endingCasts.add(state.castUuid);
+    try {
+        await removeEffect(await fromUuid(state.castUuid));
+    }
+    finally {
+        endingCasts.delete(state.castUuid);
+    }
+}
+
+async function endBeam(state, targetUuid) {
+    await globalThis.Sequencer?.EffectManager?.endEffects({name: beamName(state.castUuid, targetUuid)});
+}
+
+async function removeTarget(effect, targetUuid) {
+    const previous = targetUpdates.get(effect.uuid) ?? Promise.resolve();
+    const update = previous.then(async () => {
+        const state = stateOf(effect);
+        if(!await fromUuid(effect.uuid) || !state?.targetUuids.includes(targetUuid)) return;
+        const targetUuids = state.targetUuids.filter(uuid => uuid !== targetUuid);
+        await effect.update({"flags.gambits-premades.enervation.targetUuids": targetUuids});
+        return {state, targetUuids};
+    });
+    targetUpdates.set(effect.uuid, update);
+    let result;
+    try { result = await update; }
+    finally { if(targetUpdates.get(effect.uuid) === update) targetUpdates.delete(effect.uuid); }
+    if(!result) return;
+    const {state, targetUuids} = result;
+    await endBeam(state, targetUuid);
+    const target = await fromUuid(targetUuid);
+    for(const marker of target?.actor?.effects ?? []) {
+        if(stateOf(marker)?.casterEffectUuid === effect.uuid && stateOf(marker)?.targetTokenUuid === targetUuid) await removeEffect(marker);
+    }
+    if(!targetUuids.length) await endCast(state);
+}
+
+async function validateTargets(effect) {
+    const state = stateOf(effect);
+    if(!state || !await fromUuid(state.castUuid)) return [];
+    if(!state.targetUuids.length) {
+        await endCast(state);
+        return [];
+    }
+    const caster = await fromUuid(state.casterTokenUuid);
+    if(!caster) {
+        await endCast(state);
+        return [];
+    }
+    if(!caster.object) return [];
+    const targets = [];
+    for(const uuid of [...state.targetUuids]) {
+        const target = await fromUuid(uuid);
+        if(!target?.object || target.parent?.uuid !== caster.parent?.uuid || !game.gps.withinRange(caster.object, target.object, 60)) await removeTarget(effect, uuid);
+        else targets.push(target.object);
+    }
+    return targets;
+}
+
+export async function checkEnervationMovement(document, {deleted = false} = {}) {
+    if(game.user.id !== game.gps.getPrimaryGM()) return;
+    if(!deleted && document.parent?.uuid !== canvas.scene?.uuid) return;
+    const controllers = new Map();
+    for(const effect of document.actor?.effects ?? []) {
+        const state = stateOf(effect);
+        if(state?.role === "caster" && state.casterTokenUuid === document.uuid) controllers.set(effect.uuid, effect);
+        else if(state?.role === "target" && state.targetTokenUuid === document.uuid) {
+            const controller = await fromUuid(state.casterEffectUuid);
+            if(controller) controllers.set(controller.uuid, controller);
+        }
+    }
+    for(const effect of controllers.values()) {
+        if(deleted && stateOf(effect).casterTokenUuid === document.uuid) await endCast(stateOf(effect));
+        else if(deleted) await removeTarget(effect, document.uuid);
+        else await validateTargets(effect);
+    }
+}
+
+export async function checkEnervationWalls(wall) {
+    if(game.user.id !== game.gps.getPrimaryGM() || wall.parent?.uuid !== canvas.scene?.uuid) return;
+    const controllers = new Map();
+    for(const token of canvas.scene.tokens) {
+        for(const effect of token.actor?.effects ?? []) {
+            if(stateOf(effect)?.role === "caster") controllers.set(effect.uuid, effect);
+        }
+    }
+    for(const effect of controllers.values()) await validateTargets(effect);
+}
+
+async function healFromDamage(workflow, actor, token, item) {
+    const seen = new Set();
+    for(const entry of workflow.damageList ?? []) {
+        if(!entry.targetUuid || seen.has(entry.targetUuid)) continue;
+        seen.add(entry.targetUuid);
+        const damageTotal = Math.max(0, Math.floor((entry.damageDetail ?? []).reduce((total, part) => total + (part.type === "necrotic" ? Number(part.value ?? 0) : 0), 0)));
+        const healAmount = Math.floor(damageTotal / 2);
+        if(!healAmount) continue;
+        const roll = await new CONFIG.Dice.DamageRoll(String(healAmount), {}, {type: "healing", properties: ["mgc"]}).evaluate();
+        const healing = new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, "healing", [token], roll, {
+            itemData: {flags: {autoanimations: {isEnabled: false, version: 5}}, name: "Enervation - Healing", type: "feat", img: item.img}, flavor: "Enervation - Healing"
+        });
+        healing.activity.updateSource({"activation.type": "special", "activation.override": true});
+        await healing.ready;
+        await ChatMessage.create({
+            user: MidiQOL.playerForActor(actor)?.id ?? game.user.id,
+            speaker: ChatMessage.getSpeaker({token}),
+            content: game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Enervation.DealDamageHeal", {damageTotal, healAmount})
+        });
+    }
+}
+
+async function startBeam(state, caster, target) {
+    if(!game.gps.getCprConfig({itemUuid: state.itemUuid}).animEnabled || !globalThis.Sequence || !globalThis.Sequencer?.Database) return;
+    const file = ["jb2a.energy_beam.reverse.dark_green", "jb2a.energy_beam.normal.dark_greenpurple.03"].find(path => Sequencer.Database.entryExists(path));
+    if(!file) return;
+    await new Sequence().effect().file(file).persist().name(beamName(state.castUuid, target.document.uuid))
+        .fadeIn(500).fadeOut(500).attachTo(caster).stretchTo(target, {attachTo: true}).play();
+}
+
+export async function enervation({actor, token, item, args, workflow}) {
+    if(args[0]?.macroPass === "postActiveEffects") {
+        const concentration = actor.effects.get(workflow.concentrationId) ?? MidiQOL.getConcentrationEffect(actor, item.uuid);
+        const targets = Array.from(workflow.failedSaves ?? []).filter(target => target.actor);
+        if(!targets.length) {
+            await healFromDamage(workflow, actor, token, item);
+            await removeEffect(concentration);
             return;
         }
-
-        let targetUuids = targets.map(t => t.document.uuid);
-
-        for(let target of targets) {
-            let healAmount = Math.floor(workflow.damageTotal / 2);
-            let healRoll = await new CONFIG.Dice.DamageRoll(`${healAmount}`, {}, {type: "healing", properties: ["mgc"]}).evaluate();
-
-            const itemData = {
-                name: "Enervation - Healing",
-                type: "feat",
-                img: item.img
-            }
-
-            await new MidiQOL.DamageOnlyWorkflow(actor, token, healRoll.total, "healing", [token], healRoll, {itemData: itemData, flavor: "Enervation - Healing"});
-
-            let content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Enervation.DealDamageHeal", { damageTotal: workflow.damageTotal, healAmount: healAmount })} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`
-            let actorPlayer = MidiQOL.playerForActor(actor);
-            let chatData = {
-                user: actorPlayer.id,
-                speaker: ChatMessage.getSpeaker({ token: token }),
-                content: content
-            };
-            ChatMessage.create(chatData);
-
-            new Sequence()
-            .effect()
-                .file("jb2a.energy_beam.reverse.dark_green")
-                .persist()
-                .name(`${target.id}_Enervation`)
-                .fadeIn(500)
-                .fadeOut(500)
-                .attachTo(token)
-                .stretchTo(target,{ attachTo: true })
-            .play()
+        if(!concentration) return;
+        let effect = actor.effects.find(effect => effect.flags?.["gambits-premades"]?.gpsUuid === controllerId
+            && [concentration.uuid, workflow.activity?.uuid, item.uuid].filter(Boolean).includes(effect.origin));
+        if(stateOf(effect)?.castUuid === concentration.uuid) return;
+        const state = {
+            role: "caster", castUuid: concentration.uuid, itemUuid: item.uuid,
+            casterTokenUuid: token.document.uuid, targetUuids: targets.map(target => target.document.uuid),
+            castLevel: Number(workflow.castData?.castLevel ?? item.system.level)
+        };
+        if(!effect) {
+            const data = item.effects.find(effect => effect.flags?.["gambits-premades"]?.gpsUuid === controllerId)?.toObject();
+            if(!data) return;
+            delete data._id;
+            delete data._key;
+            data.origin = concentration.uuid;
+            data.system.origin = {effect: concentration.uuid, item: item.uuid};
+            data.flags.dnd5e = {dependentOn: concentration.uuid};
+            data.flags["gambits-premades"].enervation = state;
+            await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: actor.uuid, effects: [data]});
+            effect = actor.effects.find(effect => stateOf(effect)?.castUuid === concentration.uuid && stateOf(effect)?.role === "caster");
+            if(!effect) return;
         }
-
-        let auraTargets;
-        if(targetUuids.length > 1) auraTargets = `(token.document.uuid === '${targets[0].document.uuid}' || token.document.uuid === '${targets[1].document.uuid}') && (MidiQOL.canSee(token.document.uuid, '${targets[0].document.uuid}') || MidiQOL.canSee(token.document.uuid, '${targets[1].document.uuid}'))`;
-        else auraTargets = `token.document.uuid === '${targets[0].document.uuid}' && MidiQOL.canSee(token.document.uuid, '${targets[0].document.uuid}')`;
-
-        let effectDataRange = [{
-            "origin": item.uuid,
-            "duration": {
-                "seconds": 60
-            },
-            "disabled": false,
-            "name": "Enervation - Range",
-            "img": item.img,
-            "type": "auraeffects.aura",
-            "system": {
-                "showRadius": false,
-                "applyToSelf": false,
-                "bestFormula": "",
-                "canStack": false,
-                "collisionTypes": [
-                    "move",
-                    "sight"
-                ],
-                "color": null,
-                "combatOnly": true,
-                "disableOnHidden": false,
-                "distanceFormula": "60",
-                "disposition": -1,
-                "evaluatePreApply": false,
-                "opacity": 0.25,
-                "overrideName": "",
-                "script": auraTargets,
-                "stashedChanges": [],
-                "stashedStatuses": []
-            },
-            "changes": [
-                {
-                    "key": "macro.itemMacro",
-                    "mode": 0,
-                    "value": `function.game.gps.enervation ${actor.uuid} ${item.uuid}`,
-                    "priority": 20
+        else await effect.update({"flags.gambits-premades.enervation": state, "flags.dnd5e.dependentOn": concentration.uuid});
+        for(const target of targets) {
+            await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: target.actor.uuid, effects: [{
+                name: item.name, img: item.img, type: "base", origin: effect.uuid, transfer: false,
+                duration: {value: 60, units: "seconds"},
+                system: {origin: {effect: effect.uuid, item: item.uuid}, changes: [{key: "macro.itemMacro", value: "function.game.gps.enervation", type: "custom", priority: 20}]},
+                flags: {
+                    dnd5e: {dependentOn: effect.uuid}, dae: {stackable: "multi"},
+                    "gambits-premades": {enervation: {role: "target", castUuid: concentration.uuid, casterEffectUuid: effect.uuid, targetTokenUuid: target.document.uuid}}
                 }
-            ],
-            "transfer": false,
-            "flags": {
-                "dae": {
-                    "disableIncapacitated": false,
-                    "selfTarget": true,
-                    "selfTargetAlways": true,
-                    "dontApply": false,
-                    "stackable": "noneName"
-                },
-                "gambits-premades": {
-                    "gpsUuid": "0d9ce5a3-a0b0-44a9-b03b-edd413590139"
-                },
-                "auraeffects": {
-                    "originalType": "base"
-                }
-            }
-        }];
-
-        let rangeEffect = await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: actor.uuid, effects: effectDataRange });
-
-        const concEffect = MidiQOL.getConcentrationEffect(actor, item.uuid);
-        await concEffect.addDependent(rangeEffect[0]);
-
-        await effectData.setFlag("gambits-premades", "enervationTargetUuid", targetUuids);
-        await effectData.setFlag("gambits-premades", "enervationCastLevel", workflow.castData.castLevel);
+            }]});
+        }
+        await healFromDamage(workflow, actor, token, item);
+        for(const target of targets) await startBeam(state, token, target);
+        return;
     }
 
+    const lastArg = args.at(-1);
+    const state = stateOf(lastArg?.efData);
+    if(!state) return;
     if(args[0] === "off") {
-        const originActor = await fromUuid(args[2]);
-
-        let effectData = originActor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "9c513478-ffd9-4d5a-9e39-3d72bf0518ab");
-        let effectDataRange = originActor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "0d9ce5a3-a0b0-44a9-b03b-edd413590139");
-        let targetUuids = effectData?.getFlag("gambits-premades", "enervationTargetUuid");
-
-        if(targetUuids.length <= 1) {
-            const concEffect = MidiQOL.getConcentrationEffect(originActor, args[3]);
-            if(concEffect) await MidiQOL.socket().executeAsGM('removeEffects', { actorUuid: originActor.uuid, effects: [concEffect.id] });
+        if(state.role === "target") {
+            await endBeam(state, state.targetTokenUuid);
+            const effect = await fromUuid(state.casterEffectUuid);
+            if(effect && stateOf(effect)?.castUuid === state.castUuid) await removeTarget(effect, state.targetTokenUuid);
         }
         else {
-            targetUuids = targetUuids?.filter(uuid => uuid !== token.document.uuid);
-            await effectData?.setFlag("gambits-premades", "enervationTargetUuid", targetUuids);
-            await effectDataRange?.update({ 'system.script': `token.document.uuid === '${targetUuids[0]}' && MidiQOL.canSee(token.document.uuid, '${targetUuids[0]}')` });
+            for(const uuid of state.targetUuids) await endBeam(state, uuid);
+            await endCast(state);
         }
-
-        await Sequencer.EffectManager.endEffects({ name: `${token.id}_Enervation`});
+        return;
     }
-
-    if(args[0] === "each") {
-        item = await fromUuid(args[3]);
-        let dialogId = "enervation";
-        let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
-        let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
-        let gmUser = game.gps.getPrimaryGM();
-        let effectData = actor.appliedEffects.find(e => e.name === item.name);
-        const targetUuids = effectData.getFlag("gambits-premades", "enervationTargetUuid");
-        const castLevel = effectData.getFlag("gambits-premades", "enervationCastLevel");
-        const numDice = castLevel - 1;
-
-        let dialogContent = `
-            <div class="gps-dialog-container">
-                <div class="gps-dialog-section">
-                    <div class="gps-dialog-content">
-                        <div>
-                            <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Enervation.Prompts.UseYourAction.Default")}</p>
-                                <div id="image-container" class="gps-dialog-image-container">
-                                    <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="gps-dialog-button-container">
-                    <button id="pauseButton_${dialogId}" type="button" class="gps-dialog-button">
-                        <i class="fas fa-pause" id="pauseIcon_${dialogId}" style="margin-right: 5px;"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        let result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
-                
-        const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
-
-        if (!userDecision) {
-            return;
+    if(args[0] !== "each" || state.role !== "caster") return;
+    const effect = await fromUuid(lastArg.effectUuid ?? `${actor.uuid}.ActiveEffect.${lastArg.effectId}`);
+    if(!effect || pendingTurns.has(effect.uuid)) return;
+    pendingTurns.add(effect.uuid);
+    try {
+        const turn = game.combat ? `${game.combat.id}:${game.combat.round}:${game.combat.turn}` : null;
+        if(turn && stateOf(effect).lastTurn === turn) return;
+        if(turn) await effect.update({"flags.gambits-premades.enervation.lastTurn": turn});
+        item = await fromUuid(state.itemUuid);
+        token = (await fromUuid(state.casterTokenUuid))?.object;
+        if(!item) return await endCast(state);
+        if(!token) return;
+        const currentTargets = await validateTargets(effect);
+        if(!currentTargets.length) return;
+        const browserUser = game.gps.getBrowserUser({actorUuid: actor.uuid});
+        const result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {
+            dialogTitle: `${actor.name} | ${item.name}`, dialogId: "enervation", initialTimeLeft: 30,
+            validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: currentTargets.length === 1 ? currentTargets[0].document.uuid : false, source: game.gps.getPrimaryGM() === browserUser ? "gm" : "user", type: "singleDialog",
+            dialogContent: `<div class="gps-dialog-container"><p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.Spells.Enervation.Prompts.UseYourAction.Default", {formula: `${Math.max(4, state.castLevel - 1)}d8`})}</p><div class="gps-dialog-button-container"><button id="pauseButton_enervation" type="button" class="gps-dialog-button"><i class="fas fa-pause" id="pauseIcon_enervation"></i>${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Pause")}</button></div></div>`
+        });
+        if(!await fromUuid(effect.uuid) || !await fromUuid(state.castUuid)) return;
+        if(!result?.userDecision) return await endCast(state);
+        const targets = await validateTargets(effect);
+        if(!targets.length) return;
+        await actor.setFlag("midi-qol", "actions.action", true);
+        for(const target of targets) {
+            const roll = await new CONFIG.Dice.DamageRoll(`${Math.max(4, state.castLevel - 1)}d8`, {}, {type: "necrotic", properties: ["mgc"]}).evaluate();
+            await MidiQOL.displayDSNForRoll(roll, "damageRoll");
+            const damage = new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, "necrotic", [target], roll, {
+                itemData: {flags: {autoanimations: {isEnabled: false, version: 5}}, name: "Enervation - Damage (Necrotic)", type: "feat", img: item.img}, flavor: "Enervation - Damage (Necrotic)"
+            });
+            damage.activity.updateSource({"activation.type": "special", "activation.override": true});
+            await damage.ready;
+            await healFromDamage(damage, actor, token, item);
         }
-        else if (userDecision) {
-            for(let target of targetUuids) {
-                target = await fromUuid(target);
-                let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDice}d8`, {}, {type: "necrotic", properties: ["mgc"]}).evaluate();
-                await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
-
-                const itemData = {
-                    name: "Enervation - Damage (Necrotic)",
-                    type: "feat",
-                    img: item.img
-                }
-
-                await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "necrotic", [target.object], damageRoll, {itemData: itemData, flavor: "Enervation - Damage (Necrotic)"});
-
-                const healAmount = Math.floor(damageRoll.total / 2);
-                let healRoll = await new CONFIG.Dice.DamageRoll(`${healAmount}`, {}, {type: "healing", properties: ["mgc"]}).evaluate();
-
-                const itemDataHealing = {
-                    name: "Enervation - Healing",
-                    type: "feat",
-                    img: item.img
-                }
-
-                await new MidiQOL.DamageOnlyWorkflow(actor, token, healRoll.total, "healing", [token], healRoll, {itemData: itemDataHealing, flavor: "Enervation - Healing"});
-
-                let content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Enervation.DealDamageHeal", { damageTotal: damageRoll.total, healAmount: healAmount })} <img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`
-                let actorPlayer = MidiQOL.playerForActor(actor);
-                let chatData = {
-                    user: actorPlayer.id,
-                    speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: content
-                };
-                ChatMessage.create(chatData);
-            }
-        }
+    }
+    finally {
+        pendingTurns.delete(effect.uuid);
     }
 }

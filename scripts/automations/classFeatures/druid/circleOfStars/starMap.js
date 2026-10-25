@@ -1,9 +1,9 @@
 export async function starMap({ item }) {
     let freeUses = item.system.uses.max - item.system.uses.spent;
 
-    if(freeUses === 0) return false;
+    if(!Number.isFinite(freeUses) || freeUses <= 0) return false;
 
-    let result = await foundry.applications.api.DialogV2.wait({
+    let result = await game.gps.showAutomationDialog({
         window: { title: game.i18n.format("GAMBITSPREMADES.Dialogs.Common.FreeUse", { itemName: item.name }) },
         content: `
             <div class="gps-dialog-container">
@@ -25,6 +25,7 @@ export async function starMap({ item }) {
             action: "Yes",
             label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Yes"),
             callback: async (event, button, dialog) => {
+                if(item.system.uses.max - item.system.uses.spent <= 0) return false;
                 await item.update({ "system.uses.spent": item.system.uses.spent + 1 });
                 ui.notifications.info(game.i18n.format("GAMBITSPREMADES.Notifications.ClassFeatures.Druid.CircleOfStars.StarMap.NoSpellSlotConsumed", { name: item.name }));
                 return true;

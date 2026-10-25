@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -185,35 +185,28 @@
   "effects": [
     {
       "origin": "Compendium.gambits-premades.gps-3rd-party-spells.Item.4SkGLI2AL3ndOpwl",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Contagious Healing",
       "img": "icons/magic/life/heart-hand-gold-green-light.webp",
       "_id": "o0bHY6SZCra2Ov5v",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.contagiousHealing,isDamaged",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.contagiousHealing",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.contagiousHealing,isDamaged",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.contagiousHealing",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -226,7 +219,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -237,19 +229,20 @@
           "riders": {
             "statuses": []
           },
-          "dependents": [
-            {
-              "uuid": "Actor.W3Y25gWfToeQU9zT.ActiveEffect.WFTpgawY22C0dykk"
-            }
-          ]
+          "dependents": []
         },
         "core": {
           "overlay": false
         },
         "gambits-premades": {
           "gpsUuid": "dabf704f-a59b-43b4-8552-9aa18734a362"
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!WGKG4HlYIWFNhVMO.o0bHY6SZCra2Ov5v"
     }
   ],
@@ -314,6 +307,39 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Heal",
+        "activityType": "heal",
+        "version": 2
+      }
     }
   },
   "folder": null,

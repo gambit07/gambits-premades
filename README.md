@@ -15,7 +15,15 @@
 <li>And many more</li>
 </ul>
 
-<b>Dependencies V13 5e 5.x (V2.0.0-V2.x.x)</b>
+<b>Dependencies V14 5e 6.x (V3.0.0-V3.x.x)</b>
+<BLOCKQUOTE>
+Midi QOL<br>
+Aura Effects<br>
+Sequencer<br>
+Dynamic effects using Active Effects<br>
+</BLOCKQUOTE>
+
+<b>Dependencies V13 5e 5.x (V2.0.0-V2.1.44)</b>
 <BLOCKQUOTE>
 Midi QOL<br>
 Aura Effects<br>

@@ -5,10 +5,10 @@
   "system": {
     "description": {
       "value": "",
-      "chat": "<p>A ray of sickening greenish energy lashes out toward a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 2d8 poison damage and must make a Constitution saving throw. On a failed save, it is also poisoned until the end of your next turn.</p>\n<p><strong>At Higher Levels. </strong>When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.</p>"
+      "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -338,28 +338,25 @@
     {
       "origin": "Compendium.world.gps-spells.Item.ojAOofGnfFBhXqp1",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 12,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "seconds",
+        "expiry": "sourceEnd"
       },
       "disabled": false,
       "name": "Ray of Sickness",
       "img": "icons/magic/light/beam-rays-green-small.webp",
       "_id": "gn2XZy3CH9zbVPgl",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.StatusEffect",
-          "mode": 0,
-          "value": "poisoned",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.StatusEffect",
+            "value": "poisoned",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -372,19 +369,21 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnEndSource"
-          ],
+          "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!dTmckL8aGMJ3nLqp.gn2XZy3CH9zbVPgl"
     }
   ],
@@ -408,7 +407,7 @@
     "core": {},
     "autoanimations": {
       "id": "63e5e600-57ac-4ac8-b63f-dddae23afcb6",
-      "isEnabled": true,
+      "isEnabled": false,
       "isCustomized": true,
       "fromAmmo": false,
       "levels3d": {
@@ -635,6 +634,30 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Attack",
+        "activityType": "attack",
+        "version": 2
+      },
+      "dnd5eactivity100": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "_id": "dTmckL8aGMJ3nLqp",

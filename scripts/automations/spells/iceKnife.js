@@ -1,18 +1,11 @@
 export async function iceKnife({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
-    if(args[0].macroPass === "postPreambleComplete") {
-        item = await fromUuid(workflow.itemUuid);
-        let castLevel = workflow.castData.castLevel;
-        let castMode = workflow.item?.system?.method;
-        if ((castMode === "innate" || castMode === "atwill") && castLevel === 0) castLevel = workflow.castData.baseLevel;
-        await item.setFlag("gambits-premades", "ikCastLevel", castLevel);
-    }
 
     if((args[0].macroPass === "postAttackRollComplete" && !workflow.hitTargets.first()) || (args[0].macroPass === "postDamageRollComplete" && workflow.hitTargets.first())) {
         item = await fromUuid(workflow.itemUuid);
         let gmUser = game.gps.getPrimaryGM();
         let target = workflow.targets.first();
         if(!target) return;
-        let castLevel = await item.getFlag('gambits-premades', 'ikCastLevel');
+        const castLevel = workflow.castData?.castLevel || workflow.castData?.baseLevel || item.system.level;
         
         let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
         const { animEnabled } = cprConfig;
@@ -30,7 +23,7 @@ export async function iceKnife({ speaker, actor, token, character, item, args, s
             .play()
         }
         
-        const targets = MidiQOL.findNearby(null, target, game.gps.convertFromFeet({range:6}), { includeToken: true });
+        const targets = MidiQOL.findNearby(null, target, game.gps.convertFromFeet({range:5}), { includeToken: true });
         const targetUuids = targets.map(t => t.document.uuid);
         let numDie = castLevel + 1;
         let activityToUpdate = await item.system.activities.find(a => a.identifier === "syntheticSave");
@@ -38,9 +31,8 @@ export async function iceKnife({ speaker, actor, token, character, item, args, s
         if(activityToUpdate.damage.parts[0]?.number !== numDie) {
             let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
             damageParts[0].number = numDie;
-            await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
+            await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
         }
-        await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: targetUuids});
-        await actor.unsetFlag('gambits-premades', 'ikCastLevel');
+        await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: targetUuids});
     }
 }

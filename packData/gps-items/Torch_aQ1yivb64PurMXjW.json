@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -83,11 +83,7 @@
           "special": "",
           "override": false
         },
-        "effects": [
-          {
-            "_id": "mFaZzeDRCdJjfZCE"
-          }
-        ],
+        "effects": [],
         "range": {
           "value": "5",
           "units": "self",
@@ -443,11 +439,7 @@
       "version": 5
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.edtGqNIYfHYowUUr.ActiveEffect.VEdz50CKdBDVXSmu"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -456,6 +448,36 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2AFree"
+      ],
+      "animationModuleNote": "OptionalImpact"
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [],

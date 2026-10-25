@@ -3,11 +3,11 @@
   "type": "feat",
   "system": {
     "description": {
-      "value": "<p>You have resistance to necrotic damage and radia<span class=\"No-Break\" data-content-chunk-id=\"60f82fbd-a62a-4a76-a877-33f029c78876\">nt damage.</span></p>",
+      "value": "",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "book": "",
       "page": "",
@@ -57,41 +57,44 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/skills/wounds/blood-cells-disease-green.webp",
   "effects": [
     {
       "origin": "Compendium.world.gps-race-features.Item.wNuwXPqCsshIcO2V",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Celestial Resistance (Variant Aasimar)",
       "img": "icons/skills/wounds/blood-cells-disease-green.webp",
       "_id": "nGhKXGlzLbZGIsKu",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "system.traits.dr.value",
-          "mode": 2,
-          "value": "necrotic",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.dr.value",
-          "mode": 2,
-          "value": "radiant",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "necrotic",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "radiant",
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -102,7 +105,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -114,8 +116,13 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!wNuwXPqCsshIcO2V.nGhKXGlzLbZGIsKu"
     }
   ],

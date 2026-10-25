@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -27,7 +27,7 @@
     "target": {
       "affects": {
         "choice": false,
-        "type": ""
+        "type": "self"
       },
       "template": {
         "units": "ft",
@@ -177,28 +177,24 @@
     {
       "origin": "Actor.1xFtQVMnMyuFm2w2.Item.bRNDK6dWXpSAg2qt",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Electric Eels",
       "img": "icons/magic/lightning/bolt-strike-sparks-teal.webp",
       "_id": "sC8LPNOsmlare51n",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -213,15 +209,19 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!znMMm7q7iRlXWWnO.sC8LPNOsmlare51n"
     }
   ],
@@ -233,7 +233,7 @@
         "img": "icons/magic/lightning/barrier-wall-shield-gray.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(!game.modules.get(\"portal-lib\")?.active) return ui.notifications.error(\"You must install the Portal module to use the Scatter automation.\");\n\nif (args[0].macroPass === \"postActiveEffects\") {\n\n    const electricEel1 = await new Portal()\n        .color(\"#ff0000\")\n        .origin(token)\n        .addCreature(\"Electric Eel\", {count: 1})\n        .range(60)\n        .spawn();\n\n    if (!electricEel1) {\n        console.error(\"No valid location picked.\");\n        return;\n    }\n    \n    new Sequence()\n        .effect()\n        .file('jb2a.lightning_bolt.wide.green')\n        .atLocation(token)\n        .stretchTo(electricEel1[0].object)\n    .play()\n\n    const electricEel2 = await new Portal()\n        .color(\"#ff0000\")\n        .origin(token)\n        .addCreature(\"Electric Eel\", {count: 1})\n        .range(60)\n        .spawn();\n\n    if (!electricEel2) {\n        console.error(\"No valid location picked.\");\n        return;\n    }\n\n    new Sequence()\n        .effect()\n        .file('jb2a.lightning_bolt.wide.green')\n        .duration(1200)\n        .fadeOut(500)\n        .fadeIn(200)\n        .atLocation(token)\n        .stretchTo(electricEel2[0].object)\n    .play()\n\n    let params = [{\n        filterType: \"electric\",\n        filterId: \"myElectric\",\n        color: 0xFFFFFF,\n        time: 0,\n        blend: 1,\n        intensity: 5,\n        animated: {\n        time: { \n            active: true, \n            speed: 0.0020, \n            animType: \"move\" \n        }\n        }\n    }];\n\n    await TokenMagic.addUpdateFilters(electricEel1[0].object, params);\n    await TokenMagic.addUpdateFilters(electricEel2[0].object, params);\n}\n\nif(args[0].macroPass === \"preActiveEffects\") {\n  const actorData = game.actors.find(a => a.name === \"Electric Eel\");\n  if(!actorData) return;\n  const spellcastingAbility = actor.system.attributes.spellcasting;\n  const spellCastingTotal = actor.system.abilities[spellcastingAbility].value;\n  let updateData = {\n    [`system.attributes.spellcasting`]: spellcastingAbility,\n    [`system.abilities.${spellcastingAbility}.value`]: spellCastingTotal\n};\n  await actorData.update(updateData)\n}\n\nif(args[0] === \"off\") {\n    const effectOriginActor = await fromUuid(args[1].efData.flags.dae.actor);\n    if(effectOriginActor.uuid === actor.uuid) {\n        const tokensToDelete = canvas.tokens.placeables.filter(token => token.name === \"Electric Eel\").map(token => token.id);\n\n        if (tokensToDelete.length > 0) {\n            canvas.scene.deleteEmbeddedDocuments(\"Token\", tokensToDelete);\n        }\n    }\n    else {\n        let diValues = effectOriginActor.system.traits.di.value.has(\"lightning\");\n        let drValues = effectOriginActor.system.traits.dr.value.has(\"lightning\");\n\n        if (actor.name === \"Electric Eel\") {\n            if (diValues) { \n                effectOriginActor.system.traits.di.value.delete('lightning');\n                effectOriginActor.system.traits.dr.value.add('lightning');\n            } \n            else if(drValues) {\n                effectOriginActor.system.traits.dr.value.delete('lightning');\n            }\n        }\n    }\n}\n\nif(args[0] === \"on\") {\n    console.log(arguments)\n    console.log(args)\n    console.log(effect)\n    console.log(item)\n    const effectOriginActor = await fromUuid(args[1].efData.flags.dae.actor);\n\n    let drValues = effectOriginActor.system.traits.dr.value.has(\"lightning\");\n\n    if (actor.name === \"Electric Eel\") {\n        if (!drValues) {\n            effectOriginActor.system.traits.dr.value.add('lightning');\n        } \n        else {\n            effectOriginActor.system.traits.di.value.add('lightning');\n            effectOriginActor.system.traits.dr.value.delete('lightning');\n        }\n    }\n}",
+        "command": "const effectUuid = args.at(-1)?.effectUuid ?? (args.at(-1)?.effectId ? `${actor.uuid}.ActiveEffect.${args.at(-1).effectId}` : undefined);\nif(args[0]?.macroPass === \"postActiveEffects\") {\n    if(!game.modules.get(\"portal-lib\")?.active) return ui.notifications.error(\"Electric Eels requires Portal.\");\n    const source = actor.appliedEffects.find(effect => DAE.effectMatchesSource(effect, item.uuid) && effect.name === item.name);\n    const template = game.actors.getName(\"Electric Eel\");\n    if(!source || !template) return;\n    const ability = actor.system.attributes.spellcasting;\n    const updateData = {\n        token: {actorLink: false, flags: {\"gambits-premades\": {electricEelsSource: source.uuid}}},\n        actor: {system: {attributes: {spellcasting: ability}, abilities: {[ability]: {value: actor.system.abilities[ability].value}}}}\n    };\n    for(let index = 0; index < 2; index++) {\n        const summoned = await new Portal().color(\"#ff0000\").origin(token).addCreature(template.uuid, {count: 1, updateData: foundry.utils.deepClone(updateData)}).range(game.gps.convertFromFeet({range: 60})).spawn();\n        if(!summoned?.length) break;\n        const uuids = source.getFlag(\"gambits-premades\", \"electricEelsTokens\") ?? [];\n        await source.setFlag(\"gambits-premades\", \"electricEelsTokens\", [...uuids, ...summoned.map(token => token.uuid)]);\n        if(game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) new Sequence().effect().file(\"jb2a.lightning_bolt.wide.green\").atLocation(token).stretchTo(summoned[0].object).play();\n    }\n}\nif(args[0] === \"off\" && effectUuid) {\n    for(const scene of game.scenes) {\n        const ids = scene.tokens.filter(token => token.getFlag(\"gambits-premades\", \"electricEelsSource\") === effectUuid).map(token => token.id);\n        if(ids.length) await scene.deleteEmbeddedDocuments(\"Token\", ids);\n    }\n}\nif(args[0] === \"on\" && actor.name === \"Electric Eel\" && effectUuid) {\n    const actorUuid = args.at(-1)?.efData?.flags?.dae?.actor ?? args[1]?.efData?.flags?.dae?.actor;\n    if(!actorUuid) return;\n    const sourceActor = await fromUuid(actorUuid);\n    if(!sourceActor) return;\n    const key = sourceActor.system.traits.dr.value.has(\"lightning\") ? \"system.traits.di.value\" : \"system.traits.dr.value\";\n    await MidiQOL.socket().executeAsGM(\"createEffects\", {actorUuid: sourceActor.uuid, effects: [{name: item.name, img: item.img, origin: item.uuid, flags: {dnd5e: {dependentOn: effectUuid}}, system: {changes: [{key, type: \"add\", value: \"lightning\", priority: 20}]}}]});\n}\n",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -278,80 +278,6 @@
         "activity": [],
         "effect": []
       }
-    },
-    "region-attacher": {
-      "attachRegionToTemplate": false,
-      "regionBehaviors": [
-        {
-          "name": "onEnter",
-          "type": "executeScript",
-          "_id": "vQPnqOUAUICrkmsG",
-          "system": {
-            "events": [
-              "tokenEnter"
-            ],
-            "source": "console.log(\"onEnter\")\nlet regionActor = region?.flags[\"region-attacher\"]?.actorUuid;\nif(regionActor) {\nconst effectOriginActor = await fromUuid(region.flags[\"region-attacher\"].actorUuid);\n\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\nif (event.data?.token?.actor.name === \"Electric Eel\") {\n    let drValues = effectOriginToken.actor.system.traits.dr.value.has(\"lightning\");\n    if (!drValues) {\n        effectOriginToken.actor.system.traits.dr.value.add('lightning');\n    }\n    else{\n        effectOriginToken.actor.system.traits.di.value.add('lightning');\n    }\n}\n}"
-          },
-          "disabled": false,
-          "flags": {},
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "coreVersion": "12.331",
-            "systemId": "dnd5e",
-            "systemVersion": "3.3.1",
-            "createdTime": null,
-            "modifiedTime": null,
-            "lastModifiedBy": null
-          }
-        },
-        {
-          "name": "onExit",
-          "type": "executeScript",
-          "_id": "b77e2tGkcvDhxeOX",
-          "system": {
-            "events": [
-              "tokenExit"
-            ],
-            "source": "console.log(\"onExit\")\nlet regionActor = region?.flags[\"region-attacher\"]?.actorUuid;\nif(regionActor) {\nconst effectOriginActor = await fromUuid(region.flags[\"region-attacher\"]?.actorUuid);\n\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\nif (event.data.token.actor.name === \"Electric Eel\") {\n    let diValues = effectOriginToken.actor.system.traits.di.value.has(\"lightning\");\n    if (diValues) {\n        effectOriginToken.actor.system.traits.di.value.delete('lightning');\n    }\n    else{\n        effectOriginToken.actor.system.traits.dr.value.delete('lightning');\n    }\n}\n}"
-          },
-          "disabled": false,
-          "flags": {},
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "coreVersion": "12.331",
-            "systemId": "dnd5e",
-            "systemVersion": "3.3.1",
-            "createdTime": null,
-            "modifiedTime": null,
-            "lastModifiedBy": null
-          }
-        },
-        {
-          "name": "onStateChange",
-          "type": "executeScript",
-          "_id": "bEZgtFa2jXjEjRdW",
-          "system": {
-            "events": [
-              "behaviorStatus"
-            ],
-            "source": "if(event.data.active) {\nasync function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }\nawait wait(500);\nconsole.log(event)\n\nlet regionActor = region?.flags[\"region-attacher\"]?.actorUuid;\n\nif(regionActor) {\nconst effectOriginActor = await fromUuid(regionActor);\nlet effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\nlet attachedRegions = effectOriginActor.getFlag('gambits-premades', 'attachedRegions') || [];\n                attachedRegions.push(region.uuid);\n                await effectOriginActor.setFlag('gambits-premades', 'attachedRegions', attachedRegions);\n}\n}"
-          },
-          "disabled": false,
-          "flags": {},
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "coreVersion": "12.331",
-            "systemId": "dnd5e",
-            "systemVersion": "3.3.1",
-            "createdTime": null,
-            "modifiedTime": null,
-            "lastModifiedBy": null
-          }
-        }
-      ]
     },
     "chris-premades": {
       "info": {
@@ -578,6 +504,35 @@
       "isCustomized": false,
       "fromAmmo": false,
       "version": 5
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "folder": null,

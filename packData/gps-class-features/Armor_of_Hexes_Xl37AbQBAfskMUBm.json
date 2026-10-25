@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -72,32 +72,26 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
   "effects": [
     {
       "origin": "Compendium.world.gps-class-features.Item.Xl37AbQBAfskMUBm",
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": 0
-      },
+      "duration": {},
       "disabled": false,
       "name": "Armor of Hexes",
       "_id": "hABxNuY8XpmEFhvJ",
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.armorOfHexes, isAttacked",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -108,7 +102,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -116,13 +109,27 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/skills/toxins/poison-bottle-corked-fire-green.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.armorOfHexes, isAttacked",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!Xl37AbQBAfskMUBm.hABxNuY8XpmEFhvJ"
     }
   ],

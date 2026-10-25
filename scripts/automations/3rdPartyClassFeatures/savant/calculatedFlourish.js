@@ -10,13 +10,14 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
         return;
     }
     let target = workflow.targets.first();
+    if(!target) return;
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Calculated Flourish Timeout`));
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
 
     let targetAC = target.actor.system.attributes.ac.value;
     let attackTotal = workflow.attackTotal;
-    if (attackTotal >= targetAC) {
+    if (workflow.hitDisplayData?.[target.document.uuid]?.isHit ?? game.gps.attackHits(workflow, target)) {
         if(debugEnabled) game.gps.logInfo(`${itemName} failed because attack was a hit`);
         return;
     }
@@ -34,7 +35,7 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         // Check valid weapons
-        let validWeapons = validTokenPrimary.actor.items.filter(item => item.system.equipped === true && item.system.activities?.some(activity => activity?.actionType === "mwak"));
+        let validWeapons = validTokenPrimary.actor.items.filter(item => item.system.equipped === true && item.system.activities?.some(activity => activity?.actionType === "mwak" && MidiQOL.checkRange(activity, validTokenPrimary, new Set([workflow.token]), false).result !== "fail"));
         if (!validWeapons.length) continue;
 
         // Sort the weapons alphabetically
@@ -97,13 +98,13 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, source, type } = result || {};
@@ -112,6 +113,8 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
             continue;
         }
         else if (userDecision) {
+            const chosenWeapon = validWeapons.find(weapon => weapon.uuid === selectedItemUuid);
+            if(!chosenWeapon) continue;
             const riposteOptions = {
                 showFullCard: false,
                 createWorkflow: true,
@@ -121,9 +124,9 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
             };
 
             let riposteRoll;
-            if(source && source === "user") riposteRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: riposteOptions });
-            else if(source && source === "gm") riposteRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: riposteOptions });
-            if(riposteRoll.aborted === true) continue;
+            if(source && source === "user") riposteRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...riposteOptions, workflowData: true } } });
+            else if(source && source === "gm") riposteRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...riposteOptions, workflowData: true } } });
+            if(!riposteRoll || riposteRoll.aborted) continue;
 
             if (!selectedItemUuid) {
                 console.log("No weapon selected");
@@ -132,13 +135,13 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
 
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            let chosenWeapon = await fromUuid(selectedItemUuid);
+
             let favoriteWeaponCheck = favoriteWeaponUuid;
             let favoriteWeapon;
             if(favoriteWeaponCheck !== "null") favoriteWeapon = await fromUuid(favoriteWeaponCheck);
             if(favoriteCheck && favoriteWeaponCheck) {
                await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
-               if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
+               if (favoriteWeapon && favoriteWeapon.uuid !== chosenWeapon.uuid) {
                await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
                }
             }
@@ -146,19 +149,6 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
                await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
             }
 
-            let clonedWeapon = foundry.utils.deepClone(chosenWeapon);
-
-            foundry.utils.mergeObject(clonedWeapon, {
-            system: {
-                range: {
-                    value: null,
-                    long: null,
-                    units: ""
-                }
-            }
-            }, { inplace: true });
-    
-            chosenWeapon = clonedWeapon;
 
             const options = {
                 showFullCard: false,
@@ -174,9 +164,9 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
             };
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            if(!itemRoll) continue;
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
+            if(!itemRoll || itemRoll.aborted) continue;
 
             const hasEffectAppliedReaction = MidiQOL.hasUsedReaction(validTokenPrimary.actor);
             if (!hasEffectAppliedReaction) {

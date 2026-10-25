@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -229,52 +229,68 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Compendium.world.gps-spells.Item.mVClsljdgiSF9oL7",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 3600,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Intellect Fortress",
       "img": "icons/magic/control/control-influence-rally-purple.webp",
       "_id": "1x0dmzyNA4DM8YwN",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "system.traits.dr.value",
-          "mode": 0,
-          "value": "psychic",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.advantage.save.int",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.advantage.save.wis",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.advantage.save.cha",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "psychic",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "system.abilities.int.save.roll.mode",
+            "value": 1,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.abilities.wis.save.roll.mode",
+            "value": 1,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.abilities.cha.save.roll.mode",
+            "value": 1,
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -284,7 +300,6 @@
         "dae": {
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -301,8 +316,13 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!DEJrLlbplsT2KW8N.1x0dmzyNA4DM8YwN"
     }
   ],

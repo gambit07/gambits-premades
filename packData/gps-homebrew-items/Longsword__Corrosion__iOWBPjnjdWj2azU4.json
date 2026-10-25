@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -246,7 +246,7 @@
         "img": "icons/weapons/swords/greatsword-crossguard-steel.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"preDamageApplication\") {\n  const spellDC = 16;\n  let saveAbility = \"con\";\n  const target = workflow.targets.first();\n  const targetActor = workflow.targets.first().actor;\n  const armorKeywords = [\"Chain Mail\", \"Chain Shirt\", \"Scale Mail\", \"Half Plate\", \"Plate Armor\", \"Plate\", \"Breastplate\", \"Ring Mail\", \"Chain Mail\", \"Splint\"];  // Add additional armor here that you want included for this effect. This will do partial matches, so Mithral Scale Mail would return true with the search below and continue with the effect\n  let hasMatchingArmor = targetActor.items.some(item => armorKeywords.some(keyword => item.name.includes(keyword)));\n  if(!hasMatchingArmor) return;\n\n\n  const itemData = {\n    name: macroItem.name,\n    img: macroItem.img,\n    type: \"feat\",\n    effects: [],\n    flags: {\n      \"midi-qol\": {\n        noProvokeReaction: true,\n        onUseMacroName: null,\n        forceCEOff: true\n      },\n      \"autoanimations\": {\n        killAnim: true\n      }\n    },\n    system: {\n      equipped: true,\n      actionType: \"save\",\n      save: { dc: spellDC, ability: saveAbility, scaling: \"flat\" },\n      components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n      duration: { units: \"inst\", value: undefined },\n    }\n  };\n\n  const itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: actor });\n  const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid] };\n  const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n  if (saveResult.failedSaves.size !== 0)\n  {\n    let stacked,name;\n    name = \"Corrosion\"\n\n    let targetActorAC = targetActor.system.attributes.ac.value;\n    let updateAC = 2;\n    let targetActorACCalc = targetActorAC - 2;\n    if(targetActorACCalc < 10) updateAC = 1;\n    if (targetActorAC === 10) return;\n\n    stacked = {name, stackable:'count',changes:[{key:'system.attributes.ac.value',mode: 2,value:-updateAC}]}\n\n    const effectData = {\n      name: stacked.name,\n      changes: stacked.changes,\n      icon: macroItem.img,\n      flags: {dae:{stackable:stacked.stackable,specialDuration:['longRest','shortRest']}},\n      statuses: [stacked.name],\n      origin: macroItem.uuid\n    }\n\n    await MidiQOL.socket().executeAsGM('createEffects',{actorUuid:targetActor.uuid, effects:[effectData]});\n  }\n}",
+        "command": "if(args[0].macroPass === \"preDamageApplication\") {\n  const spellDC = 16;\n  let saveAbility = \"con\";\n  const target = workflow.targets.first();\n  const targetActor = workflow.targets.first().actor;\n  const armorKeywords = [\"Chain Mail\", \"Chain Shirt\", \"Scale Mail\", \"Half Plate\", \"Plate Armor\", \"Plate\", \"Breastplate\", \"Ring Mail\", \"Chain Mail\", \"Splint\"];  // Add additional armor here that you want included for this effect. This will do partial matches, so Mithral Scale Mail would return true with the search below and continue with the effect\n  let hasMatchingArmor = targetActor.items.some(item => armorKeywords.some(keyword => item.name.includes(keyword)));\n  if(!hasMatchingArmor) return;\n\n\n  const itemData = game.gps.disableBlfxAutoRecognition({\n    name: macroItem.name,\n    img: macroItem.img,\n    type: \"feat\",\n    effects: [],\n    flags: {\n      \"midi-qol\": {\n        noProvokeReaction: true,\n        onUseMacroName: null,\n        forceCEOff: true\n      },\n      \"autoanimations\": {\n        version: 5,\n        isEnabled: false,\n        killAnim: true\n      }\n    },\n    system: {\n            activities: {\n                gpsSynthetic0001: {\n                    type: \"save\",\n                    activation: { type: \"special\" },\n                    consumption: { spellSlot: false, targets: [] },\n                    target: { affects: { type: \"creature\", count: \"1\" } },\n                    save: { ability: [saveAbility], dc: { calculation: \"\", formula: String(spellDC) } },\n                    damage: { onSave: \"none\", parts: [] }\n                }\n            }\n        }\n  });\n\n  const itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: actor });\n  const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid] };\n  const saveResult = await MidiQOL.completeItemUse(itemUpdate, { midiOptions: options }, { configure: false }, {});\n\n  if (saveResult.failedSaves.size !== 0)\n  {\n    let stacked,name;\n    name = \"Corrosion\"\n\n    let targetActorAC = targetActor.system.attributes.ac.value;\n    let updateAC = 2;\n    let targetActorACCalc = targetActorAC - 2;\n    if(targetActorACCalc < 10) updateAC = 1;\n    if (targetActorAC === 10) return;\n\n    stacked = {name, stackable:'count',system: { changes: [{key:'system.attributes.ac.value',type: \"add\",value:-updateAC}] }}\n\n    const effectData = {\n      name: stacked.name,\n      system: { changes: stacked.system.changes },\n      img: macroItem.img,\n      flags: {dae:{stackable:stacked.stackable,specialDuration:['longRest','shortRest']}},\n      statuses: [stacked.name],\n      origin: macroItem.uuid\n    }\n\n    await MidiQOL.socket().executeAsGM('createEffects',{actorUuid:targetActor.uuid, effects:[effectData]});\n  }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -271,6 +271,26 @@
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Attack",
+        "activityType": "attack",
+        "version": 2
       }
     }
   },

@@ -1,5 +1,6 @@
-export async function animateLightMovement({ tokenData, actor, effectName, filePath, animType }) {
-  if(animType === "torch") {
+export async function animateLightMovement({ tokenData, position, effectName, filePath, animType, animEnabled = true }) {
+  if (!position) return null;
+  if(animEnabled && animType === "torch") {
     new Sequence()
       .effect()
         .name(`${effectName}_ip`)
@@ -25,23 +26,12 @@ export async function animateLightMovement({ tokenData, actor, effectName, fileP
     .play();
   }
 
-  actor.sheet.minimize();
+  if (!animEnabled) {
+    await new Sequence().animation().on(tokenData).teleportTo(position).snapToGrid().opacity(1).play();
+    return position;
+  }
 
-  let config = {
-    gridHighlight: true,
-    icon: { texture: filePath, borderVisible: true },
-    location: {
-      obj: tokenData,
-      limitMaxRange: 60,
-      showRange: true,
-      wallBehavior: Sequencer.Crosshair.PLACEMENT_RESTRICTIONS.NO_COLLIDABLES
-    }
-  };
-
-  const position = await Sequencer.Crosshair.show(config);
-  if (!position) return null;
-
-  new Sequence()
+  await new Sequence()
     .animation()
       .on(tokenData)
       .opacity(0)
@@ -74,8 +64,6 @@ export async function animateLightMovement({ tokenData, actor, effectName, fileP
       .snapToGrid()
       .opacity(1)
     .play();
-
-  actor.sheet.maximize();
 
   return position;
 }
@@ -523,9 +511,7 @@ export async function weaponAnimations({enableTrail = true, enableImpact = true,
               .play()
       }
 
-      /**************************
-       * ANIMATION CALL AND LOOP*
-       **************************/
+      
 
       const dbPath = weapon;
       const entries = Sequencer.Database.getEntry(dbPath) ?? null;

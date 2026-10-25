@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -24,7 +24,7 @@
     "target": {
       "affects": {
         "choice": false,
-        "type": ""
+        "type": "creature"
       },
       "template": {
         "units": "m",
@@ -172,29 +172,22 @@
   "effects": [
     {
       "origin": "Compendium.world.gps-3rd-party-spells.Item.lB8uMNYOuJpDIJH5",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Festering Fever",
       "img": "icons/magic/unholy/strike-hand-glow-pink.webp",
       "_id": "QVjYYIpry4j5zgop",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "@spellLevel @attributes.spell.dc @tokenUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -207,12 +200,16 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!GqeDCrvZxpHJHuLO.QVjYYIpry4j5zgop"
     }
   ],
@@ -239,7 +236,7 @@
         "img": "icons/magic/unholy/strike-hand-glow-pink.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0] === \"on\") {\n    let effectData = token.actor.appliedEffects.find(e => e.name === item.name);\n    if(!effectData) return;\n    let effectOriginToken = await fromUuid(effectData.getFlag(\"gambits-premades\", \"festeringFeverTokenUuid\"));\n    if(!effectOriginToken) return;\n    let castTotal = await effectData.getFlag(\"gambits-premades\", \"festeringFeverCastTotal\");\n    if(!castTotal) return;\n    let spellDC = await effectData.getFlag(\"gambits-premades\", \"festeringFeverSpellDC\");\n    await actor.setFlag(\"midi-qol\", \"festeringFeverApplied\", true);\n\n    const itemData = {\n        name: item.name,\n        img: item.img,\n        type: \"feat\",\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            },\"midiProperties\": {\n                saveDamage: \"halfdam\",\n                magiceffect: true,\n                magicdamage: true\n            },\n            \"autoanimations\": {\n                killAnim: true\n            }\n        },\n        system: {\n            equipped: true,\n            actionType: \"save\",\n            save: { dc: spellDC, ability: \"con\", scaling: \"flat\" },\n            damage: { parts: [[`${castTotal}d8`, \"necrotic\"]] },\n            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n            duration: { units: \"inst\", value: undefined }\n        }\n    };\n\n    const itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: effectOriginToken.actor });\n    const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [token.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n    const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n    let content;\n\n    if (saveResult.failedSaves.size === 0 || castTotal === 1) {\n        if(saveResult.failedSaves.size === 0) {\n            content = `<span style='text-wrap: wrap;'>The target saves for half damage and the fever subsides.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n        }\n        else if(castTotal === 1) {\n            content = `<span style='text-wrap: wrap;'>The target does not save but the fever subsides as its energy runs out.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n        }\n        await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: token.actor.uuid, effects: [effectData.id] });\n\n        let targets = canvas.tokens.placeables.filter(t => {\n            if (t.document.disposition !== token.document.disposition) return;\n            if (!t.actor.flags[\"gambits-premades\"].festeringFeverApplied) return;\n            return t;\n        });\n\n        if (targets.length === 0) return;\n\n        for(let target of targets) {\n            await target.actor.unsetFlag(\"midi-qol\", \"festeringFeverApplied\");\n        }\n    }\n    else {\n        content = `<span style='text-wrap: wrap;'>The target does not save and the fever continues to fester.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    }\n\n    new Sequence()\n\n    .effect()\n    .file(\"jb2a.magic_signs.rune.necromancy.complete.green\")\n    .attachTo(token)\n    .scaleToObject(2.5)\n    .opacity(1)\n    .zIndex(1)\n    .belowTokens(false)\n    .fadeIn(1500)\n    .fadeOut(1500)\n    .filter(\"ColorMatrix\", { hue: 140, brightness: 0.8, contrast: 1, saturate: 1 })\n\n    .play()\n\n    let actorPlayer = MidiQOL.playerForActor(effectOriginToken.actor);\n\n    let chatData = {\n        user: actorPlayer.id,\n        speaker: ChatMessage.getSpeaker({ token: effectOriginToken }),\n        content: game.i18n.localize(content)\n    };\n    ChatMessage.create(chatData);\n}\n\nelse if(args[0].macroPass === \"postActiveEffects\") {\n    let effectData = target.actor.appliedEffects.find(e => e.name === macroItem.name);\n    let castTotal = workflow.castData.castLevel;\n    let spellDC = actor.system.attributes.spelldc;\n    await effectData.setFlag(\"gambits-premades\", \"festeringFeverCastTotal\", castTotal);\n    await effectData.setFlag(\"gambits-premades\", \"festeringFeverSpellDC\", spellDC);\n    await effectData.setFlag(\"gambits-premades\", \"festeringFeverTokenUuid\", token.document.uuid);\n}\n\nelse if(args[0] === \"each\") {\n    let effectData = token.actor.appliedEffects.find(e => e.name === item.name);\n    if(!effectData) return;\n    let effectOriginToken = await fromUuid(effectData.getFlag(\"gambits-premades\", \"festeringFeverTokenUuid\"));\n    if(!effectOriginToken) return;\n    let castTotal = await effectData.getFlag(\"gambits-premades\", \"festeringFeverCastTotal\");\n    if(!castTotal) return;\n\n    castTotal = castTotal - 1;\n    await effectData.setFlag(\"midi-qol\", \"festeringFeverCastTotal\", castTotal);\n\n    const rangeCheck = MidiQOL.findNearby(null, token, 10, { includeToken: false });\n    const withinRange = rangeCheck.filter(t => (!t.actor.flags[\"gambits-premades\"].festeringFeverApplied) && t.document.disposition === token.document.disposition);\n\n    if (withinRange.length > 0) {\n        const randomToken = withinRange[Math.floor(Math.random() * withinRange.length)];\n        await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: randomToken.actor.uuid, effects: [effectData.toObject()] });\n    }\n    else {\n        let targets = canvas.tokens.placeables.filter(t => {\n            if (t.document.disposition !== token.document.disposition) return;\n            if (!t.actor.flags[\"gambits-premades\"].festeringFeverApplied) return;\n            return t;\n        });\n\n        if (targets.length === 0) return;\n\n        for(let target of targets) {\n            await target.actor.unsetFlag(\"midi-qol\", \"festeringFeverApplied\");\n        }\n\n        let content = `<span style='text-wrap: wrap;'>The fever subsides on the target and there are no additional targets within 10 feet.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n\n        let actorPlayer = MidiQOL.playerForActor(effectOriginToken.actor);\n\n        let chatData = {\n            user: actorPlayer.id,\n            speaker: ChatMessage.getSpeaker({ token: effectOriginToken }),\n            content: game.i18n.localize(content)\n        };\n        ChatMessage.create(chatData);\n    }\n\n    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: target.actor.uuid, effects: [effectData.id] });\n}",
+        "command": "if(args[0] === \"on\") {\n    let effectData = token.actor.appliedEffects.find(e => DAE.effectMatchesSource(e, item.uuid) && e.name === item.name);\n    if(!effectData) return;\n    const originTokenUuid = effectData.getFlag(\"gambits-premades\", \"festeringFeverTokenUuid\") ?? args[3];\n    let effectOriginToken = await fromUuid(originTokenUuid);\n    if(!effectOriginToken) return;\n    let castTotal = effectData.getFlag(\"gambits-premades\", \"festeringFeverCastTotal\") ?? Number(args[1]);\n    if(!castTotal) return;\n    let spellDC = effectData.getFlag(\"gambits-premades\", \"festeringFeverSpellDC\") ?? Number(args[2]);\n    await effectData.update({\n        \"flags.gambits-premades.festeringFeverCastTotal\": castTotal,\n        \"flags.gambits-premades.festeringFeverSpellDC\": spellDC,\n        \"flags.gambits-premades.festeringFeverTokenUuid\": originTokenUuid\n    });\n    const chainId = effectData.getFlag(\"gambits-premades\", \"feverChain\") ?? effectData.id;\n    await effectData.setFlag(\"gambits-premades\", \"feverChain\", chainId);\n    await actor.setFlag(\"gambits-premades\", `feverChains.${chainId}`, true);\n\n    const itemData = game.gps.disableBlfxAutoRecognition({\n        name: item.name,\n        img: item.img,\n        type: \"feat\",\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            },\n            \"autoanimations\": {\n                version: 5,\n                isEnabled: false,\n                killAnim: true\n            }\n        },\n        system: {\n            activities: {\n                gpsSynthetic0001: {\n                    type: \"save\",\n                    midiProperties: { magicEffect: true, magicDamage: true },\n                    activation: { type: \"special\" },\n                    consumption: { spellSlot: false, targets: [] },\n                    target: { affects: { type: \"creature\", count: \"1\" } },\n                    save: { ability: [\"con\"], dc: { calculation: \"\", formula: String(spellDC) } },\n                    damage: { onSave: \"half\", parts: [{ custom: { enabled: true, formula: `${castTotal}d8` }, types: [\"necrotic\"] }] }\n                }\n            }\n        }\n    });\n\n    const itemUpdate = new CONFIG.Item.documentClass(itemData, { parent: effectOriginToken.actor });\n    const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [token.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n    const saveResult = await MidiQOL.completeItemUse(itemUpdate, { midiOptions: options }, { configure: false }, {});\n\n    if (!saveResult || saveResult.aborted) return;\n\n    let content;\n\n    if (saveResult.failedSaves.size === 0 || castTotal === 1) {\n        if(saveResult.failedSaves.size === 0) {\n            content = `<span style='text-wrap: wrap;'>The target saves for half damage and the fever subsides.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n        }\n        else if(castTotal === 1) {\n            content = `<span style='text-wrap: wrap;'>The target does not save but the fever subsides as its energy runs out.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n        }\n        await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: token.actor.uuid, effects: [effectData.id] });\n\n        let targets = canvas.tokens.placeables.filter(t => {\n            if (t.document.disposition !== token.document.disposition) return;\n            if (!t.actor.getFlag(\"gambits-premades\", `feverChains.${chainId}`)) return;\n            return t;\n        });\n\n        if (targets.length === 0) return;\n\n        for(let target of targets) {\n            await target.actor.unsetFlag(\"gambits-premades\", `feverChains.${chainId}`);\n        }\n    }\n    else {\n        content = `<span style='text-wrap: wrap;'>The target does not save and the fever continues to fester.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    }\n\n    if(game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) {\n        new Sequence()\n\n        .effect()\n        .file(\"jb2a.magic_signs.rune.necromancy.complete.green\")\n        .attachTo(token)\n        .scaleToObject(2.5)\n        .opacity(1)\n        .zIndex(1)\n        .belowTokens(false)\n        .fadeIn(1500)\n        .fadeOut(1500)\n        .filter(\"ColorMatrix\", { hue: 140, brightness: 0.8, contrast: 1, saturate: 1 })\n\n        .play()\n    }\n\n    let actorPlayer = MidiQOL.playerForActor(effectOriginToken.actor);\n\n    let chatData = {\n        user: actorPlayer.id,\n        speaker: ChatMessage.getSpeaker({ token: effectOriginToken }),\n        content: game.i18n.localize(content)\n    };\n    ChatMessage.create(chatData);\n}\n\nelse if(args[0] === \"each\") {\n    let effectData = token.actor.appliedEffects.find(e => DAE.effectMatchesSource(e, item.uuid) && e.name === item.name);\n    if(!effectData) return;\n    let effectOriginToken = await fromUuid(effectData.getFlag(\"gambits-premades\", \"festeringFeverTokenUuid\"));\n    if(!effectOriginToken) return;\n    let castTotal = await effectData.getFlag(\"gambits-premades\", \"festeringFeverCastTotal\");\n    if(!castTotal) return;\n\n    const chainId = effectData.getFlag(\"gambits-premades\", \"feverChain\") ?? effectData.id;\n    castTotal = castTotal - 1;\n    await effectData.setFlag(\"gambits-premades\", \"festeringFeverCastTotal\", castTotal);\n\n    const rangeCheck = MidiQOL.findNearby(null, token, 10, { includeToken: false });\n    const withinRange = rangeCheck.filter(t => (!t.actor.getFlag(\"gambits-premades\", `feverChains.${chainId}`)) && t.document.disposition === token.document.disposition);\n\n    if (withinRange.length > 0) {\n        const randomToken = withinRange[Math.floor(Math.random() * withinRange.length)];\n        await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: randomToken.actor.uuid, effects: [{...effectData.toObject(), _id: foundry.utils.randomID()}] });\n    }\n    else {\n        let targets = canvas.tokens.placeables.filter(t => {\n            if (t.document.disposition !== token.document.disposition) return;\n            if (!t.actor.getFlag(\"gambits-premades\", `feverChains.${chainId}`)) return;\n            return t;\n        });\n\n        for(let target of targets) {\n            await target.actor.unsetFlag(\"gambits-premades\", `feverChains.${chainId}`);\n        }\n\n        let content = `<span style='text-wrap: wrap;'>The fever subsides on the target and there are no additional targets within 10 feet.<br><img src=\"${token.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n\n        let actorPlayer = MidiQOL.playerForActor(effectOriginToken.actor);\n\n        let chatData = {\n            user: actorPlayer.id,\n            speaker: ChatMessage.getSpeaker({ token: effectOriginToken }),\n            content: game.i18n.localize(content)\n        };\n        ChatMessage.create(chatData);\n    }\n\n    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: [effectData.id] });\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -263,6 +260,39 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2AFree"
+      ]
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "folder": null,

@@ -1,17 +1,14 @@
 export async function entangle({template, itemUuid, targets, token}) {
+    if (!template?.object) return;
+    template = template.object;
     let cprConfig = game.gps.getCprConfig({itemUuid});
     if(!cprConfig.animEnabled) return;
+    const regionAnimation = game.gps.getRegionAnimationData(template);
     
     let alignmentDecision;
     let scaleDecision;
-    if(MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates')) {
-        alignmentDecision = {};
-        scaleDecision = 1.25;
-    }
-    else {
-        alignmentDecision = { edge: "on", offset: ( {x: 198, y: 0} ) };
-        scaleDecision = 0.65;
-    }
+    alignmentDecision = {};
+    scaleDecision = 1.25;
 
     new Sequence()
 
@@ -49,6 +46,8 @@ export async function entangle({template, itemUuid, targets, token}) {
             .opacity(0.95)
             .fadeOut(500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .persist()
             .zIndex(1.5)
             .name(`Entangle`)
@@ -61,6 +60,8 @@ export async function entangle({template, itemUuid, targets, token}) {
             .opacity(0.85)
             .fadeOut(500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .persist()
             .zIndex(1.3)
             .name(`Entangle`)
@@ -73,6 +74,8 @@ export async function entangle({template, itemUuid, targets, token}) {
             .opacity(0.75)
             .fadeOut(500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .persist()
             .zIndex(1.2)
             .name(`Entangle`)
@@ -86,6 +89,8 @@ export async function entangle({template, itemUuid, targets, token}) {
             .fadeIn(500)
             .fadeOut(500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .randomRotation()
             .zIndex(2)
             .name(`Entangle`)
@@ -110,6 +115,8 @@ export async function entangle({template, itemUuid, targets, token}) {
             .fadeIn(500)
             .fadeOut(500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .randomRotation()
             .zIndex(2)
 
@@ -134,6 +141,8 @@ export async function entangle({template, itemUuid, targets, token}) {
             .opacity(1)
             .persist()
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .zIndex(1)
             .name(`Entangle`)
             .waitUntilFinished()

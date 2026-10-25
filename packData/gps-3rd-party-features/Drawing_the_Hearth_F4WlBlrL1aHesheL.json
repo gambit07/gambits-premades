@@ -8,14 +8,14 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
     "cover": null,
     "crewed": false,
     "uses": {
-      "max": "@prof",
+      "max": "1",
       "recovery": [
         {
           "period": "sr",
@@ -41,12 +41,19 @@
           "override": false
         },
         "consumption": {
-          "targets": [],
+          "targets": [
+            {
+              "type": "itemUses",
+              "target": "",
+              "value": "1",
+              "scaling": {}
+            }
+          ],
           "scaling": {
             "allowed": false,
             "max": ""
           },
-          "spellSlot": true
+          "spellSlot": false
         },
         "description": {
           "chatFlavor": ""
@@ -81,11 +88,11 @@
           },
           "affects": {
             "count": "",
-            "type": "",
+            "type": "self",
             "choice": false,
             "special": ""
           },
-          "prompt": true,
+          "prompt": false,
           "override": false
         },
         "uses": {
@@ -172,7 +179,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": []
         },
         "description": {
@@ -297,28 +304,24 @@
     {
       "origin": "Compendium.world.gps-3rd-party-features.Item.F4WlBlrL1aHesheL",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Drawing the Hearth",
       "img": "icons/magic/fire/flame-burning-earth-orange.webp",
       "_id": "7bC6w7uSbAJQ7nTZ",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.drawingTheHearth, isAttacked",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.drawingTheHearth, isAttacked",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -333,7 +336,6 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -492,6 +494,7 @@
           "gpsUuid": "2300dad6-8de1-4fa5-9878-40cec8ee37aa"
         }
       },
+      "start": null,
       "_key": "!items.effects!F4WlBlrL1aHesheL.7bC6w7uSbAJQ7nTZ"
     }
   ],
@@ -749,19 +752,44 @@
       "fromAmmo": false,
       "version": 5
     },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+    "gambits-premades": {
+      "gpsUuid": "2300dad6-8de1-4fa5-9878-40cec8ee37aa",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
         }
+      },
+      "animationModules": [
+        "JB2APatreon",
+        "GPS"
       ]
     },
-    "gambits-premades": {
-      "gpsUuid": "2300dad6-8de1-4fa5-9878-40cec8ee37aa"
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      },
+      "buQa0bLMH4K9aWWb": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "folder": "rvG7tD4SnTeXT7ji",

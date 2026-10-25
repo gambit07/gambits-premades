@@ -1,6 +1,7 @@
 export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
+    if(workflowType === "attack" && !game.gps.reactionCanChangeOutcome(workflow)) return;
     const gpsUuid = "b352241e-5042-44a4-b632-3168ded51946";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Cutting Words";
@@ -17,6 +18,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
+        if(workflowType === "attack" && !game.gps.reactionCanChangeOutcome(workflow)) return;
         const scales = validTokenPrimary.actor.system.scale;
         const possibleScales = [
           scales?.bard?.["bardic-inspiration"],
@@ -84,7 +86,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
                                     <ul id="damage-list" class="sortable" style="padding: 0; margin: 0; list-style-type: none;">
                                         ${damageTypes.map((name, index) => `
                                         <li draggable="true" style="padding: 6px; margin-bottom: 4px; cursor: grab; border: 1px solid #ccc;">
-                                            <span class="damage-type">${name}</span>${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.Pts", { points: damageTotals[index] }) : ""}
+                                            <span class="damage-type" data-damage-type="${name}">${game.i18n.localize(CONFIG.DND5E.damageTypes[name]?.label ?? name)}</span>${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.Pts", { points: damageTotals[index] }) : ""}
                                         </li>`).join('')}
                                     </ul>
                                     <div id="image-container" class="gps-dialog-image-container">
@@ -135,20 +137,20 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             `;
         }
 
-        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.ReactionAvailable", { actorName: validTokenPrimary.actor.name, rollType: workflowType, itemName: itemProperName })}</span>`;
+        let content = `<span style='text-wrap: wrap;'><img src="${validTokenPrimary.actor.img}" style="width: 25px; height: auto;" /> ${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.ReactionAvailable", { actorName: validTokenPrimary.actor.name, workflowType, itemProperName })}</span>`;
         let chatData = { user: gmUser, content: content, roll: false };
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -166,10 +168,10 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             };
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
 
-            if(!itemRoll) continue;
+            if(!itemRoll || itemRoll.aborted) continue;
             let chatContent;
 
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
@@ -178,7 +180,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             let charmImmunity = workflow.actor.system.traits.ci.value.has("charmed");
             
             if (charmImmunity || hasDeafened) {
-                chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.SeemsNotBeEffectedBy", { itemName: itemProperName })}<img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.SeemsNotBeEffectedBy", { itemProperName })}<img src="${workflow.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                 let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
                 let chatData = {
@@ -212,50 +214,28 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             }
 
             if(workflowType === "damage") {
-                const saveSetting = workflow.workflowOptions.noOnUseMacro;
-                workflow.workflowOptions.noOnUseMacro = true;
                 let reroll;
-                if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${bardicDie}`, type: workflowType });
-                if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${bardicDie}`, type: workflowType });
+                if(source && source === "user") reroll = await game.gps.queryUser("rollAsUser", browserUser, { rollParams: `1${bardicDie}`, type: workflowType });
+                if(source && source === "gm") reroll = await game.gps.queryUser("rollAsUser", gmUser, { rollParams: `1${bardicDie}`, type: workflowType });
 
+                if(!reroll) continue;
                 let remainingReduction = reroll.total;
-                let updatedRolls = [];
-                let processedRolls = new Set();
-                
-                for (const priority of damageChosen) {
-                    let rollFound = workflow.damageRolls.find(roll => roll.options.type === priority);
-                
-                    if (rollFound) {
-                    processedRolls.add(rollFound);
-                        let rollTotal = rollFound.total;
-                        if (rollTotal >= remainingReduction) {
-                            let modifiedRoll = await new CONFIG.Dice.DamageRoll(`${rollTotal} - ${remainingReduction}`).evaluate();
-                            modifiedRoll.options = rollFound.options;
-                            updatedRolls.push(modifiedRoll);
-                            remainingReduction = 0;
-                            break;
-                        } else {
-                            remainingReduction -= rollTotal;
-                            let zeroRoll = await new CONFIG.Dice.DamageRoll(`${rollTotal} - ${rollTotal}`).evaluate();
-                            zeroRoll.options = rollFound.options;
-                            updatedRolls.push(zeroRoll);
-                        }
+                const updatedRolls = [...workflow.damageRolls];
+                const priorities = [...new Set([...(damageChosen ?? []), ...workflow.damageRolls.map(roll => roll.options.type)])];
+                for(const priority of priorities) {
+                    for(let index = 0; index < workflow.damageRolls.length; index++) {
+                        const original = workflow.damageRolls[index];
+                        if(original.options.type !== priority || remainingReduction <= 0) continue;
+                        const reduction = Math.min(Math.max(0, original.total), remainingReduction);
+                        updatedRolls[index] = await game.gps.adjustRollTotal(original, -reduction);
+                        remainingReduction -= reduction;
                     }
                 }
-                
-                workflow.damageRolls.forEach(roll => {
-                    if (!processedRolls.has(roll)) {
-                        updatedRolls.push(roll);
-                    }
-                });
-
                 await workflow.setDamageRolls(updatedRolls);
-        
-                workflow.workflowOptions.noOnUseMacro = saveSetting;
 
                 chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.DamageReduced", { reduction: reroll.total })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
 
                 continue;
             }
@@ -263,28 +243,27 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
             else if(workflowType === "attack") {
                 
                 let targetAC = workflow.targets.first()?.actor.system.attributes.ac.value;
-                const saveSetting = workflow.workflowOptions.noOnUseMacro;
-                workflow.workflowOptions.noOnUseMacro = true;
                 let reroll;
-                if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1${bardicDie}`, type: workflowType });
-                if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1${bardicDie}`, type: workflowType });
-                let rerollNew = await new Roll(`${workflow.attackRoll.result} - ${reroll.total}`).evaluate();
+                if(source && source === "user") reroll = await game.gps.queryUser("rollAsUser", browserUser, { rollParams: `1${bardicDie}`, type: workflowType });
+                if(source && source === "gm") reroll = await game.gps.queryUser("rollAsUser", gmUser, { rollParams: `1${bardicDie}`, type: workflowType });
+                if(!reroll) continue;
+                let rerollNew = await game.gps.adjustRollTotal(workflow.attackRoll, -reroll.total);
 
-                await workflow.setAttackRoll(rerollNew);
-                workflow.workflowOptions.noOnUseMacro = saveSetting;
+                await game.gps.setAttackResult(workflow, rerollNew);
 
-                if((workflow.attackTotal - reroll.total) < targetAC) {
+                if(!game.gps.attackHits(workflow, workflow.targets.first())) {
                     chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.CuttingWordsReducedAttackMiss", { reduction: reroll.total })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
+                    await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
 
+                    if(game.gpsSettings.skipResolvedReactions && game.gps.reactionCanChangeOutcome(workflow)) continue;
                     return;
                 }
 
                 else {
                     chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.CuttingWordsReducedAttackHit", { reduction: reroll.total })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
+                    await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
 
                     continue;
                 }

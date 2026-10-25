@@ -135,7 +135,7 @@
       "rules": "2014",
       "book": "",
       "page": "",
-      "custom": "1.0.51",
+      "custom": "",
       "license": ""
     },
     "advancement": [],
@@ -159,45 +159,41 @@
       "name": "Wound",
       "origin": "Item.sPAhgPgannSphKdZ",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 99999,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 99999,
+        "units": "seconds"
       },
       "disabled": false,
       "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
       "_id": "PyTbYhpx8qAUSYhr",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "system.bonuses.All-Attacks",
-          "mode": 2,
-          "value": "-1",
-          "priority": 20
-        },
-        {
-          "key": "system.bonuses.abilities.save",
-          "mode": 2,
-          "value": "-1",
-          "priority": 20
-        },
-        {
-          "key": "system.bonuses.abilities.check",
-          "mode": 2,
-          "value": "-1",
-          "priority": 20
-        },
-        {
-          "key": "system.bonuses.All-Damage",
-          "mode": 2,
-          "value": "-1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "system.rolls.attack.bonus",
+            "value": -1,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.rolls.ability.save.bonus",
+            "value": -1,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.rolls.ability.check.bonus",
+            "value": -1,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.rolls.damage.all.bonus",
+            "value": -1,
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -208,7 +204,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "countDeleteDecrement",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -221,55 +216,40 @@
           "riders": {
             "statuses": []
           },
-          "dependents": [
-            {
-              "uuid": "Actor.P9e99TZAALedT5cy.ActiveEffect.7Ua3MxyRS8fJbd0x"
-            },
-            {
-              "uuid": "Actor.P9e99TZAALedT5cy.ActiveEffect.IYJDMnpgewm9m86i"
-            },
-            {
-              "uuid": "Actor.P9e99TZAALedT5cy.ActiveEffect.hqcX63F8VIi5h62o"
-            },
-            {
-              "uuid": "Actor.P9e99TZAALedT5cy.ActiveEffect.ik9LALUDobGeL93f"
-            }
-          ]
+          "dependents": []
         },
         "core": {
           "overlay": false
         },
         "gambits-premades": {
           "gpsUuid": "7186eac1-010a-4fb4-bd22-699d06839162"
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!caYyWnXvYjgsJnQd.PyTbYhpx8qAUSYhr"
     },
     {
       "name": "Wound Applicator",
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.Ct9wAPpQAERU5Bng.Actor.SNZJsEKbROB1q6bT.Item.7t9BNvIZ884SYTJ7",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": 35,
-        "startTurn": 1
-      },
+      "duration": {},
       "disabled": false,
       "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
       "_id": "5lN7yVKA5sdsrcMN",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.wound, postDamageRollComplete",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.wound, postDamageRollComplete",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -280,7 +260,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -292,35 +271,33 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!caYyWnXvYjgsJnQd.5lN7yVKA5sdsrcMN"
     },
     {
       "name": "Wound Checker",
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.Ct9wAPpQAERU5Bng.Actor.SNZJsEKbROB1q6bT.Item.7t9BNvIZ884SYTJ7",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "img": "icons/creatures/abilities/fang-tooth-blood-red.webp",
       "_id": "aXetKSabQ5JW5gEu",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.wound @itemUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.wound @itemUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -331,7 +308,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneNameOnly",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "endEveryTurn",
           "specialDuration": [],
@@ -350,8 +326,13 @@
         },
         "gambits-premades": {
           "gpsUuid": "a6e73d28-8fac-4aad-a30a-4d992217a710"
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!caYyWnXvYjgsJnQd.aXetKSabQ5JW5gEu"
     }
   ],
@@ -405,6 +386,26 @@
       "otherCondition": "",
       "effectCondition": "",
       "onUseMacroName": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "W3l6nhWFGtZetGt9": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "_id": "caYyWnXvYjgsJnQd",

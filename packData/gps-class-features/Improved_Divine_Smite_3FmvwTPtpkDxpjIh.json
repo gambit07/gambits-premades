@@ -15,30 +15,17 @@
           "specialDuration": [],
           "macroRepeat": "none",
           "disableCondition": "",
-          "disableIncapacitated": false,
-          "showIcon": false
+          "disableIncapacitated": false
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
-      "changes": [
-        {
-          "key": "system.bonuses.mwak.damage",
-          "mode": 0,
-          "value": "1d8[radiant]",
-          "priority": 0
-        }
-      ],
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "transfer": true,
       "disabled": false,
       "origin": "Compendium.world.gps-class-features.Item.3FmvwTPtpkDxpjIh",
@@ -48,8 +35,18 @@
       "statuses": [],
       "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.rolls.damage.mwak.bonus",
+            "value": "1d8[radiant]",
+            "priority": 0,
+            "type": "add"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!3FmvwTPtpkDxpjIh.9fxlvxN5rkcl9fvW"
     }
   ],
@@ -69,6 +66,16 @@
         "activity": [],
         "effect": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "system": {
@@ -77,7 +84,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.1",
+      "custom": "",
       "book": "",
       "page": "",
       "license": "",

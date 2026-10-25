@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "",
       "page": "",
       "license": "",
@@ -162,7 +162,7 @@
         "img": "icons/skills/social/intimidation-impressing.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"preAttackRoll\") {\n    if(!game.combat) return;\n    let recklessCheck = await actor.getFlag(\"gambits-premades\", \"checkRecklessAttack\");\n    if(recklessCheck === false || recklessCheck === true) return;\n\n    let currentCombatant = canvas.tokens.get(game.combat.current.tokenId);\n    if (currentCombatant.id !== token.id) return;\n\n    let dialogId = \"reckless\";\n    let dialogTitlePrimary = `${token.actor.name} | ${macroItem.name}`;\n    let dialogTitleGM = `Waiting for ${token.actor.name}'s selection | ${macroItem.name}`;\n    let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });\n    let initialTimeLeft = 30;\n    let gmUser = game.gps.getPrimaryGM();\n\n\tlet dialogContent = `\n\t\t<div class=\"gps-dialog-container\">\n\t\t\t<div class=\"gps-dialog-section\">\n\t\t\t\t<div class=\"gps-dialog-content\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<div class=\"gps-dialog-flex\">\n\t\t\t\t\t\t\t<p class=\"gps-dialog-paragraph\">Would you like to use your Reckless Attack this turn?</p>\n\t\t\t\t\t\t\t<div id=\"image-container\" class=\"gps-dialog-image-container\">\n\t\t\t\t\t\t\t\t<img id=\"img_${dialogId}\" src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"gps-dialog-button-container\">\n\t\t\t\t<button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n\t\t\t\t\t<i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>Pause\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</div>\n\t`;\n\n    if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {\n    let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: \"user\",type: \"multiDialog\", browserUser: browserUser };\n    \n    let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: \"gm\",type: \"multiDialog\" };\n\n    result = await game.gps.socket.executeAsUser(\"handleDialogPromises\", gmUser, {userDialogArgs, gmDialogArgs});\n} else {\n    result = await game.gps.socket.executeAsUser(\"process3rdPartyReactionDialog\", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? \"gm\" : \"user\",type:\"singleDialog\"});\n    }\n\t\t\t\n\tconst { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;\n\n\tif (!userDecision) {\n        await actor.setFlag(\"midi-qol\", \"checkRecklessAttack\", false);\n\t\treturn;\n\t}\n\telse if (userDecision) {\n        workflow.advantage = true;\n        await actor.setFlag(\"midi-qol\", \"checkRecklessAttack\", true);\n\n        let effectData = [{\n            \"changes\": [\n                {\n                    \"key\": \"flags.midi-qol.grants.advantage.attack.all\",\n                    \"value\": \"1\",\n                    \"mode\": 0,\n                    \"priority\": 20\n                },\n                {\n                    \"key\": \"flags.midi-qol.advantage.attack.mwak\",\n                    \"value\": \"1\",\n                    \"mode\": 0,\n                    \"priority\": 20\n                },\n                {\n                    \"key\": \"macro.itemMacro\",\n                    \"mode\": 0,\n                    \"value\": \"\",\n                    \"priority\": 20\n                },\n            ],\n            \"duration\": {\n                \"seconds\": 12\n            },\n            \"transfer\": false,\n            \"disabled\": false,\n            \"flags\": {\n                \"dae\": {\n                    \"transfer\": false,\n                    \"stackable\": \"noneName\",\n                    \"specialDuration\": [\n                        \"turnStartSource\",\n                        \"combatEnd\"\n                    ]\n                },\n                \"midi-qol\": {\n                    \"forceCEOff\": true\n                }\n            },\n            \"name\": \"Reckless Attack - Effects\",\n            \"icon\": macroItem.img,\n            \"origin\": macroItem.uuid\n        }];\n\n        await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectData });\n\n    }\n}\n\nelse if(args[0].each && args[1] === \"turnStart\") {\n    await actor.unsetFlag(\"gambits-premades\", \"checkRecklessAttack\");\n    const effectData = await actor.appliedEffects.find(e => e.name === \"Reckless Attack - Effects\");\n    if(effectData) await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: [effectData.id] });\n}\n\nelse if(args[0].each && args[1] === \"turnEnd\") {\n    const effectData = await actor.appliedEffects.find(e => e.name === \"Reckless Attack - Effects\");\n    if(effectData) {\n        let removeAdv = effectData.changes.filter(change => change.key !== \"flags.midi-qol.advantage.attack.mwak\");\n        await MidiQOL.socket().executeAsGM(\"updateEffects\",{actorUuid:actor.uuid,updates:[{_id: effectData.id,changes: removeAdv}]});\n    }\n}\n\nelse if(args[0] === \"off\") {\n    await actor.unsetFlag(\"midi-qol\", \"checkRecklessAttack\");\n}",
+        "command": "if(args[0].macroPass === \"preAttackRoll\") {\n    if(!game.combat) return;\n    let recklessCheck = await actor.getFlag(\"gambits-premades\", \"checkRecklessAttack\");\n    if(recklessCheck === false || recklessCheck === true) return;\n\n    let currentCombatant = canvas.tokens.get(game.combat.current?.tokenId);\n    if (currentCombatant?.id !== token.id) return;\n\n    let dialogId = \"reckless\";\n    let dialogTitlePrimary = `${token.actor.name} | ${macroItem.name}`;\n    let dialogTitleGM = game.i18n.format(\"GAMBITSPREMADES.Dialogs.Common.WaitingForSelection\", {actorName: token.actor.name, itemName: macroItem.name});\n    let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });\n    let initialTimeLeft = 30;\n    let gmUser = game.gps.getPrimaryGM();\n    let result;\n\n\tlet dialogContent = `\n\t\t<div class=\"gps-dialog-container\">\n\t\t\t<div class=\"gps-dialog-section\">\n\t\t\t\t<div class=\"gps-dialog-content\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<div class=\"gps-dialog-flex\">\n\t\t\t\t\t\t\t<p class=\"gps-dialog-paragraph\">${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Reckless.Prompt\")}</p>\n\t\t\t\t\t\t\t<div id=\"image-container\" class=\"gps-dialog-image-container\">\n\t\t\t\t\t\t\t\t<img id=\"img_${dialogId}\" src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"gps-dialog-button-container\">\n\t\t\t\t<button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n\t\t\t\t\t<i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Pause\")}\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</div>\n\t`;\n\n    if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {\n    let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: \"user\",type: \"multiDialog\", browserUser: browserUser };\n    \n    let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: \"gm\",type: \"multiDialog\" };\n\n    result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});\n} else {\n    result = await game.gps.queryDialog(\"process3rdPartyReactionDialog\", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? \"gm\" : \"user\",type:\"singleDialog\"});\n    }\n\t\t\t\n\tconst { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};\n\n\tif (!userDecision) {\n        await actor.setFlag(\"gambits-premades\", \"checkRecklessAttack\", false);\n\t\treturn;\n\t}\n\telse if (userDecision) {\n        workflow.advantage = true;\n        await actor.setFlag(\"gambits-premades\", \"checkRecklessAttack\", true);\n\n        let effectData = [{\n            system: { changes: [\n                {\n                    \"key\": \"flags.midi-qol.grants.advantage.attack.all\",\n                    \"value\": 1,\n                    type: \"custom\",\n                    \"priority\": 20\n                },\n                {\n                    \"key\": \"system.rolls.attack.mwak.mode\",\n                    \"value\": 1,\n                    type: \"add\",\n                    \"priority\": 20\n                },\n                {\n                    \"key\": \"macro.itemMacro\",\n                    type: \"custom\",\n                    \"value\": \"\",\n                    \"priority\": 20\n                },\n            ] },\n            \"duration\": { expiry: \"sourceStart\", value: 12, units: \"seconds\" },\n            \"transfer\": false,\n            \"disabled\": false,\n            \"flags\": { \"gambits-premades\": { expireOnCombatEnd: true },\n                \"dae\": {\n                    \"transfer\": false,\n                    \"stackable\": \"noneName\",\n                    \"specialDuration\": []\n                },\n                \"midi-qol\": {\n                    \"forceCEOff\": true\n                }\n            },\n            \"name\": \"Reckless Attack - Effects\",\n            img: macroItem.img,\n            \"origin\": macroItem.uuid\n        }];\n\n        await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectData });\n\n    }\n}\n\nelse if(args[0] === \"each\" && args[2]?.turn === \"startTurn\") {\n    await actor.unsetFlag(\"gambits-premades\", \"checkRecklessAttack\");\n    const effectData = await actor.appliedEffects.find(e => e.name === \"Reckless Attack - Effects\");\n    if(effectData) await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: [effectData.id] });\n}\n\nelse if(args[0] === \"each\" && args[2]?.turn === \"endTurn\") {\n    const effectData = await actor.appliedEffects.find(e => e.name === \"Reckless Attack - Effects\");\n    if(effectData) {\n        let removeAdv = effectData.system.changes.filter(change => ![\"system.rolls.attack.mwak.mode\", \"flags.midi-qol.advantage.attack.mwak\"].includes(change.key));\n        await MidiQOL.socket().executeAsGM(\"updateEffects\",{actorUuid:actor.uuid,updates:[{_id: effectData.id,system: { changes: removeAdv }}]});\n    }\n}\n\nelse if(args[0] === \"off\") {\n    await actor.unsetFlag(\"gambits-premades\", \"checkRecklessAttack\");\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -203,38 +203,36 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "img": "icons/skills/social/intimidation-impressing.webp",
   "effects": [
     {
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.Ct9wAPpQAERU5Bng.Actor.SNZJsEKbROB1q6bT.Item.A8Qn5ngfARIJp0R6",
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Reckless",
       "_id": "WlySPDKKWMIOowHi",
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, preAttackRoll",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "turnStart",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -246,7 +244,6 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": [],
@@ -260,13 +257,33 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/skills/social/intimidation-impressing.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, preAttackRoll",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "turnStart",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!p4g1lIZk3QBtbsW7.WlySPDKKWMIOowHi"
     }
   ],

@@ -5,23 +5,11 @@
   "effects": [
     {
       "_id": "ReM07pjSJKdkTJFE",
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.command2024",
-          "priority": 20
-        }
-      ],
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 12,
-        "combat": null,
-        "rounds": 1,
-        "turns": 1,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "seconds",
+        "expiry": "targetStart"
       },
       "transfer": false,
       "flags": {
@@ -31,12 +19,9 @@
           "stackable": "noneName",
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnStart"
-          ],
+          "specialDuration": [],
           "disableIncapacitated": false,
           "dontApply": false,
-          "showIcon": false,
           "enableCondition": "",
           "disableCondition": ""
         },
@@ -48,6 +33,13 @@
           "riders": {
             "statuses": []
           }
+        },
+        "gambits-premades": {
+          "command": true
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -57,8 +49,18 @@
       "statuses": [],
       "img": "icons/skills/social/wave-halt-stop.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.command2024",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!oCpuRWsUqMv69QdH.ReM07pjSJKdkTJFE"
     }
   ],
@@ -94,7 +96,7 @@
     },
     "core": {},
     "midi-qol": {
-      "onUseMacroName": "[postSavesComplete]function.game.gps.command2024",
+      "onUseMacroName": "[postSavesComplete]function.game.gps.command2024,[postActiveEffects]function.game.gps.command2024",
       "effectActivation": false,
       "forceCEOn": false,
       "forceCEOff": true,
@@ -124,15 +126,48 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "GPS"
+      ]
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "system": {
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> The chosen word is stored on each applied effect. The reminder appears when that effect expires at the target's next turn start. Early removal does not issue the command. Movement and actions are resolved by the player or GM.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2024",
       "book": "",

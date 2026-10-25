@@ -1,7 +1,8 @@
 export async function graspingArrow({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(!game.modules.get("jaamod")?.active) return ui.notifications.error(game.i18n.localize("GAMBITSPREMADES.Notifications.ClassFeatures.Fighter.ArcaneArcher.GraspingArrow.MissingDependency"));
     if(args?.[0].macroPass === "postPreambleComplete") {
         let target = workflow.targets.first();
+        if(!target) return;
+        if(game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled && game.modules.get("jaamod")?.active) {
 
         let seq0 = new Sequence()
             .effect()
@@ -17,11 +18,12 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
             .fadeIn(2500)
             .fadeOut(2500)
             
-        await seq0.play()
+        await seq0.play();
+        }
 
         let intMod = actor.system.abilities.int.mod;
         let profMod = actor.system.attributes.prof;
-        let itemData = [{
+        let itemData = [game.gps.disableBlfxAutoRecognition({
             "name": "Grasping Arrow - Remove Vines",
             "type": "feat",
             "img": item.img,
@@ -49,9 +51,9 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
                 "subtype": ""
             },
             "activities": {
-                "graspingArrowRemove": {
+                "gpsGraspRemove01": {
                     "type": "utility",
-                    "_id": "graspingArrowRemove",
+                    "_id": "gpsGraspRemove01",
                     "activation": {
                         "type": "action"
                     },
@@ -82,11 +84,14 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
             }
             },
             "flags": {
+                autoanimations: {isEnabled: false, version: 5},
                 "midi-qol": {
                     "onUseMacroName": "[preActiveEffects]ItemMacro"
                 },
                 "gambits-premades": {
-                    "gpsUuid": "72bc5660-235c-4190-8aa2-4d23a3a592e3"
+                    "gpsUuid": "72bc5660-235c-4190-8aa2-4d23a3a592e3",
+                    "sourceItemUuid": item.uuid,
+                    "targetUuid": target.document.uuid
                 },
                 "dae": {
                     "macro": {
@@ -94,69 +99,70 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
                         "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
                         "type": "script",
                         "scope": "global",
-                        "command": `if(args[0].macroPass === \"preActiveEffects\") {\n  let target = workflow.targets.first();\n let effectNameMovement = target.actor.appliedEffects.find(effect => effect.name === 'Grasping Arrow - Movement'); let effectName = target.actor.appliedEffects.find(effect => effect.name === 'Grasping Arrow');\n    if(!effectName && !effectNameMovement) {\n        ui.notifications.warn(\"This actor is not effected by Grasping Arrow\")\n        return workflow.aborted = true;\n    } let saveRoll = await actor.rollAbilityTest('str'); if(saveRoll.total >= (8 + ${intMod} + ${profMod})) {await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: target.actor.uuid, effects: [effectNameMovement.id] }); await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: target.actor.uuid, effects: [effectName.id] }); let content = game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.ArcaneArcher.GraspingArrow.RemoveVinesSuccess"); let actorPlayer = MidiQOL.playerForActor(actor); let chatData = {user: actorPlayer.id,speaker: ChatMessage.getSpeaker({ token: token }),content: content}; ChatMessage.create(chatData);} else{let content = game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.ArcaneArcher.GraspingArrow.RemoveVinesFail"); let actorPlayer = MidiQOL.playerForActor(actor); let chatData = {user: actorPlayer.id,speaker: ChatMessage.getSpeaker({ token: token }),content: content}; ChatMessage.create(chatData);} }`
+                        "command": `if(args[0].macroPass === "preActiveEffects") {
+                            const target = await fromUuid(macroItem.getFlag("gambits-premades", "targetUuid"));
+                            if(!target?.object || !game.gps.withinRange(token, target.object, 5)) return;
+                            const effects = target.actor.appliedEffects.filter(effect => DAE.effectMatchesSource(effect, macroItem.getFlag("gambits-premades", "sourceItemUuid")) && effect.name.startsWith("Grasping Arrow"));
+                            if(!effects.length) return;
+                            const [roll] = await actor.rollAbilityCheck({ability: "str"}) ?? [];
+                            if(roll?.total >= ${8 + intMod + profMod}) await MidiQOL.socket().executeAsGM("removeEffects", {actorUuid: target.actor.uuid, effects: effects.map(effect => effect.id)});
+                        }`
                     }
                 }
             }
-            }];
+            })];
 
-        let targets = canvas.tokens.placeables.filter(t => {
-            if (t.document.disposition === token.document.disposition) return;
-            return t;
-        });
+        let targets = [...new Map(canvas.tokens.placeables.filter(t => t.actor).map(t => [t.actor.uuid, t])).values()];
 
         if (targets.length === 0) return;
             
         for(let target of targets) {
-            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3");
+            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.first()?.document.uuid ?? token.document.uuid));
             if(hasItem) await target.actor.deleteEmbeddedDocuments("Item", [hasItem.id]);
             await target.actor.createEmbeddedDocuments("Item", itemData);
         }
     }
 
-    if(args[0] === "off" && args[3]["expiry-reason"] !== "midi-qol:isMoved") {
+    if(args[0] === "off" && args?.[3]?.["expiry-reason"] !== "midi-qol:isMoved") {
         Sequencer.EffectManager.endEffects({ name: `${token.id}.GraspingArrow` });
 
         let targets = canvas.tokens.placeables.filter(t => {
-            if (t.document.disposition !== token.document.disposition) return;
-            if (!t.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3")) return;
+            if (!t.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.first()?.document.uuid ?? token.document.uuid))) return;
             return t;
         });
 
-        let turnFlag = await actor.getFlag('gambits-premades', `graspingArrowTurnDamage`);
-        if(turnFlag) await actor.unsetFlag('gambits-premades', `graspingArrowTurnDamage`);
+        let turnFlag = await actor.getFlag('gambits-premades', `graspingArrowTurnDamage.${item.id}`);
+        if(turnFlag) await actor.unsetFlag('gambits-premades', `graspingArrowTurnDamage.${item.id}`);
 
         if (targets.length === 0) return;
 
         for(let target of targets) {
-            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3");
+            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.first()?.document.uuid ?? token.document.uuid));
             if(hasItem) await target.actor.deleteEmbeddedDocuments("Item", [hasItem.id]);
         }
     }
 
-    if(args[0]=== "off" && args[3]["expiry-reason"] === "midi-qol:isMoved") {
+    if(args[0]=== "off" && args?.[3]?.["expiry-reason"] === "midi-qol:isMoved") {
         const effectOriginActor = await fromUuid(args[2]);
         let effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);
-        let currentRound = game.combat.round;
-        let currentTurn = game.combat.turn;
-        let damageTurn = await actor.getFlag('gambits-premades', `graspingArrowTurnDamage`);
-        if(damageTurn === `${currentRound}${currentTurn}`) {
+        let currentRound = game.combat?.round;
+        let currentTurn = game.combat?.turn;
+        let damageTurn = await actor.getFlag('gambits-premades', `graspingArrowTurnDamage.${item.id}`);
+        if(damageTurn === `${game.combat?.id}:${currentRound}:${currentTurn}`) {
             let effectData = [{
             "origin": `${item.uuid}`,
-            "duration": {
-                "seconds": 60
-            },
+            "duration": { value: 60, units: "seconds" },
             "disabled": false,
             "name": "Grasping Arrow - Movement",
             "img": item.img,
-            "changes": [
+            system: { changes: [
                 {
                 "key": "macro.itemMacro",
-                "mode": 0,
+                type: "custom",
                 "value": `function.game.gps.graspingArrow ${effectOriginActor.uuid}`,
                 "priority": 20
                 }
-            ],
+            ] },
             "transfer": false,
             "flags": {
                 "dae": {
@@ -175,30 +181,29 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
         await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 
         const itemData = {
+            flags: {autoanimations: {isEnabled: false, version: 5}},
             name: "Grasping Arrow - Damage (Slashing)",
             type: "feat",
             img: item.img
         }
 
         await new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, 'slashing', token ? [token] : [], damageRoll, { itemData: itemData, flavor: "Grasping Arrow - Damage (Slashing)" });
-        await actor.setFlag("gambits-premades", 'graspingArrowTurnDamage', `${currentRound}${currentTurn}`);
+        await actor.setFlag("gambits-premades", 'graspingArrowTurnDamage', `${game.combat?.id}:${currentRound}:${currentTurn}`);
 
         let effectData = [{
             "origin": `${item.uuid}`,
-            "duration": {
-                "seconds": 60
-            },
+            "duration": { value: 60, units: "seconds" },
             "disabled": false,
             "name": "Grasping Arrow - Movement",
             "img": item.img,
-            "changes": [
+            system: { changes: [
                 {
                 "key": "macro.itemMacro",
-                "mode": 0,
+                type: "custom",
                 "value": `function.game.gps.graspingArrow ${effectOriginActor.uuid}`,
                 "priority": 20
                 }
-            ],
+            ] },
             "transfer": false,
             "flags": {
                 "dae": {

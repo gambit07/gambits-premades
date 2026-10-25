@@ -3,11 +3,11 @@
   "type": "feat",
   "system": {
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> Resource marker for Guiding Bolt. The GPS Guiding Bolt handler uses this proficiency-bonus pool for free casts. This marker has no standalone activity.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "book": "",
       "page": "",
@@ -86,6 +86,16 @@
     },
     "gambits-premades": {
       "gpsUuid": "62cd752b-7c9c-42ff-9e73-cd7b707aad66"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/sundries/scrolls/scroll-symbol-eye-brown.webp",

@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -438,16 +438,34 @@
         "activity": []
       }
     },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
         }
+      },
+      "animationModules": [
+        "JB2APatreon"
       ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [],

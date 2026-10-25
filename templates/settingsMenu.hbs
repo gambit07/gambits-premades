@@ -1,4 +1,5 @@
 <div class="gps-settings flexcol">
+  {{#if features.length}}
   <div class="gps-settings-header flexrow">
     <div class="gps-settings-item-th">{{localize "GAMBITSPREMADES.SettingsMenu.Headers.Feature"}}</div>
     <div class="gps-settings-enable-th">{{localize "GAMBITSPREMADES.SettingsMenu.Headers.Enable"}}</div>
@@ -6,6 +7,7 @@
     <div class="gps-settings-timeout-th">{{localize "GAMBITSPREMADES.SettingsMenu.Headers.TimeoutSeconds"}}</div>
     {{/if}}
   </div>
+  {{/if}}
 
   {{#each features}}
     <div
@@ -94,6 +96,26 @@
       </div>
     {{/if}}
 
+  {{/each}}
+
+  {{#if colorSettings.length}}
+    {{#if features.length}}
+      <hr class="gps-settings-section-divider">
+    {{/if}}
+  {{/if}}
+  {{#each colorSettings}}
+    <div class="form-group gps-settings-color-setting">
+      <label for="gps-setting-{{this.key}}">{{localize this.name}}</label>
+      <div class="form-fields">
+        <color-picker
+          id="gps-setting-{{this.key}}"
+          name="{{this.key}}"
+          value="{{this.value}}"
+          placeholder="{{this.placeholder}}"
+        ></color-picker>
+      </div>
+      <p class="hint">{{localize this.hint}}</p>
+    </div>
   {{/each}}
 
 </div>

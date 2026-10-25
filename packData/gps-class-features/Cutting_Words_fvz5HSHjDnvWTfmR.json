@@ -3,11 +3,11 @@
   "type": "feat",
   "system": {
     "description": {
-      "value": "<p><em>Requires MidiQOL, DAE. Make sure to Enable Cutting Words in the module settings.</em></p>",
+      "value": "<p><em>Requires MidiQOL, DAE. Make sure to Enable Cutting Words in the module settings.</em></p><p><strong>GPS setup:</strong> Reaction wrapper: enable Cutting Words in GPS settings and retain an actor-owned Bardic Inspiration item and Bardic Inspiration die scale. The reaction handler consumes that shared resource.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -167,74 +167,97 @@
     },
     "core": {},
     "gambits-premades": {
-      "gpsUuid": "b352241e-5042-44a4-b632-3168ded51946"
-    },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+      "gpsUuid": "b352241e-5042-44a4-b632-3168ded51946",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
         },
-        {
-          "value": "color",
-          "label": "CHRISPREMADES.Config.Color",
+        "color": {
+          "label": "GAMBITSPREMADES.ItemConfig.Color",
           "type": "select",
           "default": "red",
-          "category": "animation",
+          "category": "animations",
           "options": [
             {
+              "value": "red",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Red"
+            },
+            {
               "value": "blue",
-              "label": "CHRISPREMADES.Config.Colors.Blue",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Blue",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "green",
-              "label": "CHRISPREMADES.Config.Colors.Green",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Green",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "pink",
-              "label": "CHRISPREMADES.Config.Colors.Pink",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Pink",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "purple",
-              "label": "CHRISPREMADES.Config.Colors.Purple",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Purple",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "orange",
-              "label": "CHRISPREMADES.Config.Colors.Orange",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Orange",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "yellow",
-              "label": "CHRISPREMADES.Config.Colors.Yellow",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Yellow",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             }
           ]
         }
+      },
+      "animationModules": [
+        "JB2APatreon"
       ]
     },
     "dnd5e": {
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

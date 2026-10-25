@@ -4,11 +4,11 @@
   "img": "icons/creatures/birds/corvid-flying-wings-purple.webp",
   "system": {
     "description": {
-      "value": "<div class=\"k31gt\"><p><span>You can use your Channel Divinity to rebuke creatures who harm you. Immediately after a creature within 30 feet of you deals damage to you, you can use your reaction to force the creature to make a Wisdom saving throw. On a failed save, the creature takes cold damage equal to the damage it just dealt, or half as much damage on a successful save. If the creature was an undead, it takes an additional 1d6 cold damage.</span></p></div><div class=\"k31gt\"><p><span>Additionally, you learn the <em>find familiar</em> spell and can cast it as a ritual. The spell doesn’t count against your number of spells known. When you cast the spell, your familiar takes the form of a raven.</span></p></div>",
+      "value": "",
       "chat": ""
     },
     "source": {
-      "custom": "1.0.32",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -185,26 +185,10 @@
   "effects": [
     {
       "origin": "Actor.YUmZSq6NsdZkLNi9.Item.sYaxvhLRDdM4ljOQ",
-      "duration": {
-        "startTime": 1697162658,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": 2,
-        "startTurn": 0
-      },
+      "duration": {},
       "disabled": false,
       "name": "Channel Divinity: Rebuke the Damned",
       "_id": "xDcTo3iw6U2atIsE",
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, isDamaged",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -215,17 +199,35 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/creatures/birds/corvid-flying-wings-purple.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, isDamaged",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": {
+        "time": 1697162658,
+        "round": 2,
+        "turn": 0,
+        "combat": null
+      },
       "_key": "!items.effects!C054FNKAAX6REcEE.xDcTo3iw6U2atIsE"
     }
   ],
@@ -237,7 +239,7 @@
         "img": "icons/creatures/birds/corvid-flying-wings-purple.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"isDamaged\") {\n    let itemName = macroItem.name;\n    let target = workflow.token;\n    let gpsUuid = \"7c352bfb-613c-46d7-91df-ac3d3a50c0c5\";\n    \n    let findValidToken = game.gps.findValidToken({initiatingTokenUuid: target.document.uuid, targetedTokenUuid: token.document.uuid, itemName: itemName, itemType: \"feature\", itemChecked: [\"channel divinity\"], reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: \"enemy\", workflowType: \"attack\", workflowCombat: \"true\", gpsUuid: gpsUuid});\n\n    if(!findValidToken) return;\n\n    let dialogId = gpsUuid;\n\n    let initialTimeLeft = 15;\n    const dialogTitlePrimary = `${actor.name} | ${macroItem.name}`;\n    const dialogTitleGM = `Waiting for ${actor.name}'s selection | ${macroItem.name}`;\n    let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });\n    let gmUser = game.gps.getPrimaryGM();\n    let result;\n\n    let dialogContent = `\n\t\t<div class=\"gps-dialog-container\">\n\t\t\t<div class=\"gps-dialog-section\">\n\t\t\t\t<div class=\"gps-dialog-content\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<div class=\"gps-dialog-flex\">\n\t\t\t\t\t\t\t<p class=\"gps-dialog-paragraph\">You have been damaged, would you like to use ${macroItem.name} to inflict cold damage on the attacker?</p>\n\t\t\t\t\t\t\t<div id=\"image-container\" class=\"gps-dialog-image-container\">\n\t\t\t\t\t\t\t\t<img id=\"img_${dialogId}\" src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"gps-dialog-button-container\">\n\t\t\t\t<button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n\t\t\t\t\t<i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>Pause\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</div>\n\t`;\n\n    if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {\n    let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: \"user\",type: \"multiDialog\", browserUser: browserUser };\n    \n    let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: \"gm\",type: \"multiDialog\" };\n\n    result = await game.gps.socket.executeAsUser(\"handleDialogPromises\", gmUser, {userDialogArgs, gmDialogArgs});\n} else {\n    result = await game.gps.socket.executeAsUser(\"process3rdPartyReactionDialog\", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? \"gm\" : \"user\",type:\"singleDialog\"});\n    }\n\t\t\t\n\tconst { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;\n\n    if (userDecision) {\n        let activityToUpdate = macroItem.system.activities.find(a => a.identifier === \"syntheticSave\");\n        let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);\n        damageParts[0].custom.formula = target.actor.system.details.type.value === \"undead\" ? `1d6 + ${workflow.damageTotal}` : workflow.damageTotal\n\n        await game.gps.socket.executeAsUser(\"gpsActivityUpdate\", gmUser, { activityUuid: activityToUpdate.uuid, updates: {\"damage.parts\": damageParts} });\n        await game.gps.gpsActivityUse({itemUuid: macroItem.uuid, identifier: \"syntheticSave\", targetUuid: target.document.uuid});\n\n        let cprConfig = game.gps.getCprConfig({itemUuid: macroItem.uuid});\n        const { animEnabled } = cprConfig;\n        if(animEnabled) {\n            new Sequence()\n                .effect()\n                    .file(\"animated-spell-effects-cartoon.fire.118\")\n                    .fadeIn(500)\n                    .fadeOut(500)\n                    .atLocation(target, {offset:{x: 0, y: -10}})\n                    .scaleToObject(3)\n                    .filter(\"ColorMatrix\", { brightness: 0, contrast: 1 })\n                .play()\n        }\n    }\n}",
+        "command": "if(args[0].macroPass === \"isDamaged\") {\n    let itemName = macroItem.name;\n    let target = workflow.token;\n    let gpsUuid = \"7c352bfb-613c-46d7-91df-ac3d3a50c0c5\";\n    \n    let findValidToken = game.gps.findValidToken({initiatingTokenUuid: target.document.uuid, targetedTokenUuid: token.document.uuid, itemName: itemName, itemType: \"feature\", itemChecked: [\"channel divinity\"], reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: \"enemy\", workflowType: \"attack\", workflowCombat: \"true\", gpsUuid: gpsUuid});\n\n    if(!findValidToken) return;\n\n    let dialogId = gpsUuid;\n\n    let initialTimeLeft = 15;\n    const dialogTitlePrimary = `${actor.name} | ${macroItem.name}`;\n    const dialogTitleGM = game.i18n.format(\"GAMBITSPREMADES.Dialogs.Common.WaitingForSelection\", {actorName: actor.name, itemName: macroItem.name});\n    let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });\n    let gmUser = game.gps.getPrimaryGM();\n    let result;\n\n    let dialogContent = `\n\t\t<div class=\"gps-dialog-container\">\n\t\t\t<div class=\"gps-dialog-section\">\n\t\t\t\t<div class=\"gps-dialog-content\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<div class=\"gps-dialog-flex\">\n\t\t\t\t\t\t\t<p class=\"gps-dialog-paragraph\">${game.i18n.format(\"GAMBITSPREMADES.Dialogs.RebukeTheDamned.Prompt\", {itemName: foundry.utils.escapeHTML(macroItem.name)})}</p>\n\t\t\t\t\t\t\t<div id=\"image-container\" class=\"gps-dialog-image-container\">\n\t\t\t\t\t\t\t\t<img id=\"img_${dialogId}\" src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"gps-dialog-button-container\">\n\t\t\t\t<button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n\t\t\t\t\t<i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Pause\")}\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</div>\n\t`;\n\n    if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {\n    let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: \"user\",type: \"multiDialog\", browserUser: browserUser };\n    \n    let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: \"gm\",type: \"multiDialog\" };\n\n    result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});\n} else {\n    result = await game.gps.queryDialog(\"process3rdPartyReactionDialog\", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? \"gm\" : \"user\",type:\"singleDialog\"});\n    }\n\t\t\t\n\tconst { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;\n\n    if (userDecision) {\n        let activityToUpdate = macroItem.system.activities.find(a => a.identifier === \"syntheticSave\");\n        let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);\n        damageParts[0].custom.formula = target.actor.system.details.type.value === \"undead\" ? `1d6 + ${workflow.damageTotal}` : workflow.damageTotal\n\n        await game.gps.queryUser(\"gpsActivityUpdate\", gmUser, { activityUuid: activityToUpdate.uuid, updates: {\"damage.parts\": damageParts} });\n        await game.gps.gpsActivityUse({itemUuid: macroItem.uuid, identifier: \"syntheticSave\", targetUuid: target.document.uuid});\n\n        let cprConfig = game.gps.getCprConfig({itemUuid: macroItem.uuid});\n        const { animEnabled } = cprConfig;\n        if(animEnabled) {\n            game.gps.animation.spellEffect({kind: \"rebukeWings\", at: target, scale: 3, color: \"black\"});\n        }\n    }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -275,17 +277,17 @@
       }
     },
     "gambits-premades": {
-      "gpsUuid": "7c352bfb-613c-46d7-91df-ac3d3a50c0c5"
-    },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+      "gpsUuid": "7c352bfb-613c-46d7-91df-ac3d3a50c0c5",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
         }
+      },
+      "animationModules": [
+        "GPS"
       ]
     },
     "dnd5e": {
@@ -299,6 +301,26 @@
             "0": "cold"
           }
         }
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
       }
     }
   },

@@ -979,7 +979,21 @@
       "folder": null,
       "sort": 0,
       "flags": {
-        "dnd5e": {}
+        "dnd5e": {},
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
+        },
+        "boss-loot-assets-premium": {
+          "dnd5eactivity000": {
+            "autoRec": {
+              "enabled": false
+            },
+            "activityName": "Attack",
+            "activityType": "attack",
+            "version": 2
+          }
+        }
       },
       "_stats": {
         "compendiumSource": null,
@@ -1036,26 +1050,10 @@
         {
           "name": "Never Target",
           "origin": "Actor.iopoKepLLnHshdBA.Item.BW7ugXqhcSO5XeJX",
-          "duration": {
-            "startTime": null,
-            "seconds": null,
-            "combat": null,
-            "rounds": null,
-            "turns": null,
-            "startRound": null,
-            "startTurn": null
-          },
+          "duration": {},
           "transfer": true,
           "disabled": false,
           "_id": "jFKhp34XZd32ryYT",
-          "changes": [
-            {
-              "key": "flags.midi-qol.neverTarget",
-              "mode": 0,
-              "value": "true",
-              "priority": 20
-            }
-          ],
           "description": "",
           "statuses": [],
           "flags": {
@@ -1069,6 +1067,10 @@
               "durationExpression": "",
               "macroRepeat": "none",
               "specialDuration": []
+            },
+            "autoanimations": {
+              "isEnabled": false,
+              "version": 5
             }
           },
           "tint": "#ffffff",
@@ -1083,14 +1085,28 @@
           },
           "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
           "type": "base",
-          "system": {},
+          "system": {
+            "changes": [
+              {
+                "key": "flags.midi-qol.neverTarget",
+                "value": true,
+                "priority": 20,
+                "type": "custom"
+              }
+            ]
+          },
           "sort": 0,
+          "start": null,
           "_key": "!actors.items.effects!whWeB4x80BpWy1tv.icorevoMIkBVXL37.jFKhp34XZd32ryYT"
         }
       ],
       "folder": null,
       "flags": {
-        "core": {}
+        "core": {},
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
+        }
       },
       "_stats": {
         "compendiumSource": null,
@@ -1114,26 +1130,10 @@
     {
       "name": "Never Target",
       "origin": "Actor.WtxYMcamQptpNnjX.Item.icorevoMIkBVXL37",
-      "duration": {
-        "startTime": 1697159634,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "transfer": false,
       "disabled": false,
       "_id": "qCjN9FyOPXNWukms",
-      "changes": [
-        {
-          "key": "flags.midi-qol.neverTarget",
-          "mode": 0,
-          "value": "true",
-          "priority": 20
-        }
-      ],
       "description": "",
       "statuses": [],
       "flags": {
@@ -1148,6 +1148,10 @@
           "macroRepeat": "none",
           "specialDuration": [],
           "transfer": true
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -1162,8 +1166,23 @@
       },
       "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.neverTarget",
+            "value": true,
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": {
+        "time": 1697159634,
+        "round": null,
+        "turn": null,
+        "combat": null
+      },
       "_key": "!actors.effects!whWeB4x80BpWy1tv.qCjN9FyOPXNWukms"
     }
   ],

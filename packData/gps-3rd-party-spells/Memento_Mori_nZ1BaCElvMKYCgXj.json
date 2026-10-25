@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -188,25 +188,13 @@
     {
       "origin": "Actor.1xFtQVMnMyuFm2w2.Item.ZhAZPQ43IVYrTyy8",
       "duration": {
-        "rounds": 1,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "rounds",
+        "expiry": "targetEnd"
       },
       "disabled": false,
       "name": "Memento Mori",
       "_id": "aTdVZ7BfVtRpnHyR",
-      "changes": [
-        {
-          "key": "macro.StatusEffect",
-          "mode": 0,
-          "value": "stunned",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": false,
       "statuses": [],
@@ -218,19 +206,30 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnEnd"
-          ]
+          "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/magic/death/skull-humanoid-worn-teal.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "macro.StatusEffect",
+            "value": "stunned",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!nZ1BaCElvMKYCgXj.aTdVZ7BfVtRpnHyR"
     }
   ],
@@ -254,6 +253,26 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "folder": null,

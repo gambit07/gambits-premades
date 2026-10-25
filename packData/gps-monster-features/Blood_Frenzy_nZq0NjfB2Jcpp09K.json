@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "SRD 5.1",
       "page": "",
       "license": "CC-BY-4.0",
@@ -84,35 +84,38 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
   "effects": [
     {
       "origin": "Compendium.world.gps-monster-features.Item.nZq0NjfB2Jcpp09K",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Blood Frenzy",
       "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
       "_id": "zCueqccwXCi7HCfj",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, preAttackRoll",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, preAttackRoll",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -122,7 +125,6 @@
         "dae": {
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -130,8 +132,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!nZq0NjfB2Jcpp09K.zCueqccwXCi7HCfj"
     }
   ],

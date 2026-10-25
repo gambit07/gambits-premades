@@ -21,16 +21,19 @@ export async function portent({ speaker, actor, token, character, item, args, sc
                 let parser = new DOMParser();
                 let doc = parser.parseFromString(divContent.innerHTML, 'text/html');
                 let span = doc.querySelector("[id^='portentRoll']");
-                let roll = span ? span.innerText : "N/A";
+                let roll = span?.textContent.trim() ?? "";
 
+                if(!roll || !Number.isFinite(Number(roll))) return;
+                const label = game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.Roll", {number: Number(divContent.id.match(/\d+$/)?.[0]) || index + 1});
                 buttons.push({
                 action: `${divContent.id} | ${roll}`,
-                label: `${divContent.id} | ${roll}`,
+                label: `${label} | ${roll}`,
                 callback: async (html) => {
-                    const divId = `${divContent.id}`;
-                    const regex = new RegExp(`<div id="${divId}">[\\s\\S]*?<\\/div>`, 'g');
-
-                    let newDescription = description.replace(regex, '');
+                    const current = new DOMParser().parseFromString(item.system.description.value, "text/html");
+                    const entry = current.getElementById(divContent.id);
+                    if(!entry) return false;
+                    entry.remove();
+                    const newDescription = current.body.innerHTML;
 
                     await actor.updateEmbeddedDocuments("Item", [{
                     _id: item.id,
@@ -41,19 +44,17 @@ export async function portent({ speaker, actor, token, character, item, args, sc
                     }
                     }]);
                     
-                    const chatMessage = MidiQOL.getCachedChatMessage(workflow.itemCardUuid);
-                    let content = foundry.utils.duplicate(chatMessage.content);
-                    let searchString = /<div class="midi-qol-attack-roll">[\s\S]*<div class="end-midi-qol-attack-roll">/g;
-                    let replaceString = `<div class="midi-qol-attack-roll"><span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.PortentApplied", { portentLabel: divContent.id, roll: roll })}</span><div class="end-midi-qol-attack-roll">`;
-                    content = content.replace(searchString, replaceString);
-                    await chatMessage.update({ content: content });
+                    const chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.PortentApplied", { portentLabel: label, roll: roll })}</span>`;
+                    await game.gps.replaceChatCard({ actorUuid: actor.uuid, itemUuid: item.uuid, itemCardUuid: workflow.itemCardUuid, chatContent });
                 }
                 });
             });
             return buttons;
         }
 
-        await foundry.applications.api.DialogV2.wait({
+        const choices = generatePortentRollButtons();
+        if(!choices.length) return void (workflow.aborted = true);
+        const selection = await game.gps.showAutomationDialog({
             window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.Windowtitle") },
             content: `
                 <div class="gps-dialog-container">
@@ -71,16 +72,17 @@ export async function portent({ speaker, actor, token, character, item, args, sc
                     </div>
                 </div>
             `,
-            buttons: generatePortentRollButtons(),
+            buttons: choices,
             close: async (event, dialog) => {
                 return;
             }, rejectClose:false
         });
+        if(!selection) workflow.aborted = true;
     }
 
     else if(args?.[0] === "off") {
         let diceNum = actor.classes.wizard.system.levels >= 14 ? 3 : 2;
-        let diceResult = "Your portent rolls are:<br><br>";
+        let diceResult = game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Wizard.SchoolOfDivination.Portent.Rolls") + "<br><br>";
         
         for (let i = 1; i <= diceNum; i++) {
             let roll = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticRoll", targetUuid: token.document.uuid});
@@ -96,7 +98,7 @@ export async function portent({ speaker, actor, token, character, item, args, sc
         let chatData = {
             speaker: ChatMessage.getSpeaker(),
             content: diceResult,
-            whisper: actorPlayer.id
+            whisper: [actorPlayer?.id ?? game.gps.getPrimaryGM()].filter(Boolean)
         };
         await ChatMessage.create(chatData);
 
@@ -114,6 +116,6 @@ export async function portent({ speaker, actor, token, character, item, args, sc
         }]);
 
         let effectData = Array.from(actor.allApplicableEffects()).find(e => e.name === item.name);
-        await effectData.update({"disabled": false});
+        await effectData?.update({"disabled": false});
     }
 }

@@ -1,3 +1,3 @@
-export async function seekingArrow({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    await item.update({"flags.midiProperties.ignoreTotalCover" : true});
+export async function seekingArrow({workflow}) {
+    if(workflow?.activity?.midiProperties) workflow.activity.midiProperties.ignoreFullCover = true;
 }

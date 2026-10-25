@@ -9,11 +9,11 @@ export async function infestation({ speaker, actor, token, character, item, args
             const directions = ["North", "South", "East", "West"];
             const directionContent = directions[directionResult - 1];
             const walkSpeedFeet = 5;
-            await game.gps.socket.executeAsUser("moveTokenByCardinal", gmUser, {targetUuid: target.document.uuid, distance: walkSpeedFeet, direction: directionContent });
+            await game.gps.queryUser("moveTokenByCardinal", gmUser, {targetUuid: target.document.uuid, distance: walkSpeedFeet, direction: directionContent });
 
             let content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Infestation.MovementRollMovesUsingUp", { targetName: target.actor.name, directionResult: directionResult, directionContent: directionContent })}</span>`
 
-            await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: actor.uuid, itemUuid: workflow.item.uuid, chatContent: content, rollData: directionRoll});
+            await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: actor.uuid, itemUuid: workflow.item.uuid, chatContent: content, rollData: directionRoll});
         }
     }
 }

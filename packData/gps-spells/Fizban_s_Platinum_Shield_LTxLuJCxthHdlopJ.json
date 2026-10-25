@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "Fizban's Treasury of Dragons",
       "page": "20",
       "license": "",
@@ -453,89 +453,112 @@
       "actionSection": ""
     },
     "gambits-premades": {
-      "fizbansPlatShieldTarget": "Scene.1mkVNeOdyVIlDdH7.Token.6oG1hK3sp8lNIVRu"
+      "fizbansPlatShieldTarget": "Scene.1mkVNeOdyVIlDdH7.Token.6oG1hK3sp8lNIVRu",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Actor.PpeGTVYvVoFsdZZD.Item.cXmktTYSVNKPXsan",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Fizban's Platinum Shield",
       "img": "icons/magic/defensive/shield-barrier-deflect-teal.webp",
       "_id": "2TVoFB98ZtniR8Z7",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "system.attributes.ac.bonus",
-          "mode": 2,
-          "value": "+2",
-          "priority": 20
-        },
-        {
-          "key": "system.abilities.dex.bonuses.save",
-          "mode": 2,
-          "value": "+2",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.dr.value",
-          "mode": 0,
-          "value": "acid",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.dr.value",
-          "mode": 0,
-          "value": "cold",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.dr.value",
-          "mode": 0,
-          "value": "fire",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.dr.value",
-          "mode": 0,
-          "value": "lightning",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.dr.value",
-          "mode": 0,
-          "value": "poison",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.semiSuperSaver.dex",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "ATL.light.dim",
-          "mode": 2,
-          "value": "5",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.fizbansPlatinumShield @actorUuid @itemUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.ac.bonus",
+            "value": "+2",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.abilities.dex.save.roll.bonus",
+            "value": "+2",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "acid",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "cold",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "fire",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "lightning",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "poison",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.semiSuperSaver.dex",
+            "value": 1,
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "token.light.dim",
+            "value": 5,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.fizbansPlatinumShield @actorUuid @itemUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -548,7 +571,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -557,8 +579,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!LTxLuJCxthHdlopJ.2TVoFB98ZtniR8Z7"
     }
   ],

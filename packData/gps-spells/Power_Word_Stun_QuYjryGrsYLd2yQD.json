@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "Player’s Handbook (2014)",
       "page": "267",
       "license": "",
@@ -186,11 +186,7 @@
       "otherCondition": ""
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Scene.bAQsBAiUKXSqmows.Token.6vurRyomcJ2N0BDF.Actor.E7vwcKE4WtxUBgj1.ActiveEffect.ktu921oUQI8gZnNe"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -426,7 +422,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": true,
+      "isEnabled": false,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
@@ -434,40 +430,53 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Item.PvD4sCpjbcc6hJIg",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 99999,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 99999,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Power Word Stun",
       "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
       "_id": "YNLL7EqvJIny51tK",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.OverTime",
-          "mode": 0,
-          "value": "turn=end,rollType=save,saveAbility=con,saveDC=@attributes.spelldc,saveMagic=true,name=Power Word Stun",
-          "priority": 20
-        },
-        {
-          "key": "macro.StatusEffect",
-          "mode": 0,
-          "value": "stunned",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.OverTime",
+            "value": "turn=end,rollType=save,saveAbility=con,saveDC=@attributes.spell.dc,saveMagic=true,name=Power Word Stun",
+            "priority": 20,
+            "type": "custom",
+            "replacement": "origin"
+          },
+          {
+            "key": "macro.StatusEffect",
+            "value": "stunned",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -478,7 +487,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -633,6 +641,7 @@
           "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!QuYjryGrsYLd2yQD.YNLL7EqvJIny51tK"
     }
   ],

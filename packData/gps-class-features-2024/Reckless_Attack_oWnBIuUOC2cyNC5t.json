@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.41",
+      "custom": "",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -87,37 +87,25 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "effects": [
     {
       "origin": "Compendium.world.gps-class-features-2024.Item.oWnBIuUOC2cyNC5t",
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": 152,
-        "startTurn": 0
-      },
+      "duration": {},
       "disabled": false,
       "name": "Reckless Attack",
       "_id": "HvqYLk6a33Mq6j0n",
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.recklessAttack2024, preAttackRollConfig",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.recklessAttack2024",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -129,7 +117,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEndEveryTurn",
           "specialDuration": [
@@ -145,13 +132,33 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/skills/melee/strike-axe-blood-red.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.recklessAttack2024, preAttackRollConfig",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.recklessAttack2024",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!oWnBIuUOC2cyNC5t.HvqYLk6a33Mq6j0n"
     }
   ],

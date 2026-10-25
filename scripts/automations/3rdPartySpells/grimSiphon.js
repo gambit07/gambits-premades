@@ -7,7 +7,7 @@ export async function grimSiphon({ speaker, actor, token, character, item, args,
         if(validFriendlies.length === 0) return;
         let damageTotal = workflow.damageTotal;
     
-        await foundry.applications.api.DialogV2.wait({
+        await game.gps.showAutomationDialog({
         window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.GrimSiphon.Windowtitle") },
         content: `
             <div class="gps-dialog-container">
@@ -35,7 +35,7 @@ export async function grimSiphon({ speaker, actor, token, character, item, args,
             action: "Heal",
             label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.GrimSiphon.Heal"),
             callback: async (event, button, dialog) => {
-                const tokenUuid = document.querySelector('#ally-token').value;
+                const tokenUuid = dialog.element.querySelector("#ally-token").value;
                 const tokenToHeal = await fromUuid(tokenUuid);
                 if (tokenToHeal) {
                     const healingAmount = Math.floor(damageTotal / 2);
@@ -43,12 +43,13 @@ export async function grimSiphon({ speaker, actor, token, character, item, args,
                     await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
             
                     const itemData = {
-                        name: "Grim Siphon - Healing",
+                        flags: {autoanimations: {isEnabled: false, version: 5}},
+                        name: game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartySpells.GrimSiphon.Healing"),
                         type: "feat",
                         img: item.img
                     }
             
-                    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "healing", tokenToHeal.object ? [tokenToHeal.object] : [], damageRoll, {itemData: itemData, flavor: "Grim Siphon - Healing"});
+                    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "healing", tokenToHeal.object ? [tokenToHeal.object] : [], damageRoll, {itemData: itemData, flavor: game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartySpells.GrimSiphon.Healing")});
                 }
             }
         }],

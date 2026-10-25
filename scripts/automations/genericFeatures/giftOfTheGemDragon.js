@@ -11,7 +11,7 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
         let activity = item.system.activities.find(a => a.identifier === "syntheticSave");
 
         if(!activity.save?.dc?.calculation && !activity.save?.dc?.formula) {
-            await foundry.applications.api.DialogV2.wait({
+            const selection = await game.gps.showAutomationDialog({
                 window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.GiftOfTheGemDragon.Windowtitle") },
                 content: `
                     <div class="gps-dialog-container">
@@ -54,6 +54,7 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
                     return;
                 }, rejectClose:false
             });
+            if(!selection) return;
         }
 
         let initialTimeLeft = 15;
@@ -88,13 +89,13 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
         let gmUser = game.gps.getPrimaryGM();
         
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft, validTokenPrimaryUuid: token.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft, validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, source: "gm", type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token.document.uuid, source: "gm", type: "multiDialog" };
 
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, source: gmUser === browserUser ? "gm" : "user", type: "singleDialog"});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token.document.uuid, source: gmUser === browserUser ? "gm" : "user", type: "singleDialog"});
         }
                 
         const { userDecision, source, type } = result || {};
@@ -106,12 +107,12 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
             await game.gps.addReaction({actorUuid: `${actor.uuid}`});
             
             let saveResult;
-            if(source && source === "user") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
-            else if(source && source === "gm") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
+            if(source && source === "user") saveResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
+            else if(source && source === "gm") saveResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
             if(!saveResult) return;
 
             if(saveResult.failedSaves.size !== 0) {
-                await game.gps.socket.executeAsGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: workflow.token.document.uuid, distance: 10 });
+                await game.gps.queryGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: workflow.token.document.uuid, distance: 10 });
             }
         }
     }

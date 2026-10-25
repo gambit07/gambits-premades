@@ -4,10 +4,10 @@
   "system": {
     "description": {
       "value": "<p><em>Works with the Opportunity Attack Automation. Also includes the opposite end weapon attack.</em></p>",
-      "chat": "When you take the Attack action with only a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon that uses the same ability modifier as the primary attack and has a damage die of d4 (bludgeoning). While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter your reach."
+      "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2024",
       "book": "",
       "page": "",
@@ -204,6 +204,26 @@
     },
     "gambits-premades": {
       "gpsUuid": "1c6b264d-ea96-42c4-8237-e42d3e41bb96"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "eWO2KBnxZEDkn99H": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Weapon End Attack",
+        "activityType": "attack",
+        "version": 2
+      }
     }
   },
   "img": "icons/weapons/polearms/pike-flared-brown.webp",

@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "0.5.46",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -194,7 +194,7 @@
         "img": "icons/equipment/finger/ring-band-engraved-teal.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0] === \"each\") {\n    let percentileRoll = await new CONFIG.Dice.DamageRoll(`1d10`).evaluate();\n    if(percentileRoll.total !== 1) return;\n\n    let durationRoll = await new CONFIG.Dice.DamageRoll(`1d4`).evaluate();\n    let effectData = [\n        {\n            \"icon\": `${macroItem.img}`,\n            \"origin\": `${actor.uuid}`,\n            \"duration\": {\n                \"rounds\": durationRoll.total\n            },\n            \"disabled\": false,\n            \"name\": \"Ring of Invisibility - Paralyzed\",\n            \"changes\": [\n            {\n                \"key\": \"macro.StatusEffect\",\n                \"mode\": 0,\n                \"value\": \"paralyzed\",\n                \"priority\": 20\n            }\n            ],\n            \"transfer\": false\n        }\n    ];\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectData });\n    let originEffect = actor.appliedEffects.find(e => e.name === macroItem.name);\n    if(originEffect) originEffect.delete();\n}",
+        "command": "if(args[0] === \"each\") {\n    let percentileRoll = await new CONFIG.Dice.DamageRoll(`1d10`).evaluate();\n    if(percentileRoll.total !== 1) return;\n\n    let durationRoll = await new CONFIG.Dice.DamageRoll(`1d4`).evaluate();\n    let effectData = [\n        {\n            img: `${macroItem.img}`,\n            \"origin\": `${actor.uuid}`,\n            \"duration\": { value: durationRoll.total, units: \"rounds\" },\n            \"disabled\": false,\n            \"name\": \"Ring of Invisibility - Paralyzed\",\n            system: { changes: [\n            {\n                \"key\": \"macro.StatusEffect\",\n                type: \"custom\",\n                \"value\": \"paralyzed\",\n                \"priority\": 20\n            }\n            ] },\n            \"transfer\": false\n        }\n    ];\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectData });\n    let originEffect = actor.appliedEffects.find(e => e.name === macroItem.name);\n    if(originEffect) originEffect.delete();\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -216,61 +216,58 @@
       }
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.hNrKazdOP5s1UYSb.Actor.SNZJsEKbROB1q6bT.ActiveEffect.QOJDvVZicXjZbadu"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.hNrKazdOP5s1UYSb.Actor.SNZJsEKbROB1q6bT.ActiveEffect.IuBSvaZybseBM9b9"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.hNrKazdOP5s1UYSb.Actor.SNZJsEKbROB1q6bT.ActiveEffect.x5GMP6vGymIxHHuv"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.hNrKazdOP5s1UYSb.Actor.SNZJsEKbROB1q6bT.ActiveEffect.d0i3i46fcCQ54I8x"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.hNrKazdOP5s1UYSb.Actor.SNZJsEKbROB1q6bT.ActiveEffect.ssFLHseFr7KfbI7f"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },
   "effects": [
     {
       "origin": "Item.8ADBVWf0UI2nXHaQ",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Ring of Invisibility",
       "img": "icons/equipment/finger/ring-band-engraved-teal.webp",
       "_id": "fRzfKB7OFT8zJ2aH",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.StatusEffect",
-          "mode": 0,
-          "value": "invisible",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.StatusEffect",
+            "value": "invisible",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -281,7 +278,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": [
@@ -295,8 +291,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!DuWq2UgnSlWsbahi.fRzfKB7OFT8zJ2aH"
     }
   ],

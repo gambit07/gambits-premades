@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -205,25 +205,12 @@
     {
       "origin": "Item.8CxlGFmyw9RVq16D",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 1,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 1,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Triumph - Rally to Glory",
       "_id": "vc8x4tsb975JUGNN",
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": false,
       "statuses": [],
@@ -235,7 +222,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -244,24 +230,34 @@
         },
         "effectmacro": {},
         "dnd5e": {
-          "dependents": [
-            {
-              "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.P88yZhPknDdGwq1j"
-            }
-          ],
+          "dependents": [],
           "riders": {
             "statuses": []
           }
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Triumph.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!NSD3yC5ckkJPxjnN.vc8x4tsb975JUGNN"
     }
   ],
@@ -285,7 +281,7 @@
         "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Triumph.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0] === \"on\") {\n    const target = token;\n    const actorClasses = target.actor.classes;\n    const classKeys = Object.keys(actorClasses);\n\n    //Check if there are any hit dice left before creating the dialog else exit\n    const totalHitDice = classKeys.reduce((acc, key) => acc + (parseInt(actorClasses[key].system.levels) - parseInt(actorClasses[key].system.hd.spent)), 0);\n    if (totalHitDice === 0) {\n        return ui.notifications.warn(\"You have no hit dice remaining.\");\n    }\n\n    let content = `<p>Select the number of hit dice to use:</p><form>`;\n\n    for (const key of classKeys) {\n        const cls = actorClasses[key];\n        const hitDiceAvailable = parseInt(cls.system.levels) - parseInt(cls.system.hd.spent);\n        let hitDiceRollType = cls.system.hd.denomination;\n\n        //Skip the class if no hit dice are available\n        if (hitDiceAvailable === 0) continue;\n\n    content += `\n    <div class=\"form-group\">\n        <label style=\"flex: 0 0 auto; margin: 0 10px; text-align: left;\">${cls.name} - Available: <b>${hitDiceAvailable}${hitDiceRollType}</b></label>\n        <div class=\"form-fields\">\n            <button type=\"button\" class=\"hit-dice-decrement\" data-key=\"${key}\">-</button>\n            <span id=\"hitDiceDisplay-${key}\" style=\"flex: 0 0 auto; margin: 0 10px; text-align: center;\">0</span>\n            <button type=\"button\" class=\"hit-dice-increment\" data-key=\"${key}\">+</button>\n        </div>\n    </div>\n    `;\n    }\n\n    content += `</form>`;\n\n    await foundry.applications.api.DialogV2.wait({\n        window: { title: `${target.actor.name} | Triumph: Select Hit Dice` },\n        content: content,\n        buttons: [{\n                action: \"continue\",\n                label: \"Continue\",\n                default: true,\n                callback: async (event, button, dialog) => {\n                  for (const key of classKeys) {\n                      const display = dialog.element.querySelector(`#hitDiceDisplay-${key}`);\n                      if (!display) continue;\n          \n                      const hitDiceToUse = parseInt(display?.textContent ?? \"0\");\n                      const hitDiceRollType = actorClasses[key].system.hd.denomination;\n                      \n                      if (!hitDiceToUse || hitDiceToUse === 0) {\n                          continue;\n                      }\n          \n                      for (let i = 0; i < hitDiceToUse; i++) {\n                          await actor.rollHitDie({ denomination: hitDiceRollType });\n                      }\n                  }\n                }\n            },\n            {\n                action: \"cancel\",\n                label: \"Cancel\",\n                callback: () => false\n            }],\n            default: \"cancel\",\n    render: (event) => {\n        let globalHitDiceSelected = 0;\n        const dialog = event.target;\n        const dialogElement = dialog?.element;\n\n        dialogElement.addEventListener('click', event2 => {\n            const targetClick = event2.target;\n            const isIncrement = targetClick.classList.contains('hit-dice-increment');\n            const isDecrement = targetClick.classList.contains('hit-dice-decrement');\n\n            if (isIncrement || isDecrement) {\n                const key = targetClick.dataset.key;\n                const spanDisplay = dialogElement.querySelector(`#hitDiceDisplay-${key}`);\n                let currentValue = parseInt(spanDisplay.textContent);\n\n                let totalLevels = classKeys.reduce((acc, key) => acc + parseInt(actorClasses[key].system.levels), 0);\n                let totalAllowedHitDice;\n                if(actor.system.attributes.hp.value > 0) totalAllowedHitDice = Math.floor(totalLevels / 2);\n                else totalAllowedHitDice = totalLevels;\n\n                // Determine how many hit dice have been selected across all classes\n                globalHitDiceSelected = classKeys.reduce((total, classKey) => {\n                    const display = dialogElement.querySelector(`#hitDiceDisplay-${classKey}`);\n                    return total + (display ? parseInt(display.textContent) : 0);\n                }, 0);\n\n                let classAvailableHitDice = parseInt(actorClasses[key].system.levels) - parseInt(actorClasses[key].system.hd.spent);\n\n                let remainingAllowedHitDice = totalAllowedHitDice - globalHitDiceSelected + (isDecrement ? 1 : 0);\n\n                let maxValue = isIncrement ? Math.min(classAvailableHitDice, remainingAllowedHitDice + currentValue) : classAvailableHitDice;\n\n                if (isIncrement && currentValue < maxValue) {\n                    spanDisplay.textContent = currentValue + 1;\n                } else if (isDecrement && currentValue > 0) {\n                    spanDisplay.textContent = currentValue - 1;\n                }\n            }\n        });\n    }\n    })\n}\n\nif(args[0].macroPass === \"postActiveEffects\") {\n    await new Sequence()\n    .sound()\n        .file(\"assets/sounds/horn-sound.ogg\") //Change sound here\n        .fadeInAudio(500)\n        .fadeOutAudio(500)\n        .play()\n}",
+        "command": "if(args[0] === \"on\") {\n    const target = token;\n    const actorClasses = target.actor.classes;\n    const classKeys = Object.keys(actorClasses);\n\n    //Check if there are any hit dice left before creating the dialog else exit\n    const totalHitDice = classKeys.reduce((acc, key) => acc + (parseInt(actorClasses[key].system.levels) - parseInt(actorClasses[key].system.hd.spent)), 0);\n    if (totalHitDice === 0) {\n        return ui.notifications.warn(game.i18n.localize(\"GAMBITSPREMADES.Dialogs.HitDice.None\"));\n    }\n\n    let content = `<p>${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.TransientHealing.SelectHitDice\")}</p><form>`;\n\n    for (const key of classKeys) {\n        const cls = actorClasses[key];\n        const hitDiceAvailable = parseInt(cls.system.levels) - parseInt(cls.system.hd.spent);\n        let hitDiceRollType = cls.system.hd.denomination;\n\n        //Skip the class if no hit dice are available\n        if (hitDiceAvailable === 0) continue;\n\n    content += `\n    <div class=\"form-group\">\n        <label style=\"flex: 0 0 auto; margin: 0 10px; text-align: left;\">${cls.name} - ${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.TransientHealing.Available\")}: <b>${hitDiceAvailable}${hitDiceRollType}</b></label>\n        <div class=\"form-fields\">\n            <button type=\"button\" class=\"hit-dice-decrement\" data-key=\"${key}\">-</button>\n            <span id=\"hitDiceDisplay-${key}\" style=\"flex: 0 0 auto; margin: 0 10px; text-align: center;\">0</span>\n            <button type=\"button\" class=\"hit-dice-increment\" data-key=\"${key}\">+</button>\n        </div>\n    </div>\n    `;\n    }\n\n    content += `</form>`;\n\n    await game.gps.showAutomationDialog({\n        window: { title: `${target.actor.name} | ${macroItem.name}` },\n        content: content,\n        buttons: [{\n                action: \"continue\",\n                label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Window.Continue\"),\n                default: true,\n                callback: async (event, button, dialog) => {\n                  for (const key of classKeys) {\n                      const display = dialog.element.querySelector(`#hitDiceDisplay-${key}`);\n                      if (!display) continue;\n          \n                      const hitDiceToUse = parseInt(display?.textContent ?? \"0\");\n                      const hitDiceRollType = actorClasses[key].system.hd.denomination;\n                      \n                      if (!hitDiceToUse || hitDiceToUse === 0) {\n                          continue;\n                      }\n          \n                      for (let i = 0; i < hitDiceToUse; i++) {\n                          await actor.rollHitDie({ denomination: hitDiceRollType });\n                      }\n                  }\n                }\n            },\n            {\n                action: \"cancel\",\n                label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Cancel\"),\n                callback: () => false\n            }],\n            default: \"cancel\",\n    render: (event) => {\n        let globalHitDiceSelected = 0;\n        const dialog = event.target;\n        const dialogElement = dialog?.element;\n\n        dialogElement.addEventListener('click', event2 => {\n            const targetClick = event2.target;\n            const isIncrement = targetClick.classList.contains('hit-dice-increment');\n            const isDecrement = targetClick.classList.contains('hit-dice-decrement');\n\n            if (isIncrement || isDecrement) {\n                const key = targetClick.dataset.key;\n                const spanDisplay = dialogElement.querySelector(`#hitDiceDisplay-${key}`);\n                let currentValue = parseInt(spanDisplay.textContent);\n\n                let totalLevels = classKeys.reduce((acc, key) => acc + parseInt(actorClasses[key].system.levels), 0);\n                let totalAllowedHitDice;\n                if(actor.system.attributes.hp.value > 0) totalAllowedHitDice = Math.floor(totalLevels / 2);\n                else totalAllowedHitDice = totalLevels;\n\n                // Determine how many hit dice have been selected across all classes\n                globalHitDiceSelected = classKeys.reduce((total, classKey) => {\n                    const display = dialogElement.querySelector(`#hitDiceDisplay-${classKey}`);\n                    return total + (display ? parseInt(display.textContent) : 0);\n                }, 0);\n\n                let classAvailableHitDice = parseInt(actorClasses[key].system.levels) - parseInt(actorClasses[key].system.hd.spent);\n\n                let remainingAllowedHitDice = totalAllowedHitDice - globalHitDiceSelected + (isDecrement ? 1 : 0);\n\n                let maxValue = isIncrement ? Math.min(classAvailableHitDice, remainingAllowedHitDice + currentValue) : classAvailableHitDice;\n\n                if (isIncrement && currentValue < maxValue) {\n                    spanDisplay.textContent = currentValue + 1;\n                } else if (isDecrement && currentValue > 0) {\n                    spanDisplay.textContent = currentValue - 1;\n                }\n            }\n        });\n    }\n    })\n}\n\nif(args[0].macroPass === \"postActiveEffects\" && game.gps.getCprConfig({itemUuid: macroItem.uuid}).animEnabled) {\n    await new Sequence()\n    .sound()\n        .file(\"assets/sounds/horn-sound.ogg\") //Change sound here\n        .fadeInAudio(500)\n        .fadeOutAudio(500)\n        .play()\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -317,6 +313,39 @@
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "GPS"
+      ]
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

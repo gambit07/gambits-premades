@@ -1,35 +1,36 @@
-export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, isTeleport, waypoints, userId}) {
-    let gmUser = game.gps.getPrimaryGM();
-    let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
-    let region = await fromUuid(regionUuid);
-    let token = await fromUuid(tokenUuid);
-    if(!token || !region || !regionScenario) return;
+export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionScenario, isTeleport, waypoints, userId, tokenDocument, regionDocument}) {
+    if(game.user.id !== userId || !game.gpsSettings.opportunityAttackEnabled) return;
+    const debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
+    if(!["onEnter", "onExit", "onTurnStart", "onTurnEnd"].includes(regionScenario)) return;
+    if((isTeleport || CONFIG.Token.movement.actions[waypoints?.[0]?.action]?.teleport)
+        && (regionScenario === "onEnter" || regionScenario === "onExit")) return;
 
-    if ((token.actor.type !== 'npc' && token.actor.type !== 'character')) return;
-    if(!game.gpsSettings.opportunityAttackEnabled) return;
+    const region = regionDocument ?? fromUuidSync(regionUuid);
+    const token = tokenDocument ?? fromUuidSync(tokenUuid);
+    if(!region || !token?.actor || !["npc", "character"].includes(token.actor.type)) return;
 
-    if(game.user.id !== userId) return;
+    const originFlags = region.flags["gambits-premades"];
+    if(!originFlags?.actorUuid || !originFlags.tokenUuid) return;
+    const isTurnEvent = regionScenario === "onTurnStart" || regionScenario === "onTurnEnd";
+    if(isTurnEvent ? originFlags.actorUuid !== token.actor.uuid : originFlags.actorUuid === token.actor.uuid) return;
 
-    let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled");
-    if(oaDisabled) return;
-
-    const effectOriginActor = await fromUuid(region.flags["gambits-premades"].actorUuid);
-    const effectOriginToken = await fromUuid(region.flags["gambits-premades"].tokenUuid);
-
-    if(regionScenario === "onTurnStart") {
-        let behaviors = region.behaviors.filter(b => b.name === "onExit" || b.name === "onEnter");
-        for(let behavior of behaviors) {
-            await behavior.update({"disabled": true});
+    if(regionScenario === "onTurnStart") return;
+    if(region.getFlag("gambits-premades", "regionDisabled")) return;
+    if(!isTurnEvent && game.combat?.current?.tokenId !== token.id) {
+        if(debugEnabled) {
+            const effectOriginActor = fromUuidSync(originFlags.actorUuid);
+            if(effectOriginActor) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed due to not tokens turn in combat`);
         }
         return;
     }
+    if(!isTurnEvent && !token.object) return;
+    if(regionScenario === "onExit" && token.regions.has(region)) return;
+
+    const effectOriginToken = fromUuidSync(originFlags.tokenUuid);
+    const effectOriginActor = fromUuidSync(originFlags.actorUuid);
+    if(!effectOriginActor || !effectOriginToken) return;
 
     if(regionScenario === "onTurnEnd") {
-        let behaviors = region.behaviors.filter(b => b.name === "onExit" || b.name === "onEnter");
-        for(let behavior of behaviors) {
-            await behavior.update({"disabled": false});
-        }
-
         let recalculate = false;
         let tokenSize = Math.max(effectOriginToken.width, effectOriginToken.height);
 
@@ -55,75 +56,18 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         let processedOaSize = processOaSize({token: effectOriginToken, maxRange});
         const {regionShape, elevationTop, elevationBottom} = processedOaSize;
 
-        region.update({
-            elevation: { bottom: elevationBottom, top: elevationTop },
-            shapes: region.shapes.map(shape => ({
-                ...shape,
-                ...regionShape,
-            }))
+        await region.update({
+            elevation: { bottom: elevationBottom, top: elevationTop, topInclusive: true },
+            levels: effectOriginToken.level ? [effectOriginToken.level] : [],
+            shapes: [regionShape]
         });
 
         return;
     }
 
-    let currentCombatant = canvas.tokens.get(game.combat?.current.tokenId);
-    if(currentCombatant?.id !== token.object.id) {
-        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed due to not tokens turn in combat`);
-        return; // Avoid initiating opportunity attack when it's not a token's turn
-    }
-    
-    let hasSentinel = effectOriginActor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c");
-    let hasPolearmReaction = effectOriginActor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "1c6b264d-ea96-42c4-8237-e42d3e41bb96");
-    let hasDeadlyReachReaction = effectOriginActor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "e38813a6-9707-4ff3-bf2e-59c3c91b86ac");
-
-    let browserUser = game.gps.getBrowserUser({ actorUuid: effectOriginActor.uuid });
-
-    let result;
-    let dialogTitle;
-    let dialogId;
-    let braceItemUuid;
-
-    // Check if origin token can see token moving
-    if(!MidiQOL.canSee(effectOriginToken, token)) {
-        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed - ${effectOriginToken.actor.name} cannot see ${token.actor.name}`);
-        return;
-    }
-
-    if(regionScenario === "onExit") {
-        if(isTeleport) return;
-        if(token.regions.has(region)) return;
-        let dragonTurtleShield = effectOriginActor.items.getName("Dragon Turtle Dueling Shield");
-        if(dragonTurtleShield) await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
-        
-        dialogTitle = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.Title");
-        dialogId = "opportunityattack";
-    }
-    else if(regionScenario === "onEnter") {
-        if(isTeleport) return;
-        if (hasPolearmReaction) {
-            let weaponNames = ["glaive","halberd","pike","quarterstaff","spear"];
-            let hasPolearmWeapon = effectOriginActor.items.some(item => item.system?.type?.baseItem && weaponNames.includes(item.system?.type?.baseItem.toLowerCase()) && item.system.equipped === true);
-            if(!hasPolearmWeapon) return;
-            dialogTitle = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.TitlePolearm");
-            dialogId = "polearmopportunityattack";
-        }
-        else if(effectOriginActor.classes?.fighter && effectOriginActor.classes?.fighter?.subclass?.name === "Battle Master") {
-            let braceItem = effectOriginActor.items.getName("Maneuvers: Brace");
-            if(!braceItem) return;
-            braceItemUuid = braceItem.uuid;
-            dialogTitle = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.TitleBrace");
-            dialogId = "maneuversbraceopportunityattack";
-        }
-        else if (hasDeadlyReachReaction) {
-            dialogTitle = game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.TitleDeadlyReach");
-            dialogId = "deadlyreachopportunityattack";
-        }
-        else {
-            return;
-        }
-    }
-
-    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Opportunity Attack Timeout`));
+    if(!effectOriginToken.object) return;
+    const entryReaction = regionScenario === "onEnter" ? getOpportunityAttackEntry(effectOriginActor) : null;
+    if(regionScenario === "onEnter" && !entryReaction) return;
 
     // Check if origin token has already used reaction
     if (MidiQOL.hasUsedReaction(effectOriginActor)) {
@@ -162,6 +106,14 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         return;
     }
 
+    // Check if origin token can see token moving
+    if(!MidiQOL.canSee(effectOriginToken, token)) {
+        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed - ${effectOriginToken.actor.name} cannot see ${token.actor.name}`);
+        return;
+    }
+
+    let hasSentinel = effectOriginActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "f7c0b8c6-a36a-4f29-8adc-38ada0ac186c");
+
     //Check if token is disengaged and origin token does not have Sentinel
     let isDisengaged = token.actor.effects.some(e => e.name.toLowerCase() === "disengage");
     if(isDisengaged && !hasSentinel) {
@@ -186,32 +138,41 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     //Check if origin token is Charmed by initiating token
     let isCharmed = effectOriginActor.appliedEffects.find(e => e.name.toLowerCase() === "charmed");
     if(isCharmed) {
-        let charmerItem = fromUuidSync(isCharmed.origin);
-        let charmer;
-        if(charmerItem) charmer = charmerItem.parent.id;
-        if(charmer === token.actor.id) {
+        const charmer = isCharmed.getFlag("gambits-premades", "charmerUuid") ?? isCharmed.getSourceActor()?.uuid;
+        if(charmer === token.actor.uuid) {
             if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed because origin token is charmed by token`);
             return;
         }
     }
 
-    // Check if Levels believes tokens are on different levels
-    if(CONFIG?.Levels?.API?.testCollision?.({x: effectOriginToken.object.center.x, y: effectOriginToken.object.center.y, z: effectOriginToken.object.losHeight},{x: token.object.center.x, y: token.object.center.y, z: token.object.losHeight})) {
-        if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed because Levels indicates the tokens cannot see each other`);
-        return;
-    }
+    const {hasWarCaster, favoriteWeaponUuid, validWeapons} = processValidOptions({actor: effectOriginActor});
+    if (!validWeapons.length) return;
 
     //Initial Checks Passed, Pause Movement
-    const resumeMovement = await token.pauseMovement();
+    let continuation = token.pauseMovement();
+    let movementStopped = false;
+    const resumeMovement = async () => {
+        const resume = continuation;
+        continuation = undefined;
+        await resume?.();
+    };
+    try {
 
+    if(regionScenario === "onExit" && effectOriginActor.items.getName("Dragon Turtle Dueling Shield")) {
+        await effectOriginActor.setFlag("gambits-premades", "dragonTurtleShieldOA", true);
+    }
+
+    let gmUser = game.gps.getPrimaryGM();
+    let browserUser = game.gps.getBrowserUser({ actorUuid: effectOriginActor.uuid });
+    const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', 'Opportunity Attack Timeout'));
+    const dialogId = entryReaction?.dialogId ?? "opportunityattack";
+    const dialogTitle = game.i18n.localize(`GAMBITSPREMADES.Dialogs.Automations.GenericFeatures.OpportunityAttack.${entryReaction?.titleKey ?? "Title"}`);
+    const braceItemUuid = entryReaction?.braceItemUuid;
+    let result;
     let oaDisadvantage = token.actor.flags["gambits-premades"]?.oaDisadvantage;
     let oaDisadvantageSource = effectOriginActor.flags["gambits-premades"]?.oaDisadvantageSource;
     const originDisadvantage = oaDisadvantage || oaDisadvantageSource;
-    
-    let processedValidOptions = await processValidOptions({actor: effectOriginActor});
-    const {hasWarCaster, favoriteWeaponUuid, validWeapons} = processedValidOptions;
-    if (!validWeapons.length) return await resumeMovement();
-    
+
     let dialogContent = `
         <div class="gps-dialog-container">
             <div class="gps-dialog-section">
@@ -250,22 +211,24 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
     if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-        let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+        let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid, focusTokenUuid: token.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
         
-        let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+        let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid, focusTokenUuid: token.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
     
-        result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+        result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
     } else {
-        result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+        result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.uuid, focusTokenUuid: token.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
     }
             
     const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, source, type } = result || {};
 
     if (!userDecision) {
         await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
-        return await resumeMovement();
+        return await resumeMovement?.();
     }
     else if (userDecision) {
+        const chosenWeapon = validWeapons.find(weapon => weapon.uuid === selectedItemUuid);
+        if(!chosenWeapon) return;
         if (braceItemUuid) {
             let braceRoll;
             const options = {
@@ -281,24 +244,24 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
                 }
             };
 
-            if(source && source === "user") braceRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
-            else if(source && source === "gm") braceRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
-            if(!braceRoll.baseLevel && !braceRoll.castLevel && !braceRoll.checkHits && !braceRoll.itemType) return await resumeMovement();
+            if(source && source === "user") braceRoll = await game.gps.queryUser("remoteCompleteItemUse", browserUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
+            else if(source && source === "gm") braceRoll = await game.gps.queryUser("remoteCompleteItemUse", gmUser, { itemUuid: braceItemUuid, actorUuid: effectOriginActor.uuid, options: options });
+            if(!braceRoll?.completed) return await resumeMovement?.();
         }
 
         if (!selectedItemUuid) {
             console.log("No weapon selected");
-            return await resumeMovement();
+            return await resumeMovement?.();
         }
 
-        let chosenWeapon = await fromUuid(selectedItemUuid);
+
         let rsakCheck = chosenWeapon.system.activities?.some(a => a.actionType === "rsak")
         let favoriteWeaponCheck = favoriteWeaponUuid;
         let favoriteWeapon;
         if(favoriteWeaponCheck !== "null") favoriteWeapon = await fromUuid(favoriteWeaponCheck);
         if(favoriteCheck && favoriteWeaponCheck) {
            await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
-           if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
+           if (favoriteWeapon && favoriteWeapon.uuid !== chosenWeapon.uuid) {
            await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
            }
         }
@@ -323,45 +286,105 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
         }
 
         let itemRoll;
-        if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options, isWeapon: true });
-        else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options, isWeapon: true });
+        if(source && source === "user") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options, isWeapon: true });
+        else if(source && source === "gm") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: effectOriginActor.uuid, options: options, isWeapon: true });
 
-        let checkHits = itemRoll.checkHits;
+        let checkHits = itemRoll?.checkHits;
 
         await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
 
-        if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) return await resumeMovement();
+        if(!itemRoll?.completed) return await resumeMovement?.();
 
-        await game.gps.addReaction({actorUuid: `${effectOriginActor.uuid}`});
+        if (!itemRoll.reactionUsed) await game.gps.addReaction({actorUuid: `${effectOriginActor.uuid}`});
 
         if(hasSentinel && checkHits) {
             await game.gps.stopMovementExit({token});
+            movementStopped = true;
 
             let effectData = [
                 {
-                    "icon": `${hasSentinel.img}`,
+                    img: `${hasSentinel.img}`,
                     "origin": `${effectOriginActor.uuid}`,
-                    "duration": {
-                    "seconds": 1
-                    },
+                    "duration": { expiry: "turnEnd" },
                     "disabled": false,
                     "name": "Sentinel - Movement",
-                    "changes": [
-                    {
-                        "key": "system.attributes.movement.all",
-                        "mode": 0,
-                        "value": "0",
-                        "priority": 20
-                    }
-                    ],
+                    system: { changes: [
+                    ...game.gps.movementSpeedChanges("0", 20)
+                    ] },
                     "transfer": false
                 }
             ];
 
             await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: token.actor.uuid, effects: effectData });
         }
-        else await resumeMovement();
+        else await resumeMovement?.();
     }
+    } finally {
+        await effectOriginActor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
+        if(!movementStopped) await resumeMovement();
+    }
+}
+
+function getOpportunityAttackEntry(actor) {
+    if(actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "1c6b264d-ea96-42c4-8237-e42d3e41bb96")) {
+        const weaponNames = ["glaive", "halberd", "pike", "quarterstaff", "spear"];
+        if(!actor.items.some(i => i.system?.equipped === true && weaponNames.includes(i.system?.type?.baseItem?.toLowerCase()))) return null;
+        return {dialogId: "polearmopportunityattack", titleKey: "TitlePolearm"};
+    }
+    if(actor.classes?.fighter?.subclass?.name === "Battle Master") {
+        const braceItem = actor.items.getName("Maneuvers: Brace");
+        return braceItem ? {dialogId: "maneuversbraceopportunityattack", titleKey: "TitleBrace", braceItemUuid: braceItem.uuid} : null;
+    }
+    if(actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "e38813a6-9707-4ff3-bf2e-59c3c91b86ac")) {
+        return {dialogId: "deadlyreachopportunityattack", titleKey: "TitleDeadlyReach"};
+    }
+    return null;
+}
+
+let opportunityAttackRegionRefresh = Promise.resolve();
+
+export function syncOpportunityAttackRegions(combat = game.combat) {
+    if(game.user.id !== game.gps.getPrimaryGM() || !game.gpsSettings.opportunityAttackEnabled || !combat?.started) return;
+    const refresh = async () => {
+        if(!combat.started) return;
+        for(const combatant of combat.combatants) {
+            const regionUuid = combatant.getFlag("gambits-premades", "opportunityAttackRegion");
+            if(!regionUuid) continue;
+            const region = fromUuidSync(regionUuid);
+            const token = combatant.token;
+            if(!region || !token || region.parent !== token.parent || region.getFlag("gambits-premades", "tokenUuid") !== token.uuid) continue;
+            const actor = combatant.actor;
+            if(!actor) continue;
+            const updates = {};
+            if(region.attachment?.token?.id !== token.id) {
+                updates.attachment = {token: token.id};
+                updates.levels = token.level ? [token.level] : [];
+                const maxRange = region.getFlag("gambits-premades", "opportunityAttackRegionMaxRange");
+                if(Number.isFinite(maxRange)) {
+                    const {regionShape, elevationTop, elevationBottom} = processOaSize({token, maxRange});
+                    updates.shapes = [regionShape];
+                    updates.elevation = {bottom: elevationBottom, top: elevationTop, topInclusive: true};
+                }
+            }
+            if(!region.restriction?.enabled || region.restriction.type !== "move") {
+                updates.restriction = {enabled: true, type: "move"};
+            }
+            if(Object.keys(updates).length) await region.update(updates);
+            const turnDisabled = combat.current?.tokenId === token.id;
+            await setOpportunityAttackBehaviors(region, turnDisabled);
+        }
+    };
+    opportunityAttackRegionRefresh = opportunityAttackRegionRefresh.then(refresh, refresh);
+    return opportunityAttackRegionRefresh;
+}
+
+async function setOpportunityAttackBehaviors(region, turnDisabled) {
+    const updates = [];
+    for(const behavior of region.behaviors) {
+        if(behavior.type !== "executeScript" || !["onExit", "onEnter"].includes(behavior.name)) continue;
+        if(behavior.disabled !== turnDisabled) updates.push({_id: behavior.id, disabled: turnDisabled});
+    }
+    if(updates.length) await region.updateEmbeddedDocuments("RegionBehavior", updates);
 }
 
 export async function enableOpportunityAttack(combat, combatEvent) {
@@ -369,6 +392,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
     async function processCombatant(combatant) {
         const { actor } = combatant;
         const { token } = combatant;
+        if(!actor || !token) return;
         let browserUser = MidiQOL.playerForActor(actor);
     
         if (actor.type === 'npc' || actor.type === 'character') {
@@ -378,27 +402,32 @@ export async function enableOpportunityAttack(combat, combatEvent) {
             let processedOaSize = processOaSize({token, maxRange});
             const {regionShape, elevationTop, elevationBottom} = processedOaSize;
     
+            const turnDisabled = Boolean(oaDisabled || (combatant.parent?.started && combatant.parent.current?.tokenId === token.id));
             const regionData = {
                 name: `${actor.name} OA Region`,
-                color: browserUser.color,
-                elevation: { bottom: elevationBottom, top: elevationTop },
+                color: browserUser?.color ?? game.user.color,
+                elevation: { bottom: elevationBottom, top: elevationTop, topInclusive: true },
+                levels: token.level ? [token.level] : [],
+                attachment: {token: token.id},
+                restriction: {enabled: true, type: "move"},
+                visibility: CONST.REGION_VISIBILITY.LAYER,
                 shapes: [regionShape],
                 behaviors: [
                     {
                         type: "executeScript",
                         name: "onExit",
-                        disabled: false,
+                        disabled: turnDisabled,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onExit", isTeleport: event.data.movement.passed.waypoints?.[0]?.action === "displace" ? true : false, waypoints: event.data.movement.passed.waypoints, userId: event.user.id});`,
+                            source: `if(!event.user.isSelf) return; await game.gps.opportunityAttackScenarios({tokenDocument: event.data.token, regionDocument: region, regionScenario: "onExit", userId: event.user.id, isTeleport: CONFIG.Token.movement.actions[event.data.movement.passed.waypoints?.[0]?.action]?.teleport, waypoints: event.data.movement.passed.waypoints});`,
                             events: ['tokenMoveOut']
                         }
                     },
                     {
                         type: "executeScript",
                         name: "onEnter",
-                        disabled: false,
+                        disabled: turnDisabled,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid === event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onEnter", isTeleport: event.data.movement.passed.waypoints?.[0]?.action === "displace" ? true : false, waypoints: event.data.movement.passed.waypoints, userId: event.user.id});`,
+                            source: `if(!event.user.isSelf) return; await game.gps.opportunityAttackScenarios({tokenDocument: event.data.token, regionDocument: region, regionScenario: "onEnter", userId: event.user.id, isTeleport: CONFIG.Token.movement.actions[event.data.movement.passed.waypoints?.[0]?.action]?.teleport, waypoints: event.data.movement.passed.waypoints});`,
                             events: ['tokenMoveIn']
                         }
                     },
@@ -407,7 +436,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onTurnEnd",
                         disabled: false,
                         system: {
-                            source: `let oaDisabled = await region.getFlag("gambits-premades", "regionDisabled"); if(oaDisabled) return; if(region.flags["gambits-premades"].actorUuid !== event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onTurnEnd", userId: event.user.id});`,
+                            source: `if(!event.user.isSelf) return; await game.gps.opportunityAttackScenarios({tokenDocument: event.data.token, regionDocument: region, regionScenario: "onTurnEnd", userId: event.user.id});`,
                             events: ['tokenTurnEnd']
                         }
                     },
@@ -416,7 +445,7 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                         name: "onTurnStart",
                         disabled: false,
                         system: {
-                            source: `if(region.flags["gambits-premades"].actorUuid !== event.data.token.actor.uuid) return; await game.gps.opportunityAttackScenarios({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: "onTurnStart", userId: event.user.id});`,
+                            source: `if(!event.user.isSelf) return; await game.gps.opportunityAttackScenarios({tokenDocument: event.data.token, regionDocument: region, regionScenario: "onTurnStart", userId: event.user.id});`,
                             events: ['tokenTurnStart']
                         }
                     }
@@ -433,13 +462,10 @@ export async function enableOpportunityAttack(combat, combatEvent) {
                 }
             };
     
-            const createdRegions = await canvas.scene.createEmbeddedDocuments('Region', [regionData]);
+            const createdRegions = await token.parent.createEmbeddedDocuments('Region', [regionData]);
             const firstRegion = createdRegions[0];
     
             try {
-                let attachedRegions = actor.getFlag('gambits-premades', 'attachedRegions') || [];
-                attachedRegions.push(firstRegion.uuid);
-                await actor.setFlag('gambits-premades', 'attachedRegions', attachedRegions);
                 await combatant.setFlag("gambits-premades", "opportunityAttackRegion", firstRegion.uuid);
                 if (firstRegion.object && firstRegion.object.tooltip) firstRegion.object.tooltip.visible = false;
                 if (oaDisabled) await firstRegion.setFlag("gambits-premades", "regionDisabled", true);
@@ -450,43 +476,25 @@ export async function enableOpportunityAttack(combat, combatEvent) {
     }
 
     if(combatEvent === "startCombat") {
-        let levelsUI = CONFIG.Levels?.UI?.stairEnabled;
-        if(levelsUI) CONFIG.Levels.UI.stairEnabled = false;
-
         for (let combatant of combat.combatants.values()) {
             await processCombatant(combatant);
         }
-
-        if(levelsUI) CONFIG.Levels.UI.stairEnabled = true;
     }
 
     if(combatEvent === "enterCombat") {
-        let levelsUI = CONFIG.Levels?.UI?.stairEnabled;
-        if(levelsUI) CONFIG.Levels.UI.stairEnabled = false;
-
         let combatant = combat;
         await processCombatant(combatant);
-
-        if(levelsUI) CONFIG.Levels.UI.stairEnabled = true;
     }
+    await syncOpportunityAttackRegions(combatEvent === "startCombat" ? combat : combat.parent);
 };
 
 export async function disableOpportunityAttack(combat, combatEvent) {
     async function processCombatant(combatant) {
         const { actor } = combatant;
-        let dragonTurtleFlag = await actor.getFlag("gambits-premades", "dragonTurtleShieldOA");
+        let dragonTurtleFlag = actor?.getFlag("gambits-premades", "dragonTurtleShieldOA");
         if (dragonTurtleFlag) await actor.unsetFlag("gambits-premades", "dragonTurtleShieldOA");
 
         let regionFlag = await combatant.getFlag("gambits-premades", "opportunityAttackRegion");
-        let attachedRegions = actor.getFlag('gambits-premades', 'attachedRegions') || [];
-        if (attachedRegions.length !== 0) {
-            attachedRegions = attachedRegions.filter(uuid => uuid !== regionFlag);
-            await actor.setFlag('gambits-premades', 'attachedRegions', attachedRegions);
-        }
-        else {
-            return await actor.unsetFlag('gambits-premades', 'attachedRegions');
-        }
-
         let regionData = null;
 
         try {
@@ -513,11 +521,12 @@ export async function disableOpportunityAttack(combat, combatEvent) {
 };
 
 function processOaSize({token, maxRange}) {
-    const tokenCenterX = token.x + token.object.w / 2;
-    const tokenCenterY = token.y + token.object.h / 2;
-    const gridSize = canvas.scene.grid.size;
-    const gridDistance = canvas.scene.grid.distance;
-    const gridType = canvas.scene.grid.type;
+    const {width, height} = token.getSize();
+    const tokenCenterX = token.x + width / 2;
+    const tokenCenterY = token.y + height / 2;
+    const gridSize = token.parent.grid.size;
+    const gridDistance = token.parent.grid.distance;
+    const gridType = token.parent.grid.type;
     const radius = maxRange * gridSize / gridDistance;
     const points = [];
     let elevationTop = token.elevation + maxRange;
@@ -593,21 +602,22 @@ function processOaSize({token, maxRange}) {
         };
     }
 
+    regionShape.origin = {x: tokenCenterX, y: tokenCenterY};
     return {regionShape, elevationTop, elevationBottom}
 }
 
-async function processValidOptions({actor}) {
+function processValidOptions({actor}) {
     // Check valid weapons
     let hasWarCaster = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
     let warCasterMelee = true;
     let warCasterRange = true;
     if (hasWarCaster) {
-        if (game.modules.get("chris-premades")?.active) {
-            let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
-            if (cprConfig && 'warCasterRange' in cprConfig) {
+        if (game.modules.get("cat")?.active) {
+            let cprConfig = cat.utils.automationUtils.getConfigValues(hasWarCaster, ["warCasterRange", "warCasterMelee"]);
+            if (typeof cprConfig.warCasterRange === 'boolean') {
                 warCasterRange = cprConfig.warCasterRange;
             }
-            if (cprConfig && 'warCasterMelee' in cprConfig) {
+            if (typeof cprConfig.warCasterMelee === 'boolean') {
                 warCasterMelee = cprConfig.warCasterMelee;
             }
         }
@@ -627,7 +637,7 @@ async function processValidOptions({actor}) {
             if (warCasterMelee) allowedActionTypes.push("msak");
             if (warCasterRange) allowedActionTypes.push("rsak", "save");
         
-            warCasterSpell = (item.type === "spell" && item.system?.activation?.type === "action" && acts.some(a => allowedActionTypes.includes(a.actionType)) && ( item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual") ) && acts.some(a => ["creature", "enemy"].includes(a.target?.affects?.type))) || (warCasterMelee && overrideItems.includes(item.name));
+            warCasterSpell = (item.type === "spell" && acts.some(a => a.activation?.type === "action" && (allowedActionTypes.includes(a.actionType) || (warCasterRange && a.type === "save")) && ["creature", "enemy", "creatureOrObject"].includes(a.target?.affects?.type)) && ( item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual") )) || (warCasterMelee && overrideItems.includes(item.name));
         }
       
         return qualifiesWeaponOrFeat || warCasterSpell;
@@ -663,13 +673,13 @@ async function processValidRange({actor, token}) {
     let warCasterRange = true;
     let isMetric = false;
     if (hasWarCaster) {
-        if (game.modules.get("chris-premades")?.active) {
-            let cprConfig = hasWarCaster?.getFlag("chris-premades", "config");
-            if (cprConfig && 'warCasterRange' in cprConfig) {
+        if (game.modules.get("cat")?.active) {
+            let cprConfig = cat.utils.automationUtils.getConfigValues(hasWarCaster, ["warCasterRange", "warCasterMelee"]);
+            if (typeof cprConfig.warCasterRange === 'boolean') {
                 warCasterRange = cprConfig.warCasterRange;
             }
             
-            if (cprConfig && 'warCasterMelee' in cprConfig) {
+            if (typeof cprConfig.warCasterMelee === 'boolean') {
                 warCasterMelee = cprConfig.warCasterMelee;
             }
         }
@@ -682,7 +692,7 @@ async function processValidRange({actor, token}) {
     );
 
     let validSpells = actor.items.filter(item =>
-        (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.actionType === "save")) && (item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual")) && item.system.activities?.some(a => ["creature", "enemy", "creatureOrObject"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
+        (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.type === "save")) && (item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual")) && item.system.activities?.some(a => ["creature", "enemy", "creatureOrObject"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
     );
 
     isMetric ||= validSpells.some(item => ((item.system?.range?.units ?? "").toLowerCase() === "m") || (item.system?.activities ?? []).some(a => ((a.range?.units ?? "").toLowerCase() === "m")));
@@ -697,14 +707,14 @@ async function processValidRange({actor, token}) {
 
     let maxRange;
     let mwakRange = actor.flags["midi-qol"]?.range?.mwak;
-    if (onlyThrownWeapons || validSpells.length > 0) {
-        maxRange = isMetric ? game.gps.convertFromFeet({ range: 5 }) : 5;
+    if (onlyThrownWeapons || !validWeapons.length) {
+        maxRange = isMetric ? game.gps.convertFromFeet({ range: 5, scene: token.parent }) : 5;
     } else {
         const result = validWeapons.reduce((acc, item) => {
             let activityMaxRange = item.system.activities
                 ?.filter(a => a?.actionType === "msak" || a?.actionType === "mwak")
                 .reduce((actMax, activity) => {
-                    let rangeVal = activity.range?.value;
+                    let rangeVal = Number(activity.range?.reach ?? activity.range?.value);
                     return (typeof rangeVal === "number" && !isNaN(rangeVal)) ? Math.max(actMax, rangeVal) : actMax;
                 }, 0);
 
@@ -734,12 +744,12 @@ async function processValidRange({actor, token}) {
         maxRange = 4 * tokenSize;
     }
     else {      
-        const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * canvas.scene.dimensions.distance;
+        const tokenSizeOffset = Math.max(token.width, token.height) * 0.5 * token.parent.grid.distance;
         
         if(isMetric) maxRange = maxRange + tokenSizeOffset;
-        else maxRange = (game.gps.convertFromFeet({ range: maxRange })) + tokenSizeOffset; // Never gunna remember why unless noted, I'm doing this as a backup to check IF scene is set to metric, but weapon is not
+        else maxRange = (game.gps.convertFromFeet({ range: maxRange, scene: token.parent })) + tokenSizeOffset; // Never gunna remember why unless noted, I'm doing this as a backup to check IF scene is set to metric, but weapon is not
     
-        if (mwakRange) maxRange += (game.gps.convertFromFeet({ range: mwakRange }));
+        if (mwakRange) maxRange += (game.gps.convertFromFeet({ range: mwakRange, scene: token.parent }));
     }
 
     return {maxRange, validWeapons, mwakRange, oaDisabled};
@@ -758,9 +768,9 @@ async function handleMwakRange(effectOriginActor, region) {
     if (!effectOriginActor.flags["midi-qol"]?.range?.mwak) return false;
 
     let mwakExpire = effectOriginActor.appliedEffects
-        .filter(effect => effect.duration.turns == 1)
+        .filter(effect => effect.duration.units === "turns" && effect.duration.value === 1)
         .reduce((acc, effect) => {
-            const change = effect.changes.find(change => change.key == "flags.midi-qol.range.mwak");
+            const change = effect.system.changes.find(change => change.key == "flags.midi-qol.range.mwak");
             return change ? acc + Number(change.value) : acc;
         }, 0);
 

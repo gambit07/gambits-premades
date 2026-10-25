@@ -6,34 +6,30 @@
     {
       "origin": "Actor.AIqSi2gtDqMmCsIl.Item.KRL5vlmfsP90KgwS",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Grasping Arrow",
       "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
       "_id": "ODWwJEZO2OfbPZCX",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "system.attributes.movement.walk",
-          "mode": 2,
-          "value": "-10",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.graspingArrow @actorUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.movement.speeds.walk",
+            "value": -10,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.graspingArrow @actorUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -44,7 +40,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -60,35 +55,36 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!HXiUB8b13hEHEdsp.ODWwJEZO2OfbPZCX"
     },
     {
       "origin": "Actor.AIqSi2gtDqMmCsIl.Item.KRL5vlmfsP90KgwS",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Grasping Arrow - Movement",
       "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
       "_id": "O4qMbR0ctOVrVzmh",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.graspingArrow @actorUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.graspingArrow @actorUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -99,7 +95,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [
@@ -117,35 +112,43 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!HXiUB8b13hEHEdsp.O4qMbR0ctOVrVzmh"
     },
     {
       "origin": "Actor.AIqSi2gtDqMmCsIl.Item.KRL5vlmfsP90KgwS",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 12,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "seconds",
+        "expiry": "sourceStart"
       },
       "disabled": false,
       "name": "Shadow Arrow",
       "img": "icons/skills/ranged/arrows-flying-salvo-purple.webp",
       "_id": "3jbcLQeq7xscB7Zx",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "ATL.detectionModes.lightPerception.range",
-          "mode": 5,
-          "value": "5",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "token.detectionModes.lightPerception.enabled",
+            "value": true,
+            "priority": 19,
+            "type": "override"
+          },
+          {
+            "key": "token.detectionModes.lightPerception.range",
+            "value": 5,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -156,12 +159,9 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnStartSource"
-          ],
+          "specialDuration": [],
           "enableCondition": "",
           "selfTarget": false,
           "selfTargetAlways": false,
@@ -170,44 +170,41 @@
         "dnd5e": {
           "riders": {
             "statuses": []
-          },
-          "dependents": [
-            {
-              "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.uOrBiBy04v3S9w6U.Actor.SNZJsEKbROB1q6bT.ActiveEffect.x2a8hX4fYd6J0Gve"
-            }
-          ]
+          }
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!HXiUB8b13hEHEdsp.3jbcLQeq7xscB7Zx"
     },
     {
       "origin": "Actor.AIqSi2gtDqMmCsIl.Item.KRL5vlmfsP90KgwS",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 12,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "seconds",
+        "expiry": "sourceStart"
       },
       "disabled": false,
       "name": "Enfeebling Arrow",
       "img": "icons/weapons/ammunition/arrow-broadhead-bent-teal.webp",
       "_id": "rwfjw7ZdrE79qnv9",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.enfeeblingArrow, preDamageRollComplete",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.enfeeblingArrow, preDamageRollComplete",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -218,12 +215,9 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnStartSource"
-          ],
+          "specialDuration": [],
           "enableCondition": "",
           "selfTarget": false,
           "selfTargetAlways": false,
@@ -236,35 +230,37 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!HXiUB8b13hEHEdsp.rwfjw7ZdrE79qnv9"
     },
     {
       "origin": "Actor.AIqSi2gtDqMmCsIl.Item.KRL5vlmfsP90KgwS",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 12,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "seconds",
+        "expiry": "targetEnd"
       },
       "disabled": false,
       "name": "Banishing Arrow",
       "img": "icons/weapons/ammunition/arrowhead-glowing-blue.webp",
       "_id": "sHvO3h6X0O0ohneV",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "ATL.hidden",
-          "mode": 0,
-          "value": "true",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.execute.GM",
+            "value": "function.game.gps.effectTokenHidden",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -275,12 +271,9 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnEnd"
-          ],
+          "specialDuration": [],
           "enableCondition": "",
           "selfTarget": false,
           "selfTargetAlways": false,
@@ -293,41 +286,33 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!HXiUB8b13hEHEdsp.sHvO3h6X0O0ohneV"
     },
     {
       "origin": "Actor.AIqSi2gtDqMmCsIl.Item.KRL5vlmfsP90KgwS",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Arcane Shot",
       "img": "icons/magic/fire/projectile-arrow-fire-purple.webp",
       "_id": "vTTq7IsEpwHNoR1H",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.arcaneShot, postAttackRollComplete",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.arcaneShot",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.arcaneShot, postAttackRollComplete",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -338,9 +323,8 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
-          "macroRepeat": "startEndEveryTurn",
+          "macroRepeat": "none",
           "specialDuration": []
         },
         "dnd5e": {
@@ -350,8 +334,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!HXiUB8b13hEHEdsp.vTTq7IsEpwHNoR1H"
     }
   ],
@@ -371,7 +360,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -418,7 +407,7 @@
             {
               "custom": {
                 "enabled": true,
-                "formula": "@scale.arcane-archer.arcane-shot-options.formula"
+                "formula": "(2 + 2 * floor(@classes.fighter.levels / 18))d6"
               },
               "number": null,
               "denomination": 0,
@@ -442,8 +431,8 @@
             "wis"
           ],
           "dc": {
-            "calculation": "spellcasting",
-            "formula": ""
+            "calculation": "",
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -513,7 +502,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -626,7 +615,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -683,7 +672,7 @@
             {
               "custom": {
                 "enabled": true,
-                "formula": "@scale.arcane-archer.arcane-shot-options.formula"
+                "formula": "(2 + 2 * floor(@classes.fighter.levels / 18))d6"
               },
               "number": null,
               "denomination": 0,
@@ -761,7 +750,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -813,7 +802,7 @@
             {
               "custom": {
                 "enabled": true,
-                "formula": "@scale.arcane-archer.arcane-shot-options.formula"
+                "formula": "(2 + 2 * floor(@classes.fighter.levels / 18))d6"
               },
               "number": null,
               "denomination": 0,
@@ -836,8 +825,8 @@
             "wis"
           ],
           "dc": {
-            "calculation": "spellcasting",
-            "formula": ""
+            "calculation": "",
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -907,7 +896,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -959,7 +948,7 @@
             {
               "custom": {
                 "enabled": true,
-                "formula": "@scale.arcane-archer.arcane-shot-options.formula"
+                "formula": "(2 + 2 * floor(@classes.fighter.levels / 18))d6"
               },
               "number": null,
               "denomination": 0,
@@ -983,8 +972,8 @@
             "con"
           ],
           "dc": {
-            "calculation": "spellcasting",
-            "formula": ""
+            "calculation": "",
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -1054,7 +1043,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -1114,8 +1103,8 @@
             "cha"
           ],
           "dc": {
-            "calculation": "spellcasting",
-            "formula": ""
+            "calculation": "",
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -1185,7 +1174,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -1216,10 +1205,11 @@
             "type": ""
           },
           "affects": {
-            "choice": false,
-            "type": ""
+            "type": "creature",
+            "count": "1",
+            "choice": false
           },
-          "override": false,
+          "override": true,
           "prompt": false
         },
         "uses": {
@@ -1246,16 +1236,18 @@
             }
           ],
           "critical": {
-            "allow": true,
+            "allow": false,
             "bonus": ""
           },
           "onSave": "half"
         },
         "save": {
-          "ability": [],
+          "ability": [
+            "dex"
+          ],
           "dc": {
             "calculation": "",
-            "formula": ""
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -1288,7 +1280,7 @@
           "rollMode": "default",
           "chooseEffects": false,
           "toggleEffect": false,
-          "ignoreFullCover": false,
+          "ignoreFullCover": true,
           "autoConsume": false,
           "forceConsumeDialog": "default",
           "forceRollDialog": "default",
@@ -1325,7 +1317,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -1358,13 +1350,12 @@
             "count": ""
           },
           "affects": {
-            "choice": false,
             "type": "creature",
             "count": "",
-            "special": ""
+            "choice": false
           },
-          "override": false,
-          "prompt": false
+          "override": true,
+          "prompt": true
         },
         "uses": {
           "spent": 0,
@@ -1390,18 +1381,18 @@
             }
           ],
           "critical": {
-            "allow": true,
+            "allow": false,
             "bonus": ""
           },
-          "onSave": "none"
+          "onSave": "half"
         },
         "save": {
           "ability": [
             "dex"
           ],
           "dc": {
-            "calculation": "spellcasting",
-            "formula": ""
+            "calculation": "",
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -1434,7 +1425,7 @@
           "rollMode": "default",
           "chooseEffects": false,
           "toggleEffect": false,
-          "ignoreFullCover": false,
+          "ignoreFullCover": true,
           "autoConsume": false,
           "forceConsumeDialog": "default",
           "forceRollDialog": "default",
@@ -1470,7 +1461,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -1546,8 +1537,8 @@
             "cha"
           ],
           "dc": {
-            "calculation": "spellcasting",
-            "formula": ""
+            "calculation": "",
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -1617,7 +1608,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -1648,10 +1639,11 @@
             "type": ""
           },
           "affects": {
-            "choice": false,
-            "type": ""
+            "type": "creature",
+            "count": "1",
+            "choice": false
           },
-          "override": false,
+          "override": true,
           "prompt": false
         },
         "uses": {
@@ -1678,16 +1670,18 @@
             }
           ],
           "critical": {
-            "allow": true,
+            "allow": false,
             "bonus": ""
           },
           "onSave": "half"
         },
         "save": {
-          "ability": [],
+          "ability": [
+            "dex"
+          ],
           "dc": {
             "calculation": "",
-            "formula": ""
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -1720,7 +1714,7 @@
           "rollMode": "default",
           "chooseEffects": false,
           "toggleEffect": false,
-          "ignoreFullCover": false,
+          "ignoreFullCover": true,
           "autoConsume": false,
           "forceConsumeDialog": "default",
           "forceRollDialog": "default",
@@ -1757,7 +1751,7 @@
           "scaling": {
             "allowed": false
           },
-          "spellSlot": true,
+          "spellSlot": false,
           "targets": [
             {
               "type": "itemUses",
@@ -1791,13 +1785,12 @@
             "width": "1"
           },
           "affects": {
-            "choice": false,
-            "count": "",
             "type": "creature",
-            "special": ""
+            "count": "",
+            "choice": false
           },
-          "override": false,
-          "prompt": false
+          "override": true,
+          "prompt": true
         },
         "uses": {
           "spent": 0,
@@ -1823,18 +1816,18 @@
             }
           ],
           "critical": {
-            "allow": true,
+            "allow": false,
             "bonus": ""
           },
-          "onSave": "none"
+          "onSave": "half"
         },
         "save": {
           "ability": [
             "dex"
           ],
           "dc": {
-            "calculation": "spellcasting",
-            "formula": ""
+            "calculation": "",
+            "formula": "8 + @prof + @abilities.int.mod"
           }
         },
         "useConditionText": "",
@@ -1867,7 +1860,7 @@
           "rollMode": "default",
           "chooseEffects": false,
           "toggleEffect": false,
-          "ignoreFullCover": false,
+          "ignoreFullCover": true,
           "autoConsume": false,
           "forceConsumeDialog": "default",
           "forceRollDialog": "default",
@@ -1893,7 +1886,7 @@
       }
     },
     "uses": {
-      "spent": 2,
+      "spent": 0,
       "max": "2",
       "recovery": [
         {
@@ -1903,15 +1896,15 @@
       ]
     },
     "description": {
-      "value": "",
-      "chat": "<div class=\"ddb\">\nTwice per short rest and once per turn when you fire an arrow from a shortbow or longbow as part of the Attack action, you can apply one Arcane Shot option of your choice to that arrow. You decide to use the option when the arrow hits a creature, unless the option doesn’t involve an attack roll.\n</div>"
+      "value": "<p><strong>GPS setup:</strong> Add only learned Arrow marker items. On-hit options are offered after a successful shortbow/longbow attack made with the Attack action. Use Seeking or Piercing Arrow directly from this item instead of rolling a normal attack; these add the selected bow damage and use a Dexterity save for half. Confirm line/path and recent-sighting requirements manually. Only one option may be used per turn. Weapon item macros and attack-only riders are not triggered by substituted saves.</p>",
+      "chat": ""
     },
     "identifier": "arcane-shot-legacy",
     "source": {
       "book": "XGtE",
       "page": "",
       "license": "",
-      "custom": "1.0.14",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -1953,10 +1946,150 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": "",
-      "onUseMacroName": "[postPreambleComplete]function.game.gps.arcaneShot,[preActiveEffects]function.game.gps.arcaneShot,[postSave]function.game.gps.arcaneShot"
+      "onUseMacroName": "[preItemRoll]function.game.gps.arcaneShot,[postPreambleComplete]function.game.gps.arcaneShot,[preDamageRollComplete]function.game.gps.arcaneShot,[preActiveEffects]function.game.gps.arcaneShot,[postSave]function.game.gps.arcaneShot"
     },
     "gambits-premades": {
-      "gpsUuid": "f9a050c1-e755-4428-b523-90969df6c799"
+      "gpsUuid": "f9a050c1-e755-4428-b523-90969df6c799",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        },
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
+        }
+      },
+      "animationModules": [
+        "JB2APatreon",
+        "JAAMod"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "snnEZ29vcSywJnWU": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Beguiling Arrow",
+        "activityType": "save",
+        "version": 2
+      },
+      "9C1o574HxwAVyYfF": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Bursting Arrow",
+        "activityType": "utility",
+        "version": 2
+      },
+      "iPu4lPX0eLgqTTrK": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Grasping Arrow",
+        "activityType": "damage",
+        "version": 2
+      },
+      "bn1Pl34s34MbcwWv": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Shadow Arrow",
+        "activityType": "save",
+        "version": 2
+      },
+      "q6tXqyfKqg69oXcR": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Enfeebling Arrow",
+        "activityType": "save",
+        "version": 2
+      },
+      "1ndgmbfLTcgpbCRA": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Banishing Arrow",
+        "activityType": "save",
+        "version": 2
+      },
+      "scjte3Hk2rQfTouQ": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Seeking Arrow",
+        "activityType": "save",
+        "version": 2
+      },
+      "5K3HMU336Ndphpce": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Piercing Arrow",
+        "activityType": "save",
+        "version": 2
+      },
+      "cgJzMQQrUNkVwTfe": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Banishing Arrow",
+        "activityType": "save",
+        "version": 2
+      },
+      "1o3PbN4xMTMt0KRo": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Seeking Arrow",
+        "activityType": "save",
+        "version": 2
+      },
+      "7oNUv6LSFZop5M6G": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Piercing Arrow",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "img": "icons/magic/fire/projectile-arrow-fire-purple.webp",

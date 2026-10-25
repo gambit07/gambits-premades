@@ -48,7 +48,7 @@ export async function rabbitHop({ speaker, actor, token, character, item, args, 
         .waitUntilFinished(-100)
 
         .effect()
-        .file("animated-spell-effects-cartoon.air.portal")
+        .file("eskie.smoke.07.white")
         .atLocation(token)
         .scaleToObject(1.75)
         .belowTokens()
@@ -84,7 +84,7 @@ export async function rabbitHop({ speaker, actor, token, character, item, args, 
         .opacity(1)
 
         .effect()
-        .file("animated-spell-effects-cartoon.level 02.misty step")
+        .file("blfx.spell.misc.puff_smoke_dust_mist.2.center1.color1")
         .atLocation(position)
         .scaleToObject(1.75 * token.document.width)
         .belowTokens()
@@ -92,5 +92,6 @@ export async function rabbitHop({ speaker, actor, token, character, item, args, 
         .play();
     }
 
+    if(!animEnabled) await new Sequence().animation().on(token).teleportTo(position).snapToGrid().opacity(1).play();
     await actor.sheet.maximize();
 }

@@ -1,18 +1,20 @@
-export async function command({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "postSavesComplete" && workflow.failedSaves) {
-        let targets = workflow.failedSaves;
+import {commandExpiredAtTurnStart} from "../../utils/rulesReviewUtils.js";
 
-        await foundry.applications.api.DialogV2.wait({
+export async function command({ speaker, actor, token, character, item, args, scope, workflow, options }) {
+    if(args[0].macroPass === "postSavesComplete" && workflow.failedSaves?.size) {
+
+        const selection = await game.gps.showAutomationDialog({
+            focusTokenUuid: workflow.failedSaves.size === 1 ? workflow.failedSaves.first().document.uuid : false,
             window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Command.WindowTitle") },
             content: `
                 <div class="gps-dialog-container">
                     <div class="gps-dialog-section">
                         <div class="gps-dialog-content">
-                            <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Command.Prompts.SelectCommand")}</p>
+                            <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Command.Prompts.SingleWord")}</p>
                             <div>
                                 <div class="gps-dialog-flex">
                                     <div style='width: 100%; text-align: center;'>
-                                        <input type="text" name="wordInput" id="wordInput" maxlength = "10" autofocus></input>
+                                        <input type="text" name="wordInput" id="wordInput" required pattern="\\s*\\S+\\s*" autofocus>
                                     </div>
                                     <div id="image-container" class="gps-dialog-image-container">
                                         <img src="${workflow.item.img}" class="gps-dialog-image">
@@ -28,27 +30,38 @@ export async function command({ speaker, actor, token, character, item, args, sc
                 label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Cast"),
                 default: true,
                 callback: async (event, button, dialog) => {
-                    let wordInput = document.querySelector('#wordInput').value;
-                    for (let target of targets) {
-                        await MidiQOL.socket().executeAsGM('_gmSetFlag', { actorUuid : target.actor.uuid, base : 'gambits-premades', key : 'commandWord', value : wordInput })
-                    }
+                    let wordInput = button.form.elements.wordInput.value;
+                    (workflow.gps ??= {}).commandWord = wordInput.trim();
                 }
             }],
             close: async (event, dialog) => {
                 return;
             }, rejectClose:false
         });
+        if(!selection) workflow.aborted = true;
+    }
+    else if(args[0]?.macroPass === "postActiveEffects") {
+        const word = workflow.gps?.commandWord;
+        if(!word) return;
+        for(const target of workflow.failedSaves ?? []) {
+            const effect = target.actor.effects.filter(effect => effect.flags?.["gambits-premades"]?.command && DAE.effectMatchesSource(effect, item.uuid)).at(-1);
+            if(effect) await MidiQOL.socket().executeAsGM("updateEffects", {actorUuid: target.actor.uuid, updates: [{_id: effect.id, "flags.gambits-premades.commandWord": word}]});
+        }
     }
     else if(args[0] === "off") {
-        let wordInput = await actor.getFlag("gambits-premades", "commandWord")
-        let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Command.MustNow", { actorName: actor.name, wordInput: wordInput });
+        const context = args.at(-1);
+        if(!commandExpiredAtTurnStart(context?.effectUuid)) return;
+        const wordInput = context?.efData?.flags?.["gambits-premades"]?.commandWord;
+        if(!wordInput) return;
+        let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Command.MustNow", { actorName: actor.name, wordInput: foundry.utils.escapeHTML(wordInput) });
         let actorPlayer = MidiQOL.playerForActor(actor);
         let chatData = {
-            user: actorPlayer.id,
-            speaker: ChatMessage.getSpeaker({ token: token }),
+            user: actorPlayer?.id ?? game.user.id,
+            speaker: ChatMessage.getSpeaker({ actor, token }),
             content: content
         };
-        ChatMessage.create(chatData);
+        await ChatMessage.create(chatData);
+        if(!token || !game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) return;
 
         const style = {
             "fill": "#ffffff",
@@ -88,6 +101,6 @@ export async function command({ speaker, actor, token, character, item, args, sc
             delay += delayIncrement;
         });
 
-        MidiQOL.socket().executeAsGM('_gmUnsetFlag', { actorUuid : actor.uuid, base : 'gambits-premades', key : 'commandWord' })
+
     }
 }

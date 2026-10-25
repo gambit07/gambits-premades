@@ -2,9 +2,10 @@ export async function defileGround({ speaker, actor, token, character, item, arg
     if(args[0].macroPass === "postActiveEffects") {
         const template = await fromUuidSync(args[0].templateUuid);
         const distanceTotal = actor.classes.druid?.system.levels < 10 ? 10 : 20;
-        await template.update({distance:distanceTotal});
-        const templateId = template.id;
-        let itemData = [{
+        await game.gps.resizeRegion({ regionUuid: template.uuid, radius: game.gps.convertFromFeet({ range: distanceTotal }) });
+        const regionUuid = template.uuid;
+        const regionAnimation = game.gps.getRegionAnimationData(template);
+        let itemData = [game.gps.disableBlfxAutoRecognition({
             "name": `${item.name} - Move`,
             "type": "feat",
             "img": item.img,
@@ -54,6 +55,7 @@ export async function defileGround({ speaker, actor, token, character, item, arg
                 }
             },
             "flags": {
+                autoanimations: {isEnabled: false, version: 5},
                 "midi-qol": {
                     "effectActivation": false,
                     "onUseMacroName": "[preActiveEffects]ItemMacro"
@@ -69,57 +71,63 @@ export async function defileGround({ speaker, actor, token, character, item, arg
                     "scope": "global",
                     "command": `
                         if(args[0].macroPass === \"preActiveEffects\") {
-                        let template = canvas.templates.placeables.find(t => t.id === '${templateId}');
+                        let region = await fromUuid('${regionUuid}');
+                            if (!region) return;
 
                         let config = {
                             gridHighlight: true,
                             icon: {texture: 'icons/svg/dice-target.svg', borderVisible: true},
-                            location: {obj: template, limitMaxRange: 30, showRange: true}
+                            location: {obj: region.object, limitMaxRange: game.gps.convertFromFeet({range: 30}), showRange: true}
                         }
 
                         let position = await Sequencer.Crosshair.show(config);
 
                         if(!position) return;
 
-                        template.document.update({ x: position.x, y: position.y });
+                        await game.gps.moveRegion({ regionUuid: region.uuid, x: position.x, y: position.y });
                         await MidiQOL.setBonusActionUsed(actor);
                     }`
                 }
                 }
             }
-        }];
+        })];
 
         let itemCheck = actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "f3bca81e-885d-4f45-aac4-c817eba4efc2");
         if (!itemCheck) await actor.createEmbeddedDocuments("Item", itemData);
         
-        new Sequence()
-        .effect()
-            .attachTo(template)
-            .persist()
-            .scale(2)
-            .belowTokens()
-            .file("jb2a.ground_cracks.green.03")
-        .play()
+        if(game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) {
+            new Sequence()
+            .effect()
+                .attachTo(template)
+                .persist()
+                .scale(2)
+                .belowTokens()
+                .elevation(regionAnimation.elevation, { absolute: true })
+                .onLevels(regionAnimation.levels)
+                .file("jb2a.ground_cracks.green.03")
+            .play()
+        }
     }
 
     if (args[0].macroPass === "isDamaged") {
-        if(workflow.flavor === 'Blighted Ground Damage') return;
+        if(workflow.flavor === 'Defile Ground - Damage (Necrotic)') return;
         const currentRound = game.combat.round;
         const currentTurn = game.combat.turn;
         let defileGroundTurnDamage = await token.actor.getFlag("midi-qol", "defileGroundTurnDamage");
-        if(defileGroundTurnDamage && defileGroundTurnDamage === `${currentRound}${currentTurn}`) return;
+        if(defileGroundTurnDamage && defileGroundTurnDamage === `${currentRound}-${currentTurn}`) return;
         const dieAmount = item.parent.classes.druid?.system.levels >= 14 ? "1d8" : (item.parent.classes.druid?.system.levels >= 10 ? "1d6" : "1d4")
         let damageRoll = await new CONFIG.Dice.DamageRoll(`${dieAmount}`, {}, {type: "necrotic", properties: ["mgc"]}).evaluate();
         await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')
 
         const itemData = {
+            flags: {autoanimations: {isEnabled: false, version: 5}},
             name: "Defile Ground - Damage (Necrotic)",
             type: "feat",
             img: item.img
         }
 
-        new MidiQOL.DamageOnlyWorkflow(workflow.actor, workflow.token, damageRoll.total, "necrotic", token ? [token] : [], damageRoll, {itemData: itemData, flavor: "Defile Ground - Damage (Necrotic)"});
-        await MidiQOL.socket().executeAsGM('_gmSetFlag', { actorUuid : token.actor.uuid, base : 'midi-qol', key : 'defileGroundTurnDamage', value : `${currentRound}${currentTurn}` });
+        await MidiQOL.socket().executeAsGM('_gmSetFlag', { actorUuid : token.actor.uuid, base : 'midi-qol', key : 'defileGroundTurnDamage', value : `${currentRound}-${currentTurn}` });
+        await new MidiQOL.DamageOnlyWorkflow(workflow.actor, workflow.token, damageRoll.total, "necrotic", token ? [token] : [], damageRoll, {itemData: itemData, flavor: "Defile Ground - Damage (Necrotic)"});
         return;
     }
 

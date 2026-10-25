@@ -3,11 +3,11 @@
   "type": "weapon",
   "system": {
     "description": {
-      "value": "<p>You have a +2 bonus to attack and damage rolls made with this magic weapon.</p><p><strong>Guardless.</strong> If the wielder of Duskfall is not using a shield they receive a +2 bonus to their AC when being attacked with advantage.</p>",
+      "value": "<p><strong>Guardless.</strong> If the wielder of Duskfall is not using a shield they receive a +2 bonus to their AC when being attacked with advantage.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -33,15 +33,9 @@
       "reach": null
     },
     "uses": {
-      "max": "@prof",
-      "recovery": [
-        {
-          "period": "lr",
-          "type": "formula",
-          "formula": "@prof"
-        }
-      ],
-      "spent": 0
+      "max": "",
+      "spent": 0,
+      "recovery": []
     },
     "damage": {
       "versatile": {
@@ -111,17 +105,7 @@
           "override": false
         },
         "consumption": {
-          "targets": [
-            {
-              "type": "itemUses",
-              "target": "",
-              "value": "1",
-              "scaling": {
-                "mode": "",
-                "formula": ""
-              }
-            }
-          ],
+          "targets": [],
           "scaling": {
             "allowed": false,
             "max": ""
@@ -273,7 +257,7 @@
         "img": "icons/weapons/swords/greatsword-crossguard-embossed-gold.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"isAttacked\") {\n    if(token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) return; // Origin token is using a shield\n    if(workflow.advantage === true) {\n      let effectData = [\n      {\n        \"name\": \"Duskfall Greatsword - Guardless AC\",\n        \"icon\": macroItem.img,\n        \"origin\": macroItem.uuid,\n        \"disabled\": false,\n        \"changes\": [\n          {\n            \"key\": \"system.attributes.ac.value\",\n            \"mode\": 2,\n            \"value\": \"2\",\n            \"priority\": 20\n          }\n        ],\n        \"flags\": {\n          \"dae\": {\n            \"specialDuration\": [\n              \"isAttacked\"\n            ]\n          }\n        },\n        \"transfer\": false\n      }\n    ]\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectData });\n  }\n}",
+        "command": "if(args[0].macroPass === \"isAttacked\") {\n    if(token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) return; // Origin token is using a shield\n    if(workflow.advantage === true) {\n      let effectData = [\n      {\n        \"name\": \"Duskfall Greatsword - Guardless AC\",\n        img: macroItem.img,\n        \"origin\": macroItem.uuid,\n        \"disabled\": false,\n        system: { changes: [\n          {\n            \"key\": \"system.attributes.ac.value\",\n            type: \"add\",\n            \"value\": 2,\n            \"priority\": 20\n          }\n        ] },\n        \"flags\": {\n          \"dae\": {\n            \"specialDuration\": [\n              \"isAttacked\"\n            ]\n          }\n        },\n        \"transfer\": false\n      }\n    ]\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectData });\n  }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -299,31 +283,35 @@
         "activity": [],
         "effect": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Attack",
+        "activityType": "attack",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Compendium.world.gps-homebrew-items.Item.9OZieXqZdYtNnKoa",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Duskfall Greatsword - Guardless",
       "_id": "zUqTzPi3G3Hwkhek",
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, isAttacked",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -335,17 +323,30 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/weapons/swords/greatsword-crossguard-embossed-gold.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, isAttacked",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!93vrLmrW4TahDktI.zUqTzPi3G3Hwkhek"
     }
   ],

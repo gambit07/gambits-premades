@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -179,40 +179,37 @@
     {
       "origin": "Compendium.world.gps-3rd-party-spells.Item.9KWfBkDgBdjg7UOD",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Storm Mote",
       "img": "icons/magic/lightning/projectiles-tendril-salvo-pink.webp",
       "_id": "h7ZazoVGpBsd1FDM",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.disadvantage.attack.all",
-          "mode": 0,
-          "value": "targetId === '@token'",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.stormMote,postAttackRollComplete",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.stormMote",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.disadvantage.attack.all",
+            "value": "targetId === '@token'",
+            "priority": 20,
+            "type": "custom",
+            "replacement": "origin"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.stormMote,postAttackRollComplete",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.stormMote",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -225,7 +222,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -239,29 +235,20 @@
           "riders": {
             "statuses": []
           },
-          "dependents": [
-            {
-              "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.qEzRQUzq4Ko1aFRv.Actor.SNZJsEKbROB1q6bT.ActiveEffect.letAuXAEvkf2TYC7"
-            }
-          ]
+          "dependents": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!EKmXvjaUgx5JU1ND.h7ZazoVGpBsd1FDM"
     }
   ],
   "flags": {
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.YUmZSq6NsdZkLNi9.ActiveEffect.6dzKnergL7Wt9FDi"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.6zlYuPkPZYe6Ca21"
-        },
-        {
-          "uuid": "Actor.aCfdgOvZPZzP2vmC.ActiveEffect.XeVrdf5KM0UKa03l"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -515,70 +502,90 @@
       "version": 5
     },
     "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+      "info": {
+        "source": "gambits-premades",
+        "version": "0.5.76"
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
         },
-        {
-          "value": "color",
-          "label": "CHRISPREMADES.Config.Color",
+        "color": {
+          "label": "GAMBITSPREMADES.ItemConfig.Color",
           "type": "select",
           "default": "green",
-          "category": "animation",
+          "category": "animations",
           "options": [
             {
               "value": "blue",
-              "label": "CHRISPREMADES.Config.Colors.Blue",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Blue",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "green",
-              "label": "CHRISPREMADES.Config.Colors.Green",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Green",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "purple",
-              "label": "CHRISPREMADES.Config.Colors.Purple",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Purple",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "orange",
-              "label": "CHRISPREMADES.Config.Colors.Orange",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Orange",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "red",
-              "label": "CHRISPREMADES.Config.Colors.Red",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Red",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             }
           ]
         }
+      },
+      "animationModules": [
+        "JB2APatreon"
       ],
-      "info": {
+      "animationModuleNote": "StormMoteColors"
+    },
+    "cat": {
+      "automation": {
         "source": "gambits-premades",
-        "version": "0.5.76"
+        "version": "3.0.1"
       },
       "config": {
         "color": "green"
       }
     },
-    "tidy5e-sheet": {
-      "section": "",
-      "actionSection": ""
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "folder": null,

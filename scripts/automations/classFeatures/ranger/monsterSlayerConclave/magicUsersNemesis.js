@@ -13,7 +13,6 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
         return;
     }
     let dialogId = gpsUuid;
-    const lastMessage = game.messages.contents[game.messages.contents.length - 1]; // Use to hide initial spell message
     let gmUser = game.gps.getPrimaryGM();
 
     const castProperties = ["vocal", "somatic", "material"];
@@ -30,16 +29,15 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
     let selectedToken;
     workflowType === "teleport" ? selectedToken = workflowData.token : selectedToken = workflow.token;
-    let notInitialCast = false;
     let itemRoll = false;
-    let munFailure = false;
     let chatContent = [];
     let saveCheck;
     let browserUser;
 
-    await initialProcess(workflow, lastMessage, notInitialCast, selectedToken);
+    if(!selectedToken?.actor) return;
+    await initialProcess(workflow, selectedToken);
     
-    async function initialProcess(workflow, lastMessage, notInitialCast, selectedToken) {
+    async function initialProcess(workflow, selectedToken) {
         let findValidTokens;
         if(workflowType !== "teleport") {
             findValidTokens = game.gps.findValidTokens({initiatingToken: selectedToken, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["magic-users-nemesis"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid, sourceRules: "2014"});
@@ -51,13 +49,9 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
         if(findValidTokens.length === 0 || !findValidTokens) return;
 
         for (const validTokenPrimary of findValidTokens) {
-            if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: gmUser });
             if(workflow?.aborted === true) return;
-            if(!notInitialCast) {
-                hasDeafenedStatus = validTokenPrimary.document.hasStatusEffect("deafened");
-                if (isVocalOnly && hasDeafenedStatus) continue;
-            }
-            notInitialCast = true;
+            hasDeafenedStatus = validTokenPrimary.document.hasStatusEffect("deafened");
+            if (isVocalOnly && hasDeafenedStatus) continue;
             let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
             let itemProperName = chosenItem?.name;
             const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
@@ -97,32 +91,27 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
             let result;
     
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-                let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage.id };
+                let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: selectedToken.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id ?? notificationMessage.id };
                 
-                let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage.id };
+                let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: selectedToken.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id ?? notificationMessage.id };
             
-                result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+                result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
             } else {
-                result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage.id});
+                result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: selectedToken.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id ?? notificationMessage.id});
             }
                     
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result || {};
 
             if (!userDecision && isLastToken) {
-                if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                 if(workflowType !== "teleport") return workflow.aborted = false;
                 else return;
             }
             else if (!userDecision) {
-                if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
                 continue;
             }
             else if (userDecision) {
-                if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
 
                 hasVSMProperty = castProperties.some(prop => chosenItem.system.properties.has(prop));
-
-                if(genericCheck) await itemSorcery?.update({"system.uses.spent" : itemSorcery.system.uses.spent + 1})
 
                 const options = {
                     showFullCard: false,
@@ -132,13 +121,13 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
                     targetUuids: [selectedToken.document.uuid]
                 };
 
-                if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
-                else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+                if(source && source === "user") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+                else if(source && source === "gm") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
     
-                if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) continue;
+                if(!itemRoll?.completed) continue;
 
-                if(source && source === "user") saveCheck = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: selectedToken.document.uuid});
-                else if(source && source === "gm") saveCheck = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: selectedToken.document.uuid});
+                if(source && source === "user") saveCheck = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: selectedToken.document.uuid});
+                else if(source && source === "gm") saveCheck = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: selectedToken.document.uuid});
                 if(!saveCheck) continue;
                 
                 if (saveCheck.failedSaves.size !== 0) {
@@ -146,19 +135,21 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
                 }
                 else {
                     chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Ranger.MonsterSlayerConclave.MagicUsersNemesis.SaveSucceeded")}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    munFailure = true;
                 }
 
                 await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: saveCheck.saveRolls});
+                await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: saveCheck.saveRolls});
                 
-                if(munFailure) continue;
+                if(saveCheck.failedSaves.size === 0) continue;
 
                 if(workflowType === "teleport") {
                     game.gps.disableRegionTeleport = true;
-                    await selectedToken.document.update({ x: workflowData.tokenOriginX, y: workflowData.tokenOriginY }, { teleport: true });
-                    game.gps.disableRegionTeleport = false;
+                    try {
+                        await selectedToken.document.move({ x: workflowData.tokenOriginX, y: workflowData.tokenOriginY, action: "displace" });
+                    } finally {
+                        game.gps.disableRegionTeleport = false;
+                    }
                 }
 
                 let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
@@ -166,7 +157,7 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
                 if(animEnabled) {
                     new Sequence()
                     .effect()
-                        .file("animated-spell-effects-cartoon.energy.beam.01")
+                        .file("jb2a.ranged.beam.002.03.purple")
                         .fadeIn(500)
                         .fadeOut(500)
                         .atLocation(validTokenPrimary)

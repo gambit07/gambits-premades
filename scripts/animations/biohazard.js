@@ -1,17 +1,14 @@
 export function biohazard({template, itemUuid}) {
+    if (!template?.object) return;
+    template = template.object;
     let cprConfig = game.gps.getCprConfig({itemUuid});
     if(!cprConfig.animEnabled) return;
+    const regionAnimation = game.gps.getRegionAnimationData(template);
     
     let alignmentDecision;
     let scaleDecision;
-    if(MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates')) {
-        alignmentDecision = {};
-        scaleDecision = 1.1;
-    }
-    else {
-        alignmentDecision = { edge: "on", offset: ( {x: 145, y: 0} ) };
-        scaleDecision = 0.6;
-    }
+    alignmentDecision = {};
+    scaleDecision = 1.1;
 
     new Sequence()
         .effect()
@@ -24,6 +21,8 @@ export function biohazard({template, itemUuid}) {
             .fadeIn(500)
             .fadeOut(500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .persist()
             .zIndex(2)
         .effect()
@@ -35,6 +34,8 @@ export function biohazard({template, itemUuid}) {
             .fadeIn(500)
             .fadeOut(500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .persist()
             .zIndex(2)
     .play()

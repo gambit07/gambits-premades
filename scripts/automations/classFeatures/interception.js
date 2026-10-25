@@ -46,7 +46,7 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
                                 <ul id="damage-list" class="sortable" style="padding: 0; margin: 0; list-style-type: none;">
                                     ${damageTypes.map((name, index) => `
                                     <li draggable="true" style="padding: 6px; margin-bottom: 4px; cursor: grab; border: 1px solid #ccc;">
-                                        ${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Interception.PtsOf", { points: damageTotals[index] }) : ""}<span class="damage-type">${name}</span>
+                                        ${["none", "detailsDSN", "details", "d20Only", "hitDamage", "hitCriticalDamage"].includes(rollDetailSetting) ? game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Interception.PtsOf", { points: damageTotals[index] }) : ""}<span class="damage-type" data-damage-type="${name}">${game.i18n.localize(CONFIG.DND5E.damageTypes[name]?.label ?? name)}</span>
                                     </li>`).join('')}
                                 </ul>
                                 <div id="image-container" class="gps-dialog-image-container">
@@ -67,13 +67,13 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -84,27 +84,30 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
         else if (userDecision) {
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            let primaryFile = "jb2a.spiritual_weapon.sword.spectral.orange";
-            let alternateFile = "jb2a.icon.shield.yellow";
+            if(game.gps.getCprConfig({itemUuid: chosenItem.uuid}).animEnabled) {
+                let primaryFile = "jb2a.spiritual_weapon.sword.spectral.orange";
+                let alternateFile = "jb2a.icon.shield.yellow";
 
-            let fileToPlay = Sequencer.Database.getEntry(primaryFile) ? primaryFile : Sequencer.Database.getEntry(alternateFile) ? alternateFile : "";
+                let fileToPlay = Sequencer.Database.getEntry(primaryFile) ? primaryFile : Sequencer.Database.getEntry(alternateFile) ? alternateFile : "";
 
-            new Sequence()
-                .effect()
-                .file(fileToPlay)
-                .atLocation(validTokenPrimary)
-                .moveTowards(target)
-                .scaleToObject(2.0)
-                .zIndex(0)
-                .belowTokens(false)
-                .fadeIn(250)
-                .fadeOut(250)
-                .play();
+                new Sequence()
+                    .effect()
+                    .file(fileToPlay)
+                    .atLocation(validTokenPrimary)
+                    .moveTowards(target)
+                    .scaleToObject(2.0)
+                    .zIndex(0)
+                    .belowTokens(false)
+                    .fadeIn(250)
+                    .fadeOut(250)
+                    .play();
+            }
 
             const saveSetting = workflow.workflowOptions.noOnUseMacro;
             workflow.workflowOptions.noOnUseMacro = true;
-            let actorProf = validTokenPrimary.actor.system.attributes.prof;
             let reroll;
+            try {
+            let actorProf = validTokenPrimary.actor.system.attributes.prof;
             let numDice = '1d10';
             let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid, type: "homebrewDice"});
             if(cprConfig.homebrewDiceEnabled) {
@@ -113,43 +116,28 @@ export async function interception({workflowData,workflowType,workflowCombat}) {
                 numDice = `${dieNumber}${dieFace}`;
             }
 
-            if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
-            if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
+            if(source && source === "user") reroll = await game.gps.queryUser("rollAsUser", browserUser, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
+            if(source && source === "gm") reroll = await game.gps.queryUser("rollAsUser", gmUser, { rollParams: `${numDice} + ${actorProf}`, type: workflowType });
 
+            if(!reroll) continue;
             let remainingReduction = reroll.total;
-            let updatedRolls = [];
-            let processedRolls = new Set();
-            
-            for (const priority of damageChosen) {
-                let rollFound = workflow.damageRolls.find(roll => roll.options.type === priority);
-            
-                if (rollFound) {
-                    processedRolls.add(rollFound);
-                    let rollTotal = rollFound.total;
-                    if (rollTotal >= remainingReduction) {
-                        let modifiedRoll = await new Roll(`${rollTotal} - ${remainingReduction}`).evaluate();
-                        modifiedRoll.options = rollFound.options;
-                        updatedRolls.push(modifiedRoll);
-                        remainingReduction = 0;
-                        break;
-                    } else {
-                        remainingReduction -= rollTotal;
-                        let zeroRoll = await new Roll(`${rollTotal} - ${rollTotal}`).evaluate();
-                        zeroRoll.options = rollFound.options;
-                        updatedRolls.push(zeroRoll);
-                    }
+            const updatedRolls = [...workflow.damageRolls];
+            const priorities = [...new Set([...(damageChosen ?? []), ...workflow.damageRolls.map(roll => roll.options.type)])];
+            for(const priority of priorities) {
+                for(let index = 0; index < workflow.damageRolls.length; index++) {
+                    const original = workflow.damageRolls[index];
+                    if(original.options.type !== priority || remainingReduction <= 0) continue;
+                    const reduction = Math.min(Math.max(0, original.total), remainingReduction);
+                    updatedRolls[index] = await game.gps.adjustRollTotal(original, -reduction);
+                    remainingReduction -= reduction;
                 }
             }
-            
-            workflow.damageRolls.forEach(roll => {
-                if (!processedRolls.has(roll)) {
-                    updatedRolls.push(roll);
-                }
-            });
 
             await workflow.setDamageRolls(updatedRolls);
     
-            workflow.workflowOptions.noOnUseMacro = saveSetting;
+            } finally {
+                workflow.workflowOptions.noOnUseMacro = saveSetting;
+            }
 
             let content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Interception.ReduceDamageTakenBy", { itemProperName: itemProperName, targetName: target.actor.name, reduction: reroll.total })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);

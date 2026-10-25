@@ -14,9 +14,10 @@ export async function stinkingCloud({tokenUuid, regionUuid, regionScenario, regi
         return;
     }
 
-    let region = await fromUuid(regionUuid);
-    let tokenDocument = await fromUuid(tokenUuid);
+    let region = fromUuidSync(regionUuid);
+    let tokenDocument = fromUuidSync(tokenUuid);
     let token = tokenDocument?.object;
+    if(!token?.actor) return;
 
     if (!MidiQOL.isTargetable(token)) {
         if(debugEnabled) game.gps.logInfo(`Token is not targetable for ${itemName}`);
@@ -27,14 +28,17 @@ export async function stinkingCloud({tokenUuid, regionUuid, regionScenario, regi
         return;
     }
 
-    let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
+    if(!region) return;
 
-    let turn = game.combat.round + '-' + game.combat.turn;
+    let turn = game.gps.regionTurnKey();
     let lastTurn = region.flags['gambits-premades']?.spell?.stinkingCloud?.[token.id]?.turn;
     if (turn === lastTurn) {
         if(debugEnabled) game.gps.logInfo(`Token already made a saving throw this round for ${itemName}`);
         return;
     }
+
+    let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
+    if(!chosenItem) return;
 
     await region.setFlag('gambits-premades', 'spell.stinkingCloud.' + token.id + '.turn', turn);
 
@@ -44,18 +48,21 @@ export async function stinkingCloud({tokenUuid, regionUuid, regionScenario, regi
     if (saveResult.failedSaves.size !== 0) {
         const effectData = [
             {
-                "name": "Asphyxiated",
-                "icon": "icons/svg/stoned.svg",
+                "name": game.i18n.localize("GAMBITSPREMADES.Effects.StinkingCloud.Asphyxiated"),
+                img: "icons/svg/stoned.svg",
                 "duration": {
-                    "seconds": 6
+                    "value": 6,
+                    "units": "seconds"
                 },
-                "description": "An asphyxiated creature must spend their action retching and reeling"
+                "description": game.i18n.localize("GAMBITSPREMADES.Effects.StinkingCloud.Description"),
+                "origin": chosenItem.uuid,
+                "transfer": false
             }
         ];
         await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: token.actor.uuid, effects: effectData });
         let browserUser = MidiQOL.playerForActor(token.actor);
         let chatData = {
-            user: browserUser.id,
+            user: browserUser?.id ?? game.user.id,
             speaker: ChatMessage.getSpeaker({ token: token }),
             content: game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.StinkingCloud.Content"),
         };

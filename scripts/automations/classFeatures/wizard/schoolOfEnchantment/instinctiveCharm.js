@@ -15,7 +15,9 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
     let browserUser;
     
     for (const validTokenPrimary of findValidTokens) {
-        let targets = canvas.tokens.placeables.filter(t => t.document.uuid !== validTokenPrimary.document.uuid && t.document.uuid !== target.document.uuid && MidiQOL.canSee(target, t) && MidiQOL.computeDistance(target, t, true) <= workflow.item.system.range.value);
+        if(!workflow.targets.has(validTokenPrimary)) continue;
+        let targets = canvas.tokens.placeables.filter(t => t.actor && t !== validTokenPrimary && t !== target
+            && MidiQOL.canSee(target, t) && MidiQOL.checkRange(workflow.activity, target, new Set([t]), false).result !== "fail");
 
         if(targets.length === 0) {
             if(debugEnabled) game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed at alternate target within range`);
@@ -31,7 +33,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
         
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
-        if(target.actor.appliedEffects.some(e => e.name === `${itemProperName} - Immunity`)) return;
+        if(target.actor.appliedEffects.some(e => e.flags["gambits-premades"]?.instinctiveCharmSource === validTokenPrimary.actor.uuid)) continue;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
@@ -65,13 +67,13 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser.id, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsGM("handleDialogPromises", userDialogArgs, gmDialogArgs);
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -89,10 +91,10 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
             };
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
 
-            if(!itemRoll) continue;
+            if(!itemRoll || itemRoll.aborted) continue;
 
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
@@ -102,7 +104,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
             const spellDC = validTokenPrimary.actor.system.attributes.spell.dc;
             let saveAbility = "wis";
 
-            const itemData = {
+            const itemData = game.gps.disableBlfxAutoRecognition({
                 name: `${itemProperName} Save`,
                 type: "feat",
                 img: chosenItem.img,
@@ -113,26 +115,34 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                         onUseMacroName: null,
                         forceCEOff: true
                     },
-                    "midiProperties": {
-                        magiceffect: true
-                    },
                     "autoanimations": {
+                        version: 5,
+                        isEnabled: false,
                         killAnim: true
                     }
 
                 },
                 system: {
                     equipped: true,
-                    actionType: "save",
-                    save: { dc: spellDC, ability: saveAbility, scaling: "flat" },
-                    components: { concentration: false, material: false, ritual: false, somatic: false, value: "", vocal: false },
+                    activities: {
+                        gpsSynthetic0001: {
+                            _id: "gpsSynthetic0001",
+                            type: "save",
+                            midiProperties: { magicEffect: true },
+                            activation: { type: "special" },
+                            save: { ability: [saveAbility], dc: { calculation: "", formula: String(spellDC) } },
+                            target: { affects: { type: "creature", count: "1" } },
+                            range: { units: "any" }
+                        }
+                    },
                     duration: { units: "inst", value: undefined }
                 },
-            };
+            });
             const itemUpdateTarget = new CONFIG.Item.documentClass(itemData, {parent: validTokenPrimary.actor});
             const optionsTarget = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };
-            const saveResult = await MidiQOL.completeItemUse(itemUpdateTarget, {}, optionsTarget);
+            const saveResult = await MidiQOL.completeItemUse(itemUpdateTarget, { midiOptions: optionsTarget }, {}, {});
             const hasCharmImmunity = target.actor.system.traits.ci.value.has("charmed");
+            if(!saveResult || saveResult.aborted) continue;
             if (saveResult.failedSaves.size !== 0 && !hasCharmImmunity) {
                 let dialogContentTarget = `
                     <div class="gps-dialog-container">
@@ -169,14 +179,16 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                     
                     let gmDialogArgsTarget = { dialogTitle:dialogTitleGM,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
                 
-                    resultTarget = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgsTarget, gmDialogArgsTarget});
+                    resultTarget = await game.gps.handleDialogPromises({userDialogArgs: userDialogArgsTarget, gmDialogArgs: gmDialogArgsTarget});
                 } else {
-                    resultTarget = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUserTarget.id, {dialogTitle:dialogTitlePrimary,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source: gmUser === browserUserTarget ? "gm" : "user",type:"singleDialog"});
+                    resultTarget = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUserTarget, {dialogTitle:dialogTitlePrimary,dialogContent: dialogContentTarget,dialogId: dialogIdTarget,initialTimeLeft,validTokenPrimaryUuid: target.document.uuid,source: gmUser === browserUserTarget ? "gm" : "user",type:"singleDialog"});
                 }
         
-                const { enemyTokenUuid } = resultTarget;
+                const { enemyTokenUuid } = resultTarget ?? {};
+                if(!targetUuids.includes(enemyTokenUuid)) continue;
 
                 let newTarget = await fromUuid(enemyTokenUuid);
+                if(!newTarget?.object) continue;
                 workflow.targets.delete(validTokenPrimary);
                 workflow.targets.add(newTarget.object);
                 return;
@@ -185,12 +197,13 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                 if(hasCharmImmunity) ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.ClassFeatures.Wizard.SchoolOfEnchantment.InstinctiveCharm.CharmImmunity"));
                 let effectData = [
                     {
-                        "icon": `${chosenItem.img}`,
+                        img: `${chosenItem.img}`,
                         "origin": `${validTokenPrimary.actor.uuid}`,
                         "disabled": false,
                         "name": `${chosenItem.name} - Immunity`,
                         "transfer": false,
                         "flags": {
+                            "gambits-premades": {instinctiveCharmSource: validTokenPrimary.actor.uuid},
                             "dae": {
                                 "specialDuration": [
                                     "longRest"

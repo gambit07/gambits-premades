@@ -1,37 +1,51 @@
 export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario, movementScenario, regionStatus, speaker, actor, token, character, item, args, scope, workflow, options, userId}) {
+    if(args?.[0] === "off") {
+        const originActor = await fromUuid(args[2]);
+        if(!originActor) return;
+        const legacyItems = originActor.items.filter(candidate => candidate.flags["gambits-premades"]?.gpsUuid === "920bfa86-2a3a-4e6a-ae7d-3d420c2c5992"
+            && !candidate.flags["gambits-premades"]?.cloudOfDaggersRegion);
+        if(legacyItems.length) await originActor.deleteEmbeddedDocuments("Item", legacyItems.map(candidate => candidate.id));
+        return;
+    }
+    if(args?.[0] === "on") return;
     if(!game.combat) return ui.notifications.warn(game.i18n.format("GAMBITSPREMADES.Notifications.Common.RequiresActiveCombat", { effectName: workflow?.item?.name ?? item?.name ?? game.i18n.localize("GAMBITSPREMADES.Notifications.Common.ThisEffect") }))
 
     if(args?.[0]?.macroPass === "templatePlaced") {
         const template = await fromUuid(workflow.templateUuid);
-        await template.setFlag("gambits-premades", "codCastLevel", workflow.castData.castLevel);
         game.gps.animation.cloudOfDaggers({template, itemUuid: workflow.item.uuid});
         return;
     }
 
-    if(args?.[0].macroPass === "postActiveEffects") {
-        if(workflow.targets.size > 0) {
+    if(args?.[0]?.macroPass === "postActiveEffects") {
+        if(!workflow || workflow.aborted) return;
+        const region = await fromUuid(workflow.templateUuid);
+        if(region?.documentName !== "Region") return;
+        const regionUuid = region.uuid;
+        const turn = game.gps.regionTurnKey();
+        const targets = Array.from(region.tokens, document => document.object).filter(target =>
+            target?.actor && (target.actor.type === "npc" || target.actor.type === "character") && MidiQOL.isTargetable(target)
+            && region.getFlag("gambits-premades", `spell.cloudOfDaggers.${target.id}.turn`) !== turn);
+        if(targets.length > 0) {
             let damageDice =  (2*(workflow.castData.castLevel - 2)) + 4;
             let damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}d4`, {}, {type: "slashing", properties: ["mgc"]}).evaluate();
             await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 
             const itemDataDamage = {
+                flags: {autoanimations: {isEnabled: false, version: 5}},
                 name: "Cloud of Daggers - Damage (Slashing)",
                 type: "feat",
                 img: item.img
             }
 
-            await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "slashing", workflow.targets ? workflow.targets : [], damageRoll, {itemData: itemDataDamage, flavor: "Cloud of Daggers - Damage (Slashing)"});
+            for(const target of targets) {
+                await game.gps.queryUser("gmSetFlag", game.gps.getPrimaryGM(), {flagDocumentUuid: regionUuid, key: `spell.cloudOfDaggers.${target.id}.turn`, value: turn});
+            }
+            const damage = new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "slashing", targets, damageRoll, {itemData: itemDataDamage, flavor: "Cloud of Daggers - Damage (Slashing)"});
+            damage.activity.updateSource({"activation.type": "special", "activation.override": true});
+            await damage.ready;
         }
 
-        const template = await fromUuidSync(workflow.templateUuid);
-        const templateId = template.id;
-        let turn = game.combat.round + '-' + game.combat.turn;
-        const region = await fromUuid(template.flags["region-attacher"]?.attachedRegion);
-        for(let target of workflow.targets) {
-            await region.setFlag('gambits-premades', 'spell.cloudOfDaggers.' + target.id + '.turn', turn);
-        }
-
-        let itemData = [{
+        let itemData = [game.gps.disableBlfxAutoRecognition({
             "name": `${item.name} - Move`,
             "type": "feat",
             "img": item.img,
@@ -41,16 +55,11 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
                     "chat": "",
                     "unidentified": ""
                 },
-                "activation": {
-                    "type": "bonus",
-                    "cost": 1
-                },
-                "actionType": "util",
                 "type": {
                     "value": "class"
                 },
                 "activities": {
-                    "cloudOfDaggersMove": {
+                    "gpsDaggersMove01": {
                         "type": "utility",
                         "activation": {
                             "type": "action"
@@ -81,13 +90,16 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
                 }
             },
             "flags": {
+                autoanimations: {isEnabled: false, version: 5},
                 "midi-qol": {
                     "effectActivation": false,
                     "onUseMacroName": "[preActiveEffects]ItemMacro"
                 },
                 "gambits-premades": {
-                    "gpsUuid": "920bfa86-2a3a-4e6a-ae7d-3d420c2c5992"
+                    "gpsUuid": "920bfa86-2a3a-4e6a-ae7d-3d420c2c5992",
+                    "cloudOfDaggersRegion": regionUuid
                 },
+                "dnd5e": { "dependentOn": regionUuid },
                 "dae": {
                 "macro": {
                     "name": `${item.name} - Move`,
@@ -96,48 +108,35 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
                     "scope": "global",
                     "command": `
                         if(args[0].macroPass === \"preActiveEffects\") {
-                            let template = canvas.templates.placeables.find(t => t.id === '${templateId}');
+                            let region = await fromUuid('${regionUuid}');
+                            if (!region) return;
 
                             let config = {
                                 gridHighlight: true,
                                 icon: {texture: 'icons/svg/dice-target.svg', borderVisible: true},
-                                location: {obj: template, limitMaxRange: 30, showRange: true}
+                                location: {obj: region.object, limitMaxRange: game.gps.convertFromFeet({range: 30}), showRange: true}
                             }
 
-                            actor.sheet.minimize();
-
-                            let position = await Sequencer.Crosshair.show(config);
-
-                            if(!position) return actor.sheet.maximize();
-
-                            template.document.update({ x: position.x, y: position.y });
-
-                            actor.sheet.maximize();
+                            await actor.sheet.minimize();
+                            try {
+                                const position = await Sequencer.Crosshair.show(config);
+                                if(position) await game.gps.moveRegion({ regionUuid: region.uuid, x: position.x, y: position.y });
+                            } finally {
+                                await actor.sheet.maximize();
+                            }
                         }
                     `
                 }
                 }
             }
-        }];
+        })];
 
-        let itemCheck = actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "920bfa86-2a3a-4e6a-ae7d-3d420c2c5992");
+        const staleItems = actor.items.filter(candidate => candidate.flags["gambits-premades"]?.gpsUuid === "920bfa86-2a3a-4e6a-ae7d-3d420c2c5992"
+            && !candidate.flags["gambits-premades"]?.cloudOfDaggersRegion);
+        if(staleItems.length) await actor.deleteEmbeddedDocuments("Item", staleItems.map(candidate => candidate.id));
+        let itemCheck = actor.items.some(candidate => candidate.flags["gambits-premades"]?.cloudOfDaggersRegion === regionUuid);
         if (!itemCheck) await actor.createEmbeddedDocuments("Item", itemData);
         ui.notifications.info(game.i18n.format("GAMBITSPREMADES.Notifications.Automations2024.Spells.CloudOfDaggers2024.MoveFeatureItemCreated", { name: item.name, name2: item.name }))
-        return;
-    }
-
-    if (args?.[0] === "off") {
-        async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
-        await wait(250);
-        const originActor = await fromUuid(args[2]);
-        let itemCheck = originActor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "920bfa86-2a3a-4e6a-ae7d-3d420c2c5992");
-        item = originActor.items.find(i => i.identifier === "cloud-of-daggers");
-        
-        let effectCheck = originActor.appliedEffects.some(e => e.name === `${item.name}`);
-        if(!effectCheck)
-        {
-            await originActor.deleteEmbeddedDocuments("Item", [itemCheck.id]);
-        }
         return;
     }
 
@@ -150,10 +149,11 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
         return;
     }
 
-    if(game.user.id !== userId) return;
+    if(game.user.id !== game.gps.regionEventUser(regionScenario, userId)) return;
 
     let tokenDocument = await fromUuid(tokenUuid);
     token = tokenDocument?.object;
+    if(!token?.actor) return;
 
     if (!MidiQOL.isTargetable(token)) {
         if(debugEnabled) game.gps.logInfo(`Token is not targetable for ${itemName}`);
@@ -165,36 +165,48 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
     }
 
     let region = await fromUuid(regionUuid);
-    let turn = game.combat.round + '-' + game.combat.turn;
+    if(!region) return;
+    let turn = game.gps.regionTurnKey();
     let lastTurn = region.flags['gambits-premades']?.spell?.cloudOfDaggers?.[token.id]?.turn;
     if (turn === lastTurn) {
         if(debugEnabled) game.gps.logInfo(`Token already damaged this round for ${itemName}`);
         return;
     }
 
-    let template = await fromUuid(region.flags["region-attacher"]?.attachedTemplate)
-    const effectOriginActor = await fromUuid(region.flags["region-attacher"]?.actorUuid);
-    const effectOriginToken = await MidiQOL.tokenForActor(region.flags["region-attacher"]?.actorUuid);
-    let chosenItem = await fromUuid(region.flags["region-attacher"]?.itemUuid);
-    let castLevel = template.getFlag("gambits-premades", "codCastLevel");
+    let template = region
+    const effectOriginActor = game.gps.getRegionActor(region);
+    const effectOriginToken = fromUuidSync(region.getFlag("dnd5e", "origin"))?.object;
+    let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
+    if(!chosenItem || !effectOriginActor) return;
+    let castLevel = template.getFlag("dnd5e", "spellLevel");
     let damageDice = (2*(castLevel - 2)) + 4;
 
     let resumeMovement;
+    try {
     if(regionScenario === "tokenEnter" && movementScenario) resumeMovement = await tokenDocument?.pauseMovement();
 
-    await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: 'spell.cloudOfDaggers.' + token.id + '.turn', value: turn });
+    await game.gps.queryUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: 'spell.cloudOfDaggers.' + token.id + '.turn', value: turn });
 
     let damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}d4`, {}, {type: "slashing", properties: ["mgc"]}).evaluate();
     await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 
     const itemData = {
+        flags: {autoanimations: {isEnabled: false, version: 5}},
         name: "Cloud of Daggers - Damage (Slashing)",
         type: "feat",
         img: chosenItem.img
     }
 
-    await new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, "slashing", token ? [token] : [], damageRoll, {itemData: itemData, flavor: "Cloud of Daggers - Damage (Slashing)"});
-    if(regionScenario === "tokenEnter" && movementScenario) await resumeMovement();
+    const damage = new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, "slashing", [token], damageRoll, {itemData: itemData, flavor: "Cloud of Daggers - Damage (Slashing)"});
+    damage.activity.updateSource({"activation.type": "special", "activation.override": true});
+    await damage.ready;
+    if(regionScenario === "tokenEnter" && movementScenario) await resume();
 
     return;
+    } finally { await resume(); }
+    async function resume() {
+        const callback = resumeMovement;
+        resumeMovement = undefined;
+        await callback?.();
+    }
 }

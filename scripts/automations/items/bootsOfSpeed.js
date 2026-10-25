@@ -2,7 +2,7 @@ export async function bootsOfSpeed({ speaker, actor, token, character, item, arg
     if (args[0].macroPass === "preItemRoll") {
         if(!actor.appliedEffects.some(e => e.name === "Boots of Speed")) return;
 
-        await foundry.applications.api.DialogV2.wait({
+        await game.gps.showAutomationDialog({
             window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Items.BootsOfSpeed.Windowtitle") },
             content: `
                 <div class="gps-dialog-container">
@@ -69,12 +69,12 @@ export async function bootsOfSpeed({ speaker, actor, token, character, item, arg
             effectDataCurrent = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "6274a76f-2c25-4f80-8cc0-70e02f8d880c");
             manualTrigger = true;
         }
-        let currentSeconds = effectDataCurrent?.duration?.seconds;
-        let currentRounds;
-        if(!currentSeconds) currentRounds = effectDataCurrent?.duration?.remaining;
-        else currentRounds = currentSeconds / 6;
-        if(currentRounds || duration) {
-            await effectData.update({ "duration.rounds": duration ? duration : currentRounds });
+        const remainingDuration = effectDataCurrent instanceof CONFIG.ActiveEffect.documentClass
+            ? effectDataCurrent.updateDuration()
+            : effectDataCurrent ? new CONFIG.ActiveEffect.documentClass(effectDataCurrent, { parent: actor }).duration : null;
+        const currentRounds = Math.max(0, Math.ceil((remainingDuration?.secondsRemaining ?? 0) / CONFIG.time.roundTime));
+        if(duration || Number.isFinite(currentRounds)) {
+            await effectData.update({ "duration.value": duration ?? currentRounds, "duration.units": "rounds" });
         }
         if(manualTrigger) await effectDataCurrent.delete();
     }

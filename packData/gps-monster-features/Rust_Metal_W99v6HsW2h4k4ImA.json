@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "book": "",
       "page": "",
@@ -44,7 +44,7 @@
         "img": "icons/skills/melee/shield-damaged-broken-gold.webp",
         "type": "script",
         "scope": "global",
-        "command": "if (workflow.activity?.midiProperties?.magicDamage === true || workflow.activity?.actionType !== 'mwak') return;\n\nconst actor = workflow.actor;\nconst item = workflow.item;\nconst activity = workflow.activity;\nif (!activity) return;\n\nconst gmUser = game.gps.getPrimaryGM();\nif (!gmUser) return;\n\nconst rustPath = `feature.rustMetal.${item.id}`;\nconst rustFlags = foundry.utils.getProperty(actor.flags['gambits-premades'], rustPath) ?? {};\nlet totalPenalty = Number(rustFlags.penalty ?? 0);\n\ntotalPenalty -= 1;\n\nif (totalPenalty === -5) {\n  const actorPlayer = MidiQOL.playerForActor(actor);\n  await ChatMessage.create({\n    user: actorPlayer?.id ?? game.user.id,\n    speaker: ChatMessage.getSpeaker({ actor }),\n    content: \"Your weapon crumbles and is fully destroyed as it rusts through.\"\n  });\n\n  await item.delete();\n  await actor.unsetFlag('gambits-premades', rustPath); // Clean up flag\n  return;\n}\nelse {\n  await ChatMessage.create({\n  user: gmUser,\n  whisper: [gmUser],\n  speaker: ChatMessage.getSpeaker({ actor }),\n  content: `⚠️ <strong>${item.name}</strong> has taken rust damage from a Rust Monster. Current penalty: <strong>${totalPenalty}</strong>. Destroyed at <strong>-5</strong>`\n});\n}\n\nawait actor.setFlag('gambits-premades', `${rustPath}.penalty`, totalPenalty);\nawait actor.setFlag('gambits-premades', `${rustPath}.damage`, `${totalPenalty}`);\n\n// Build penalty damage part (negative flat damage)\nconst penaltyPart = {\n  includeBase: false,\n  number: 0,\n  bonus: \"\",\n  denomination: null,\n  scaling: { mode: \"\", number: null, formula: \"\" },\n  types: new Set(), // Optional: Set([\"slashing\"])\n  custom: {\n    enabled: true,\n    formula: `${totalPenalty}`\n  }\n};\n\n// Push update to the activity via socket\nawait game.gps.socket.executeAsUser(\"gpsActivityUpdate\", gmUser, {\n  activityUuid: activity.uuid,\n  updates: {\n    \"damage.parts\": [penaltyPart]\n  }\n});",
+        "command": "const weapon = workflow.item;\nif(weapon.type !== \"weapon\" || workflow.activity?.actionType !== \"mwak\" || workflow.activity?.midiProperties?.magicDamage || weapon.system.properties.has(\"mgc\") || weapon.system.magicalBonus) return;\nconst material = String(weapon.system.material?.type ?? \"\").toLowerCase();\nconst base = weapon.system.type?.baseItem ?? weapon.system.baseItem;\nconst metalWeapons = new Set([\"dagger\", \"handaxe\", \"javelin\", \"mace\", \"sickle\", \"spear\", \"battleaxe\", \"flail\", \"glaive\", \"greataxe\", \"greatsword\", \"halberd\", \"lance\", \"longsword\", \"maul\", \"morningstar\", \"pike\", \"rapier\", \"scimitar\", \"shortsword\", \"trident\", \"warpick\", \"warhammer\"]);\nif(material ? ![\"iron\", \"steel\", \"silver\", \"adamantine\", \"mithral\"].includes(material) : !metalWeapons.has(base)) return;\nconst existing = weapon.effects.find(effect => effect.flags[\"gambits-premades\"]?.rustMetal);\nconst penalty = Number(existing?.getFlag(\"gambits-premades\", \"rustMetal\") ?? 0) - 1;\nif(penalty <= -5) {\n    await weapon.delete();\n    return;\n}\nconst data = {name: \"Rust Metal\", type: \"enchantment\", transfer: true, origin: macroItem.uuid, system: {magical: false, changes: [{key: \"system.damage.bonus\", type: \"add\", value: String(penalty), priority: 20}]}, flags: {\"gambits-premades\": {rustMetal: penalty}}};\nif(existing) await existing.update(data);\nelse await weapon.createEmbeddedDocuments(\"ActiveEffect\", [data]);\n",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -94,6 +94,16 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/skills/melee/shield-damaged-broken-gold.webp",
@@ -101,26 +111,10 @@
     {
       "name": "Rust Metal",
       "origin": "Compendium.world.gps-monster-features.Item.OViIIfcfXLb8lv6C",
-      "duration": {
-        "startTime": 1697165136,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "transfer": true,
       "disabled": false,
       "_id": "UCzjVUEiQr310D2P",
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro,isDamaged",
-          "priority": 20
-        }
-      ],
       "description": "",
       "statuses": [],
       "flags": {
@@ -133,17 +127,35 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/skills/melee/shield-damaged-broken-gold.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro,isDamaged",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": {
+        "time": 1697165136,
+        "round": null,
+        "turn": null,
+        "combat": null
+      },
       "_key": "!items.effects!W99v6HsW2h4k4ImA.UCzjVUEiQr310D2P"
     }
   ],

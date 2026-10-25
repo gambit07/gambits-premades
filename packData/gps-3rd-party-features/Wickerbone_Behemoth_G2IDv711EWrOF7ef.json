@@ -15,7 +15,7 @@
       "itemCondition": "",
       "otherCondition": "",
       "effectCondition": "",
-      "onUseMacroName": ""
+      "onUseMacroName": "[preItemRoll]function.game.gps.wickerboneBehemoth,[preActiveEffects]function.game.gps.wickerboneBehemoth"
     },
     "dae": {
       "macro": {
@@ -23,7 +23,7 @@
         "img": "icons/creatures/magical/spirit-undead-ghost-tan-teal.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0] === \"on\") {\n    await token.document.update({\n        \"texture.src\": \"assets/pcs/demon_tree_lesser_02_hi.webp\",\n        \"texture.scaleX\": 1.5,\n        \"texture.scaleY\": 1.5\n    }); // Change transformed token here\n\n    let itemData = actor.items.getName(\"Club\");\n    await itemData.update({\"system.equipped\" : true});\n    const weaponItem = actor.getEmbeddedDocument(\"Item\", itemData.id);\n    const weaponCopy = duplicate(weaponItem);\n    await DAE.setFlag(actor, \"shillelagh\", {\n        id: itemData.id,\n        name: weaponItem.name,\n        damage: weaponItem.system.damage.parts[0][0],\n        ability: weaponItem.system.ability,\n        magical: getProperty(weaponItem, \"system.properties.mgc\") || false,\n    });\n    const damage = weaponCopy.system.damage.parts[0][0];\n    const targetAbilities = actor.system.abilities;\n    weaponCopy.system.damage.parts[0][0] = damage.replace(/1d(4|6)/g, \"1d8\");\n    if (targetAbilities.wis.value > targetAbilities.str.value) weaponCopy.system.ability = \"wis\";\n    weaponCopy.name = weaponItem.name + \" [Shillelagh]\";\n    setProperty(weaponCopy, \"system.properties.mgc\", true);\n    await actor.updateEmbeddedDocuments(\"Item\", [weaponCopy]);\n}\n\nif(args[0] === \"off\") {\n    await token.document.update({\"texture.src\" : \"tokenizer/pc-images/cait.token.webp?1714091336458\",\n        \"texture.scaleX\": 1,\n        \"texture.scaleY\": 1\n    }); // Change origin token here\n\n    const flag = DAE.getFlag(actor, \"shillelagh\");\n    const weaponItem = actor.getEmbeddedDocument(\"Item\", flag.id);\n    const weaponCopy = duplicate(weaponItem);\n    weaponCopy.system.damage.parts[0][0] = flag.damage;\n    weaponCopy.system.ability = flag.ability;\n    weaponCopy.name = flag.name;\n    setProperty(weaponCopy, \"system.properties.mgc\", flag.magical);\n    await actor.updateEmbeddedDocuments(\"Item\", [weaponCopy]);\n    await DAE.unsetFlag(actor, \"shillelagh\");\n    let itemData = actor.items.getName(\"Club\");\n    await itemData.update({\"system.equipped\" : false});\n    await actor.unsetFlag(\"midi-qol\", \"wickerboneAccDamage\");\n}\n\nif(args[0].macroPass === \"isDamaged\") {\n    async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }\n    let gameVersion = parseInt(game.system.version.split('.')[0], 10);\n    const rangeCheck = MidiQOL.findNearby(null, token, 5, { includeToken: false });\n    const withinRange = rangeCheck.filter(i => i.document.disposition !== token.document.disposition);\n    if (withinRange.length === 0) return;\n    let itemImage = macroItem.img;\n    for(target of withinRange) {\n        let targetUuid = target.document.uuid;\n        let diceTotal = (actor.system.details.level < 10) ? '1d4' : '2d4';\n\n        const tempEffectData = [{\n        \"icon\": `${itemImage}`,\n        \"name\": \"Wickerbone Behemoth Splinter\",\n        \"changes\": [],\n        \"origin\": actor.uuid,\n        \"disabled\": false,\n        \"duration\": {\n            \"rounds\": 1\n        },\n        \"flags\": {\n            \"effectmacro\": {\n                \"onCreate\": {\n                    \"script\": `\n                            const itemData = {\n                            name: \"Wickerbone Behemoth Splinter\",\n                            type: \"feat\",\n                                img: '${itemImage}',\n                            effects: [],\n                            flags: {\n                                \"midi-qol\": {\n                                    noProvokeReaction: true,\n                                    onUseMacroName: null,\n                                    forceCEOff: true\n                                },\n                                \"midiProperties\": {\n                                    nodam: true\n                                },\n                            },\n                            system: {\n                                equipped: true,\n                                actionType: \"attack\",\n                                damage: { parts: [['${diceTotal}', 'piercing']] },\n                                components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n                                duration: { units: \"inst\", value: undefined },\n                                properties: {mgc: true}\n                            },\n                            };\n                            const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: actor});\n                            const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: ['${targetUuid}'], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n                            await MidiQOL.completeItemUse(itemUpdate, {}, options);\n                    `\n                }\n            }\n        }\n    }];\n\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: tempEffectData });\n    await wait(100);\n    let tempEffectRemove;\n    if(gameVersion >= 3) {\n        tempEffectRemove = actor.appliedEffects.find(i => i.name.toLowerCase() === \"wickerbone behemoth splinter\");\n    }\n    else {\n        tempEffectRemove = actor.effects.getName(\"Wickerbone Behemoth Splinter\");\n    }\n    await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: [tempEffectRemove.id] });\n    }\n\n    let damageReceived = await actor.getFlag(\"midi-qol\", \"wickerboneAccDamage\");\n    if(!damageReceived) await actor.setFlag(\"midi-qol\", \"wickerboneAccDamage\", workflow.damageTotal);\n    else await actor.setFlag(\"midi-qol\", \"wickerboneAccDamage\", damageReceived + workflow.damageTotal);\n}",
+        "command": "return await game.gps.wickerboneBehemoth({actor, token, item, args, workflow: typeof workflow === \"undefined\" ? undefined : workflow, macroItem: typeof macroItem === \"undefined\" ? undefined : macroItem});\n",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -261,17 +261,41 @@
       "isCustomized": false,
       "fromAmmo": false,
       "version": 5
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      },
+      "dnd5eactivity200": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Splinters",
+        "activityType": "damage",
+        "version": 2
+      }
     }
   },
   "system": {
     "description": {
-      "value": "<p><em>Requires Midi QOL, DAE. This item comes from Steinhardt's Guide to the Eldritch Hunt, purchase at https://www.kickstarter.com/projects/monkey-dm/eldritch-hunt</em></p>",
+      "value": "<p><em>Requires Midi QOL, DAE, Effect Macro. This item comes from Steinhardt's Guide to the Eldritch Hunt, purchase at https://www.kickstarter.com/projects/monkey-dm/eldritch-hunt</em></p><p><strong>GPS setup:</strong> Keep an actor-owned Wild Shape item with configured uses. Activation binds to that resource and adds temporary left and right arm weapons; existing weapons are left unchanged. The Splinters activity is used by the automation after choosing nearby recipients. Damage tracking uses applied HP and temporary HP damage; direct sheet edits are not tracked. Use the Wild Shape activity or the system Wild Shape preset to end the transformation early.</p>",
       "chat": ""
     },
     "source": {
       "book": "SGEH",
       "page": "",
-      "custom": "2.1.38",
+      "custom": "",
       "license": "",
       "revision": 1,
       "rules": "2014"
@@ -302,22 +326,12 @@
           "override": false
         },
         "consumption": {
-          "targets": [
-            {
-              "type": "attribute",
-              "target": "resources.primary.value",
-              "value": "1",
-              "scaling": {
-                "mode": "",
-                "formula": ""
-              }
-            }
-          ],
+          "targets": [],
           "scaling": {
             "allowed": false,
             "max": ""
           },
-          "spellSlot": true
+          "spellSlot": false
         },
         "description": {
           "chatFlavor": ""
@@ -351,11 +365,11 @@
           },
           "affects": {
             "count": "1",
-            "type": "",
+            "type": "self",
             "choice": false,
             "special": ""
           },
-          "prompt": true,
+          "prompt": false,
           "override": false
         },
         "uses": {
@@ -425,46 +439,31 @@
         "_id": "dnd5eactivity200",
         "type": "damage",
         "activation": {
-          "type": "action",
-          "value": 1,
+          "type": "special",
+          "value": null,
           "condition": "",
           "override": false
         },
         "consumption": {
-          "targets": [
-            {
-              "type": "attribute",
-              "target": "resources.primary.value",
-              "value": "1",
-              "scaling": {
-                "mode": "",
-                "formula": ""
-              }
-            }
-          ],
+          "targets": [],
+          "spellSlot": false,
           "scaling": {
             "allowed": false,
             "max": ""
-          },
-          "spellSlot": true
+          }
         },
         "description": {
           "chatFlavor": ""
         },
         "duration": {
+          "units": "inst",
           "concentration": false,
-          "value": "10",
-          "units": "minute",
-          "special": "",
           "override": false
         },
-        "effects": [
-          {
-            "_id": "kE7T0D7E6CnMvjvr"
-          }
-        ],
+        "effects": [],
         "range": {
-          "units": "self",
+          "value": "5",
+          "units": "ft",
           "special": "",
           "override": false
         },
@@ -479,12 +478,12 @@
             "units": "m"
           },
           "affects": {
-            "count": "1",
-            "type": "",
-            "choice": false,
+            "count": "",
+            "type": "creature",
+            "choice": true,
             "special": ""
           },
-          "prompt": true,
+          "prompt": false,
           "override": false
         },
         "uses": {
@@ -499,16 +498,18 @@
           },
           "parts": [
             {
-              "number": 2,
+              "number": 1,
               "denomination": 4,
               "bonus": "",
-              "types": [],
+              "types": [
+                "piercing"
+              ],
               "custom": {
                 "enabled": false,
                 "formula": ""
               },
               "scaling": {
-                "mode": "whole",
+                "mode": "",
                 "number": null,
                 "formula": ""
               }
@@ -540,13 +541,13 @@
           "forceConsumeDialog": "default",
           "forceRollDialog": "default",
           "forceDamageDialog": "default",
-          "confirmTargets": "default",
+          "confirmTargets": "never",
           "autoTargetType": "any",
           "autoTargetAction": "default",
-          "automationOnly": false,
+          "automationOnly": true,
           "otherActivityCompatible": true,
           "otherActivityAsParentType": true,
-          "identifier": "",
+          "identifier": "wickerboneSplinters",
           "displayActivityName": false,
           "rollMode": "default",
           "chooseEffects": false,
@@ -554,7 +555,7 @@
           "ignoreFullCover": false,
           "removeChatButtons": "default",
           "magicEffect": false,
-          "magicDamage": false,
+          "magicDamage": true,
           "noConcentrationCheck": false,
           "autoCEEffects": "default"
         },
@@ -563,7 +564,8 @@
           "saveRemoves": true,
           "preRemoveConditionText": "",
           "postRemoveConditionText": ""
-        }
+        },
+        "name": "Splinters"
       }
     },
     "identifier": "wickerbone-behemoth",
@@ -582,43 +584,12 @@
     {
       "origin": "Actor.6kguFcZvUgTJzCvS.Item.bDnC8h9XbLrI9TJo",
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 600,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Wickerbone Behemoth",
       "_id": "kE7T0D7E6CnMvjvr",
-      "changes": [
-        {
-          "key": "system.attributes.ac.formula",
-          "mode": 5,
-          "value": "16",
-          "priority": 20
-        },
-        {
-          "key": "system.attributes.ac.calc",
-          "mode": 5,
-          "value": "custom",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, isDamaged",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": false,
       "statuses": [],
@@ -629,22 +600,50 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
         },
         "effectmacro": {
           "onTurnStart": {
-            "script": "let damageTaken = await actor.getFlag(\"midi-qol\", \"wickerboneAccDamage\");\nif(!damageTaken) return;\nlet healingTotal = Math.floor(damageTaken / 2);\nlet healingValid = actor.system.abilities.wis.mod * 3;\n\nif(healingTotal > healingValid) {\n    await MidiQOL.applyTokenDamage([{ damage: healingValid, type: \"healing\" }], healingValid, new Set([token]), origin, new Set(), { forceApply: false });\n}\nelse {\n    await MidiQOL.applyTokenDamage([{ damage: healingTotal, type: \"healing\" }], healingTotal, new Set([token]), origin, new Set(), { forceApply: false });\n}\n\nawait actor.unsetFlag(\"midi-qol\", \"wickerboneAccDamage\");"
+            "script": "await game.gps.wickerboneTurnStart({actor, token, effect});"
           }
+        },
+        "gambits-premades": {
+          "wickerbone": true
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/creatures/magical/spirit-undead-ghost-tan-teal.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.ac.min",
+            "value": "16",
+            "priority": 20,
+            "type": "upgrade"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, isDamaged",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr"
     }
   ],

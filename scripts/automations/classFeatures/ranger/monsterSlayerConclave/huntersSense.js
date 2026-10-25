@@ -16,7 +16,7 @@ export async function huntersSense({ speaker, actor, token, character, item, arg
         return array.map(item => item.charAt(0).toUpperCase() + item.slice(1));
     }
 
-    const chatMessage = game.messages.get(args[0].itemCardId);
+    const chatMessage = await fromUuid(args[0].itemCardUuid);
 
     const noneLabel = game.i18n.localize("GAMBITSPREMADES.UI.None");
 

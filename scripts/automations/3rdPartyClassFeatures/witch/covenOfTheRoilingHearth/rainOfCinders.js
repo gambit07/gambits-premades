@@ -1,6 +1,7 @@
 export async function rainOfCinders({workflowData,workflowType,workflowCombat}) {
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
+    if(workflowType === "attack" && !game.gps.reactionCanChangeOutcome(workflow)) return;
     const gpsUuid = "a95f3926-ba77-45ab-90d9-c0cf3cca10aa";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Rain of Cinders";
@@ -17,6 +18,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
+        if(workflowType === "attack" && !game.gps.reactionCanChangeOutcome(workflow)) return;
         if(!validTokenPrimary.actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa")) {
             if(debugEnabled) game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed at parent effect active`);
             continue;
@@ -27,7 +29,6 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
         const { animEnabled } = cprConfig;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
         const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
-        let baseItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa");
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         let dialogContent = `
@@ -59,13 +60,13 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -89,99 +90,29 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
             }
 
             let saveResult;
-            if(source && source === "user") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
-            else if(source && source === "gm") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
+            if(source && source === "user") saveResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
+            else if(source && source === "gm") saveResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
             if(!saveResult) continue;
 
             if (saveResult.failedSaves.size !== 0) {
-                let itemUses = baseItem.system.uses.spent;
-                let itemUsesRemaining = baseItem.system.uses.max - itemUses;
-                let attackTotal = workflow.attackTotal;
-                let spiritAC = 10 + validTokenPrimary.actor.system.attributes.prof;
-                if(attackTotal >= spiritAC) {
-                    let highestIndex = -1;
-
-                    for (let i = 0; i < itemUsesRemaining; i++) {
-                        const effects = Sequencer.EffectManager.getEffects({name: `DrawingTheHearth_${validTokenPrimary.actor.id}_${i}`, source: validTokenPrimary});
-                        if (effects.length > 0) {
-                            highestIndex = i;
-                        }
-                    }
-
-                    if (highestIndex !== -1) {
-                        Sequencer.EffectManager.endEffects({name: `DrawingTheHearth_${validTokenPrimary.actor.id}_${highestIndex}`, source: validTokenPrimary});
-
-                        new Sequence()
-                        .effect()
-                            .atLocation(validTokenPrimary)
-                            .file("animated-spell-effects-cartoon.fire.ball.05")
-                            .fadeIn(100)
-                            .fadeOut(100)
-                            .moveTowards(target)
-                            .scaleToObject(0.4)
-                            .filter("ColorMatrix", { hue: 60 })
-                            .waitUntilFinished()
-                        .effect()
-                            .atLocation(target)
-                            .file("animated-spell-effects-cartoon.fire.10")
-                            .fadeIn(100)
-                            .fadeOut(100)
-                            .scaleToObject(1.5)
-                            .filter("ColorMatrix", { hue: 60 })
-                        .play();
-                    }
-
-                    await baseItem.update({"system.uses.spent" : itemUses + 1})
-                    let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.SootSpiritAttackedHit", { sootSpiritsRemaining: itemUsesRemaining - 1 })
-                    let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
-                    let chatData = {
-                        user: actorPlayer.id,
-                        speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
-                        content: content
-                    };
-                    ChatMessage.create(chatData);
-                    workflow.aborted = true;
-
-                    if((itemUsesRemaining - 1) === 0) {
-                        let effectData = validTokenPrimary.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa");
-                        if(effectData) {
-                            await effectData.delete();
-                        }
-                    }
+                const effect = validTokenPrimary.actor.appliedEffects.find(e => e.active && e.getFlag("gambits-premades", "gpsUuid") === "2300dad6-8de1-4fa5-9878-40cec8ee37aa");
+                const state = effect?.getFlag("gambits-premades", "hearthSpirits");
+                if(!state?.remaining) continue;
+                const hit = !workflow.isFumble && (workflow.isCritical || workflow.attackTotal >= 10 + validTokenPrimary.actor.system.attributes.prof);
+                const resolved = await game.gps.queryUser("resolveHearthSpirit", gmUser, {effectUuid: effect.uuid, activation: state.activation, hit});
+                if(!resolved) continue;
+                if(animEnabled) {
+                    game.gps.animation.spellEffect({kind: "hearthOrb", at: validTokenPrimary, to: target, mode: "travel", scale: 0.4, color: "green", duration: 850});
+                    if(hit) game.gps.animation.spellEffect({kind: "cinderBurst", at: target, scale: 1.5, color: "green", delay: 850});
+                    else game.gps.animation.spellEffect({kind: "hearthOrb", at: target, to: validTokenPrimary, mode: "travel", scale: 0.4, color: "green", duration: 850, delay: 850});
                 }
-                else {
-                    new Sequence()
-                    .effect()
-                        .atLocation(validTokenPrimary)
-                        .file("animated-spell-effects-cartoon.fire.ball.05")
-                        .fadeIn(100)
-                        .fadeOut(100)
-                        .moveTowards(target)
-                        .scaleToObject(0.4)
-                        .filter("ColorMatrix", { hue: 60 })
-                        .waitUntilFinished()
-                    .effect()
-                        .atLocation(target)
-                        .file("animated-spell-effects-cartoon.fire.ball.05")
-                        .fadeIn(100)
-                        .fadeOut(100)
-                        .moveTowards(validTokenPrimary)
-                        .scaleToObject(0.4)
-                        .filter("ColorMatrix", { hue: 60 })
-                        .waitUntilFinished()
-                    .play();
-
-
-                    let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.SootSpiritAttackedMiss", { sootSpiritsRemaining: itemUsesRemaining })
-                    let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
-                    let chatData = {
-                        user: actorPlayer.id,
-                        speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
-                        content: content
-                    };
-                    ChatMessage.create(chatData);
-                    workflow.aborted = true;            
-                }
+                const message = hit ? "SootSpiritAttackedHit" : "SootSpiritAttackedMiss";
+                await ChatMessage.create({
+                    user: MidiQOL.playerForActor(validTokenPrimary.actor)?.id ?? game.user.id,
+                    speaker: ChatMessage.getSpeaker({token: validTokenPrimary}),
+                    content: game.i18n.format(`GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.${message}`, {sootSpiritsRemaining: resolved.remaining})
+                });
+                workflow.aborted = true;
             }
         }
     }

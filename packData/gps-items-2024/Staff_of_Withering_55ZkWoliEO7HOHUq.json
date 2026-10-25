@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -39,7 +39,8 @@
       "recovery": [
         {
           "period": "dawn",
-          "type": "recoverAll"
+          "type": "formula",
+          "formula": "1d3"
         }
       ],
       "spent": 0
@@ -156,14 +157,8 @@
         },
         "uses": {
           "spent": 0,
-          "max": "3",
-          "recovery": [
-            {
-              "period": "dawn",
-              "type": "formula",
-              "formula": "1d3"
-            }
-          ]
+          "max": "",
+          "recovery": []
         },
         "attack": {
           "ability": "str",
@@ -445,6 +440,34 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Attack",
+        "activityType": "attack",
+        "version": 2
+      },
+      "HMFVRnkvvl1o5cL4": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "effects": [],

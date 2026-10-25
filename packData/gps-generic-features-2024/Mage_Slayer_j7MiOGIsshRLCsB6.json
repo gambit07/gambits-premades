@@ -4,10 +4,10 @@
   "system": {
     "description": {
       "value": "<p><em>Requires MidiQOL, DAE. Make sure to Enable Mage Slayer in the module settings.</em></p>",
-      "chat": "When a creature within 5 ft. of you casts a spell, you can use your reaction to make a melee weapon attack against that creature, and when you damage a creature that is concentrating on a spell, that creature has disadvantage on the saving throw it makes to maintain its concentration. You also have advantage on saving throws against spells cast by creatures within 5 ft. of you."
+      "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2024",
       "revision": 1,
       "book": "",
@@ -172,7 +172,7 @@
         "img": "icons/weapons/polearms/halberd-crescent-glowing.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"preDamageRollComplete\") {\n  if(workflow.hitTargets.size === 0) return;\n  let target = workflow.hitTargets.first();\n\n  const hasConcApplied = target.actor.appliedEffects.some(e => e.name.includes(\"Concentrating\"));\n\tif (!hasConcApplied) return;\n\n  let effectData = [{\n    \"origin\": macroItem.uuid,\n    \"disabled\": false,\n    \"name\": `${macroItem.name} - Disadvantage`,\n    \"img\": macroItem.img,\n    \"type\": \"base\",\n    \"changes\": [\n      {\n        \"key\": \"flags.midi-qol.disadvantage.concentration\",\n        \"mode\": 0,\n        \"value\": \"1\",\n        \"priority\": 20\n      }\n    ],\n    \"transfer\": false,\n    \"flags\": {\n      \"dae\": {\n        \"specialDuration\": [\n          \"isSave.con\"\n        ]\n      }\n    }\n  }];\n\n  await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}",
+        "command": "if(args[0].macroPass === \"preDamageRollComplete\") {\n  if(workflow.hitTargets.size === 0) return;\n  let target = workflow.hitTargets.first();\n\n  const hasConcApplied = target.actor.appliedEffects.some(e => e.name.includes(\"Concentrating\"));\n\tif (!hasConcApplied) return;\n\n  let effectData = [{\n    \"origin\": macroItem.uuid,\n    \"disabled\": false,\n    \"name\": `${macroItem.name} - Disadvantage`,\n    \"img\": macroItem.img,\n    \"type\": \"base\",\n    system: { changes: [\n      {\n        \"key\": \"system.attributes.concentration.roll.mode\",\n        type: \"add\",\n        \"value\": -1,\n        \"priority\": 20\n      }\n    ] },\n    \"transfer\": false,\n    \"flags\": {\n      \"dae\": {\n        \"specialDuration\": [\n          \"isSave.con\"\n        ]\n      }\n    }\n  }];\n\n  await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -205,35 +205,48 @@
         "activity": [],
         "effect": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "XEyDcj6vYUIkSfHJ": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "img": "icons/weapons/polearms/halberd-crescent-glowing.webp",
   "effects": [
     {
       "origin": "Compendium.world.gps-generic-features.Item.iuUGS62pqYBuo1U0",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Mage Slayer",
       "img": "icons/weapons/polearms/halberd-crescent-glowing.webp",
       "_id": "A2TnuwjVXETHP1rO",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, preDamageRollComplete",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, preDamageRollComplete",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -243,15 +256,19 @@
         "dae": {
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
           "selfTarget": false,
           "selfTargetAlways": false,
           "dontApply": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!j7MiOGIsshRLCsB6.A2TnuwjVXETHP1rO"
     }
   ],

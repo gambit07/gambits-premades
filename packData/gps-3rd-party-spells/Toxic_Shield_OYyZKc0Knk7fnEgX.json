@@ -4,13 +4,13 @@
   "img": "icons/magic/defensive/shield-barrier-glowing-triangle-green.webp",
   "system": {
     "description": {
-      "value": "<p>Requires MidiQOL, DAE, Sequencer, Jack Kerouacs Animated Spell Effects - Cartoon</p>",
+      "value": "<p>Requires MidiQOL, DAE, Sequencer</p>",
       "chat": ""
     },
     "source": {
       "book": "Sebastian Crowe's Guide to Drakkenheim",
       "page": "",
-      "custom": "0.5.85",
+      "custom": "",
       "license": "",
       "revision": 1,
       "rules": "2014"
@@ -173,46 +173,42 @@
     {
       "origin": "Item.qF9vXMhSs72yB8lx",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Toxic Shield",
       "img": "icons/magic/defensive/shield-barrier-glowing-triangle-green.webp",
       "_id": "1qXUy5XyTuXH4e3T",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "system.traits.dr.value",
-          "mode": 0,
-          "value": "poison",
-          "priority": 20
-        },
-        {
-          "key": "flags.chris-premades.CR.poisoned",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, isHit",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "poison",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.chris-premades.CR.poisoned",
+            "value": 1,
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, isHit",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -227,15 +223,19 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!OYyZKc0Knk7fnEgX.1qXUy5XyTuXH4e3T"
     }
   ],
@@ -467,7 +467,7 @@
         "img": "icons/magic/defensive/shield-barrier-glowing-triangle-green.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"isHit\") {\n    let target = workflow.token;\n    if(MidiQOL.computeDistance(token,target, {wallsBlock: true, includeCover: true}) > 5 || (workflow.item.system.actionType !== \"mwak\" && workflow.item.system.actionType !== \"msak\")) return;\n    let effectData = actor.appliedEffects.find(e => e.name === macroItem.name);\n    let castLevel = await effectData.getFlag(\"gambits-premades\", \"toxicShieldCastLevel\");\n    let numDice = 1 + Math.floor((castLevel - 1) / 2);\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDice}d8`).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        name: \"Toxic Shield - Damage (Poison)\",\n        type: \"feat\",\n        img: macroItem.img\n    }\n\n    await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"poison\", target ? [target] : [], damageRoll, {itemData: itemData});\n\n    new Sequence()\n    .effect()\n        .atLocation(token)\n        .rotateTowards(target)\n        .file(\"animated-spell-effects-cartoon.cantrips.poison_spray.green\")\n        .filter(\"ColorMatrix\", { hue: 50 })\n        .scaleToObject()\n    .play()\n}\n\nif(args[0].macroPass === \"postActiveEffects\") {\n    let effectData = actor.appliedEffects.find(e => e.name === macroItem.name);\n    await effectData.setFlag(\"gambits-premades\", \"toxicShieldCastLevel\", workflow.castData.castLevel);\n    new Sequence()\n    .effect()\n        .attachTo(token,{bindVisibility: true})\n        .file(\"jb2a.markers.shield_rampart.loop.01.orange\")\n        .filter(\"ColorMatrix\", { hue: 70,brightness: 1 })\n        .filter(\"Glow\", {color: 0x006400, knockout: false})\n        .scaleToObject(1.8)\n        .persist()\n        .name(`${token.document.id}_ToxicShield`)\n    .play()\n}\n\nif(args[0] === \"off\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.document.id}_ToxicShield` });\n}",
+        "command": "if(args[0].macroPass === \"isHit\") {\n    let target = workflow.token;\n    if(!game.gps.withinRange(token, target, 5) || (workflow.activity.actionType !== \"mwak\" && workflow.activity.actionType !== \"msak\")) return;\n    let effectData = actor.appliedEffects.find(e => DAE.effectMatchesSource(e, macroItem.uuid) && e.name === macroItem.name);\n    if(!effectData) return;\n    let castLevel = await effectData.getFlag(\"gambits-premades\", \"toxicShieldCastLevel\");\n    let numDice = 1 + Math.floor((castLevel - 1) / 2);\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDice}d8`).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        flags: {autoanimations: {isEnabled: false, version: 5}},\n        name: \"Toxic Shield - Damage (Poison)\",\n        type: \"feat\",\n        img: macroItem.img\n    }\n\n    await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"poison\", target ? [target] : [], damageRoll, {itemData: itemData});\n\n    if(game.gps.getCprConfig({itemUuid: macroItem.uuid}).animEnabled) {\n        game.gps.animation.spellEffect({kind: \"poisonSpray\", at: token, to: target, scale: 1.5, height: token.w, color: \"green\"});\n    }\n}\n\nif(args[0].macroPass === \"postActiveEffects\") {\n    let effectData = actor.appliedEffects.find(e => DAE.effectMatchesSource(e, macroItem.uuid) && e.name === macroItem.name);\n    if(!effectData) return;\n    await effectData.setFlag(\"gambits-premades\", \"toxicShieldCastLevel\", workflow.castData.castLevel);\n    if(game.gps.getCprConfig({itemUuid: macroItem.uuid}).animEnabled) {\n        new Sequence()\n        .effect()\n            .attachTo(token,{bindVisibility: true})\n            .file(\"jb2a.markers.shield_rampart.loop.01.orange\")\n            .filter(\"ColorMatrix\", { hue: 70,brightness: 1 })\n            .filter(\"Glow\", {color: 0x006400, knockout: false})\n            .scaleToObject(1.8)\n            .persist()\n            .name(`${token.document.id}_${item.uuid}_ToxicShield`)\n        .play()\n    }\n}\n\nif(args[0] === \"off\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.document.id}_${item.uuid}_ToxicShield` });\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -489,11 +489,7 @@
       }
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.w88977HaPVOXN7mP.ActiveEffect.YKjyceX2IaxsqpmA"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -504,6 +500,36 @@
       "itemCondition": "",
       "effectCondition": "",
       "onUseMacroName": "[postActiveEffects]ItemMacro"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2AFree",
+        "GPS"
+      ]
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "_id": "OYyZKc0Knk7fnEgX",

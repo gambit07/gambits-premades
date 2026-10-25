@@ -1,0 +1,63 @@
+{
+  "name": "Fury of the Small",
+  "type": "feat",
+  "effects": [],
+  "system": {
+    "activities": {},
+    "uses": {
+      "max": "@prof",
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 0
+    },
+    "advancement": {},
+    "description": {
+      "value": "",
+      "chat": ""
+    },
+    "identifier": "fury-of-the-small",
+    "source": {
+      "book": "MotM",
+      "page": "",
+      "license": "",
+      "custom": "",
+      "rules": "2014",
+      "revision": 1
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "Goblin",
+    "type": {
+      "value": "race",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "gambits-premades": {
+      "gpsUuid": "9ec968bf-60fe-4d3b-987c-d3dc16206d89"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    }
+  },
+  "img": "icons/commodities/bones/skull-bat-grey.webp",
+  "folder": "gpsGoblinFolder1",
+  "_id": "if5kQZaGr93i89Ve",
+  "_key": "!items!if5kQZaGr93i89Ve"
+}

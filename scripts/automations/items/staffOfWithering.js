@@ -1,5 +1,6 @@
 export async function staffOfWithering({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preDamageRollComplete") {
+        if(!workflow.hitTargets.size || workflow.gps?.staffOfWithering) return;
         let remainingCharges = item.system.uses.max - item.system.uses.spent;
         if(!remainingCharges) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.StaffOfWithering.NotAvailable"));
         let chargesText;
@@ -33,7 +34,7 @@ export async function staffOfWithering({ speaker, actor, token, character, item,
             </div>
         `;
 
-        let result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+        let result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.hitTargets.first().document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
             
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
 
@@ -41,50 +42,51 @@ export async function staffOfWithering({ speaker, actor, token, character, item,
             return;
         }
         else if (userDecision) {
-            await item.update({ "system.uses.spent": item.system.uses.spent + 1 });
             let target = workflow.hitTargets.first();
 
             let saveResult;
-            if(source && source === "user") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
-            else if(source && source === "gm") saveResult = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            if(source && source === "user") saveResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            else if(source && source === "gm") saveResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
             if(!saveResult) return;
+            if(item.system.uses.spent >= item.system.uses.max) return;
+            await item.update({"system.uses.spent": item.system.uses.spent + 1});
+            workflow.gps ??= {};
+            workflow.gps.staffOfWithering = true;
 
             if (saveResult.failedSaves.size !== 0) {
                 let effectData = [
                 {
-                    "icon": item.img,
+                    img: item.img,
                     "origin": item.uuid,
-                    "duration": {
-                        "seconds": 3600
-                    },
+                    "duration": { value: 3600, units: "seconds" },
                     "disabled": false,
                     "name": "Staff of Withering",
-                    "changes": [
+                    system: { changes: [
                         {
-                        "key": "flags.midi-qol.disadvantage.check.str",
-                        "mode": 0,
-                        "value": "1",
+                        "key": "system.abilities.str.check.roll.mode",
+                        type: "add",
+                        "value": -1,
                         "priority": 20
                         },
                         {
-                        "key": "flags.midi-qol.disadvantage.check.con",
-                        "mode": 0,
-                        "value": "1",
+                        "key": "system.abilities.con.check.roll.mode",
+                        type: "add",
+                        "value": -1,
                         "priority": 20
                         },
                         {
-                        "key": "flags.midi-qol.disadvantage.save.str",
-                        "mode": 0,
-                        "value": "1",
+                        "key": "system.abilities.str.save.roll.mode",
+                        type: "add",
+                        "value": -1,
                         "priority": 20
                         },
                         {
-                        "key": "flags.midi-qol.disadvantage.save.con",
-                        "mode": 0,
-                        "value": "1",
+                        "key": "system.abilities.con.save.roll.mode",
+                        type: "add",
+                        "value": -1,
                         "priority": 20
                         }
-                    ]
+                    ] }
                 }
                 ];
                 await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: target.actor.uuid, effects: effectData });

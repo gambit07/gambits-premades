@@ -2,6 +2,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
     if (args[0].macroPass === "postPreambleComplete") {
         let numMotes = (actor.system.details.level >= 17) ? 4 : (actor.system.details.level >= 11) ? 3 : (actor.system.details.level >= 5) ? 2 : 1;
         let totalAssignedMotes = 0;
+        if(!workflow.targets.size) {workflow.aborted = true;return;}
 
         if(workflow.targets.size === 1) {
             await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:workflow.targets.first().actor.uuid, base :"gambits-premades", key: "stormMotesGiven", value: numMotes});
@@ -17,10 +18,10 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                     <div class="gps-dialog-flex">
                         <div style="margin-bottom: 10px;">
                             ${Array.from(workflow.targets).map(target => `
-                                <div style="margin-bottom: 10px; display: flex; align-items: center;">
-                                    <label for="form-fields" style="flex: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${target.actor.name}</label>
+                                <div data-gps-token-uuid="${target.document.uuid}" style="margin-bottom: 10px; display: flex; align-items: center;">
+                                    <label  style="flex: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${foundry.utils.escapeHTML(target.actor.name)}</label>
                                     <div class="form-group" style="flex: 1;">
-                                        <div id="form-fields" class="form-fields" style="display: flex; align-items: center; justify-content: flex-end; margin-left: 86px;">
+                                        <div class="form-fields" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
                                             <button type="button" class="mote-decrement" data-target="${target.actor.uuid}" data-key="${target.id}">-</button>
                                             <span id="moteDisplay-${target.id}" style="flex: 0 0 auto; margin: 0 10px; text-align: center;">0</span>
                                             <button type="button" class="mote-increment" data-target="${target.actor.uuid}" data-key="${target.id}">+</button>
@@ -38,7 +39,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
         </div>
         `;
 
-        await foundry.applications.api.DialogV2.wait({
+        const selection = await game.gps.showAutomationDialog({
             window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.StormMote.Windowtitle") },
             content: content,
             buttons: [{
@@ -46,7 +47,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                 label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.StormMote.Confirm"),
                 callback: async (event, button, dialog) => {
                     for (const target of workflow.targets) {
-                        let assignedCount = parseInt(document.querySelector(`#moteDisplay-${target.id}`).textContent, 10);
+                        let assignedCount = parseInt(dialog.element.querySelector(`#moteDisplay-${target.id}`).textContent, 10);
                         await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:target.actor.uuid, base :"gambits-premades", key: "stormMotesGiven", value: assignedCount});
                         await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:target.actor.uuid, base :"gambits-premades", key: "stormMoteOrigin", value: token.document.uuid});
                     }
@@ -58,11 +59,12 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                     workflow.aborted = true;
                 }
             }],
-            render: (html) => {
-                document.querySelectorAll('.mote-increment').forEach(button => {
+            render: (event, dialog) => {
+                const root = dialog.element;
+                root.querySelectorAll('.mote-increment').forEach(button => {
                     button.addEventListener('click', event => {
                         let key = event.currentTarget.dataset.key;
-                        let display = document.querySelector(`#moteDisplay-${key}`);
+                        let display = root.querySelector(`#moteDisplay-${key}`);
                         let currentValue = parseInt(display.textContent, 10);
                         if (currentValue < numMotes && totalAssignedMotes < numMotes) {
                             display.textContent = currentValue + 1;
@@ -71,10 +73,10 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                     });
                 });
 
-                document.querySelectorAll('.mote-decrement').forEach(button => {
+                root.querySelectorAll('.mote-decrement').forEach(button => {
                     button.addEventListener('click', event => {
                         let key = event.currentTarget.dataset.key;
-                        let display = document.querySelector(`#moteDisplay-${key}`);
+                        let display = root.querySelector(`#moteDisplay-${key}`);
                         let currentValue = parseInt(display.textContent, 10);
                         if (currentValue > 0) {
                             display.textContent = currentValue - 1;
@@ -88,6 +90,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
             },
             rejectClose: false
         });
+        if(selection !== "Confirm") workflow.aborted = true;
     }
 
     if (args[0].macroPass === "postApplyDynamicEffects") {
@@ -185,8 +188,6 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
     if(args[0].macroPass === "postAttackRollComplete") {
         let effectOriginActorUuid = actor.getFlag("gambits-premades", "stormMoteOrigin");
         if(workflow.targets.first()?.document.uuid !== effectOriginActorUuid) return;
-        let cprConfig = game.gps.getCprConfig({itemUuid: macroItem.uuid});
-        const { animEnabled, animColor } = cprConfig;
         let givenMotes = await actor.getFlag("gambits-premades", "stormMotesGiven");
         if((givenMotes - 1) <= 0) {
             await actor.unsetFlag("gambits-premades", "stormMotesGiven");
@@ -196,19 +197,17 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
         else {
             await actor.setFlag("gambits-premades", "stormMotesGiven", givenMotes - 1);
 
-            if(animEnabled) {
-                let highestIndex = -1;
+            let highestIndex = -1;
 
-                for (let i = 0; i < givenMotes; i++) {
-                    const effects = Sequencer.EffectManager.getEffects({name: `StormMote_${actor.id}_${i}`, source: token});
-                    if (effects.length > 0) {
-                        highestIndex = i;
-                    }
+            for (let i = 0; i < givenMotes; i++) {
+                const effects = Sequencer.EffectManager.getEffects({name: `StormMote_${actor.id}_${i}`, source: token});
+                if (effects.length > 0) {
+                    highestIndex = i;
                 }
+            }
 
-                if (highestIndex !== -1) {
-                    Sequencer.EffectManager.endEffects({name: `StormMote_${actor.id}_${highestIndex}`, source: token});
-                }
+            if (highestIndex !== -1) {
+                Sequencer.EffectManager.endEffects({name: `StormMote_${actor.id}_${highestIndex}`, source: token});
             }
         }
     }

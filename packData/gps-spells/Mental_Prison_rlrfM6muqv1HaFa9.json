@@ -155,7 +155,7 @@
       "book": "XGtE",
       "page": "",
       "license": "",
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -208,28 +208,24 @@
     {
       "origin": "Actor.61bbjJUkASXmxxcU.Item.ddbMentalPrison1",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Mental Prison",
       "img": "icons/magic/control/debuff-chains-ropes-purple.webp",
       "_id": "ALD0yIwzOKUYORqW",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.mentalPrison",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.mentalPrison",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -340,7 +336,7 @@
               "zIndex": 1
             }
           },
-          "isEnabled": true,
+          "isEnabled": false,
           "isCustomized": true,
           "fromAmmo": false,
           "version": 5,
@@ -355,13 +351,13 @@
               "customPath": ""
             },
             "sound": {
-              "enable": true,
+              "enable": false,
               "delay": 0,
               "repeat": 1,
               "repeatDelay": 250,
               "startTime": 0,
               "volume": 0.75,
-              "file": "modules/dnd5e-animations/assets/sounds/Spells/Hex.mp3"
+              "file": ""
             },
             "options": {
               "addTokenWidth": false,
@@ -438,8 +434,8 @@
               "autoSize": true
             },
             "sound": {
-              "enable": true,
-              "file": "modules/dnd5e-animations/assets/sounds/Spells/Hex.mp3",
+              "enable": false,
+              "file": "",
               "volume": 0.75,
               "delay": 2000,
               "startTime": 0
@@ -474,7 +470,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [
@@ -491,6 +486,7 @@
           "overlay": false
         }
       },
+      "start": null,
       "_key": "!items.effects!rlrfM6muqv1HaFa9.ALD0yIwzOKUYORqW"
     }
   ],
@@ -664,7 +660,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": true,
+      "isEnabled": false,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5,
@@ -679,13 +675,13 @@
           "customPath": ""
         },
         "sound": {
-          "enable": true,
+          "enable": false,
           "delay": 0,
           "repeat": 1,
           "repeatDelay": 250,
           "startTime": 0,
           "volume": 0.75,
-          "file": "modules/dnd5e-animations/assets/sounds/Spells/Hex.mp3"
+          "file": ""
         },
         "options": {
           "addTokenWidth": false,
@@ -762,8 +758,8 @@
           "autoSize": true
         },
         "sound": {
-          "enable": true,
-          "file": "modules/dnd5e-animations/assets/sounds/Spells/Hex.mp3",
+          "enable": false,
+          "file": "",
           "volume": 0.75,
           "delay": 2000,
           "startTime": 0
@@ -788,6 +784,22 @@
           "targetPlay": "end"
         },
         "enable": true
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
       }
     }
   },

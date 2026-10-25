@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -48,30 +48,24 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "effects": [
     {
       "origin": "Compendium.world.gps-class-features.Item.sX4cuwQuCcSvuNLi",
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "_id": "XXAFZYmwpId9iXoO",
-      "changes": [
-        {
-          "key": "flags.midi-qol.advantage.concentration",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        }
-      ],
       "tint": "#ffffff",
       "transfer": true,
       "flags": {
@@ -83,11 +77,14 @@
           "macroRepeat": "none",
           "specialDuration": [],
           "disableCondition": "",
-          "disableIncapacitated": false,
-          "showIcon": false
+          "disableIncapacitated": false
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "name": "Eldritch Invocations: Eldritch Mind",
@@ -95,8 +92,18 @@
       "statuses": [],
       "img": "icons/magic/death/skull-flames-white-blue.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.concentration.roll.mode",
+            "value": 1,
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!sX4cuwQuCcSvuNLi.XXAFZYmwpId9iXoO"
     }
   ],

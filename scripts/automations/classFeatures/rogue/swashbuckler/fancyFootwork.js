@@ -4,8 +4,8 @@ export async function fancyFootwork({ speaker, actor, token, character, item, ar
         if(actionType != "mwak" && actionType != "msak") return;
         let targetId = workflow.targets.first()?.id;
         if (!targetId) return;
-        let currentCombatant = canvas.tokens.get(game.combat.current.tokenId);
-        if (currentCombatant.id !== token.id) return;
+        let currentCombatant = canvas.tokens.get(game.combat?.current?.tokenId);
+        if (currentCombatant?.id !== token.id) return;
         let existingTargets = await actor.getFlag("midi-qol", `oaFancyFootworkAttack`) || [];
         if (!existingTargets.includes(targetId)) {
             existingTargets.push(targetId);

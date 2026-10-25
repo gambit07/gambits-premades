@@ -1,17 +1,14 @@
 export function caltrops({template, itemUuid}) {
+    if (!template?.object) return;
+    template = template.object;
     let cprConfig = game.gps.getCprConfig({itemUuid});
     if(!cprConfig.animEnabled) return;
+    const regionAnimation = game.gps.getRegionAnimationData(template);
     
     let alignmentDecision;
     let scaleDecision;
-    if(MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates')) {
-        alignmentDecision = {};
-        scaleDecision = 1.25;
-    }
-    else {
-        alignmentDecision = { edge: "on", offset: ( {x: 50, y: 0} ) };
-        scaleDecision = 0.5;
-    }
+    alignmentDecision = {};
+    scaleDecision = 1.25;
 
     new Sequence()
         .effect()
@@ -21,6 +18,8 @@ export function caltrops({template, itemUuid}) {
             .scaleToObject(scaleDecision)
             .mask()
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .persist()
     .play()
 }

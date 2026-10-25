@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.40",
+      "custom": "",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -440,64 +440,68 @@
       "fromAmmo": false,
       "version": 5
     },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
         },
-        {
-          "value": "color",
-          "label": "CHRISPREMADES.Config.Color",
+        "color": {
+          "label": "GAMBITSPREMADES.ItemConfig.Color",
           "type": "select",
-          "default": "red",
-          "category": "animation",
+          "default": "green",
+          "category": "animations",
           "options": [
             {
-              "value": "blue",
-              "label": "CHRISPREMADES.Config.Colors.Blue",
-              "requiredModules": [
-                "jb2a_patreon"
-              ]
-            },
-            {
               "value": "green",
-              "label": "CHRISPREMADES.Config.Colors.Green",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Green",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "purple",
-              "label": "CHRISPREMADES.Config.Colors.Purple",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Purple",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
-              "value": "red",
-              "label": "CHRISPREMADES.Config.Colors.Red",
-              "requiredModules": [
-                "jb2a_patreon"
-              ]
-            },
-            {
-              "value": "orange",
-              "label": "CHRISPREMADES.Config.Colors.Yellow",
+              "value": "yellow",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Yellow",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             }
           ]
         }
+      },
+      "animationModules": [
+        "JB2APatreon",
+        "EskiePatreon"
       ]
     },
-    "tidy5e-sheet": {
-      "section": "",
-      "actionSection": ""
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [],

@@ -3,22 +3,17 @@ export async function powerWordHeal2024({ speaker, actor, token, character, item
         const targets = workflow.targets;
         let gmUser = game.gps.getPrimaryGM();
         for(let target of targets) {
-            if(target.actor.system.details?.type?.value === "construct" || target.actor.system.details?.type?.value === "undead") {
-                ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.PowerWordHeal.TargetUndead"));
-                workflow.targets.delete(target);
-                continue;
-            }
 
             let isCharmed = target.document.hasStatusEffect("charmed");
-            if(isCharmed) await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "charmed", active: false });
+            if(isCharmed) await game.gps.queryUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "charmed", active: false });
             let isFrightened = target.document.hasStatusEffect("frightened");
-            if(isFrightened) await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "frightened", active: false });
+            if(isFrightened) await game.gps.queryUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "frightened", active: false });
             let isParalyzed = target.document.hasStatusEffect("paralyzed");
-            if(isParalyzed) await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "paralyzed", active: false });
+            if(isParalyzed) await game.gps.queryUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "paralyzed", active: false });
             let isStunned = target.document.hasStatusEffect("stunned");
-            if(isStunned) await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "stunned", active: false });
+            if(isStunned) await game.gps.queryUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "stunned", active: false });
             let isPoisoned = target.document.hasStatusEffect("poisoned");
-            if(isPoisoned) await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "poisoned", active: false });
+            if(isPoisoned) await game.gps.queryUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "poisoned", active: false });
 
             let currentHP = target.actor.system.attributes.hp.value
             let maxHP = target.actor.system.attributes.hp.max;
@@ -27,6 +22,7 @@ export async function powerWordHeal2024({ speaker, actor, token, character, item
             let healRoll = await new CONFIG.Dice.DamageRoll(`${remainingHP}`, {}, {type: "healing", properties: ["mgc"]}).evaluate();
 
             const itemData = {
+                flags: {autoanimations: {isEnabled: false, version: 5}},
                 name: "Power Word Healing",
                 type: "feat",
                 img: item.img
@@ -35,7 +31,7 @@ export async function powerWordHeal2024({ speaker, actor, token, character, item
             await new MidiQOL.DamageOnlyWorkflow(actor, token, healRoll.total, "healing", [target], healRoll, {itemData: itemData, flavor: "Power Word Healing"});
 
             let isProne = target.document.hasStatusEffect("prone");
-            if(!isProne) return;
+            if(!isProne || MidiQOL.hasUsedReaction(target.actor)) continue;
 
             let dialogId = "powerwordheal";
             let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: target.actor.name, itemName: item.name });
@@ -67,22 +63,22 @@ export async function powerWordHeal2024({ speaker, actor, token, character, item
             `;
             
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-                let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
+                let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
                 
-                let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: "gm",type: "multiDialog" };
+                let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog" };
             
-                result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+                result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
             } else {
-                result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+                result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
             }
                     
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
 
             if (!userDecision) {
-                return;
+                continue;
             }
             else if (userDecision) {
-                await game.gps.socket.executeAsUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "prone", active: false });
+                await game.gps.queryUser("gmToggleStatus", gmUser, {tokenUuid: `${target.document.uuid}`, status: "prone", active: false });
                 await game.gps.addReaction({actorUuid: target.actor.uuid});
             }
         }

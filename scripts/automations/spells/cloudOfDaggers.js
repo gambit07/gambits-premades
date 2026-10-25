@@ -3,7 +3,6 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
 
     if(args?.[0]?.macroPass === "templatePlaced") {
         const template = await fromUuid(workflow.templateUuid);
-        await template.setFlag("gambits-premades", "codCastLevel", workflow.castData.castLevel);
         game.gps.animation.cloudOfDaggers({template, itemUuid: workflow.item.uuid});
         return;
     }
@@ -17,10 +16,11 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
         return;
     }
 
-    if(game.user.id !== userId) return;
+    if(game.user.id !== game.gps.regionEventUser(regionScenario, userId)) return;
 
-    let tokenDocument = await fromUuid(tokenUuid);
+    let tokenDocument = fromUuidSync(tokenUuid);
     let token = tokenDocument?.object;
+    if(!token?.actor) return;
 
     if (!MidiQOL.isTargetable(token)) {
         if(debugEnabled) game.gps.logInfo(`Token is not targetable for ${itemName}`);
@@ -31,38 +31,51 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
         return;
     }
 
-    let region = await fromUuid(regionUuid);
-    let template = await fromUuid(region.flags["region-attacher"].attachedTemplate)
+    let region = fromUuidSync(regionUuid);
+    let template = region
 
-    const effectOriginActor = await fromUuid(region.flags["region-attacher"].actorUuid);
-    const effectOriginToken = await MidiQOL.tokenForActor(region.flags["region-attacher"].actorUuid);
-    let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
+    if(!region) return;
 
-    let turn = game.combat.round + '-' + game.combat.turn;
+    let turn = game.gps.regionTurnKey();
     let lastTurn = region.flags['gambits-premades']?.spell?.cloudOfDaggers?.[token.id]?.turn;
     if (turn === lastTurn) {
         if(debugEnabled) game.gps.logInfo(`Token already damaged this round for ${itemName}`);
         return;
     }
 
+    const effectOriginActor = game.gps.getRegionActor(region);
+    const effectOriginToken = fromUuidSync(region.getFlag("dnd5e", "origin"))?.object;
+    let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
+    if(!chosenItem || !effectOriginActor) return;
+
     let resumeMovement;
-    if(regionScenario === "tokenEnter") resumeMovement = await tokenDocument.pauseMovement();
+    try {
+    if(regionScenario === "tokenEnter") resumeMovement = tokenDocument.pauseMovement();
 
-    await game.gps.socket.executeAsUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: 'spell.cloudOfDaggers.' + token.id + '.turn', value: turn });
+    await game.gps.queryUser("gmSetFlag", gmUser, { flagDocumentUuid: region.uuid, key: 'spell.cloudOfDaggers.' + token.id + '.turn', value: turn });
 
-    let castLevel = template.getFlag("gambits-premades", "codCastLevel");
+    let castLevel = template.getFlag("dnd5e", "spellLevel");
 
     let damageDice =  (2*(castLevel - 2)) + 4;
     let damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}d4`, {}, {type: "slashing", properties: ["mgc"]}).evaluate();
     await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 
     const itemData = {
+        flags: {autoanimations: {isEnabled: false, version: 5}},
         name: "Cloud of Daggers - Damage (Slashing)",
         type: "feat",
         img: chosenItem.img
     }
 
-    await new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, "slashing", token ? [token] : [], damageRoll, {itemData: itemData, flavor: "Cloud of Daggers - Damage (Slashing)"});
-    if(regionScenario === "tokenEnter") await resumeMovement();
+    const damage = new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, "slashing", [token], damageRoll, {itemData: itemData, flavor: "Cloud of Daggers - Damage (Slashing)"});
+    damage.activity.updateSource({"activation.type": "special", "activation.override": true});
+    await damage.ready;
+    if(regionScenario === "tokenEnter") await resume();
     return;
+    } finally { await resume(); }
+    async function resume() {
+        const callback = resumeMovement;
+        resumeMovement = undefined;
+        await callback?.();
+    }
 }

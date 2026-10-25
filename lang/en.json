@@ -46,6 +46,9 @@
           "ShroomOfDoom": {
             "MushroomCreatedOnBody": "The creature has {mushroomCount} mushroom created on their body with Shroom of Doom.",
             "MushroomsCreatedOnBody": "The creature has {mushroomCount} mushrooms created on their body with Shroom of Doom."
+          },
+          "GrimSiphon": {
+            "Healing": "Grim Siphon - Healing"
           }
         },
         "ClassFeatures": {
@@ -152,7 +155,8 @@
             "SchoolOfDivination": {
               "Portent": {
                 "PortentApplied": "You used {portentLabel} and changed the dice result to {roll}.",
-                "PortentRoll": "- Portent Roll {i}:"
+                "PortentRoll": "- Portent Roll {i}:",
+                "Rolls": "Portent rolls:"
               }
             },
             "SchoolOfEnchantment": {
@@ -186,7 +190,7 @@
           },
           "DreadCounterspell": {
             "DreadCounterspellAutoSuccess": "The creature was dread counterspelled because you used {itemProperName} on a spell that was 4th level or lower.",
-            "DreadCounterspellFailed": "The creature was not dread counterspelled, you rolled a {skillTotal} on your {skillFlavor} ability check and needed a {spellThreshold}.{spellPenetrationChat}",
+            "DreadCounterspellFailed": "The creature was not dread counterspelled, you rolled a {skillTotal} on your {skillFlavor} ability check and needed a {spellThreshold}.",
             "DreadCounterspellSuccess": "The creature was dread counterspelled, you rolled a {skillTotal} on your {skillFlavor} ability check."
           }
         },
@@ -269,9 +273,30 @@
           "Remaining": "You have {remaining} use remaining.",
           "UsesRemaining": "You have {remaining} uses remaining."
         }
+      },
+      "HealingGlyph": {
+        "Healed": "Healing Glyph restores {hitPoints} hit points.",
+        "Restored": "Healing Glyph removes {condition}."
+      },
+      "ArmorOfHexes": {
+        "Success": "{actorName} used {itemName} and avoided the attack.",
+        "Failure": "{actorName} used {itemName} but could not avoid the attack."
+      },
+      "PoetryInMisery": {
+        "NaturalOne": "{actorName}'s natural 1 on a {rollType}",
+        "RollTypes": {
+          "attack": "attack roll",
+          "save": "saving throw",
+          "ability": "ability check",
+          "skill": "skill check"
+        }
+      },
+      "EnemiesAbound": {
+        "DispositionChanged": "{actorName}'s disposition changed to Neutral, allowing attacks against enemies or allies. The original disposition returns when the effect ends."
       }
     },
     "DAE": {
+      "Category": "Gambit's Premades",
       "Flags": {
         "OADisadvantage": {
           "Description": "Grants disadvantage on Opportunity Attacks against this token",
@@ -324,7 +349,10 @@
         "Target": "Target:",
         "WaitingForSelection": "Waiting for {actorName}'s selection | {itemName}",
         "Weapon": "Weapon:",
-        "Yes": "Yes"
+        "Yes": "Yes",
+        "Cancel": "Cancel",
+        "Ally": "Ally:",
+        "Use": "Use"
       },
       "Automations": {
         "ThirdPartyClassFeatures": {
@@ -493,8 +521,6 @@
               "RestoreBalance": {
                 "Ally": "Ally:",
                 "Enemy": "Enemy:",
-                "OnchangeResetallyselect": "onchange=\"resetAllySelect()\">",
-                "OnchangeResetenemyselect": "onchange=\"resetEnemySelect()\">",
                 "Prompts": {
                   "UseYourReaction": {
                     "SelectTarget": "Would you like to use your reaction to initiate {itemName}? {selectionHint}",
@@ -535,7 +561,8 @@
             "SchoolOfDivination": {
               "Portent": {
                 "SelectPortentRoll": "Which portent roll would you like to use?",
-                "Windowtitle": "Portent Roll Selection"
+                "Windowtitle": "Portent Roll Selection",
+                "Roll": "Portent Roll {number}"
               }
             },
             "SchoolOfEnchantment": {
@@ -658,7 +685,7 @@
           "Enervation": {
             "Prompts": {
               "UseYourAction": {
-                "Default": "Would you like to use your action this round to deal 4d8 necrotic damage to your target via Enervation?"
+                "Default": "Would you like to use your action this round to deal {formula} necrotic damage to your target via Enervation?"
               }
             }
           },
@@ -734,7 +761,8 @@
           "Command": {
             "WindowTitle": "🗣Command🗣",
             "Prompts": {
-              "SelectCommand": "What would you like to command?"
+              "SelectCommand": "What would you like to command?",
+              "SingleWord": "Enter a single-word command."
             }
           }
         }
@@ -838,6 +866,74 @@
           "PromptAction": "What would you like to do with your {dialogTitle}?",
           "Throw": "Throw"
         }
+      },
+      "Window": {
+        "Paused": "Timer paused",
+        "Resume": "Resume",
+        "Remaining": "{seconds}s remaining",
+        "Continue": "Continue",
+        "LightColor": "Choose the light color.",
+        "TimedTitle": "{title} - {seconds}s"
+      },
+      "TransientHealing": {
+        "Title": "Use Hit Dice",
+        "SelectHitDice": "Select the number of Hit Dice to use.",
+        "Available": "Available"
+      },
+      "Light": {
+        "Caster": "Carried by you",
+        "Unattended": "Unattended object",
+        "Willing": "Willing or unattended",
+        "Unwilling": "Unwilling creature",
+        "TurnOff": "Turn Off",
+        "TurnOffDescription": "End the existing Light spell cast by this actor."
+      },
+      "HitDice": {
+        "None": "No Hit Dice remain.",
+        "NoTarget": "Select a target first."
+      },
+      "SpiritBalm": {
+        "Prompt": "Each target regains {hitPoints} hit points. Select a condition to remove.",
+        "ConditionCount": "{condition} ({count})",
+        "TooManyTargets": "Selected {selected} targets; the maximum is {maximum}."
+      },
+      "DipolarGages": {
+        "Offensive": "Spend a charge to push the target 15 feet and attempt to knock it prone?",
+        "Defensive": "Spend a charge and a reaction to attempt to disarm this magnetic metal weapon?"
+      },
+      "SacrificialShield": {
+        "Prompt": "Destroy the shield to prevent this critical hit?"
+      },
+      "ImpetusSlasher": {
+        "Prompt": "Use Impetus Slasher to gain advantage on this attack? A hit gains critical and bonus damage."
+      },
+      "Nova": {
+        "DamageDice": "Damage dice (maximum {maximum})"
+      },
+      "RoksjasHusk": {
+        "Prompt": "Use a bonus action to try to keep the creature paralyzed with Roksja's Husk?"
+      },
+      "Reckless": {
+        "Prompt": "Use Reckless Attack this turn?"
+      },
+      "Tentacles": {
+        "Prompt": "Use an action to attempt to escape the Tentacles grapple?"
+      },
+      "BloodiedButUnbowed": {
+        "Prompt": "Use {itemName} to gain temporary hit points and restore Moxie?"
+      },
+      "RebukeTheDamned": {
+        "Prompt": "Use {itemName} to deal cold damage to the attacker?"
+      },
+      "DeadMistLash": {
+        "Prompt": "Spend hit points to empower this spell and cast it at a higher level?",
+        "Option": "+{increase} (Spell level: {level} | Self damage: {damage})",
+        "Level": "Level:"
+      },
+      "HealingGlyph": {
+        "Prompt": "Choose how to use Healing Glyph.",
+        "Healing": "Healing",
+        "Restoration": "Restoration - {condition}"
       }
     },
     "Directions": {
@@ -855,6 +951,10 @@
         "Helpers": {
           "LongRestChargeUsed": "{itemName}: Long Rest Charge Used"
         }
+      },
+      "StinkingCloud": {
+        "Asphyxiated": "Asphyxiated",
+        "Description": "The failed Stinking Cloud save prevents taking an action this turn."
       }
     },
     "Menus": {
@@ -864,7 +964,7 @@
         "Name": "Class Features"
       },
       "GeneralSettings": {
-        "Hint": "Mirror Dialog, Identify Restriction, etc",
+        "Hint": "Mirror Dialog, Token Movement Speed, etc",
         "Label": "General Settings",
         "Name": "General Settings"
       },
@@ -879,7 +979,7 @@
         "Name": "Monster Features"
       },
       "PatreonSupport": {
-        "Hint": "If you'd like to support me, Gambit! Subscribing helps support development of this and my other free modules, and also gets you access to my premium modules Gambit's FXMaster+, Gambit's Asset Previewer, and Gambit's Image Viewer!",
+        "Hint": "If you'd like to support me, Gambit! Subscribing helps support development of this and my other free modules, and also gets you access to my premium modules Gambit's FXMaster+, Gambit's Games, Gambit's Asset Previewer, and Gambit's Image Viewer!",
         "Label": "Gambit's Lounge",
         "Name": "Patreon Support"
       },
@@ -967,9 +1067,6 @@
         "CanOnlySelectUp": "You can only select up to {numTargets} targets.",
         "CastOptionNoSlotConsumed": "You used your {restModeName} cast option to initiate {name} and did not use a spell slot. The spell was cast at its base level."
       },
-      "Hooks": {
-        "Msg": "{message}"
-      },
       "Items": {
         "AmuletOfTheDevout": {
           "NoAmuletCharges": "You have no Amulet of the Devout charges to use.",
@@ -1032,6 +1129,9 @@
         },
         "ViciousMockery": {
           "TargetCannotHearYou": "A creature is not affected because it cannot hear you."
+        },
+        "ShroomOfDoom": {
+          "TargetNotAffected": "This creature is not affected by Shroom of Doom."
         }
       }
     },
@@ -1059,10 +1159,6 @@
       "EnableCuttingWords": {
         "Hint": "If enabled, this will present an appropriate dialog to users with cutting words, and automate cutting words application when used.",
         "Name": "Enable Cutting Words"
-      },
-      "EnableIdentifyRestrictions": {
-        "Hint": "If enabled, this will prevent player characters from Identifying unidentified items except through the use of my Identify spell automation.",
-        "Name": "Enable Identify Restrictions"
       },
       "EnableIndomitable": {
         "Hint": "",
@@ -1107,10 +1203,6 @@
       "FlashOfGeniusTimeout": {
         "Hint": "Enter custom number (in seconds). Default timeout value is 15 seconds.",
         "Name": "Flash of Genius Timeout"
-      },
-      "IdentifyRestrictionMessage": {
-        "Hint": "This is the message that will display to users if they are restricted.",
-        "Name": "Identify Restriction Message"
       },
       "IndomitableTimeout": {
         "Hint": "",
@@ -1196,10 +1288,6 @@
         "Hint": "If enabled, this will cause the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.",
         "Name": "Enable Timer Full Bar Animation"
       },
-      "HideTemplates": {
-        "Hint": "This option is always enabled for Opportunity Attacks. If this setting is enabled, it will fully hide templates for other automations that use templates in my module. It will NOT hide templates for automations or templates created outside of my module.",
-        "Name": "Hide Templates"
-      },
       "PrimaryGM": {
         "Hint": "",
         "Name": "primaryGM"
@@ -1207,6 +1295,10 @@
       "TokenMovementSpeed": {
         "Hint": "",
         "Name": "tokenMovementSpeed"
+      },
+      "ContextualFocusPulseColor": {
+        "Name": "Contextual Focus Pulse Color",
+        "Hint": "Color used to highlight the token relevant to a GPS dialog. Leave blank to use your player color."
       }
     },
     "SettingsMenu": {
@@ -1348,14 +1440,6 @@
           "Description": "Allows 3rd party reactions to function while combat is not active.",
           "Name": "Enable 3rd Party Reactions Outside Combat"
         },
-        "EnableIdentifyRestrictions": {
-          "Description": "Prevents players from Identifying items except through the use of my Identify spell.",
-          "Name": "Enable Identify Restrictions"
-        },
-        "IdentifyRestrictionMessage": {
-          "Description": "Custom message that will display to users if they are restricted.",
-          "Name": "Identify Restriction Message"
-        },
         "EnableRegionWrapping": {
           "Description": "Replaces Foundry default region behavior testing token center points only with multi-point tests to better match the 5e ruleset (Requires Reload).",
           "Name": "Enable Region Wrapping"
@@ -1363,10 +1447,6 @@
         "EnableTimerFullAnim": {
           "Description": "Modify the countdown timer animation for dialogs to cover the full title bar instead of the title bar border.",
           "Name": "Enable Timer Full Bar Animation"
-        },
-        "HideTemplates": {
-          "Description": "Hide templates after placement.",
-          "Name": "Hide Templates"
         },
         "TokenMovementSpeed": {
           "Description": "Numeric value for token movement animation speed. Default Foundry speed is 6.",
@@ -1379,6 +1459,10 @@
         "MirrorThirdPartyDialogForGMs": {
           "Name": "Mirror 3rd Party Dialog for GMs",
           "Description": "If enabled, 3rd party dialog's will be sent to the GM as well as the player. Either party can interact with the dialog to use/dismiss/pause it."
+        },
+        "SkipResolvedReactions": {
+          "Name": "Skip Resolved Reaction Prompts",
+          "Description": "Reduces reaction popups for resolved interactions, skipping further prompts once an attack or saving throw reaches the desired outcome."
         }
       }
     },
@@ -1401,6 +1485,96 @@
       "EnableSpells": "Enable Spells",
       "GeneralSettings": "General Settings",
       "PatreonSupport": "Patreon Support"
+    },
+    "Detection": {
+      "DivineSense": "Divine Sense"
+    },
+    "ItemConfig": {
+      "PlayAnimation": "Play Animation",
+      "Color": "Color",
+      "Colors": {
+        "Blue": "Blue",
+        "Green": "Green",
+        "Orange": "Orange",
+        "Pink": "Pink",
+        "Purple": "Purple",
+        "Red": "Red",
+        "Yellow": "Yellow"
+      },
+      "RegionVisibility": {
+        "Name": "Region Visibility",
+        "Choices": {
+          "Layer": "Layer Only",
+          "LayerUnlocked": "Layer Only When Unlocked",
+          "Gamemaster": "Always for GMs",
+          "Observer": "Always for Observers",
+          "Always": "Always"
+        }
+      },
+      "SoundVolume": {
+        "Name": "Sound Volume",
+        "Hint": "Fireball sound volume from 0 to 1. Default: 0.2. Set to 0 to mute."
+      }
+    },
+    "RegionEscape": {
+      "Name": "Escape: {spell}",
+      "Description": "Use an action on your turn to attempt this escape. Additional actions can be used for additional attempts. This item is removed when its restraint ends.",
+      "UseAction": "Use your action to attempt to escape? You can also use the Escape action from your sheet later in your turn.",
+      "Reminder": "An Escape action is available on your sheet for use during your turn. Open it now?"
+    },
+    "RulesReview": {
+      "ChooseDamageType": "Choose a damage type",
+      "FreedomEscape": "Escape Nonmagical Restraint",
+      "FreedomCost": "Confirm that 5 feet of movement is available and spent to escape this nonmagical restraint. Movement expenditure is tracked manually.",
+      "ResourceRequired": "Configure this activity to consume its actor-owned shared resource before using it.",
+      "HuntersSenseVisible": "Confirm with the GM that the target is visible and is not hidden from divination. If it is hidden, cancel and treat its damage defenses as unknown.",
+      "None": "None",
+      "DamageImmunities": "Damage immunities",
+      "DamageResistances": "Damage resistances",
+      "DamageVulnerabilities": "Damage vulnerabilities",
+      "SmolderEligible": "Apply advantage against an eligible Beast or Humanoid? Confirm that Smolder has not already been used against this creature since its last long rest.",
+      "ElementalAffinityPrompt": "Add {bonus} to this {type} damage roll? This uses Elemental Affinity for this casting.",
+      "LightObject2014": "The selected token represents an object no larger than 10 feet in any dimension. Is the object carried by an unwilling creature?",
+      "LightObject2024": "Confirm that the selected token represents a Large or smaller object that is not worn or carried by another creature. An allied creature cannot carry the object during casting.",
+      "LightEligible": "Eligible object",
+      "LightWilling": "Object is eligible; carrier is willing or absent",
+      "LightUnwilling": "Object is eligible; carrier is unwilling",
+      "ArcaneChoose": "Choose a learned Arcane Shot option.",
+      "ArcaneBow": "Choose the equipped shortbow or longbow used for this shot.",
+      "ArcaneAttackAction": "Confirm this arrow is fired as part of the Attack action. Seeking Arrow also requires a creature seen within the past minute and an unobstructed arrow-sized path.",
+      "ShieldStrike": "Shield Strike",
+      "ShieldSlash": "Slash",
+      "HuntersSenseTitle": "Hunter's Sense",
+      "HuntersSenseConcealed": "GM: Is {target} hidden from divination magic? A concealed target is reported as having no damage immunities, resistances, or vulnerabilities.",
+      "LightCasterObject": "Large or smaller object carried by the caster",
+      "LightLooseObject": "Large or smaller unattended object token"
+    },
+    "Wickerbone": {
+      "ArmorBlocked": "Wickerbone Behemoth cannot be activated while wearing armor.",
+      "WildShapeRequired": "Add a Wild Shape item with configured uses, or link this activity to the correct Wild Shape item.",
+      "LeftArm": "Wickerbone: Left Arm",
+      "RightArm": "Wickerbone: Right Arm",
+      "ChooseTargets": "Apply splinter damage? Select any nearby creatures to affect, including allies if desired. Leave creatures unchecked to spare them."
+    },
+    "FuryOfTheSmall": {
+      "Prompt": "Use Fury of the Small against {target}? Add {bonus} damage before defenses. Uses remaining: {remaining}.",
+      "DamageType": "Damage type"
+    },
+    "AnimationModules": {
+      "Note": "Animation modules: {modules}.",
+      "OptionalImpact": "JB2A Patreon adds the optional ignition impact.",
+      "StormMoteColors": "The default mote color uses JB2A Patreon. The blue asset is also included in JB2A Free.",
+      "Providers": {
+        "JB2AFree": "JB2A Free or JB2A Patreon",
+        "JB2APatreon": "JB2A Patreon",
+        "JB2APatreonOptions": "JB2A Patreon for kunai and additional color options",
+        "EskieFree": "Eskie Effects Free or Eskie Effects Patreon",
+        "EskiePatreon": "Eskie Effects Patreon",
+        "JAAMod": "Jinker's Animated Art (JAAMod)",
+        "BLFX": "Boss Loot FX (BLFX) — Premium",
+        "GPS": "GPS built-in visuals",
+        "Protection": "JAAMod or JB2A Patreon"
+      }
     }
   }
 }

@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -40,29 +40,22 @@
   "effects": [
     {
       "origin": "Compendium.world.gps-monster-features.Item.tbdWvPstXczXT7I9",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Heated Body",
       "img": "icons/creatures/unholy/demon-fanged-horned-yellow.webp",
       "_id": "nPdcowcgBOfOy56Z",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro,isHit",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro,isHit",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -72,12 +65,16 @@
         "dae": {
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!tbdWvPstXczXT7I9.nPdcowcgBOfOy56Z"
     }
   ],
@@ -100,7 +97,7 @@
         "img": "icons/creatures/unholy/demon-fanged-horned-yellow.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"isHit\") {\n\tif(workflow.activity.actionType === \"mwak\" || workflow.activity.actionType === \"msak\")\n\t{\n\t\tlet measuredDistance = MidiQOL.computeDistance(token,workflow.token, {wallsBlock: true, includeCover: true});\n\t\tlet range = game.gps.convertFromFeet({range: 5});\n\t\tif (measuredDistance > range) return;\n\t\tconst damageDice = \"3d6\"; // Change damage dice here\n\t\tconst damageType = \"fire\"; // Change damage type here\n\n\t\tlet damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}`, {}, {type: damageType, properties: [\"mgc\"]}).evaluate();\n\t\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n\t\tconst itemData = {\n\t\t\tname: \"Heated Body - Damage (Fire)\",\n\t\t\ttype: \"feat\",\n\t\t\timg: macroItem.img\n      \t}\n\n\t\tnew MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, damageType, workflow.token ? [workflow.token] : [], damageRoll, {itemData: itemData, flavor: \"Heated Body - Damage (Fire)\"});\n\t}\n}",
+        "command": "if(args[0].macroPass === \"isHit\") {\n\tif(workflow.activity.actionType === \"mwak\" || workflow.activity.actionType === \"msak\")\n\t{\n\t\tlet measuredDistance = MidiQOL.computeDistance(token,workflow.token, {wallsBlock: true, includeCover: true});\n\t\tlet range = game.gps.convertFromFeet({range: 5});\n\t\tif (measuredDistance < 0 || measuredDistance > range) return;\n\t\tconst damageDice = \"3d6\"; // Change damage dice here\n\t\tconst damageType = \"fire\"; // Change damage type here\n\n\t\tlet damageRoll = await new CONFIG.Dice.DamageRoll(`${damageDice}`, {}, {type: damageType, properties: [\"mgc\"]}).evaluate();\n\t\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n\t\tconst itemData = {\n\t\t\tflags: {autoanimations: {isEnabled: false, version: 5}},\n\t\t\tname: \"Heated Body - Damage (Fire)\",\n\t\t\ttype: \"feat\",\n\t\t\timg: macroItem.img\n      \t}\n\n\t\tnew MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, damageType, workflow.token ? [workflow.token] : [], damageRoll, {itemData: itemData, flavor: \"Heated Body - Damage (Fire)\"});\n\t}\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -132,6 +129,19 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "gambits-premades": {
+      "monsterIdentifier": "reduced-threat-remorhaz"
     }
   },
   "img": "icons/creatures/unholy/demon-fanged-horned-yellow.webp",

@@ -1,18 +1,15 @@
 export function cloudOfDaggers({template, itemUuid}) {
+    if (!template?.object) return;
+    template = template.object;
     let cprConfig = game.gps.getCprConfig({itemUuid});
     if(!cprConfig.animEnabled) return;
+    const regionAnimation = game.gps.getRegionAnimationData(template);
     let animColor = cprConfig.animColor ?? "orange";
     
     let alignmentDecision;
     let scaleDecision;
-    if(MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates')) {
-        alignmentDecision = {};
-        scaleDecision = 1.25;
-    }
-    else {
-        alignmentDecision = { edge: "on", offset: ( {x: 50, y: 0} ) };
-        scaleDecision = 0.65;
-    }
+    alignmentDecision = {};
+    scaleDecision = 1.25;
 
     const animFileType = game.modules.get("jb2a_patreon")?.active ? "kunai" : "daggers";
 
@@ -27,5 +24,7 @@ export function cloudOfDaggers({template, itemUuid}) {
             .fadeOut(500)
             .persist()
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
     .play()
 }

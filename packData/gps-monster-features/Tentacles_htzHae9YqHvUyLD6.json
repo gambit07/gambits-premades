@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -148,7 +148,7 @@
           },
           "affects": {
             "count": "",
-            "type": "",
+            "type": "creature",
             "choice": false,
             "special": ""
           },
@@ -246,28 +246,24 @@
     {
       "origin": "Compendium.world.gps-monster-features.Item.htzHae9YqHvUyLD6",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Tentacles",
       "img": "icons/commodities/biological/tentacle-purple-white.webp",
       "_id": "b3OjzPWvIMChk5t4",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -280,12 +276,16 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!htzHae9YqHvUyLD6.b3OjzPWvIMChk5t4"
     }
   ],
@@ -310,7 +310,7 @@
         "img": "icons/commodities/biological/tentacle-purple-white.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"preDamageRoll\") {\n\tconst target = workflow.hitTargets.first();\n\tif(target)\n\t{\n\t\tconst actorSize = target.actor.system.traits.size;\n\t\tif(actorSize === \"med\" || actorSize === \"sm\" || actorSize === \"tiny\")\n\t\t{\n\t\t\tlet effectData = [{\n                disabled: false,\n                name: \"Tentacles - Grappled\",\n                duration: {\n                \tseconds: 60\n                },\n                transfer: false,\n                icon: \"systems/dnd5e/icons/svg/statuses/grappled.svg\",\n                origin: macroItem.uuid,\n\t\t\t\tchanges: [\n\t\t\t\t\t{\n\t\t\t\t\t\tkey: 'system.attributes.movement.all',\n\t\t\t\t\t\tmode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n\t\t\t\t\t\tvalue: '0',\n\t\t\t\t\t\tpriority: 25,\n\t\t\t\t\t},\n\t\t\t\t]\n            }];\n            await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n\n\t\t\tconst spellDC = 15;\n\t\t\tlet saveAbility = \"int\";\n\t\t\tconst skillCheck = await target.actor.rollAbilitySave(saveAbility);\n\t\t\tif (skillCheck.total < spellDC) {\n\t\t\t\tlet effectDataStunned = [{\n\t\t\t\t\tdisabled: false,\n\t\t\t\t\tname: \"Tentacles - Stunned\",\n\t\t\t\t\tduration: {\n\t\t\t\t\t\tseconds: 60\n\t\t\t\t\t},\n\t\t\t\t\ttransfer: false,\n\t\t\t\t\ticon: \"systems/dnd5e/icons/svg/statuses/stunned.svg\",\n\t\t\t\t\torigin: macroItem.uuid,\n\t\t\t\t\tchanges: [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `flags.midi-qol.fail.ability.save.dex`,\n\t\t\t\t\t\t\tmode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n\t\t\t\t\t\t\tvalue: '1',\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `flags.midi-qol.fail.ability.save.str`,\n\t\t\t\t\t\t\tmode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n\t\t\t\t\t\t\tvalue: '1',\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `flags.midi-qol.grants.advantage.attack.all`,\n\t\t\t\t\t\t\tmode: CONST.ACTIVE_EFFECT_MODES.CUSTOM,\n\t\t\t\t\t\t\tvalue: '1',\n\t\t\t\t\t\t},\n\t\t\t\t\t]\n\t\t\t\t}];\n\t\t\t\tawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectDataStunned });\n\t\t\t}\n\t\t}\n\t}\n}\nelse if(args[0] === \"off\") {\n\tlet effectData = actor.effects.find(e => e.name === \"Tentacles - Grappled\");\n\tlet effectDataStunned = actor.effects.find(e => e.name === \"Tentacles - Stunned\");\n\n\tif (effectData) {  \n\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: effectData.id });\n\t}\n\tif (effectDataStunned) {\n\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: effectDataStunned.id });\n\t}\n}\nelse if(args[0] === \"each\") {\n\tconst spellDC = 15;\n\tconst hasEffectApplied = actor.appliedEffects.find(e => e.name === \"Tentacles - Grappled\")\n\tconst hasEffectAppliedStun = actor.appliedEffects.find(e => e.name === \"Tentacles - Stunned\")\n\tif(hasEffectApplied && !hasEffectAppliedStun)\n\t{\n\t\tlet dialogId = \"tentacles\";\n\t\tlet dialogTitlePrimary = `${token.actor.name} | ${item.name}`;\n\t\tlet browserUser = MidiQOL.playerForActor(token.actor);\n\t\tif (!browserUser.active) {\n\t\t\tbrowserUser = game.users?.activeGM;\n\t\t}\n\t\tlet dialogContent = `\n\t\t\t<div class=\"gps-dialog-container\">\n\t\t\t\t<div class=\"gps-dialog-section\">\n\t\t\t\t\t<div class=\"gps-dialog-content\">\n\t\t\t\t\t\t<p class=\"gps-dialog-paragraph\">Would you like to use your action to make an ability check to escape being grappled by Tentacles?</p>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div class=\"gps-dialog-flex\">\n\t\t\t\t\t\t\t\t<table style=\"background-color: rgba(181, 99, 69, 0.2);\" width=\"100%\"><tbody><tr><th>Athletics</th><th>Acrobatics</th></tr><tr><td style=\"text-align: center;vertical-align: middle;\"><input type=\"radio\" value=\"ath\" id=\"ability-check\" name=\"ability-check\" style=\"margin: 0 auto;\"></td><td style=\"text-align: center;vertical-align: middle;\"><input type=\"radio\" value=\"acr\" id=\"ability-check\" name=\"ability-check\" style=\"margin: 0 auto;\"></td></tr></tbody></table>\n\t\t\t\t\t\t\t\t<div id=\"image-container\" class=\"gps-dialog-image-container\">\n\t\t\t\t\t\t\t\t\t<img id=\"img_${dialogId}\" src=\"${item.img}\" class=\"gps-dialog-image\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"gps-dialog-button-container\">\n\t\t\t\t\t<button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n\t\t\t\t\t\t<i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>Pause\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t`;\n\n\t\tlet result = await game.gps.socket.executeAsUser(\"process3rdPartyReactionDialog\", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:browserUser.isGM ? \"gm\" : \"user\",type:\"singleDialog\"});\n\t\t\t\n\t\tconst { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;\n\n\t\tif (!userDecision) {\n\t\t\treturn;\n\t\t}\n\t\telse if (userDecision) {\n\t\t\tif (abilityCheck) {\n\t\t\t\tconst skillCheck = await actor.rollSkill(abilityCheck);\n\t\t\t\tif (skillCheck.total >= spellDC) {\n\t\t\t\t\tlet effectData = actor.effects.find(e => e.name === \"Tentacles\");\n\n\t\t\t\t\tif (effectData) {  \n\t\t\t\t\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: effectData.id });\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}",
+        "command": "if(args[0].macroPass === \"preDamageRoll\") {\n\tconst target = workflow.hitTargets.first();\n\tif(target)\n\t{\n\t\tconst actorSize = target.actor.system.traits.size;\n\t\tif(actorSize === \"med\" || actorSize === \"sm\" || actorSize === \"tiny\")\n\t\t{\n\t\t\tlet effectData = [{\n                disabled: false,\n                name: \"Tentacles - Grappled\",\n                duration: { value: 60, units: \"seconds\" },\n                transfer: false,\n                img: \"systems/dnd5e/icons/svg/statuses/grappled.svg\",\n                origin: macroItem.uuid,\n\t\t\t\tsystem: { changes: [\n\t\t\t\t\t...game.gps.movementSpeedChanges(\"0\", 25),\n\t\t\t\t] }\n            }];\n            await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n\n\t\t\tconst spellDC = 15;\n\t\t\tlet saveAbility = \"int\";\n\t\t\tconst [skillCheck] = await target.actor.rollSavingThrow({ability: saveAbility}) ?? [];\n            if (!skillCheck) return;\n\t\t\tif (skillCheck.total < spellDC) {\n\t\t\t\tlet effectDataStunned = [{\n\t\t\t\t\tdisabled: false,\n\t\t\t\t\tname: \"Tentacles - Stunned\",\n\t\t\t\t\tduration: { value: 60, units: \"seconds\" },\n\t\t\t\t\ttransfer: false,\n\t\t\t\t\timg: \"systems/dnd5e/icons/svg/statuses/stunned.svg\",\n\t\t\t\t\torigin: macroItem.uuid,\n\t\t\t\t\tsystem: { changes: [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `system.abilities.dex.save.roll.fail`,\n\t\t\t\t\t\t\ttype: \"override\",\n\t\t\t\t\t\t\tvalue: 1,\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `system.abilities.str.save.roll.fail`,\n\t\t\t\t\t\t\ttype: \"override\",\n\t\t\t\t\t\t\tvalue: 1,\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tkey: `flags.midi-qol.grants.advantage.attack.all`,\n\t\t\t\t\t\t\ttype: \"custom\",\n\t\t\t\t\t\t\tvalue: 1,\n\t\t\t\t\t\t},\n\t\t\t\t\t] }\n\t\t\t\t}];\n\t\t\t\tawait MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectDataStunned });\n\t\t\t}\n\t\t}\n\t}\n}\nelse if(args[0] === \"off\") {\n\tlet effectData = actor.effects.find(e => e.name === \"Tentacles - Grappled\");\n\tlet effectDataStunned = actor.effects.find(e => e.name === \"Tentacles - Stunned\");\n\n\tif (effectData) {  \n\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: [effectData.id] });\n\t}\n\tif (effectDataStunned) {\n\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: [effectDataStunned.id] });\n\t}\n}\nelse if(args[0] === \"each\") {\n\tconst spellDC = 15;\n\tconst hasEffectApplied = actor.appliedEffects.find(e => e.name === \"Tentacles - Grappled\")\n\tconst hasEffectAppliedStun = actor.appliedEffects.find(e => e.name === \"Tentacles - Stunned\")\n\tif(hasEffectApplied && !hasEffectAppliedStun)\n\t{\n\t\tlet dialogId = \"tentacles\";\n\t\tlet dialogTitlePrimary = `${token.actor.name} | ${item.name}`;\n\t\tlet browserUser = MidiQOL.playerForActor(token.actor);\n\t\tif (!browserUser?.active) {\n\t\t\tbrowserUser = game.users?.activeGM;\n\t\t}\n\t\tif(!browserUser) return;\n\t\tlet dialogContent = `\n\t\t\t<div class=\"gps-dialog-container\">\n\t\t\t\t<div class=\"gps-dialog-section\">\n\t\t\t\t\t<div class=\"gps-dialog-content\">\n\t\t\t\t\t\t<p class=\"gps-dialog-paragraph\">${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Tentacles.Prompt\")}</p>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div class=\"gps-dialog-flex\">\n\t\t\t\t\t\t\t\t<table style=\"background-color: rgba(181, 99, 69, 0.2);\" width=\"100%\"><tbody><tr><th>${game.i18n.localize(\"DND5E.SkillAth\")}</th><th>${game.i18n.localize(\"DND5E.SkillAcr\")}</th></tr><tr><td style=\"text-align: center;vertical-align: middle;\"><input type=\"radio\" value=\"ath\" id=\"ability-ath\" name=\"ability-check\" style=\"margin: 0 auto;\"></td><td style=\"text-align: center;vertical-align: middle;\"><input type=\"radio\" value=\"acr\" id=\"ability-acr\" name=\"ability-check\" style=\"margin: 0 auto;\"></td></tr></tbody></table>\n\t\t\t\t\t\t\t\t<div id=\"image-container\" class=\"gps-dialog-image-container\">\n\t\t\t\t\t\t\t\t\t<img id=\"img_${dialogId}\" src=\"${item.img}\" class=\"gps-dialog-image\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"gps-dialog-button-container\">\n\t\t\t\t\t<button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n\t\t\t\t\t\t<i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Pause\")}\n\t\t\t\t\t</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t`;\n\n\t\tlet result = await game.gps.queryDialog(\"process3rdPartyReactionDialog\", browserUser.id, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:browserUser.isGM ? \"gm\" : \"user\",type:\"singleDialog\"});\n\t\t\t\n\t\tconst { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;\n\n\t\tif (!userDecision) {\n\t\t\treturn;\n\t\t}\n\t\telse if (userDecision) {\n\t\t\tif (abilityCheck) {\n\t\t\t\tconst [skillCheck] = await actor.rollSkill({skill: abilityCheck}) ?? [];\n                if (!skillCheck) return;\n\t\t\t\tif (skillCheck.total >= spellDC) {\n\t\t\t\t\tlet effectData = actor.effects.find(e => e.name === \"Tentacles\");\n\n\t\t\t\t\tif (effectData) {  \n\t\t\t\t\t\tawait MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: actor.uuid, effects: [effectData.id] });\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -340,6 +340,26 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Attack",
+        "activityType": "attack",
+        "version": 2
+      }
     }
   },
   "img": "icons/commodities/biological/tentacle-purple-white.webp",

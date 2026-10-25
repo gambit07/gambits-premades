@@ -3,11 +3,11 @@
   "type": "feat",
   "system": {
     "description": {
-      "value": "<p><em>Make sure to Enable Poetry in Misery in the module settings.</em></p>",
+      "value": "<p><em>Make sure to Enable Poetry in Misery in the module settings.</em></p><p><strong>GPS setup:</strong> Passive marker: enable Poetry in Misery in GPS settings and retain an actor-owned Bardic Inspiration resource. This marker has no standalone use.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -47,6 +47,16 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/skills/trades/academics-book-study-runes.webp",

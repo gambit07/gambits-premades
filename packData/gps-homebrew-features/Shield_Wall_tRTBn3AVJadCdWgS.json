@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -37,38 +37,10 @@
   "effects": [
     {
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.ZLoub4dgPCiXbC4u.Actor.SNZJsEKbROB1q6bT.Item.BDnpAwgLhzynIyKp",
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Shield Wall",
       "_id": "m9blhJJyD0sqfkNB",
-      "changes": [
-        {
-          "key": "system.attributes.ac.bonus",
-          "mode": 2,
-          "value": "+1",
-          "priority": 20
-        },
-        {
-          "key": "system.abilities.dex.bonuses.save",
-          "mode": 2,
-          "value": "+1",
-          "priority": 20
-        },
-        {
-          "key": "system.abilities.str.bonuses.save",
-          "mode": 2,
-          "value": "+1",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -80,17 +52,42 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/equipment/shield/heater-steel-boss-red.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.ac.bonus",
+            "value": "+1",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.abilities.dex.save.roll.bonus",
+            "value": "+1",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.abilities.str.save.roll.bonus",
+            "value": "+1",
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!tRTBn3AVJadCdWgS.m9blhJJyD0sqfkNB"
     }
   ],
@@ -110,6 +107,16 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "_id": "tRTBn3AVJadCdWgS",

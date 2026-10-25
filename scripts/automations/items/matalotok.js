@@ -1,5 +1,6 @@
 export async function matalotok({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preDamageRollComplete" && workflow.hitTargets.first() && workflow.activity.identifier !== "matalotok-cold-damage") {
+        if(!game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) return;
         let source = token;
         let targets = workflow.hitTargets;
         

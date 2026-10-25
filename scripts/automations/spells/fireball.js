@@ -10,20 +10,21 @@ export async function fireball({ speaker, actor, token, character, item, args, s
     }
 
     async function renderExplosion() {
-        let { animEnabled, animColor } = game.gps.getCprConfig({itemUuid: item.uuid});
+        let { animEnabled, animColor, soundVolume } = game.gps.getCprConfig({itemUuid: item.uuid});
         if (!animEnabled) return;
 
         const damageType = workflow.damageDetail[0]?.type ?? "fire";
         animColor = animColor ?? "orange";
-        if(animColor !== "orange") animColor = animColor;
-        else if (["radiant", "lightning", "cold"].includes(damageType)) animColor = "blue";
-        else if (["necrotic", "poison", "acid"].includes(damageType)) animColor = "green";
-        else if (["thunder", "force", "psychic"].includes(damageType)) animColor = "purple";
-        else if (["slashing", "bludgeoning", "piercing"].includes(damageType)) animColor = "purple";
+        if(animColor === "orange") {
+            if (["radiant", "lightning", "cold"].includes(damageType)) animColor = "blue";
+            else if (["necrotic", "poison", "acid"].includes(damageType)) animColor = "green";
+            else if (["thunder", "force", "psychic", "slashing", "bludgeoning", "piercing"].includes(damageType)) animColor = "purple";
+        }
 
-        const templateData = fromUuidSync(workflow.templateUuid);
-        let cast = game.gps.animation.fireball({type: "cast", token, templateData, color: animColor, sound: {enabled: true, volume: 1.0}});
-        let explosion = game.gps.animation.fireball({type: "explosion", token, templateData, color: animColor, sound: {enabled: true, volume: 1.0}});
+        const templateData = fromUuidSync(workflow.templateUuid)?.object;
+        if (!templateData) return;
+        let cast = game.gps.animation.fireball({type: "cast", token, templateData, color: animColor, sound: {enabled: true, volume: soundVolume}});
+        let explosion = game.gps.animation.fireball({type: "explosion", token, templateData, color: animColor, sound: {enabled: true, volume: soundVolume}});
 
         await cast.play();
         await explosion.play();

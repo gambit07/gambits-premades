@@ -9,7 +9,7 @@
     "source": {
       "page": "",
       "license": "",
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1,
       "book": ""
@@ -284,6 +284,34 @@
     },
     "gambits-premades": {
       "gpsUuid": "fc2a2693-b92b-4811-b7ff-7c6cb8e5ded5"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "ZRN1U15A2kBXmPvk": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      },
+      "RM91PnA2uma8h2U4": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "img": "icons/magic/time/clock-stopwatch-white-blue.webp",

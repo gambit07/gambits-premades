@@ -9,7 +9,7 @@
     "source": {
       "book": "Basic Rules (2014)",
       "page": "126",
-      "custom": "1.0.0",
+      "custom": "",
       "license": "",
       "revision": 1,
       "rules": "2014"
@@ -250,11 +250,7 @@
       "reactionCondition": ""
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.edtGqNIYfHYowUUr.ActiveEffect.cO5DX6YooxhO9F9S"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -476,7 +472,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": true,
+      "isEnabled": false,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
@@ -490,7 +486,7 @@
         "img": "icons/magic/fire/explosion-embers-evade-silhouette.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"postAttackRoll\") {\n    let target = workflow.hitTargets.first();\n    if(!target) return;\n    let checkEffect = target.actor.appliedEffects.some(e => e.name === \"Ignition\");\n    if(checkEffect) return;\n    let effectData = [{\n      \"origin\": macroItem.uuid,\n      \"duration\": {\n        \"seconds\": 99999\n      },\n      \"disabled\": false,\n      \"name\": \"Ignition\",\n      \"img\": macroItem.img,\n      \"changes\": [\n        {\n          \"key\": \"flags.midi-qol.OverTime\",\n          \"mode\": 0,\n          \"value\": \"turn=start,saveRemove=true,damageRoll=1d10,damageType=fire,name=Ignition\",\n          \"priority\": 20\n        }\n      ],\n      \"transfer\": false\n    }];\n\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}",
+        "command": "if(args[0].macroPass === \"postAttackRoll\") {\n    let target = workflow.hitTargets.first();\n    if(!target) return;\n    let checkEffect = target.actor.appliedEffects.some(e => e.name === \"Ignition\");\n    if(checkEffect) return;\n    let effectData = [{\n      \"origin\": macroItem.uuid,\n      \"duration\": { value: 99999, units: \"seconds\" },\n      \"disabled\": false,\n      \"name\": \"Ignition\",\n      \"img\": macroItem.img,\n      system: { changes: [\n        {\n          \"key\": \"flags.midi-qol.OverTime\",\n          type: \"custom\",\n          \"value\": \"turn=start,saveCount=1,damageRoll=1d10,damageType=fire,name=Ignition\",\n          \"priority\": 20\n        }\n      ] },\n      \"transfer\": false\n    }];\n\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -514,6 +510,22 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Attack",
+        "activityType": "attack",
+        "version": 2
+      }
     }
   },
   "img": "icons/magic/fire/explosion-embers-evade-silhouette.webp",

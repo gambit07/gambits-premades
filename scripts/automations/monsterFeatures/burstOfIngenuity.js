@@ -12,12 +12,17 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
     let target = workflow.token;
     let browserUser;
 
-    let findValidTokens = game.gps.findValidTokens({initiatingToken: target, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: false, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
+    let findValidTokens = game.gps.findValidTokens({initiatingToken: target, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: null, reactionCheck: false, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: false, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
     if(findValidTokens.length === 0 || !findValidTokens) return;
 
     for (const validTokenPrimary of findValidTokens) {
-        let targets = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 30);
+        let targets = Array.from(workflow.targets).filter(t => {
+            if(!game.gps.reactionCanChangeOutcome(workflow, {type: "save", desired: "success", target: t})) return false;
+            if(t.document.disposition !== validTokenPrimary.document.disposition || !workflow.tokenSaves?.[t.document.uuid]) return false;
+            const distance = MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true});
+            return distance >= 0 && distance <= game.gps.convertFromFeet({range: 30}) && MidiQOL.canSee(validTokenPrimary, t);
+        });
 
         if(targets.length === 0) continue;
 
@@ -71,9 +76,9 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
             
             let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -94,21 +99,21 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
                 targetUuids: [allyToken.document.uuid]
             };
 
-            if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
-            if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) continue;
+            if(!itemRoll?.completed) continue;
 
-            let rollFound = workflow.saveRolls.find(roll => roll.data.actorUuid === allyToken.actor.uuid);
+            let rollFound = workflow.tokenSaves?.[allyToken.document.uuid];
 
+            if(!rollFound) continue;
             let saveBonus = await new CONFIG.Dice.DamageRoll(`2`).evaluate();
             let newRoll;
             if(rollFound) newRoll = await MidiQOL.addRollTo(rollFound, saveBonus);
             let saveDC = workflow?.saveActivity?.save.dc?.value;
             let chatContent;
-            if(newRoll.total >= saveDC && rollFound.total < saveDC) {
-                workflow.failedSaves.delete(allyToken);
-                workflow.saves.add(allyToken);
+            const saved = await game.gps.updateSaveResult({workflow, token: allyToken, roll: newRoll});
+            if(saved && rollFound.total < saveDC) {
                 chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.BurstOfIngenuity.AddedBonusToRollSaveSucceeded", { allyName: allyToken.actor.name })}<br><img src="${allyToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             }
             else if(rollFound.total < saveDC){
@@ -118,7 +123,7 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
                 chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.BurstOfIngenuity.AddedBonusToRollSaveAlreadySucceeded", { allyName: allyToken.actor.name })}<br><img src="${allyToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             }
 
-            await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: newRoll});
+            await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: newRoll});
         }
     }
 }

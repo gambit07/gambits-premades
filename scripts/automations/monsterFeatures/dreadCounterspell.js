@@ -74,13 +74,13 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
             let result;
     
             if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-                let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage.id };
+                let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage.id };
                 
-                let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage.id };
+                let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage.id };
             
-                result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+                result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
             } else {
-                result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage.id});
+                result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage.id});
             }
                     
             const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, genericCheck, source, type } = result || {};
@@ -104,10 +104,10 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                     targetUuids: [selectedToken.document.uuid]
                 };
 
-                if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
-                else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+                if(source && source === "user") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+                else if(source && source === "gm") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
     
-                if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) continue;
+                if(!itemRoll?.completed) continue;
 
                 let itemRollCastType = itemRoll.itemType;
                 let itemRollCastLevel = itemRoll.castLevel;
@@ -118,9 +118,9 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
 
                 if(castLevel >= 5) {
                     let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticCheck");
-                    await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"check.dc.calculation": "", "check.dc.formula": spellThreshold, "check.dc.value": spellThreshold} });
-                    if(source && source === "user") skillCheck = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
-                    else if(source && source === "gm") skillCheck = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
+                    await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"check.dc.calculation": "", "check.dc.formula": spellThreshold, "check.dc.value": spellThreshold} });
+                    if(source && source === "user") skillCheck = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
+                    else if(source && source === "gm") skillCheck = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticCheck", targetUuid: validTokenPrimary.document.uuid});
                     if(!skillCheck) continue;
                     skillRoll = skillCheck.saveRolls;
                     let skillTotal = skillRoll.total;
@@ -135,23 +135,23 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                     }
                 }
                 else {
-                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.DreadCounterspell.DreadCounterspellAutoSuccess", { itemName: itemProperName })}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                    chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.MonsterFeatures.DreadCounterspell.DreadCounterspellAutoSuccess", { itemProperName })}<br><img src="${selectedToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 }
 
                 if(!csFailure) {
-                    await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticDamage", targetUuid: selectedToken.document.uuid});
+                    await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticDamage", targetUuid: selectedToken.document.uuid});
                 }
 
                 await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: skillRoll});
+                await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: skillRoll});
 
                 let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
                 const { animEnabled } = cprConfig;
                 if(animEnabled) {
                     new Sequence()
                     .effect()
-                        .file("animated-spell-effects-cartoon.energy.beam.01")
+                        .file("jb2a.ranged.beam.002.03.purple")
                         .fadeIn(500)
                         .fadeOut(500)
                         .atLocation(validTokenPrimary)

@@ -1,3 +1,4 @@
+import { lightSpell } from "./lightSpell.js";
 import { ashardalonsStride } from "./ashardalonsStride.js";
 import { blackTentacles } from "./blackTentacles.js";
 import { cloudOfDaggers } from "./cloudOfDaggers.js";
@@ -35,6 +36,7 @@ import { freedomOfMovement } from "./freedomOfMovement.js";
 import { powerWordPain } from "./powerWordPain.js";
 
 export const spellsMacros = {
+  lightSpell,
   ashardalonsStride,
   blackTentacles,
   cloudOfDaggers,

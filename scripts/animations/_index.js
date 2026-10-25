@@ -1,3 +1,4 @@
+import { spellEffect } from "./spellVisuals/index.js";
 import { fireball } from './fireball.js';
 import { ashardalonsStride } from './ashardalonsStride.js';
 import { blackTentacles } from './blackTentacles.js';
@@ -10,6 +11,7 @@ import { stinkingCloud } from './stinkingCloud.js';
 import { entangle } from './entangle.js';
 
 export const animation = {
+  spellEffect,
   fireball,
   ashardalonsStride,
   blackTentacles,

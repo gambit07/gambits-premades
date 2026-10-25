@@ -4,11 +4,11 @@
   "img": "icons/magic/symbols/triangle-glow-purple.webp",
   "system": {
     "description": {
-      "value": "<p><em>Requires Midi QOL, DAE</em></p><p><span style=\"font-family:'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Symbols'\">At 1st level, you can unleash your Star's fury in earnest. However, if you channel its energy for too long, it will consume your mortal body. You can use your bonus action to enter a Nova. When you enter a Nova, and each subsequent turn you begin while your Nova is active, you take special radiant damage called Nova damage. This damage begins at 1d6 when you enter your Nova, and increases to 2d6 the following turn, 3d6 the turn after, and so on. This damage can't be reduced or avoided. You don't make Constitution saving throws to maintain your concentration as a result of taking this damage. Your Nova ends if you drop to 0 hit points or if you use your bonus action to end it.</span></p><p><span style=\"font-family:'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Symbols'\">While your Nova is active, you can add bonus d6s of damage, up to a maximum of twice the number of Nova damage dice you have taken on your turn, when you damage a creature with an attack or saving throw on your turn. You can choose to add all the damage dice to the roll of a single attack, or divide up the damage among multiple attacks.</span></p>",
+      "value": "<p><em>Requires Midi QOL, DAE</em></p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -160,31 +160,12 @@
       "name": "Nova",
       "origin": "Item.3cUI96gq3xUYgMb0",
       "duration": {
-        "startTime": null,
-        "seconds": 100000,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 100000,
+        "units": "seconds"
       },
       "transfer": false,
       "disabled": false,
       "_id": "tRB7OZrfYO4wXdrY",
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "startEveryTurn",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro,postDamageRoll",
-          "priority": 20
-        }
-      ],
       "description": "",
       "statuses": [],
       "flags": {
@@ -197,18 +178,40 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": []
         },
-        "core": {}
+        "core": {},
+        "gambits-premades": {
+          "nova": true
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
+        }
       },
       "tint": "#ffffff",
       "img": "icons/magic/symbols/triangle-glow-purple.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "startEveryTurn",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro,preDamageRollComplete",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!qtBoQHKfqPs2o8zv.tRB7OZrfYO4wXdrY"
     }
   ],
@@ -231,7 +234,7 @@
         "img": "icons/magic/symbols/triangle-glow-purple.webp",
         "type": "script",
         "scope": "global",
-        "command": "if (args[0] === 'on') {\n\tlet itemData = [{\n\t\t\"name\": \"Nova - End Nova\",\n\t\t\"type\": \"feat\",\n\t\t\"img\": item.img,\n\t\t\"system\": {\n\t\t\"activation\": {\n\t\t  \"type\": \"bonus\",\n\t\t  \"cost\": 1,\n\t\t  \"condition\": \"\"\n\t\t},\n\t\t\"target\": {\n\t\t  \"type\": \"self\"\n\t\t},\n\t\t\"range\": {\n\t\t  \"units\": \"self\"\n\t\t},\n\t\t\"actionType\": \"other\",\n\t\t\"type\": {\n\t\t  \"value\": \"feat\"\n\t\t}\n\t\t},\n\t\t\"flags\": {\n\t\t\t\"midi-qol\": {\n\t\t\t\"effectActivation\": false,\n\t\t\t\"onUseMacroName\": \"[preActiveEffects]ItemMacro\"\n\t\t\t},\n\t\t\t\"dae\": {\n\t\t\t\"macro\": {\n\t\t\t\t\"name\": \"Nova - End Nova\",\n\t\t\t\t\"img\": item.img,\n\t\t\t\t\"type\": \"script\",\n\t\t\t\t\"scope\": \"global\",\n\t\t\t\t\"command\": \"let originItem = actor.items.find(i => i.name === \\\"Nova\\\");\\n\\tlet effectData = actor.appliedEffects.find(e => e.name === \\\"Nova\\\");\\n\\tif(effectData) {\\n\\t\\tawait effectData.delete();\\n\\t\\treturn ui.notifications.warn(\\\"You have ended the Nova state.\\\");\\n\\t}\"\n\t\t\t}\n\t\t\t}\n\t\t}\n\t\t}];\n\tlet itemCheck = actor.items.find(i => i.name === \"Nova - End Nova\");\n\tif (!itemCheck) await actor.createEmbeddedDocuments(\"Item\", itemData);\n\t\n\tlet diceAvailable = 0;\n\tlet selfDamage = 1;\n\tdiceAvailable = selfDamage * 2;\n\tawait item.setFlag('midi-qol', 'feature.nova.' + token.id + '.selfDamage', selfDamage);\n\tawait item.setFlag('midi-qol', 'feature.nova.' + token.id + '.diceAvailable', diceAvailable);\n\tlet damageRoll = await new CONFIG.Dice.DamageRoll(`${selfDamage}d6`).evaluate();\n\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')\n\n\tconst itemDataChat = {\n        name: \"Nova - Damage (Self)\",\n        type: \"feat\",\n        img: item.img\n    }\n\n    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"none\", token ? [token] : [], damageRoll, {itemData: itemDataChat, forceApply: false, noConcentrationCheck: true});\n\n\tnew Sequence()\n\t.effect()\n\t\t.atLocation(token)\n\t\t.file(\"jb2a.explosion.03.purplepink\")\n\t\t.scale(0.5)\n\t.play()\n}\n\nif (args[0] === 'each' && args[1] === 'startEveryTurn') {\n\tlet diceList = [];\n\tlet selfDamageValue = await item.getFlag('midi-qol', 'feature.nova.' + token.id + '.selfDamage');\n\tlet selfDamage = Number.isNaN(parseInt(selfDamageValue)) ? 0 : parseInt(selfDamageValue);\n\tlet diceAvailable = 0;\n\tif(selfDamage === 0) return;\n\tselfDamage = selfDamage + 1;\n\tdiceAvailable = selfDamage * 2;\n\tawait item.setFlag('midi-qol', 'feature.nova.' + token.id + '.selfDamage', selfDamage);\n\tawait item.setFlag('midi-qol', 'feature.nova.' + token.id + '.diceAvailable', diceAvailable);\n\tlet damageRoll = await new CONFIG.Dice.DamageRoll(`${selfDamage}d6`).evaluate();\n\tdamageRoll.dice.forEach(die => {die.results.forEach(rollResult => {diceList.push(`<li class=\"roll die d6\">${rollResult.result}</li>`);});});\n\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')\n\n\tconst itemData = {\n        name: \"Nova - Damage (Self)\",\n        type: \"feat\",\n        img: item.img\n    }\n\n    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"none\", token ? [token] : [], damageRoll, {itemData: itemData, forceApply: false, noConcentrationCheck: true});\n\n\tnew Sequence()\n\t.effect()\n\t\t.atLocation(token)\n\t\t.file(\"jb2a.explosion.03.purplepink\")\n\t\t.scale(0.5)\n\t.play()\n}\n\nif (args[0] === 'off') {\n\tawait item.unsetFlag('midi-qol', 'feature.nova');\n\tlet itemCheck = actor.items.find(i => i.name === \"Nova - End Nova\");\n\tif (itemCheck) await itemCheck.delete();\n}\n\nif(args[0].macroPass === \"postDamageRoll\") {\n\tif(workflow.targets.size > 1) return;\n\tif(workflow.saves.size > 0 && workflow.flags.midiProperties.nodam === true) return;\n\tconst target = workflow.targets.first();\n\tlet tokenId = token.id;\n\tlet diceAvailable = parseInt(await macroItem.getFlag('midi-qol', `feature.nova.${tokenId}.diceAvailable`));\n\tif(diceAvailable === 0) return;\n\tlet diceRollType = 'd6';\n\n\tlet content = `<p>Select the number of dice to use:</p>\n\t<form>\n\t\t<div class=\"form-group\">\n\t\t\t<label style=\"flex: 0 0 auto; margin: 0 10px; text-align: left;\">Nova Damage Available: <b>${diceAvailable}${diceRollType}</b></label>\n\t\t\t<div class=\"form-fields\">\n\t\t\t\t<button type=\"button\" class=\"dice-decrement\">-</button>\n\t\t\t\t<span id=\"diceDisplay\" style=\"flex: 0 0 auto; margin: 0 10px; text-align: center;\">0</span>\n\t\t\t\t<button type=\"button\" class=\"dice-increment\">+</button>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\t`;\n\n\tawait new Dialog({\n\t\ttitle: `Use Nova Damage`,\n\t\tcontent: content,\n\t\tbuttons: {\n\t\trecover: {\n\t\t\tlabel: \"Continue\",\n\t\t\tcallback: async (html) => {\n\t\t\t\tlet diceUsed = false;\n\t\t\t\tconst display = html.find(`#diceDisplay`)[0];\n\t\t\t\tif (!display) return;\n\n\t\t\t\tconst diceToUse = parseInt(display.textContent);\n\t\t\t\tif (!isNaN(diceToUse) && diceToUse > 0) {\n\t\t\t\tdiceUsed = true;\n\t\t\t\t}\n\n\t\t\t\t//Exit if no dice selected\n\t\t\t\tif (!diceUsed) {\n\t\t\t\t  ui.notifications.warn(\"You did not use any additional damage.\");\n\t\t\t\t  return;\n\t\t\t\t}\n\t\t\t\t\n\t\t\t\tlet damageRoll;\n\t\t\t\t//Roll damage dice\n\t\t\t\tif(workflow.saves.size > 0 && workflow.flags.midiProperties.halfdam === true) {\n\t\t\t\t\tdamageRoll = await new CONFIG.Dice.DamageRoll(`${diceToUse}d6 / 2`).evaluate();\n\t\t\t\t}\n\t\t\t\telse {\n\t\t\t\t\tdamageRoll = await new CONFIG.Dice.DamageRoll(`${diceToUse}d6`).evaluate();\n\t\t\t\t}\n\t\t\t\tlet damageRollTotal = Math.floor(damageRoll.total);\n\t\t\t\tawait MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')\n\n\t\t\t\tconst itemData = {\n\t\t\t\t\tname: \"Nova - Damage (Radiant)\",\n\t\t\t\t\ttype: \"feat\",\n\t\t\t\t\timg: item.img\n\t\t\t\t}\n\n\t\t\t\tnew MidiQOL.DamageOnlyWorkflow(actor, token, damageRollTotal, \"radiant\", target ? [target] : [], damageRoll, {itemData: itemData});\n\t\t\t\t\n\t\t\t\tnew Sequence()\n\t\t\t\t.effect()\n\t\t\t\t\t.atLocation(target)\n\t\t\t\t\t.file(\"jb2a.template_circle.out_pulse.02.burst.purplepink\")\n\t\t\t\t\t.scale(0.5)\n\t\t\t\t.play()\n\t\t\t\n\t\t\t\t//Update the actor with the new diceUsed value per class\n\t\t\t\tconst diceRemaining = diceAvailable - diceToUse;\n\t\t\t\tawait macroItem.setFlag('midi-qol', 'feature.nova.' + token.id + '.diceAvailable', diceRemaining);\n\t\t\t}\n\t\t},\n\t\t\tcancel: {\n\t\t\t\tlabel: \"Cancel\",\n\t\t\t\tcallback: () => false\n\t\t\t}\n\t\t},\n\t\t\tdefault: \"cancel\",\n\trender: (html) => {\n\t\t//Implement clickable buttons in the dialog box and prevent going over max/min values\n\t\thtml[0].addEventListener('click', event => {\n\t\t\tconst targetClick = event.target;\n\t\t\tconst isIncrement = targetClick.classList.contains('dice-increment');\n\t\t\tconst isDecrement = targetClick.classList.contains('dice-decrement');\n\n\t\t\tif (isIncrement || isDecrement) {\n\t\t\t\tconst key = targetClick.dataset.key;\n\t\t\t\tconst spanDisplay = html[0].querySelector(`#diceDisplay`);\n\t\t\t\tlet currentValue = parseInt(spanDisplay.textContent);\n\t\t\t\tconst maxValue = diceAvailable;\n\n\t\t\t\tif (isIncrement && currentValue < maxValue) {\n\t\t\t\tspanDisplay.textContent = currentValue + 1;\n\t\t\t\t} else if (isDecrement && currentValue > 0) {\n\t\t\t\tspanDisplay.textContent = currentValue - 1;\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t}\n\t}).render(true);\n}",
+        "command": "const sourceItem = macroItem ?? item;\nconst stateKey = `feature.nova.${token.id}`;\nif(args[0] === \"on\") {\n    const context = args.at(-1);\n    const sourceUuid = context?.effectUuid ?? `${actor.uuid}.ActiveEffect.${context?.effectId}`;\n    const existing = actor.items.find(helper => helper.getFlag(\"dnd5e\", \"dependentOn\") === sourceUuid && helper.getFlag(\"gambits-premades\", \"novaHelper\"));\n    if(!existing) await actor.createEmbeddedDocuments(\"Item\", [game.gps.disableBlfxAutoRecognition({name: \"Nova - End Nova\", type: \"feat\", img: sourceItem.img, system: {activities: {gpsEndNova000001: {type: \"utility\", activation: {type: \"bonus\"}, consumption: {spellSlot: false, targets: []}, target: {affects: {type: \"self\"}}}}}, flags: {autoanimations: {isEnabled: false, version: 5}, dnd5e: {dependentOn: sourceUuid}, \"gambits-premades\": {novaHelper: true}, \"midi-qol\": {onUseMacroName: \"[preActiveEffects]ItemMacro\"}, dae: {macro: {name: \"End Nova\", type: \"script\", command: 'const source = await fromUuid(macroItem.getFlag(\"dnd5e\", \"dependentOn\")); await source?.delete(); if(actor.items.has(macroItem.id)) await macroItem.delete();'}}}})]);\n}\nif(args[0] === \"on\" || (args[0] === \"each\" && args[1] === \"startEveryTurn\")) {\n    const previous = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.selfDamage`)) || 0;\n    const selfDamage = args[0] === \"on\" ? 1 : previous + 1;\n    await sourceItem.setFlag(\"midi-qol\", stateKey, {selfDamage, diceAvailable: selfDamage * 2});\n    const roll = await new CONFIG.Dice.DamageRoll(`${selfDamage}d6`).evaluate();\n    await MidiQOL.displayDSNForRoll(roll, \"damageRoll\");\n    await new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, \"none\", [token], roll, {itemData: {flags: {autoanimations: {isEnabled: false, version: 5}}, name: \"Nova - Damage (Self)\", type: \"feat\", img: sourceItem.img}, noConcentrationCheck: true});\n}\nif(args[0] === \"off\") {\n    await sourceItem.unsetFlag(\"midi-qol\", stateKey);\n    const sourceUuid = args.at(-1)?.effectUuid ?? `${actor.uuid}.ActiveEffect.${args.at(-1)?.effectId}`;\n    const ids = actor.items.filter(helper => helper.getFlag(\"dnd5e\", \"dependentOn\") === sourceUuid && helper.getFlag(\"gambits-premades\", \"novaHelper\")).map(helper => helper.id);\n    if(ids.length) await actor.deleteEmbeddedDocuments(\"Item\", ids);\n}\nif(args[0]?.macroPass === \"preDamageRollComplete\") {\n    if(!game.combat?.started || game.combat.combatant?.token?.uuid !== token.document.uuid || actor.system.attributes.hp.value <= 0) return;\n    if(!workflow.activity.hasAttack && !workflow.activity.hasSave) return;\n    if(workflow.targets.size !== 1 || (workflow.activity.hasAttack && !workflow.hitTargets.size) || workflow.gps?.novaDamage) return;\n    const available = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.diceAvailable`)) || 0;\n    if(available <= 0) return;\n    const count = await game.gps.showAutomationDialog({window: {title: sourceItem.name}, content: `<label>${game.i18n.format(\"GAMBITSPREMADES.Dialogs.Nova.DamageDice\", {maximum: available})} <input name=\"dice\" type=\"number\" value=\"0\" min=\"0\" max=\"${available}\" step=\"1\"></label>`, buttons: [{action: \"use\", label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Use\"), callback: (event, button) => Number(button.form.elements.dice.value)}, {action: \"cancel\", label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Cancel\")}], rejectClose: false});\n    const current = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.diceAvailable`)) || 0;\n    if(!Number.isInteger(count) || count < 1 || count > current) return;\n    const roll = await new CONFIG.Dice.DamageRoll(`${count}d6`, {}, {type: \"radiant\", properties: [\"mgc\"]}).evaluate();\n    await sourceItem.setFlag(\"midi-qol\", `${stateKey}.diceAvailable`, current - count);\n    (workflow.gps ??= {}).novaDamage = true;\n    await workflow.setDamageRolls([...workflow.damageRolls, roll]);\n}\n",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -465,6 +468,22 @@
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

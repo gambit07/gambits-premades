@@ -5,54 +5,8 @@
   "effects": [
     {
       "_id": "GrZ2AlujZEWCppJt",
-      "changes": [
-        {
-          "key": "flags.midi-qol.optional.Karma.attack.all",
-          "mode": 5,
-          "value": "1d6",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.optional.Karma.save.all",
-          "mode": 5,
-          "value": "1d6",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.optional.Karma.check.all",
-          "mode": 5,
-          "value": "1d6",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.optional.Karma.label",
-          "mode": 5,
-          "value": "Karma",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.optional.Karma.skill.all",
-          "mode": 2,
-          "value": "1d6",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.optional.Karma.damage.all",
-          "mode": 2,
-          "value": "1d6",
-          "priority": 20
-        }
-      ],
       "disabled": false,
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "origin": "Item.dQvh9dejF0s0d9nk",
       "transfer": false,
       "flags": {
@@ -69,8 +23,7 @@
           "enableCondition": "",
           "disableCondition": "",
           "disableIncapacitated": false,
-          "dontApply": false,
-          "showIcon": false
+          "dontApply": false
         },
         "core": {
           "overlay": false
@@ -79,6 +32,10 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -87,8 +44,54 @@
       "statuses": [],
       "img": "modules/gambits-premades/assets/images/karma.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.optional.Karma.attack.all",
+            "value": "1d6",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "flags.midi-qol.optional.Karma.save.all",
+            "value": "1d6",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "flags.midi-qol.optional.Karma.check.all",
+            "value": "1d6",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "flags.midi-qol.optional.Karma.label",
+            "value": "Karma",
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "flags.midi-qol.optional.Karma.skill.all",
+            "value": "1d6",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "flags.midi-qol.optional.Karma.damage.all",
+            "value": "1d6",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "flags.midi-qol.optional.Karma.count",
+            "value": "1",
+            "type": "override",
+            "priority": 20
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!UfepHZeaO8Hr0gI2.GrZ2AlujZEWCppJt"
     }
   ],
@@ -114,24 +117,40 @@
       "actionSection": ""
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Scene.GO63mgFDMhBfPVWf.Token.iELiDIqKyq03oDVK.Actor.CUd9btBTjzY0Pdd4.ActiveEffect.bRJSW34eNyUjNoYv"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },
   "system": {
     "description": {
-      "value": "<p>You have a number of Karma points per long rest equal to your proficiency bonus and the bonus for the prime ability of your class.</p><p>As a free action, you can activate a karma point. It will stay activated till you use it or take a long rest.</p><p>While you have Karma activated you can add a d6 to one attack roll, saving throw, ability check, damage roll, or healing roll.</p><p>All Karma points are restored after a long rest.</p><p></p><p>NOTE:</p><p>Use @prof + @abilities.str.mod with the appropriate primary ability mod in the Max Usage field for non-spellcasting classes.</p>",
+      "value": "<p>You have a number of Karma points per long rest equal to your proficiency bonus and the bonus for the prime ability of your class.</p><p>As a free action, you can activate a karma point. It will stay activated till you use it or take a long rest.</p><p>While you have Karma activated you can add a d6 to one attack roll, saving throw, ability check, damage roll, or healing roll.</p><p>All Karma points are restored after a long rest.</p><p></p><p>NOTE:</p><p>Use @prof + @abilities.str.mod with the appropriate primary ability mod in the Max Usage field for non-spellcasting classes.</p><p><strong>GPS setup:</strong> All optional roll categories share one activation. Healing uses Midi's damage-roll bonus dialog. Consuming the bonus removes the activated effect.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",

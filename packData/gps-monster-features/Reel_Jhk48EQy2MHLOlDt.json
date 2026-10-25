@@ -9,7 +9,7 @@
     "source": {
       "book": "Monstrous Compendium Vol. 1: Spelljammer Creatures",
       "page": "3",
-      "custom": "1.0.0",
+      "custom": "",
       "license": "",
       "revision": 1,
       "rules": "2014"
@@ -173,7 +173,7 @@
         "img": "icons/tools/fishing/reel-brown-white.webp",
         "type": "script",
         "scope": "global",
-        "command": "let validTokens = canvas.tokens.placeables.filter(t => t.actor.appliedEffects.find(e => e.name === \"Web Strand\"));\nfor (const target of validTokens) {\n    await game.gps.socket.executeAsGM(\"moveTokenByOriginPoint\", {originX: token.center.x, originY: token.center.y, targetUuid: target.document.uuid, distance: -60 });\n}",
+        "command": "let validTokens = canvas.tokens.placeables.filter(t => t.actor?.appliedEffects.some(e => e.name === \"Web Strand\" && DAE.getEffectSource(e).actorUuid === actor.uuid));\nfor (const target of validTokens) {\n    await game.gps.queryGM(\"moveTokenByOriginPoint\", {originX: token.center.x, originY: token.center.y, targetUuid: target.document.uuid, distance: -60 });\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -423,6 +423,22 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "img": "icons/tools/fishing/reel-brown-white.webp",

@@ -1,6 +1,9 @@
 const Base = foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2);
 
 export function registerSettings() {
+    game.settings.register("gambits-premades", "releaseMessage", {
+        scope: "world", config: false, type: String, default: ""
+    });
     game.settings.register('gambits-premades', 'Mirror 3rd Party Dialog for GMs', {
         name: "GAMBITSPREMADES.Settings.MirrorThirdPartyDialogForGMs.Name",
         hint: "GAMBITSPREMADES.Settings.MirrorThirdPartyDialogForGMs.Hint",
@@ -303,22 +306,13 @@ export function registerSettings() {
         }
     });
 
-    game.settings.register('gambits-premades', 'Enable Identify Restrictions', {
-        name: "GAMBITSPREMADES.Settings.EnableIdentifyRestrictions.Name",
-        hint: "GAMBITSPREMADES.Settings.EnableIdentifyRestrictions.Hint",
-        scope: 'world',
+    game.settings.register("gambits-premades", "skipResolvedReactions", {
+        name: "GAMBITSPREMADES.SettingsMenu.General.SkipResolvedReactions.Name",
+        hint: "GAMBITSPREMADES.SettingsMenu.General.SkipResolvedReactions.Description",
+        scope: "world",
         config: false,
         type: Boolean,
         default: false
-    });
-
-    game.settings.register('gambits-premades', 'Identify Restriction Message', {
-        name: "GAMBITSPREMADES.Settings.IdentifyRestrictionMessage.Name",
-        hint: "GAMBITSPREMADES.Settings.IdentifyRestrictionMessage.Hint",
-        scope: 'world',
-        config: false,
-        type: String,
-        default: "Nice try, DENIED ;)"
     });
 
     game.settings.register('gambits-premades', 'enableTimerFullAnim', {
@@ -330,18 +324,18 @@ export function registerSettings() {
         default: false
     });
 
+    game.settings.register("gambits-premades", "contextualFocusPulseColor", {
+        name: "GAMBITSPREMADES.Settings.ContextualFocusPulseColor.Name",
+        hint: "GAMBITSPREMADES.Settings.ContextualFocusPulseColor.Hint",
+        scope: "user",
+        config: false,
+        type: new foundry.data.fields.ColorField({nullable: true, blank: true}),
+        default: ""
+    });
+
     game.settings.register('gambits-premades', 'enable3prNoCombat', {
         name: "GAMBITSPREMADES.Settings.Enable3prNoCombat.Name",
         hint: "GAMBITSPREMADES.Settings.Enable3prNoCombat.Hint",
-        scope: 'world',
-        config: false,
-        type: Boolean,
-        default: false
-    });
-
-    game.settings.register('gambits-premades', 'hideTemplates', {
-        name: "GAMBITSPREMADES.Settings.HideTemplates.Name",
-        hint: "GAMBITSPREMADES.Settings.HideTemplates.Hint",
         scope: 'world',
         config: false,
         type: Boolean,
@@ -773,7 +767,7 @@ export function registerSettings() {
         scope: 'world',
         config: true,
         type: GeneralSettingsMenu,
-        restricted: true
+        restricted: false
     });
 
     game.settings.registerMenu('gambits-premades', 'spells', {
@@ -921,6 +915,8 @@ export class BaseSettingsMenu extends Base {
 
   static async #handleSubmit(event, form, formData) {
     for (let [key, value] of Object.entries(formData.object)) {
+        const setting = game.settings.settings.get(`gambits-premades.${key}`);
+        if (!setting || (setting.scope === "world" && !game.user.isGM)) continue;
         if (game.settings.get('gambits-premades', key) === value) continue;
         await game.settings.set('gambits-premades', key, value);
     }
@@ -1222,21 +1218,28 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
 
   async _prepareContext(options) {
     let context = await super._prepareContext(options);
+    const pulseColor = game.settings.get("gambits-premades", "contextualFocusPulseColor");
+    const colorSettings = [{
+      key: "contextualFocusPulseColor",
+      name: "GAMBITSPREMADES.Settings.ContextualFocusPulseColor.Name",
+      hint: "GAMBITSPREMADES.Settings.ContextualFocusPulseColor.Hint",
+      value: pulseColor?.css ?? pulseColor ?? "",
+      placeholder: (game.user.color?.css ?? game.user.color) || "#f26522"
+    }];
 
     const definitions = [
       { id: "enable3prNoCombat", name: "GAMBITSPREMADES.SettingsMenu.General.Enable3prNoCombat.Name", description: "GAMBITSPREMADES.SettingsMenu.General.Enable3prNoCombat.Description", boolKey: "enable3prNoCombat" },
-      { id: "enableIdentifyRestrictions", name: "GAMBITSPREMADES.SettingsMenu.General.EnableIdentifyRestrictions.Name", description: "GAMBITSPREMADES.SettingsMenu.General.EnableIdentifyRestrictions.Description", boolKey: "Enable Identify Restrictions", children: [{ id: "message", name: "GAMBITSPREMADES.SettingsMenu.General.IdentifyRestrictionMessage.Name", description: "GAMBITSPREMADES.SettingsMenu.General.IdentifyRestrictionMessage.Description", type: "String", boolKey: "Identify Restriction Message" }] },
+      { id: "skipResolvedReactions", name: "GAMBITSPREMADES.SettingsMenu.General.SkipResolvedReactions.Name", description: "GAMBITSPREMADES.SettingsMenu.General.SkipResolvedReactions.Description", boolKey: "skipResolvedReactions" },
       { id: "enableRegionWrapping", name: "GAMBITSPREMADES.SettingsMenu.General.EnableRegionWrapping.Name", description: "GAMBITSPREMADES.SettingsMenu.General.EnableRegionWrapping.Description", boolKey: "enableRegionWrapping" },
       { id: "enableTimerFullAnim", name: "GAMBITSPREMADES.SettingsMenu.General.EnableTimerFullAnim.Name", description: "GAMBITSPREMADES.SettingsMenu.General.EnableTimerFullAnim.Description", boolKey: "enableTimerFullAnim" },
-      { id: "hideTemplates", name: "GAMBITSPREMADES.SettingsMenu.General.HideTemplates.Name", description: "GAMBITSPREMADES.SettingsMenu.General.HideTemplates.Description", boolKey: "hideTemplates" },
       { id: "mirror3rdPartyDialogForGMs", name: "GAMBITSPREMADES.SettingsMenu.General.MirrorThirdPartyDialogForGMs.Name", description: "GAMBITSPREMADES.SettingsMenu.General.MirrorThirdPartyDialogForGMs.Description", boolKey: "Mirror 3rd Party Dialog for GMs" },
       { id: "tokenMovementSpeed", name: "GAMBITSPREMADES.SettingsMenu.General.TokenMovementSpeed.Name", description: "GAMBITSPREMADES.SettingsMenu.General.TokenMovementSpeed.Description", boolKey: "enableTokenMovementSpeed", timeoutKey: "tokenMovementSpeed" },
       { id: "debugEnabled", name: "GAMBITSPREMADES.SettingsMenu.General.DebugEnabled.Name", description: "GAMBITSPREMADES.SettingsMenu.General.DebugEnabled.Description", boolKey: "debugEnabled" }
     ];
 
-    const hasTimeoutColumn = definitions.some(d => !!d.timeoutKey);
+    const hasTimeoutColumn = game.user.isGM && definitions.some(d => !!d.timeoutKey);
 
-    const features = definitions.map(def => {
+    const features = (game.user.isGM ? definitions : []).map(def => {
       const feature = {
         id:          def.id,
         name:        def.name,
@@ -1267,6 +1270,7 @@ export class GeneralSettingsMenu extends BaseSettingsMenu {
     return foundry.utils.mergeObject(context, {
       features,
       hasTimeoutColumn,
+      colorSettings,
       buttons: [
         { type: "submit", icon: "fa-solid fa-save", label: game.i18n.localize("GAMBITSPREMADES.UI.SaveSettings") }
       ]

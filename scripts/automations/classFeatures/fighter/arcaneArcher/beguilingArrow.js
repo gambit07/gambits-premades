@@ -2,9 +2,9 @@ export async function beguilingArrow({ speaker, actor, token, character, item, a
     if(args[0].macroPass === "postSave") {
         let target = workflow.failedSaves.first();
         if(!target) return;
-        const allies = canvas.tokens.placeables.filter(t => t.document.disposition === token.document.disposition && MidiQOL.canSee(token, t) && MidiQOL.computeDistance(token, t, {wallsBlock: true, includeCover: true}) <= 30);
+        const allies = canvas.tokens.placeables.filter(t => t.actor && t.actor.uuid !== actor.uuid && t.actor.uuid !== target.actor.uuid && t.document.disposition === token.document.disposition && MidiQOL.canSee(token, t) && game.gps.withinRange(target, t, 30));
 
-        const allyUuids = allies.map(t => t.actor.uuid);
+        const allyUuids = allies.map(t => t.document.uuid);
         const allyNames = allies.map(t => t.actor.name);
 
         if (allyUuids.length === 0) return;
@@ -21,9 +21,9 @@ export async function beguilingArrow({ speaker, actor, token, character, item, a
                         <p class="gps-dialog-paragraph">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Fighter.ArcaneArcher.BeguilingArrow.SelectAllyForCharm")}</p>
                         <div>
                             <div class="gps-dialog-flex">
-                                <label for="ally-token" class="gps-dialog-label"Ally:</label>
+                                <label for="ally-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Ally")}</label>
                                 <select id="ally-token" class="gps-dialog-select">
-                                    ${allyNames.map((name, index) => `<option class="gps-dialog-option" value="${allyUuids[index]}">${name}</option>`).join('')}
+                                    ${allyNames.map((name, index) => `<option class="gps-dialog-option" value="${allyUuids[index]}">${foundry.utils.escapeHTML(name)}</option>`).join('')}
                                 </select>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${item.img}" class="gps-dialog-image">
@@ -40,7 +40,7 @@ export async function beguilingArrow({ speaker, actor, token, character, item, a
             </div>
         `;
         
-        let result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+        let result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
 
@@ -49,44 +49,45 @@ export async function beguilingArrow({ speaker, actor, token, character, item, a
         }
         else if (userDecision) {
             let allyToken = await fromUuid(allyTokenUuid);
+            if(!allyToken?.actor || !allyUuids.includes(allyTokenUuid)) return;
 
             let effectData = [
-                {
-                    "icon": "systems/dnd5e/icons/svg/statuses/charmed.svg",
-                    "origin": `${allyToken.actor.uuid}`,
+                { duration: { expiry: "sourceStart" },
+                    img: "systems/dnd5e/icons/svg/statuses/charmed.svg",
+                    "origin": item.uuid,
+                    "statuses": ["charmed"],
                     "disabled": false,
-                    "name": "Charmed",
+                    "name": game.i18n.localize("DND5E.ConCharmed"),
                     "transfer": false,
                     "flags": {
+                        "gambits-premades": {charmerUuid: allyToken.actor.uuid},
                         "dae": {
-                            "specialDuration": [
-                                "turnStartSource"
-                            ]
+                            "specialDuration": []
                         }
                     }
                 }
             ];
-            await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: allyToken.actor.uuid, effects: effectData });
+            await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: target.actor.uuid, effects: effectData });
 
             let content = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.ArcaneArcher.BeguilingArrow.TargetCharmedByAlly", { allyName: allyToken.actor.name })}<br/><img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
             let actorPlayer = MidiQOL.playerForActor(actor);
             let chatData = {
-                user: actorPlayer.id,
+                user: actorPlayer?.id ?? game.user.id,
                 speaker: ChatMessage.getSpeaker({ token: token }),
                 content: content
             };
-            ChatMessage.create(chatData);
+            await ChatMessage.create(chatData);
 
             let contentAlly = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.ArcaneArcher.BeguilingArrow.TargetCharmedByYou", { actorName: actor.name })}<br/><img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
             let actorPlayerAlly = MidiQOL.playerForActor(allyToken.actor);
             let chatDataAlly = {
-                user: actorPlayerAlly.id,
+                user: actorPlayerAlly?.id ?? game.user.id,
                 speaker: ChatMessage.getSpeaker({ token: allyToken }),
                 content: contentAlly
             };
-            ChatMessage.create(chatDataAlly);
+            await ChatMessage.create(chatDataAlly);
         }
     }
 }

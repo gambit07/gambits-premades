@@ -10,7 +10,7 @@
       "book": "Player’s Handbook (2014)",
       "page": "158",
       "license": "",
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -107,17 +107,6 @@
       "otherCondition": "",
       "effectCondition": ""
     },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
-          "type": "checkbox",
-          "default": true,
-          "category": "animation"
-        }
-      ]
-    },
     "dnd5e": {
       "riders": {
         "activity": []
@@ -126,40 +115,35 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "GPS"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "effects": [
     {
       "img": "icons/equipment/back/cloak-plain-blue.webp",
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.cloakOfDisplacement",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.grants.disadvantage.attack.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.cloakOfDisplacement, isDamaged",
-          "priority": 20
-        }
-      ],
-      "duration": {
-        "seconds": null,
-        "startTime": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null,
-        "combat": null
-      },
+      "duration": {},
       "tint": "#ffffff",
       "transfer": true,
       "disabled": false,
@@ -170,7 +154,6 @@
           "macroRepeat": "startEveryTurnAny",
           "disableCondition": "",
           "disableIncapacitated": true,
-          "showIcon": false,
           "durationExpression": "",
           "specialDuration": []
         },
@@ -185,43 +168,67 @@
           "riders": {
             "statuses": []
           }
+        },
+        "gambits-premades": {
+          "cloakOfDisplacement": "benefit"
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "name": "Cloak of Displacement",
       "statuses": [],
       "_id": "5el2lHipVzj3rUVC",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.cloakOfDisplacement",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.grants.disadvantage.attack.all",
+            "value": 1,
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.cloakOfDisplacement, isDamaged",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "origin": "Compendium.world.gps-items.Item.EU01knV1iWL0qUwq",
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!G0WyymrUet7baO97.5el2lHipVzj3rUVC"
     },
     {
       "origin": "Compendium.world.gps-items.Item.EU01knV1iWL0qUwq",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "expiry": "combatEnd"
       },
       "disabled": false,
       "name": "Cloak of Displacement: Start-End",
       "img": "icons/equipment/back/cloak-plain-blue.webp",
       "_id": "ldOYJlb9eTpZAfJj",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.cloakOfDisplacement startEnd",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.cloakOfDisplacement startEnd",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -232,18 +239,24 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [
-            "combatEnd",
             "joinCombat"
           ]
         },
         "core": {
           "overlay": false
+        },
+        "gambits-premades": {
+          "cloakOfDisplacement": "controller"
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!G0WyymrUet7baO97.ldOYJlb9eTpZAfJj"
     }
   ],

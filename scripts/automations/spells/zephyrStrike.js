@@ -1,8 +1,10 @@
 export async function zephyrStrike({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "preAttackRoll") {
+    if(args?.[0].macroPass === "preAttackRoll") {
+        const effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "507baaea-a55b-43b5-af50-6fefba1b3220" && !e.getFlag("gambits-premades", "zephyrStrikeUsed"));
+        if(!effectData) return;
         if(workflow.activity?.actionType !== "mwak" && workflow.activity?.actionType !== "rwak") return;
         
-        await foundry.applications.api.DialogV2.wait({
+        await game.gps.showAutomationDialog({
             window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.ZephyrStrike.Windowtitle") },
             content: `
                 <div class="gps-dialog-container">
@@ -26,25 +28,20 @@ export async function zephyrStrike({ speaker, actor, token, character, item, arg
                 callback: async (event, button, dialog) => {
                 workflow.tracker.advantage.add(true, "Zephyr Strike");
     
-                let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "507baaea-a55b-43b5-af50-6fefba1b3220");
+                workflow.gps ??= {};
+                workflow.gps.zephyrStrike = effectData.uuid;
                 await effectData.setFlag("gambits-premades", "zephyrStrikeUsed", true);
     
                     let effectDataSpeed = [
                     {
-                        "icon": `${item.img}`,
-                        "origin": `${actor.uuid}`,
+                        img: `${item.img}`,
+                        "origin": effectData.origin,
                         "disabled": false,
-                        "duration": {
-                            "turns": 1
-                        },
+                        "duration": { expiry: "turnEnd" },
                         "name": "Zephyr Strike - Speed",
-                        "changes": [
-                        {
-                            "key": "system.attributes.movement.all",
-                            "value": "+ 30",
-                            "mode": CONST.ACTIVE_EFFECT_MODES.CUSTOM
-                        }
-                        ],
+                        system: { changes: [
+                        ...game.gps.movementSpeedChanges("+ 30")
+                        ] },
                         "transfer": false
                     }
                 ];
@@ -63,19 +60,17 @@ export async function zephyrStrike({ speaker, actor, token, character, item, arg
         });
     }
     
-    if(args[0].macroPass === "preDamageRollComplete") {
+    if(args?.[0].macroPass === "preDamageRollComplete") {
+        if(!workflow.gps?.zephyrStrike || workflow.gps.zephyrStrikeDamage || !workflow.hitTargets.size) return;
         if(workflow.activity?.actionType !== "mwak" && workflow.activity?.actionType !== "rwak") return;
-        let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "507baaea-a55b-43b5-af50-6fefba1b3220");
-        let effectAdv = effectData.getFlag("gambits-premades", "zephyrStrikeUsed");
+        const effectAdv = true;
         let numDice = workflow.isCritical ? 2 : 1;
         if(effectAdv) {
             let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDice}d8`, {}, {type: "force", properties: ["mgc"]}).evaluate();
 
-            let rollFound = workflow.damageRoll;
-
-            if(rollFound) await MidiQOL.addRollTo(rollFound, damageRoll);
+            await workflow.setDamageRolls([...workflow.damageRolls, damageRoll]);
         
-            await effectData.delete();
+            workflow.gps.zephyrStrikeDamage = true;
         }
     }
 }

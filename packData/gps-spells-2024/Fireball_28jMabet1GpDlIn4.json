@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -199,11 +199,7 @@
         "otherActivityAsParentType": true,
         "friendlySave": "default",
         "img": "",
-        "flags": {
-          "region-attacher": {
-            "attachRegionToTemplate": false
-          }
-        },
+        "flags": {},
         "appliedEffects": []
       }
     },
@@ -479,64 +475,117 @@
         "activity": []
       }
     },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
         },
-        {
-          "value": "color",
-          "label": "CHRISPREMADES.Config.Color",
+        "color": {
+          "label": "GAMBITSPREMADES.ItemConfig.Color",
           "type": "select",
           "default": "orange",
-          "category": "animation",
+          "category": "animations",
           "options": [
             {
               "value": "blue",
-              "label": "CHRISPREMADES.Config.Colors.Blue",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Blue",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "green",
-              "label": "CHRISPREMADES.Config.Colors.Green",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Green",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "orange",
-              "label": "CHRISPREMADES.Config.Colors.Orange",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Orange",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "purple",
-              "label": "CHRISPREMADES.Config.Colors.Purple",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Purple",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "red",
-              "label": "CHRISPREMADES.Config.Colors.Red",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Red",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             }
           ]
+        },
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
+        },
+        "soundVolume": {
+          "label": "GAMBITSPREMADES.ItemConfig.SoundVolume.Name",
+          "hint": "GAMBITSPREMADES.ItemConfig.SoundVolume.Hint",
+          "type": "number",
+          "default": 0.2,
+          "category": "animations"
         }
+      },
+      "animationModules": [
+        "JB2APatreon",
+        "GPS"
       ]
     },
-    "tidy5e-sheet": {
-      "section": "",
-      "actionSection": ""
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "effects": [],

@@ -1,6 +1,7 @@
 export async function chronalShift({workflowData,workflowType,workflowCombat}) {
     const workflow = await MidiQOL.Workflow.getWorkflow(workflowData);
     if(!workflow) return;
+    if(workflowType === "attack" && !game.gps.reactionCanChangeOutcome(workflow)) return;
     const gpsUuid = "fc2a2693-b92b-4811-b7ff-7c6cb8e5ded5";
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Chronal Shift";
@@ -11,9 +12,9 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
     if(workflow.legendaryResistanceUsed) return;
 
     // Check if attack hits
-    if(workflowType === "attack" && workflow.attackTotal < workflow.targets?.first()?.actor.system.attributes.ac.value) return;
+    if(workflowType === "attack" && !game.gpsSettings.skipResolvedReactions && workflow.attackTotal < workflow.targets?.first()?.actor.system.attributes.ac.value) return;
     // Check if there is a save success
-    if(workflowType === "save" && workflow.saves.size === 0) return;
+    if(workflowType === "save" && workflow.saves.size === 0 && workflow.failedSaves.size === 0) return;
 
     let findValidTokens;
     
@@ -21,12 +22,13 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
         findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["chronal-shift"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     }
     else if(workflowType === "save") {
-        findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["chronal-shift"], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
+        findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["chronal-shift"], reactionCheck: true, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: false, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     }
     
     let browserUser;
 
     for (const validTokenPrimary of findValidTokens) {
+        if(workflowType === "attack" && !game.gps.reactionCanChangeOutcome(workflow)) return;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
@@ -64,7 +66,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                                     <div class="gps-dialog-flex">
                                     <label for="enemy-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.EnemyTarget")}</label>
                                     ${enemyTargetNames.length >= 1 ? 
-                                        `<select id="enemy-token" class="gps-dialog-select">
+                                        `<select id="enemy-token" class="gps-dialog-select" data-gps-token-group="reaction">
                                             <option value="">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.SelectEnemy")}</option>
                                             ${enemyTargetNames.map((name, index) => `<option class="gps-dialog-option" value="${enemyTargetUuids[index]}">${name}</option>`).join('')}
                                         </select>` : `<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.NoValidEnemiesInRange")}</div>`
@@ -73,7 +75,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                                     <div class="gps-dialog-flex">
                                     <label for="ally-token" class="gps-dialog-label">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AllyTarget")}</label>
                                     ${allyTargetNames.length >= 1 ? 
-                                        `<select id="ally-token" class="gps-dialog-select">
+                                        `<select id="ally-token" class="gps-dialog-select" data-gps-token-group="reaction">
                                             <option value="">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.SelectAlly")}</option>
                                             ${allyTargetNames.map((name, index) => `<option class="gps-dialog-option" value="${allyTargetUuids[index]}">${name}</option>`).join('')}
                                         </select>` : `<div style="padding: 4px; width: 100%; box-sizing: border-box; line-height: normal;">${game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.NoValidAlliesInRange")}</div>`
@@ -127,13 +129,13 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle: dialogTitlePrimary, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle: dialogTitlePrimary, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflowType === "attack" ? workflow.token.document.uuid : undefined, source: "user", type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle: dialogTitleGM, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, source: "gm", type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle: dialogTitleGM, dialogContent, dialogId, initialTimeLeft, validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflowType === "attack" ? workflow.token.document.uuid : undefined, source: "gm", type: "multiDialog", notificationId: notificationMessage._id };
             
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflowType === "attack" ? workflow.token.document.uuid : undefined,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -148,6 +150,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
             else if(allyTokenUuid) allyToken = await fromUuid(allyTokenUuid);
             let targetToken = enemyTokenUuid ? enemyToken : allyToken;
             let targetUuid = enemyTokenUuid ? enemyTokenUuid : allyTokenUuid;
+            if(workflowType === "save" && !targetToken?.actor) continue;
             
             let chatContent;
 
@@ -160,51 +163,31 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
             };
             
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
 
-            if(!itemRoll) continue;
+            if(!itemRoll || itemRoll.aborted) continue;
 
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
             if(workflowType === "save") {
                 let saveDC = workflow?.saveActivity?.save.dc?.value;
-                let saveAbility = workflow.saveActivity?.ability;
+                let saveAbility = workflow.tokenSaves?.[targetUuid]?.options?.midiChosenId ?? workflow.saveActivity?.save?.ability?.first();
                 let workflowTarget = enemyTokenUuid ? Array.from(workflow.saves).find(t => t.document.uuid === targetUuid) : Array.from(workflow.failedSaves).find(t => t.document.uuid === targetUuid);
 
                 let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
-                await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"save.dc.calculation": "", "save.dc.formula": saveDC, "save.dc.value": saveDC, "save.ability": [saveAbility]} });
+                await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"save.dc.calculation": "", "save.dc.formula": saveDC, "save.dc.value": saveDC, "save.ability": [saveAbility]} });
                 let reroll;
-                if(source && source === "user") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
-                else if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
+                if(source && source === "user") reroll = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
+                else if(source && source === "gm") reroll = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
 
-                if(reroll.failedSaves.size !== 0) {
-                    if(enemyTokenUuid) {
-                        workflow.saves.delete(workflowTarget);
-                        workflow.failedSaves.add(workflowTarget);
-                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.EnemySaveFailed")} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    }
-                    else {
-                        workflow.failedSaves.delete(workflowTarget);
-                        workflow.saves.add(workflowTarget);
-                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AllySaveSucceeded")} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    }
-
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
-                    return;
-                }
-
-                else {
-                    if(enemyTokenUuid) {
-                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.EnemySaveSucceeded")} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    }
-                    else {
-                        chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AllySaveFailed")} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    }
-
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
-                    continue;
-                }
+                if(!reroll?.saveRolls) continue;
+                const saved = reroll.failedSaves.size === 0;
+                await game.gps.updateSaveResult({workflow, token: workflowTarget, roll: reroll.saveRolls, saved});
+                const resultKey = `${enemyTokenUuid ? "Enemy" : "Ally"}Save${saved ? "Succeeded" : "Failed"}`;
+                chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize(`GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.${resultKey}`)} <img src="${workflowTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
+                await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent, rollData: reroll.saveRolls});
+                continue;
             }
             else if(workflowType === "attack") {
                 let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
@@ -212,21 +195,22 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let reroll;
-                if(source && source === "user") reroll = await game.gps.socket.executeAsUser("rollAsUser", browserUser, { rollParams: `1d20 + ${rerollAddition}` });
-                if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("rollAsUser", gmUser, { rollParams: `1d20 + ${rerollAddition}` });
-                if(reroll.total < workflow.attackTotal) await workflow.setAttackRoll(reroll);
+                if(source && source === "user") reroll = await game.gps.queryUser("rollAsUser", browserUser, { rollParams: `1d20 + ${rerollAddition}` });
+                if(source && source === "gm") reroll = await game.gps.queryUser("rollAsUser", gmUser, { rollParams: `1d20 + ${rerollAddition}` });
+                if(reroll) await workflow.setAttackRoll(reroll);
 
                 workflow.options.noOnUseMacro = saveSetting;
 
                 if(workflow.attackTotal < targetAC) {                    
                     chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AttackFailed")} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                    await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                    if(game.gpsSettings.skipResolvedReactions && game.gps.reactionCanChangeOutcome(workflow)) continue;
                     return;
                 }
 
                 else {
                     chatContent = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.AttackHitAnyway")} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
-                    await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
+                    await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll});
                     continue;
                 }
             }

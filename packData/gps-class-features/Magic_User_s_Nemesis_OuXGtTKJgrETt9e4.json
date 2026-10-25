@@ -9,7 +9,7 @@
     "source": {
       "page": "",
       "license": "",
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1,
       "book": ""
@@ -298,7 +298,46 @@
       }
     },
     "gambits-premades": {
-      "gpsUuid": "e573e3f4-d9f5-4105-8187-d44f09ae6a0b"
+      "gpsUuid": "e573e3f4-d9f5-4105-8187-d44f09ae6a0b",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "S73e3dXo1wUaYk1e": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      },
+      "PlBKD3anOzKhjaxO": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "img": "icons/magic/control/debuff-chains-ropes-net-green.webp",

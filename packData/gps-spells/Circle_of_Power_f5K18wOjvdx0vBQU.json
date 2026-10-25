@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -379,7 +379,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": true,
+      "isEnabled": false,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5,
@@ -450,7 +450,14 @@
           "enabled": false
         },
         "activityName": "Use",
-        "activityType": "utility"
+        "activityType": "utility",
+        "version": 2
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
       }
     }
   },
@@ -458,31 +465,12 @@
     {
       "origin": "Compendium.world.gps-spells.Item.bM5mY6X8ziNqBrfU",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 600,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Circle of Power",
       "_id": "e8PUC4mtW1UlZngp",
-      "changes": [
-        {
-          "key": "flags.midi-qol.superSaver.all",
-          "mode": 0,
-          "value": "item?.type === \"spell\" || item?.flags?.midiProperties?.magiceffect",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.advantage.save.all",
-          "mode": 0,
-          "value": "item?.type === \"spell\" || item?.flags?.midiProperties?.magiceffect",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": false,
       "statuses": [],
@@ -493,7 +481,6 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -675,9 +662,24 @@
         "overrideName": "",
         "script": "",
         "stashedChanges": [],
-        "stashedStatuses": []
+        "stashedStatuses": [],
+        "changes": [
+          {
+            "key": "flags.midi-qol.superSaver.all",
+            "value": "item?.type === \"spell\" || activity?.midiProperties?.magicEffect",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.advantage.save.all",
+            "value": "item?.type === \"spell\" || activity?.midiProperties?.magicEffect",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
       },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!f5K18wOjvdx0vBQU.e8PUC4mtW1UlZngp"
     }
   ],

@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -248,13 +248,13 @@
           "customPath": ""
         },
         "sound": {
-          "enable": true,
+          "enable": false,
           "delay": 0,
           "repeat": 1,
           "repeatDelay": 250,
           "startTime": 0,
           "volume": 0.75,
-          "file": "modules/dnd5e-animations/assets/sounds/Spells/Whoosh/spell-whoosh-13.mp3"
+          "file": ""
         },
         "options": {
           "contrast": 0,
@@ -417,10 +417,11 @@
       "fromAmmo": false,
       "version": 5
     },
-    "region-attacher": {
-      "attachRegionToTemplate": {
-        "dnd5eactivity000": true
-      },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "gambits-premades": {
       "regionBehaviors": {
         "dnd5eactivity000": [
           {
@@ -470,66 +471,58 @@
             }
           }
         ]
-      }
-    },
-    "tidy5e-sheet": {
-      "section": "",
-      "actionSection": ""
-    },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+      },
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
         },
-        {
-          "value": "color",
-          "label": "CHRISPREMADES.Config.Color",
+        "color": {
+          "label": "GAMBITSPREMADES.ItemConfig.Color",
           "type": "select",
           "default": "orange",
-          "category": "animation",
+          "category": "animations",
           "options": [
             {
               "value": "blue",
-              "label": "CHRISPREMADES.Config.Colors.Blue",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Blue",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "green",
-              "label": "CHRISPREMADES.Config.Colors.Green",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Green",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "purple",
-              "label": "CHRISPREMADES.Config.Colors.Purple",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Purple",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "orange",
-              "label": "CHRISPREMADES.Config.Colors.Orange",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Orange",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "red",
-              "label": "CHRISPREMADES.Config.Colors.Red",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Red",
               "requiredModules": [
                 "jb2a_patreon"
               ]
             },
             {
               "value": "yellow",
-              "label": "CHRISPREMADES.Config.Colors.Yellow",
+              "label": "GAMBITSPREMADES.ItemConfig.Colors.Yellow",
               "requiredModules": [
                 "jb2a_patreon"
               ]
@@ -549,8 +542,56 @@
               ]
             }
           ]
+        },
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
         }
+      },
+      "animationModules": [
+        "JB2AFree",
+        "JB2APatreonOptions"
       ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
@@ -558,27 +599,23 @@
       "name": "Cloud of Daggers",
       "origin": "Compendium.world.gps-spells-2024.Item.eDJIU9cOb1iEWhuE",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "img": "icons/skills/ranged/daggers-thrown-salvo-green.webp",
       "_id": "pCcWkTZ9j8Yp7gN9",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.cloudOfDaggers2024 @actorUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.cloudOfDaggers2024 @actorUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -604,13 +641,13 @@
               "customPath": ""
             },
             "sound": {
-              "enable": true,
+              "enable": false,
               "delay": 0,
               "repeat": 1,
               "repeatDelay": 250,
               "startTime": 0,
               "volume": 0.75,
-              "file": "modules/dnd5e-animations/assets/sounds/Spells/Whoosh/spell-whoosh-13.mp3"
+              "file": ""
             },
             "options": {
               "contrast": 0,
@@ -777,7 +814,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -795,6 +831,7 @@
           "overlay": false
         }
       },
+      "start": null,
       "_key": "!items.effects!K4nbHdBY6TFtz94Y.pCcWkTZ9j8Yp7gN9"
     }
   ],

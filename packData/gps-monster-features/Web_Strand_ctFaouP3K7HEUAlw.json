@@ -9,7 +9,7 @@
     "source": {
       "book": "Monstrous Compendium Vol. 1: Spelljammer Creatures",
       "page": "3",
-      "custom": "1.0.0",
+      "custom": "",
       "license": "",
       "revision": 1,
       "rules": "2014"
@@ -141,7 +141,7 @@
           },
           "affects": {
             "count": "",
-            "type": "",
+            "type": "creature",
             "choice": false,
             "special": ""
           },
@@ -239,40 +239,36 @@
     {
       "origin": "Scene.mcZYI9W1Hd4rVznC.Token.RqizWjONLB6d6jFd.Actor.VuEOZY2vgy6qxOin.Item.LSMvlnXNLVMdoV1Z",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 99999,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 99999,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Web Strand",
       "img": "icons/commodities/materials/material-webbing.webp",
       "_id": "4k9NUNFKsNboMaPi",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.StatusEffect",
-          "mode": 0,
-          "value": "grappled",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, isAttacked",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.StatusEffect",
+            "value": "grappled",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, isAttacked",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -287,7 +283,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -438,6 +433,7 @@
           "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!ctFaouP3K7HEUAlw.4k9NUNFKsNboMaPi"
     }
   ],
@@ -460,7 +456,7 @@
         "img": "icons/commodities/materials/material-webbing.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    let target = workflow.hitTargets.first();\n    if(!target) return;\n\n    let webItem = await target.actor.appliedEffects.find(e => e.name === item.name);\n    await webItem.setFlag(\"gambits-premades\", \"webHP\", 20);\n    \n    new Sequence()\n    .effect()\n        .file(\"jb2a.energy_beam.normal.dark_greenpurple.03\")\n        .persist()\n        .name(`${target.id}_webStrand`)\n        .fadeIn(500)\n        .fadeOut(500)\n        .attachTo(token, {offset: { x: -125, y: 35 }})\n        .filter(\"ColorMatrix\", { hue: 0, saturate: -1 })\n        .stretchTo(target,{ attachTo: true })\n    .play()\n\n    new Sequence()\n        .effect()\n        .file(\"jb2a.shield_themed.below.eldritch_web.02.dark_green\")\n        .persist()\n        .name(`${target.id}_web`)\n        .fadeIn(500)\n        .fadeOut(500)\n        .scaleToObject(1.5)\n        .attachTo(target)\n        .filter(\"ColorMatrix\", { hue: 0, saturate: -1 })\n    .play()\n}\n\nif(args[0] === \"off\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.id}_webStrand` });\n    Sequencer.EffectManager.endEffects({ name: `${token.id}_web` });\n}\n\nif(args[0].macroPass === \"isAttacked\") {\n    let attacker = workflow.token;\n    if(token.document.disposition !== attacker.document.disposition) return;\n\n    const damageTypeImmunity = [\"Bludgeoning\", \"Poison\", \"Psychic\"];\n    const damageImmunity = damageTypeImmunity.some(type => workflow.item.labels.damageTypes.includes(type));\n    if(damageImmunity) return;\n\n    let webItem = await token.actor.appliedEffects.find(e => e.name === item.name);\n    if(!webItem) return;\n\n    if(workflow.attackTotal < 12) return;\n\n    const damageTypeVulnerability = [\"Fire\"];\n    const damageVulnerability = damageTypeVulnerability.some(type => workflow.item.labels.damageTypes.includes(type));\n    let webHP = await webItem.getFlag(\"gambits-premades\", \"webHP\");\n\n    const damageFormula = workflow.item.system.damage.parts\n        .map(damagePart => `${damagePart[0]}`)\n        .join(\" + \");\n\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`${damageFormula} + ${actor.system.attributes.prof}`).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    let damageTotal = damageVulnerability ? damageRoll.total * 2 : damageRoll.total;\n\n    let hpRemaining = webHP - damageTotal;\n    let chatContent;\n\n    if (hpRemaining > 0) {\n        await webItem.setFlag(\"gambits-premades\", \"webHP\", hpRemaining);\n        chatContent = `<span style='text-wrap: wrap;'>${attacker.document.name} hit the web strands surrounding you dealing ${damageTotal} points of damage. <img src=\"${attacker.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    } else {\n        await webItem.delete();\n        chatContent = `<span style='text-wrap: wrap;'>${attacker.document.name} hit the web strands surrounding you dealing ${damageTotal} points of damage and destroyed the web. <img src=\"${attacker.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    }\n\n    await game.gps.replaceChatCard({actorUuid: token.actor.uuid, itemUuid: item.uuid, chatContent: chatContent, rollData: damageRoll});\n\n    workflow.aborted = true;\n}",
+        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    let target = workflow.hitTargets.first();\n    if(!target) return;\n\n    let webItem = await target.actor.appliedEffects.find(e => DAE.effectMatchesSource(e, macroItem?.uuid ?? item.uuid) && e.name === (macroItem?.name ?? item.name));\n    if(!webItem) return;\n    await webItem.setFlag(\"gambits-premades\", \"webHP\", 20);\n    \n    if(game.gps.getCprConfig({itemUuid: macroItem.uuid}).animEnabled) {\n        new Sequence()\n        .effect()\n            .file(\"jb2a.energy_beam.normal.dark_greenpurple.03\")\n            .persist()\n            .name(`${target.id}_webStrand`)\n            .fadeIn(500)\n            .fadeOut(500)\n            .attachTo(token, {offset: { x: -125, y: 35 }})\n            .filter(\"ColorMatrix\", { hue: 0, saturate: -1 })\n            .stretchTo(target,{ attachTo: true })\n        .play()\n    }\n\n    if(game.gps.getCprConfig({itemUuid: macroItem.uuid}).animEnabled) {\n        new Sequence()\n            .effect()\n            .file(\"jb2a.shield_themed.below.eldritch_web.02.dark_green\")\n            .belowTokens()\n            .persist()\n            .name(`${target.id}_web`)\n            .fadeIn(500)\n            .fadeOut(500)\n            .scaleToObject(1.5)\n            .attachTo(target)\n            .filter(\"ColorMatrix\", { hue: 0, saturate: -1 })\n        .play()\n    }\n}\n\nif(args[0] === \"off\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.id}_webStrand` });\n    Sequencer.EffectManager.endEffects({ name: `${token.id}_web` });\n}\n\nif(args[0].macroPass === \"isAttacked\") {\n    let attacker = workflow.token;\n    if(token.document.disposition !== attacker.document.disposition) return;\n\n    const webItem = token.actor.appliedEffects.find(effect => DAE.effectMatchesSource(effect, macroItem.uuid) && effect.name === macroItem.name);\n    if(!webItem || workflow.isFumble || (!workflow.isCritical && workflow.attackTotal < 12)) return;\n    const rolls = await workflow.activity.rollDamage({isCritical: workflow.isCritical}, {configure: true}, {create: false});\n    if(!rolls?.length) return;\n    const immune = new Set([\"bludgeoning\", \"poison\", \"psychic\"]);\n    const damageTotal = rolls.reduce((sum, roll) => sum + (immune.has(roll.options.type) ? 0 : roll.total * (roll.options.type === \"fire\" ? 2 : 1)), 0);\n    const damageRoll = rolls[0];\n    const webHP = webItem.getFlag(\"gambits-premades\", \"webHP\") ?? 20;\n    let hpRemaining = webHP - damageTotal;\n    let chatContent;\n\n    if (hpRemaining > 0) {\n        await webItem.setFlag(\"gambits-premades\", \"webHP\", hpRemaining);\n        chatContent = `<span style='text-wrap: wrap;'>${attacker.document.name} hit the web strands surrounding you dealing ${damageTotal} points of damage. <img src=\"${attacker.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    } else {\n        await webItem.delete();\n        chatContent = `<span style='text-wrap: wrap;'>${attacker.document.name} hit the web strands surrounding you dealing ${damageTotal} points of damage and destroyed the web. <img src=\"${attacker.actor.img}\" width=\"30\" height=\"30\" style=\"border:0px\"></span>`;\n    }\n\n    await game.gps.replaceChatCard({actorUuid: token.actor.uuid, itemUuid: item.uuid, chatContent: chatContent, rollData: damageRoll});\n\n    workflow.aborted = true;\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -482,107 +478,7 @@
       }
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.3LDQvvFihwo9Ny6V"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.5lPAQOwOOAhe6iaP"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.JlsXyP1zCaqT4oAn"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.CJVi4tji2O2eCvbx"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.n9b8gQQpFBbPaFYr"
-        },
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.VdzbZu3T4pFsi4w7"
-        },
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.SQJRszKo0ANMKmPD"
-        },
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.exsz0Ol6qgnU3bYw"
-        },
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.nAye6oc3kpnoyTqm"
-        },
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.1eOXLrcTZfKw8ii9"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.0ec9ZXAHR5lMvAjw"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.xCJjZb6kfOoojL8h"
-        },
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.AWULdBdoRN9NCLwk"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.LuJdH9SIghlHyRfD"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.SqJIbEa2glZqRvlh"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.99Bk7h1QcJuo8lVu"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.PakM7e2hAHFsm5MC"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.OSde8FAMF4SOGNpS"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.Al9AtwQb6ud9u8Js"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.fwncynDElTC8wqhA"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.ZvN3tut1Rdt828Ez"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.cDFhTNkyYBFganTl"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.dhQOhqTkHnYPFEib"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.tGe6xLok1FO8eS4F"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.2rA6c1JJOZwJrPHO"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.HCPHn09wHXDb76S1"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.WwuzG0r843Zc2IFg"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.LpTHaAHvWsjmtJnm"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.lwPOV8kSQPIRCghL"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.llxnSJ19ZaZK27Z5"
-        },
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.5sg5uy47lGAORyJq"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.5vyDubKccqwXpUL1"
-        },
-        {
-          "uuid": "Actor.qCpb5H6vLrBeOWAO.ActiveEffect.BSypHvKiFKasb1Ej"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -799,6 +695,35 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Attack",
+        "activityType": "attack",
+        "version": 2
+      }
     }
   },
   "img": "icons/commodities/materials/material-webbing.webp",

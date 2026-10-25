@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "Player’s Handbook (2024)",
       "page": "250",
       "license": "",
@@ -211,16 +211,7 @@
     "chris-premades": {
       "info": {
         "source": "world.ddb-spelljammer-adventures-in-space-ddb-spells"
-      },
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
-          "type": "checkbox",
-          "default": true,
-          "category": "animation"
-        }
-      ]
+      }
     },
     "midi-qol": {
       "removeAttackDamageButtons": "default",
@@ -268,7 +259,19 @@
       }
     },
     "gambits-premades": {
-      "gpsUuid": "999b21b1-cd4a-45b3-b9e9-c9406a74b3fd"
+      "gpsUuid": "999b21b1-cd4a-45b3-b9e9-c9406a74b3fd",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon",
+        "JAAMod"
+      ]
     },
     "autoanimations": {
       "id": "14cb38ea-3dab-4be0-bb3f-1ed83bba2c74",
@@ -493,34 +496,43 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Compendium.world.gps-spells.Item.rHuOtkCKlGkCw9xt",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Hellish Rebuke",
       "img": "icons/magic/control/fear-fright-shadow-monster-red.webp",
       "_id": "dzKosJ14E0fEgQZ5",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.hellishRebuke, isDamaged",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.hellishRebuke, isDamaged",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -531,15 +543,19 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!mSw2KdZIGIY7cNJa.dzKosJ14E0fEgQZ5"
     }
   ],

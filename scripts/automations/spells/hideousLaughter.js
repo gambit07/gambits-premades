@@ -1,5 +1,13 @@
 export async function hideousLaughter({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(!game.modules.get("animated-spell-effects-cartoon")?.active) return ui.notifications.error(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.MissingDependency"));
+    if(args[0]?.macroPass === "prePreambleComplete" && item.system.source.rules === "2014") {
+        for(const target of Array.from(workflow.targets)) {
+            if(target.actor.system.abilities.int.value > 4) continue;
+            workflow.targets.delete(target);
+            ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.HideousLaughter.TargetNotAffectedIntTooLow"));
+        }
+        if(!workflow.targets.size) workflow.aborted = true;
+        return;
+    }
     if (args[0].macroPass === "isDamaged" || args[0] === "each")
     {
         let effectOriginActor;
@@ -7,7 +15,7 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
 
         if(args[0].macroPass === "isDamaged") {
             let effectAdv = [{
-                changes: [{ key: "flags.midi-qol.advantage.save.wis", mode: CONST.ACTIVE_EFFECT_MODES.CUSTOM, value: 1, priority: 20 }],
+                system: { changes: [{ key: "system.abilities.wis.save.roll.mode", type: "add", value: 1, priority: 20 }] },
                 flags: { "dae": { "token": actor.uuid, specialDuration: ["isSave"] } },
                 disabled: false,
                 name: `Damaged - Advantage on Save`
@@ -18,9 +26,9 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
 
         const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
 
-        if (saveResult.failedSaves.size === 0)
+        if (saveResult?.failedSaves.size === 0)
         {
-            let effectData = actor.appliedEffects.find(e => e.name === item.name)
+            let effectData = actor.appliedEffects.find(e => e.name === item.name && DAE.effectMatchesSource(e, item.uuid))
             if (effectData)	await effectData.delete();
         }
     }
@@ -29,7 +37,7 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
     {
         let targets = workflow.failedSaves;
         const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid)
-        if(!targets && hasConcApplied) {
+        if(!targets.size && hasConcApplied) {
             await hasConcApplied.delete();
             return;
         }
@@ -37,14 +45,15 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
         for(let target of targets) {
             const intScore = target.actor.system.abilities.int.value;
 
-            if(intScore > 4)
+            if(item.system.source.rules === "2024" || intScore > 4)
             {
                 const hasEffectApplied = target.document.hasStatusEffect("prone");
 
                 if (!hasEffectApplied) {
-                    await game.gps.socket.executeAsGM("gmToggleStatus", { tokenUuid: `${target.document.uuid}`, status: "prone", active: true });
+                    await game.gps.queryGM("gmToggleStatus", { tokenUuid: `${target.document.uuid}`, status: "prone", active: true });
                 }
 
+                if(!game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) continue;
                 let facing = 1;
 
                 await new Sequence()
@@ -93,20 +102,14 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
                 .waitUntilFinished(-1500)
 
                 .effect()
-                .file("animated-spell-effects-cartoon.level 01.bless.yellow")
+                .file("eskie.star.02.yellow")
                 .atLocation(target, {randomOffset: 1.2, gridUnits:true})
                 .scaleToObject(0.5)
                 .repeats(8, 100,100)
                 .zIndex(1)
 
-                .effect()
-                .file("animated-spell-effects-cartoon.cantrips.mending.yellow")
-                .atLocation(target)
-                .scaleToObject(3)
-                .opacity(0.75)
-                .filter("ColorMatrix", { saturate: 1,brightness: 1.3, hue: -5 })
-                .zIndex(0)
-                .waitUntilFinished(-500)
+                .thenDo(() => game.gps.animation.spellEffect({kind: "mending", at: target, scale: 3, opacity: 0.75}))
+                .wait(780)
 
                 .effect()
                 .delay(300)
@@ -129,7 +132,7 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
                 .zIndex(1)
 
                 .effect()
-                .file("animated-spell-effects-cartoon.magic.impact.02")
+                .file("eskie.damage.bludgeoning.01.yellow")
                 .atLocation(target)
                 .scaleToObject(2)
                 .opacity(1)
@@ -199,7 +202,7 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
         }
 
         targets = workflow.failedSaves;
-        if(!targets && hasConcApplied) {
+        if(!targets.size && hasConcApplied) {
             await hasConcApplied.delete();
             return;
         }

@@ -10,7 +10,7 @@
       "book": "Player’s Handbook (2014)",
       "page": "155",
       "license": "",
-      "custom": "2.0.0",
+      "custom": "",
       "revision": 1,
       "rules": "2024"
     },
@@ -228,11 +228,7 @@
       "otherCondition": ""
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.edtGqNIYfHYowUUr.ActiveEffect.L9SsD4GtLwTX4OG5"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -244,33 +240,33 @@
     },
     "gambits-premades": {
       "gpsUuid": "6274a76f-2c25-4f80-8cc0-70e02f8d880c"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "img": "icons/equipment/feet/boots-collared-simple-leather.webp",
-      "changes": [
-        {
-          "key": "system.attributes.movement.walk",
-          "mode": 2,
-          "value": "0",
-          "priority": 9
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.bootsOfSpeed",
-          "priority": 20
-        }
-      ],
       "duration": {
-        "seconds": null,
-        "startTime": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null,
-        "combat": null
+        "expiry": "combatEnd"
       },
       "tint": "#ffffff",
       "transfer": true,
@@ -281,12 +277,10 @@
           "stackable": "noneName",
           "disableCondition": "",
           "disableIncapacitated": false,
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [
-            "longRest",
-            "combatEnd"
+            "longRest"
           ]
         },
         "midi-qol": {
@@ -302,6 +296,10 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "name": "Boots of Speed - Passive",
@@ -309,9 +307,25 @@
       "description": "",
       "_id": "mQ2DXY5DjK9G1zht",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.movement.speeds.walk",
+            "value": 0,
+            "priority": 9,
+            "type": "add"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.bootsOfSpeed",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "origin": "Compendium.world.gps-items.Item.SJnbBcljW2paqvIY",
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!xK6xZUX7XOpqXmat.mQ2DXY5DjK9G1zht"
     },
     {
@@ -320,36 +334,32 @@
       "origin": "Actor.Q7GcFBwAbXgQX9Yv.Item.HnQ6v8eSDRNROLQT",
       "_id": "4MWaqwin1ny5WN8B",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.bootsOfSpeed",
-          "priority": 20
-        },
-        {
-          "key": "system.attributes.movement.walk",
-          "mode": 1,
-          "value": "2",
-          "priority": 20
-        },
-        {
-          "key": "flags.gambits-premades.oaDisadvantage",
-          "mode": 5,
-          "value": "1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.bootsOfSpeed",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "system.attributes.movement.speeds.walk",
+            "value": 2,
+            "priority": 20,
+            "type": "multiply"
+          },
+          {
+            "key": "flags.gambits-premades.oaDisadvantage",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": 100,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 100,
+        "units": "rounds"
       },
       "description": "",
       "tint": "#ffffff",
@@ -365,7 +375,6 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -380,8 +389,13 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!xK6xZUX7XOpqXmat.4MWaqwin1ny5WN8B"
     }
   ],

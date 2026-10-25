@@ -3,7 +3,7 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
         const targets = workflow.hitTargets;
         const gmUser = game.gps.getPrimaryGM();
         for(let target of targets) {
-            const targetMovementSpeed = target.actor.system.attributes.movement.walk;
+            const targetMovementSpeed = target.actor.system.attributes.movement.speeds.walk;
             const damageType = "psychic";
             const attackNum = Math.floor(workflow.castData.castLevel + 2);
             const hasDeafened = target.document.hasStatusEffect("deafened");
@@ -18,12 +18,12 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
                     content: game.i18n.localize(content)
                 };
                 ChatMessage.create(chatData);
-                let damageRoll = await new CONFIG.Dice.DamageRoll(`${attackNum}d6 / 2`, {}, {type: "psychic", properties: ["mgc"]}).evaluate();
+                let damageRoll = await new CONFIG.Dice.DamageRoll(`floor(${attackNum}d6 / 2)`, {}, {type: "psychic", properties: ["mgc"]}).evaluate();
                 await MidiQOL.displayDSNForRoll(damageRoll,'damageRoll');
-                damageRoll.total = Math.floor(damageRoll.total);
-                damageRoll._total = Math.floor(damageRoll.total);
+
 
                 const itemData = {
+                    flags: {autoanimations: {isEnabled: false, version: 5}},
                     name: "Dissonant Whispers - Damage (Psychic)",
                     type: "feat",
                     img: item.img,
@@ -60,13 +60,13 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
                 let castDamage = (workflow.castData.castLevel - 1) + 3;
                 damageParts[0].number = castDamage;
 
-                await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
+                await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
                 const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
 
-                if (saveResult.failedSaves.size === 1) {
-                    if(!hasReactionUsed) await game.gps.socket.executeAsGM("addReaction", {actorUuid: `${target.actor.uuid}`});
+                if (saveResult?.failedSaves.size === 1 && !hasReactionUsed) {
+                    if(!hasReactionUsed) await game.gps.queryGM("addReaction", {actorUuid: `${target.actor.uuid}`});
 
-                    await game.gps.socket.executeAsGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: target.document.uuid, distance: targetMovementSpeed });
+                    await game.gps.queryGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: target.document.uuid, distance: targetMovementSpeed });
 
                     let chatData = {
                         user: gmUser,

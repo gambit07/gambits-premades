@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "Deep Magic Vol. 2, page 204",
       "page": "",
       "license": "",
@@ -208,34 +208,31 @@
     {
       "origin": "Actor.1xFtQVMnMyuFm2w2.Item.6BDRx5MzIdbcnMfn",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 12,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "seconds",
+        "expiry": "targetEnd"
       },
       "disabled": false,
       "name": "Ominous Shadow",
       "img": "icons/creatures/magical/humanoid-silhouette-dashing-blue.webp",
       "_id": "oPIJGfVwcV2Ld5LV",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.disadvantage.attack.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.disadvantage.save.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "attack",
+            "value": "-1",
+            "priority": 100,
+            "type": "dnd5e.advantage"
+          },
+          {
+            "key": "save",
+            "value": "-1",
+            "priority": 100,
+            "type": "dnd5e.advantage"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -250,12 +247,9 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnEnd"
-          ]
+          "specialDuration": []
         },
         "core": {
           "overlay": false
@@ -408,6 +402,7 @@
           }
         }
       },
+      "start": null,
       "_key": "!items.effects!vtqlE2dhGGC5SVMQ.oPIJGfVwcV2Ld5LV"
     }
   ],
@@ -425,50 +420,7 @@
       "otherCondition": ""
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.khikVA7je9dqdiM0.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.khikVA7je9dqdiM0.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.khikVA7je9dqdiM0.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.khikVA7je9dqdiM0.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.khikVA7je9dqdiM0.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.khikVA7je9dqdiM0.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        },
-        {
-          "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.iDVLR98Q1KnCCbpE.Actor.SNZJsEKbROB1q6bT.ActiveEffect.oPIJGfVwcV2Ld5LV"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -656,17 +608,30 @@
           "zIndex": 1
         }
       },
-      "isEnabled": true,
+      "isEnabled": false,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
     },
-    "region-attacher": {
-      "attachRegionToTemplate": false
-    },
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "folder": null,

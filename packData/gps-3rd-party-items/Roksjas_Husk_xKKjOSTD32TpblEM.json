@@ -6,34 +6,31 @@
     {
       "origin": "Actor.1xFtQVMnMyuFm2w2.Item.XYHyK5QAYwIiWNTD",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 12,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "seconds",
+        "expiry": "sourceStart"
       },
       "disabled": false,
       "name": "Roksjas Husk",
       "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Roksja%27s%20Husk.webp",
       "_id": "lOqfCqmeXLE4oS9c",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "@itemUuid @actorUuid",
-          "priority": 20
-        },
-        {
-          "key": "macro.StatusEffect",
-          "mode": 0,
-          "value": "paralyzed",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "@itemUuid @actorUuid",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.StatusEffect",
+            "value": "paralyzed",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -46,29 +43,27 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "turnStartSource"
-          ],
+          "specialDuration": [],
           "enableCondition": "",
           "disableCondition": ""
         },
         "dnd5e": {
-          "dependents": [
-            {
-              "uuid": "Scene.1mkVNeOdyVIlDdH7.Token.zgjENgaFfKyR3kEa.Actor.PuTa1RjkXhl9uhQl.ActiveEffect.mw0SQv2MAc4V7zCs"
-            }
-          ],
+          "dependents": [],
           "riders": {
             "statuses": []
           }
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!xKKjOSTD32TpblEM.lOqfCqmeXLE4oS9c"
     }
   ],
@@ -90,7 +85,7 @@
         "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Roksja%27s%20Husk.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0] === \"off\" && args[3] && args[3][\"expiry-reason\"] !== \"effect-deleted\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.id}.RoksjasHusk` });\n\n    let originItem = await fromUuid(args[1])\n\n    if(originItem.system.uses.value === 0) {\n        await effectData.delete();\n        return ui.notifications.warn(\"You have no remaining charges for Roksja's Husk\")\n    }\n    let effectOriginActor = await fromUuid(args[2]);\n    let effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\n    let midiSightTest = MidiQOL.canSee(effectOriginToken, token);\n    if (midiSightTest === false) return ui.notifications.warn(\"You can no longer see the target\");\n\n    let dialogId = \"roksjashusk\";\n    let dialogTitleGM = `Waiting for ${effectOriginToken.actor.name}'s selection | ${originItem.name}`;\n    let dialogTitlePrimary = `${effectOriginToken.actor.name} | ${originItem.name}`;\n    let browserUser = game.gps.getBrowserUser({ actorUuid: effectOriginActor.uuid });\n    let result;\n    let initialTimeLeft = 15;\n    let gmUser = game.gps.getPrimaryGM();\n    \n    let dialogContent = `\n        <div class=\"gps-dialog-container\">\n            <div class=\"gps-dialog-section\">\n                <div class=\"gps-dialog-content\">\n                    <div>\n                        <div class=\"gps-dialog-flex\">\n                            <p class=\"gps-dialog-paragraph\">Would you like to use your bonus action to try and keep the creature paralyzed with Roksja's Husk?</p>\n                            <div id=\"image-container\" class=\"gps-dialog-image-container\">\n                                <img id=\"img_${dialogId}\" src=\"${originItem.img}\" class=\"gps-dialog-image\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"gps-dialog-button-container\">\n                <button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n                    <i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>Pause\n                </button>\n            </div>\n        </div>\n    `;\n\n    if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {\n    let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.document.uuid,source: \"user\",type: \"multiDialog\", browserUser: browserUser };\n    \n    let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.document.uuid,source: \"gm\",type: \"multiDialog\" };\n\n    result = await game.gps.socket.executeAsUser(\"handleDialogPromises\", gmUser, {userDialogArgs, gmDialogArgs});\n} else {\n    result = await game.gps.socket.executeAsUser(\"process3rdPartyReactionDialog\", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.document.uuid,source:gmUser === browserUser ? \"gm\" : \"user\",type:\"singleDialog\"});\n    }\n        \n    const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;\n\n    if (!userDecision) {\n        return;\n    }\n    else if (userDecision) {\n        await originItem.update({ \"system.uses.value\": originItem.system.uses.value - 1 });\n\n        let saveResult = await game.gps.gpsActivityUse({itemUuid: originItem.uuid, identifier: \"syntheticSave\", targetUuid: token.document.uuid});\n\n        if (saveResult.failedSaves.size !== 0){\n            new Sequence()\n                .effect()\n                    .name(`${token.id}.RoksjasHusk`)\n                    .file(\"jb2a.icon.stun.dark_teal\")\n                    .attachTo(token,{bindVisibility: true})\n                    .scaleToObject(0.7)\n                    .opacity(0.85)\n                    .zIndex(0)\n                    .mask(token)\n                    .persist()\n                    .belowTokens(false)\n                    .fadeIn(500)\n                    .fadeOut(500)\n                    .spriteOffset({x:0.0*token.document.width, y:-0.28*token.document.width}, {gridUnits:true})\n            .play()\n        }\n    }\n}\n\nelse if(args[0] === \"off\" && args[3] && args[3][\"expiry-reason\"] === \"effect-deleted\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.id}.RoksjasHusk` });\n}\n\nelse if(args[0].macroPass === \"postSave\") {\n    let target = workflow.failedSaves.first();\n\n    new Sequence()\n        .effect()\n            .name(`${target.id}.RoksjasHusk`)\n            .file(\"jb2a.icon.stun.dark_teal\")\n            .attachTo(target,{bindVisibility: true})\n            .scaleToObject(0.7)\n            .opacity(0.85)\n            .zIndex(0)\n            .mask(target)\n            .persist()\n            .belowTokens(false)\n            .fadeIn(500)\n            .fadeOut(500)\n            .spriteOffset({x:0.0*target.document.width, y:-0.28*target.document.width}, {gridUnits:true})\n\n    .play()\n}",
+        "command": "if(args[0] === \"off\" && args[3] && args[3][\"expiry-reason\"] !== \"effect-deleted\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.id}.RoksjasHusk` });\n\n    let originItem = await fromUuid(args[1])\n\n    if(originItem.system.uses.spent >= originItem.system.uses.max) {\n        return ui.notifications.warn(\"You have no remaining charges for Roksja's Husk\")\n    }\n    let effectOriginActor = await fromUuid(args[2]);\n    let effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor.uuid);\n\n    let midiSightTest = MidiQOL.canSee(effectOriginToken, token);\n    if (midiSightTest === false) return ui.notifications.warn(\"You can no longer see the target\");\n\n    let dialogId = \"roksjashusk\";\n    let dialogTitleGM = game.i18n.format(\"GAMBITSPREMADES.Dialogs.Common.WaitingForSelection\", {actorName: effectOriginToken.actor.name, itemName: originItem.name});\n    let dialogTitlePrimary = `${effectOriginToken.actor.name} | ${originItem.name}`;\n    let browserUser = game.gps.getBrowserUser({ actorUuid: effectOriginActor.uuid });\n    let result;\n    let initialTimeLeft = 15;\n    let gmUser = game.gps.getPrimaryGM();\n    \n    let dialogContent = `\n        <div class=\"gps-dialog-container\">\n            <div class=\"gps-dialog-section\">\n                <div class=\"gps-dialog-content\">\n                    <div>\n                        <div class=\"gps-dialog-flex\">\n                            <p class=\"gps-dialog-paragraph\">${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.RoksjasHusk.Prompt\")}</p>\n                            <div id=\"image-container\" class=\"gps-dialog-image-container\">\n                                <img id=\"img_${dialogId}\" src=\"${originItem.img}\" class=\"gps-dialog-image\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"gps-dialog-button-container\">\n                <button id=\"pauseButton_${dialogId}\" type=\"button\" class=\"gps-dialog-button\">\n                    <i class=\"fas fa-pause\" id=\"pauseIcon_${dialogId}\" style=\"margin-right: 5px;\"></i>${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Pause\")}\n                </button>\n            </div>\n        </div>\n    `;\n\n    if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {\n    let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.document.uuid,source: \"user\",type: \"multiDialog\", browserUser: browserUser };\n    \n    let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.document.uuid,source: \"gm\",type: \"multiDialog\" };\n\n    result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});\n} else {\n    result = await game.gps.queryDialog(\"process3rdPartyReactionDialog\", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: effectOriginToken.document.uuid,source:gmUser === browserUser ? \"gm\" : \"user\",type:\"singleDialog\"});\n    }\n        \n    const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result;\n\n    if (!userDecision) {\n        return;\n    }\n    else if (userDecision) {\n        await originItem.update({ \"system.uses.spent\": originItem.system.uses.spent + 1 });\n\n        let saveResult = await game.gps.gpsActivityUse({itemUuid: originItem.uuid, identifier: \"syntheticSave\", targetUuid: token.document.uuid});\n\n        if (saveResult.failedSaves.size !== 0){\n            if(game.gps.getCprConfig({itemUuid: originItem.uuid}).animEnabled) {\n                new Sequence()\n                    .effect()\n                        .name(`${token.id}.RoksjasHusk`)\n                        .file(\"jb2a.icon.stun.dark_teal\")\n                        .attachTo(token,{bindVisibility: true})\n                        .scaleToObject(0.7)\n                        .opacity(0.85)\n                        .zIndex(0)\n                        .mask(token)\n                        .persist()\n                        .belowTokens(false)\n                        .fadeIn(500)\n                        .fadeOut(500)\n                        .spriteOffset({x:0.0*token.document.width, y:-0.28*token.document.width}, {gridUnits:true})\n                .play()\n            }\n        }\n    }\n}\n\nelse if(args[0] === \"off\" && args[3] && args[3][\"expiry-reason\"] === \"effect-deleted\") {\n    Sequencer.EffectManager.endEffects({ name: `${token.id}.RoksjasHusk` });\n}\n\nelse if(args[0].macroPass === \"postSave\") {\n    let target = workflow.failedSaves.first();\n    if (!target) return;\n\n    if(game.gps.getCprConfig({itemUuid: macroItem.uuid}).animEnabled) {\n        new Sequence()\n            .effect()\n                .name(`${target.id}.RoksjasHusk`)\n                .file(\"jb2a.icon.stun.dark_teal\")\n                .attachTo(target,{bindVisibility: true})\n                .scaleToObject(0.7)\n                .opacity(0.85)\n                .zIndex(0)\n                .mask(target)\n                .persist()\n                .belowTokens(false)\n                .fadeIn(500)\n                .fadeOut(500)\n                .spriteOffset({x:0.0*target.document.width, y:-0.28*target.document.width}, {gridUnits:true})\n\n        .play()\n    }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -340,11 +335,7 @@
       }
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Scene.gi3yMQZW3JzSPvCg.Token.1v9YPgQQnj1vkMk2.Actor.WG9XslQu0uPVmNYX.ActiveEffect.qZsGR9cSHi3loYwU"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -355,6 +346,43 @@
         "source": "gambits-premades",
         "version": "0.5.56"
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      },
+      "eKeS9T0kXahiyOpG": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "system": {
@@ -363,7 +391,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -480,7 +508,7 @@
           },
           "affects": {
             "count": "",
-            "type": "",
+            "type": "creature",
             "choice": false,
             "special": ""
           },

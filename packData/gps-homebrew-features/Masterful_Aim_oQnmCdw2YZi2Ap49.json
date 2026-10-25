@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -159,25 +159,12 @@
     {
       "origin": "Item.LcFCXCB2IPHvKlKm",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 6,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 6,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Masterful Aim",
       "_id": "hPR9ii2vho7FqWlZ",
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro,preCheckHits",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": false,
       "statuses": [],
@@ -189,19 +176,32 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [
             "1Attack"
           ]
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/skills/ranged/projectile-spiral-gray.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro,preCheckHits",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!oQnmCdw2YZi2Ap49.hPR9ii2vho7FqWlZ"
     }
   ],
@@ -221,7 +221,7 @@
         "img": "icons/skills/ranged/projectile-spiral-gray.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"preCheckHits\") {\n    if(workflow.attackRoll.dice[0].total <= 7) {\n    let updatedRoll = (workflow.attackTotal - workflow.attackRoll.dice[0].total) + 8;\n    workflow.attackRoll._total = updatedRoll;\n    }\n}",
+        "command": "if(args[0]?.macroPass === \"preCheckHits\") {\n    const result = workflow.attackRoll?.dice.find(die => die.faces === 20)?.results.find(result => result.active && !result.discarded)?.result;\n    if(result <= 7) await game.gps.setAttackResult(workflow, game.gps.replaceD20Result(workflow.attackRoll, 8));\n}\n",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -245,6 +245,26 @@
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

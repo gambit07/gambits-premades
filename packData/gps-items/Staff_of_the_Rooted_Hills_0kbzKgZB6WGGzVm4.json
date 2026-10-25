@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -406,31 +406,43 @@
       "section": "",
       "actionSection": ""
     },
-    "gambits-premades": {}
+    "gambits-premades": {},
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Attack",
+        "activityType": "attack",
+        "version": 2
+      },
+      "pGftyGNy5ZI6Vxe6": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
+    }
   },
   "effects": [
     {
       "origin": "Compendium.world.gps-items.Item.rPLED9VTdrxEzpRX",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Staff of the Rooted Hills",
       "_id": "gCMcWr5UW0b0GirN",
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.staffOfTheRootedHills",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -442,7 +454,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": [],
@@ -451,13 +462,27 @@
         "effectmacro": {},
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/weapons/staves/staff-engraved-wood.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.staffOfTheRootedHills",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!0kbzKgZB6WGGzVm4.gCMcWr5UW0b0GirN"
     }
   ],

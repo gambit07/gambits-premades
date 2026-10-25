@@ -5,32 +5,10 @@
   "effects": [
     {
       "origin": "Actor.1xFtQVMnMyuFm2w2.Item.q4yCFb4aLYYzuxMt",
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Weaver's Hoop",
       "_id": "UNiU6zoPTpbrxoIA",
-      "changes": [
-        {
-          "key": "system.attributes.ac.bonus",
-          "mode": 2,
-          "value": "+1",
-          "priority": 20
-        },
-        {
-          "key": "system.attributes.movement.climb",
-          "mode": 5,
-          "value": "@attributes.movement.walk",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -42,17 +20,36 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Weaver%27s%20Hoop.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.ac.bonus",
+            "value": "+1",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.attributes.movement.speeds.climb",
+            "value": "@attributes.movement.speeds.walk",
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!ntDZHgxnpeDq2TUL.UNiU6zoPTpbrxoIA"
     }
   ],
@@ -70,6 +67,16 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "system": {
@@ -78,7 +85,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },

@@ -3,18 +3,18 @@
   "type": "feat",
   "system": {
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> Choose one visible creature within 60 feet. The result is whispered to the controlling player and GM. Magical concealment from divination is checked by the GM before the result is revealed.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
     "cover": null,
     "crewed": false,
     "uses": {
-      "max": "",
+      "max": "max(1, @abilities.wis.mod)",
       "recovery": [
         {
           "period": "lr",
@@ -42,7 +42,13 @@
           "override": false
         },
         "consumption": {
-          "targets": [],
+          "targets": [
+            {
+              "type": "itemUses",
+              "target": "",
+              "value": "1"
+            }
+          ],
           "scaling": {
             "allowed": false,
             "max": ""
@@ -161,7 +167,7 @@
   },
   "flags": {
     "midi-qol": {
-      "onUseMacroName": "[preActiveEffects]ItemMacro",
+      "onUseMacroName": "[preItemRoll]function.game.gps.huntersSense,[postActiveEffects]function.game.gps.huntersSense",
       "effectActivation": false
     },
     "core": {},
@@ -196,6 +202,26 @@
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

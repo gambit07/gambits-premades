@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -31,7 +31,7 @@
       "template": {
         "units": "ft",
         "type": "",
-        "size": "10 + ((@item.level - 4) * 5)",
+        "size": "10 + 5 * @scaling.increase",
         "contiguous": false,
         "count": ""
       }
@@ -58,7 +58,8 @@
     "properties": [
       "vocal",
       "somatic",
-      "concentration"
+      "concentration",
+      "material"
     ],
     "activities": {
       "dnd5eactivity000": {
@@ -101,7 +102,7 @@
             "contiguous": false,
             "units": "ft",
             "type": "sphere",
-            "size": "10",
+            "size": "10 + 5 * @scaling.increase",
             "count": ""
           },
           "affects": {
@@ -185,11 +186,7 @@
         "otherActivityAsParentType": true,
         "friendlySave": "default",
         "img": "",
-        "flags": {
-          "region-attacher": {
-            "attachRegionToTemplate": false
-          }
-        },
+        "flags": {},
         "appliedEffects": [
           "ZhbfaYrtnhrdTaNL"
         ]
@@ -372,9 +369,6 @@
       "riders": {
         "activity": []
       }
-    },
-    "region-attacher": {
-      "attachRegionToTemplate": false
     },
     "autoanimations": {
       "id": "82fa314d-85c7-4f58-a612-e0b334ff51f5",
@@ -596,54 +590,105 @@
       "fromAmmo": false,
       "version": 5
     },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
-          "type": "checkbox",
-          "default": true,
-          "category": "animation"
-        }
-      ]
-    },
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        },
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
+        }
+      },
+      "animationModules": [
+        "JB2AFree",
+        "JAAMod"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      },
+      "UbhLznWGObzk7F3l": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Compendium.world.gps-spells.Item.SGoFEo5oFEf8lkhe",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Confusion",
       "img": "icons/magic/air/air-burst-spiral-teal-green.webp",
       "_id": "ZhbfaYrtnhrdTaNL",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.confusion @itemUuid @actorUuid",
-          "priority": 20
-        },
-        {
-          "key": "flags.gambits-premades.oaSuppression",
-          "mode": 5,
-          "value": "1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.confusion @itemUuid @actorUuid",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.gambits-premades.oaSuppression",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -654,7 +699,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEndEveryTurn",
           "specialDuration": [],
@@ -670,8 +714,13 @@
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!p2Hld67kdUYmlJKm.ZhbfaYrtnhrdTaNL"
     }
   ],

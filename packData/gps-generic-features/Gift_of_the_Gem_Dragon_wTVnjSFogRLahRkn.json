@@ -4,10 +4,10 @@
   "system": {
     "description": {
       "value": "",
-      "chat": "When you take damage from a creature within 10 ft. of you, you can use your reaction to force that creature to make a STR saving throw (DC equals {{8+proficiency#unsigned}} + the ability modifier of the score increased by this feat). On a failure, the creature takes <strong>2d8</strong> force damage and is pushed up to 10 ft. away from you. On a success, the creature takes half as much damage and isn’t pushed. You can use this reaction {{proficiency#unsigned}} times per long rest."
+      "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -239,32 +239,36 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "qqRLvVeIMhGeAWqN": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "img": "icons/commodities/gems/pearl-storm.webp",
   "effects": [
     {
       "origin": "Compendium.world.gps-generic-features.Item.VXdRNRLMZVjJyAFz",
-      "duration": {
-        "startTime": 1697160834,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": 80,
-        "startTurn": 0
-      },
+      "duration": {},
       "disabled": false,
       "name": "Gift of the Gem Dragon",
       "_id": "UQqm78qcCZGVhbxw",
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.giftOfTheGemDragon, isDamaged",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -275,7 +279,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -283,13 +286,32 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/commodities/gems/pearl-storm.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.giftOfTheGemDragon, isDamaged",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": {
+        "time": 1697160834,
+        "round": 80,
+        "turn": 0,
+        "combat": null
+      },
       "_key": "!items.effects!wTVnjSFogRLahRkn.UQqm78qcCZGVhbxw"
     }
   ],

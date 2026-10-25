@@ -4,10 +4,10 @@
   "system": {
     "description": {
       "value": "",
-      "chat": "You can take the Disengage action as a bonus action."
+      "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -60,8 +60,7 @@
           }
         ],
         "range": {
-          "value": "5",
-          "units": "ft",
+          "units": "self",
           "special": "",
           "override": false
         },
@@ -77,11 +76,11 @@
           },
           "affects": {
             "count": "",
-            "type": "",
+            "type": "self",
             "choice": false,
             "special": ""
           },
-          "prompt": true,
+          "prompt": false,
           "override": false
         },
         "uses": {
@@ -179,31 +178,37 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Actor.1xFtQVMnMyuFm2w2.Item.t4OyiaPhW814t6PU",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 1,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "expiry": "turnEnd"
       },
       "disabled": false,
       "name": "Disengage",
       "_id": "NcYMpQ7B3RwBuLC7",
-      "changes": [
-        {
-          "key": "flags.gambits-premades.oaImmunity",
-          "mode": 5,
-          "value": "1",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": false,
       "statuses": [],
@@ -215,7 +220,6 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -229,13 +233,27 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/equipment/feet/boots-armored-green.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "flags.gambits-premades.oaImmunity",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!20mWH34DNe7oze62.NcYMpQ7B3RwBuLC7"
     }
   ],

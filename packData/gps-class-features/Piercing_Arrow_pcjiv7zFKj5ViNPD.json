@@ -11,7 +11,7 @@
       "max": ""
     },
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> Learned-option marker for Arcane Shot. Use the Arcane Shot item; this marker is not a standalone attack.</p>",
       "chat": ""
     },
     "identifier": "arcane-shot-options-piercing-arrow-legacy",
@@ -19,7 +19,7 @@
       "book": "XGtE",
       "page": "",
       "license": "",
-      "custom": "1.0.14",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -64,6 +64,16 @@
     },
     "gambits-premades": {
       "gpsUuid": "7478d1f7-24dc-44c5-aa5e-035128bf94e9"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/skills/ranged/projectile-spiral-gray.webp",

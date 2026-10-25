@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "",
       "page": "",
       "license": "",
@@ -63,9 +63,9 @@
         "_id": "5fOhrxvmARa497YY",
         "sort": 0,
         "activation": {
-          "type": "action",
-          "value": null,
-          "override": true,
+          "type": "bonus",
+          "value": 1,
+          "override": false,
           "condition": ""
         },
         "consumption": {
@@ -85,9 +85,6 @@
           "value": "1"
         },
         "effects": [
-          {
-            "_id": "1oEvffyjGNgLw4lh"
-          },
           {
             "_id": "PQ3LSgzaiBaCAJoK"
           }
@@ -326,25 +323,20 @@
         "overrideName": "Ashardalon's Stride Aura",
         "script": "",
         "stashedChanges": [],
-        "stashedStatuses": []
+        "stashedStatuses": [],
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.ashardalonsStride @itemUuid @actorUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
       },
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.ashardalonsStride @itemUuid @actorUuid",
-          "priority": 20
-        }
-      ],
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "description": "",
       "tint": "#ffffff",
@@ -579,7 +571,6 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -597,6 +588,7 @@
         }
       },
       "_id": "PQ3LSgzaiBaCAJoK",
+      "start": null,
       "_key": "!items.effects!b4aKzkjuc43SDZxH.PQ3LSgzaiBaCAJoK"
     }
   ],
@@ -663,15 +655,6 @@
       }
     },
     "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
-          "type": "checkbox",
-          "default": true,
-          "category": "animation"
-        }
-      ],
       "info": {
         "source": "gambits-premades",
         "version": "1.0.52",
@@ -902,6 +885,43 @@
       "parentClass": "Bard",
       "section": "",
       "actionSection": ""
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "GPS"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "5fOhrxvmARa497YY": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      },
+      "rEEgexfiIgtYlbMx": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Damage",
+        "activityType": "damage",
+        "version": 2
+      }
     }
   },
   "img": "icons/magic/fire/projectile-bolt-zigzag-orange.webp",

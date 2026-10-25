@@ -1,6 +1,9 @@
 export function web({template, token, itemUuid}) {
+    if (!template?.object) return;
+    template = template.object;
     let cprConfig = game.gps.getCprConfig({itemUuid});
     if(!cprConfig.animEnabled) return;
+    const regionAnimation = game.gps.getRegionAnimationData(template);
     
     let alignmentDecision;
     let scaleDecision;
@@ -9,24 +12,13 @@ export function web({template, token, itemUuid}) {
     let scaleImpact;
     let scaleMagicSign1;
     let scaleMagicSign2;
-    if(MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates')) {
-        alignmentDecision = {};
-        scaleDecision = 1.1;
-        scaleOrb = 0.4;
-        scaleWeb = 0.3;
-        scaleImpact = 1;
-        scaleMagicSign1 = 1;
-        scaleMagicSign2 = 1;
-    }
-    else {
-        alignmentDecision = { edge: "on", offset: ( {x: 198, y: 0} ) };
-        scaleDecision = 0.55;
-        scaleOrb = 0.2;
-        scaleWeb = 0.15;
-        scaleImpact = 0.5;
-        scaleMagicSign1 = 1.25;
-        scaleMagicSign2 = 0.5;
-    }
+    alignmentDecision = {};
+    scaleDecision = 1.1;
+    scaleOrb = 0.4;
+    scaleWeb = 0.3;
+    scaleImpact = 1;
+    scaleMagicSign1 = 1;
+    scaleMagicSign2 = 1;
     
     new Sequence()
         .effect()
@@ -64,6 +56,8 @@ export function web({template, token, itemUuid}) {
             .rotateIn(180, 600, {ease: "easeOutCubic"})
             .scaleIn(0, 600, {ease: "easeOutCubic"})
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
 
         .effect()
             .file("jb2a.particles.outward.white.01.02")
@@ -85,6 +79,8 @@ export function web({template, token, itemUuid}) {
             .fadeIn(500)
             .duration(2500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .zIndex(2)
 
         .effect()
@@ -95,6 +91,8 @@ export function web({template, token, itemUuid}) {
             .fadeIn(500)
             .duration(2500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .zIndex(2.1)
             .opacity(0.5)
             .filter("ColorMatrix", { brightness:0 })
@@ -108,6 +106,8 @@ export function web({template, token, itemUuid}) {
             .fadeIn(500)
             .duration(2500)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .zIndex(1.9)
             .filter("ColorMatrix", { brightness:0 })
             .opacity(0.5)
@@ -126,6 +126,8 @@ export function web({template, token, itemUuid}) {
             .scaleToObject(scaleDecision)
             .tieToDocuments(template)
             .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .fadeIn(1500)
             .zIndex(1)
             .fadeOut(1500)
@@ -138,6 +140,9 @@ export function web({template, token, itemUuid}) {
             .scaleToObject(scaleDecision)
             .tieToDocuments(template)
             .opacity(0.3)
+            .belowTokens()
+            .elevation(regionAnimation.elevation, { absolute: true })
+            .onLevels(regionAnimation.levels)
             .fadeIn(1500)
             .zIndex(1)
             .fadeOut(1500)

@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -355,7 +355,7 @@
         "img": "icons/weapons/thrown/bomb-spiked-purple.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"templatePlaced\") {\n\tawait actor.setFlag(\"gambits-premades\", \"caltropsTemplateUuid\", workflow.templateUuid);\n\tconst template = await fromUuid(workflow.templateUuid);\n\tlet alignmentDecision;\n\t(MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates') === true) ? alignmentDecision = \"center\" : alignmentDecision = \"right\";\n\n\tnew Sequence()\n\t\t.effect()\n\t\t\t.file(\"jb2a.caltrops.endframe.01.grey\")\n\t\t.scaleToObject(1.3)\n\t\t.attachTo(template, { align: alignmentDecision})\n\t\t.mask()\n\t\t.belowTokens()\n\t\t.persist()\n\t\t.play()\n}\n\nif(args[0] === \"off\") {\n\tconst effectOriginActor = await fromUuid(args[1]);\n\tlet caltropsFlag = await effectOriginActor.getFlag(\"gambits-premades\", \"caltropsTemplateUuid\");\n\tlet caltropsTemplate = await fromUuid(caltropsFlag);\n\tif(caltropsTemplate) await caltropsTemplate.delete();\n}",
+        "command": "if(args[0].macroPass === \"templatePlaced\") {\n\tawait actor.setFlag(\"gambits-premades\", \"caltropsTemplateUuid\", workflow.templateUuid);\n\tconst template = await fromUuid(workflow.templateUuid);\n\tconst regionAnimation = game.gps.getRegionAnimationData(template);\n\tlet alignmentDecision;\n\t(MidiQOL.safeGetGameSetting('dnd5e', 'gridAlignedSquareTemplates') === true) ? alignmentDecision = \"center\" : alignmentDecision = \"right\";\n\n\tif(game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) {\n    \tnew Sequence()\n    \t\t.effect()\n    \t\t\t.file(\"jb2a.caltrops.endframe.01.grey\")\n    \t\t.scaleToObject(1.3)\n    \t\t.attachTo(template, { align: alignmentDecision})\n    \t\t.mask()\n    \t\t.belowTokens()\n    \t\t.elevation(regionAnimation.elevation, { absolute: true })\n    \t\t.onLevels(regionAnimation.levels)\n    \t\t.persist()\n    \t\t.play()\n\t}\n}\n\nif(args[0] === \"off\") {\n\tconst effectOriginActor = await fromUuid(args[1]);\n\tlet caltropsFlag = await effectOriginActor.getFlag(\"gambits-premades\", \"caltropsTemplateUuid\");\n\tlet caltropsTemplate = await fromUuid(caltropsFlag);\n\tif(caltropsTemplate) await caltropsTemplate.delete();\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -564,10 +564,16 @@
       "fromAmmo": false,
       "version": 5
     },
-    "region-attacher": {
-      "attachRegionToTemplate": {
-        "dnd5eactivity000": true
-      },
+    "dnd5e": {
+      "riders": {
+        "activity": []
+      }
+    },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "gambits-premades": {
       "regionBehaviors": {
         "dnd5eactivity000": [
           {
@@ -593,27 +599,70 @@
             }
           }
         ]
-      }
-    },
-    "dnd5e": {
-      "riders": {
-        "activity": []
-      }
-    },
-    "tidy5e-sheet": {
-      "section": "",
-      "actionSection": ""
-    },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+      },
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
+        },
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
         }
+      },
+      "animationModules": [
+        "JB2AFree"
       ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      },
+      "66qqG2ODWHJRvS3I": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "effects": [],

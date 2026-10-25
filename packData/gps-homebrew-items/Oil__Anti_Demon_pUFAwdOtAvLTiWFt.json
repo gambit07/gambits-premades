@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -201,40 +201,36 @@
     {
       "origin": "Compendium.world.gps-homebrew-items.Item.Qvxs1MZOMavh2nQ1",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Oil, Anti-Demon",
       "img": "icons/consumables/potions/potion-tube-corked-bat-gold-red.webp",
       "_id": "sPbS18OFzyix9Nsf",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, preDamageApplication",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, preWaitForAttackRoll",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, preDamageApplication",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, preWaitForAttackRoll",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -247,12 +243,16 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!pUFAwdOtAvLTiWFt.sPbS18OFzyix9Nsf"
     }
   ],
@@ -264,7 +264,7 @@
         "img": "icons/consumables/potions/potion-tube-corked-bat-gold-red.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0] === \"on\") {\n    let validWeapons = actor.items.filter(itemData => \n        ((itemData.system.actionType === \"mwak\" || itemData.system.actionType === \"rwak\") && itemData.system.equipped === true && itemData.flags.midiProperties.magicdam === false)\n    );\n    let weaponIdArray = validWeapons.map(itemArray => itemArray.id);\n    await actor.setFlag(\"gambits-premades\", item.name + \"WeaponFlag\", weaponIdArray);\n    if (!validWeapons.length) return;\n\n    for(let weapon of validWeapons) {\n        await weapon.update({'flags.midiProperties.magicdam': true});\n    }\n}\n\nif(args[0] === \"off\") {\n    let weaponIdArray = await actor.getFlag(\"gambits-premades\", item.name + \"WeaponFlag\");\n    if (weaponIdArray.length === 0) return await actor.unsetFlag(\"gambits-premades\", item.name + \"WeaponFlag\");\n    \n    for (let weaponId of weaponIdArray) {\n        let weapon = actor.items.get(weaponId);\n        if (weapon) {\n            await weapon.update({'flags.midiProperties.magicdam': false});\n        }\n    }\n    await actor.unsetFlag(\"gambits-premades\", item.name + \"WeaponFlag\");\n}\n\nif(args[0].macroPass === \"preDamageApplication\") {\n    const target = workflow.hitTargets.first();\n    const typeCheck = [\"undead\",\"fiend\"].includes(MidiQOL.typeOrRace(target));\n    if(!typeCheck) return;\n    let numDice = workflow.isCritical === true ? 2 : 1;\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`${numDice}d6`).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')\n\n    const itemData = {\n        name: \"Anti-Demon Oil - Damage (Radiant)\",\n        type: \"feat\",\n        img: macroItem.img\n    }\n\n    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"radiant\", target ? [target] : [], damageRoll, {itemData: itemData});\n}\n\nif(args[0].macroPass === \"preWaitForAttackRoll\") {\n    const target = workflow.targets.first();\n    const typeCheck = [\"undead\",\"fiend\"].includes(MidiQOL.typeOrRace(target));\n    const actionType = workflow.item.system.actionType;\n    if(!typeCheck || (actionType != \"mwak\" && actionType != \"rwak\")) return;\n    workflow.advantage = true;\n}",
+        "command": "await game.gps.weaponOil({actor, token, item, macroItem: typeof macroItem === \"undefined\" ? item : macroItem, args, workflow: typeof workflow === \"undefined\" ? undefined : workflow});",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -298,6 +298,29 @@
     "dnd5e": {
       "riders": {
         "activity": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "oilType": "anti-demon"
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

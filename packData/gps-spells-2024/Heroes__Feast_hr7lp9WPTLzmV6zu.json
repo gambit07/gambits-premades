@@ -236,7 +236,7 @@
       "book": "PHB",
       "page": "",
       "license": "",
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2024",
       "revision": 1
     },
@@ -292,46 +292,9 @@
       "img": "icons/containers/kitchenware/goblet-jeweled-red.webp",
       "name": "Heroes' Feast",
       "statuses": [],
-      "changes": [
-        {
-          "key": "system.attributes.hp.tempmax",
-          "mode": 2,
-          "value": "[[2d10]]",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.ci.value",
-          "mode": 2,
-          "value": "frightened",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.ci.value",
-          "mode": 2,
-          "value": "poisoned",
-          "priority": 20
-        },
-        {
-          "key": "system.traits.dr.value",
-          "mode": 2,
-          "value": "poison",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.advantage.save.wis",
-          "mode": 5,
-          "value": "1",
-          "priority": 20
-        }
-      ],
       "duration": {
-        "seconds": 86400,
-        "startTime": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null,
-        "combat": null
+        "value": 86400,
+        "units": "seconds"
       },
       "tint": "#ffffff",
       "transfer": false,
@@ -346,7 +309,6 @@
           "selfTarget": false,
           "selfTargetAlways": false,
           "dontApply": false,
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -358,25 +320,56 @@
           "overlay": false
         },
         "dnd5e": {
-          "dependents": [
-            {
-              "uuid": "Actor.9SDnT6BTxs3e8pXd.ActiveEffect.dwdNlPOHm9GtfJCN"
-            },
-            {
-              "uuid": "Actor.1NNLZbcJpvSfwvnd.ActiveEffect.qVUJrV86JipVxjjt"
-            }
-          ],
+          "dependents": [],
           "riders": {
             "statuses": []
           }
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "description": "",
       "_id": "guYbniQzjSBEbDyB",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.hp.tempmax",
+            "value": "[[[2d10]]]",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.traits.ci.value",
+            "value": "frightened",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.traits.ci.value",
+            "value": "poisoned",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "poison",
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.abilities.wis.save.roll.mode",
+            "value": 1,
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "origin": null,
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!hr7lp9WPTLzmV6zu.guYbniQzjSBEbDyB"
     }
   ],
@@ -406,6 +399,34 @@
             "0": "healing"
           }
         }
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "utilityHeroeFeas": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Create Feast",
+        "activityType": "utility",
+        "version": 2
+      },
+      "dpcTO6sCjQEKwapI": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Consume Feast",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

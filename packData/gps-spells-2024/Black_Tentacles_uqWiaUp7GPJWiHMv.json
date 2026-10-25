@@ -4,11 +4,11 @@
   "img": "icons/creatures/tentacles/tentacles-octopus-black-pink.webp",
   "system": {
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> Leaving the area does not end this spell's Restrained condition. <strong>Escape: Black Tentacles</strong> remains available on the affected actor; ending the spell removes it. The GM may remove the effect for exceptional relocation rulings. Area damage requires being within the area.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -172,11 +172,7 @@
         "otherActivityId": "none",
         "otherActivityAsParentType": true,
         "img": "",
-        "flags": {
-          "region-attacher": {
-            "attachRegionToTemplate": true
-          }
-        },
+        "flags": {},
         "appliedEffects": [],
         "visibility": {
           "level": {
@@ -588,7 +584,7 @@
       "AoETargetType": "any",
       "AoETargetTypeIncludeSelf": true,
       "autoTarget": "default",
-      "onUseMacroName": "[templatePlaced]function.game.gps.blackTentacles2024",
+      "onUseMacroName": "[templatePlaced]function.game.gps.blackTentacles2024,[postActiveEffects]function.game.gps.blackTentacles2024",
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
       "otherCondition": ""
@@ -848,10 +844,11 @@
         "activity": []
       }
     },
-    "region-attacher": {
-      "attachRegionToTemplate": {
-        "dnd5eactivity000": true
-      },
+    "tidy5e-sheet": {
+      "section": "",
+      "actionSection": ""
+    },
+    "gambits-premades": {
       "regionBehaviors": {
         "dnd5eactivity000": [
           {
@@ -884,7 +881,7 @@
               "events": [
                 "tokenMoveOut"
               ],
-              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nconst hasEffectApplied = event.data.token.hasStatusEffect(\"restrained\");\n\nif (hasEffectApplied) {\n  await game.gps.socket.executeAsGM(\"gmToggleStatus\", {tokenUuid: `${event.data.token.uuid}`, status: \"restrained\", active: false });\n}\nreturn;"
+              "source": ""
             },
             "disabled": false,
             "flags": {},
@@ -906,7 +903,7 @@
               "events": [
                 "tokenTurnEnd"
               ],
-              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nawait game.gps.blackTentacles2024({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: \"tokenTurnEnd\", userId: event.user.id});"
+              "source": "if(game.user.id !== game.gps.getPrimaryGM()) return;\nawait game.gps.blackTentacles2024({tokenUuid: event.data.token.uuid, regionUuid: region.uuid, regionScenario: \"tokenTurnEnd\", userId: event.user.id, turnKey: game.gps.regionTurnKey(event.data)});"
             },
             "disabled": false,
             "flags": {},
@@ -942,22 +939,87 @@
             }
           }
         ]
-      }
-    },
-    "tidy5e-sheet": {
-      "section": "",
-      "actionSection": ""
-    },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
+      },
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
           "type": "checkbox",
           "default": true,
-          "category": "animation"
+          "category": "animations"
+        },
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
         }
+      },
+      "animationModules": [
+        "JB2AFree",
+        "JAAMod"
       ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      },
+      "546i5jBV6ZGlojj4": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Damage",
+        "activityType": "damage",
+        "version": 2
+      },
+      "ldaA3PLTqI2bCgIc": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Check",
+        "activityType": "check",
+        "version": 2
+      },
+      "56yGf6aHGF8ma2wB": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "_id": "uqWiaUp7GPJWiHMv",

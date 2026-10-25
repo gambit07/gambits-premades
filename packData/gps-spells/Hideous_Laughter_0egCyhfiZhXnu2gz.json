@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.35",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -312,40 +312,36 @@
     {
       "origin": "Compendium.world.gps-spells.Item.lKFOLNRRdLIBS3Xc",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Hideous Laughter",
       "img": "icons/sundries/misc/teeth-dentures.webp",
       "_id": "0DQgdtRDzoHvkedJ",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.hideousLaughter,isDamaged",
-          "priority": 20
-        },
-        {
-          "key": "macro.StatusEffect",
-          "mode": 0,
-          "value": "incapacitated",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.hideousLaughter @actorUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.hideousLaughter,isDamaged",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.StatusEffect",
+            "value": "incapacitated",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.hideousLaughter @actorUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -358,7 +354,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "endEveryTurn",
           "specialDuration": [],
@@ -367,8 +362,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!0egCyhfiZhXnu2gz.0DQgdtRDzoHvkedJ"
     }
   ],
@@ -377,7 +377,7 @@
     "midi-qol": {
       "effectActivation": false,
       "forceCEOff": true,
-      "onUseMacroName": "[postActiveEffects]function.game.gps.hideousLaughter",
+      "onUseMacroName": "[prePreambleComplete]function.game.gps.hideousLaughter,[postActiveEffects]function.game.gps.hideousLaughter",
       "forceCEOn": false,
       "rollAttackPerTarget": "default",
       "itemCondition": "",
@@ -644,6 +644,45 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon",
+        "EskiePatreon",
+        "GPS"
+      ]
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      },
+      "QFUn3VrqeywA1JFn": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "folder": null,

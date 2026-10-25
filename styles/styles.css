@@ -495,3 +495,31 @@
     }
   }
 }
+.gps-settings .gps-settings-section-divider {
+  border: 0;
+  border-top: 1px solid var(--color-border-light-2, #666);
+  align-self: stretch;
+  margin: 0.75rem 0.5rem 0.25rem;
+}
+
+.gps-settings .gps-settings-color-setting {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(11rem, 0.65fr);
+  column-gap: 1rem;
+  row-gap: 0.4rem;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.gps-settings .gps-settings-color-setting .form-fields {
+  min-width: 0;
+}
+
+.gps-settings .gps-settings-color-setting color-picker {
+  width: 100%;
+}
+
+.gps-settings .gps-settings-color-setting .hint {
+  grid-column: 1 / -1;
+  margin: 0;
+}

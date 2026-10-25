@@ -6,10 +6,9 @@ export async function flamesEmbrace({ speaker, actor, token, character, item, ar
         if (rollFound) {
             const saveResult = await game.gps.gpsActivityUse({itemUuid: macroItem.uuid, identifier: "syntheticSave2", targetUuid: token.document.uuid});
 
-            if (saveResult.failedSaves.size === 0) {
-                let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "c87befde-c36f-4237-b645-e98e1526de42");
-                await effectData.delete();
-                Sequencer.EffectManager.endEffects({ name: `${token.id}.FlamesEmbrace` });
+            if (saveResult?.failedSaves?.size === 0) {
+                let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "c87befde-c36f-4237-b645-e98e1526de42" && DAE.effectMatchesSource(e, macroItem.uuid));
+                await effectData?.delete();
             }
         }
     }

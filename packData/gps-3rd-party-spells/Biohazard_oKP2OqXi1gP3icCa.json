@@ -10,7 +10,7 @@
     "source": {
       "book": "Sebastian Crowe's Guide to Drakkenheim",
       "page": "",
-      "custom": "2.1.0",
+      "custom": "",
       "license": "",
       "revision": 1,
       "rules": "2014"
@@ -191,12 +191,7 @@
           "concentration": false,
           "override": true
         },
-        "effects": [
-          {
-            "_id": "yfvuP5dpXaqd5YFv",
-            "onSave": false
-          }
-        ],
+        "effects": [],
         "range": {
           "override": true,
           "units": "any",
@@ -315,102 +310,6 @@
   "effects": [],
   "folder": null,
   "flags": {
-    "region-attacher": {
-      "attachRegionToTemplate": {
-        "dnd5eactivity000": true
-      },
-      "regionBehaviors": {
-        "dnd5eactivity000": [
-          {
-            "name": "tokenEnter",
-            "type": "executeScript",
-            "_id": "QduBzEBwjqG7zxNk",
-            "system": {
-              "events": [
-                "tokenMoveIn"
-              ],
-              "source": "if (event.data.teleport) return;\n\nawait game.gps.biohazard({\n  tokenUuid: event.data.token.uuid,\n  regionUuid: region.uuid,\n  regionScenario: \"tokenEnter\", userId: event.user.id\n});"
-            },
-            "disabled": false,
-            "flags": {},
-            "_stats": {
-              "compendiumSource": null,
-              "duplicateSource": null,
-              "exportSource": null,
-              "coreVersion": "13.347",
-              "systemId": "dnd5e",
-              "systemVersion": "5.1.0",
-              "lastModifiedBy": null
-            }
-          },
-          {
-            "name": "tokenExit",
-            "type": "executeScript",
-            "_id": "0UC7yf8lHNjMb4IN",
-            "system": {
-              "events": [],
-              "source": "if (event.data.teleport) return;\n\nawait game.gps.biohazard({\n  tokenUuid: event.data.token.uuid,\n  regionUuid: region.uuid,\n  regionScenario: \"tokenExit\", userId: event.user.id\n});"
-            },
-            "disabled": false,
-            "flags": {},
-            "_stats": {
-              "compendiumSource": null,
-              "duplicateSource": null,
-              "exportSource": null,
-              "coreVersion": "13.347",
-              "systemId": "dnd5e",
-              "systemVersion": "5.1.0",
-              "lastModifiedBy": null
-            }
-          },
-          {
-            "name": "tokenStartsTurn",
-            "type": "executeScript",
-            "_id": "KvzSSogIzjwPYQDK",
-            "system": {
-              "events": [
-                "tokenTurnStart"
-              ],
-              "source": "if (game.user.id !== game.gps.getPrimaryGM()) return;\n\nawait game.gps.biohazard({\n  tokenUuid: event.data.token.uuid,\n  regionUuid: region.uuid,\n  regionScenario: \"tokenTurnStart\", userId: event.user.id\n});"
-            },
-            "disabled": false,
-            "flags": {},
-            "_stats": {
-              "compendiumSource": null,
-              "duplicateSource": null,
-              "exportSource": null,
-              "coreVersion": "13.347",
-              "systemId": "dnd5e",
-              "systemVersion": "5.1.0",
-              "lastModifiedBy": null
-            }
-          },
-          {
-            "name": "Difficult Terrain",
-            "type": "dnd5e.difficultTerrain",
-            "_id": "cF4kLtYBFeG6uqHg",
-            "system": {
-              "magical": true,
-              "types": [],
-              "ignoredDispositions": []
-            },
-            "disabled": false,
-            "flags": {},
-            "_stats": {
-              "compendiumSource": null,
-              "duplicateSource": null,
-              "exportSource": null,
-              "coreVersion": "13.347",
-              "systemId": "dnd5e",
-              "systemVersion": "5.1.0",
-              "createdTime": 1755321029523,
-              "modifiedTime": 1755321035665,
-              "lastModifiedBy": "roRDywD19pu2VxlC"
-            }
-          }
-        ]
-      }
-    },
     "midi-qol": {
       "AoETargetType": "any",
       "AoETargetTypeIncludeSelf": true,
@@ -451,92 +350,7 @@
       }
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.JS0XBeKCGLwlLlwp"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.B30g8Qz4tnMVFkEj"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.LXN7fEQfJJoAyPXy"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.UeBKdKLZoljPOxJp"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.ZQClKMFzhMd4iPUv"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.6VYTClAd0W3Yc5ID"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.AoAAwvC1Qbq82d2h"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.Q6WwW6Ghze6I6o8N"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.aoryMiPHaMZjcW4n"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.zoaDKzfskXHPQceQ"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.U7ZBrLAi9xzf9mBC"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.WYwj451BxvqtHHFC"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.2x2BRaSj4lKiEyM7"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.NdmpZw4ahmowVvTh"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.Ov6PrGYpXn9xuPfp"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.laYRq5UhnBAcjaE4"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.GGdm0xF4plbJ9Gha"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.1Y0GeXU4FcHzGMnL"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.X0CDtNeQ5A2h1Kun"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.G69R4d9FNGIp4IlY"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.4mEKq44y3Gei6y2Q"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.dp1nsaKqUslgbe5X"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.YCmNrZkGwMx2BdzD"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.WybnhTYUDbZu29Ap"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.Q04LqeKc9Nhfdr0P"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.mGMqKGhjHiohzBUr"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.sh4aT5wphlR9Cy3p"
-        },
-        {
-          "uuid": "Actor.1xFtQVMnMyuFm2w2.ActiveEffect.e34nIt3LDGB63tPC"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -738,6 +552,162 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "gambits-premades": {
+      "regionBehaviors": {
+        "dnd5eactivity000": [
+          {
+            "name": "tokenEnter",
+            "type": "executeScript",
+            "_id": "QduBzEBwjqG7zxNk",
+            "system": {
+              "events": [
+                "tokenMoveIn"
+              ],
+              "source": "if (CONFIG.Token.movement.actions[event.data.movement.passed.waypoints.at(-1)?.action]?.teleport) return;\n\nawait game.gps.biohazard({\n  tokenUuid: event.data.token.uuid,\n  regionUuid: region.uuid,\n  regionScenario: \"tokenEnter\", userId: event.user.id\n});"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.347",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.0",
+              "lastModifiedBy": null
+            }
+          },
+          {
+            "name": "tokenExit",
+            "type": "executeScript",
+            "_id": "0UC7yf8lHNjMb4IN",
+            "system": {
+              "events": [],
+              "source": "if (CONFIG.Token.movement.actions[event.data.movement.passed.waypoints.at(-1)?.action]?.teleport) return;\n\nawait game.gps.biohazard({\n  tokenUuid: event.data.token.uuid,\n  regionUuid: region.uuid,\n  regionScenario: \"tokenExit\", userId: event.user.id\n});"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.347",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.0",
+              "lastModifiedBy": null
+            }
+          },
+          {
+            "name": "tokenStartsTurn",
+            "type": "executeScript",
+            "_id": "KvzSSogIzjwPYQDK",
+            "system": {
+              "events": [
+                "tokenTurnStart"
+              ],
+              "source": "if (game.user.id !== game.gps.getPrimaryGM()) return;\n\nawait game.gps.biohazard({\n  tokenUuid: event.data.token.uuid,\n  regionUuid: region.uuid,\n  regionScenario: \"tokenTurnStart\", userId: event.user.id\n});"
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.347",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.0",
+              "lastModifiedBy": null
+            }
+          },
+          {
+            "name": "Difficult Terrain",
+            "type": "dnd5e.difficultTerrain",
+            "_id": "cF4kLtYBFeG6uqHg",
+            "system": {
+              "magical": true,
+              "types": [],
+              "ignoredDispositions": []
+            },
+            "disabled": false,
+            "flags": {},
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "13.347",
+              "systemId": "dnd5e",
+              "systemVersion": "5.1.0",
+              "createdTime": 1755321029523,
+              "modifiedTime": 1755321035665,
+              "lastModifiedBy": "roRDywD19pu2VxlC"
+            }
+          }
+        ]
+      },
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        },
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Biohazard",
+        "activityType": "utility",
+        "version": 2
+      },
+      "sGqrUdcKagEuZAjn": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save: Automation",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "_id": "oKP2OqXi1gP3icCa",

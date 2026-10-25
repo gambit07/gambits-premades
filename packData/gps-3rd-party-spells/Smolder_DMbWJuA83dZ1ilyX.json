@@ -4,11 +4,11 @@
   "img": "icons/magic/fire/elemental-fire-humanoid.webp",
   "system": {
     "description": {
-      "value": "<p><em>Requires Midi QOL, DAE, Advantage Reminder for DND5e. This item comes from Kobold Press' Deep Magic 2, purchase at </em><a href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" title=\"Deep Magic 2\"><em>https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/</em></a></p>",
+      "value": "<p><em>Requires Midi QOL, DAE, Advantage Reminder for DND5e. This item comes from Kobold Press' Deep Magic 2, purchase at </em><a href=\"https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/\" title=\"Deep Magic 2\"><em>https://koboldpress.com/kpstore/product/deep-magic-volume-2-foundry/</em></a></p><p><strong>GPS setup:</strong> Cast to activate the one-minute benefit. Use the Intimidation advantage prompt only against an eligible Beast or Humanoid; the benefit is consumed on use. A creature cannot be affected again until it finishes a long rest. Target eligibility and that rest restriction are adjudicated manually.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "",
       "page": "",
       "license": "",
@@ -27,7 +27,7 @@
     "target": {
       "affects": {
         "choice": false,
-        "type": ""
+        "type": "self"
       },
       "template": {
         "units": "m",
@@ -80,13 +80,17 @@
           "concentration": false,
           "override": false
         },
-        "effects": [],
+        "effects": [
+          {
+            "_id": "oxzWSYduqkFWENzC"
+          }
+        ],
         "range": {
           "override": false,
           "units": "self"
         },
         "target": {
-          "prompt": true,
+          "prompt": false,
           "template": {
             "contiguous": false,
             "units": "ft"
@@ -168,27 +172,14 @@
     {
       "origin": "Compendium.world.gps-3rd-party-spells.Item.6SoCOKad4lvhmgSx",
       "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Smolder",
       "_id": "oxzWSYduqkFWENzC",
-      "changes": [
-        {
-          "key": "flags.midi-qol.advantage.skill.itm",
-          "mode": 2,
-          "value": "['beast', 'humanoid'].includes(typeOrRace) ? 1 : 0",
-          "priority": 20
-        }
-      ],
       "description": "",
-      "transfer": true,
+      "transfer": false,
       "statuses": [],
       "flags": {
         "times-up": {},
@@ -198,12 +189,9 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
-          "specialDuration": [
-            "isSkill.itm"
-          ],
+          "specialDuration": [],
           "disableCondition": ""
         },
         "dnd5e": {
@@ -213,13 +201,23 @@
         },
         "core": {
           "overlay": false
+        },
+        "gambits-premades": {
+          "smolder": true
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/magic/fire/elemental-fire-humanoid.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": []
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!DMbWJuA83dZ1ilyX.oxzWSYduqkFWENzC"
     }
   ],
@@ -243,6 +241,26 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "folder": null,

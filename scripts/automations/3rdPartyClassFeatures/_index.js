@@ -1,3 +1,4 @@
+import { wickerboneBehemoth, wickerboneTurnStart } from "./druid/wickerboneBehemoth.js";
 import { rainOfCinders } from "./witch/covenOfTheRoilingHearth/rainOfCinders.js";
 import { witchesHex } from "./witch/witchesHex.js";
 import { flamesEmbrace } from "./witch/covenOfTheRoilingHearth/flamesEmbrace.js";
@@ -7,6 +8,8 @@ import { defileGround } from "./druid/circleOfTheBlighted/defileGround.js";
 import { calculatedFlourish } from "./savant/calculatedFlourish.js";
 
 export const thirdPartyClassFeaturesMacros = {
+  wickerboneBehemoth,
+  wickerboneTurnStart,
   rainOfCinders,
   witchesHex,
   flamesEmbrace,

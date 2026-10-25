@@ -2,11 +2,11 @@
   "type": "spell",
   "system": {
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> Casting again removes the previous Foresight effect from the same caster, including another target. The recipient cannot be surprised; the GM should not apply Surprised to this creature.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "2.1.35",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -188,63 +188,81 @@
       "autoTarget": "default",
       "removeAttackDamageButtons": "default",
       "reactionCondition": "",
-      "otherCondition": ""
+      "otherCondition": "",
+      "onUseMacroName": "[postActiveEffects]function.game.gps.foresight"
     },
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Item.ZZ3xwEyunmyHPt0c",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 28800,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 28800,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Foresight",
       "img": "icons/magic/perception/hand-eye-fire-blue.webp",
       "_id": "DaQYicerrenqjSbA",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.advantage.attack.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.grants.disadvantage.attack.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.advantage.check.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.advantage.save.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.advantage.skill.all",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "attack",
+            "value": "1",
+            "priority": 100,
+            "type": "dnd5e.advantage"
+          },
+          {
+            "key": "flags.midi-qol.grants.disadvantage.attack.all",
+            "value": 1,
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "check",
+            "value": "1",
+            "priority": 100,
+            "type": "dnd5e.advantage",
+            "conditions": "{\"o\":\"NOT\",\"v\":{\"k\":\"roll.type\",\"v\":\"initiative\"}}"
+          },
+          {
+            "key": "save",
+            "value": "1",
+            "priority": 100,
+            "type": "dnd5e.advantage"
+          },
+          {
+            "key": "system.attributes.init.roll.mode",
+            "value": 1,
+            "type": "add",
+            "priority": 20
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -258,8 +276,7 @@
           "selfTarget": false,
           "selfTargetAlways": false,
           "dontApply": false,
-          "stackable": "noneName",
-          "showIcon": false,
+          "stackable": "multi",
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -271,8 +288,16 @@
         },
         "core": {
           "overlay": false
+        },
+        "gambits-premades": {
+          "foresight": true
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!xeTgIuRWB3fR2mTu.DaQYicerrenqjSbA"
     }
   ],

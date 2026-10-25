@@ -4,7 +4,6 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         return workflow.aborted = true;
     }
     if(args[0].macroPass === "preActiveEffects") {
-        game.gps.animation.ashardalonsStride({type: "use", token, itemUuid: item.uuid});
     
         let castLevel = workflow.castData.castLevel;
         let castMode = workflow.item?.system?.method;
@@ -14,23 +13,21 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
     
         let effectData = [
         {
-            "icon": "icons/magic/fire/projectile-bolt-zigzag-orange.webp",
+            img: "icons/magic/fire/projectile-bolt-zigzag-orange.webp",
             "origin": hasConcApplied.uuid,
-            "duration": {
-                "seconds": 60
-            },
+            "duration": { value: 60, units: "seconds" },
             "disabled": false,
             "name": "Ashardalon's Stride",
-            "changes": [
+            system: { changes: [
             {
-                "key": "system.attributes.movement.walk",
-                "mode": 2,
+                "key": "system.attributes.movement.speeds.walk",
+                type: "add",
                 "value": movementSpeed,
                 "priority": 20
             },
             {
                 "key": "macro.itemMacro",
-                "mode": 0,
+                type: "custom",
                 "value": `function.game.gps.ashardalonsStride ${item.uuid} ${actor.uuid}`,
                 "priority": 20
             },
@@ -39,7 +36,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
                 "value": 1,
                 "priority": 20
             }
-            ],
+            ] },
             "transfer": false,
             "flags": {
                 "dae": {
@@ -48,7 +45,6 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
                     "selfTargetAlways": true,
                     "dontApply": false,
                     "stackable": "noneName",
-                    "showIcon": false,
                     "macroRepeat": "startEveryTurn"
                 },
                 "gambits-premades": {"gpsUuid": "ef27f042-ba6d-4ff4-ac2b-4ca6ff611c17", "asCastLevel": castLevel}
@@ -58,6 +54,7 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
     
         let effectName = await actor.createEmbeddedDocuments("ActiveEffect", effectData);
         await hasConcApplied.addDependent(effectName[0]);
+        await game.gps.animation.ashardalonsStride({type: "use", token, itemUuid: item.uuid, effectUuid: effectName[0].uuid});
     }
 
     if(args[0] === "on") {
@@ -80,9 +77,9 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
         if(activityToUpdate.damage.parts[0]?.number !== numDie) {
             let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
             damageParts[0].number = numDie;
-            await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
+            await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
         }
-        await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: targetToken.document.uuid});
+        await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: targetToken.document.uuid});
     
         game.gps.animation.ashardalonsStride({type: "damage", token: targetToken, itemUuid: item.uuid});
     }
@@ -106,16 +103,13 @@ export async function ashardalonsStride({ speaker, actor, token, character, item
                 if(activityToUpdate.damage.parts[0]?.number !== numDie) {
                     let damageParts = foundry.utils.duplicate(activityToUpdate.damage.parts);
                     damageParts[0].number = numDie;
-                    await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
+                    await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
                 }
-                await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
+                await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
             
                 game.gps.animation.ashardalonsStride({type: "damage", token: target, itemUuid: item.uuid});
             }
         }
     }
     
-    if(args[0] === "off") {
-        Sequencer.EffectManager.endEffects({name: `${token.id}_ashardalonsStride`});
-    }
 }

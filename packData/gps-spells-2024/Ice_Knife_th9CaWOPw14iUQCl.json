@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.32",
+      "custom": "",
       "rules": "2024",
       "revision": 1,
       "book": "",
@@ -631,20 +631,20 @@
       "fromAmmo": false,
       "version": 5
     },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "playAnimation",
-          "label": "CHRISPREMADES.Config.PlayAnimation",
-          "type": "checkbox",
-          "default": true,
-          "category": "animation"
-        }
-      ]
-    },
     "gambits-premades": {
       "rootedHillsStaff": 0,
-      "ikCastLevel": 1
+      "ikCastLevel": 1,
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
     },
     "boss-loot-assets-premium": {
       "dnd5eactivity000": {
@@ -652,7 +652,22 @@
           "enabled": false
         },
         "activityName": "Attack",
-        "activityType": "attack"
+        "activityType": "attack",
+        "version": 2
+      },
+      "dnd5eactivity100": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Shard Explosion",
+        "activityType": "save",
+        "version": 2
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
       }
     }
   },

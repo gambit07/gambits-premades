@@ -3,13 +3,13 @@
   "type": "equipment",
   "system": {
     "description": {
-      "value": "<p><em>Requires MidiQOL, DAE</em></p><p>While holding this shield, you have a +1 bonus to AC. This bonus is in addition to the shield's normal bonus to AC. This shield grants you the ability to attack your enemies as well as defend against them. While holding this shield, you can angle the blades at the top downwards to slash your enemies. When used in this way, this shield deals 3d6 magical <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.sz2XKQ5lgsdPEJOa\" data-id=\"sz2XKQ5lgsdPEJOa\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">slashing</a> damage.</p><p>Additionally, when an enemy within 5 feet of you attempts to leave your melee range, you can use a reaction to Shield Strike them. On a successful hit, the creature takes 3d6 magical <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.39LFrlef94JIYO8m\" data-id=\"39LFrlef94JIYO8m\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">bludgeoning</a> damage and must succeed on a DC 16 <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a> saving throw or fall <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.y0TkcdyoZlOTmAFT\" data-id=\"y0TkcdyoZlOTmAFT\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">prone</a></p>",
+      "value": "<p><em>Requires MidiQOL, DAE</em></p><p>This shield grants you the ability to attack your enemies as well as defend against them. While holding this shield, you can angle the blades at the top downwards to slash your enemies. When used in this way, this shield deals 3d6 magical <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.sz2XKQ5lgsdPEJOa\" data-id=\"sz2XKQ5lgsdPEJOa\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">slashing</a> damage.</p><p>Additionally, when an enemy within 5 feet of you attempts to leave your melee range, you can use a reaction to Shield Strike them. On a successful hit, the creature takes 3d6 magical <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.39LFrlef94JIYO8m\" data-id=\"39LFrlef94JIYO8m\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">bludgeoning</a> damage and must succeed on a DC 16 <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.NizgRXLNUqtdlC1s.JournalEntryPage.ER8CKDUWLsFXuARJ\" data-id=\"ER8CKDUWLsFXuARJ\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">Dexterity</a> saving throw or fall <a class=\"content-link\" data-uuid=\"Compendium.dnd5e.rules.JournalEntry.w7eitkpD7QQTB6j0.JournalEntryPage.y0TkcdyoZlOTmAFT\" data-id=\"y0TkcdyoZlOTmAFT\" data-type=\"JournalEntryPage\" data-pack=\"dnd5e.rules\" data-tooltip=\"Rule Page\">prone</a></p>",
       "chat": ""
     },
     "source": {
       "page": "",
       "license": "",
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -136,14 +136,14 @@
           "critical": {
             "bonus": ""
           },
-          "includeBase": true,
+          "includeBase": false,
           "parts": [
             {
               "number": 3,
               "denomination": 6,
               "bonus": "",
               "types": [
-                "piercing"
+                "slashing"
               ],
               "custom": {
                 "enabled": false,
@@ -212,7 +212,160 @@
         "ammunition": "",
         "otherActivityUuid": "",
         "attackRollPerTarget": "default",
-        "fumbleThreshold": 1
+        "fumbleThreshold": 1,
+        "name": "Slash"
+      },
+      "gpsShieldStrike1": {
+        "_id": "gpsShieldStrike1",
+        "type": "attack",
+        "activation": {
+          "type": "reaction",
+          "value": 1,
+          "override": true
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "",
+          "units": "inst",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "value": "5",
+          "units": "ft",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "m"
+          },
+          "affects": {
+            "count": "",
+            "type": "",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "attack": {
+          "ability": "",
+          "bonus": "",
+          "critical": {
+            "threshold": null
+          },
+          "flat": false,
+          "type": {
+            "value": "melee",
+            "classification": "weapon"
+          }
+        },
+        "damage": {
+          "critical": {
+            "bonus": ""
+          },
+          "includeBase": false,
+          "parts": [
+            {
+              "number": 3,
+              "denomination": 6,
+              "bonus": "",
+              "types": [
+                "bludgeoning"
+              ],
+              "custom": {
+                "enabled": false,
+                "formula": ""
+              },
+              "scaling": {
+                "mode": "whole",
+                "number": null,
+                "formula": ""
+              }
+            }
+          ]
+        },
+        "sort": 0,
+        "useConditionText": "",
+        "useConditionReason": "",
+        "effectConditionText": "",
+        "macroData": {
+          "name": "",
+          "command": ""
+        },
+        "ignoreTraits": {
+          "idi": false,
+          "idr": false,
+          "idv": false,
+          "ida": false,
+          "idm": false
+        },
+        "midiProperties": {
+          "ignoreTraits": [],
+          "triggeredActivityId": "none",
+          "triggeredActivityConditionText": "",
+          "triggeredActivityTargets": "targets",
+          "triggeredActivityRollAs": "self",
+          "autoConsume": false,
+          "forceConsumeDialog": "default",
+          "forceRollDialog": "default",
+          "forceDamageDialog": "default",
+          "confirmTargets": "default",
+          "autoTargetType": "any",
+          "autoTargetAction": "default",
+          "automationOnly": false,
+          "otherActivityCompatible": true,
+          "otherActivityAsParentType": true,
+          "identifier": "shieldStrike",
+          "displayActivityName": false,
+          "rollMode": "default",
+          "chooseEffects": false,
+          "toggleEffect": false,
+          "ignoreFullCover": false,
+          "removeChatButtons": "default",
+          "magicEffect": false,
+          "magicDamage": false,
+          "noConcentrationCheck": false,
+          "autoCEEffects": "default"
+        },
+        "isOverTimeFlag": false,
+        "overTimeProperties": {
+          "saveRemoves": true,
+          "preRemoveConditionText": "",
+          "postRemoveConditionText": ""
+        },
+        "otherActivityId": "",
+        "otherActivityAsParentType": true,
+        "attackMode": "oneHanded",
+        "ammunition": "",
+        "otherActivityUuid": "",
+        "attackRollPerTarget": "default",
+        "fumbleThreshold": 1,
+        "name": "Shield Strike"
       }
     },
     "identifier": "dragon-turtle-dueling-shield",
@@ -225,7 +378,7 @@
       "itemCondition": "",
       "effectCondition": "",
       "fumbleThreshold": null,
-      "onUseMacroName": "[postDamageRoll]ItemMacro,[preItemRoll]ItemMacro"
+      "onUseMacroName": "[postActiveEffects]ItemMacro"
     },
     "core": {},
     "rest-recovery": {
@@ -241,7 +394,7 @@
         "img": "icons/equipment/shield/kite-steel-boss-gold.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"postDamageRoll\") {\n    let oaFlag = await actor.getFlag(\"gambits-premades\", \"dragonTurtleShieldOA\")\n    let target = workflow.hitTargets.first();\n\n    if(oaFlag && target) {\n        const itemData = {\n        name: \"Dragon Turtle Dueling Shield Save\",\n        type: \"feat\",\n            img: \"https://www.dndbeyond.com/avatars/40852/561/638472515906293225.png\",\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            }\n        },\n        system: {\n            equipped: true,\n            actionType: \"save\",\n            save: { dc: 16, ability: \"dex\", scaling: \"flat\" },\n            components: { concentration: false, material: false, ritual: false, somatic: false, value: \"\", vocal: false },\n            duration: { units: \"inst\", value: undefined }\n        }\n        };\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: actor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n        const saveResult = await MidiQOL.completeItemUse(itemUpdate, {}, options);\n\n        if(saveResult.failedSaves.size === 1) {\n            const hasEffectApplied = target.actor.appliedEffects.find(e => e.name === \"Prone\");\n            if (!hasEffectApplied) {\n                await game.gps.socket.executeAsGM(\"gmToggleStatus\", {tokenUuid: `${target.document.uuid}`, status: \"prone\", active: true });\n            }\n        }\n\n        let updatedType = foundry.utils.duplicate(macroItem.system.damage.parts);\n        updatedType[0][1] = \"piercing\";\n        await macroItem.update({\"system.damage.parts\" : updatedType});\n        await actor.unsetFlag(\"gambits-premades\", \"dragonTurtleShieldOA\");\n    }\n}\nif(args[0].macroPass === \"preItemRoll\") {\n    let oaFlag = await actor.getFlag(\"gambits-premades\", \"dragonTurtleShieldOA\")\n    if(oaFlag) {\n        let updatedType = foundry.utils.duplicate(macroItem.system.damage.parts);\n        updatedType[0][1] = \"bludgeoning\";\n        await macroItem.update({\"system.damage.parts\" : updatedType});\n    }\n}",
+        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    const oaFlag = workflow.activity.identifier === \"shieldStrike\";\n    let target = workflow.hitTargets.first();\n\n    if(oaFlag && target) {\n        const itemData = game.gps.disableBlfxAutoRecognition({\n        name: \"Dragon Turtle Dueling Shield Save\",\n        type: \"feat\",\n            img: \"https://www.dndbeyond.com/avatars/40852/561/638472515906293225.png\",\n        effects: [],\n        flags: {\n            autoanimations: {isEnabled: false, version: 5},\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            }\n        },\n        system: {\n            activities: {\n                gpsSynthetic0001: {\n                    type: \"save\",\n                    activation: { type: \"special\" },\n                    consumption: { spellSlot: false, targets: [] },\n                    target: { affects: { type: \"creature\", count: \"1\" } },\n                    save: { ability: [\"dex\"], dc: { calculation: \"\", formula: String(16) } },\n                    damage: { onSave: \"none\", parts: [] }\n                }\n            }\n        }\n        });\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: actor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n        const saveResult = await MidiQOL.completeItemUse(itemUpdate, { midiOptions: options }, { configure: false }, {});\n\n        if(saveResult.failedSaves.size === 1) {\n            const hasEffectApplied = target.actor.appliedEffects.find(e => e.name === \"Prone\");\n            if (!hasEffectApplied) {\n                await game.gps.queryGM(\"gmToggleStatus\", {tokenUuid: `${target.document.uuid}`, status: \"prone\", active: true });\n            }\n        }\n\n\n    }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -266,6 +419,37 @@
       "riders": {
         "activity": [],
         "effect": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "shieldStrike": true
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Slash",
+        "activityType": "attack",
+        "version": 2
+      },
+      "gpsShieldStrike1": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Shield Strike",
+        "activityType": "attack",
+        "version": 2
       }
     }
   },

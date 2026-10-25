@@ -6,6 +6,7 @@ export async function sentinel2024({workflowData,workflowType,workflowCombat}) {
     let itemName = "Sentinel";
     let dialogId = gpsUuid;
     let target = workflow.targets.first();
+    if(!target) return;
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
     if(!workflow.hitTargets.first()) return;
@@ -88,13 +89,13 @@ export async function sentinel2024({workflowData,workflowType,workflowCombat}) {
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog",browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "user",type: "multiDialog",browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: workflow.token.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, selectedItemUuid, favoriteCheck, source, type } = result || {};
@@ -108,13 +109,14 @@ export async function sentinel2024({workflowData,workflowType,workflowCombat}) {
                 continue;
             }
 
-            let chosenWeapon = await fromUuid(selectedItemUuid);
+            let chosenWeapon = validWeapons.find(weapon => weapon.uuid === selectedItemUuid);
+            if(!chosenWeapon) continue;
             let favoriteWeaponCheck = favoriteWeaponUuid;
             let favoriteWeapon;
             if(favoriteWeaponCheck !== "null") favoriteWeapon = await fromUuid(favoriteWeaponCheck);
             if(favoriteCheck && favoriteWeaponCheck) {
                await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
-               if (favoriteWeapon.uuid !== chosenWeapon.uuid) {
+               if (favoriteWeapon && favoriteWeapon.uuid !== chosenWeapon.uuid) {
                await favoriteWeapon.unsetFlag("midi-qol", "oaFavoriteAttack");
                }
             }
@@ -122,19 +124,6 @@ export async function sentinel2024({workflowData,workflowType,workflowCombat}) {
                await chosenWeapon.setFlag("midi-qol", "oaFavoriteAttack", true);
             }
 
-            let clonedWeapon = foundry.utils.deepClone(chosenWeapon);
-
-            foundry.utils.mergeObject(clonedWeapon, {
-            system: {
-                range: {
-                    value: null,
-                    long: null,
-                    units: ""
-                }
-            }
-            }, { inplace: true });
-    
-            chosenWeapon = clonedWeapon;
 
             const options = {
                 showFullCard: false,
@@ -150,31 +139,24 @@ export async function sentinel2024({workflowData,workflowType,workflowCombat}) {
             };
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenWeapon.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options, isWeapon: true });
+            else if(source && source === "gm") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenWeapon.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options, isWeapon: true });
     
-            if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) continue;
+            if(!itemRoll?.completed) continue;
 
             let checkHits = itemRoll.checkHits;
 
             if(checkHits) {
                 let effectData = [
                     {
-                        "icon": `${chosenItem.img}`,
+                        img: `${chosenItem.img}`,
                         "origin": `${validTokenPrimary.actor.uuid}`,
-                        "duration": {
-                        "seconds": 1
-                        },
+                        "duration": { expiry: "turnEnd" },
                         "disabled": false,
                         "name": "Sentinel - Movement",
-                        "changes": [
-                        {
-                            "key": "system.attributes.movement.all",
-                            "mode": 0,
-                            "value": "0",
-                            "priority": 20
-                        }
-                        ],
+                        system: { changes: [
+                        ...game.gps.movementSpeedChanges("0", 20)
+                        ] },
                         "transfer": false
                     }
                 ];

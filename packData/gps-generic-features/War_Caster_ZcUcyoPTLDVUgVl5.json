@@ -4,10 +4,10 @@
   "system": {
     "description": {
       "value": "<p><em>Works with the Opportunity Attack Automation.</em></p>",
-      "chat": "You have advantage on CON saving throws that you make to maintain your concentration on a spell when you take damage. You can perform the somatic components of spells even when you have weapons or a shield in one or both hands. You can use your reaction to make an opportunity attack to cast a spell that has a casting time of 1 action and targets only that creature."
+      "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2014",
       "book": "",
       "page": "",
@@ -57,51 +57,41 @@
       }
     },
     "gambits-premades": {
-      "gpsUuid": "4cb8e0f5-63fd-49b7-b167-511db23d9dbf"
-    },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "warCasterRange",
+      "gpsUuid": "4cb8e0f5-63fd-49b7-b167-511db23d9dbf",
+      "itemConfig": {
+        "warCasterRange": {
           "label": "Enable Opportunity Attack Ranged Spells:",
           "type": "checkbox",
           "default": true,
           "category": "homebrew"
         },
-        {
-          "value": "warCasterMelee",
+        "warCasterMelee": {
           "label": "Enable Opportunity Attack Melee Spells:",
           "type": "checkbox",
           "default": true,
           "category": "homebrew"
         }
-      ]
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/weapons/wands/wand-carved-fire.webp",
   "effects": [
     {
       "origin": "Compendium.world.gps-generic-features.Item.ZcUcyoPTLDVUgVl5",
-      "duration": {
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "War Caster",
       "_id": "IxLspcfy2IQcz9iY",
-      "changes": [
-        {
-          "key": "flags.midi-qol.advantage.concentration",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": true,
       "statuses": [],
@@ -112,7 +102,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -125,13 +114,27 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "icons/weapons/wands/wand-carved-fire.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.concentration.roll.mode",
+            "value": 1,
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!ZcUcyoPTLDVUgVl5.IxLspcfy2IQcz9iY"
     }
   ],

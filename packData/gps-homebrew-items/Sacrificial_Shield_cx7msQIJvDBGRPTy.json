@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "0.5.40",
+      "custom": "",
       "book": "",
       "page": "",
       "license": "",
@@ -77,7 +77,7 @@
         "img": "icons/equipment/shield/oval-wooden-boss-steel.webp",
         "type": "script",
         "scope": "global",
-        "command": "if (args[0].macroPass === \"isHit\" && workflow.isCritical) {\n    await foundry.applications.api.DialogV2.wait({\n        window: { title: 'Sacrificial Shield' },\n        content: `\n            <div class=\"gps-dialog-container\">\n                <div class=\"gps-dialog-section\">\n                    <div class=\"gps-dialog-content\">\n                        <div>\n                            <div class=\"gps-dialog-flex\">\n                                <p class=\"gps-dialog-paragraph\">Would you like to destroy your shield to prevent a critical hit?</p>\n                                <div id=\"image-container\" class=\"gps-dialog-image-container\">\n                                    <img src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        `,\n        buttons: [{\n            action: \"Yes\",\n            label: \"Yes\",\n            callback: async (event, button, dialog) => {\n                workflow.isCritical = false;\n                workflow.hitDisplayData[workflow.hitTargets.first().document.uuid].hitString = \"hits\";\n\n                let actorPlayer = MidiQOL.playerForActor(actor);\n                ChatMessage.create({\n                    user: actorPlayer.id,\n                    content: `The ${macroItem.name} cracks from the heavy impact, but protects its wearer from a critical hit`,\n                    speaker: ChatMessage.getSpeaker({ token: token })\n                });\n\n                await macroItem.update({\n                    \"system.equipped\": false,\n                    \"name\": `${macroItem.name} (Broken)`\n                });\n            }\n        },\n        {\n            action: \"No\",\n            label: \"No\",\n            callback: async (event, button, dialog) => {\n                return;\n            }\n        }],\n        close: async (event, dialog) => {\n            return;\n        }, rejectClose:false\n    });\n}",
+        "command": "if (args[0].macroPass === \"isHit\" && workflow.isCritical) {\n    await game.gps.showAutomationDialog({\n        window: { title: macroItem.name },\n        content: `\n            <div class=\"gps-dialog-container\">\n                <div class=\"gps-dialog-section\">\n                    <div class=\"gps-dialog-content\">\n                        <div>\n                            <div class=\"gps-dialog-flex\">\n                                <p class=\"gps-dialog-paragraph\">${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.SacrificialShield.Prompt\")}</p>\n                                <div id=\"image-container\" class=\"gps-dialog-image-container\">\n                                    <img src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        `,\n        buttons: [{\n            action: \"Yes\",\n            label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Yes\"),\n            callback: async (event, button, dialog) => {\n                workflow.isCritical = false;\n                workflow.hitDisplayData[workflow.hitTargets.first().document.uuid].hitString = \"hits\";\n\n                let actorPlayer = MidiQOL.playerForActor(actor);\n                ChatMessage.create({\n                    user: actorPlayer.id,\n                    content: `The ${macroItem.name} cracks from the heavy impact, but protects its wearer from a critical hit`,\n                    speaker: ChatMessage.getSpeaker({ token: token })\n                });\n\n                await macroItem.update({\n                    \"system.equipped\": false,\n                    \"name\": `${macroItem.name} (Broken)`\n                });\n            }\n        },\n        {\n            action: \"No\",\n            label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.No\"),\n            callback: async (event, button, dialog) => {\n                return;\n            }\n        }],\n        close: async (event, dialog) => {\n            return;\n        }, rejectClose:false\n    });\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -102,34 +102,37 @@
       "riders": {
         "activity": []
       }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "effects": [
     {
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.hNrKazdOP5s1UYSb.Actor.SNZJsEKbROB1q6bT.Item.U9Zr63GqKyeI5jnK",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "name": "Sacrificial Shield",
       "img": "icons/equipment/shield/oval-wooden-boss-steel.webp",
       "_id": "rdCztK1Tsmy0bGcC",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, isHit",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, isHit",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -140,15 +143,19 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!cx7msQIJvDBGRPTy.rdCztK1Tsmy0bGcC"
     }
   ],

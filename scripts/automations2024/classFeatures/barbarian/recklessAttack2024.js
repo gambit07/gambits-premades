@@ -6,8 +6,8 @@ export async function recklessAttack2024({ speaker, actor, token, character, ite
         let recklessCheck = await actor.getFlag("midi-qol", "checkRecklessAttack2024");
         if(recklessCheck === false || recklessCheck === true) return;
 
-        let currentCombatant = canvas.tokens.get(game.combat.current.tokenId);
-        if (currentCombatant.id !== token.id) return;
+        let currentCombatant = canvas.tokens.get(game.combat.current?.tokenId);
+        if (currentCombatant?.id !== token.id) return;
 
         let dialogId = "recklessattack2024";
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
@@ -44,9 +44,9 @@ export async function recklessAttack2024({ speaker, actor, token, character, ite
             
             let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source: "gm",type: "multiDialog" };
 
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-        result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+        result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
@@ -59,52 +59,47 @@ export async function recklessAttack2024({ speaker, actor, token, character, ite
             workflow.tracker.advantage.add(userDecision, "Reckless Attack");
             await actor.setFlag("midi-qol", "checkRecklessAttack2024", true);
 
-            let effectData = [{
-                "changes": [
+            let effectData = [{ duration: { expiry: "sourceStart" },
+                system: { changes: [
                     {
                         "key": "flags.midi-qol.grants.advantage.attack.all",
-                        "value": "1",
-                        "mode": 0,
+                        "value": 1,
+                        type: "custom",
                         "priority": 20
                     },
                     {
-                        "key": "flags.midi-qol.advantage.attack.all",
-                        "value": "activity?.ability === 'str'",
-                        "mode": 0,
+                        "key": "system.abilities.str.attack.roll.mode",
+                        "value": 1,
+                        type: "add",
                         "priority": 20
                     },
                     {
                         "key": "macro.itemMacro",
-                        "mode": 0,
+                        type: "custom",
                         "value": "function.game.gps.recklessAttack2024",
                         "priority": 20
                     },
-                ],
+                ] },
                 "transfer": false,
                 "disabled": false,
                 "flags": {
                     "dae": {
                         "transfer": false,
                         "stackable": "noneName",
-                        "specialDuration": [
-                            "turnStartSource",
-                            "combatEnd"
-                        ]
+                        "specialDuration": []
                     },
                     "midi-qol": {
                         "forceCEOff": true
                     },
-                    "gambits-premades": {
+                    "gambits-premades": { expireOnCombatEnd: true,
                         "gpsUuid": "872c2cfd-5f58-4e64-a804-2b0db2c65900"
                     },
-                    "chris-premades": {
-                        "info": {
-                            "identifier": "recklessAttackEffect"
-                        }
+                    "cat": {
+                        "identifier": "recklessAttackEffect"
                     }
                 },
                 "name": "Reckless Attack - Effects",
-                "icon": item.img,
+                img: item.img,
                 "origin": item.uuid
             }];
 

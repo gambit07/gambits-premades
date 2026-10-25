@@ -10,7 +10,6 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
 
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
     let initialTarget = workflow.token;
-    let targets = [workflow.token.document.uuid];
     let browserUser;
 
     let findValidTokens = game.gps.findValidTokens({initiatingToken: initialTarget, targetedToken: null, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 120, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
@@ -53,13 +52,13 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initialTarget.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initialTarget.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initialTarget.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -76,11 +75,12 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                 targetUuids: [initialTarget.document.uuid]
             };
 
-            if(source && source === "user") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await game.gps.socket.executeAsUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", browserUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            else if(source && source === "gm") itemRoll = await game.gps.queryUser("remoteCompleteItemUse", gmUser, { itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid, options: options });
 
-            if(!itemRoll.baseLevel && !itemRoll.castLevel && !itemRoll.checkHits && !itemRoll.itemType) continue;
+            if(!itemRoll?.completed) continue;
 
+            let targets = [workflow.token.document.uuid];
             let itemRollCastLevel = itemRoll.castLevel;
             let numTargets = itemRollCastLevel - 5;
             let targetsNearby;
@@ -125,50 +125,47 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
                 let result;
         
                 if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-                    let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId: `${dialogId}-1`,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,numTargets: numTargets, source: "user",type: "multiDialog", browserUser: browserUser };
+                    let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId: `${dialogId}-1`,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initialTarget.document.uuid,numTargets: numTargets, source: "user",type: "multiDialog", browserUser: browserUser };
                     
-                    let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId: `${dialogId}-1`,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,numTargets: numTargets, source: "gm",type: "multiDialog" };
+                    let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId: `${dialogId}-1`,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initialTarget.document.uuid,numTargets: numTargets, source: "gm",type: "multiDialog" };
                 
-                    result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+                    result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
                 } else {
-                    result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId: `${dialogId}-1`,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,numTargets: numTargets, source: gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+                    result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId: `${dialogId}-1`,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initialTarget.document.uuid,numTargets: numTargets, source: gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
                 }
                         
                 const { userDecision, enemyTokenUuid, enemyTokenUuids, allyTokenUuid, damageChosen, source, type } = result || {};
                 
-                targets.push(...enemyTokenUuids);
+                targets.push(...(enemyTokenUuids ?? []));
             }
 
             let chatContent;
             const saveResult = await game.gps.gpsActivityUse({itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: targets});
+            if (!saveResult) continue;
 
-            for(let failedTarget of saveResult.failedSavesObject) {
-                failedTarget = await fromUuid(failedTarget.document.uuid);
-                failedTarget = failedTarget.object;
+            for(const failedTargetUuid of saveResult.failedSaveUuids) {
+                const failedTarget = (await fromUuid(failedTargetUuid))?.object;
+                if (!failedTarget) continue;
 
                 chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.TemporalShunt.TargetRollInterrupted", { workflowType: workflowType })}<br><img src="${failedTarget.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
+                await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent});
                 
                 let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
                 const { animEnabled } = cprConfig;
                 if(animEnabled) {
-                    for(let target of targets) {
-                        target = await fromUuid(target);
-                        target = target.object;
                         new Sequence()
                         .effect()
                             .file("jb2a.portals.horizontal.vortex.black")
                             .fadeIn(500)
                             .fadeOut(500)
-                            .atLocation(target)
+                            .atLocation(failedTarget)
                             .scaleToObject(2)
                         .play()
-                    }
                 } 
             }
 
-            workflow.aborted = true;
+            if (saveResult.failedSaveUuids.includes(workflow.token.document.uuid)) workflow.aborted = true;
         }
     }
 }

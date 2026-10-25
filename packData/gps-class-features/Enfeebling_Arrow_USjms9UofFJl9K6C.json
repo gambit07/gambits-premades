@@ -10,7 +10,7 @@
       "recovery": []
     },
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> Learned-option marker for Arcane Shot. Use the Arcane Shot item; this marker is not a standalone attack.</p>",
       "chat": ""
     },
     "identifier": "arcane-shot-options-enfeebling-arrow-legacy",
@@ -18,7 +18,7 @@
       "book": "XGtE",
       "page": "",
       "license": "",
-      "custom": "1.0.14",
+      "custom": "",
       "rules": "2014",
       "revision": 1
     },
@@ -48,6 +48,16 @@
     },
     "gambits-premades": {
       "gpsUuid": "cde79d00-3828-4cef-821e-8936f605d8cb"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
     }
   },
   "img": "icons/weapons/ammunition/arrow-broadhead-bent-teal.webp",

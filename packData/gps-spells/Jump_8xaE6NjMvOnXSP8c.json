@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.1",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -26,7 +26,7 @@
       "affects": {
         "choice": false,
         "count": "",
-        "type": ""
+        "type": "creature"
       },
       "template": {
         "units": "touch",
@@ -192,27 +192,43 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
       "origin": "Compendium.world.gps-spells.Item.pHaMJBTQHtVHh9RF",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Jump",
       "img": "icons/magic/control/debuff-energy-hold-levitate-teal-blue.webp",
       "_id": "3IzgEJNHEPFgnFlg",
       "type": "base",
-      "system": {},
-      "changes": [],
+      "system": {
+        "changes": []
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -227,15 +243,19 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!8xaE6NjMvOnXSP8c.3IzgEJNHEPFgnFlg"
     }
   ],

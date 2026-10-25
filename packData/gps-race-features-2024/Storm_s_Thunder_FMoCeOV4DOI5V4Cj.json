@@ -153,7 +153,7 @@
       "rules": "2024",
       "book": "",
       "page": "",
-      "custom": "2.1.11",
+      "custom": "",
       "license": ""
     },
     "enchant": {},
@@ -177,28 +177,21 @@
     {
       "name": "Storm's Thunder",
       "origin": "Compendium.world.gps-race-features-2024.Item.FMoCeOV4DOI5V4Cj",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
+      "duration": {},
       "disabled": false,
       "img": "icons/magic/lightning/bolts-salvo-clouds-sky.webp",
       "_id": "GORcWyNzv0ECAsWW",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.stormsThunder2024,isDamaged",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.stormsThunder2024,isDamaged",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": true,
@@ -209,7 +202,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -221,8 +213,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!FMoCeOV4DOI5V4Cj.GORcWyNzv0ECAsWW"
     }
   ],
@@ -241,6 +238,26 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "3eWfDnXfYJVJqT1z": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Damage",
+        "activityType": "damage",
+        "version": 2
+      }
     }
   },
   "_id": "FMoCeOV4DOI5V4Cj",

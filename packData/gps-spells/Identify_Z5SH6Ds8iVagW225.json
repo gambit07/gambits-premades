@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "book": "",
       "page": "",
       "license": "",
@@ -16,7 +16,7 @@
       "rules": "2014"
     },
     "activation": {
-      "type": "action",
+      "type": "minute",
       "condition": "",
       "value": 1
     },
@@ -65,8 +65,8 @@
         "_id": "dnd5eactivity000",
         "type": "utility",
         "activation": {
-          "type": "action",
-          "value": null,
+          "type": "minute",
+          "value": 1,
           "override": false
         },
         "consumption": {
@@ -242,6 +242,26 @@
     },
     "gambits-premades": {
       "gpsUuid": "2cc1f50d-cdb8-4f17-a532-2532f74440ae"
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "_id": "Z5SH6Ds8iVagW225",

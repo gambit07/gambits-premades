@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -185,46 +185,42 @@
     {
       "origin": "Compendium.world.gps-3rd-party-spells.Item.bntrnUZ7NRmWduPG",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 600,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Leiloch’s Interminable Yarn",
       "img": "icons/skills/trades/music-singing-voice-blue.webp",
       "_id": "Nl1fac5sPmrnI9rj",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.fail.skill.inv",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.fail.skill.ins",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.fail.skill.prc",
-          "mode": 0,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.inv.roll.fail",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "system.skills.ins.roll.fail",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "system.skills.prc.roll.fail",
+            "value": 1,
+            "priority": 20,
+            "type": "override"
+          },
+          {
+            "key": "macro.itemMacro",
+            "value": "",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -237,12 +233,16 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!wocgVbiYDe6ghSMn.Nl1fac5sPmrnI9rj"
     }
   ],
@@ -276,7 +276,7 @@
         "img": "icons/skills/trades/music-singing-voice-blue.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    let itemData = {\n        \"name\": \"Leiloch’s Interminable Yarn - Pull Away\",\n        \"type\": \"feat\",\n        \"img\": macroItem.img,\n        \"system\": {\n            \"activation\": {\n                \"type\": \"special\",\n                \"cost\": null,\n                \"condition\": \"\"\n            },\n            \"target\": {\n                \"value\": null,\n                \"width\": null,\n                \"units\": \"\",\n                \"type\": \"self\",\n                \"prompt\": true\n            },\n            \"range\": {\n                \"value\": null,\n                \"long\": null,\n                \"units\": \"self\"\n            },\n            \"actionType\": \"save\",\n            \"save\": {\n                \"ability\": \"wis\",\n                \"dc\": actor.system.attributes.spelldc,\n                \"scaling\": \"flat\"\n            }\n        },\n        \"effects\": [\n            {\n                \"icon\": macroItem.img,\n                \"duration\": {\n                    \"seconds\": 60\n                },\n                \"disabled\": false,\n                \"name\": \"Leiloch’s Interminable Yarn - Unconscious\",\n                \"changes\": [\n                    {\n                        \"key\": \"macro.StatusEffect\",\n                        \"mode\": 0,\n                        \"value\": \"Convenient Effect: Unconscious\",\n                        \"priority\": 20\n                    }\n                ],\n                \"transfer\": false\n            }\n        ],\n        \"flags\": {\n            \"midiProperties\": {\n                \"magiceffect\": true\n            },\n            \"midi-qol\": {\n                \"onUseMacroName\": \"[postActiveEffects]ItemMacro\"\n            },\n            \"dae\": {\n                \"macro\": {\n                    \"name\": \"Leiloch’s Interminable Yarn - Pull Away\",\n                    \"img\": macroItem.img,\n                    \"type\": \"script\",\n                    \"scope\": \"global\",\n                    \"command\": \"let effectData = actor.appliedEffects.find(e => e.name === 'Leiloch’s Interminable Yarn'); await effectData.delete(); await macroItem.delete();\"\n                }\n            }\n        }\n    }\n\n    for (let target of workflow.targets) {\n        await target.actor.createEmbeddedDocuments(\"Item\", [itemData]);\n    }\n}\n\nif(args[0] === \"off\") {\n    let itemData = actor.items.getName(\"Leiloch’s Interminable Yarn - Pull Away\");\n    await itemData.delete();\n}",
+        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    let itemData = game.gps.disableBlfxAutoRecognition({\n        \"name\": \"Leiloch’s Interminable Yarn - Pull Away\",\n        \"type\": \"feat\",\n        \"img\": macroItem.img,\n        \"system\": {\n            activities: {\n                gpsSynthetic0001: {\n                    type: \"save\",\n                    midiProperties: { magicEffect: true },\n                    activation: { type: \"special\" },\n                    consumption: { spellSlot: false, targets: [] },\n                    target: { affects: { type: \"self\" } },\n                    save: { ability: [\"wis\"], dc: { calculation: \"\", formula: String(actor.system.attributes.spell.dc) } },\n                    effects: [{ _id: \"gpsYarnSleep0001\", onSave: false }]\n                }\n            }\n        },\n        \"effects\": [\n            {\n                _id: \"gpsYarnSleep0001\",\n                img: macroItem.img,\n                \"duration\": { value: 60, units: \"seconds\" },\n                \"disabled\": false,\n                \"name\": \"Leiloch’s Interminable Yarn - Unconscious\",\n                system: { changes: [\n                    {\n                        \"key\": \"macro.StatusEffect\",\n                        type: \"custom\",\n                        \"value\": \"unconscious\",\n                        \"priority\": 20\n                    }\n                ] },\n                \"transfer\": false\n            }\n        ],\n        \"flags\": {\n            autoanimations: {isEnabled: false, version: 5},\n            \"midi-qol\": {\n                \"onUseMacroName\": \"[postActiveEffects]ItemMacro\"\n            },\n            \"dae\": {\n                \"macro\": {\n                    \"name\": \"Leiloch’s Interminable Yarn - Pull Away\",\n                    \"img\": macroItem.img,\n                    \"type\": \"script\",\n                    \"scope\": \"global\",\n                    \"command\": \"const source = await fromUuid(macroItem.getFlag(\\\"dnd5e\\\", \\\"dependentOn\\\")); await source?.delete(); if(actor.items.has(macroItem.id)) await macroItem.delete();\"\n                }\n            }\n        }\n    })\n\n    for (let target of workflow.targets) {\n        const source = target.actor.appliedEffects.find(effect => DAE.effectMatchesSource(effect, macroItem.uuid) && effect.name === macroItem.name);\n        if(!source) continue;\n        itemData.flags.dnd5e = {dependentOn: source.uuid};\n        await target.actor.createEmbeddedDocuments(\"Item\", [itemData]);\n    }\n}\n\nif(args[0] === \"off\") {\n    const sourceUuid = args.at(-1)?.effectUuid ?? `${actor.uuid}.ActiveEffect.${args.at(-1)?.effectId}`;\n    const helpers = actor.items.filter(helper => helper.getFlag(\"dnd5e\", \"dependentOn\") === sourceUuid);\n    if(helpers.length) await actor.deleteEmbeddedDocuments(\"Item\", helpers.map(helper => helper.id));\n}\n",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -295,6 +295,26 @@
           "compendiumSource": null,
           "duplicateSource": null
         }
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
       }
     }
   },

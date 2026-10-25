@@ -1,114 +1,85 @@
-export async function drawingTheHearth({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
-    if(args[0].macroPass === "postActiveEffects") {
-        if(macroItem.system.uses.spent >= macroItem.system.uses.max) return workflow.aborted = true;
+const MODULE_ID = "gambits-premades";
+const EFFECT_ID = "2300dad6-8de1-4fa5-9878-40cec8ee37aa";
+const spiritUpdates = new Map();
+const animationPrefix = effect => `DrawingTheHearth_${effect.uuid.replaceAll(".", "_")}`;
 
-        let cprConfig = game.gps.getCprConfig({itemUuid: macroItem.uuid});
-        const { animEnabled } = cprConfig;
-        
-        let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa");
-        if(animEnabled) {
-            new Sequence()
-            .effect()
-                .attachTo(token)
-                .tieToDocuments(effectData)
-                .file("jb2a.bonfire.02.green")
-                .fadeIn(500)
-                .fadeOut(500)
-                .scaleToObject(2.7)
-                .spriteOffset({ x: 0, y: 7 })
-                .persist()
-                .belowTokens()
-                .name(`DrawingTheHearth_${token.actor.id}_bg`)
-            .play();
-        }
-        
-        let numMotes = macroItem.system.uses.max;
-        if(animEnabled) {
-            const offsets = [
-                { x: -80, y: -55 },
-                { x: -80, y: 55 },
-                { x: 80, y: -55 },
-                { x: 80, y: 55 }
-            ];
-
-            for (let i = 0; i < numMotes; i++) {
-                let offset = offsets[i % offsets.length];
-                    new Sequence()
-                        .effect()
-                            .attachTo(token)
-                            .tieToDocuments(effectData)
-                            .file("animated-spell-effects-cartoon.fire.ball.05")
-                            .fadeIn(500)
-                            .fadeOut(500)
-                            .scaleToObject(0.4)
-                            .spriteOffset({ x: offset.x, y: offset.y })
-                            .filter("ColorMatrix", { hue: 60 })
-                            .persist()
-                            .name(`DrawingTheHearth_${token.actor.id}_${i}`)
-                            .loopProperty("spriteContainer", "rotation", { from: 0, to: 360, duration: 10000, delay: 500 })
-                            .loopProperty("sprite", "rotation", { from: 0, to: -360, duration: 10000, ease: "linear" })
-                        .play();
-            }
-        }
+/** Initialize a separate spirit pool and render one distinct orb per spirit. */
+async function initializeSpirits({actor, token, item, effect}) {
+    const proficiency = Number(actor.system.attributes.prof);
+    const count = Number.isFinite(proficiency) ? Math.max(0, Math.floor(proficiency)) : 0;
+    await effect.setFlag(MODULE_ID, "hearthSpirits", {initial: count, remaining: count, activation: foundry.utils.randomID()});
+    const prefix = animationPrefix(effect);
+    if(typeof Sequencer !== "undefined") await Sequencer.EffectManager.endEffects({name: `${prefix}_*`});
+    if(!count) {
+        await effect.delete();
+        return;
     }
+    if(!game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled || !token) return;
 
-    if(args[0].macroPass === "isAttacked") {
-        let itemUses = macroItem.system.uses.spent;
-        let itemUsesRemaining = macroItem.system.uses.max - itemUses;
-        let target = workflow.token;
-        const saveCheck = await target.actor.rollAbilitySave(actor.system.attributes.spellcasting);
-        if (saveCheck.total < actor.system.attributes.spelldc) {
-            let attackTotal = workflow.attackTotal;
-            let spiritAC = 10 + actor.system.attributes.prof;
-            let cprConfig = game.gps.getCprConfig({itemUuid: macroItem.uuid});
-            const { animEnabled } = cprConfig;
-            
-            if(attackTotal >= spiritAC) {
-                if(animEnabled) {
-                    let highestIndex = -1;
+    const sequence = new Sequence()
+        .effect()
+            .attachTo(token)
+            .tieToDocuments(effect)
+            .file("jb2a.bonfire.02.green")
+            .fadeIn(500)
+            .fadeOut(500)
+            .scaleToObject(2.7)
+            .spriteOffset({x: 0, y: 7})
+            .persist()
+            .belowTokens()
+            .name(`${prefix}_background`);
+    await effect.setFlag(MODULE_ID, "spellVisual", {kind: "hearth", tokenUuid: token.document.uuid, itemUuid: item.uuid, color: "green", startedAt: Date.now()});
+    await sequence.play();
+}
 
-                    for (let i = 0; i < itemUsesRemaining; i++) {
-                        const effects = Sequencer.EffectManager.getEffects({name: `DrawingTheHearth_${actor.id}_${i}`, source: token});
-                        if (effects.length > 0) {
-                            highestIndex = i;
-                        }
-                    }
-
-                    if (highestIndex !== -1) {
-                        Sequencer.EffectManager.endEffects({name: `DrawingTheHearth_${actor.id}_${highestIndex}`, source: token});
-                    }
-                }
-
-                await macroItem.update({"system.uses.spent" : itemUses + 1})
-                
-                let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.SootSpiritAttackedHit", { sootSpiritsRemaining: itemUsesRemaining - 1 })
-                let actorPlayer = MidiQOL.playerForActor(actor);
-                let chatData = {
-                    user: actorPlayer.id,
-                    speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: content
-                };
-                ChatMessage.create(chatData);
-                workflow.aborted = true;
-
-                if((itemUsesRemaining - 1) === 0) {
-                    let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "2300dad6-8de1-4fa5-9878-40cec8ee37aa");
-                    if(effectData) {
-                        await effectData.delete();
-                    }
-                }
-            }
-            else {
-                let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.SootSpiritAttackedMiss", { sootSpiritsRemaining: itemUsesRemaining })
-                let actorPlayer = MidiQOL.playerForActor(actor);
-                let chatData = {
-                    user: actorPlayer.id,
-                    speaker: ChatMessage.getSpeaker({ token: token }),
-                    content: content
-                };
-                ChatMessage.create(chatData);
-                workflow.aborted = true;            
-            }
-        }
+/** Serialize spirit resolution on the GM so simultaneous attacks cannot spend the same spirit. */
+export async function resolveHearthSpirit({effectUuid, activation, hit}) {
+    const previous = spiritUpdates.get(effectUuid) ?? Promise.resolve();
+    const pending = previous.catch(() => {}).then(async () => {
+        const effect = await fromUuid(effectUuid);
+        if(!effect?.active || effect.getFlag(MODULE_ID, "gpsUuid") !== EFFECT_ID) return;
+        const state = effect.getFlag(MODULE_ID, "hearthSpirits");
+        if(state?.activation !== activation) return;
+        const remaining = Number(state?.remaining);
+        if(!Number.isInteger(remaining) || remaining < 1) return;
+        if(!hit) return {remaining};
+        const next = remaining - 1;
+        await effect.update({[`flags.${MODULE_ID}.hearthSpirits.remaining`]: next});
+        if(!next) await effect.delete();
+        return {remaining: next};
+    });
+    spiritUpdates.set(effectUuid, pending);
+    try {
+        return await pending;
+    } finally {
+        if(spiritUpdates.get(effectUuid) === pending) spiritUpdates.delete(effectUuid);
     }
+}
+
+/** Activate Drawing the Hearth and resolve attacks redirected toward its remaining spirits. */
+export async function drawingTheHearth({actor, token, item, args, workflow, macroItem}) {
+    item = macroItem ?? item;
+    const pass = args?.[0]?.macroPass;
+    const effect = actor.appliedEffects.find(candidate => candidate.getFlag(MODULE_ID, "gpsUuid") === EFFECT_ID
+        && DAE.effectMatchesSource(candidate, item.uuid));
+    if(!effect) return;
+    if(pass === "postActiveEffects" && !workflow.aborted) return initializeSpirits({actor, token, item, effect});
+    const state = effect.getFlag(MODULE_ID, "hearthSpirits");
+    if(pass !== "isAttacked" || !workflow.token?.actor || !(state?.remaining > 0)) return;
+    const activation = state.activation;
+
+    const [save] = await workflow.token.actor.rollSavingThrow({ability: "cha"}) ?? [];
+    if(!save || save.total >= actor.system.attributes.spell.dc) return;
+    const hit = !workflow.isFumble && (workflow.isCritical || workflow.attackTotal >= 10 + actor.system.attributes.prof);
+    const gm = game.gps.getPrimaryGM();
+    if(!gm) return;
+    const result = await game.gps.queryUser("resolveHearthSpirit", gm, {effectUuid: effect.uuid, activation, hit});
+    if(!result) return;
+    workflow.aborted = true;
+    const message = hit ? "SootSpiritAttackedHit" : "SootSpiritAttackedMiss";
+    await ChatMessage.create({
+        user: MidiQOL.playerForActor(actor)?.id ?? game.user.id,
+        speaker: ChatMessage.getSpeaker({token}),
+        content: game.i18n.format(`GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.CovenOfTheRoilingHearth.${message}`, {sootSpiritsRemaining: result.remaining})
+    });
 }

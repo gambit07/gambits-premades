@@ -1,11 +1,12 @@
 export async function perfectSelf({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0] === "off") {
-        if (actor.classes.monk.system.levels < 20) return;
+        if ((actor.classes?.monk?.system.levels ?? 0) < 20) return;
 
-        function checkAndUpdateResource(resource) {
+        async function checkAndUpdateResource(key) {
+            const resource = actor.system.resources?.[key];
             if (resource && (resource.label.toLowerCase() === "ki" || resource.label.toLowerCase() === "ki points")) {
                 if (resource.value !== 0) return false;
-                resource.value = 4;
+                await actor.update({[`system.resources.${key}.value`]: 4});
                 return true;
             }
             return false;
@@ -13,12 +14,12 @@ export async function perfectSelf({ speaker, actor, token, character, item, args
 
         async function updateEffects() {
             let effectData = Array.from(actor.allApplicableEffects()).find(e => e.name === item.name);
-            await effectData.update({"disabled" : false});
+            await effectData?.update({"disabled" : false});
         }
 
-        if (!checkAndUpdateResource(actor.system.resources.primary) &&
-            !checkAndUpdateResource(actor.system.resources.secondary) &&
-            !checkAndUpdateResource(actor.system.resources.tertiary)) {
+        if (!await checkAndUpdateResource("primary") &&
+            !await checkAndUpdateResource("secondary") &&
+            !await checkAndUpdateResource("tertiary")) {
             
             const kiItems = actor.items.filter(i => 
                 i.name.toLowerCase() === "ki" || i.name.toLowerCase() === "ki points"

@@ -62,9 +62,9 @@ export async function indomitable2024({workflowData,workflowType,workflowCombat}
             
             let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -79,35 +79,38 @@ export async function indomitable2024({workflowData,workflowType,workflowCombat}
                 versatile: false,
                 configureDialog: true,
                 targetUuids: [validTokenPrimary.document.uuid],
+                workflowOptions: { notReaction: true },
             };
 
             let itemRoll;
-            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
-            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, options: options });
+            if(source && source === "user") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", browserUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
+            else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenItem, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
 
-            if(itemRoll.aborted === true) continue;
+            if(!itemRoll || itemRoll.aborted) continue;
             let chatContent;
             let indomitableHomebrew = MidiQOL.safeGetGameSetting('gambits-premades', 'enableAutoSucceedIndomitable');
             let saveDC = workflow?.saveActivity?.save.dc?.value;
-            let saveAbility = workflow?.saveActivity?.ability;
+            let saveRoll = workflow.tokenSaves?.[validTokenPrimary.document.uuid];
+            let saveAbility = saveRoll?.options?.midiChosenId ?? saveRoll?.data?.roll?.ability ?? workflow.saveActivity?.save?.ability?.first();
             let reroll;
 
             if(!indomitableHomebrew) {
+                const bonusId = foundry.utils.randomID();
                 let effectData = [
                     {
+                        "_id": bonusId,
                         "name": chosenItem.name,
                         "img": chosenItem.img,
                         "origin": chosenItem.uuid,
                         "type": "base",
-                        "system": {},
-                        "changes": [
+                        "system": { changes: [
                             {
-                            "key": "system.bonuses.abilities.save",
-                            "mode": 2,
-                            "value": `${validTokenPrimary.actor.classes?.fighter.system.levels}`,
+                            "key": "system.rolls.ability.save.bonus",
+                            type: "add",
+                            "value": `${validTokenPrimary.actor.classes?.fighter?.system.levels ?? 0}`,
                             "priority": 20
                             }
-                        ],
+                        ]},
                         "disabled": false,
                         "flags": {
                             "dae": {
@@ -120,14 +123,20 @@ export async function indomitable2024({workflowData,workflowType,workflowCombat}
                     }
                 ];
 
-                await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: validTokenPrimary.actor.uuid, effects: effectData });
+                await MidiQOL.socket().executeAsUser("createEffects", gmUser, { actorUuid: validTokenPrimary.actor.uuid, effects: effectData, options: {keepId: true} });
 
+                try {
                 let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
-                await game.gps.socket.executeAsUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"save.dc.calculation": "", "save.dc.formula": saveDC, "save.dc.value": saveDC, "save.ability": [saveAbility]} });
-                if(source && source === "user") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: validTokenPrimary.document.uuid});
-                else if(source && source === "gm") reroll = await game.gps.socket.executeAsUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: validTokenPrimary.document.uuid});
+                await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"save.dc.calculation": "", "save.dc.formula": saveDC, "save.dc.value": saveDC, "save.ability": [saveAbility]} });
+                if(source && source === "user") reroll = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: validTokenPrimary.document.uuid});
+                else if(source && source === "gm") reroll = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: validTokenPrimary.document.uuid});
+                } finally {
+                    if(validTokenPrimary.actor.effects.has(bonusId)) await MidiQOL.socket().executeAsUser("removeEffects", gmUser, {actorUuid: validTokenPrimary.actor.uuid, effects: [bonusId]});
+                }
             }
 
+            if(!indomitableHomebrew && !reroll?.saveRolls) continue;
+            if(!indomitableHomebrew) await game.gps.updateSaveResult({workflow, token: validTokenPrimary, roll: reroll.saveRolls, saved: reroll.failedSaves.size === 0});
             if(reroll?.failedSaves?.size === 0 || indomitableHomebrew) {
                 workflow.saves.add(validTokenPrimary);
                 workflow.failedSaves.delete(validTokenPrimary);
@@ -135,15 +144,15 @@ export async function indomitable2024({workflowData,workflowType,workflowCombat}
                 if(indomitableHomebrew) chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.Indomitable.AutoSuccess", { actorName: validTokenPrimary.actor.name })} <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
                 else chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.Indomitable.Success", { actorName: validTokenPrimary.actor.name })} <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: !indomitableHomebrew ? reroll.saveRolls : null});
-                return;
+                await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: !indomitableHomebrew ? reroll.saveRolls : null});
+                continue;
             }
 
             else {
                 chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Fighter.Indomitable.Failure", { actorName: validTokenPrimary.actor.name })} <img src="${validTokenPrimary.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
-                await game.gps.socket.executeAsUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
-                return;
+                await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: reroll.saveRolls});
+                continue;
             }
         }
     }

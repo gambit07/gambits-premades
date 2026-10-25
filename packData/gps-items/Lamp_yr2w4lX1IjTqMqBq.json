@@ -7,7 +7,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -438,11 +438,7 @@
       "version": 5
     },
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.edtGqNIYfHYowUUr.ActiveEffect.pHSTQ4WZq0zEuCpm"
-        }
-      ],
+      "dependents": [],
       "riders": {
         "activity": [],
         "effect": []
@@ -453,7 +449,34 @@
       "actionSection": ""
     },
     "gambits-premades": {
-      "gpsUuid": "ed5ddad4-9a4b-4ff8-ba7a-141862cb4fec"
+      "gpsUuid": "ed5ddad4-9a4b-4ff8-ba7a-141862cb4fec",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "GPS"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [],

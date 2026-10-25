@@ -18,6 +18,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     let browserUser;
     
     for (const validTokenPrimary of findValidTokens) {
+        if(enableProtectionOnSuccess && !game.gps.reactionCanChangeOutcome(workflow, {target})) return;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
@@ -54,13 +55,13 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -71,22 +72,24 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
         else if (userDecision) {
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            let primaryFile = "jaamod.condition.magic_shield";
-            let alternateFile = "jb2a.icon.shield.blue";
+            if(game.gps.getCprConfig({itemUuid: chosenItem.uuid}).animEnabled) {
+                let primaryFile = "jaamod.condition.magic_shield";
+                let alternateFile = "jb2a.icon.shield.blue";
     
-            let fileToPlay = Sequencer.Database.getEntry(primaryFile) ? primaryFile : Sequencer.Database.getEntry(alternateFile) ? alternateFile : "";
+                let fileToPlay = Sequencer.Database.getEntry(primaryFile) ? primaryFile : Sequencer.Database.getEntry(alternateFile) ? alternateFile : "";
     
-            new Sequence()
-                .effect()
-                .file(fileToPlay)
-                .atLocation(validTokenPrimary)
-                .moveTowards(target)
-                .scaleToObject(2.0)
-                .zIndex(0)
-                .belowTokens(false)
-                .fadeIn(250)
-                .fadeOut(250)
-                .play();
+                new Sequence()
+                    .effect()
+                    .file(fileToPlay)
+                    .atLocation(validTokenPrimary)
+                    .moveTowards(target)
+                    .scaleToObject(2.0)
+                    .zIndex(0)
+                    .belowTokens(false)
+                    .fadeIn(250)
+                    .fadeOut(250)
+                    .play();
+            }
 
             if(!enableProtectionOnSuccess) {
                 workflow.tracker.disadvantage.add(true, "Protection");

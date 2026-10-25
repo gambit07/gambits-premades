@@ -17,6 +17,7 @@ export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, 
     let region = await fromUuid(regionUuid);
     let tokenDocument = await fromUuid(tokenUuid);
     let token = tokenDocument?.object;
+    if(!region || !token?.actor) return;
 
     if (!MidiQOL.isTargetable(token)) {
         if(debugEnabled) game.gps.logInfo(`Token is not targetable for ${itemName}`);
@@ -27,9 +28,10 @@ export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, 
         return;
     }
 
-    let chosenItem = await fromUuid(region.flags["region-attacher"].itemUuid);
+    let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
+    if(!chosenItem) return;
 
-    let turn = game.combat.round + '-' + game.combat.turn;
+    let turn = game.gps.regionTurnKey();
     let lastTurn = region.flags['gambits-premades']?.spell?.stinkingCloud?.[token.id]?.turn;
     if (turn === lastTurn) {
         if(debugEnabled) game.gps.logInfo(`Token already made a saving throw this round for ${itemName}`);
@@ -44,7 +46,7 @@ export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, 
     if (saveResult.failedSaves.size !== 0) {
         let browserUser = MidiQOL.playerForActor(token.actor);
         let chatData = {
-            user: browserUser.id,
+            user: browserUser?.id ?? game.user.id,
             speaker: ChatMessage.getSpeaker({ token: token }),
             content: game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations2024.Spells.StinkingCloud2024.Content"),
         };

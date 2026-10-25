@@ -150,7 +150,7 @@
       "max": "@prof"
     },
     "description": {
-      "value": "",
+      "value": "<p><strong>GPS setup:</strong> Offered after Midi computes damage for the hit target, including immunity and reduction. Damage cards set to manual application still require the GM to apply the calculated damage.</p>",
       "chat": ""
     },
     "source": {
@@ -158,7 +158,7 @@
       "rules": "2024",
       "book": "",
       "page": "",
-      "custom": "1.0.40",
+      "custom": "",
       "license": ""
     },
     "enchant": {},
@@ -186,48 +186,45 @@
       "transfer": false,
       "_id": "YHKgdj2KIbQRBZWW",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "system.attributes.movement.walk",
-          "mode": 2,
-          "value": "-10",
-          "priority": 20
-        },
-        {
-          "key": "system.attributes.movement.burrow",
-          "mode": 2,
-          "value": "-10",
-          "priority": 20
-        },
-        {
-          "key": "system.attributes.movement.climb",
-          "mode": 2,
-          "value": "-10",
-          "priority": 20
-        },
-        {
-          "key": "system.attributes.movement.fly",
-          "mode": 2,
-          "value": "-10",
-          "priority": 20
-        },
-        {
-          "key": "system.attributes.movement.swim",
-          "mode": 2,
-          "value": "-10",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.movement.speeds.walk",
+            "value": -10,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.attributes.movement.speeds.burrow",
+            "value": -10,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.attributes.movement.speeds.climb",
+            "value": -10,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.attributes.movement.speeds.fly",
+            "value": -10,
+            "priority": 20,
+            "type": "add"
+          },
+          {
+            "key": "system.attributes.movement.speeds.swim",
+            "value": -10,
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 10,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": null,
+        "units": "seconds",
+        "expiry": "sourceStart"
       },
       "description": "",
       "tint": "#ffffff",
@@ -242,60 +239,6 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "multi",
-          "showIcon": false,
-          "durationExpression": "",
-          "macroRepeat": "none",
-          "specialDuration": [
-            "turnStartSource"
-          ]
-        },
-        "dnd5e": {
-          "riders": {
-            "statuses": []
-          }
-        },
-        "core": {
-          "overlay": false
-        }
-      },
-      "_key": "!items.effects!RlUSwec1E7MuK6YB.YHKgdj2KIbQRBZWW"
-    },
-    {
-      "name": "Frost's Chill",
-      "origin": "Compendium.world.gps-race-features-2024.Item.RlUSwec1E7MuK6YB",
-      "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": null,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
-      },
-      "disabled": false,
-      "img": "icons/magic/water/heart-ice-freeze.webp",
-      "_id": "xIHCGomLrpyg1Nh0",
-      "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "function.game.gps.frostsChill2024,postDamageRollComplete",
-          "priority": 20
-        }
-      ],
-      "description": "",
-      "tint": "#ffffff",
-      "transfer": true,
-      "statuses": [],
-      "sort": 0,
-      "flags": {
-        "dae": {
-          "disableCondition": "",
-          "disableIncapacitated": false,
-          "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
@@ -307,8 +250,61 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
+      "_key": "!items.effects!RlUSwec1E7MuK6YB.YHKgdj2KIbQRBZWW"
+    },
+    {
+      "name": "Frost's Chill",
+      "origin": "Compendium.world.gps-race-features-2024.Item.RlUSwec1E7MuK6YB",
+      "duration": {},
+      "disabled": false,
+      "img": "icons/magic/water/heart-ice-freeze.webp",
+      "_id": "xIHCGomLrpyg1Nh0",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "function.game.gps.frostsChill2024,postActiveEffects",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dae": {
+          "disableCondition": "",
+          "disableIncapacitated": false,
+          "stackable": "multi",
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": []
+        },
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        },
+        "core": {
+          "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
+        }
+      },
+      "start": null,
       "_key": "!items.effects!RlUSwec1E7MuK6YB.xIHCGomLrpyg1Nh0"
     }
   ],
@@ -327,6 +323,26 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "6goWQaWLexUqgig8": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Damage",
+        "activityType": "damage",
+        "version": 2
+      }
     }
   },
   "_id": "RlUSwec1E7MuK6YB",

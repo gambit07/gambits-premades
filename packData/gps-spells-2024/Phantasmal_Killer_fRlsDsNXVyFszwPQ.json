@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "rules": "2024",
       "book": "",
       "page": "",
@@ -210,13 +210,8 @@
       "name": "Phantasmal Killer",
       "origin": "Compendium.dnd-players-handbook.spells.Item.phbsplPhantasmal",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "flags": {
@@ -233,44 +228,50 @@
           "selfTargetAlways": false,
           "dontApply": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "img": "icons/magic/death/skull-horned-white-purple.webp",
       "_id": "4k92Sjfpcm5bnguO",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.OverTime",
-          "mode": 2,
-          "value": "label=Phantasmal Killer (End of Turn),turn=end,saveAbility=wis,saveDC=@attributes.spell.dc,saveMagic=true,damageRoll=(4+(@scaling-1))d10,damageType=psychic,savingThrow=true,damageBeforeSave=false,killAnim=true",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.disadvantage.check.all",
-          "mode": 2,
-          "value": "1",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.disadvantage.attack.all",
-          "mode": 2,
-          "value": "1",
-          "priority": 20
-        }
-      ],
-      "description": "<p>The target has Disadvantage on ability checks and attack rolls for the duration.</p><p>For the duration, the target makes a [[/save ability=wis]] saving throw at the end of each of its turns. On a failed save, it takes the Psychic damage again. On a successful save, the spell ends.</p>",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.OverTime",
+            "value": "label=Phantasmal Killer (End of Turn),turn=end,saveAbility=wis,saveDC=@attributes.spell.dc,saveMagic=true,damageRoll=(4+@scaling)d10,damageType=psychic,savingThrow=true,damageBeforeSave=false,killAnim=true",
+            "priority": 20,
+            "type": "add",
+            "replacement": "origin"
+          },
+          {
+            "key": "check",
+            "value": "-1",
+            "priority": 100,
+            "type": "dnd5e.advantage"
+          },
+          {
+            "key": "attack",
+            "value": "-1",
+            "priority": 100,
+            "type": "dnd5e.advantage"
+          }
+        ]
+      },
+      "description": "",
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!fRlsDsNXVyFszwPQ.4k92Sjfpcm5bnguO"
     }
   ],
@@ -296,6 +297,26 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "_id": "fRlsDsNXVyFszwPQ",

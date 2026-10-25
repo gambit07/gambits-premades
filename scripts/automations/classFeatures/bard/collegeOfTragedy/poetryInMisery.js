@@ -5,50 +5,31 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     if(workflow?.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Poetry in Misery";
     let dialogId = gpsUuid;
-    let initiatingToken;
-    (workflow) ? initiatingToken = workflow.token : initiatingToken = await MidiQOL.tokenForActor(workflowData.actor.uuid);
-    let gmUser = game.gps.getPrimaryGM();
+    const triggeringTokens = workflowType === "save" && workflow
+        ? Object.entries(workflow.tokenSaves ?? {}).filter(([, roll]) => roll.isFumble)
+            .map(([uuid]) => [...(workflow.targets ?? [])].find(token => token.document?.uuid === uuid) ?? fromUuidSync(uuid)?.object).filter(token => token?.actor)
+        : (workflow ? workflow.attackRoll : workflowData.roll)?.isFumble
+            ? [workflow?.token ?? await MidiQOL.tokenForActor(workflowData.actor)].filter(token => token?.actor)
+            : [];
+    if(!triggeringTokens.length) return;
+    const gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
-
-    let findValidTokens = game.gps.findValidTokens({initiatingToken: initiatingToken, targetedToken: initiatingToken, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "ally", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
-
-    let browserUser;
-
-    for (const validTokenPrimary of findValidTokens) {
-        const itemData = validTokenPrimary.actor.items.find(i => i.identifier.includes("bardic-inspiration"));
-
-        if(itemData) {
-            if(itemData.system.uses.spent === 0) continue;
-        }
-
-        let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
-        let itemProperName = chosenItem?.name;
+    const candidates = new Map();
+    for(const triggeringToken of triggeringTokens) {
+        const validTokens = game.gps.findValidTokens({initiatingToken: triggeringToken, targetedToken: triggeringToken, itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 30, dispositionCheck: true, dispositionCheckType: "ally", workflowType, workflowCombat, gpsUuid});
+        for(const token of validTokens) if(!candidates.has(token.actor.uuid)) candidates.set(token.actor.uuid, {token, triggeringToken});
+    }
+    for(const {token: validTokenPrimary, triggeringToken: initiatingToken} of candidates.values()) {
+        if(MidiQOL.hasUsedReaction(validTokenPrimary.actor)) continue;
+        const itemData = validTokenPrimary.actor.items.find(item => item.identifier?.includes("bardic-inspiration"));
+        if(!itemData || !Number.isFinite(itemData.system.uses.spent) || itemData.system.uses.spent <= 0) continue;
+        const chosenItem = validTokenPrimary.actor.items.find(item => item.flags["gambits-premades"]?.gpsUuid === gpsUuid);
+        if(!chosenItem) continue;
+        const itemProperName = chosenItem.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
-        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
-        browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
-        let chatActor;
-
-        if (workflowType === "attack") {
-            if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) continue;
-            if(!workflow.attackRoll.isFumble) return;
-        }
-        if (workflowType === "save") {
-            if(workflow) {
-                if(initiatingToken.document.disposition === validTokenPrimary.document.disposition) continue;
-                const fumbleRoll = workflow.saveRolls.find(roll => roll.isFumble && roll.data.token.document.disposition === validTokenPrimary.document.disposition);
-                if(!fumbleRoll) return;
-                chatActor = fumbleRoll.data.token.actor;
-            }
-            else {
-                if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) continue;
-                if(!workflowData.roll.isFumble) return;
-                chatActor = initiatingToken.actor;
-            }
-        }
-        if(workflowType === "ability" || workflowType === "skill") {
-            if(initiatingToken.document.disposition !== validTokenPrimary.document.disposition) continue;
-            if(!workflowData.roll.isFumble) return;
-        }
+        const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", {actorName: validTokenPrimary.actor.name, itemName: itemProperName});
+        const browserUser = game.gps.getBrowserUser({actorUuid: validTokenPrimary.actor.uuid});
+        const rollType = game.i18n.localize(`GAMBITSPREMADES.ChatMessages.PoetryInMisery.RollTypes.${workflowType}`);
 
         let dialogContent = `
             <div class="gps-dialog-container">
@@ -56,7 +37,7 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
                     <div class="gps-dialog-content">
                         <div>
                             <div class="gps-dialog-flex">
-                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Bard.CollegeOfTragedy.PoetryInMisery.Prompts.UseYourReaction.Default", { itemName: itemProperName, rollType: workflowType })}</p>
+                                <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ClassFeatures.Bard.CollegeOfTragedy.PoetryInMisery.Prompts.UseYourReaction.Default", { itemName: itemProperName, rollType })}</p>
                                 <div id="image-container" class="gps-dialog-image-container">
                                     <img id="img_${dialogId}" src="${chosenItem.img}" class="gps-dialog-image">
                                 </div>
@@ -78,13 +59,13 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initiatingToken.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initiatingToken.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
-            result = await game.gps.socket.executeAsUser("handleDialogPromises", gmUser, {userDialogArgs, gmDialogArgs});
+            result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.socket.executeAsUser("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initiatingToken.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -95,20 +76,18 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         else if (userDecision) {
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
-            if(itemData) {
-                await itemData.update({ 'system.uses.spent' : itemData.system.uses.spent - 1 })
-            }
+            await itemData.update({'system.uses.spent': Math.max(0, itemData.system.uses.spent - 1)});
 
-            let typeText = (workflowType === "attack") ? `${initiatingToken.actor.name}'s nat 1 attack roll` : (workflowType === "ability") ? `${initiatingToken.actor.name}'s nat 1 ability check` : (workflowType === "skill") ? `${initiatingToken.actor.name}'s nat 1 skill check` : `${chatActor.name}'s nat 1 saving throw`;
+            const typeText = game.i18n.format("GAMBITSPREMADES.ChatMessages.PoetryInMisery.NaturalOne", {actorName: initiatingToken.actor.name, rollType});
 
             let contentOutcome = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfTragedy.PoetryInMisery.SoliloquizeOverRegain", { itemProperName: itemProperName, typeText: typeText })}<br/><img src="${initiatingToken.actor.img}" width="30" height="30" style="border:0px"></span>`;
             let actorPlayer = MidiQOL.playerForActor(validTokenPrimary.actor);
             let chatDataOutcome = {
-            user: actorPlayer.id,
+            user: actorPlayer?.id ?? game.user.id,
             speaker: ChatMessage.getSpeaker({ token: validTokenPrimary }),
             content: contentOutcome
             };
-            ChatMessage.create(chatDataOutcome);
+            await ChatMessage.create(chatDataOutcome);
             continue;
         }
     }

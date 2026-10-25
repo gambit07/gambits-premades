@@ -1,7 +1,7 @@
 export async function divineSense({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
     let timeoutValue = 30; // Change duration effect will display for here in seconds.
-    let distance = workflow.activity.range.value =! null ? workflow.activity.range.value : 60;
+    let distance = workflow.activity.range.value ?? game.gps.convertFromFeet({ range: 60 });
     let targets = MidiQOL.findNearby(null, token, distance, {includeToken: false, maxSize: CONFIG.DND5E.actorSizes['grg'].token});
 
     let totalCount = [];
@@ -9,17 +9,11 @@ export async function divineSense({ speaker, actor, token, character, item, args
     let is_fiend = [];
     let is_undead = [];
 
-    const getTypeOrRace = (target) => {
-        if (target.actor.type === "character") {
-            return target.actor.system.details.race ? target.actor.system.details.race.toString() : "";
-        } else {
-            return target.actor.system.details.type.value ? target.actor.system.details.type.value.toString() : "";
-        }
-    };
+    const getTypeOrRace = target => MidiQOL.raceOrType(target) ?? "";
 
     targets.forEach(target => {
         let typeOrRace = getTypeOrRace(target).toLowerCase();
-        let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(token, target, {type:"move", mode:"any"});
+        let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(token.center, target.center, {type:"move", mode:"any"});
         if (!collisionDetected) {
             if (["celestial", "fiend", "undead"].some(type => typeOrRace.includes(type))) {
                 totalCount.push(target);
@@ -33,16 +27,11 @@ export async function divineSense({ speaker, actor, token, character, item, args
 
     await wait(300);
     let the_message = `<table border="1" style="text-align:center;"><thead><tr><th>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Type")}</th><th>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Found")}</th></tr></thead><tbody><tr><td>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Undead")}</td><td>${is_undead.length}</td></tr><tr><td>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Fiends")}</td><td>${is_fiend.length}</td></tr><tr><td>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.Celestials")}</td><td>${is_celestial.length}</td></tr></tbody><tbody style="background: rgba(0, 0, 0, 0.5);color: #f0f0e0;text-shadow: 1px 1px #000;border-bottom: 1px solid #000;"><tr><td>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Paladin.DivineSense.TotalSensed")}</td><td>${totalCount.length}</td></tr></tbody></table>`;
-    let chatMessage = await fromUuid(workflow.itemCardUuid);
-    let content = foundry.utils.duplicate(chatMessage.content);
-    let searchString = /<div class="midi-qol-saves-display">[\s\S]*<div class="end-midi-qol-saves-display">/g;
-    let replaceString = `<div class="midi-qol-saves-display"><div class="end-midi-qol-saves-display">${the_message}`;
-    content = content.replace(searchString, replaceString);
-    chatMessage.update({ content: content });
+    await game.gps.replaceChatCard({ actorUuid: actor.uuid, itemUuid: item.uuid, itemCardUuid: workflow.itemCardUuid, chatContent: the_message });
     await wait(300);
     ui.chat.scrollBottom();
 
-    let cprConfig = game.gps.getCprConfig({itemUuid: chosenItem.uuid});
+    let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
     const { animEnabled } = cprConfig;
 
     if(animEnabled) {
@@ -59,30 +48,37 @@ export async function divineSense({ speaker, actor, token, character, item, args
         .play()
     }
 
+    const effectId = foundry.utils.randomID();
     let effectData = [{
-        "icon": item.img,
+        _id: effectId,
+        img: item.img,
         "origin": item.uuid,
         "disabled": false,
         "name": item.name,
-        "changes": [
+        system: { changes: [
         {
-            "key": "ATL.detectionModes.divineSense.range",
-            "mode": 0,
-            "value": "60",
+            "key": "token.detectionModes.divineSense.enabled",
+            "type": "override",
+            "value": true,
+            "priority": 19
+        },
+        {
+            "key": "token.detectionModes.divineSense.range",
+            "type": "override",
+            "value": String(distance),
             "priority": 20
         }
-        ]
+        ] }
     }];
-    await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: actor.uuid, effects: effectData });
+    await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: actor.uuid, effects: effectData, options: {keepId: true} });
 
     setTimeout(() => {
-        let effectName = token.actor.appliedEffects.find(e => e.name === "Divine Sense");
-        if(effectName) effectName.delete();
+        if(actor.effects.has(effectId)) MidiQOL.socket().executeAsGM("removeEffects", {actorUuid: actor.uuid, effects: [effectId]});
     }, timeoutValue * 1000);
 
     targets.forEach(target => {
         if (target.name !== token.name) {
-            let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(token, target, {type:"move", mode:"any"});
+            let collisionDetected = CONFIG.Canvas.polygonBackends.move.testCollision(token.center, target.center, {type:"move", mode:"any"});
             if (collisionDetected) return;
 
             const distance = Math.sqrt(
@@ -117,7 +113,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
                 .zIndex(0.2)
                 .opacity(1)
                 .playIf(() => {
-                return target.actor.system.details.type.value == "fiend" || "celestial" || "undead";
+                return ["fiend", "celestial", "undead"].includes(MidiQOL.raceOrType(target));
                 })
 
                 //Fiend Effect
@@ -136,7 +132,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
                 .zIndex(0.1)
                 .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
                 .playIf(() => {
-                return target.actor.system.details.type.value == "fiend";
+                return MidiQOL.raceOrType(target) == "fiend";
                 })
 
                 .effect()
@@ -153,7 +149,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
                 .opacity(0.5)
                 .belowTokens()
                 .playIf(() => {
-                return target.actor.system.details.type.value == "fiend";
+                return MidiQOL.raceOrType(target) == "fiend";
                 })
 
                 //Celestial Effect
@@ -172,7 +168,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
                 .zIndex(0.1)
                 .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
                 .playIf(() => {
-                return target.actor.system.details.type.value == "celestial";
+                return MidiQOL.raceOrType(target) == "celestial";
                 })
 
                 .effect()
@@ -189,7 +185,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
                 .opacity(0.75)
                 .belowTokens()
                 .playIf(() => {
-                return target.actor.system.details.type.value == "celestial";
+                return MidiQOL.raceOrType(target) == "celestial";
                 })
 
                 //Undead Effect
@@ -208,7 +204,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
                 .zIndex(0.1)
                 .loopProperty("alphaFilter", "alpha", { values: [0.5, 0], duration: 1000, pingPong: true ,delay:500})
                 .playIf(() => {
-                return target.actor.system.details.type.value == "undead";
+                return MidiQOL.raceOrType(target) == "undead";
                 })
 
                 .effect()
@@ -225,7 +221,7 @@ export async function divineSense({ speaker, actor, token, character, item, args
                 .opacity(0.5)
                 .belowTokens()
                 .playIf(() => {
-                return target.actor.system.details.type.value == "undead";
+                return MidiQOL.raceOrType(target) == "undead";
                 })
 
                 .play()

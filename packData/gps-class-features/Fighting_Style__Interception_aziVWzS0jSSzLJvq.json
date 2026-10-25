@@ -4,7 +4,7 @@
   "system": {
     "description": {
       "value": "<p><em>Make sure to Enable Interception in the module settings.</em></p>",
-      "chat": "When a creature you can see hits a target, other than you, within 5 ft. of you with an attack, you can use your reaction to reduce the damage the target takes by <a class=\"inline-roll roll\" data-mode=\"roll\" data-flavor data-formula=\"1d10 + @prof\"><i class=\"fas fa-dice-d20\"></i>1d10 + @prof</a> (to a minimum of 0 damage). You must be wielding a shield or a simple or martial weapon to use this reaction."
+      "chat": ""
     },
     "cover": null,
     "crewed": false,
@@ -20,7 +20,7 @@
     "properties": [],
     "requirements": "",
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -201,19 +201,15 @@
       "otherCondition": ""
     },
     "gambits-premades": {
-      "gpsUuid": "411b0d88-a483-4d85-97d9-2bd8dbd4ef70"
-    },
-    "chris-premades": {
-      "customConfig": [
-        {
-          "value": "enableCustomDice",
+      "gpsUuid": "411b0d88-a483-4d85-97d9-2bd8dbd4ef70",
+      "itemConfig": {
+        "enableCustomDice": {
           "label": "Enable custom dice to use with Interceptions damage reduction.",
           "type": "checkbox",
           "default": false,
           "category": "homebrew"
         },
-        {
-          "value": "customDiceNum",
+        "customDiceNum": {
           "label": "Dice Number",
           "type": "select",
           "default": "1",
@@ -261,8 +257,7 @@
             }
           ]
         },
-        {
-          "value": "customDiceFace",
+        "customDiceFace": {
           "label": "Dice Face",
           "type": "select",
           "default": "d10",
@@ -293,8 +288,37 @@
               "label": "d20"
             }
           ]
+        },
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
         }
+      },
+      "animationModules": [
+        "JB2APatreon"
       ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "effects": [],

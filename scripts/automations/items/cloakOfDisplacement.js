@@ -1,58 +1,57 @@
-export async function cloakOfDisplacement({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if (args[0] === "each") {
-        actor.unsetFlag("gambits-premades", "codTurnSuppressed");
-        let effectData = await fromUuid(args[2].effectUuid);
-        if(!effectData.disabled) return;
-        if((actor.system.attributes.movement.walk === 0) || token.document.hasStatusEffect("incapacitated")) return;
-        await effectData.update({"disabled" : false});
+export async function cloakOfDisplacement({ actor, token, item, args = [], workflow }) {
+    if(!actor) return;
+    const tokens = token ? [token] : actor.getActiveTokens();
+    const endAnimation = async () => {
+        for(const activeToken of tokens) await Sequencer.EffectManager.endEffects({name: `${activeToken.id}-cloakOfDisplacement`});
+    };
+    if(args[0] === "off" && args[2] !== "startEnd") {
+        await endAnimation();
+        return;
     }
+    const effects = Array.from(actor.allApplicableEffects());
+    const cloak = effects.find(effect => effect.flags?.["gambits-premades"]?.cloakOfDisplacement === "benefit" || effect.name === "Cloak of Displacement");
+    if(!cloak) return;
+    const unavailable = actor.system.attributes.movement.speeds.walk === 0 || ["incapacitated", "paralyzed", "petrified", "stunned", "unconscious"].some(status => actor.statuses?.has(status));
+    const suppressed = () => actor.getFlag("gambits-premades", "codTurnSuppressed");
+    const setEnabled = async () => {
+        if(unavailable || suppressed()) return;
+        if(cloak.disabled) await cloak.update({disabled: false, "flags.gambits-premades.-=cloakStateSuppressed": null});
+    };
 
-    else if(args[0] === "off" && args[2] === "startEnd") {
-        actor.unsetFlag("gambits-premades", "codTurnSuppressed");
-        let effectOrigin = await fromUuid(args[3].effectUuid);
-        await effectOrigin.update({"disabled" : false});
-        if((actor.system.attributes.movement.walk === 0) || token.document.hasStatusEffect("incapacitated")) return;
-        let effectData = await actor.allApplicableEffects().find(e => e.name === item.name)
-        if(effectData.disabled) await effectData.update({"disabled" : false});
+    if(args[0] === "each") {
+        await actor.unsetFlag("gambits-premades", "codTurnSuppressed");
+        if(unavailable) {
+            if(!cloak.flags?.["gambits-premades"]?.cloakStateSuppressed) await cloak.update({disabled: true, "flags.gambits-premades.cloakStateSuppressed": true});
+            return;
+        }
+        await setEnabled();
     }
-
-    else if(args[0].macroPass === "isDamaged") {
-        if(!workflow.damageTotal) return;
-        let effectData = actor.appliedEffects.find(e => e.name === "Cloak of Displacement");
-        await effectData.update({"disabled" : true});
-        Sequencer.EffectManager.endEffects({ name: `${token.id}-cloakOfDisplacement` });
-        actor.setFlag("gambits-premades", "codTurnSuppressed", true);
+    else if(args?.[0]?.macroPass === "isDamaged") {
+        if(!workflow?.damageTotal) return;
+        await actor.setFlag("gambits-premades", "codTurnSuppressed", true);
+        if(!cloak.disabled) await cloak.update({disabled: true});
+        await endAnimation();
     }
-
-    else if(args === "effectSuppression") {
-        let effectData = actor.appliedEffects.find(e => e.name === "Cloak of Displacement");
-        await effectData.update({"disabled" : true});
-        Sequencer.EffectManager.endEffects({ name: `${token.id}-cloakOfDisplacement` });
+    else if(["effectState", "effectSuppression", "effectActivation"].includes(args)) {
+        if(unavailable && (!cloak.disabled || suppressed())) {
+            if(!cloak.flags?.["gambits-premades"]?.cloakStateSuppressed) await cloak.update({disabled: true, "flags.gambits-premades.cloakStateSuppressed": true});
+            await endAnimation();
+        }
+        else if(cloak.flags?.["gambits-premades"]?.cloakStateSuppressed) await setEnabled();
     }
-
-    else if (args === "effectActivation") {
-        if(actor.getFlag("gambits-premades", "codTurnSuppressed")) return;
-        let effectData = await actor.allApplicableEffects().find(e => e.name === "Cloak of Displacement")
-        if(effectData.disabled) await effectData.update({"disabled" : false});
+    else if(["on", "off"].includes(args[0]) && args[2] === "startEnd") {
+        await actor.unsetFlag("gambits-premades", "codTurnSuppressed");
+        const controller = await fromUuid(args.at(-1)?.effectUuid);
+        if(controller?.disabled) await controller.update({disabled: false});
+        await setEnabled();
     }
-
-    else if(args[0] === "on" && args[2] === "startEnd") {
-        if(!token) return;
-        let effectData = await actor.allApplicableEffects().find(e => e.name === item.name)
-        if(effectData.disabled) await effectData.update({"disabled" : false});
-        let effectOrigin = await fromUuid(args[3].effectUuid);
-        await effectOrigin.update({"disabled" : false});
-        actor.unsetFlag("gambits-premades", "codTurnSuppressed");
-        let currentSeq = Sequencer.EffectManager.getEffects({ name: `${token?.id}-cloakOfDisplacement` });
-        if(currentSeq.length >= 1) return;
-        processSequencer({token: token});
-    }
-
-    else if(args[0] === "on") {
-        if(!token) return;
-        let currentSeq = Sequencer.EffectManager.getEffects({ name: `${token?.id}-cloakOfDisplacement` });
-        if(currentSeq.length >= 1) return;
-        processSequencer({token: token});
+    else if(args[0] === "on" && !unavailable && !suppressed()) {
+        item = cloak.parent?.documentName === "Item" ? cloak.parent : item;
+        if(!item) return;
+        for(const activeToken of tokens) {
+            if(Sequencer.EffectManager.getEffects({name: `${activeToken.id}-cloakOfDisplacement`}).length) continue;
+            processSequencer({token: activeToken});
+        }
     }
 
     function processSequencer({token}) {

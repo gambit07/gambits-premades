@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -124,11 +124,11 @@
           },
           "affects": {
             "count": "",
-            "type": "",
+            "type": "self",
             "choice": false,
             "special": ""
           },
-          "prompt": true,
+          "prompt": false,
           "override": false
         },
         "uses": {
@@ -212,31 +212,12 @@
     {
       "origin": "Item.N03FRmkwKxlC2OkO",
       "duration": {
-        "startTime": null,
-        "seconds": 86400,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 86400,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Boldin's Beard Oil - 24",
       "_id": "A1LsjG1ZxIxFP2ry",
-      "changes": [
-        {
-          "key": "system.traits.dr.value",
-          "mode": 0,
-          "value": "poison",
-          "priority": 20
-        },
-        {
-          "key": "flags.adv-reminder.message.all",
-          "mode": 0,
-          "value": "Ah, what I wouldn't give right now to clasp a fine piece of stone in my hands! Its rugged charm and enduring character always bring a playful twinkle to my eye, as if it's whispering age-old secrets with an alluring whisper. There's something unexpectedly captivating about it, almost a mysterious, magnetic, dare I say it? Sexy... quality that draws me in, making each stony encounter surprisingly mesmer-rocking. Heh, I'm so funny, bet all the rocks would love that pun.",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": false,
       "statuses": [],
@@ -248,41 +229,47 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Boldin%27s%20Beard%20Oil.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "poison",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.adv-reminder.message.all",
+            "value": "Ah, what I wouldn't give right now to clasp a fine piece of stone in my hands! Its rugged charm and enduring character always bring a playful twinkle to my eye, as if it's whispering age-old secrets with an alluring whisper. There's something unexpectedly captivating about it, almost a mysterious, magnetic, dare I say it? Sexy... quality that draws me in, making each stony encounter surprisingly mesmer-rocking. Heh, I'm so funny, bet all the rocks would love that pun.",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!1sTnzvZ7IfUl9NJI.A1LsjG1ZxIxFP2ry"
     },
     {
       "origin": "Item.N03FRmkwKxlC2OkO",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 14400,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 14400,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Boldin's Beard Oil - 4",
       "_id": "SShn5byLnHvn6yE7",
-      "changes": [
-        {
-          "key": "system.abilities.con.value",
-          "mode": 2,
-          "value": "+1",
-          "priority": 20
-        }
-      ],
       "description": "",
       "transfer": false,
       "statuses": [],
@@ -294,17 +281,30 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
       "tint": "#ffffff",
       "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Boldin%27s%20Beard%20Oil.webp",
       "type": "base",
-      "system": {},
+      "system": {
+        "changes": [
+          {
+            "key": "system.abilities.con.value",
+            "value": "+1",
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "sort": 0,
+      "start": null,
       "_key": "!items.effects!1sTnzvZ7IfUl9NJI.SShn5byLnHvn6yE7"
     }
   ],
@@ -321,6 +321,26 @@
     "dnd5e": {
       "riders": {
         "activity": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

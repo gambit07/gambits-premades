@@ -1,7 +1,7 @@
 export async function scornfulRebuke({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "isHit") {
         let reactingDamage = actor.system.abilities.cha.mod;
-        if(reactingDamage < 1) reactionDamage = 1;
+        if(reactingDamage < 1) reactingDamage = 1;
         const target = workflow.token;
         const isIncapacitated = MidiQOL.checkIncapacitated(token);
 
@@ -10,6 +10,7 @@ export async function scornfulRebuke({ speaker, actor, token, character, item, a
         await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 
         const itemData = {
+            flags: {autoanimations: {isEnabled: false, version: 5}},
             name: "Scornful Rebuke - Damage (Psychic)",
             type: "feat",
             img: item.img

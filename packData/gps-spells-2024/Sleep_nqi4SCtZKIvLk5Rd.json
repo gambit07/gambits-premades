@@ -6,7 +6,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.44",
+      "custom": "",
       "rules": "2024",
       "revision": 1,
       "book": "",
@@ -108,8 +108,8 @@
             "count": ""
           },
           "affects": {
-            "choice": false,
-            "type": "enemy",
+            "choice": true,
+            "type": "creature",
             "count": "",
             "special": ""
           },
@@ -189,11 +189,7 @@
         "name": "",
         "otherActivityAsParentType": true,
         "friendlySave": "default",
-        "flags": {
-          "region-attacher": {
-            "attachRegionToTemplate": false
-          }
-        },
+        "flags": {},
         "visibility": {
           "level": {
             "min": null,
@@ -230,16 +226,7 @@
           "concentration": false,
           "override": true
         },
-        "effects": [
-          {
-            "_id": "uYzQNfTFL7dNlQRM",
-            "onSave": false,
-            "level": {
-              "min": null,
-              "max": null
-            }
-          }
-        ],
+        "effects": [],
         "range": {
           "override": true,
           "units": "any",
@@ -341,10 +328,7 @@
           "requireIdentification": false,
           "requireMagic": false
         },
-        "img": "",
-        "appliedEffects": [
-          "uYzQNfTFL7dNlQRM"
-        ]
+        "img": ""
       }
     },
     "identifier": "sleep",
@@ -358,27 +342,23 @@
       "name": "Sleep: Incapacitated",
       "origin": "Compendium.world.gps-spells-2024.Item.c956MGw4Jt1pALIZ",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "img": "icons/magic/light/light-candles-lit-white.webp",
       "_id": "NQLLac7vAxeaoUOx",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.sleep2024 @itemUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.sleep2024 @itemUuid",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -391,11 +371,10 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "endEveryTurn",
           "specialDuration": [
-            "None"
+            "isDamaged"
           ],
           "enableCondition": "",
           "selfTarget": false,
@@ -405,40 +384,36 @@
         "dnd5e": {
           "riders": {
             "statuses": []
-          },
-          "dependents": [
-            {
-              "uuid": "Actor.i22vevIkyrH7NDdq.ActiveEffect.LhMnMAN8NxJWa2iG"
-            }
-          ]
+          }
         },
         "core": {
           "overlay": false
         },
         "gambits-premades": {
           "gpsUuid": "12518587-9f13-41c9-aff9-a5bf885aed32"
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!nqi4SCtZKIvLk5Rd.NQLLac7vAxeaoUOx"
     },
     {
       "name": "Sleep: Unconscious",
       "origin": "Compendium.world.gps-spells-2024.Item.c956MGw4Jt1pALIZ",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "img": "icons/magic/light/light-candles-lit-white.webp",
       "_id": "uYzQNfTFL7dNlQRM",
       "type": "base",
-      "system": {},
-      "changes": [],
+      "system": {
+        "changes": []
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -451,7 +426,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [
@@ -469,8 +443,16 @@
         },
         "core": {
           "overlay": false
+        },
+        "gambits-premades": {
+          "gpsUuid": "gps-sleep-unconscious"
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!nqi4SCtZKIvLk5Rd.uYzQNfTFL7dNlQRM"
     }
   ],
@@ -495,6 +477,66 @@
         "source": "gambits-premades",
         "version": "2.1.0",
         "rules": "modern"
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "regionVisibility": {
+          "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Name",
+          "type": "select",
+          "default": "LAYER",
+          "category": "animations",
+          "options": [
+            {
+              "value": "LAYER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Layer"
+            },
+            {
+              "value": "LAYER_UNLOCKED",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.LayerUnlocked"
+            },
+            {
+              "value": "GAMEMASTER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Gamemaster"
+            },
+            {
+              "value": "OBSERVER",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Observer"
+            },
+            {
+              "value": "ALWAYS",
+              "label": "GAMBITSPREMADES.ItemConfig.RegionVisibility.Choices.Always"
+            }
+          ]
+        }
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      },
+      "r6dQ6EGSYvYyjajt": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
       }
     }
   },

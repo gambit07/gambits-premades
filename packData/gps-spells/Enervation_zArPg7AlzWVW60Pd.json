@@ -6,7 +6,7 @@
       "chat": "<div class=\"ddb\">\n\n</div>"
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014",
       "book": "",
@@ -77,7 +77,7 @@
           "spellSlot": true
         },
         "description": {
-          "chatFlavor": "[healing] you regain hit points equal to half the amount of necrotic damage the target takes"
+          "chatFlavor": "[healing]"
         },
         "duration": {
           "units": "inst",
@@ -115,17 +115,19 @@
           "parts": [
             {
               "custom": {
-                "enabled": true,
-                "formula": "4d8"
+                "enabled": false,
+                "formula": ""
               },
-              "number": null,
-              "denomination": null,
+              "number": 4,
+              "denomination": 8,
               "bonus": "",
               "types": [
                 "necrotic"
               ],
               "scaling": {
-                "mode": ""
+                "mode": "whole",
+                "number": 1,
+                "formula": ""
               }
             }
           ],
@@ -248,14 +250,6 @@
     },
     "core": {},
     "dnd5e": {
-      "dependents": [
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.56G178xyLSxBXpvG"
-        },
-        {
-          "uuid": "Actor.q72yJyE8I2A1bhue.ActiveEffect.LzMjc8SaO8gk9hfj"
-        }
-      ],
       "last": {
         "dnd5eactivity000": {
           "damageType": {
@@ -506,34 +500,59 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Save",
+        "activityType": "save",
+        "version": 2
+      }
     }
   },
   "effects": [
     {
-      "origin": "Compendium.world.gps-spells.Item.MPscy2rdOlSVVepd",
+      "origin": null,
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Enervation",
       "img": "icons/commodities/biological/eye-tentacle-grey-orange.webp",
       "_id": "m2ELujtfE92t39Xl",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "macro.itemMacro",
-          "mode": 0,
-          "value": "function.game.gps.enervation @actorUuid @itemUuid",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "macro.itemMacro",
+            "value": "function.game.gps.enervation",
+            "priority": 20,
+            "type": "custom"
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -546,7 +565,6 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "startEveryTurn",
           "specialDuration": [
@@ -560,8 +578,13 @@
         },
         "gambits-premades": {
           "gpsUuid": "9c513478-ffd9-4d5a-9e39-3d72bf0518ab"
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!zArPg7AlzWVW60Pd.m2ELujtfE92t39Xl"
     }
   ],

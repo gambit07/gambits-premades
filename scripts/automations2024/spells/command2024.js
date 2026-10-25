@@ -1,8 +1,10 @@
-export async function command2024({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "postSavesComplete" && workflow.failedSaves) {
-        let targets = workflow.failedSaves;
+import {commandExpiredAtTurnStart} from "../../utils/rulesReviewUtils.js";
 
-        await foundry.applications.api.DialogV2.wait({
+export async function command2024({ speaker, actor, token, character, item, args, scope, workflow, options }) {
+    if(args[0].macroPass === "postSavesComplete" && workflow.failedSaves?.size) {
+
+        const selection = await game.gps.showAutomationDialog({
+            focusTokenUuid: workflow.failedSaves.size === 1 ? workflow.failedSaves.first().document.uuid : false,
             window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Command.WindowTitle") },
             content: `
             <div class="gps-dialog-container">
@@ -32,31 +34,40 @@ export async function command2024({ speaker, actor, token, character, item, args
             label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Cast"),
             default: true,
             callback: async (event, button, dialog) => {
-                const selected = document.querySelector('#commandSelect').value;
-                for (let target of targets) {
-                await MidiQOL.socket().executeAsGM('_gmSetFlag', {
-                    actorUuid: target.actor.uuid,
-                    base: 'gambits-premades',
-                    key: 'commandWord',
-                    value: selected
-                });
-                }
+                const selected = button.form.elements.commandSelect.value;
+                (workflow.gps ??= {}).commandWord = selected;
             }
             }],
             close: async (event, dialog) => { return; },
             rejectClose: false
         });
+        if(!selection) workflow.aborted = true;
+    }
+    else if(args[0]?.macroPass === "postActiveEffects") {
+        const word = workflow.gps?.commandWord;
+        if(!word) return;
+        for(const target of workflow.failedSaves ?? []) {
+            const effect = target.actor.effects.filter(effect => effect.flags?.["gambits-premades"]?.command && DAE.effectMatchesSource(effect, item.uuid)).at(-1);
+            if(effect) await MidiQOL.socket().executeAsGM("updateEffects", {actorUuid: target.actor.uuid, updates: [{_id: effect.id, "flags.gambits-premades.commandWord": word}]});
+        }
     }
     else if(args[0] === "off") {
-        let wordInput = await actor.getFlag("gambits-premades", "commandWord")
-        let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Command.MustNow", { actorName: actor.name, wordInput: wordInput });
+        const context = args.at(-1);
+        if(!commandExpiredAtTurnStart(context?.effectUuid)) return;
+        const commandWord = context?.efData?.flags?.["gambits-premades"]?.commandWord;
+        if(!commandWord) return;
+        const wordInput = ["Approach", "Drop", "Flee", "Grovel", "Halt"].includes(commandWord)
+            ? game.i18n.localize(`GAMBITSPREMADES.Dialogs.Automations2024.Spells.Command2024.${commandWord}`)
+            : commandWord;
+        let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Command.MustNow", { actorName: actor.name, wordInput: foundry.utils.escapeHTML(wordInput) });
         let actorPlayer = MidiQOL.playerForActor(actor);
         let chatData = {
-            user: actorPlayer.id,
-            speaker: ChatMessage.getSpeaker({ token: token }),
+            user: actorPlayer?.id ?? game.user.id,
+            speaker: ChatMessage.getSpeaker({ actor, token }),
             content: content
         };
-        ChatMessage.create(chatData);
+        await ChatMessage.create(chatData);
+        if(!token || !game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) return;
 
         const style = {
             "fill": "#ffffff",
@@ -96,6 +107,6 @@ export async function command2024({ speaker, actor, token, character, item, args
             delay += delayIncrement;
         });
 
-        MidiQOL.socket().executeAsGM('_gmUnsetFlag', { actorUuid : actor.uuid, base : 'gambits-premades', key : 'commandWord' })
+
     }
 }

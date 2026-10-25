@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "1.0.9",
+      "custom": "",
       "revision": 1,
       "rules": "2024",
       "book": "",
@@ -182,30 +182,26 @@
       "origin": "Actor.X5TrzQsUsgt7sz8j.Item.XOd6vHjvBl3XAjRx",
       "_id": "8tw03CXz3eslo1Hi",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro,isDamaged",
-          "priority": 20
-        },
-        {
-          "key": "system.attributes.ac.bonus",
-          "mode": 2,
-          "value": "+1",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro,isDamaged",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "system.attributes.ac.bonus",
+            "value": "+1",
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
       "disabled": false,
       "duration": {
-        "startTime": null,
-        "seconds": 3600,
-        "combat": null,
-        "rounds": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 600,
+        "units": "seconds"
       },
       "description": "",
       "tint": "#ffffff",
@@ -217,7 +213,6 @@
           "disableCondition": "",
           "disableIncapacitated": false,
           "stackable": "multi",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": [],
@@ -233,8 +228,13 @@
         },
         "core": {
           "overlay": false
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!T880eXMSbSsHnxLx.8tw03CXz3eslo1Hi"
     }
   ],
@@ -260,7 +260,7 @@
         "img": "icons/creatures/mammals/rodent-rat-green.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"isDamaged\") {\n    if(workflow.item.system.actionType !== \"mwak\" && workflow.item.system.actionType !== \"msak\") return;\n    let tokenDistance = MidiQOL.computeDistance(token,workflow.token, {wallsBlock: true, includeCover: true})\n    if(tokenDistance > 6.4) return;\n    let target = workflow.token;\n    let damageRoll = await new CONFIG.Dice.DamageRoll(\"2d4\", {}, {type: \"piercing\", properties: [\"mgc\"]}).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        name: \"Cloak of Vermin - Damage (Piercing)\",\n        type: \"feat\",\n        img: macroItem.img\n    }\n\n    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"piercing\", target ? [target] : [], damageRoll, { itemData: itemData, flavor: \"Cloak of Vermin - Damage (Piercing)\" });\n}",
+        "command": "if(args[0].macroPass === \"isDamaged\") {\n    if(workflow.activity.actionType !== \"mwak\" && workflow.activity.actionType !== \"msak\") return;\n    let tokenDistance = MidiQOL.computeDistance(token,workflow.token, {wallsBlock: true, includeCover: true})\n    if(tokenDistance > 6.4) return;\n    let target = workflow.token;\n    let damageRoll = await new CONFIG.Dice.DamageRoll(\"2d4\", {}, {type: \"piercing\", properties: [\"mgc\"]}).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        flags: {autoanimations: {isEnabled: false, version: 5}},\n        name: \"Cloak of Vermin - Damage (Piercing)\",\n        type: \"feat\",\n        img: macroItem.img\n    }\n\n    new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"piercing\", target ? [target] : [], damageRoll, { itemData: itemData, flavor: \"Cloak of Vermin - Damage (Piercing)\" });\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -284,6 +284,26 @@
     "tidy5e-sheet": {
       "section": "",
       "actionSection": ""
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "CGt1zUOWmlPHaw3O": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      }
     }
   },
   "folder": null,

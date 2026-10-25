@@ -8,7 +8,7 @@
       "chat": ""
     },
     "source": {
-      "custom": "2.1.38",
+      "custom": "",
       "revision": 1,
       "rules": "2014"
     },
@@ -201,46 +201,36 @@
     {
       "origin": "Compendium.world.gps-homebrew-items.Item.KCEyqsO077X1A1cg",
       "duration": {
-        "rounds": null,
-        "startTime": null,
-        "seconds": 60,
-        "combat": null,
-        "turns": null,
-        "startRound": null,
-        "startTurn": null
+        "value": 60,
+        "units": "seconds"
       },
       "disabled": false,
       "name": "Oil, Corrosive",
       "img": "icons/consumables/potions/bottle-corked-green.webp",
       "_id": "eQudwYP9NznzaSiV",
       "type": "base",
-      "system": {},
-      "changes": [
-        {
-          "key": "system.bonuses.rwak.damage",
-          "mode": 0,
-          "value": "1d6[acid]",
-          "priority": 20
-        },
-        {
-          "key": "system.bonuses.mwak.damage",
-          "mode": 0,
-          "value": "1d6[acid]",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, preDamageRoll",
-          "priority": 20
-        },
-        {
-          "key": "flags.midi-qol.onUseMacroName",
-          "mode": 0,
-          "value": "ItemMacro, postActiveEffects",
-          "priority": 20
-        }
-      ],
+      "system": {
+        "changes": [
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, preDamageRoll",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "flags.midi-qol.onUseMacroName",
+            "value": "ItemMacro, postActiveEffects",
+            "priority": 20,
+            "type": "custom"
+          },
+          {
+            "key": "macro.itemMacro",
+            "type": "custom",
+            "value": "",
+            "priority": 20
+          }
+        ]
+      },
       "description": "",
       "tint": "#ffffff",
       "transfer": false,
@@ -253,12 +243,16 @@
           "selfTargetAlways": true,
           "dontApply": false,
           "stackable": "noneName",
-          "showIcon": false,
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
+        },
+        "autoanimations": {
+          "isEnabled": false,
+          "version": 5
         }
       },
+      "start": null,
       "_key": "!items.effects!NthftXzuANWTAUiq.eQudwYP9NznzaSiV"
     }
   ],
@@ -270,7 +264,7 @@
         "img": "icons/consumables/potions/bottle-corked-green.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"preDamageRoll\") {\n    const target = workflow.hitTargets.first();\n    if(!target) return;\n    let effectData = [{\n        disabled: false,\n        name: \"Corrosive Damage DR\",\n        icon: macroItem.img,\n        origin: macroItem.uuid,\n        changes: [\n        {\n            key: 'flags.midi-qol.DR.all',\n            mode: 5,\n            priority: 99,\n            value: 0\n        }]\n    }];\n    \n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}\n\nif(args[0].macroPass === \"postActiveEffects\") {\n    const target = workflow.hitTargets.first();\n    if(!target) return;\n    let effectName = await target.actor.appliedEffects.find(e => e.name === \"Corrosive Damage DR\");\n    if(effectName) await effectName.delete();\n}",
+        "command": "await game.gps.weaponOil({actor, token, item, macroItem: typeof macroItem === \"undefined\" ? item : macroItem, args, workflow: typeof workflow === \"undefined\" ? undefined : workflow});",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -304,6 +298,29 @@
     "dnd5e": {
       "riders": {
         "activity": []
+      }
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "gambits-premades": {
+      "oilType": "corrosive"
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "dnd5eactivity000": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
       }
     }
   },

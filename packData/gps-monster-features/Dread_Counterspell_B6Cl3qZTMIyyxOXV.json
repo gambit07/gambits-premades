@@ -364,7 +364,7 @@
       "rules": "2014",
       "book": "",
       "page": "",
-      "custom": "2.0.6",
+      "custom": "",
       "license": ""
     },
     "advancement": [],
@@ -391,7 +391,54 @@
       }
     },
     "gambits-premades": {
-      "gpsUuid": "47d0c0d4-46c9-4e59-ac2e-3fba926d39c9"
+      "gpsUuid": "47d0c0d4-46c9-4e59-ac2e-3fba926d39c9",
+      "itemConfig": {
+        "playAnimation": {
+          "label": "GAMBITSPREMADES.ItemConfig.PlayAnimation",
+          "type": "checkbox",
+          "default": true,
+          "category": "animations"
+        }
+      },
+      "animationModules": [
+        "JB2APatreon"
+      ]
+    },
+    "cat": {
+      "automation": {
+        "source": "gambits-premades",
+        "version": "3.0.1"
+      }
+    },
+    "autoanimations": {
+      "isEnabled": false,
+      "version": 5
+    },
+    "boss-loot-assets-premium": {
+      "HW8JJkM60lhFNqzT": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Use",
+        "activityType": "utility",
+        "version": 2
+      },
+      "neaFbwoYD0XK5IUs": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Check: Automation",
+        "activityType": "check",
+        "version": 2
+      },
+      "j5gV1ADHWy7gjpcT": {
+        "autoRec": {
+          "enabled": false
+        },
+        "activityName": "Damage: Automation",
+        "activityType": "damage",
+        "version": 2
+      }
     }
   },
   "_id": "B6Cl3qZTMIyyxOXV",
