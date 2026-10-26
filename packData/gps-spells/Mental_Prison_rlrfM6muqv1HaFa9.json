@@ -150,7 +150,7 @@
       "value": "",
       "chat": ""
     },
-    "identifier": "mental-prison-legacy",
+    "identifier": "mental-prison",
     "source": {
       "book": "XGtE",
       "page": "",
@@ -789,7 +789,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.4"
       }
     }
   },

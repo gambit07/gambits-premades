@@ -231,7 +231,7 @@
       "value": "",
       "chat": ""
     },
-    "identifier": "heroes-feast-legacy",
+    "identifier": "heroes-feast",
     "source": {
       "book": "PHB",
       "page": "",
@@ -400,7 +400,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.4"
       }
     }
   },

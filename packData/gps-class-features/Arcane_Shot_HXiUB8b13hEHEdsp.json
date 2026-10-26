@@ -1899,7 +1899,7 @@
       "value": "<p><strong>GPS setup:</strong> Add only learned Arrow marker items. On-hit options are offered after a successful shortbow/longbow attack made with the Attack action. Use Seeking or Piercing Arrow directly from this item instead of rolling a normal attack; these add the selected bow damage and use a Dexterity save for half. Confirm line/path and recent-sighting requirements manually. Only one option may be used per turn. Weapon item macros and attack-only riders are not triggered by substituted saves.</p>",
       "chat": ""
     },
-    "identifier": "arcane-shot-legacy",
+    "identifier": "arcane-shot",
     "source": {
       "book": "XGtE",
       "page": "",
@@ -1994,7 +1994,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.4"
       }
     },
     "autoanimations": {

@@ -13,7 +13,7 @@
       "value": "<p><strong>GPS setup:</strong> Learned-option marker for Arcane Shot. Use the Arcane Shot item; this marker is not a standalone attack.</p>",
       "chat": ""
     },
-    "identifier": "arcane-shot-options-seeking-arrow-legacy",
+    "identifier": "arcane-shot-options-seeking-arrow",
     "source": {
       "book": "XGtE",
       "page": "",
@@ -52,7 +52,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.4"
       }
     }
   },
