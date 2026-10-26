@@ -106,16 +106,13 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.hNrKazdOP5s1UYSb.Actor.SNZJsEKbROB1q6bT.Item.U9Zr63GqKyeI5jnK",
       "duration": {},
       "disabled": false,
@@ -137,7 +134,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -149,10 +145,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,

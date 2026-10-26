@@ -379,7 +379,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": false,
+      "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5,
@@ -444,25 +444,16 @@
       "section": "",
       "actionSection": ""
     },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
-      }
-    },
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
     }
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-spells.Item.bM5mY6X8ziNqBrfU",
       "duration": {
         "value": 600,
@@ -625,7 +616,7 @@
               "zIndex": 1
             }
           },
-          "isEnabled": false,
+          "isEnabled": true,
           "isCustomized": false,
           "version": 5
         },
@@ -678,7 +669,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!f5K18wOjvdx0vBQU.e8PUC4mtW1UlZngp"
     }

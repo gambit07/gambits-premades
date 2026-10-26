@@ -1,4 +1,4 @@
-/** Disable BLFX auto-recognition for each activity in GPS-generated item data. */
+/** Disable BLFX auto-recognition for generated actions that have a GPS animation. */
 export function disableBlfxAutoRecognition(itemData) {
     const activities = Object.entries(itemData.system?.activities ?? {});
     if (!activities.length) return itemData;

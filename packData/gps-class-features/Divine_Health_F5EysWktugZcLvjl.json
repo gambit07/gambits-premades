@@ -49,17 +49,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/magic/life/cross-worn-green.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-class-features.Item.F5EysWktugZcLvjl",
       "duration": {},
       "disabled": false,
@@ -81,7 +78,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -98,10 +94,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,

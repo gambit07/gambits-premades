@@ -48,7 +48,7 @@ function location(object) {
         regionUuid: document.documentName === "Region" ? document.uuid : undefined};
 }
 
-/** Sends a transient visual to viewers of the current scene withOUT blocking the item workflow. */
+/** Sends a transient visual to viewers of the current scene without blocking the item workflow. */
 export function spellEffect({kind, at, to, scale = 1, width, height, color, opacity = 1, delay = 0, duration, mode = "point", rotation = 0} = {}) {
     if(!canvas?.ready || !Object.hasOwn(durations, kind)) return 0;
     const start = location(at), end = location(to);

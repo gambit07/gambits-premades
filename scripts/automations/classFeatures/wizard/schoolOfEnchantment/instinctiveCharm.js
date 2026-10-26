@@ -104,7 +104,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
             const spellDC = validTokenPrimary.actor.system.attributes.spell.dc;
             let saveAbility = "wis";
 
-            const itemData = game.gps.disableBlfxAutoRecognition({
+            const itemData = {
                 name: `${itemProperName} Save`,
                 type: "feat",
                 img: chosenItem.img,
@@ -114,11 +114,6 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                         noProvokeReaction: true,
                         onUseMacroName: null,
                         forceCEOff: true
-                    },
-                    "autoanimations": {
-                        version: 5,
-                        isEnabled: false,
-                        killAnim: true
                     }
 
                 },
@@ -137,7 +132,7 @@ export async function instinctiveCharm({workflowData,workflowType,workflowCombat
                     },
                     duration: { units: "inst", value: undefined }
                 },
-            });
+            };
             const itemUpdateTarget = new CONFIG.Item.documentClass(itemData, {parent: validTokenPrimary.actor});
             const optionsTarget = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };
             const saveResult = await MidiQOL.completeItemUse(itemUpdateTarget, { midiOptions: optionsTarget }, {}, {});

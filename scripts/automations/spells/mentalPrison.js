@@ -20,7 +20,7 @@ export async function mentalPrison({ speaker, actor, token, character, item, arg
         await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')
 
         const itemData = {
-            flags: {autoanimations: {isEnabled: false, version: 5}},
+            flags: {},
             name: "Mental Prison - Effect End",
             type: "feat",
             img: item.img

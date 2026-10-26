@@ -238,26 +238,13 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Actor.1xFtQVMnMyuFm2w2.Item.l58sU09dGO3XVN15",
       "duration": {
         "value": 60,
@@ -280,10 +267,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -306,7 +289,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!jrfU4qVqkBaEby1m.SeG9nKb7onKepWFE"
     }

@@ -227,26 +227,13 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.ddb-spelljammer-adventures-in-space-ddb-spells.Item.uGk4urvP5vEO2MV6",
       "duration": {
         "value": 60,
@@ -271,7 +258,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableIncapacitated": false,
@@ -292,16 +278,13 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!5IvSD4bkMwt5yfJy.uqNgDBSdJHG7c5h6"
     },
     {
+      "sort": 0,
       "origin": "Actor.Q7GcFBwAbXgQX9Yv.Item.X9OHWkBN7PLeoeUL",
       "duration": {},
       "disabled": false,
@@ -329,7 +312,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -353,10 +335,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,

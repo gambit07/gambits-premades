@@ -77,17 +77,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/equipment/feet/shoes-simple-leaf-green.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-class-features.Item.DtgOa4gLtyx2TFU5",
       "duration": {},
       "disabled": false,
@@ -112,10 +109,6 @@
         "effectmacro": {},
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -137,7 +130,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!DtgOa4gLtyx2TFU5.MKnb2Fy2BWJPLI5r"
     }

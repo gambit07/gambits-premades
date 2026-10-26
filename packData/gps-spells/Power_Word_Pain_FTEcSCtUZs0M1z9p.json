@@ -302,29 +302,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "Xv7ExfsdTuPR1yqS": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
-      },
-      "16LugPNkQs8G0qWF": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

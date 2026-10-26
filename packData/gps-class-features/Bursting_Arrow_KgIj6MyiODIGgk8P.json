@@ -296,7 +296,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": false,
+      "isEnabled": true,
       "isCustomized": false,
       "fromAmmo": false,
       "version": 5
@@ -307,7 +307,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
     }
   },

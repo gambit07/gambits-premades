@@ -98,17 +98,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/skills/melee/shield-damaged-broken-gold.webp",
   "effects": [
     {
+      "sort": 0,
       "name": "Rust Metal",
       "origin": "Compendium.world.gps-monster-features.Item.OViIIfcfXLb8lv6C",
       "duration": {},
@@ -130,10 +127,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -149,7 +142,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": {
         "time": 1697165136,
         "round": null,

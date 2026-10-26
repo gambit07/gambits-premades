@@ -184,6 +184,7 @@
   "img": "icons/commodities/flowers/clover.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-spells.Item.PMm4SHDlDfIZWORG",
       "duration": {},
       "disabled": false,
@@ -241,7 +242,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableIncapacitated": false,
@@ -257,10 +257,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -319,21 +315,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

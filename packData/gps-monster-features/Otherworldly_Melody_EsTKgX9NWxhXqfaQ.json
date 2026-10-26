@@ -201,6 +201,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-monster-features.Item.EsTKgX9NWxhXqfaQ",
       "duration": {
         "value": 60,
@@ -231,7 +232,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableIncapacitated": false,
@@ -242,10 +242,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -284,21 +280,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

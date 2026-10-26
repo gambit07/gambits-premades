@@ -207,21 +207,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "eWO2KBnxZEDkn99H": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Weapon End Attack",
-        "activityType": "attack",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

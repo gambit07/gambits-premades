@@ -339,6 +339,7 @@
   "img": "icons/magic/light/light-candles-lit-white.webp",
   "effects": [
     {
+      "sort": 0,
       "name": "Sleep: Incapacitated",
       "origin": "Compendium.world.gps-spells-2024.Item.c956MGw4Jt1pALIZ",
       "duration": {
@@ -365,7 +366,6 @@
       "statuses": [
         "incapacitated"
       ],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -391,16 +391,13 @@
         },
         "gambits-premades": {
           "gpsUuid": "12518587-9f13-41c9-aff9-a5bf885aed32"
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!nqi4SCtZKIvLk5Rd.NQLLac7vAxeaoUOx"
     },
     {
+      "sort": 0,
       "name": "Sleep: Unconscious",
       "origin": "Compendium.world.gps-spells-2024.Item.c956MGw4Jt1pALIZ",
       "duration": {
@@ -420,7 +417,6 @@
       "statuses": [
         "unconscious"
       ],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -446,10 +442,6 @@
         },
         "gambits-premades": {
           "gpsUuid": "gps-sleep-unconscious"
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -482,7 +474,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
     },
     "gambits-premades": {
@@ -515,28 +507,6 @@
             }
           ]
         }
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
-      },
-      "r6dQ6EGSYvYyjajt": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
       }
     }
   },

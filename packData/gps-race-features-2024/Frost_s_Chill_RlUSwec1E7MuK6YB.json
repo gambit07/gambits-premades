@@ -180,6 +180,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "name": "Chilled",
       "img": "icons/magic/water/heart-ice-freeze.webp",
       "origin": "Compendium.dnd-players-handbook.origins.Item.phbsptFrostsChil",
@@ -229,7 +230,6 @@
       "description": "",
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -250,16 +250,13 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!RlUSwec1E7MuK6YB.YHKgdj2KIbQRBZWW"
     },
     {
+      "sort": 0,
       "name": "Frost's Chill",
       "origin": "Compendium.world.gps-race-features-2024.Item.RlUSwec1E7MuK6YB",
       "duration": {},
@@ -281,7 +278,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -298,10 +294,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -327,21 +319,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "6goWQaWLexUqgig8": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Damage",
-        "activityType": "damage",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

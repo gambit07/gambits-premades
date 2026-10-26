@@ -257,7 +257,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": false,
+      "isEnabled": true,
       "isCustomized": false,
       "fromAmmo": false,
       "version": 5
@@ -265,25 +265,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
-      },
-      "dnd5eactivity200": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Splinters",
-        "activityType": "damage",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
@@ -582,6 +564,7 @@
   "folder": "4Ecsdk7k1FvMs9OF",
   "effects": [
     {
+      "sort": 0,
       "origin": "Actor.6kguFcZvUgTJzCvS.Item.bDnC8h9XbLrI9TJo",
       "duration": {
         "value": 600,
@@ -611,10 +594,6 @@
         },
         "gambits-premades": {
           "wickerbone": true
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -642,7 +621,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!G2IDv711EWrOF7ef.kE7T0D7E6CnMvjvr"
     }

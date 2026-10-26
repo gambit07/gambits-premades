@@ -21,7 +21,7 @@ export async function wound({ speaker, actor, token, character, item, args, scop
         let damageRoll = await new CONFIG.Dice.DamageRoll(`${count}`, {}, {type: "none"}).evaluate();
 
         const itemData = {
-            flags: {autoanimations: {isEnabled: false, version: 5}},
+            flags: {},
             name: "Wound Damage",
             type: "feat",
             img: item.img

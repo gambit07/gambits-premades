@@ -92,11 +92,13 @@ Hooks.once('ready', async function() {
     registerHooks();
     daeInjectFlags();
     await game.gps.syncOpportunityAttackRegions();
+});
 
+Hooks.once("ready", async () => {
     const packageId = "gambits-premades";
     const version = game.modules.get(packageId).version;
     if (game.settings.get(packageId, "releaseMessage") !== version && game.user.isGM) {
-const content = `
+        const content = `
             <div class="gps-announcement" style="border:4px solid #4A90E2; border-radius:6px; padding:12px;">
                 <h3 style="margin:0;">🎉 Welcome to Gambit's Premades V${version}!</h3>
                 <p style="font-size:1em;">Full release for Foundry VTT V14 and DND5e V6!</p><p>Tons of things have been updated and modified with refreshed automation dialogs using appV2 instead of dialogV2, removed module dependencies for things no longer needed, added QOL options with a skip dialog on resolved prompts and contextual token focus highlight, overhauled animation sources removing Jack Kerouac pieces and replacing them with Eskies Effects/BLFX/etc when available or custom pixi effects, improvements to the medkit integrations via CAT (big thanks to all the folks working on that), and more!</p>

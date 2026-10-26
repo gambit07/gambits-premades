@@ -4,6 +4,7 @@
   "img": "icons/magic/symbols/rune-sigil-red-orange.webp",
   "effects": [
     {
+      "sort": 0,
       "_id": "9fxlvxN5rkcl9fvW",
       "flags": {
         "dae": {
@@ -19,10 +20,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "duration": {},
@@ -45,7 +42,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!3FmvwTPtpkDxpjIh.9fxlvxN5rkcl9fvW"
     }
@@ -70,12 +66,8 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "system": {

@@ -75,17 +75,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/skills/melee/weapons-crossed-swords-yellow.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-class-features.Item.4FIlEdNlAY78XCap",
       "duration": {},
       "disabled": false,
@@ -109,10 +106,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -128,7 +121,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!4FIlEdNlAY78XCap.dNyVYLbGpztKomkw"
     }

@@ -209,27 +209,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "XEyDcj6vYUIkSfHJ": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "img": "icons/weapons/polearms/halberd-crescent-glowing.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-generic-features.Item.iuUGS62pqYBuo1U0",
       "duration": {},
       "disabled": false,
@@ -251,7 +238,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableIncapacitated": false,
@@ -262,10 +248,6 @@
           "selfTarget": false,
           "selfTargetAlways": false,
           "dontApply": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,

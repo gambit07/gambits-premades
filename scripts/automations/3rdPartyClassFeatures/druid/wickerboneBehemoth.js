@@ -78,9 +78,9 @@ async function createArms(actor, item, sourceUuid) {
     const attackId = "gpsWickerAttack1";
     const data = ["LeftArm", "RightArm"].filter(side => !actor.items.some(weapon =>
         weapon.getFlag(MODULE_ID, "wickerboneArm") === side && weapon.getFlag(MODULE_ID, "wickerboneSource") === sourceUuid))
-        .map(side => (game.gps.disableBlfxAutoRecognition({
+        .map(side => ({
             name: loc(side), type: "weapon", img: item.img,
-            flags: {autoanimations: {isEnabled: false, version: 5}, dnd5e: {dependentOn: sourceUuid}, [MODULE_ID]: {wickerboneArm: side, wickerboneSource: sourceUuid}},
+            flags: {dnd5e: {dependentOn: sourceUuid}, [MODULE_ID]: {wickerboneArm: side, wickerboneSource: sourceUuid}},
             system: {
                 source: {rules: "2014"}, quantity: 1, equipped: true, proficient: 1,
                 type: {value: "simpleM", baseItem: "club"}, properties: ["lgt", "mgc"],
@@ -96,7 +96,7 @@ async function createArms(actor, item, sourceUuid) {
             },
             effects: [{name: item.name, type: "enchantment", transfer: true, origin: item.uuid, img: item.img,
                 system: {changes: [{key: `system.activities.${attackId}.attack.abilities`, type: "add", value: "wis", priority: 20}]}}]
-        })));
+        }));
     if(data.length) await actor.createEmbeddedDocuments("Item", data);
 }
 

@@ -36,7 +36,7 @@ export async function shroomOfDoom({ speaker, actor, token, character, item, arg
             .play()
         }
 
-        let itemData = [game.gps.disableBlfxAutoRecognition({
+        let itemData = [{
             "name": `${macroItem.name} - Remove Shroom`,
             "type": "feat",
             "img": macroItem.img,
@@ -89,7 +89,6 @@ export async function shroomOfDoom({ speaker, actor, token, character, item, arg
                 }
             },
             "flags": {
-                autoanimations: {isEnabled: false, version: 5},
                 "midi-qol": {
                     "onUseMacroName": "[preDamageRoll]ItemMacro"
                 },
@@ -106,7 +105,7 @@ export async function shroomOfDoom({ speaker, actor, token, character, item, arg
                     }
                 }
             }
-            })];
+            }];
 
         let validTargets = canvas.tokens.placeables.filter(t => {
             if (t.document.disposition !== target.document.disposition) return;

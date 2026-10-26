@@ -422,7 +422,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": false,
+      "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
@@ -434,22 +434,13 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Item.PvD4sCpjbcc6hJIg",
       "duration": {
         "value": 99999,
@@ -481,7 +472,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -636,7 +626,7 @@
               "zIndex": 1
             }
           },
-          "isEnabled": false,
+          "isEnabled": true,
           "isCustomized": false,
           "version": 5
         }

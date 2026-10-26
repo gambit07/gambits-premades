@@ -365,34 +365,13 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "E84yHqO0hKJXzlhr": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Light",
-        "activityType": "utility",
-        "version": 2
-      },
-      "zcOjpyPtsDxNBHHS": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "effects": [
     {
+      "sort": 0,
       "name": "Light - Pink",
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
@@ -471,7 +450,6 @@
       "origin": null,
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -492,16 +470,13 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!WWQhRmbUYiVK44OB.g0bxlhO8QKHjDIGd"
     },
     {
+      "sort": 0,
       "name": "Light - Purple",
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
@@ -580,7 +555,6 @@
       "origin": null,
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -601,16 +575,13 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!WWQhRmbUYiVK44OB.8KIkxyPVv7PzB0fL"
     },
     {
+      "sort": 0,
       "name": "Light - Blue",
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
@@ -689,7 +660,6 @@
       "origin": null,
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -710,16 +680,13 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!WWQhRmbUYiVK44OB.YkRhbxQESDDSLMs9"
     },
     {
+      "sort": 0,
       "name": "Light - Cyan",
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
@@ -798,7 +765,6 @@
       "origin": null,
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -819,16 +785,13 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!WWQhRmbUYiVK44OB.nLVYhbMU19Vhr6S7"
     },
     {
+      "sort": 0,
       "name": "Light - Green",
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
@@ -907,7 +870,6 @@
       "origin": null,
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -928,16 +890,13 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!WWQhRmbUYiVK44OB.Pwdk9vQoyF1BB0eU"
     },
     {
+      "sort": 0,
       "name": "Light - Yellow",
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
@@ -1016,7 +975,6 @@
       "origin": null,
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -1037,16 +995,13 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!WWQhRmbUYiVK44OB.Hh76KTeT9k4vVFwk"
     },
     {
+      "sort": 0,
       "name": "Light - Orange",
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
@@ -1125,7 +1080,6 @@
       "origin": null,
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -1146,16 +1100,13 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!WWQhRmbUYiVK44OB.StxGZzIWNq085IGH"
     },
     {
+      "sort": 0,
       "name": "Light - Red",
       "transfer": false,
       "img": "icons/magic/light/explosion-star-small-blue-yellow.webp",
@@ -1234,7 +1185,6 @@
       "origin": null,
       "tint": "#ffffff",
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "enableCondition": "",
@@ -1255,10 +1205,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,

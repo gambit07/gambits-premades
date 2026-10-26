@@ -43,7 +43,7 @@ export async function grimSiphon({ speaker, actor, token, character, item, args,
                     await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
             
                     const itemData = {
-                        flags: {autoanimations: {isEnabled: false, version: 5}},
+                        flags: {},
                         name: game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartySpells.GrimSiphon.Healing"),
                         type: "feat",
                         img: item.img

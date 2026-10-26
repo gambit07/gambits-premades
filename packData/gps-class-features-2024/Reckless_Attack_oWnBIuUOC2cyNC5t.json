@@ -91,16 +91,13 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-class-features-2024.Item.oWnBIuUOC2cyNC5t",
       "duration": {},
       "disabled": false,
@@ -132,10 +129,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -157,7 +150,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!oWnBIuUOC2cyNC5t.HvqYLk6a33Mq6j0n"
     }

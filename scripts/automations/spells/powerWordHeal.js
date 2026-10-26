@@ -25,7 +25,7 @@ export async function powerWordHeal({ speaker, actor, token, character, item, ar
             let healRoll = await new CONFIG.Dice.DamageRoll(`${remainingHP}`, {}, {type: "healing", properties: ["mgc"]}).evaluate();
 
             const itemData = {
-                flags: {autoanimations: {isEnabled: false, version: 5}},
+                flags: {},
                 name: "Power Word Healing",
                 type: "feat",
                 img: item.img

@@ -11,7 +11,7 @@ export async function thoughtShield({ speaker, actor, token, character, item, ar
                 name: "Thought Shield - Damage (Psychic)",
                 type: "feat",
                 img: item.img,
-                flags: {autoanimations: {isEnabled: false, version: 5}, "gambits-premades": {thoughtShieldReflection: true}}
+                flags: {"gambits-premades": {thoughtShieldReflection: true}}
             }
 
             await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "psychic", workflow.token ? [workflow.token] : [], damageRoll, {itemData: itemData, flavor: "Thought Shield - Damage (Psychic)"});

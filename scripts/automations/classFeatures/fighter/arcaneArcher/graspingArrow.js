@@ -23,7 +23,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
 
         let intMod = actor.system.abilities.int.mod;
         let profMod = actor.system.attributes.prof;
-        let itemData = [game.gps.disableBlfxAutoRecognition({
+        let itemData = [{
             "name": "Grasping Arrow - Remove Vines",
             "type": "feat",
             "img": item.img,
@@ -84,7 +84,6 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
             }
             },
             "flags": {
-                autoanimations: {isEnabled: false, version: 5},
                 "midi-qol": {
                     "onUseMacroName": "[preActiveEffects]ItemMacro"
                 },
@@ -110,7 +109,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
                     }
                 }
             }
-            })];
+            }];
 
         let targets = [...new Map(canvas.tokens.placeables.filter(t => t.actor).map(t => [t.actor.uuid, t])).values()];
 

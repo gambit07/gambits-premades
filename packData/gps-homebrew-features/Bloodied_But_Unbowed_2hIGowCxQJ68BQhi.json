@@ -176,6 +176,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "name": "Bloodied But Unbowed",
       "origin": "Actor.GYQSLDNGWKsLCTOE.Item.B3WvqeJyAw8jd5Qi",
       "duration": {},
@@ -197,10 +198,6 @@
           "specialDuration": [],
           "disableIncapacitated": false,
           "dontApply": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -216,7 +213,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": {
         "time": 47433171441,
         "round": 1,
@@ -448,7 +444,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": false,
+      "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
@@ -487,17 +483,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

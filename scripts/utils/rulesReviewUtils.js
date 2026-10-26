@@ -10,8 +10,10 @@ export function registerRulesReviewHooks() {
         const result = freedomMovementChanges.call(this, wrapped, phase);
         if(phase === "final") {
             const item = this.items.find(item => item.system.identifier === "elemental-affinity" && item.system.source.rules === "2024");
-            const type = item && elementalAffinityType(item);
-            if(type && item.effects.some(effect => effect.active && effect.transfer)) this.system.traits.dr.value.add(type);
+            if(item?.effects.some(effect => effect.active && effect.transfer)) {
+                const type = elementalAffinityType(item);
+                if(type) this.system.traits.dr.value.add(type);
+            }
         }
         return result;
     }, "WRAPPER");
@@ -47,7 +49,7 @@ export async function foresight({actor, item, args, workflow}) {
     if(args?.[0]?.macroPass !== "postActiveEffects" || workflow.aborted) return;
     const actors = new Map([...game.actors].map(actor => [actor.uuid, actor]));
     for(const scene of game.scenes) for(const token of scene.tokens) {
-        if(!token.actorLink && token.delta?._source.effects?.some(effect => effect.flags?.["gambits-premades"]?.foresight)) actors.set(token.actor.uuid, token.actor);
+        if(!token.actorLink && token._source.delta?.effects?.some(effect => effect.flags?.["gambits-premades"]?.foresight)) actors.set(token.actor.uuid, token.actor);
     }
     const currentTargets = new Set([...workflow.targets].map(token => token.actor.uuid));
     for(const recipient of actors.values()) {

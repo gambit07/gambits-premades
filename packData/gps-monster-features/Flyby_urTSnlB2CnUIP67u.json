@@ -38,6 +38,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "name": "Flyby",
       "origin": "Compendium.world.gps-monster-features.Item.urTSnlB2CnUIP67u",
       "duration": {},
@@ -59,7 +60,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -76,10 +76,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -113,12 +109,8 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/magic/control/buff-flight-wings-runes-blue-white.webp",

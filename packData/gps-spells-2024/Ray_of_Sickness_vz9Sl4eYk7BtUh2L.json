@@ -217,6 +217,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-spells.Item.ojAOofGnfFBhXqp1",
       "duration": {
         "value": null,
@@ -242,7 +243,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableIncapacitated": false,
@@ -258,10 +258,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -288,7 +284,7 @@
     "core": {},
     "autoanimations": {
       "id": "63e5e600-57ac-4ac8-b63f-dddae23afcb6",
-      "isEnabled": false,
+      "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
       "levels3d": {
@@ -519,17 +515,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Attack",
-        "activityType": "attack",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

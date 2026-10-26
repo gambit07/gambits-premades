@@ -52,16 +52,13 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-class-features.Item.sX4cuwQuCcSvuNLi",
       "duration": {},
       "disabled": false,
@@ -81,10 +78,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "name": "Eldritch Invocations: Eldritch Mind",
@@ -102,7 +95,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!sX4cuwQuCcSvuNLi.XXAFZYmwpId9iXoO"
     }

@@ -39,6 +39,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Scene.bAQsBAiUKXSqmows.Token.V7Cw9dXWIwhc2oNl.Actor.99amRyyGWbOk6u8F.Item.1F5YZIe6tLPfTt45",
       "duration": {},
       "disabled": false,
@@ -60,7 +61,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -72,16 +72,13 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!pQxTjXcLJffGjO4a.mSyMADxeNUdhaAxr"
     },
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-monster-features.Item.pQxTjXcLJffGjO4a",
       "duration": {},
       "disabled": false,
@@ -121,7 +118,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -141,10 +137,6 @@
         },
         "auraeffects": {
           "originalType": "base"
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -168,7 +160,7 @@
         "img": "icons/magic/fire/projectile-embers-orange.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"isHit\") {\n    if(workflow.activity.actionType !== \"mwak\" && workflow.activity.actionType !== \"msak\") return;\n    let target = workflow.token;\n    let measuredDistance = MidiQOL.computeDistance(token,target, {wallsBlock: true, includeCover: true});\n    if(measuredDistance === -1 || measuredDistance > 5) return;\n\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`1d10`, {}, {type: \"fire\", properties: [\"mgc\"]}).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        flags: {autoanimations: {isEnabled: false, version: 5}},\n        name: \"Fire Form - Damage (Fire)\",\n        type: \"feat\",\n        img: macroItem.img\n    }\n\n    await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"fire\", target ? [target] : [], damageRoll, {itemData: itemData, flavor: \"Fire Form - Damage (Fire)\"});\n}\n\nif(args[0] === \"on\") {\n    let effectOriginActor = await fromUuid(args[1]);\n    let effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor);\n    let checkEffect = actor.appliedEffects.some(e => e.name === \"Ignition\");\n    if(checkEffect) return;\n    let effectData = [{\n      \"origin\": item.uuid,\n      \"duration\": { value: 99999, units: \"seconds\" },\n      \"disabled\": false,\n      \"name\": \"Ignition\",\n      \"img\": item.img,\n      system: { changes: [\n        {\n          \"key\": \"flags.midi-qol.OverTime\",\n          type: \"custom\",\n          \"value\": \"turn=start,saveCount=1,damageRoll=1d10,damageType=fire,name=Ignition\",\n          \"priority\": 20\n        }\n      ] },\n      \"transfer\": false\n    }];\n\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectData });\n\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`1d10`, {}, {type: \"fire\", properties: [\"mgc\"]}).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        flags: {autoanimations: {isEnabled: false, version: 5}},\n        name: \"Fire Form - Damage (Fire)\",\n        type: \"feat\",\n        img: item.img\n    }\n\n    await new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, \"fire\", token ? [token] : [], damageRoll, {itemData: itemData, flavor: \"Fire Form - Damage (Fire)\"});\n}",
+        "command": "if(args[0].macroPass === \"isHit\") {\n    if(workflow.activity.actionType !== \"mwak\" && workflow.activity.actionType !== \"msak\") return;\n    let target = workflow.token;\n    let measuredDistance = MidiQOL.computeDistance(token,target, {wallsBlock: true, includeCover: true});\n    if(measuredDistance === -1 || measuredDistance > 5) return;\n\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`1d10`, {}, {type: \"fire\", properties: [\"mgc\"]}).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        flags: {},\n        name: \"Fire Form - Damage (Fire)\",\n        type: \"feat\",\n        img: macroItem.img\n    }\n\n    await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"fire\", target ? [target] : [], damageRoll, {itemData: itemData, flavor: \"Fire Form - Damage (Fire)\"});\n}\n\nif(args[0] === \"on\") {\n    let effectOriginActor = await fromUuid(args[1]);\n    let effectOriginToken = await MidiQOL.tokenForActor(effectOriginActor);\n    let checkEffect = actor.appliedEffects.some(e => e.name === \"Ignition\");\n    if(checkEffect) return;\n    let effectData = [{\n      \"origin\": item.uuid,\n      \"duration\": { value: 99999, units: \"seconds\" },\n      \"disabled\": false,\n      \"name\": \"Ignition\",\n      \"img\": item.img,\n      system: { changes: [\n        {\n          \"key\": \"flags.midi-qol.OverTime\",\n          type: \"custom\",\n          \"value\": \"turn=start,saveCount=1,damageRoll=1d10,damageType=fire,name=Ignition\",\n          \"priority\": 20\n        }\n      ] },\n      \"transfer\": false\n    }];\n\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: actor.uuid, effects: effectData });\n\n    let damageRoll = await new CONFIG.Dice.DamageRoll(`1d10`, {}, {type: \"fire\", properties: [\"mgc\"]}).evaluate();\n    await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n    const itemData = {\n        flags: {},\n        name: \"Fire Form - Damage (Fire)\",\n        type: \"feat\",\n        img: item.img\n    }\n\n    await new MidiQOL.DamageOnlyWorkflow(effectOriginActor, effectOriginToken, damageRoll.total, \"fire\", token ? [token] : [], damageRoll, {itemData: itemData, flavor: \"Fire Form - Damage (Fire)\"});\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -202,12 +194,8 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/magic/fire/projectile-embers-orange.webp",

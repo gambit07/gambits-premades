@@ -1,7 +1,25 @@
-export function isMagicalEffect(effect) {
-    if(effect.system?.magical) return true;
-    const origin = effect.system?.origin?.item ?? effect.flags?.dae?.castData?.itemUuid ?? effect.origin;
-    const source = origin ? fromUuidSync(origin, {strict: false}) : null;
+/** Inspect token item sources without constructing another synthetic actor during preparation. */
+function tokenOriginItem(origin, actor) {
+    const match = /^Scene\.([^.]+)\.Token\.([^.]+)(?:\.Actor\.[^.]+)?\.Item\.([^.]+)/.exec(origin);
+    if(!match) return null;
+    const [, sceneId, tokenId, itemId] = match;
+    const tokenUuid = `Scene.${sceneId}.Token.${tokenId}`;
+    if(actor?.uuid === tokenUuid || actor?.uuid?.startsWith(`${tokenUuid}.Actor.`)) return actor.items.get(itemId);
+    const token = game.scenes.get(sceneId)?.tokens.get(tokenId);
+    if(!token) return null;
+    const baseItem = game.actors.get(token._source.actorId)?.items.get(itemId);
+    if(token._source.actorLink) return baseItem;
+    const deltaItem = token._source.delta?.items?.find(item => item._id === itemId);
+    if(deltaItem?._deleted) return null;
+    return deltaItem?.type ? deltaItem : baseItem;
+}
+
+export function isMagicalEffect(effect, actor) {
+    if(effect.system?.magical || (effect.parent?.documentName === "Item" && effect.parent.type === "spell")) return true;
+    const origin = effect.system?.origin?.item || effect.flags?.dae?.castData?.itemUuid || effect.origin;
+    if(typeof origin !== "string" || !origin) return false;
+    if(origin.startsWith("Scene.")) return tokenOriginItem(origin, actor)?.type === "spell";
+    const source = fromUuidSync(origin, {strict: false});
     return source?.type === "spell" || source?.parent?.type === "spell";
 }
 
@@ -15,7 +33,8 @@ export function freedomMovementChanges(wrapped, phase) {
     const restored = [];
     try {
         for(const effect of this.allApplicableEffects()) {
-            if(!effect.active || !isMagicalEffect(effect)) continue;
+            if(!effect.active || !["paralyzed", "restrained"].some(status => effect.statuses.has(status))
+                || !isMagicalEffect(effect, this)) continue;
             restored.push([effect, effect.statuses]);
             effect.statuses = new Set([...effect.statuses].filter(status => !["paralyzed", "restrained"].includes(status)));
         }
@@ -28,7 +47,7 @@ export function freedomMovementChanges(wrapped, phase) {
 
 export function freedomMovementChange(wrapped, model, change, options) {
     if(model.documentName !== "Actor" || !change.key.startsWith("system.attributes.movement.")
-        || !change.effect || !isMagicalEffect(change.effect) || !freedomMovementActive(model)) return wrapped(model, change, options);
+        || !change.effect || !freedomMovementActive(model) || !isMagicalEffect(change.effect, model)) return wrapped(model, change, options);
     const before = foundry.utils.getProperty(model, change.key);
     const result = wrapped(model, change, options);
     const after = result?.[change.key] ?? foundry.utils.getProperty(model, change.key);
@@ -58,15 +77,15 @@ export async function ensureFreedomEscape({actorUuid, itemUuid}) {
     const spell = await fromUuid(itemUuid);
     const effect = actor?.effects.find(effect => effect.flags?.["gambits-premades"]?.freedomOfMovement && effect.origin === itemUuid);
     if(!effect || !spell) return;
-    await actor.createEmbeddedDocuments("Item", [game.gps.disableBlfxAutoRecognition({name: game.i18n.localize("GAMBITSPREMADES.RulesReview.FreedomEscape"), type: "feat", img: spell.img,
+    await actor.createEmbeddedDocuments("Item", [{name: game.i18n.localize("GAMBITSPREMADES.RulesReview.FreedomEscape"), type: "feat", img: spell.img,
         system: {activities: {gpsFreedomEscape: {type: "utility", activation: {type: "special"}, consumption: {spellSlot: false, targets: []}, target: {affects: {type: "self"}}}}},
-        flags: {autoanimations: {isEnabled: false, version: 5}, dnd5e: {dependentOn: effect.uuid}, "midi-qol": {onUseMacroName: "[preActiveEffects]function.game.gps.freedomEscape"}}
-    })]);
+        flags: {dnd5e: {dependentOn: effect.uuid}, "midi-qol": {onUseMacroName: "[preActiveEffects]function.game.gps.freedomEscape"}}
+    }]);
 }
 
 export async function freedomEscape({actor, workflow}) {
     if(!freedomMovementActive(actor)) return void (workflow.aborted = true);
-    const effects = actor.effects.filter(effect => effect.active && !isMagicalEffect(effect) && (effect.statuses.has("restrained") || effect.statuses.has("grappled")));
+    const effects = actor.effects.filter(effect => effect.active && (effect.statuses.has("restrained") || effect.statuses.has("grappled")) && !isMagicalEffect(effect, actor));
     if(!effects.length) return;
     const choices = effects.map(effect => `<option value="${effect.id}">${foundry.utils.escapeHTML(effect.name)}</option>`).join("");
     const selected = await game.gps.showAutomationDialog({window: {title: game.i18n.localize("GAMBITSPREMADES.RulesReview.FreedomEscape")},

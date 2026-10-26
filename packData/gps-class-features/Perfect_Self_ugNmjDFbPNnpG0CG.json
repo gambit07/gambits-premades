@@ -77,17 +77,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/magic/perception/third-eye-blue-red.webp",
   "effects": [
     {
+      "sort": 0,
       "name": "Perfect Self",
       "origin": "Compendium.world.gps-class-features.Item.ugNmjDFbPNnpG0CG",
       "duration": {},
@@ -116,10 +113,6 @@
         "effectmacro": {},
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -135,7 +128,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!ugNmjDFbPNnpG0CG.Z6aK5JHacSpklffP"
     }

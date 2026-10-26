@@ -35,7 +35,7 @@ export async function weaponOil({actor, token, item, macroItem, args, workflow})
         if(pass !== "preDamageApplication") return;
         const roll = await new CONFIG.Dice.DamageRoll(`${workflow.isCritical ? 2 : 1}d6`, {}, {type: "radiant", properties: ["mgc"]}).evaluate();
         await MidiQOL.displayDSNForRoll(roll, "damageRoll");
-        new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, "radiant", [target], roll, {itemData: {flags: {autoanimations: {isEnabled: false, version: 5}}, name: oil.name, type: "feat", img: oil.img}});
+        new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, "radiant", [target], roll, {itemData: {flags: {}, name: oil.name, type: "feat", img: oil.img}});
     }
     if(oilType === "corrosive") {
         for(const target of workflow.hitTargets) {

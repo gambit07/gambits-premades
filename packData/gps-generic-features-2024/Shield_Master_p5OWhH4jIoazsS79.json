@@ -170,27 +170,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "8XcwaTfeUxz3KH5P": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "img": "icons/magic/defensive/shield-barrier-deflect-gold.webp",
   "effects": [
     {
+      "sort": 0,
       "name": "Shield Bash",
       "origin": "Compendium.world.gps-generic-features-2024.Item.p5OWhH4jIoazsS79",
       "duration": {},
@@ -218,7 +205,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dnd5e": {
           "riders": {
@@ -239,16 +225,13 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!p5OWhH4jIoazsS79.XyI4nE0eHeDIWriN"
     },
     {
+      "sort": 0,
       "name": "Interpose Shield Check",
       "origin": "Compendium.world.gps-generic-features-2024.Item.y87qKpfKMUPfX4sP",
       "duration": {},
@@ -270,7 +253,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dnd5e": {
           "riders": {
@@ -288,16 +270,13 @@
         "core": {
           "overlay": false
         },
-        "gambits-premades": {},
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
-        }
+        "gambits-premades": {}
       },
       "start": null,
       "_key": "!items.effects!p5OWhH4jIoazsS79.1ix3sc5lJ8lbQnj5"
     },
     {
+      "sort": 0,
       "name": "Interpose Shield",
       "origin": "Compendium.world.gps-generic-features-2024.Item.y87qKpfKMUPfX4sP",
       "duration": {},
@@ -319,7 +298,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dnd5e": {
           "riders": {
@@ -342,10 +320,6 @@
         },
         "gambits-premades": {
           "gpsUuid": "2109c2b7-7640-4649-ad3c-26b5a84d5646"
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,

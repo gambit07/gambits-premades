@@ -175,6 +175,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Actor.4rgwJtcvBFEmAQ4A.Item.93rhOp07dHSQtJOr",
       "duration": {},
       "disabled": false,
@@ -208,7 +209,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -221,11 +221,7 @@
         "core": {
           "overlay": false
         },
-        "gambits-premades": {},
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
-        }
+        "gambits-premades": {}
       },
       "start": null,
       "_key": "!items.effects!p0o3KOB7vBwe8CZS.vhj7xJmCiTIagALN"
@@ -239,7 +235,7 @@
         "img": "systems/dnd5e/icons/svg/items/feature.svg",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"preAttackRoll\") {\n    if(macroItem.system.uses.spent >= macroItem.system.uses.max) return;\n    let target = workflow.targets.first();\n    if(!target?.document.hasStatusEffect(\"frightened\")) return;\n  \n    await game.gps.showAutomationDialog({\n        window: { title: macroItem.name },\n        content: `\n            <div class=\"gps-dialog-container\">\n                <div class=\"gps-dialog-section\">\n                    <div class=\"gps-dialog-content\">\n                        <div>\n                            <div class=\"gps-dialog-flex\">\n                                <p class=\"gps-dialog-paragraph\">${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.ImpetusSlasher.Prompt\")}</p>\n                                <div id=\"image-container\" class=\"gps-dialog-image-container\">\n                                    <img src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        `,\n        buttons: [{\n            action: \"Yes\",\n            label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Yes\"),\n            callback: async (event, button, dialog) => {\n                workflow.tracker.advantage.add(true, \"Impetus Slasher\");\n                workflow.gps ??= {};\n                workflow.gps.impetusSlasher = true;\n            }\n        },\n        {\n            action: \"No\",\n            label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.No\"),\n            callback: async (event, button, dialog) => {return;}\n        }],\n        close: async (event, dialog) => {\n            return;\n        }, rejectClose:false\n    });\n}\n\nif(args[0].macroPass === \"preDamageRoll\") {\n    if(macroItem.system.uses.spent >= macroItem.system.uses.max) return;\n    let target = workflow.hitTargets.first();\n    if(!target?.document.hasStatusEffect(\"frightened\")) return;\n\n    let effectAdv = workflow.gps?.impetusSlasher;\n    if(effectAdv) {\n        workflow.isCritical = true;\n    }\n}\n\nif(args[0].macroPass === \"postDamageRollComplete\") {\n    if(macroItem.system.uses.spent >= macroItem.system.uses.max) return;\n    let target = workflow.hitTargets.first();\n    if(!target?.document.hasStatusEffect(\"frightened\")) return;\n\n    let effectAdv = workflow.gps?.impetusSlasher;\n    if(effectAdv) {\n        let damageRoll = await new CONFIG.Dice.DamageRoll(`2d12`).evaluate();\n        await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n        const itemData = {\n            flags: {autoanimations: {isEnabled: false, version: 5}},\n            name: \"Impetus Slasher - Damage (Force)\",\n            type: \"feat\",\n            img: macroItem.img\n        }\n\n        await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"force\", target ? [target] : [], damageRoll, {itemData: itemData});\n\n        await macroItem.update({\"system.uses.spent\": macroItem.system.uses.spent + 1});\n        workflow.gps.impetusSlasher = false;\n    }\n}",
+        "command": "if(args[0].macroPass === \"preAttackRoll\") {\n    if(macroItem.system.uses.spent >= macroItem.system.uses.max) return;\n    let target = workflow.targets.first();\n    if(!target?.document.hasStatusEffect(\"frightened\")) return;\n  \n    await game.gps.showAutomationDialog({\n        window: { title: macroItem.name },\n        content: `\n            <div class=\"gps-dialog-container\">\n                <div class=\"gps-dialog-section\">\n                    <div class=\"gps-dialog-content\">\n                        <div>\n                            <div class=\"gps-dialog-flex\">\n                                <p class=\"gps-dialog-paragraph\">${game.i18n.localize(\"GAMBITSPREMADES.Dialogs.ImpetusSlasher.Prompt\")}</p>\n                                <div id=\"image-container\" class=\"gps-dialog-image-container\">\n                                    <img src=\"${macroItem.img}\" class=\"gps-dialog-image\">\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        `,\n        buttons: [{\n            action: \"Yes\",\n            label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Yes\"),\n            callback: async (event, button, dialog) => {\n                workflow.tracker.advantage.add(true, \"Impetus Slasher\");\n                workflow.gps ??= {};\n                workflow.gps.impetusSlasher = true;\n            }\n        },\n        {\n            action: \"No\",\n            label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.No\"),\n            callback: async (event, button, dialog) => {return;}\n        }],\n        close: async (event, dialog) => {\n            return;\n        }, rejectClose:false\n    });\n}\n\nif(args[0].macroPass === \"preDamageRoll\") {\n    if(macroItem.system.uses.spent >= macroItem.system.uses.max) return;\n    let target = workflow.hitTargets.first();\n    if(!target?.document.hasStatusEffect(\"frightened\")) return;\n\n    let effectAdv = workflow.gps?.impetusSlasher;\n    if(effectAdv) {\n        workflow.isCritical = true;\n    }\n}\n\nif(args[0].macroPass === \"postDamageRollComplete\") {\n    if(macroItem.system.uses.spent >= macroItem.system.uses.max) return;\n    let target = workflow.hitTargets.first();\n    if(!target?.document.hasStatusEffect(\"frightened\")) return;\n\n    let effectAdv = workflow.gps?.impetusSlasher;\n    if(effectAdv) {\n        let damageRoll = await new CONFIG.Dice.DamageRoll(`2d12`).evaluate();\n        await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');\n\n        const itemData = {\n            flags: {},\n            name: \"Impetus Slasher - Damage (Force)\",\n            type: \"feat\",\n            img: macroItem.img\n        }\n\n        await new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, \"force\", target ? [target] : [], damageRoll, {itemData: itemData});\n\n        await macroItem.update({\"system.uses.spent\": macroItem.system.uses.spent + 1});\n        workflow.gps.impetusSlasher = false;\n    }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -269,21 +265,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

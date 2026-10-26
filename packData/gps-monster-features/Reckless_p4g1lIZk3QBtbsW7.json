@@ -207,27 +207,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "img": "icons/skills/social/intimidation-impressing.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.Ct9wAPpQAERU5Bng.Actor.SNZJsEKbROB1q6bT.Item.A8Qn5ngfARIJp0R6",
       "duration": {},
       "disabled": false,
@@ -257,10 +244,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -282,7 +265,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!p4g1lIZk3QBtbsW7.WlySPDKKWMIOowHi"
     }

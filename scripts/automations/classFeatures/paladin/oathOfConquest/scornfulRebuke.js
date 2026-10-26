@@ -10,7 +10,7 @@ export async function scornfulRebuke({ speaker, actor, token, character, item, a
         await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll');
 
         const itemData = {
-            flags: {autoanimations: {isEnabled: false, version: 5}},
+            flags: {},
             name: "Scornful Rebuke - Damage (Psychic)",
             type: "feat",
             img: item.img

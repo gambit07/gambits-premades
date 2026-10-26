@@ -786,6 +786,20 @@
   },
   "items": [
     {
+      "sort": 0,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.1.4",
+        "lastModifiedBy": "roRDywD19pu2VxlC",
+        "modifiedTime": 1776232259525
+      },
+      "ownership": {
+        "default": 0
+      },
       "name": "Bolt of Lightening",
       "type": "feat",
       "system": {
@@ -977,24 +991,12 @@
       "img": "icons/magic/lightning/bolt-strike-blue.webp",
       "effects": [],
       "folder": null,
-      "sort": 0,
       "flags": {
-        "dnd5e": {},
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
-        },
-        "boss-loot-assets-premium": {
-          "dnd5eactivity000": {
-            "autoRec": {
-              "enabled": false
-            },
-            "activityName": "Attack",
-            "activityType": "attack",
-            "version": 2
-          }
-        }
+        "dnd5e": {}
       },
+      "_key": "!actors.items!whWeB4x80BpWy1tv.hXjPG3fRcHXMXer5"
+    },
+    {
       "_stats": {
         "compendiumSource": null,
         "duplicateSource": null,
@@ -1003,14 +1005,12 @@
         "systemId": "dnd5e",
         "systemVersion": "5.1.4",
         "lastModifiedBy": "roRDywD19pu2VxlC",
-        "modifiedTime": 1776232259525
+        "modifiedTime": 1776232259534
       },
+      "sort": 1700000,
       "ownership": {
         "default": 0
       },
-      "_key": "!actors.items!whWeB4x80BpWy1tv.hXjPG3fRcHXMXer5"
-    },
-    {
       "name": "Never Target",
       "type": "feat",
       "system": {
@@ -1048,6 +1048,16 @@
       "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
       "effects": [
         {
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "13.348",
+            "systemId": "dnd5e",
+            "systemVersion": "5.1.4",
+            "lastModifiedBy": null
+          },
+          "sort": 0,
           "name": "Never Target",
           "origin": "Actor.iopoKepLLnHshdBA.Item.BW7ugXqhcSO5XeJX",
           "duration": {},
@@ -1067,22 +1077,9 @@
               "durationExpression": "",
               "macroRepeat": "none",
               "specialDuration": []
-            },
-            "autoanimations": {
-              "isEnabled": false,
-              "version": 5
             }
           },
           "tint": "#ffffff",
-          "_stats": {
-            "compendiumSource": null,
-            "duplicateSource": null,
-            "exportSource": null,
-            "coreVersion": "13.348",
-            "systemId": "dnd5e",
-            "systemVersion": "5.1.4",
-            "lastModifiedBy": null
-          },
           "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
           "type": "base",
           "system": {
@@ -1095,39 +1092,30 @@
               }
             ]
           },
-          "sort": 0,
           "start": null,
           "_key": "!actors.items.effects!whWeB4x80BpWy1tv.icorevoMIkBVXL37.jFKhp34XZd32ryYT"
         }
       ],
       "folder": null,
       "flags": {
-        "core": {},
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
-        }
-      },
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "13.351",
-        "systemId": "dnd5e",
-        "systemVersion": "5.1.4",
-        "lastModifiedBy": "roRDywD19pu2VxlC",
-        "modifiedTime": 1776232259534
+        "core": {}
       },
       "_id": "icorevoMIkBVXL37",
-      "sort": 1700000,
-      "ownership": {
-        "default": 0
-      },
       "_key": "!actors.items!whWeB4x80BpWy1tv.icorevoMIkBVXL37"
     }
   ],
   "effects": [
     {
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.348",
+        "systemId": "dnd5e",
+        "systemVersion": "5.1.4",
+        "lastModifiedBy": null
+      },
+      "sort": 0,
       "name": "Never Target",
       "origin": "Actor.WtxYMcamQptpNnjX.Item.icorevoMIkBVXL37",
       "duration": {},
@@ -1148,22 +1136,9 @@
           "macroRepeat": "none",
           "specialDuration": [],
           "transfer": true
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
-      "_stats": {
-        "compendiumSource": null,
-        "duplicateSource": null,
-        "exportSource": null,
-        "coreVersion": "13.348",
-        "systemId": "dnd5e",
-        "systemVersion": "5.1.4",
-        "lastModifiedBy": null
-      },
       "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
       "type": "base",
       "system": {
@@ -1176,7 +1151,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": {
         "time": 1697159634,
         "round": null,

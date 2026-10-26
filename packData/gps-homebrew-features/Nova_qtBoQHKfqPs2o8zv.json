@@ -157,6 +157,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "name": "Nova",
       "origin": "Item.3cUI96gq3xUYgMb0",
       "duration": {
@@ -185,10 +186,6 @@
         "core": {},
         "gambits-premades": {
           "nova": true
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -210,7 +207,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!qtBoQHKfqPs2o8zv.tRB7OZrfYO4wXdrY"
     }
@@ -234,7 +230,7 @@
         "img": "icons/magic/symbols/triangle-glow-purple.webp",
         "type": "script",
         "scope": "global",
-        "command": "const sourceItem = macroItem ?? item;\nconst stateKey = `feature.nova.${token.id}`;\nif(args[0] === \"on\") {\n    const context = args.at(-1);\n    const sourceUuid = context?.effectUuid ?? `${actor.uuid}.ActiveEffect.${context?.effectId}`;\n    const existing = actor.items.find(helper => helper.getFlag(\"dnd5e\", \"dependentOn\") === sourceUuid && helper.getFlag(\"gambits-premades\", \"novaHelper\"));\n    if(!existing) await actor.createEmbeddedDocuments(\"Item\", [game.gps.disableBlfxAutoRecognition({name: \"Nova - End Nova\", type: \"feat\", img: sourceItem.img, system: {activities: {gpsEndNova000001: {type: \"utility\", activation: {type: \"bonus\"}, consumption: {spellSlot: false, targets: []}, target: {affects: {type: \"self\"}}}}}, flags: {autoanimations: {isEnabled: false, version: 5}, dnd5e: {dependentOn: sourceUuid}, \"gambits-premades\": {novaHelper: true}, \"midi-qol\": {onUseMacroName: \"[preActiveEffects]ItemMacro\"}, dae: {macro: {name: \"End Nova\", type: \"script\", command: 'const source = await fromUuid(macroItem.getFlag(\"dnd5e\", \"dependentOn\")); await source?.delete(); if(actor.items.has(macroItem.id)) await macroItem.delete();'}}}})]);\n}\nif(args[0] === \"on\" || (args[0] === \"each\" && args[1] === \"startEveryTurn\")) {\n    const previous = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.selfDamage`)) || 0;\n    const selfDamage = args[0] === \"on\" ? 1 : previous + 1;\n    await sourceItem.setFlag(\"midi-qol\", stateKey, {selfDamage, diceAvailable: selfDamage * 2});\n    const roll = await new CONFIG.Dice.DamageRoll(`${selfDamage}d6`).evaluate();\n    await MidiQOL.displayDSNForRoll(roll, \"damageRoll\");\n    await new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, \"none\", [token], roll, {itemData: {flags: {autoanimations: {isEnabled: false, version: 5}}, name: \"Nova - Damage (Self)\", type: \"feat\", img: sourceItem.img}, noConcentrationCheck: true});\n}\nif(args[0] === \"off\") {\n    await sourceItem.unsetFlag(\"midi-qol\", stateKey);\n    const sourceUuid = args.at(-1)?.effectUuid ?? `${actor.uuid}.ActiveEffect.${args.at(-1)?.effectId}`;\n    const ids = actor.items.filter(helper => helper.getFlag(\"dnd5e\", \"dependentOn\") === sourceUuid && helper.getFlag(\"gambits-premades\", \"novaHelper\")).map(helper => helper.id);\n    if(ids.length) await actor.deleteEmbeddedDocuments(\"Item\", ids);\n}\nif(args[0]?.macroPass === \"preDamageRollComplete\") {\n    if(!game.combat?.started || game.combat.combatant?.token?.uuid !== token.document.uuid || actor.system.attributes.hp.value <= 0) return;\n    if(!workflow.activity.hasAttack && !workflow.activity.hasSave) return;\n    if(workflow.targets.size !== 1 || (workflow.activity.hasAttack && !workflow.hitTargets.size) || workflow.gps?.novaDamage) return;\n    const available = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.diceAvailable`)) || 0;\n    if(available <= 0) return;\n    const count = await game.gps.showAutomationDialog({window: {title: sourceItem.name}, content: `<label>${game.i18n.format(\"GAMBITSPREMADES.Dialogs.Nova.DamageDice\", {maximum: available})} <input name=\"dice\" type=\"number\" value=\"0\" min=\"0\" max=\"${available}\" step=\"1\"></label>`, buttons: [{action: \"use\", label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Use\"), callback: (event, button) => Number(button.form.elements.dice.value)}, {action: \"cancel\", label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Cancel\")}], rejectClose: false});\n    const current = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.diceAvailable`)) || 0;\n    if(!Number.isInteger(count) || count < 1 || count > current) return;\n    const roll = await new CONFIG.Dice.DamageRoll(`${count}d6`, {}, {type: \"radiant\", properties: [\"mgc\"]}).evaluate();\n    await sourceItem.setFlag(\"midi-qol\", `${stateKey}.diceAvailable`, current - count);\n    (workflow.gps ??= {}).novaDamage = true;\n    await workflow.setDamageRolls([...workflow.damageRolls, roll]);\n}\n",
+        "command": "const sourceItem = macroItem ?? item;\nconst stateKey = `feature.nova.${token.id}`;\nif(args[0] === \"on\") {\n    const context = args.at(-1);\n    const sourceUuid = context?.effectUuid ?? `${actor.uuid}.ActiveEffect.${context?.effectId}`;\n    const existing = actor.items.find(helper => helper.getFlag(\"dnd5e\", \"dependentOn\") === sourceUuid && helper.getFlag(\"gambits-premades\", \"novaHelper\"));\n    if(!existing) await actor.createEmbeddedDocuments(\"Item\", [{name: \"Nova - End Nova\", type: \"feat\", img: sourceItem.img, system: {activities: {gpsEndNova000001: {type: \"utility\", activation: {type: \"bonus\"}, consumption: {spellSlot: false, targets: []}, target: {affects: {type: \"self\"}}}}}, flags: {dnd5e: {dependentOn: sourceUuid}, \"gambits-premades\": {novaHelper: true}, \"midi-qol\": {onUseMacroName: \"[preActiveEffects]ItemMacro\"}, dae: {macro: {name: \"End Nova\", type: \"script\", command: 'const source = await fromUuid(macroItem.getFlag(\"dnd5e\", \"dependentOn\")); await source?.delete(); if(actor.items.has(macroItem.id)) await macroItem.delete();'}}}}]);\n}\nif(args[0] === \"on\" || (args[0] === \"each\" && args[1] === \"startEveryTurn\")) {\n    const previous = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.selfDamage`)) || 0;\n    const selfDamage = args[0] === \"on\" ? 1 : previous + 1;\n    await sourceItem.setFlag(\"midi-qol\", stateKey, {selfDamage, diceAvailable: selfDamage * 2});\n    const roll = await new CONFIG.Dice.DamageRoll(`${selfDamage}d6`).evaluate();\n    await MidiQOL.displayDSNForRoll(roll, \"damageRoll\");\n    await new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, \"none\", [token], roll, {itemData: {flags: {}, name: \"Nova - Damage (Self)\", type: \"feat\", img: sourceItem.img}, noConcentrationCheck: true});\n}\nif(args[0] === \"off\") {\n    await sourceItem.unsetFlag(\"midi-qol\", stateKey);\n    const sourceUuid = args.at(-1)?.effectUuid ?? `${actor.uuid}.ActiveEffect.${args.at(-1)?.effectId}`;\n    const ids = actor.items.filter(helper => helper.getFlag(\"dnd5e\", \"dependentOn\") === sourceUuid && helper.getFlag(\"gambits-premades\", \"novaHelper\")).map(helper => helper.id);\n    if(ids.length) await actor.deleteEmbeddedDocuments(\"Item\", ids);\n}\nif(args[0]?.macroPass === \"preDamageRollComplete\") {\n    if(!game.combat?.started || game.combat.combatant?.token?.uuid !== token.document.uuid || actor.system.attributes.hp.value <= 0) return;\n    if(!workflow.activity.hasAttack && !workflow.activity.hasSave) return;\n    if(workflow.targets.size !== 1 || (workflow.activity.hasAttack && !workflow.hitTargets.size) || workflow.gps?.novaDamage) return;\n    const available = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.diceAvailable`)) || 0;\n    if(available <= 0) return;\n    const count = await game.gps.showAutomationDialog({window: {title: sourceItem.name}, content: `<label>${game.i18n.format(\"GAMBITSPREMADES.Dialogs.Nova.DamageDice\", {maximum: available})} <input name=\"dice\" type=\"number\" value=\"0\" min=\"0\" max=\"${available}\" step=\"1\"></label>`, buttons: [{action: \"use\", label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Use\"), callback: (event, button) => Number(button.form.elements.dice.value)}, {action: \"cancel\", label: game.i18n.localize(\"GAMBITSPREMADES.Dialogs.Common.Cancel\")}], rejectClose: false});\n    const current = Number(sourceItem.getFlag(\"midi-qol\", `${stateKey}.diceAvailable`)) || 0;\n    if(!Number.isInteger(count) || count < 1 || count > current) return;\n    const roll = await new CONFIG.Dice.DamageRoll(`${count}d6`, {}, {type: \"radiant\", properties: [\"mgc\"]}).evaluate();\n    await sourceItem.setFlag(\"midi-qol\", `${stateKey}.diceAvailable`, current - count);\n    (workflow.gps ??= {}).novaDamage = true;\n    await workflow.setDamageRolls([...workflow.damageRolls, roll]);\n}\n",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -459,7 +455,7 @@
           "zIndex": 1
         }
       },
-      "isEnabled": false,
+      "isEnabled": true,
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
@@ -473,17 +469,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

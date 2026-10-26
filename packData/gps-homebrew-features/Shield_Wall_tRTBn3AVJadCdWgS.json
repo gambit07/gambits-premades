@@ -36,6 +36,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.ZLoub4dgPCiXbC4u.Actor.SNZJsEKbROB1q6bT.Item.BDnpAwgLhzynIyKp",
       "duration": {},
       "disabled": false,
@@ -55,10 +56,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -86,7 +83,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!tRTBn3AVJadCdWgS.m9blhJJyD0sqfkNB"
     }
@@ -111,12 +107,8 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "_id": "tRTBn3AVJadCdWgS",

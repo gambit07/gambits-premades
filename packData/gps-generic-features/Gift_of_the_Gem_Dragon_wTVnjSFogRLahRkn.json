@@ -243,27 +243,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "qqRLvVeIMhGeAWqN": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "img": "icons/commodities/gems/pearl-storm.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-generic-features.Item.VXdRNRLMZVjJyAFz",
       "duration": {},
       "disabled": false,
@@ -286,10 +273,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -305,7 +288,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": {
         "time": 1697160834,
         "round": 80,

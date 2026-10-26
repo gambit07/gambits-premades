@@ -289,6 +289,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "img": "icons/containers/kitchenware/goblet-jeweled-red.webp",
       "name": "Heroes' Feast",
       "statuses": [],
@@ -324,10 +325,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "description": "",
@@ -368,7 +365,6 @@
         ]
       },
       "origin": null,
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!hr7lp9WPTLzmV6zu.guYbniQzjSBEbDyB"
     }
@@ -404,29 +400,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "utilityHeroeFeas": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Create Feast",
-        "activityType": "utility",
-        "version": 2
-      },
-      "dpcTO6sCjQEKwapI": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Consume Feast",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

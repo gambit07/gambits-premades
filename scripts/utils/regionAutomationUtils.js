@@ -49,13 +49,20 @@ export function regionEventUser(regionScenario, userId) {
 export async function cleanupRegionStatuses(region) {
     if(game.user.id !== game.gps.getPrimaryGM()) return;
     const actors = new Map(Array.from(game.actors ?? [], actor => [actor.uuid, actor]));
+    const matchesEffect = effect => effect.flags?.["gambits-premades"]?.regionUuid === region.uuid;
+    const matchesItem = item => item.flags?.["gambits-premades"]?.regionEscape?.regionUuid === region.uuid;
+    const baseActors = new Set([...actors.values()].filter(actor => actor.effects.some(matchesEffect) || actor.items.some(matchesItem)).map(actor => actor.id));
     for(const scene of game.scenes ?? []) for(const token of scene.tokens) {
-        if(token.actor) actors.set(token.actor.uuid, token.actor);
+        if(token.actorLink) continue;
+        const source = token._source;
+        if(!baseActors.has(source.actorId) && !source.delta?.effects?.some(matchesEffect) && !source.delta?.items?.some(matchesItem)) continue;
+        const actor = token.actor;
+        if(actor) actors.set(actor.uuid, actor);
     }
     for(const actor of actors.values()) {
-        const ids = actor.effects.filter(effect => effect.flags["gambits-premades"]?.regionUuid === region.uuid).map(effect => effect.id);
+        const ids = actor.effects.filter(matchesEffect).map(effect => effect.id);
         if(ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
-        const items = actor.items.filter(item => item.flags["gambits-premades"]?.regionEscape?.regionUuid === region.uuid);
+        const items = actor.items.filter(matchesItem);
         if(items.length) await actor.deleteEmbeddedDocuments("Item", items.map(item => item.id));
     }
 }

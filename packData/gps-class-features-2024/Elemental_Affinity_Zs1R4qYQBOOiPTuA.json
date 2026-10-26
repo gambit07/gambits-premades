@@ -40,6 +40,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "name": "Elemental Affinity",
       "origin": "Compendium.world.gps-class-features-2024.Item.Zs1R4qYQBOOiPTuA",
       "duration": {},
@@ -73,7 +74,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dnd5e": {
           "riders": {
@@ -90,10 +90,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -181,15 +177,11 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       },
       "config": {
         "damageType": "force"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "_id": "Zs1R4qYQBOOiPTuA",

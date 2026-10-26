@@ -87,17 +87,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/skills/movement/feet-winged-boots-brown.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-generic-features.Item.dV0FzUTUxfvhGWVj",
       "duration": {},
       "disabled": false,
@@ -128,10 +125,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -159,7 +152,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!Y25WtZ7Ts1HZB9ts.ayGBoPfqCMspbtky"
     }

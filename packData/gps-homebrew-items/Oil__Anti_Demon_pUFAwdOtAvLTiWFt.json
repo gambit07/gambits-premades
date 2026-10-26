@@ -199,6 +199,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-homebrew-items.Item.Qvxs1MZOMavh2nQ1",
       "duration": {
         "value": 60,
@@ -235,7 +236,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableIncapacitated": false,
@@ -246,10 +246,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -303,25 +299,11 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
     },
     "gambits-premades": {
       "oilType": "anti-demon"
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
-      }
     }
   },
   "_id": "pUFAwdOtAvLTiWFt",

@@ -61,17 +61,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/skills/wounds/blood-cells-disease-green.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-race-features.Item.wNuwXPqCsshIcO2V",
       "duration": {},
       "disabled": false,
@@ -99,7 +96,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -116,10 +112,6 @@
           "riders": {
             "statuses": []
           }
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,

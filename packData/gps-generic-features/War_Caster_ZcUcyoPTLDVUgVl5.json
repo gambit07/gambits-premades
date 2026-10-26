@@ -76,17 +76,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "img": "icons/weapons/wands/wand-carved-fire.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-generic-features.Item.ZcUcyoPTLDVUgVl5",
       "duration": {},
       "disabled": false,
@@ -114,10 +111,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -133,7 +126,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!ZcUcyoPTLDVUgVl5.IxLspcfy2IQcz9iY"
     }

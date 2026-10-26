@@ -300,6 +300,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "origin": "Compendium.world.gps-3rd-party-features.Item.Og8JVlVmMGomOSkp",
       "duration": {
         "value": 60,
@@ -330,7 +331,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -354,10 +354,6 @@
         },
         "gambits-premades": {
           "gpsUuid": "c87befde-c36f-4237-b645-e98e1526de42"
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -413,29 +409,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
-      },
-      "XlPgKZcLDzD5xUyN": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

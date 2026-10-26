@@ -206,6 +206,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "name": "Dipolar Gages",
       "origin": "Actor.4rgwJtcvBFEmAQ4A.Item.QHaSUe6nNJkA4BwS",
       "duration": {},
@@ -228,11 +229,7 @@
           "macroRepeat": "none",
           "specialDuration": []
         },
-        "effectmacro": {},
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
-        }
+        "effectmacro": {}
       },
       "tint": "#ffffff",
       "img": "modules/abyssal-brews-magical-kompendium-vol2/artwork/Dipolar%20Gages.webp",
@@ -253,7 +250,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!Sahgrs44C8h5pVyJ.s5vVugxWuFKNWeL3"
     }
@@ -276,7 +272,7 @@
         "img": "modules/abyssal-brews-magical-kompendium-vol2/artwork/Dipolar%20Gages.webp",
         "type": "script",
         "scope": "global",
-        "command": "const offensive = args[0]?.macroPass === \"preDamageRoll\" && workflow.hitTargets.size && workflow.activity.actionType === \"mwak\";\nconst defensive = args[0]?.macroPass === \"isAttacked\" && workflow.activity.actionType === \"mwak\" && !game.gps.attackHits(workflow, token);\nif(!offensive && !defensive) return;\nif(macroItem.system.uses.spent >= macroItem.system.uses.max || (defensive && MidiQOL.hasUsedReaction(actor))) return;\nconst accepted = await game.gps.confirmAutomationDialog({window: {title: macroItem.name}, content: `<p>${offensive ? game.i18n.localize(\"GAMBITSPREMADES.Dialogs.DipolarGages.Offensive\") : game.i18n.localize(\"GAMBITSPREMADES.Dialogs.DipolarGages.Defensive\")}</p>`, rejectClose: false});\nif(!accepted || macroItem.system.uses.spent >= macroItem.system.uses.max || (defensive && MidiQOL.hasUsedReaction(actor))) return;\nconst target = offensive ? workflow.hitTargets.first() : workflow.token;\nif(!target) return;\nconst synthetic = new CONFIG.Item.documentClass(game.gps.disableBlfxAutoRecognition({flags: {autoanimations: {isEnabled: false, version: 5}}, name: macroItem.name, type: \"feat\", img: macroItem.img, system: {activities: {gpsGagesSave0001: {type: \"save\", activation: {type: \"special\"}, consumption: {spellSlot: false, targets: []}, target: {affects: {type: \"creature\", count: \"1\"}}, save: {ability: [offensive ? \"dex\" : \"str\"], dc: {calculation: \"\", formula: \"15\"}}, damage: {onSave: \"none\", parts: []}}}}}), {parent: actor});\nconst save = await MidiQOL.completeItemUse(synthetic, {midiOptions: {targetUuids: [target.document.uuid], noOnUseMacro: true}}, {configure: false}, {});\nif(!save || save.aborted) return;\nawait macroItem.update({\"system.uses.spent\": macroItem.system.uses.spent + 1});\nif(defensive) await game.gps.addReaction({actorUuid: actor.uuid});\nif(offensive) await MidiQOL.moveTokenAwayFromPoint(target, game.gps.convertFromFeet({range: 15}), token.center, {animate: false});\nif(save.failedSaves.size) {\n    if(offensive) await game.gps.queryGM(\"gmToggleStatus\", {tokenUuid: target.document.uuid, status: \"prone\", active: true});\n    else await MidiQOL.socket().executeAsGM(\"updateItems\", {actorUuid: workflow.actor.uuid, updates: [{_id: workflow.item.id, \"system.equipped\": false}]});\n}\n",
+        "command": "const offensive = args[0]?.macroPass === \"preDamageRoll\" && workflow.hitTargets.size && workflow.activity.actionType === \"mwak\";\nconst defensive = args[0]?.macroPass === \"isAttacked\" && workflow.activity.actionType === \"mwak\" && !game.gps.attackHits(workflow, token);\nif(!offensive && !defensive) return;\nif(macroItem.system.uses.spent >= macroItem.system.uses.max || (defensive && MidiQOL.hasUsedReaction(actor))) return;\nconst accepted = await game.gps.confirmAutomationDialog({window: {title: macroItem.name}, content: `<p>${offensive ? game.i18n.localize(\"GAMBITSPREMADES.Dialogs.DipolarGages.Offensive\") : game.i18n.localize(\"GAMBITSPREMADES.Dialogs.DipolarGages.Defensive\")}</p>`, rejectClose: false});\nif(!accepted || macroItem.system.uses.spent >= macroItem.system.uses.max || (defensive && MidiQOL.hasUsedReaction(actor))) return;\nconst target = offensive ? workflow.hitTargets.first() : workflow.token;\nif(!target) return;\nconst synthetic = new CONFIG.Item.documentClass({flags: {}, name: macroItem.name, type: \"feat\", img: macroItem.img, system: {activities: {gpsGagesSave0001: {type: \"save\", activation: {type: \"special\"}, consumption: {spellSlot: false, targets: []}, target: {affects: {type: \"creature\", count: \"1\"}}, save: {ability: [offensive ? \"dex\" : \"str\"], dc: {calculation: \"\", formula: \"15\"}}, damage: {onSave: \"none\", parts: []}}}}}, {parent: actor});\nconst save = await MidiQOL.completeItemUse(synthetic, {midiOptions: {targetUuids: [target.document.uuid], noOnUseMacro: true}}, {configure: false}, {});\nif(!save || save.aborted) return;\nawait macroItem.update({\"system.uses.spent\": macroItem.system.uses.spent + 1});\nif(defensive) await game.gps.addReaction({actorUuid: actor.uuid});\nif(offensive) await MidiQOL.moveTokenAwayFromPoint(target, game.gps.convertFromFeet({range: 15}), token.center, {animate: false});\nif(save.failedSaves.size) {\n    if(offensive) await game.gps.queryGM(\"gmToggleStatus\", {tokenUuid: target.document.uuid, status: \"prone\", active: true});\n    else await MidiQOL.socket().executeAsGM(\"updateItems\", {actorUuid: workflow.actor.uuid, updates: [{_id: workflow.item.id, \"system.equipped\": false}]});\n}\n",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -306,21 +302,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

@@ -171,27 +171,14 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "qPmo1metfeKZACYI": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
   "img": "icons/creatures/abilities/wings-birdlike-blue.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Actor.Q7GcFBwAbXgQX9Yv.Item.qWiv28Gjy6Da4SDd",
       "duration": {
         "value": 60,
@@ -217,7 +204,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -241,10 +227,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,

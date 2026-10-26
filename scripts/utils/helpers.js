@@ -1097,11 +1097,12 @@ export async function gmDeleteItem({itemUuid}) {
     await itemData.delete();
 }
 
-export function getCprConfig({itemUuid, type = "anim"}) {
+/** Read configuration from an existing item when available to avoid resolving its actor during preparation. */
+export function getCprConfig({item, itemUuid, type = "anim"}) {
     if(type === "anim") {
         const defaults = {animEnabled: true, animColor: null, soundVolume: 0.2};
         if(!game.modules.get("cat")?.active) return defaults;
-        let itemData = fromUuidSync(itemUuid);
+        let itemData = item ?? fromUuidSync(itemUuid);
         if(!itemData) return defaults;
         const config = cat.utils.automationUtils.getConfigValues(itemData, ["playAnimation", "color", "soundVolume"]) ?? {};
         return {
@@ -1112,7 +1113,7 @@ export function getCprConfig({itemUuid, type = "anim"}) {
     }
     else if(type === "homebrewDice") {
         if(!game.modules.get("cat")?.active) return {homebrewDiceEnabled: false};
-        let itemData = fromUuidSync(itemUuid);
+        let itemData = item ?? fromUuidSync(itemUuid);
         if(!itemData) return {homebrewDiceEnabled: false};
         let cprConfig = cat.utils.automationUtils.getConfigValues(itemData, ["enableCustomDice", "customDiceNum", "customDiceFace"]);
         if(!cprConfig) return {homebrewDiceEnabled: false};
@@ -1124,7 +1125,7 @@ export function getCprConfig({itemUuid, type = "anim"}) {
     }
     else if(type === "damageType") {
         if(!game.modules.get("cat")?.active) return {damageType: false};
-        let itemData = fromUuidSync(itemUuid);
+        let itemData = item ?? fromUuidSync(itemUuid);
         if(!itemData) return {damageType: false};
         let cprConfig = cat.utils.automationUtils.getConfigValues(itemData, ["damageType"]);
         if(!cprConfig) return {damageType: false};

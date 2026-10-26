@@ -207,6 +207,7 @@
   "img": "icons/magic/death/undead-ghosts-trio-blue.webp",
   "effects": [
     {
+      "sort": 0,
       "name": "Phantasmal Killer",
       "origin": "Compendium.dnd-players-handbook.spells.Item.phbsplPhantasmal",
       "duration": {
@@ -234,10 +235,6 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "img": "icons/magic/death/skull-horned-white-purple.webp",
@@ -270,7 +267,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!fRlsDsNXVyFszwPQ.4k92Sjfpcm5bnguO"
     }
@@ -301,21 +297,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Save",
-        "activityType": "save",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },

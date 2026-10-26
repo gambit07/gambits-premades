@@ -394,7 +394,7 @@
         "img": "icons/equipment/shield/kite-steel-boss-gold.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    const oaFlag = workflow.activity.identifier === \"shieldStrike\";\n    let target = workflow.hitTargets.first();\n\n    if(oaFlag && target) {\n        const itemData = game.gps.disableBlfxAutoRecognition({\n        name: \"Dragon Turtle Dueling Shield Save\",\n        type: \"feat\",\n            img: \"https://www.dndbeyond.com/avatars/40852/561/638472515906293225.png\",\n        effects: [],\n        flags: {\n            autoanimations: {isEnabled: false, version: 5},\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            }\n        },\n        system: {\n            activities: {\n                gpsSynthetic0001: {\n                    type: \"save\",\n                    activation: { type: \"special\" },\n                    consumption: { spellSlot: false, targets: [] },\n                    target: { affects: { type: \"creature\", count: \"1\" } },\n                    save: { ability: [\"dex\"], dc: { calculation: \"\", formula: String(16) } },\n                    damage: { onSave: \"none\", parts: [] }\n                }\n            }\n        }\n        });\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: actor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n        const saveResult = await MidiQOL.completeItemUse(itemUpdate, { midiOptions: options }, { configure: false }, {});\n\n        if(saveResult.failedSaves.size === 1) {\n            const hasEffectApplied = target.actor.appliedEffects.find(e => e.name === \"Prone\");\n            if (!hasEffectApplied) {\n                await game.gps.queryGM(\"gmToggleStatus\", {tokenUuid: `${target.document.uuid}`, status: \"prone\", active: true });\n            }\n        }\n\n\n    }\n}",
+        "command": "if(args[0].macroPass === \"postActiveEffects\") {\n    const oaFlag = workflow.activity.identifier === \"shieldStrike\";\n    let target = workflow.hitTargets.first();\n\n    if(oaFlag && target) {\n        const itemData = {\n        name: \"Dragon Turtle Dueling Shield Save\",\n        type: \"feat\",\n            img: \"https://www.dndbeyond.com/avatars/40852/561/638472515906293225.png\",\n        effects: [],\n        flags: {\n            \"midi-qol\": {\n                noProvokeReaction: true,\n                onUseMacroName: null,\n                forceCEOff: true\n            }\n        },\n        system: {\n            activities: {\n                gpsSynthetic0001: {\n                    type: \"save\",\n                    activation: { type: \"special\" },\n                    consumption: { spellSlot: false, targets: [] },\n                    target: { affects: { type: \"creature\", count: \"1\" } },\n                    save: { ability: [\"dex\"], dc: { calculation: \"\", formula: String(16) } },\n                    damage: { onSave: \"none\", parts: [] }\n                }\n            }\n        }\n        };\n        const itemUpdate = new CONFIG.Item.documentClass(itemData, {parent: actor});\n        const options = { showFullCard: false, createWorkflow: true, versatile: false, configureDialog: false, targetUuids: [target.document.uuid], workflowOptions: {autoRollDamage: 'always', autoFastDamage: true} };\n        const saveResult = await MidiQOL.completeItemUse(itemUpdate, { midiOptions: options }, { configure: false }, {});\n\n        if(saveResult.failedSaves.size === 1) {\n            const hasEffectApplied = target.actor.appliedEffects.find(e => e.name === \"Prone\");\n            if (!hasEffectApplied) {\n                await game.gps.queryGM(\"gmToggleStatus\", {tokenUuid: `${target.document.uuid}`, status: \"prone\", active: true });\n            }\n        }\n\n\n    }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -424,33 +424,11 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
     },
     "gambits-premades": {
       "shieldStrike": true
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "dnd5eactivity000": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Slash",
-        "activityType": "attack",
-        "version": 2
-      },
-      "gpsShieldStrike1": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Shield Strike",
-        "activityType": "attack",
-        "version": 2
-      }
     }
   },
   "effects": [],

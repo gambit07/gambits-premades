@@ -4,6 +4,7 @@
   "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Weaver%27s%20Hoop.webp",
   "effects": [
     {
+      "sort": 0,
       "origin": "Actor.1xFtQVMnMyuFm2w2.Item.q4yCFb4aLYYzuxMt",
       "duration": {},
       "disabled": false,
@@ -23,10 +24,6 @@
           "durationExpression": "",
           "macroRepeat": "none",
           "specialDuration": []
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "tint": "#ffffff",
@@ -48,7 +45,6 @@
           }
         ]
       },
-      "sort": 0,
       "start": null,
       "_key": "!items.effects!ntDZHgxnpeDq2TUL.UNiU6zoPTpbrxoIA"
     }
@@ -71,12 +67,8 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
     }
   },
   "system": {

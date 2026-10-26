@@ -1,5 +1,5 @@
 export function elementalAffinityType(item) {
-    const configured = game.gps?.getCprConfig?.({itemUuid: item.uuid, type: "damageType"})?.dType;
+    const configured = game.gps?.getCprConfig?.({item, type: "damageType"})?.dType;
     return typeof configured === "string" && Object.hasOwn(CONFIG.DND5E.damageTypes, configured) ? configured : null;
 }
 

@@ -156,6 +156,7 @@
   },
   "effects": [
     {
+      "sort": 0,
       "name": "Wound",
       "origin": "Item.sPAhgPgannSphKdZ",
       "duration": {
@@ -198,7 +199,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -223,16 +223,13 @@
         },
         "gambits-premades": {
           "gpsUuid": "7186eac1-010a-4fb4-bd22-699d06839162"
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!caYyWnXvYjgsJnQd.PyTbYhpx8qAUSYhr"
     },
     {
+      "sort": 0,
       "name": "Wound Applicator",
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.Ct9wAPpQAERU5Bng.Actor.SNZJsEKbROB1q6bT.Item.7t9BNvIZ884SYTJ7",
       "duration": {},
@@ -254,7 +251,6 @@
       "tint": "#ffffff",
       "transfer": true,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -271,16 +267,13 @@
         },
         "core": {
           "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
       "_key": "!items.effects!caYyWnXvYjgsJnQd.5lN7yVKA5sdsrcMN"
     },
     {
+      "sort": 0,
       "name": "Wound Checker",
       "origin": "Scene.1mkVNeOdyVIlDdH7.Token.Ct9wAPpQAERU5Bng.Actor.SNZJsEKbROB1q6bT.Item.7t9BNvIZ884SYTJ7",
       "duration": {},
@@ -302,7 +295,6 @@
       "tint": "#ffffff",
       "transfer": false,
       "statuses": [],
-      "sort": 0,
       "flags": {
         "dae": {
           "disableCondition": "",
@@ -326,10 +318,6 @@
         },
         "gambits-premades": {
           "gpsUuid": "a6e73d28-8fac-4aad-a30a-4d992217a710"
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
         }
       },
       "start": null,
@@ -390,21 +378,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
-      }
-    },
-    "autoanimations": {
-      "isEnabled": false,
-      "version": 5
-    },
-    "boss-loot-assets-premium": {
-      "W3l6nhWFGtZetGt9": {
-        "autoRec": {
-          "enabled": false
-        },
-        "activityName": "Use",
-        "activityType": "utility",
-        "version": 2
+        "version": "3.0.3"
       }
     }
   },
