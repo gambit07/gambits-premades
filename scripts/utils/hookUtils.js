@@ -60,6 +60,7 @@ export function registerWrapping() {
             if (behavior.type !== "executeScript") return wrapped.call(this, region, waypoints);
         }
 
+        if (waypoints.length < 2) return wrapped.call(this, region, waypoints);
         if (waypoints.some(point => ["level", "width", "height", "depth", "shape"].some(key => point[key] !== undefined && point[key] !== this._source[key]))) return wrapped.call(this, region, waypoints);
         if (!region.includedInLevel(this._source.level)) return [];
         const size = this.parent.grid.size;
@@ -68,17 +69,48 @@ export function registerWrapping() {
         const reduction = Math.min(wPx, hPx) * 0.1;
 
         const points = [
-            { x: reduction, y: reduction, elevation: this.elevation },
-            { x: wPx - reduction, y: reduction, elevation: this.elevation },
-            { x: reduction, y: hPx - reduction, elevation: this.elevation },
-            { x: wPx - reduction, y: hPx - reduction, elevation: this.elevation },
-            { x: wPx / 2, y: reduction, elevation: this.elevation },
-            { x: wPx / 2, y: hPx - reduction, elevation: this.elevation },
-            { x: reduction, y: hPx / 2, elevation: this.elevation },
-            { x: wPx - reduction, y: hPx / 2,       elevation: this.elevation }
+            { x: reduction, y: reduction, elevation: this._source.elevation },
+            { x: wPx - reduction, y: reduction, elevation: this._source.elevation },
+            { x: reduction, y: hPx - reduction, elevation: this._source.elevation },
+            { x: wPx - reduction, y: hPx - reduction, elevation: this._source.elevation },
+            { x: wPx / 2, y: reduction, elevation: this._source.elevation },
+            { x: wPx / 2, y: hPx - reduction, elevation: this._source.elevation },
+            { x: reduction, y: hPx / 2, elevation: this._source.elevation },
+            { x: wPx - reduction, y: hPx / 2,       elevation: this._source.elevation }
         ];
 
-        const segments = region.segmentizeMovementPath(waypoints, points);
+        const {width, height, depth, shape, level} = this._source;
+        const dimensions = {width, height, depth, shape, level};
+        const source = this._source;
+        const first = waypoints[0];
+        let from = {x: first.x ?? source.x, y: first.y ?? source.y, elevation: first.elevation ?? source.elevation};
+        let previousAction = first.action ?? this.movementAction;
+        const segments = [];
+
+        for (let index = 1; index < waypoints.length; index++) {
+            const waypoint = waypoints[index];
+            const action = waypoint.action ?? previousAction;
+            const to = {
+                x: Math.round(waypoint.x ?? from.x),
+                y: Math.round(waypoint.y ?? from.y),
+                elevation: waypoint.elevation ?? from.elevation,
+                teleport: CONFIG.Token.movement.actions[action].teleport
+            };
+
+            for (const segment of region.segmentizeMovementPath([from, to], points)) {
+                delete segment.teleport;
+                Object.assign(segment.from, dimensions);
+                Object.assign(segment.to, dimensions);
+                segment.action = action;
+                segment.terrain = waypoint.terrain ? waypoint.terrain.clone() : null;
+                segment.snapped = waypoint.snapped ?? false;
+                segments.push(segment);
+            }
+
+            from = to;
+            previousAction = action;
+        }
+
         return (segments.length > 0) ? segments : wrapped.call(this, region, waypoints);
     }, 'MIXED');
 }

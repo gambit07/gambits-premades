@@ -101,8 +101,8 @@ Hooks.once("ready", async () => {
         const content = `
             <div class="gps-announcement" style="border:4px solid #4A90E2; border-radius:6px; padding:12px;">
                 <h3 style="margin:0;">🎉 Welcome to Gambit's Premades V${version}!</h3>
-                <p style="font-size:1em;">This release removes a -legacy suffix from Heroes Feast, Mental Prison, Arcane Shot, and Arcane Shot arrow items to bring them in line with other items. If you have characters using those items I suggest reviewing them to make sure they update appropriately via the CAT medkit process.</p>
-                <p style="font-size:1em;">After installing, use CAT to update existing item automations or manually replace relevant items with their updated compendium items. Make sure you are on the Beta releases for Midi QOL (14.6.4) and DAE (14.6.3) if you want to use this update.</p>
+                <p style="font-size:1em;">This release resolves a bug that could cause a world crash with certain region types when region wrapping was enabled.</p>
+                <p style="font-size:1em;">Use CAT to update existing item automations or manually replace relevant items with their updated compendium items. Make sure you are on the Beta releases for Midi QOL (14.6.4) and DAE (14.6.3) if you want to use this update.</p>
                 <p style="font-size:1em;">Please check out the <a href="https://github.com/gambit07/gambits-premades/releases/latest" target="_blank" rel="noopener noreferrer" style="color:#dd6b20; text-decoration:none; font-weight:bold;">Release Notes</a> for more detail.</p>
                 <ul>
                     <li>If you'd like to support development and get access to these additional modules:

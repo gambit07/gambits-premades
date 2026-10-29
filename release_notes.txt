@@ -1,7 +1,3 @@
 Offical V14 and DND5e V6 release! Tons of updates, fixes, changes, etc with high level overviews below. If you have issues please report them on the Discord. Make sure you are on the Beta releases for Midi QOL and DAE if you want to use this update.
-- Updates:
-  - Updated Heroes Feast 2014 to remove -legacy identifier suffix from the originally added ddbi item. Users with this gps item will need to grab a new copy of the item from srd/phb/ddbi or update their item's identifier to remove -legacy in order to receive future updates via CAT.
-  - Updated Mental Prison 2014 to remove -legacy identifier suffix from the originally added ddbi item. Users with this gps item will need to grab a new copy of the item from srd/phb/ddbi or update their item's identifier to remove -legacy in order to receive future updates via CAT.
-  - Updated Arcane Shot 2014 and all of it's sub-arrows to remove -legacy identifier suffix from the originally added ddbi item. Users with this gps item will need to grab a new copy of the item from srd/phb/ddbi or update their item's identifier to remove -legacy in order to receive future updates via CAT.
 - Bugfixes:
-  - Resolved a world hang that could occur for a few gps items via unintended recursion
+  - Fixed a world crash that could occur when using token animates in/out region behavior events with GPS region wrapping enabled
