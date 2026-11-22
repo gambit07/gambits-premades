@@ -23,12 +23,13 @@ export async function setRegionStatus({tokenUuid, regionUuid, status = "restrain
         const region = await fromUuid(regionUuid);
         const item = await fromUuid(region?.getFlag("dnd5e", "item"));
         if(!region || !item || game.gps.spellRegionSuppressed(item, token.actor)) return;
-        const concentration = MidiQOL.getConcentrationEffect(item.actor, item.uuid);
+        const owner = region.getFlag("dnd5e", "dependentOn");
+        if(owner && !fromUuidSync(owner, {strict: false})) return;
         const condition = CONFIG.statusEffects.find(effect => effect.id === status);
         const data = {
             name: `${item.name}: ${game.i18n.localize(condition?.name ?? status)}`,
             img: condition?.img ?? item.img, origin: item.uuid, statuses: [status], transfer: false, system: {magical: item.type === "spell"},
-            flags: {"gambits-premades": {regionUuid}, dnd5e: concentration ? {dependentOn: concentration.uuid} : {}}
+            flags: {"gambits-premades": {regionUuid}, dnd5e: owner ? {dependentOn: owner} : {}}
         };
         await token.actor.createEmbeddedDocuments("ActiveEffect", [data]);
         await game.gps.ensureRegionEscape({tokenUuid, regionUuid});

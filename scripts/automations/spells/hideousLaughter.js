@@ -1,3 +1,12 @@
+import {castConcentration, removeAppliedEffect} from "../../utils/castEffects.js";
+/** Midi reads these values for this target's pending save, including a roll requested on another client. */
+export function applyRepeatSaveAdvantage(token, workflow, details) {
+    const uuid = workflow.workflowOptions?.gps?.advantageSaveTarget;
+    if(!uuid || game.gps.tokenDocument(token)?.uuid !== uuid || workflow.activity?.identifier !== "syntheticSave") return;
+    details.advantage = true;
+    details.modifierTracker?.advantage.add("gpsRepeatSave", workflow.item.name);
+}
+
 export async function hideousLaughter({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options }) {
     if(args[0]?.macroPass === "prePreambleComplete" && item.system.source.rules === "2014") {
         for(const target of workflow.targets.documents) {
@@ -10,33 +19,26 @@ export async function hideousLaughter({ speaker, actor, token, tokenDocument = g
     }
     if (args[0].macroPass === "isDamaged" || args[0] === "each")
     {
-        let effectOriginActor;
-        (args[0].macroPass === "isDamaged") ? effectOriginActor = item.parent : effectOriginActor = await fromUuid(args[2]);
-
-        if(args[0].macroPass === "isDamaged") {
-            let effectAdv = [{
-                system: { changes: [{ key: "system.abilities.wis.save.roll.mode", type: "add", value: 1, priority: 20 }] },
-                flags: { "dae": { "token": actor.uuid, specialDuration: ["isSave"] } },
-                disabled: false,
-                name: `Damaged - Advantage on Save`
-            }];
-            let checkEffect = actor.appliedEffects.find(i => i.name ===  `Damaged - Advantage on Save`);
-            if(!checkEffect) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: actor.uuid, effects: effectAdv });
-        }
-
-        const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: tokenDocument.uuid});
-
-        if (saveResult?.failedSaves.size === 0)
-        {
-            let effectData = actor.appliedEffects.find(e => e.name === item.name && DAE.effectMatchesSource(e, item.uuid))
-            if (effectData)	await effectData.delete();
+        if(!tokenDocument?.uuid) return;
+        const damaged = args[0]?.macroPass === "isDamaged";
+        const effects = damaged ? actor.appliedEffects.filter(e => e.system?.changes?.some(c =>
+            c.key === "flags.midi-qol.onUseMacroName" && String(c.value).includes("gps.hideousLaughter")))
+            : [actor.effects.get(args.at(-1)?.effectId)];
+        const handled = damaged ? ((workflow.gps ??= {}).laughterSaves ??= new Set()) : new Set();
+        for(const effect of effects) {
+            if(!effect?.active || handled.has(effect.uuid)) continue;
+            handled.add(effect.uuid);
+            const source = await DAE.getEffectItem(effect);
+            if(!source) continue;
+            const save = await game.gps.gpsActivityUse({itemUuid: source.uuid, identifier: "syntheticSave", targetUuid: tokenDocument.uuid, advantageSave: damaged});
+            if(save?.failedSaves?.size === 0) await removeAppliedEffect(effect);
         }
     }
 
     else if (args[0].macroPass === "postActiveEffects")
     {
         let targets = workflow.failedSaves.documents;
-        const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid)
+        const hasConcApplied = castConcentration(actor, item, {workflow});
         if(!targets.length && hasConcApplied) {
             await hasConcApplied.delete();
             return;

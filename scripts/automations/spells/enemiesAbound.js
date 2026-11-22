@@ -1,3 +1,4 @@
+import {castConcentration, appliedSpellEffect, removeAppliedEffect} from "../../utils/castEffects.js";
 import {effectToken, setEffectFlag} from "../../utils/effectTargetUtils.js";
 
 const MODULE = "gambits-premades";
@@ -36,7 +37,7 @@ export async function enemiesAbound({ speaker, actor, token, tokenDocument = gam
             if (immunity) {
                 ui.notifications.notify(game.i18n.format("GAMBITSPREMADES.Notifications.Spells.EnemiesAbound.TargetImmuneCannotBeFrightened", { name: target.actor.name }));
                 
-                const hasConcApplied = await MidiQOL.getConcentrationEffect(actor, item.uuid)
+                const hasConcApplied = castConcentration(actor, item, {workflow});
                 
                 if (hasConcApplied) {
                     await hasConcApplied.delete();
@@ -45,9 +46,9 @@ export async function enemiesAbound({ speaker, actor, token, tokenDocument = gam
                 return;
             }
 
-            const effects = target.actor.effects.filter(e => e.getFlag(MODULE, "gpsUuid") === SPELL && DAE.effectMatchesSource(e, item.uuid));
-            const effect = effects.find(e => !e.getFlag(MODULE, "enemiesAboundTokenUuid"))
-                ?? effects.find(e => e.getFlag(MODULE, "enemiesAboundTokenUuid") === target.uuid);
+            const cast = castConcentration(actor, item, {workflow});
+            if(!cast) continue;
+            const effect = appliedSpellEffect(target.actor, item, {cast, workflow, matches: e => e.getFlag(MODULE, "gpsUuid") === SPELL});
             if(!effect) continue;
             await setEffectFlag(effect, "enemiesAboundTokenUuid", target.uuid);
             await game.gps.queryGM("syncEnemiesAboundDisposition", {tokenUuid: target.uuid, effectUuid: effect.uuid, active: true});
@@ -99,15 +100,19 @@ export async function enemiesAbound({ speaker, actor, token, tokenDocument = gam
     if(args[0].macroPass === "isDamaged") {
         const target = effectToken(tokenDocument, null, actor);
         if(!target) return;
-        const effect = actor.appliedEffects.find(e => e.active && e.getFlag(MODULE, "gpsUuid") === SPELL
+        const effects = actor.appliedEffects.filter(e => e.active && e.getFlag(MODULE, "gpsUuid") === SPELL
             && e.getFlag(MODULE, "enemiesAboundTokenUuid") === target.uuid);
-        const spell = effect && await DAE.getEffectItem(effect);
-        if(!spell?.actor) return;
-        const result = await game.gps.gpsActivityUse({itemUuid: spell.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
-        if(result && !result.aborted && result.failedSaves?.size === 0) {
-            await effect.delete();
-            const concentration = MidiQOL.getConcentrationEffect(spell.actor, spell.uuid);
-            if(concentration) await concentration.delete();
+        const handled = ((workflow.gps ??= {}).enemiesAboundSaves ??= new Set());
+        for(const effect of effects) {
+            if(handled.has(effect.uuid)) continue;
+            handled.add(effect.uuid);
+            const spell = await DAE.getEffectItem(effect);
+            if(!spell?.actor) continue;
+            const cast = castConcentration(spell.actor, spell, {effect});
+            const result = await game.gps.gpsActivityUse({itemUuid: spell.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
+            if(result?.failedSaves?.size !== 0 || result.aborted) continue;
+            await removeAppliedEffect(cast);
+            await removeAppliedEffect(effect);
         }
     } else if(args[0] === "off" || args[0] === "on") {
         const context = args.at(-1);

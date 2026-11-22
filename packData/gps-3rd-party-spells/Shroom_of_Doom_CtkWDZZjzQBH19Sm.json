@@ -224,6 +224,9 @@
         "autoanimations": {
           "isEnabled": false,
           "version": 5
+        },
+        "gambits-premades": {
+          "shroomRecipient": true
         }
       },
       "tint": "#ffffff",
@@ -258,7 +261,7 @@
       "reactionCondition": "",
       "otherCondition": "",
       "effectCondition": "",
-      "onUseMacroName": "[postSave]function.game.gps.shroomOfDoom",
+      "onUseMacroName": "[postActiveEffects]function.game.gps.shroomOfDoom",
       "removeAttackDamageButtons": "default"
     },
     "core": {},
@@ -510,7 +513,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.7"
       }
     },
     "gambits-premades": {

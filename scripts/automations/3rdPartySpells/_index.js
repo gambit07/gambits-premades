@@ -1,3 +1,4 @@
+import { emotionalGamut } from "./emotionalGamut.js";
 import { festeringFever } from "./festeringFever.js";
 import { biohazard } from "./biohazard.js";
 import { powerWordRebound } from "./powerWordRebound.js";
@@ -17,5 +18,6 @@ export const thirdPartySpellsMacros = {
   cecilysStormshot,
   contagiousHealing,
   festeringFever,
+  emotionalGamut,
   shroomOfDoom
 };

@@ -1,9 +1,10 @@
+import {castConcentration} from "../../utils/castEffects.js";
 import {effectToken} from "../../utils/effectTargetUtils.js";
 
 export async function mentalPrison({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "postActiveEffects") {
         const targets = workflow.failedSaves;
-        const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid)
+        const hasConcApplied = castConcentration(actor, item, {workflow});
         const checkFails = targets.count === (workflow.activationFails?.count ?? 0);
         const checkElements = targets.documents.every(token => workflow.activationFails?.has(token));
 

@@ -1098,7 +1098,7 @@ export function getPrimaryGM() {
 export async function gmDeleteItem({itemUuid}) {
     if(!itemUuid) return;
     let itemData = await fromUuid(itemUuid);
-    await itemData.delete();
+    await itemData?.delete();
 }
 
 /** Read configuration from an existing item when available to avoid resolving its actor during preparation. */
@@ -1183,7 +1183,7 @@ export async function remoteAbilityTest({spellcasting, actorUuid}) {
     }
 }
 
-export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
+export async function gpsActivityUse({itemUuid, identifier, targetUuid, advantageSave = false, castUuid}) {
     const item = await fromUuid(itemUuid);
     if(!item) return game.gps.logInfo(`Shame you didn't pass me an itemUuid`);
     const activity = item.system.activities.find(a => a.identifier === identifier);
@@ -1191,6 +1191,9 @@ export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
     let targetUuids = (Array.isArray(targetUuid)) ? targetUuid : [targetUuid];
 
     const options = { midiOptions: { targetUuids: targetUuids, noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMstatus: true, autoRollAttack: true, autoRollDamage: "always", fastForwardAttack: true, fastForwardDamage: true, workflowData: true } };
+    if(advantageSave || castUuid) options.midiOptions.workflowOptions = {gps: {
+        ...(advantageSave && targetUuids.length === 1 ? {advantageSaveTarget: targetUuids[0]} : {}), ...(castUuid ? {castUuid} : {})
+    }};
     let activityUse = await MidiQOL.completeActivityUse(activity.uuid, options, {}, {});
     if (!activityUse || activityUse.aborted) return;
     const failedSaveUuids = activityUse.failedSaveUuids ?? activityUse.failedSaves?.uuids ?? [];

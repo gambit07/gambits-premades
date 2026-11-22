@@ -1,3 +1,4 @@
+import {castConcentration, appliedSpellEffect} from "../../utils/castEffects.js";
 const controllerId = "9c513478-ffd9-4d5a-9e39-3d72bf0518ab";
 const pendingTurns = new Set();
 const endingCasts = new Set();
@@ -143,7 +144,7 @@ async function startBeam(state, caster, target) {
 
 export async function enervation({actor, token, item, args, workflow}) {
     if(args[0]?.macroPass === "postActiveEffects") {
-        const concentration = actor.effects.get(workflow.concentrationId) ?? MidiQOL.getConcentrationEffect(actor, item.uuid);
+        const concentration = castConcentration(actor, item, {workflow});
         const targets = (workflow.failedSaves?.documents ?? []).filter(target => target.actor);
         if(!targets.length) {
             await healFromDamage(workflow, actor, token, item);
@@ -151,8 +152,9 @@ export async function enervation({actor, token, item, args, workflow}) {
             return;
         }
         if(!concentration) return;
-        let effect = actor.effects.find(effect => effect.flags?.["gambits-premades"]?.gpsUuid === controllerId
-            && [concentration.uuid, workflow.activity?.uuid, item.uuid].filter(Boolean).includes(effect.origin));
+        let effect = actor.effects.find(effect => stateOf(effect)?.castUuid === concentration.uuid && stateOf(effect)?.role === "caster")
+            ?? appliedSpellEffect(actor, item, {cast: concentration, workflow,
+                matches: e => e.flags["gambits-premades"]?.gpsUuid === controllerId && !stateOf(e)});
         if(stateOf(effect)?.castUuid === concentration.uuid) return;
         const state = {
             role: "caster", castUuid: concentration.uuid, itemUuid: item.uuid,

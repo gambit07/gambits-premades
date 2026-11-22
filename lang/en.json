@@ -1,5 +1,11 @@
 {
   "GAMBITSPREMADES": {
+    "EffectHelpers": {
+      "RemoveVines": "Remove Vines: {target}",
+      "RemoveShroom": "Remove Shroom: {target}",
+      "CharmImmune": "The target is immune to being charmed.",
+      "ChangeTarget": "Change Target"
+    },
     "ChatMessages": {
       "Common": {
         "OptionAvailableSaveTrigger": "{actorName} has an option available for a save triggering {itemProperName}.",

@@ -1,3 +1,4 @@
+import {castConcentration} from "../../utils/castEffects.js";
 import {effectToken} from "../../utils/effectTargetUtils.js";
 
 export async function confusion({actor, token, item, args, workflow}, directions = ["North", "South", "East", "West", "Northwest", "Northeast", "Southwest", "Southeast"]) {
@@ -152,7 +153,7 @@ export async function confusion({actor, token, item, args, workflow}, directions
     else if(args[0].macroPass === "postAllRollsComplete") {
         const template = workflow.templateUuid ? await fromUuid(workflow.templateUuid) : null;
         if(!workflow.failedSaves.count) {
-            const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid)
+            const hasConcApplied = castConcentration(actor, item, {workflow});
             if (hasConcApplied)	await hasConcApplied.delete();
         }
         else {

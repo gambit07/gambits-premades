@@ -1,3 +1,4 @@
+import {castConcentration} from "../../utils/castEffects.js";
 import {spaceTest} from "../../utils/effectTargetUtils.js";
 
 const MODULE = "gambits-premades";
@@ -11,18 +12,22 @@ export async function ashardalonsStride({actor, token, tokenDocument, item, args
     }
     if(args[0]?.macroPass !== "preActiveEffects") return;
     const doc = tokenDocument ?? game.gps.tokenDocument(token);
-    const concentration = MidiQOL.getConcentrationEffect(actor, item.uuid);
-    if(!doc || !concentration) return;
+    if(!doc) return;
+    const concentration = castConcentration(actor, item, {workflow, allowUnique: true});
+    if(!concentration?.active) return;
     const level = workflow.castData.castLevel || workflow.castData.baseLevel;
     const [effect] = await actor.createEmbeddedDocuments("ActiveEffect", [{
         name: item.name, img: item.img, origin: concentration.uuid, duration: {value: 60, units: "seconds"}, transfer: false,
         system: {magical: true, changes: [
             {key: "system.attributes.movement.speeds.walk", type: "add", value: 20 + Math.max(0, level - 3) * 5, priority: 20},
             {key: "flags.gambits-premades.oaImmunity", type: "override", value: "true", priority: 20}
-        ]}, flags: {dae: {stackable: "noneName"}, [MODULE]: {gpsUuid: ID, stride: {itemUuid: item.uuid, tokenUuid: doc.uuid, level}}}
+        ]}, flags: {
+            dnd5e: {dependentOn: concentration.uuid},
+            dae: {stackable: "noneName"},
+            [MODULE]: {gpsUuid: ID, stride: {itemUuid: item.uuid, tokenUuid: doc.uuid, level}}
+        }
     }]);
-    await concentration.addDependent(effect);
-    if(doc.object) await game.gps.animation.ashardalonsStride({type: "use", token: doc.object, itemUuid: item.uuid, effectUuid: effect.uuid});
+    if(effect && doc.object) await game.gps.animation.ashardalonsStride({type: "use", token: doc.object, itemUuid: item.uuid, effectUuid: effect.uuid});
 }
 
 /** Only the distance actually traversed counts; discarded waypoints and teleports do not. */
@@ -87,7 +92,7 @@ export function strideMoved(doc, movement) {
         }
         await effect.setFlag(MODULE, "strideHits", {turn, targets: [...used, ...targets.map(t => t.uuid)]});
         for(const target of targets) {
-            await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.uuid});
+            await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticDamage", targetUuid: target.uuid, castUuid: effect.flags.dnd5e?.dependentOn});
             if(target.object) void game.gps.animation.ashardalonsStride({type: "damage", token: target.object, itemUuid: item.uuid});
         }
     });

@@ -19,13 +19,13 @@ export async function restrainingRegion({tokenUuid, regionUuid, regionScenario, 
     try {
         if(restrained() && regionScenario === turnEvent) {
             if(!handled && kind === "blackTentacles") {
-                const result = await game.gps.gpsActivityUse({itemUuid: spell.uuid, identifier: revised ? "syntheticSave" : "syntheticDamage", targetUuid: tokenUuid});
+                const result = await game.gps.gpsActivityUse({itemUuid: spell.uuid, identifier: revised ? "syntheticSave" : "syntheticDamage", targetUuid: tokenUuid, castUuid: region.getFlag("dnd5e", "dependentOn")});
                 if(result || !revised) await game.gps.queryGM("gmSetFlag", {flagDocumentUuid: regionUuid, key: flag, value: eventTurnKey});
             }
         }
         else if(!restrained()) {
             if(regionScenario === "tokenEnter") resumeMovement = tokenDocument.pauseMovement();
-            const save = await game.gps.gpsActivityUse({itemUuid: spell.uuid, identifier: "syntheticSave", targetUuid: tokenUuid});
+            const save = await game.gps.gpsActivityUse({itemUuid: spell.uuid, identifier: "syntheticSave", targetUuid: tokenUuid, castUuid: region.getFlag("dnd5e", "dependentOn")});
             if(!save) return;
             await game.gps.queryGM("gmSetFlag", {flagDocumentUuid: regionUuid, key: flag, value: eventTurnKey});
             if(save.failedSaves.size) await game.gps.queryGM("setRegionStatus", {tokenUuid, regionUuid, active: true});

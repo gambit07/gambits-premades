@@ -59,67 +59,13 @@
         "autoanimations": {
           "isEnabled": false,
           "version": 5
+        },
+        "gambits-premades": {
+          "graspingVines": true
         }
       },
       "start": null,
       "_key": "!items.effects!HXiUB8b13hEHEdsp.ODWwJEZO2OfbPZCX"
-    },
-    {
-      "origin": "Actor.AIqSi2gtDqMmCsIl.Item.KRL5vlmfsP90KgwS",
-      "duration": {
-        "value": 60,
-        "units": "seconds"
-      },
-      "disabled": false,
-      "name": "Grasping Arrow - Movement",
-      "img": "icons/magic/nature/root-vine-entangled-humanoid.webp",
-      "_id": "O4qMbR0ctOVrVzmh",
-      "type": "base",
-      "system": {
-        "changes": [
-          {
-            "key": "macro.itemMacro",
-            "value": "function.game.gps.graspingArrow @actorUuid",
-            "priority": 20,
-            "type": "custom"
-          }
-        ]
-      },
-      "description": "",
-      "tint": "#ffffff",
-      "transfer": false,
-      "statuses": [],
-      "sort": 0,
-      "flags": {
-        "dae": {
-          "disableCondition": "",
-          "disableIncapacitated": false,
-          "stackable": "multi",
-          "durationExpression": "",
-          "macroRepeat": "none",
-          "specialDuration": [
-            "isMoved"
-          ],
-          "enableCondition": "",
-          "selfTarget": false,
-          "selfTargetAlways": false,
-          "dontApply": false
-        },
-        "dnd5e": {
-          "riders": {
-            "statuses": []
-          }
-        },
-        "core": {
-          "overlay": false
-        },
-        "autoanimations": {
-          "isEnabled": false,
-          "version": 5
-        }
-      },
-      "start": null,
-      "_key": "!items.effects!HXiUB8b13hEHEdsp.O4qMbR0ctOVrVzmh"
     },
     {
       "origin": "Actor.AIqSi2gtDqMmCsIl.Item.KRL5vlmfsP90KgwS",
@@ -636,9 +582,6 @@
         "effects": [
           {
             "_id": "ODWwJEZO2OfbPZCX"
-          },
-          {
-            "_id": "O4qMbR0ctOVrVzmh"
           }
         ],
         "range": {
@@ -1994,7 +1937,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.4"
+        "version": "3.0.7"
       }
     },
     "autoanimations": {

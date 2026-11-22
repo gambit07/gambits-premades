@@ -1,3 +1,5 @@
+import {deleteGrantedEffectItems} from "./castEffects.js";
+import {applyRepeatSaveAdvantage} from "../automations/spells/hideousLaughter.js";
 import {strideMoved} from "../automations/spells/ashardalonsStride.js";
 import {trackSpeechHp} from "../automations/spells/motivationalSpeech.js";
 import { registerWickerboneHooks } from "../automations/3rdPartyClassFeatures/druid/wickerboneBehemoth.js";
@@ -10,6 +12,8 @@ import {isAttackForcedMiss, registerAttackOutcomeHandling} from "./attackOutcome
 import { checkEnervationMovement, checkEnervationWalls } from "../automations/spells/enervation.js";
 
 export function registerHooks() {
+    Hooks.on("deleteActiveEffect", deleteGrantedEffectItems);
+    Hooks.on("midi-qol.preTargetSave", applyRepeatSaveAdvantage);
     Hooks.on("moveToken", strideMoved);
     registerWickerboneHooks();
     registerFuryOfTheSmallHooks();

@@ -1,32 +1,30 @@
+const speechId = "32cabdaf-560e-48ea-8980-37cf5ad242c0";
+const pending = new Set();
+
+export async function grantSpeechAdvantage({effectUuid}) {
+    if(pending.has(effectUuid)) return;
+    pending.add(effectUuid);
+    try {
+        const speech = await fromUuid(effectUuid), actor = speech?.parent;
+        const claim = actor?.getFlag("gambits-premades", "motivationalSpeechTempHp");
+        if(!speech?.active || speech.flags["gambits-premades"]?.gpsUuid !== speechId || claim?.effectUuid !== effectUuid
+            || claim.paused || !(actor.system.attributes.hp.temp > 0) || actor.effects.some(e => e.flags.dnd5e?.dependentOn === effectUuid
+                && e.flags["gambits-premades"]?.speechAdvantage)) return;
+        const [bonus] = await actor.createEmbeddedDocuments("ActiveEffect", [{
+            name: "Motivational Speech Advantage", img: speech.img, origin: speech.uuid, transfer: false,
+            system: {magical: true, changes: [{key: "attack", type: "dnd5e.advantage", value: "1", priority: 100}]},
+            flags: {dnd5e: {dependentOn: speech.uuid}, dae: {specialDuration: ["1Attack"]}, "gambits-premades": {speechAdvantage: true}}
+        }]);
+        if(bonus && (!actor.effects.get(speech.id)?.active || actor.getFlag("gambits-premades", "motivationalSpeechTempHp")?.effectUuid !== effectUuid)
+            && actor.effects.has(bonus.id)) await bonus.delete();
+    } finally { pending.delete(effectUuid); }
+}
+
 export async function motivationalSpeech({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {   
-    if(args?.[0]?.macroPass === "isHit")
-    {
-      item = await actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "32cabdaf-560e-48ea-8980-37cf5ad242c0");
-      const effectName = "Motivational Speech Advantage";
-      const effectCheck = actor.appliedEffects.some(e => e.name === effectName);
-    
-      if(!effectCheck)
-      {
-        const uuid = actor.uuid;
-        let effectData = [{
-          disabled: false,
-          flags: {
-            dae: { specialDuration: ["1Attack"] }
-          },
-          img: macroItem?.img ?? item?.img,
-          duration: { value: 99999, units: "seconds" },
-          name: "Motivational Speech Advantage",
-          system: { changes: [
-                {
-                  key: "attack",
-                  type: "dnd5e.advantage",
-                  value: "1",
-                  priority: 100
-                }
-              ] }
-          }];
-        await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: uuid, effects: effectData });
-      }
+    if(args?.[0]?.macroPass === "isHit") {
+        const claim = actor.getFlag("gambits-premades", "motivationalSpeechTempHp");
+        if(claim?.effectUuid && !claim.paused) await game.gps.queryGM("grantSpeechAdvantage", {effectUuid: claim.effectUuid});
+        return;
     }
 
     if(args?.[0]?.macroPass === "preActiveEffects")
@@ -39,6 +37,10 @@ export async function motivationalSpeech({ speaker, actor, token, character, ite
 
     if(args?.[0] !== "on" && args?.[0] !== "off") return;
     const context = args.at(-1);
+    if(args[0] === "off" && game.gps.effectSuspended(context)) {
+        const ids = actor.effects.filter(e => e.flags.dnd5e?.dependentOn === context.effectUuid && e.flags["gambits-premades"]?.speechAdvantage).map(e => e.id);
+        if(ids.length) await MidiQOL.socket().executeAsGM("removeEffects", {actorUuid: actor.uuid, effects: ids});
+    }
     const claim = actor.getFlag("gambits-premades", "motivationalSpeechTempHp");
     if(!claim || !context.effectUuid || (claim.effectUuid && claim.effectUuid !== context.effectUuid)) return;
     const source = macroItem?.uuid ?? item?.uuid;

@@ -62,7 +62,6 @@ export async function arcaneShot({actor, token, item, args, workflow, macroItem}
     }
     if(pass === "postPreambleComplete") {
         if(currentTurn) await actor.setFlag("gambits-premades", "arcaneShotTurnUsed", currentTurn);
-        if(option === "graspingArrow") await game.gps.graspingArrow({workflow, args, actor, token, item});
     }
     if(pass === "preDamageRollComplete" && substitutions.has(option) && !workflow.gps?.arcaneWeaponDamage) {
         const bow = await fromUuid(workflow.gps?.arcaneBowUuid);

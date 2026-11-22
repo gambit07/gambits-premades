@@ -1,7 +1,8 @@
+import {castConcentration} from "../../utils/castEffects.js";
 export async function holyAura({actor, item, args, workflow}) {
     if(args?.[0]?.macroPass === "postActiveEffects") {
         if(item.system.source.rules !== "2024" || workflow.aborted) return;
-        const concentration = MidiQOL.getConcentrationEffect(actor, item.uuid);
+        const concentration = castConcentration(actor, item, {workflow, allowUnique: true});
         if(!concentration) return;
         const data = item.effects.find(effect => effect.flags["gambits-premades"]?.gpsUuid === "5f7adec6-3c0f-4654-8516-a4a38260ed85")?.toObject();
         if(!data) return;
@@ -13,6 +14,7 @@ export async function holyAura({actor, item, args, workflow}) {
         data.flags.dnd5e = {dependentOn: concentration.uuid};
         data.flags.auraeffects = {originalType: "base"};
         data.flags["gambits-premades"].holyAuraSource = item.uuid;
+        data.flags["gambits-premades"].holyAuraCast = concentration.uuid;
         data.system = {
             ...data.system, showRadius: false, applyToSelf: true, canStack: false,
             collisionTypes: ["move"], combatOnly: false, distanceFormula: "30", disposition: 0,
@@ -28,15 +30,15 @@ export async function holyAura({actor, item, args, workflow}) {
     for(const effect of effects) {
         const sourceUuid = effect.flags["gambits-premades"]?.holyAuraSource ?? effect.flags["midi-qol"]?.castData?.itemUuid;
         const source = sourceUuid ? await fromUuid(sourceUuid) : DAE.getEffectItem(effect);
-        if(!source) continue;
+        const concentration = castConcentration(source?.actor, source, {effect});
+        if(!concentration) continue;
         workflow.gps ??= {};
         workflow.gps.holyAura ??= new Set();
-        if(workflow.gps.holyAura.has(source.uuid)) continue;
-        workflow.gps.holyAura.add(source.uuid);
+        if(workflow.gps.holyAura.has(concentration.uuid)) continue;
+        workflow.gps.holyAura.add(concentration.uuid);
         const save = await game.gps.gpsActivityUse({itemUuid: source.uuid, identifier: "syntheticSave", targetUuid: workflow.tokenDocument.uuid});
         if(save?.failedSaves.size !== 1) continue;
-        const concentration = MidiQOL.getConcentrationEffect(source.actor, source.uuid);
-        if(!concentration) continue;
+        if(!source.actor.effects.get(concentration.id)?.active) continue;
         const revised = source.system.source.rules === "2024";
         const data = {
             name: `${source.name}: ${game.i18n.localize("DND5E.ConBlinded")}`,

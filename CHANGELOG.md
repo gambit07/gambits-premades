@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.0.7] - 2026-11-22
+Offical DND5e V6.1 release! If you have issues please report them on the Discord. Make sure you are on the latest releases for Midi QOL and DAE.
+- Bugfixes:
+  - Ashardalon's Stride
+  - Fizban's Platinum Shield
+  - Hideous Laughter
+  - Grasping Arrow
+
 ## [v3.0.6] - 2026-11-22
 Offical DND5e V6.1 release! If you have issues please report them on the Discord. Make sure you are on the latest releases for Midi QOL and DAE.
 - Bugfixes:

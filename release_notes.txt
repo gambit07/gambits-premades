@@ -1,5 +1,6 @@
 Offical DND5e V6.1 release! If you have issues please report them on the Discord. Make sure you are on the latest releases for Midi QOL and DAE.
 - Bugfixes:
-  - Enervation: Resolved issue where concentration could end early
-  - Fury of the Small: Resolved a number of issues not accounting for saves, resistance, temporary hp, etc
-  - Fixed a few items not setup with the Magical property in certain instances
+  - Ashardalon's Stride
+  - Fizban's Platinum Shield
+  - Hideous Laughter
+  - Grasping Arrow

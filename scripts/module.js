@@ -10,6 +10,11 @@ import { animation } from './animations/_index.js';
 import { registerCatConfig } from "./utils/catUtils.js";
 import { deleteEnervationEffect } from "./automations/spells/enervation.js";
 
+import { grantGamutDisadvantage } from "./automations/3rdPartySpells/emotionalGamut.js";
+import { initializeShrooms, removeShroom } from "./automations/3rdPartySpells/shroomOfDoom.js";
+import { initializeGraspingArrow, graspingArrowMoved } from "./automations/classFeatures/fighter/arcaneArcher/graspingArrow.js";
+import { moveFizbanShield } from "./automations/spells/fizbansPlatinumShield.js";
+import { grantSpeechAdvantage } from "./automations/spells/motivationalSpeech.js";
 import { syncEnemiesAboundDisposition } from "./automations/spells/enemiesAbound.js";
 
 Hooks.once("catReady", registerCatConfig);
@@ -23,7 +28,8 @@ Hooks.once('init', async function() {
     helpers.registerSpellVisuals();
     helpers.registerRemoteQueries({
         gm: {
-            syncEnemiesAboundDisposition,
+            syncEnemiesAboundDisposition, moveFizbanShield, grantSpeechAdvantage, grantGamutDisadvantage,
+            initializeShrooms, removeShroom, initializeGraspingArrow, graspingArrowMoved,
             addReaction: helpers.addReaction,
             claimRegionEscape: helpers.claimRegionEscape,
             consumeDrafynMote: helpers.consumeDrafynMote,
@@ -105,8 +111,8 @@ Hooks.once("ready", async () => {
         const content = `
             <div class="gps-announcement" style="border:4px solid #4A90E2; border-radius:6px; padding:12px;">
                 <h3 style="margin:0;">🎉 Welcome to Gambit's Premades V${version}!</h3>
-                <p style="font-size:1em;">Updated for D&amp;D 5e 6.1: fixes for multi-target saves and reactions, spell suppression, Enervation and Fury of the Small.</p>
-                <p style="font-size:1em;">Use CAT to update existing item automations or manually replace relevant items with their updated compendium items. This release supports D&amp;D 5e 6.1 with Midi-QOL 14.7.0 and DAE 14.6.10 or later.</p>
+                <p style="font-size:1em;">Fixed Ashardalon’s Stride and Fizban’s Platinum Shield, and corrected cleanup for repeat saves, overlapping casts, and temporary actions.</p>
+                <p style="font-size:1em;">Use CAT’s Medkit to update Arcane Shot, Emotional Gamut, and Shroom of Doom on existing actors. The other fixes apply when the module is updated.</p>
                 <p style="font-size:1em;">Please check out the <a href="https://github.com/gambit07/gambits-premades/releases/latest" target="_blank" rel="noopener noreferrer" style="color:#dd6b20; text-decoration:none; font-weight:bold;">Release Notes</a> for more detail.</p>
                 <ul>
                     <li>If you'd like to support development and get access to these additional modules:
