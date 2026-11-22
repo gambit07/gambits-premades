@@ -19,17 +19,17 @@ export async function flashOfGenius({workflowData,workflowType,workflowCombat}) 
     let browserUser;
     
     for (const validTokenPrimary of findValidTokens) {
-        let targets = workflow ? Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition) : [initiatingToken];
+        let targets = workflow ? workflow.targets.documents.filter(t => t.disposition === validTokenPrimary.document.disposition) : [game.gps.tokenDocument(initiatingToken)];
         targets = targets.filter(t => {
             if(!game.gps.reactionCanChangeOutcome(workflow, {type: "save", desired: "success", target: t})) return false;
-            if(!t || (workflow && !workflow.tokenSaves?.[t.document.uuid])) return false;
+            if(!t || (workflow && !workflow.tokenSaves?.[t.uuid])) return false;
             const distance = MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true});
             return distance >= 0 && distance <= game.gps.convertFromFeet({range: 30}) && MidiQOL.canSee(validTokenPrimary, t);
         });
         if(targets.length === 0) continue;
-        const casterInTargets = targets.includes(validTokenPrimary);
-        const targetUuids = targets.map(t => t.document.uuid);
-        const targetNames = targets.map(t => t.document.name);
+        const casterInTargets = targets.includes(validTokenPrimary.document);
+        const targetUuids = targets.map(t => t.uuid);
+        const targetNames = targets.map(t => t.name);
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;
         const dialogTitlePrimary = `${validTokenPrimary.actor.name} | ${itemProperName}`;
@@ -94,6 +94,7 @@ export async function flashOfGenius({workflowData,workflowType,workflowCombat}) 
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             let target = await fromUuid(allyTokenUuid);
             if(!target?.actor || !targetUuids.includes(target.uuid)) continue;
             let intMod = validTokenPrimary.actor.system.abilities.int.mod;

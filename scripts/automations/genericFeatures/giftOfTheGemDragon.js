@@ -1,6 +1,8 @@
-export async function giftOfTheGemDragon({ speaker, actor, token, character, item, args, scope, workflow, options }) {
+export async function giftOfTheGemDragon({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "isDamaged") {
-        if(MidiQOL.hasUsedReaction(actor)) return;
+        if(!tokenDocument?.object) return;
+        token = tokenDocument.object;
+        if(game.gps.reactionUnavailable(actor)) return;
         if(MidiQOL.checkIncapacitated(token)) return;
 
         let rangeTotal = 10;         
@@ -89,13 +91,13 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
         let gmUser = game.gps.getPrimaryGM();
         
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft, validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft, validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: workflow.token.document.uuid, source: "user", type: "multiDialog", browserUser: browserUser };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token.document.uuid, source: "gm", type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: workflow.token.document.uuid, source: "gm", type: "multiDialog" };
 
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token.document.uuid, source: gmUser === browserUser ? "gm" : "user", type: "singleDialog"});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: workflow.token.document.uuid, source: gmUser === browserUser ? "gm" : "user", type: "singleDialog"});
         }
                 
         const { userDecision, source, type } = result || {};
@@ -104,6 +106,7 @@ export async function giftOfTheGemDragon({ speaker, actor, token, character, ite
             return;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(actor)) return;
             await game.gps.addReaction({actorUuid: `${actor.uuid}`});
             
             let saveResult;

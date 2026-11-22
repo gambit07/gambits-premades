@@ -110,6 +110,7 @@ export async function magicUsersNemesis({ workflowData,workflowType,workflowComb
                 continue;
             }
             else if (userDecision) {
+                if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
 
                 hasVSMProperty = castProperties.some(prop => chosenItem.system.properties.has(prop));
 

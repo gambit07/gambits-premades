@@ -358,7 +358,8 @@
             "priority": 20,
             "type": "custom"
           }
-        ]
+        ],
+        "magical": true
       },
       "description": "",
       "tint": "#ffffff",
@@ -409,7 +410,8 @@
       "_id": "uYzQNfTFL7dNlQRM",
       "type": "base",
       "system": {
-        "changes": []
+        "changes": [],
+        "magical": true
       },
       "description": "",
       "tint": "#ffffff",
@@ -474,7 +476,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     },
     "gambits-premades": {

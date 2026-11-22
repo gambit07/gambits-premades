@@ -1,8 +1,9 @@
 const statusUpdates = new Map();
 
-export function regionStatusEffects(token, regionUuid, status = "restrained") {
+export function regionStatusEffects(token, regionUuid, status = "restrained", {includeInactive = false} = {}) {
     return Array.from(token?.actor?.effects ?? []).filter(effect =>
-        effect.flags["gambits-premades"]?.regionUuid === regionUuid && effect.statuses.has(status));
+        effect.flags["gambits-premades"]?.regionUuid === regionUuid && effect.statuses.has(status)
+        && (includeInactive || effect.active));
 }
 
 export async function setRegionStatus({tokenUuid, regionUuid, status = "restrained", active}) {
@@ -11,7 +12,7 @@ export async function setRegionStatus({tokenUuid, regionUuid, status = "restrain
     const update = previous.catch(() => {}).then(async () => {
         const token = await fromUuid(tokenUuid);
         if(!token?.actor) return;
-        const effects = regionStatusEffects(token, regionUuid, status);
+        const effects = regionStatusEffects(token, regionUuid, status, {includeInactive: true});
         if(!active) {
             if(effects.length) await token.actor.deleteEmbeddedDocuments("ActiveEffect", effects.map(effect => effect.id));
             const items = token.actor.items.filter(item => item.flags["gambits-premades"]?.regionEscape?.regionUuid === regionUuid);
@@ -21,12 +22,12 @@ export async function setRegionStatus({tokenUuid, regionUuid, status = "restrain
         if(effects.length) return;
         const region = await fromUuid(regionUuid);
         const item = await fromUuid(region?.getFlag("dnd5e", "item"));
-        if(!region || !item) return;
+        if(!region || !item || game.gps.spellRegionSuppressed(item, token.actor)) return;
         const concentration = MidiQOL.getConcentrationEffect(item.actor, item.uuid);
         const condition = CONFIG.statusEffects.find(effect => effect.id === status);
         const data = {
             name: `${item.name}: ${game.i18n.localize(condition?.name ?? status)}`,
-            img: condition?.img ?? item.img, origin: item.uuid, statuses: [status], transfer: false,
+            img: condition?.img ?? item.img, origin: item.uuid, statuses: [status], transfer: false, system: {magical: item.type === "spell"},
             flags: {"gambits-premades": {regionUuid}, dnd5e: concentration ? {dependentOn: concentration.uuid} : {}}
         };
         await token.actor.createEmbeddedDocuments("ActiveEffect", [data]);

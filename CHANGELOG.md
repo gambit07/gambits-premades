@@ -1,5 +1,12 @@
 # Changelog
 
+## [v3.0.6] - 2026-11-22
+Offical DND5e V6.1 release! If you have issues please report them on the Discord. Make sure you are on the latest releases for Midi QOL and DAE.
+- Bugfixes:
+  - Enervation: Resolved issue where concentration could end early
+  - Fury of the Small: Resolved a number of issues not accounting for saves, resistance, temporary hp, etc
+  - Fixed a few items not setup with the Magical property in certain instances
+
 ## [v3.0.5] - 2026-10-29
 Offical V14 and DND5e V6 release! Tons of updates, fixes, changes, etc with high level overviews below. If you have issues please report them on the Discord. Make sure you are on the Beta releases for Midi QOL and DAE if you want to use this update.
 - Bugfixes:

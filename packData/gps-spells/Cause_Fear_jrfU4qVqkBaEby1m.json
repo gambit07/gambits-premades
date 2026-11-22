@@ -238,7 +238,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     }
   },
@@ -287,7 +287,8 @@
             "priority": 20,
             "type": "custom"
           }
-        ]
+        ],
+        "magical": true
       },
       "start": null,
       "_key": "!items.effects!jrfU4qVqkBaEby1m.SeG9nKb7onKepWFE"

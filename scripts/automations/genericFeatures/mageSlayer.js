@@ -15,7 +15,7 @@ export async function mageSlayer({workflowData,workflowType,workflowCombat}) {
         let itemProperName = chosenItem?.name;
         
         if(workflowType === "save") {
-            let target = Array.from(workflow.targets).filter(t => t.document.uuid === validTokenPrimary.document.uuid);
+            let target = workflow.targets.documents.filter(t => t.uuid === validTokenPrimary.document.uuid);
             if(target.length === 0) continue;
             else {
                 let effectData = [{

@@ -17,17 +17,17 @@ export async function burstOfIngenuity({ workflowData,workflowType,workflowComba
     if(findValidTokens.length === 0 || !findValidTokens) return;
 
     for (const validTokenPrimary of findValidTokens) {
-        let targets = Array.from(workflow.targets).filter(t => {
+        let targets = workflow.targets.documents.filter(t => {
             if(!game.gps.reactionCanChangeOutcome(workflow, {type: "save", desired: "success", target: t})) return false;
-            if(t.document.disposition !== validTokenPrimary.document.disposition || !workflow.tokenSaves?.[t.document.uuid]) return false;
+            if(t.disposition !== validTokenPrimary.document.disposition || !workflow.tokenSaves?.[t.uuid]) return false;
             const distance = MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true});
             return distance >= 0 && distance <= game.gps.convertFromFeet({range: 30}) && MidiQOL.canSee(validTokenPrimary, t);
         });
 
         if(targets.length === 0) continue;
 
-        const targetUuids = targets.map(t => t.document.uuid);
-        const targetNames = targets.map(t => t.document.name);
+        const targetUuids = targets.map(t => t.uuid);
+        const targetNames = targets.map(t => t.name);
         
         let targetOptions = targetUuids.map((uuid, index) => 
             `<option class="gps-dialog-option" value="${uuid}">${targetNames[index]}</option>`

@@ -10,14 +10,14 @@ export async function indomitable({workflowData,workflowType,workflowCombat}) {
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     // Check if there is a save success
-    if(workflowType === "save" && workflow.failedSaves.size === 0) return debugEnabled ? game.gps.logInfo(`${itemName} failed due to no valid failed save targets`) : "";
+    if(workflowType === "save" && workflow.failedSaves.count === 0) return debugEnabled ? game.gps.logInfo(`${itemName} failed due to no valid failed save targets`) : "";
 
     let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["indomitable"], reactionCheck: false, sightCheck: false, rangeCheck: false, rangeTotal: null, dispositionCheck: false, dispositionCheckType: null, workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
     let browserUser;
     
     for (const validTokenPrimary of findValidTokens) {
-        let targetUuids = Array.from(workflow.failedSaves).filter(t => t.document.uuid === validTokenPrimary.document.uuid).map(t => t.document.uuid);
+        let targetUuids = workflow.failedSaves.documents.filter(t => t.uuid === validTokenPrimary.document.uuid).map(t => t.uuid);
         if(targetUuids.length === 0) continue;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;

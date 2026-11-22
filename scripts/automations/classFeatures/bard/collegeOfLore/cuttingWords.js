@@ -11,7 +11,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
-    if(workflowType === "damage" && workflow.hitTargets?.size === 0) return;
+    if(workflowType === "damage" && workflow.hitTargets?.count === 0) return;
 
     let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: null, itemName: itemName, itemType: "feature", itemChecked: ["bardic-inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", rollType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
     
@@ -109,7 +109,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
                 if(debugEnabled) game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed at failed at token disposition check`);
                 continue;
             }
-            if(((workflow.attackTotal - bardicNum) >= workflow.targets.first()?.actor.system.attributes.ac.value) && homebrewDisableMaxMiss) {
+            if(((workflow.attackTotal - bardicNum) >= workflow.targets.documents[0]?.actor.system.attributes.ac.value) && homebrewDisableMaxMiss) {
                 if(debugEnabled) game.gps.logInfo(`${itemName} for ${validTokenPrimary.actor.name} failed at homebrew max bardic die would not effect hit`);
                 continue;
             }
@@ -158,7 +158,8 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
         if (!userDecision) {
             continue;
         }
-        else if (userDecision) {            
+        else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             const options = {
                 showFullCard: false,
                 createWorkflow: true,
@@ -242,7 +243,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
 
             else if(workflowType === "attack") {
                 
-                let targetAC = workflow.targets.first()?.actor.system.attributes.ac.value;
+                let targetAC = workflow.targets.documents[0]?.actor.system.attributes.ac.value;
                 let reroll;
                 if(source && source === "user") reroll = await game.gps.queryUser("rollAsUser", browserUser, { rollParams: `1${bardicDie}`, type: workflowType });
                 if(source && source === "gm") reroll = await game.gps.queryUser("rollAsUser", gmUser, { rollParams: `1${bardicDie}`, type: workflowType });
@@ -251,7 +252,7 @@ export async function cuttingWords({workflowData,workflowType,workflowCombat}) {
 
                 await game.gps.setAttackResult(workflow, rerollNew);
 
-                if(!game.gps.attackHits(workflow, workflow.targets.first())) {
+                if(!game.gps.attackHits(workflow, workflow.targets.documents[0])) {
                     chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ClassFeatures.Bard.CollegeOfLore.CuttingWords.CuttingWordsReducedAttackMiss", { reduction: reroll.total })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
                     await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});

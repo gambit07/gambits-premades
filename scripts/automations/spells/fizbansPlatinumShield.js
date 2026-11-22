@@ -67,7 +67,11 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
                 if(!returnedToken || !withinRange.some(t => t.document.uuid === returnedToken.uuid)) return;
                 let currentEffect = currentTarget.actor.appliedEffects.find(e => DAE.effectMatchesSource(e, sourceItemUuid));
                 
-                if(!currentEffect) return macroItem.delete();
+                if(!currentEffect) {
+                    if(currentTarget.actor.effects.some(e => DAE.effectMatchesSource(e, sourceItemUuid))) return;
+                    return macroItem.delete();
+                }
+                if(!currentEffect.active) return;
                 const effectCopy = currentEffect.toObject();
                 delete effectCopy._id;
                 const newEffect = await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: returnedToken.actor.uuid, effects: [effectCopy]});
@@ -105,7 +109,7 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
             }
             }
             `;
-        let targets = workflow.targets;
+        let targets = workflow.targets.documents;
         
         for(let target of targets) {
         const concentration = MidiQOL.getConcentrationEffect(actor, item.uuid);
@@ -157,7 +161,7 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
                 "onUseMacroName": "[preActiveEffects]ItemMacro"
             },
             "gambits-premades": {
-                "fizbansPlatShieldTarget": target.document.uuid,
+                "fizbansPlatShieldTarget": target.uuid,
                 "fizbansPlatShieldItem": item.uuid
             }
             },
@@ -169,7 +173,7 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
             new Sequence()
     
             .effect()
-            .name(`${target.document.id}.FizbansPlatinumShield`)
+            .name(`${target.id}.FizbansPlatinumShield`)
             .file("jb2a.markers.shield_rampart.loop.03.blue")
             .attachTo(target,{bindVisibility: true})
             .scaleToObject(1.7)
@@ -184,12 +188,14 @@ export async function fizbansPlatinumShield({ speaker, actor, token, character, 
         }
     }
     
-    if(args[0] === "off") {
+    if(args[0] === "off" && !game.gps.effectSuspended(args.at(-1))) {
         let gmUser = game.gps.getPrimaryGM();
         const effectOriginActor = await fromUuid(args[2]);
         if(!effectOriginActor) return;
-        const helpers = effectOriginActor.items.filter(helper => helper.getFlag("gambits-premades", "fizbansPlatShieldItem") === args[3] && helper.getFlag("gambits-premades", "fizbansPlatShieldTarget") === token.document.uuid);
+        const affected = game.gps.tokenDocument(token) ?? (args.at(-1)?.tokenUuid ? await fromUuid(args.at(-1).tokenUuid) : null);
+        if(!affected) return;
+        const helpers = effectOriginActor.items.filter(helper => helper.getFlag("gambits-premades", "fizbansPlatShieldItem") === args[3] && helper.getFlag("gambits-premades", "fizbansPlatShieldTarget") === affected.uuid);
         for(const helper of helpers) await game.gps.queryUser("gmDeleteItem", gmUser, {itemUuid: helper.uuid});
-        Sequencer.EffectManager.endEffects({ name: `${token.document.id}.FizbansPlatinumShield` });
+        Sequencer.EffectManager.endEffects({ name: `${affected.id}.FizbansPlatinumShield` });
     }
 }

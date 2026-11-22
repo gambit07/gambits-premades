@@ -60,7 +60,7 @@ export function freedomMovementChange(wrapped, model, change, options) {
 
 export async function freedomOfMovement({item, workflow}) {
     if(!workflow || workflow.aborted) return;
-    for(const target of workflow.targets) {
+    for(const target of workflow.targets.documents) {
         const changes = [{key: "system.attributes.movement.ignoredDifficultTerrain", type: "override", value: "all", priority: 20}];
         if(item.system.source.rules === "2024") changes.push({key: "system.attributes.movement.speeds.swim", type: "upgrade", value: "@attributes.movement.speeds.walk", priority: 99, phase: "final"});
         await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: target.actor.uuid, effects: [{

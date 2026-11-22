@@ -1,16 +1,15 @@
-export async function kineticJaunt({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    const rangeCheck = MidiQOL.findNearby(null, token, 2, { includeToken: false });
+import {effectToken, sharesCreatureSpace} from "../../utils/effectTargetUtils.js";
 
-    if(rangeCheck.length > 0) {
-        let damageRoll = await new CONFIG.Dice.DamageRoll(`1d8`, {}, {type: "force", properties: ["mgc"]}).evaluate();
-        await MidiQOL.applyTokenDamage([{ damage: damageRoll.total, type: 'force' }], damageRoll.total, new Set([token]), null, null);
-        let content = game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.KineticJaunt.EndTurnAnotherCreaturesSpace", { damageTotal: damageRoll.total })
-        let actorPlayer = MidiQOL.playerForActor(actor);
-        let chatData = {
-            user: actorPlayer.id,
-            speaker: ChatMessage.getSpeaker({ token: token }),
-            content: content
-        };
-        ChatMessage.create(chatData);
-    }
+export async function kineticJaunt({actor, token, args}) {
+    const context = args?.at(-1);
+    if(args?.[0] !== "each" || context?.turn !== "endTurn") return;
+    const target = effectToken(token, context, actor);
+    if(!target || !sharesCreatureSpace(target)) return;
+
+    const roll = await new CONFIG.Dice.DamageRoll("1d8", {}, {type: "force", properties: ["mgc"]}).evaluate();
+    await MidiQOL.applyTokenDamage([{damage: roll.total, type: "force"}], roll.total, new Set([target]), null, null);
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({actor, token: target}),
+        content: game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.KineticJaunt.EndTurnAnotherCreaturesSpace", {damageTotal: roll.total})
+    });
 }

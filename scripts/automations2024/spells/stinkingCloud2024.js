@@ -29,7 +29,7 @@ export async function stinkingCloud2024({tokenUuid, regionUuid, regionScenario, 
     }
 
     let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
-    if(!chosenItem) return;
+    if(!chosenItem || game.gps.spellRegionSuppressed(chosenItem, token.actor)) return;
 
     let turn = game.gps.regionTurnKey();
     let lastTurn = region.flags['gambits-premades']?.spell?.stinkingCloud?.[token.id]?.turn;

@@ -1,31 +1,31 @@
 export async function viciousMockery({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "prePreambleComplete" && item.system.source.rules === "2014") {
-        const targets = workflow.targets;
+        const targets = workflow.targets.documents;
         for(let target of targets) {
-            const hasEffectApplied = target.document.hasStatusEffect("deafened");
+            const hasEffectApplied = target.hasStatusEffect("deafened");
             if(hasEffectApplied) {
                 workflow.targets.delete(target);
                 ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.ViciousMockery.TargetCannotHearYou"));
             }
         }
 
-        if(workflow.targets.size === 0) return workflow.aborted = true;
+        if(workflow.targets.count === 0) return workflow.aborted = true;
     }
 
     if(args[0].macroPass === "postSavesComplete") {
         let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
         const { animEnabled } = cprConfig;
 
-        const targets = workflow.failedSaves;
-        if(targets.size === 0) return;
+        const targets = workflow.failedSaves.documents;
+        if(targets.length === 0) return;
 
         for(let target of targets) {
             const targetActor = target.actor;
-            const targetUuid = target.document.uuid;
+            const targetUuid = target.uuid;
             const uuid = targetActor.uuid;
 
             const effectDisadv = [{
-                system: { changes: [{ key: "attack", type: "dnd5e.advantage", value: "-1", priority: 100 }] },
+                origin: item.uuid, system: { magical: true, changes: [{ key: "attack", type: "dnd5e.advantage", value: "-1", priority: 100 }] },
                 flags: { "dae": { "token": targetUuid, "specialDuration": ["1Attack"] } },
                 disabled: false,
                 name: item.name,
@@ -35,7 +35,8 @@ export async function viciousMockery({ speaker, actor, token, character, item, a
             const checkEffect = targetActor.appliedEffects.find(i => i.name ===  item.name);
             if(!checkEffect) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: uuid, effects: effectDisadv });
 
-            if(!animEnabled) continue;
+            target = target.object;
+            if(!animEnabled || !target || !token) continue;
 
             new Sequence()
 

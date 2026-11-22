@@ -1,10 +1,10 @@
-export async function flamesEmbrace({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
+export async function flamesEmbrace({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options, macroItem }) {
     if (args[0].macroPass === "isDamaged") {
         let damageTypes = ["fire"];
         let rollFound = workflow.damageDetail.some(roll => damageTypes.includes(roll.type));
 
-        if (rollFound) {
-            const saveResult = await game.gps.gpsActivityUse({itemUuid: macroItem.uuid, identifier: "syntheticSave2", targetUuid: token.document.uuid});
+        if (rollFound && tokenDocument) {
+            const saveResult = await game.gps.gpsActivityUse({itemUuid: macroItem.uuid, identifier: "syntheticSave2", targetUuid: tokenDocument.uuid});
 
             if (saveResult?.failedSaves?.size === 0) {
                 let effectData = actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "c87befde-c36f-4237-b645-e98e1526de42" && DAE.effectMatchesSource(e, macroItem.uuid));

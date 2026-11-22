@@ -223,7 +223,8 @@
             "priority": 20,
             "type": "custom"
           }
-        ]
+        ],
+        "magical": true
       },
       "start": null,
       "_key": "!items.effects!nZ1BaCElvMKYCgXj.aTdVZ7BfVtRpnHyR"
@@ -253,7 +254,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     }
   },

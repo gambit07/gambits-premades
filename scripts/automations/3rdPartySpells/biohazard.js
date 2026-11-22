@@ -27,6 +27,7 @@ export async function biohazard({speaker, actor, character, item, args, scope, w
     const damagedThisTurn = region.getFlag("gambits-premades", `regionTurns.checkBiohazardRound.${token.id}`);
     if(damagedThisTurn && damagedThisTurn === game.gps.regionTurnKey()) return;
     let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
+    if(!chosenItem || game.gps.spellRegionSuppressed(chosenItem, token.actor)) return;
     let castLevel = template.getFlag("dnd5e", "spellLevel") - 1;
 
     let resumeMovement;

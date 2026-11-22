@@ -1,7 +1,8 @@
-export async function armorOfHexes({ speaker, actor, token, character, item, args, scope, workflow, options }) {
+export async function armorOfHexes({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "isAttacked") {
-        const targetUuid = token.document?.uuid ?? token.uuid;
-        let target = [...workflow.targets].find(t => t.document.uuid === targetUuid && t.actor.uuid === actor.uuid);
+        if(!tokenDocument) return;
+        const targetUuid = tokenDocument?.uuid;
+        let target = workflow.targets.documents.find(t => t.uuid === targetUuid && t.actor.uuid === actor.uuid);
         if(!target) return;
         const ownedCurse = workflow.actor.appliedEffects.some(effect => {
             if(effect.name !== "Hexblade's Curse: Target") return false;
@@ -9,12 +10,12 @@ export async function armorOfHexes({ speaker, actor, token, character, item, arg
         });
         if(!ownedCurse) return;
         if(item.parent.uuid !== target.actor.uuid) return;
-        if (MidiQOL.hasUsedReaction(target.actor)) return;
+        if (game.gps.reactionUnavailable(target.actor)) return;
         if (!game.gps.attackHits(workflow, target)) return;
 
         let dialogId = "armorofhexes";
-        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: item.name });
-        let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: actor.name, itemName: item.name });
+        let dialogTitlePrimary = `${actor.name} | ${item.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
         let initialTimeLeft = 15;
@@ -43,13 +44,13 @@ export async function armorOfHexes({ speaker, actor, token, character, item, arg
         `;
         
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token?.document?.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: workflow.token?.document?.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token?.document?.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: workflow.token?.document?.uuid,source: "gm",type: "multiDialog" };
         
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.token?.document?.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: workflow.token?.document?.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
@@ -58,13 +59,14 @@ export async function armorOfHexes({ speaker, actor, token, character, item, arg
             return;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(actor)) return;
             let rollData = await new CONFIG.Dice.DamageRoll('1d6').evaluate();
             await MidiQOL.displayDSNForRoll(rollData, 'damageRoll');
             if(rollData.total >= 4) {
                 let actorPlayer = MidiQOL.playerForActor(actor);
                 let chatData = {
                 user: actorPlayer?.id ?? game.user.id,
-                speaker: ChatMessage.getSpeaker({ token: token }),
+                speaker: ChatMessage.getSpeaker({token: tokenDocument, actor}),
                 content: game.i18n.format("GAMBITSPREMADES.ChatMessages.ArmorOfHexes.Success", {actorName: target.actor.name, itemName: item.name})
                 };
                 await ChatMessage.create(chatData);
@@ -75,7 +77,7 @@ export async function armorOfHexes({ speaker, actor, token, character, item, arg
                 let actorPlayer = MidiQOL.playerForActor(actor);
                 let chatData = {
                 user: actorPlayer?.id ?? game.user.id,
-                speaker: ChatMessage.getSpeaker({ token: token }),
+                speaker: ChatMessage.getSpeaker({token: tokenDocument, actor}),
                 content: game.i18n.format("GAMBITSPREMADES.ChatMessages.ArmorOfHexes.Failure", {actorName: target.actor.name, itemName: item.name})
                 };
                 await ChatMessage.create(chatData);

@@ -23,7 +23,7 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
         const regionUuid = region.uuid;
         const turn = game.gps.regionTurnKey();
         const targets = Array.from(region.tokens, document => document.object).filter(target =>
-            target?.actor && (target.actor.type === "npc" || target.actor.type === "character") && MidiQOL.isTargetable(target)
+            target?.actor && (target.actor.type === "npc" || target.actor.type === "character") && MidiQOL.isTargetable(target) && !game.gps.spellRegionSuppressed(item, target.actor)
             && region.getFlag("gambits-premades", `spell.cloudOfDaggers.${target.id}.turn`) !== turn);
         if(targets.length > 0) {
             let damageDice =  (2*(workflow.castData.castLevel - 2)) + 4;
@@ -177,7 +177,7 @@ export async function cloudOfDaggers2024({tokenUuid, regionUuid, regionScenario,
     const effectOriginActor = game.gps.getRegionActor(region);
     const effectOriginToken = fromUuidSync(region.getFlag("dnd5e", "origin"))?.object;
     let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
-    if(!chosenItem || !effectOriginActor) return;
+    if(!chosenItem || !effectOriginActor || game.gps.spellRegionSuppressed(chosenItem, token.actor)) return;
     let castLevel = template.getFlag("dnd5e", "spellLevel");
     let damageDice = (2*(castLevel - 2)) + 4;
 

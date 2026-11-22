@@ -64,12 +64,17 @@ async function validateTargets(effect) {
         await endCast(state);
         return [];
     }
-    if(!caster.object) return [];
     const targets = [];
     for(const uuid of [...state.targetUuids]) {
         const target = await fromUuid(uuid);
-        if(!target?.object || target.parent?.uuid !== caster.parent?.uuid || !game.gps.withinRange(caster.object, target.object, 60)) await removeTarget(effect, uuid);
-        else targets.push(target.object);
+        if(!target || target.parent?.uuid !== caster.parent?.uuid) {
+            await removeTarget(effect, uuid);
+            continue;
+        }
+        if(!caster.object || !target.object) continue;
+        const check = MidiQOL.measureTokens(caster, target, {wallsBlock: true, includeCover: true});
+        if(check.reason === "blocked" || (check.ok && check.distance > game.gps.convertFromFeet({range: 60}))) await removeTarget(effect, uuid);
+        else if(check.ok && !caster.actor?.statuses.has("antimagic") && !target.actor?.statuses.has("antimagic")) targets.push(target.object);
     }
     return targets;
 }
@@ -105,29 +110,31 @@ export async function checkEnervationWalls(wall) {
 }
 
 async function healFromDamage(workflow, actor, token, item) {
+    const caster = workflow.tokenDocument ?? game.gps.tokenDocument(token);
+    if(!caster) return;
     const seen = new Set();
     for(const entry of workflow.damageList ?? []) {
         if(!entry.targetUuid || seen.has(entry.targetUuid)) continue;
         seen.add(entry.targetUuid);
-        const damageTotal = Math.max(0, Math.floor((entry.damageDetail ?? []).reduce((total, part) => total + (part.type === "necrotic" ? Number(part.value ?? 0) : 0), 0)));
+        const damageTotal = Math.max(0, Math.floor((entry.calculatedDamages ?? []).reduce((total, part) => total + (part.type === "necrotic" ? Number(part.value ?? 0) : 0), 0)));
         const healAmount = Math.floor(damageTotal / 2);
         if(!healAmount) continue;
         const roll = await new CONFIG.Dice.DamageRoll(String(healAmount), {}, {type: "healing", properties: ["mgc"]}).evaluate();
-        const healing = new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, "healing", [token], roll, {
+        const healing = new MidiQOL.DamageOnlyWorkflow(actor, caster, roll.total, "healing", [caster], roll, {
             itemData: {flags: {autoanimations: {isEnabled: false, version: 5}}, name: "Enervation - Healing", type: "feat", img: item.img}, flavor: "Enervation - Healing"
         });
         healing.activity.updateSource({"activation.type": "special", "activation.override": true});
         await healing.ready;
         await ChatMessage.create({
             user: MidiQOL.playerForActor(actor)?.id ?? game.user.id,
-            speaker: ChatMessage.getSpeaker({token}),
+            speaker: ChatMessage.getSpeaker({token: caster, actor}),
             content: game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.Spells.Enervation.DealDamageHeal", {damageTotal, healAmount})
         });
     }
 }
 
 async function startBeam(state, caster, target) {
-    if(!game.gps.getCprConfig({itemUuid: state.itemUuid}).animEnabled || !globalThis.Sequence || !globalThis.Sequencer?.Database) return;
+    if(!caster || !target || !game.gps.getCprConfig({itemUuid: state.itemUuid}).animEnabled || !globalThis.Sequence || !globalThis.Sequencer?.Database) return;
     const file = ["jb2a.energy_beam.reverse.dark_green", "jb2a.energy_beam.normal.dark_greenpurple.03"].find(path => Sequencer.Database.entryExists(path));
     if(!file) return;
     await new Sequence().effect().file(file).persist().name(beamName(state.castUuid, target.document.uuid))
@@ -137,7 +144,7 @@ async function startBeam(state, caster, target) {
 export async function enervation({actor, token, item, args, workflow}) {
     if(args[0]?.macroPass === "postActiveEffects") {
         const concentration = actor.effects.get(workflow.concentrationId) ?? MidiQOL.getConcentrationEffect(actor, item.uuid);
-        const targets = Array.from(workflow.failedSaves ?? []).filter(target => target.actor);
+        const targets = (workflow.failedSaves?.documents ?? []).filter(target => target.actor);
         if(!targets.length) {
             await healFromDamage(workflow, actor, token, item);
             await removeEffect(concentration);
@@ -149,7 +156,7 @@ export async function enervation({actor, token, item, args, workflow}) {
         if(stateOf(effect)?.castUuid === concentration.uuid) return;
         const state = {
             role: "caster", castUuid: concentration.uuid, itemUuid: item.uuid,
-            casterTokenUuid: token.document.uuid, targetUuids: targets.map(target => target.document.uuid),
+            casterTokenUuid: workflow.tokenDocument.uuid, targetUuids: targets.map(target => target.uuid),
             castLevel: Number(workflow.castData?.castLevel ?? item.system.level)
         };
         if(!effect) {
@@ -170,15 +177,15 @@ export async function enervation({actor, token, item, args, workflow}) {
             await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: target.actor.uuid, effects: [{
                 name: item.name, img: item.img, type: "base", origin: effect.uuid, transfer: false,
                 duration: {value: 60, units: "seconds"},
-                system: {origin: {effect: effect.uuid, item: item.uuid}, changes: [{key: "macro.itemMacro", value: "function.game.gps.enervation", type: "custom", priority: 20}]},
+                system: {magical: true, origin: {effect: effect.uuid, item: item.uuid}, changes: [{key: "macro.itemMacro", value: "function.game.gps.enervation", type: "custom", priority: 20}]},
                 flags: {
                     dnd5e: {dependentOn: effect.uuid}, dae: {stackable: "multi"},
-                    "gambits-premades": {enervation: {role: "target", castUuid: concentration.uuid, casterEffectUuid: effect.uuid, targetTokenUuid: target.document.uuid}}
+                    "gambits-premades": {enervation: {role: "target", castUuid: concentration.uuid, casterEffectUuid: effect.uuid, targetTokenUuid: target.uuid}}
                 }
             }]});
         }
         await healFromDamage(workflow, actor, token, item);
-        for(const target of targets) await startBeam(state, token, target);
+        for(const target of targets) await startBeam(state, token, target.object);
         return;
     }
 
@@ -186,6 +193,9 @@ export async function enervation({actor, token, item, args, workflow}) {
     const state = stateOf(lastArg?.efData);
     if(!state) return;
     if(args[0] === "off") {
+        if(game.gps.effectSuspended(lastArg)) return;
+        const existing = await fromUuid(lastArg.effectUuid ?? `${actor.uuid}.ActiveEffect.${lastArg.effectId}`);
+        if(existing && (existing.disabled || existing.isSuppressed)) return;
         if(state.role === "target") {
             await endBeam(state, state.targetTokenUuid);
             const effect = await fromUuid(state.casterEffectUuid);

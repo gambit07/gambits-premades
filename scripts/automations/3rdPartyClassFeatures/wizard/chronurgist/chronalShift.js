@@ -12,9 +12,9 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
     if(workflow.legendaryResistanceUsed) return;
 
     // Check if attack hits
-    if(workflowType === "attack" && !game.gpsSettings.skipResolvedReactions && workflow.attackTotal < workflow.targets?.first()?.actor.system.attributes.ac.value) return;
+    if(workflowType === "attack" && !game.gpsSettings.skipResolvedReactions && workflow.attackTotal < workflow.targets?.documents[0]?.actor.system.attributes.ac.value) return;
     // Check if there is a save success
-    if(workflowType === "save" && workflow.saves.size === 0 && workflow.failedSaves.size === 0) return;
+    if(workflowType === "save" && workflow.saves.count === 0 && workflow.failedSaves.count === 0) return;
 
     let findValidTokens;
     
@@ -40,15 +40,15 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
         const rollDetailSetting = MidiQOL.safeGetGameSetting('midi-qol', 'ConfigSettings').hideRollDetails;
 
         if(workflowType === "save") {
-            let enemyTargets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 30);
-            let allyTargets = Array.from(workflow.failedSaves).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && MidiQOL.computeDistance(validTokenPrimary, t, {wallsBlock: true, includeCover: true}) <= 30);
+            let enemyTargets = workflow.saves.documents.filter(t => t.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && game.gps.withinRange(validTokenPrimary, t, 30));
+            let allyTargets = workflow.failedSaves.documents.filter(t => t.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && game.gps.withinRange(validTokenPrimary, t, 30));
 
             if(enemyTargets.length === 0 && allyTargets.length === 0) continue;
 
-            const enemyTargetUuids = enemyTargets.map(t => t.document.uuid);
-            const enemyTargetNames = enemyTargets.map(t => t.document.name);
-            const allyTargetUuids = allyTargets.map(t => t.document.uuid);
-            const allyTargetNames = allyTargets.map(t => t.document.name);
+            const enemyTargetUuids = enemyTargets.map(t => t.uuid);
+            const enemyTargetNames = enemyTargets.map(t => t.name);
+            const allyTargetUuids = allyTargets.map(t => t.uuid);
+            const allyTargetNames = allyTargets.map(t => t.name);
             let detailsKey;
 
             if (enemyTargets.length > 0 && allyTargets.length > 0) detailsKey = "GAMBITSPREMADES.Dialogs.Automations.ThirdPartyClassFeatures.Wizard.Chronurgist.ChronalShift.Details.EnemiesSucceededAlliesFailed";
@@ -144,6 +144,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             let allyToken = null;
             let enemyToken = null;
             if(enemyTokenUuid) enemyToken = await fromUuid(enemyTokenUuid);
@@ -173,13 +174,13 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
             if(workflowType === "save") {
                 let saveDC = workflow?.saveActivity?.save.dc?.value;
                 let saveAbility = workflow.tokenSaves?.[targetUuid]?.options?.midiChosenId ?? workflow.saveActivity?.save?.ability?.first();
-                let workflowTarget = enemyTokenUuid ? Array.from(workflow.saves).find(t => t.document.uuid === targetUuid) : Array.from(workflow.failedSaves).find(t => t.document.uuid === targetUuid);
+                let workflowTarget = enemyTokenUuid ? workflow.saves.documents.find(t => t.uuid === targetUuid) : workflow.failedSaves.documents.find(t => t.uuid === targetUuid);
 
                 let activity = chosenItem.system.activities.find(a => a.identifier === "syntheticSave");
                 await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activity.uuid, updates: {"save.dc.calculation": "", "save.dc.formula": saveDC, "save.dc.value": saveDC, "save.ability": [saveAbility]} });
                 let reroll;
-                if(source && source === "user") reroll = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
-                else if(source && source === "gm") reroll = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.document.uuid});
+                if(source && source === "user") reroll = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.uuid});
+                else if(source && source === "gm") reroll = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticSave", targetUuid: workflowTarget.uuid});
 
                 if(!reroll?.saveRolls) continue;
                 const saved = reroll.failedSaves.size === 0;
@@ -191,7 +192,7 @@ export async function chronalShift({workflowData,workflowType,workflowCombat}) {
             }
             else if(workflowType === "attack") {
                 let rerollAddition = workflow.attackRoll.total - workflow.attackRoll.dice[0].total;
-                let targetAC = workflow.targets.first().actor.system.attributes.ac.value;
+                let targetAC = workflow.targets.documents[0].actor.system.attributes.ac.value;
                 const saveSetting = workflow.options.noOnUseMacro;
                 workflow.options.noOnUseMacro = true;
                 let reroll;

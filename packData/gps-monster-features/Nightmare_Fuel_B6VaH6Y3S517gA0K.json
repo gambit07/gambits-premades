@@ -227,7 +227,7 @@
         "img": "icons/magic/death/undead-skeleton-worn-blue.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"postDamageRoll\" && workflow.failedSaves.size !== 0) {\n    let tempHP = workflow.damageTotal;\n    await actor.applyTempHP(tempHP);\n}",
+        "command": "if(args[0].macroPass === \"postDamageRoll\" && workflow.failedSaves.count !== 0) {\n    let tempHP = workflow.damageTotal;\n    await actor.applyTempHP(tempHP);\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -261,7 +261,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     }
   },

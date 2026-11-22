@@ -1,9 +1,9 @@
 export async function iceKnife({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
 
-    if((args[0].macroPass === "postAttackRollComplete" && !workflow.hitTargets.first()) || (args[0].macroPass === "postDamageRollComplete" && workflow.hitTargets.first())) {
+    if((args[0].macroPass === "postAttackRollComplete" && !workflow.hitTargets.documents[0]) || (args[0].macroPass === "postDamageRollComplete" && workflow.hitTargets.documents[0])) {
         item = await fromUuid(workflow.itemUuid);
         let gmUser = game.gps.getPrimaryGM();
-        let target = workflow.targets.first();
+        let target = workflow.targets.documents[0];
         if(!target) return;
         const castLevel = workflow.castData?.castLevel || workflow.castData?.baseLevel || item.system.level;
         

@@ -2,16 +2,16 @@ export async function staffOfTheRootedHills({ speaker, actor, token, character, 
     if(args[0].macroPass === "postDamageRoll") {
         let flagValue = await item.getFlag("gambits-premades", "rootedHillsStaff");
         if(flagValue === 0) return;
-        let target = workflow.hitTargets.first();
+        let target = workflow.hitTargets.documents[0];
         if(!target) return;
-        const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+        const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
 
         if(!saveResult) return;
         await item.setFlag("gambits-premades", "rootedHillsStaff", 0);
         if(saveResult.failedSaves.size !== 0) {
-            const hasEffectApplied = target.document.hasStatusEffect("restrained");
+            const hasEffectApplied = target.hasStatusEffect("restrained");
             if (!hasEffectApplied) {
-                await game.gps.queryGM("gmToggleStatus", {tokenUuid: `${target.document.uuid}`, status: "restrained", active: true });
+                await game.gps.queryGM("gmToggleStatus", {tokenUuid: `${target.uuid}`, status: "restrained", active: true });
             }
 
             let content = game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Items.StaffOfTheRootedHills.RestrainedBy")

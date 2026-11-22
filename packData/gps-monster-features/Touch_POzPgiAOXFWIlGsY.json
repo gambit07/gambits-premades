@@ -486,7 +486,7 @@
         "img": "icons/magic/fire/explosion-embers-evade-silhouette.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"postAttackRoll\") {\n    let target = workflow.hitTargets.first();\n    if(!target) return;\n    let checkEffect = target.actor.appliedEffects.some(e => e.name === \"Ignition\");\n    if(checkEffect) return;\n    let effectData = [{\n      \"origin\": macroItem.uuid,\n      \"duration\": { value: 99999, units: \"seconds\" },\n      \"disabled\": false,\n      \"name\": \"Ignition\",\n      \"img\": macroItem.img,\n      system: { changes: [\n        {\n          \"key\": \"flags.midi-qol.OverTime\",\n          type: \"custom\",\n          \"value\": \"turn=start,saveCount=1,damageRoll=1d10,damageType=fire,name=Ignition\",\n          \"priority\": 20\n        }\n      ] },\n      \"transfer\": false\n    }];\n\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}",
+        "command": "if(args[0].macroPass === \"postAttackRoll\") {\n    let target = workflow.hitTargets.documents[0];\n    if(!target) return;\n    let checkEffect = target.actor.appliedEffects.some(e => e.name === \"Ignition\");\n    if(checkEffect) return;\n    let effectData = [{\n      \"origin\": macroItem.uuid,\n      \"duration\": { value: 99999, units: \"seconds\" },\n      \"disabled\": false,\n      \"name\": \"Ignition\",\n      \"img\": macroItem.img,\n      system: { changes: [\n        {\n          \"key\": \"flags.midi-qol.OverTime\",\n          type: \"custom\",\n          \"value\": \"turn=start,saveCount=1,damageRoll=1d10,damageType=fire,name=Ignition\",\n          \"priority\": 20\n        }\n      ] },\n      \"transfer\": false\n    }];\n\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: target.actor.uuid, effects: effectData });\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -514,7 +514,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     }
   },

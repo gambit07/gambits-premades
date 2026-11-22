@@ -11,7 +11,7 @@ export async function ensureRegionEscape({tokenUuid, regionUuid}) {
     const existing = token.actor.items.find(item => item.flags["gambits-premades"]?.regionEscape?.regionUuid === regionUuid);
     if(existing) return existing.uuid;
     const spell = await fromUuid(region.getFlag("dnd5e", "item"));
-    const check = spell?.system.activities.find(activity => activity.type === "check");
+    const check = spell?.system.activities.find(activity => activity.isLike("check"));
     if(!check || !Number.isFinite(check.check.dc.value)) return;
     const abilities = spell.system.identifier === "black-tentacles" && spell.system.source.rules === "2014" ? ["str", "dex"] : ["str"];
     const activities = {};
@@ -47,9 +47,9 @@ export async function regionEscapeAction({item, args, workflow}) {
             workflow.aborted = true;
             return;
         }
-        workflow.targets = new Set([token.object]);
+        workflow.targets = new Set([token]);
     }
-    if(args?.[0]?.macroPass === "postActiveEffects" && !workflow.aborted && workflow.saves?.has(token?.object)) {
+    if(args?.[0]?.macroPass === "postActiveEffects" && !workflow.aborted && workflow.saves?.has(token)) {
         await game.gps.queryGM("setRegionStatus", {tokenUuid: token.uuid, regionUuid: region.uuid, active: false});
     }
 }

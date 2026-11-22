@@ -329,7 +329,8 @@
       "_id": "Hsy2PlDGxUG8ryB1",
       "type": "base",
       "system": {
-        "changes": []
+        "changes": [],
+        "magical": true
       },
       "description": "",
       "tint": "#ffffff",
@@ -754,7 +755,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.6"
       }
     },
     "boss-loot-assets-premium": {

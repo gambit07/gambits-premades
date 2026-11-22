@@ -1,3 +1,5 @@
+import {strideMoved} from "../automations/spells/ashardalonsStride.js";
+import {trackSpeechHp} from "../automations/spells/motivationalSpeech.js";
 import { registerWickerboneHooks } from "../automations/3rdPartyClassFeatures/druid/wickerboneBehemoth.js";
 import { registerFuryOfTheSmallHooks } from "../automations/raceFeatures/furyOfTheSmall.js";
 import { executeWorkflow, updateSettings, daeAddFlags, arcaneShotValidActivities } from "./hookUtils.js";
@@ -8,6 +10,7 @@ import {isAttackForcedMiss, registerAttackOutcomeHandling} from "./attackOutcome
 import { checkEnervationMovement, checkEnervationWalls } from "../automations/spells/enervation.js";
 
 export function registerHooks() {
+    Hooks.on("moveToken", strideMoved);
     registerWickerboneHooks();
     registerFuryOfTheSmallHooks();
     registerAttackOutcomeHandling();
@@ -67,7 +70,7 @@ export function registerHooks() {
 
     Hooks.on("midi-qol.prePreambleComplete", async (workflow) => {
         let workflowItemUuid = workflow.itemCardUuid;
-        let workflowType = (workflow.saveActivity || workflow.activity?.type === "save") ? "save" : (workflow.activity?.hasAttack) ? "attack" : "item";
+        let workflowType = (workflow.saveActivity || workflow.activity?.isLike("save")) ? "save" : (workflow.activity?.hasAttack) ? "attack" : "item";
         if (game.gpsSettings.counterspellEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "counterspell", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
         if (game.gpsSettings.counterspellEnabled && workflow?.item?.type === "spell") await executeWorkflow({ workflowItem: "counterspell2024", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
         if (game.gpsSettings.temporalShuntEnabled && (workflow.item.type === "spell" || workflow.activity.hasAttack)) await executeWorkflow({ workflowItem: "temporalShunt", workflowData: workflowItemUuid, workflowType: workflowType, workflowCombat: true });
@@ -77,7 +80,7 @@ export function registerHooks() {
 
     Hooks.on("midi-qol.preCheckHits", async (workflow) => {
         if(!workflow.activity.hasAttack) return;
-        if(isAttackForcedMiss(workflow) || (workflow.targets.size > 0 && [...workflow.targets].every(target => isAttackForcedMiss(workflow, target)))) return;
+        if(isAttackForcedMiss(workflow) || (workflow.targets.count > 0 && workflow.targets.documents.every(target => isAttackForcedMiss(workflow, target)))) return;
         let workflowItemUuid = workflow.itemCardUuid;
         if (game.gpsSettings.silveryBarbsEnabled) await executeWorkflow({ workflowItem: "silveryBarbs", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
         if (game.gpsSettings.cuttingWordsEnabled) await executeWorkflow({ workflowItem: "cuttingWords", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
@@ -120,7 +123,7 @@ export function registerHooks() {
     Hooks.on("midi-qol.preSavesComplete", async (workflow) => {
         if(!workflow.saveActivity) return;
         let workflowItemUuid = workflow.itemCardUuid;
-        const hasDrafynsBaneOfExcellence = Array.from(workflow.saves).some(t => t.document.actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === "e6e24759-a9d3-4993-b0f2-6328010a6520"));
+        const hasDrafynsBaneOfExcellence = workflow.saves.documents.some(t => t.actor.appliedEffects.some(e => e.flags["gambits-premades"]?.gpsUuid === "e6e24759-a9d3-4993-b0f2-6328010a6520"));
         if (hasDrafynsBaneOfExcellence) await executeWorkflow({ workflowItem: "drafynsBaneOfExcellence", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.restoreBalanceEnabled) await executeWorkflow({ workflowItem: "restoreBalance", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
         if (game.gpsSettings.flashOfGeniusEnabled) await executeWorkflow({ workflowItem: "flashOfGenius", workflowData: workflowItemUuid, workflowType: "save", workflowCombat: true });
@@ -151,8 +154,8 @@ export function registerHooks() {
     Hooks.on("midi-qol.preCompleted", async (workflow) => {
         let workflowItemUuid = workflow.itemCardUuid;
         if (game.gpsSettings.mageSlayerEnabled && workflow.item.type === "spell") await executeWorkflow({ workflowItem: "mageSlayer", workflowData: workflowItemUuid, workflowType: "spell", workflowCombat: true });
-        if (game.gpsSettings.sentinelEnabled && workflow.activity.type === "attack") await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
-        if (game.gpsSettings.sentinelEnabled && workflow.activity.type === "attack") await executeWorkflow({ workflowItem: "sentinel2024", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.sentinelEnabled && workflow.activity.isLike("attack")) await executeWorkflow({ workflowItem: "sentinel", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
+        if (game.gpsSettings.sentinelEnabled && workflow.activity.isLike("attack")) await executeWorkflow({ workflowItem: "sentinel2024", workflowData: workflowItemUuid, workflowType: "attack", workflowCombat: true });
     });
 
     Hooks.on("dnd5e.rollSavingThrow", async (rolls, data) => {
@@ -262,13 +265,6 @@ export function registerHooks() {
         if (!foundry.utils.hasProperty(diff, 'system.attributes.hp.temp')) return;
       
         const hpTemp = foundry.utils.getProperty(diff, 'system.attributes.hp.temp');
-        const claim = actor.getFlag("gambits-premades", "motivationalSpeechTempHp");
-        if(claim && !options?.gpsMotivationalSpeechGrant) {
-            if(hpTemp <= 0 || hpTemp > claim.amount) await actor.unsetFlag("gambits-premades", "motivationalSpeechTempHp");
-            else if(hpTemp !== claim.amount) await actor.setFlag("gambits-premades", "motivationalSpeechTempHp", {...claim, amount: hpTemp});
-        }
-        let effectData = actor.appliedEffects?.some(e => e.flags["gambits-premades"]?.gpsUuid === "32cabdaf-560e-48ea-8980-37cf5ad242c0");
-        if(hpTemp > 0 || !effectData) return;
-        await game.gps.motivationalSpeech({ actor: actor, args: "effectRemoval" });
+        await trackSpeechHp(actor, hpTemp, options);
       });
 }

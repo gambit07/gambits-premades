@@ -6,8 +6,7 @@ export async function lightSpell({ actor, token, item, args, workflow }) {
     const sourceActor = sourceItem?.actor ?? actor;
     if(!sourceItem || !sourceActor || workflow.activity?.identifier === "syntheticSave") return;
 
-    const target = workflow.targets.first() ?? token;
-    const targetDocument = target?.document ?? target;
+    const targetDocument = workflow.targets.documents[0] ?? workflow.tokenDocument ?? game.gps.tokenDocument(token);
     const isLightEffect = effect => !effect.transfer
         && effect.system?.changes?.some(change => change.key === "token.light.color");
     const collectPrevious = () => {

@@ -5,7 +5,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Fighting Style: Protection";
     let dialogId = gpsUuid;
-    let target = workflow.targets.first();
+    let target = workflow.targets.documents[0];
     let enableProtectionOnSuccess = MidiQOL.safeGetGameSetting('gambits-premades', 'enableProtectionOnSuccess');
     if ((enableProtectionOnSuccess && workflow.attackRoll.formula.includes("kl")) || (!enableProtectionOnSuccess && workflow.tracker.hasDisadvantage)) return;
     let gmUser = game.gps.getPrimaryGM();
@@ -25,7 +25,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
         const dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: validTokenPrimary.actor.name, itemName: itemProperName });
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
-        if (target.document.uuid === validTokenPrimary.document.uuid) continue;
+        if (target.uuid === validTokenPrimary.document.uuid) continue;
 
         let dialogContent = `
             <div class="gps-dialog-container">
@@ -55,13 +55,13 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
         let result;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -70,6 +70,7 @@ export async function protection({workflowData,workflowType,workflowCombat}) {
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             await game.gps.addReaction({actorUuid: `${validTokenPrimary.actor.uuid}`});
 
             if(game.gps.getCprConfig({itemUuid: chosenItem.uuid}).animEnabled) {

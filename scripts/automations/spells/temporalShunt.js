@@ -67,6 +67,7 @@ export async function temporalShunt({ workflowData,workflowType,workflowCombat }
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             const options = {
                 showFullCard: false,
                 createWorkflow: true,

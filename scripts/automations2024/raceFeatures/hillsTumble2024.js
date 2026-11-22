@@ -6,7 +6,7 @@ export async function hillsTumble2024({ speaker, actor, token, character, item, 
         let itemName = macroItem.name;
         let target = game.gps.damagedAttackTarget(workflow);
         if(!target) return;
-        let isProne = target.document.hasStatusEffect("prone");
+        let isProne = target.hasStatusEffect("prone");
         if(isProne) return;
         let itemUses = macroItem.system.uses.spent;
         let itemUsesRemaining = macroItem.system.uses.max - itemUses;
@@ -52,13 +52,13 @@ export async function hillsTumble2024({ speaker, actor, token, character, item, 
         `;
         
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source: "gm",type: "multiDialog" };
         
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
@@ -68,10 +68,10 @@ export async function hillsTumble2024({ speaker, actor, token, character, item, 
         }
         else if (userDecision) {
             let useResult;
-            if(source && source === "user") useResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: macroItem.uuid, identifier: "syntheticUse", targetUuid: target.document.uuid});
-            else if(source && source === "gm") useResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: macroItem.uuid, identifier: "syntheticUse", targetUuid: target.document.uuid});
+            if(source && source === "user") useResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: macroItem.uuid, identifier: "syntheticUse", targetUuid: target.uuid});
+            else if(source && source === "gm") useResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: macroItem.uuid, identifier: "syntheticUse", targetUuid: target.uuid});
             if(!useResult) return;
-            await game.gps.queryGM("gmToggleStatus", {tokenUuid: `${target.document.uuid}`, status: "prone", active: true });
+            await game.gps.queryGM("gmToggleStatus", {tokenUuid: `${target.uuid}`, status: "prone", active: true });
         }
     }
 }

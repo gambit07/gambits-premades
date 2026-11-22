@@ -1,11 +1,11 @@
-export async function hideousLaughter({ speaker, actor, token, character, item, args, scope, workflow, options }) {
+export async function hideousLaughter({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options }) {
     if(args[0]?.macroPass === "prePreambleComplete" && item.system.source.rules === "2014") {
-        for(const target of Array.from(workflow.targets)) {
+        for(const target of workflow.targets.documents) {
             if(target.actor.system.abilities.int.value > 4) continue;
             workflow.targets.delete(target);
             ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.HideousLaughter.TargetNotAffectedIntTooLow"));
         }
-        if(!workflow.targets.size) workflow.aborted = true;
+        if(!workflow.targets.count) workflow.aborted = true;
         return;
     }
     if (args[0].macroPass === "isDamaged" || args[0] === "each")
@@ -24,7 +24,7 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
             if(!checkEffect) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: actor.uuid, effects: effectAdv });
         }
 
-        const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
+        const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: tokenDocument.uuid});
 
         if (saveResult?.failedSaves.size === 0)
         {
@@ -35,25 +35,26 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
 
     else if (args[0].macroPass === "postActiveEffects")
     {
-        let targets = workflow.failedSaves;
+        let targets = workflow.failedSaves.documents;
         const hasConcApplied = MidiQOL.getConcentrationEffect(actor, item.uuid)
-        if(!targets.size && hasConcApplied) {
+        if(!targets.length && hasConcApplied) {
             await hasConcApplied.delete();
             return;
         }
 
-        for(let target of targets) {
-            const intScore = target.actor.system.abilities.int.value;
+        for(const doc of targets) {
+            const intScore = doc.actor.system.abilities.int.value;
 
             if(item.system.source.rules === "2024" || intScore > 4)
             {
-                const hasEffectApplied = target.document.hasStatusEffect("prone");
+                const hasEffectApplied = doc.hasStatusEffect("prone");
 
                 if (!hasEffectApplied) {
-                    await game.gps.queryGM("gmToggleStatus", { tokenUuid: `${target.document.uuid}`, status: "prone", active: true });
+                    await game.gps.queryGM("gmToggleStatus", { tokenUuid: `${doc.uuid}`, status: "prone", active: true });
                 }
 
-                if(!game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) continue;
+                const target = doc.object;
+                if(!target || !token || !game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) continue;
                 let facing = 1;
 
                 await new Sequence()
@@ -197,21 +198,21 @@ export async function hideousLaughter({ speaker, actor, token, character, item, 
             }
             else if (intScore <= 4) {
                 ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.HideousLaughter.TargetNotAffectedIntTooLow"));
-                workflow.failedSaves.delete(target);
+                workflow.failedSaves.delete(doc);
             }
         }
 
-        targets = workflow.failedSaves;
-        if(!targets.size && hasConcApplied) {
+        targets = workflow.failedSaves.documents;
+        if(!targets.length && hasConcApplied) {
             await hasConcApplied.delete();
             return;
         }
     }
 
-    else if(args[0] === "off") {
-        Sequencer.EffectManager.endEffects({ name: `Laugh_${token.id}_1` });
-        Sequencer.EffectManager.endEffects({ name: `Laugh_${token.id}_2` });
-        Sequencer.EffectManager.endEffects({ name: `Laugh_${token.id}_3` });
-        Sequencer.EffectManager.endEffects({ name: `Fear_${token.id}` });
+    else if(args[0] === "off" && tokenDocument && globalThis.Sequencer) {
+        Sequencer.EffectManager.endEffects({ name: `Laugh_${tokenDocument.id}_1` });
+        Sequencer.EffectManager.endEffects({ name: `Laugh_${tokenDocument.id}_2` });
+        Sequencer.EffectManager.endEffects({ name: `Laugh_${tokenDocument.id}_3` });
+        Sequencer.EffectManager.endEffects({ name: `Fear_${tokenDocument.id}` });
     }
 }

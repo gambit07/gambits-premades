@@ -40,8 +40,10 @@ export function createSpellVisual({kind, width, height = width, color, opacity =
 /** Captures a visible endpoint while retaining token identity for each client's perception checks. */
 function location(object) {
     if(!object) return;
-    const document = object.document ?? object;
-    const point = object.center ?? document.bounds?.center ?? object;
+    const document = object.documentName ? object : object.document ?? object;
+    const placeable = document.documentName === "Token" ? document.object : object;
+    if(!placeable) return;
+    const point = placeable.center ?? document.bounds?.center ?? placeable;
     const x = Number(point.x ?? document.x), y = Number(point.y ?? document.y);
     if(!Number.isFinite(x) || !Number.isFinite(y)) return;
     return {x, y, tokenId: document.documentName === "Token" ? document.id : undefined,
@@ -53,7 +55,7 @@ export function spellEffect({kind, at, to, scale = 1, width, height, color, opac
     if(!canvas?.ready || !Object.hasOwn(durations, kind)) return 0;
     const start = location(at), end = location(to);
     if(!start || (mode !== "point" && !end)) return 0;
-    width ??= (Number(at?.w) || canvas.grid.size) * scale;
+    width ??= (Number(at?.documentName === "Token" ? at.object?.w : at?.w) || canvas.grid.size) * scale;
     height ??= width;
     duration ??= durations[kind];
     const data = {kind, start, end, width, height, color, opacity, duration, mode, rotation, sceneId: canvas.scene.id,

@@ -1,3 +1,4 @@
+export {tokenDocument, reactionUnavailable, magicUnavailable, spellRegionSuppressed, effectSuspended} from "./tokenUtils.js";
 export { showAutomationDialog, confirmAutomationDialog } from "./dialogUtils.js";
 export { disableBlfxAutoRecognition } from "./itemAnimationUtils.js";
 export { requestFuryOfTheSmall } from "../automations/raceFeatures/furyOfTheSmall.js";
@@ -29,7 +30,7 @@ export async function addReaction({ actorUuid }) {
     if(!actorUuid) return;
     let actor = await fromUuid(`${actorUuid}`);
     if(actor) {
-        const hasEffectApplied = MidiQOL.hasUsedReaction(actor);
+        const hasEffectApplied = game.gps.reactionUnavailable(actor);
         if (!hasEffectApplied) {
             await MidiQOL.setReactionUsed(actor);
         }
@@ -296,7 +297,8 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the tokens reaction already used
-        else if(reactionCheck && MidiQOL.hasUsedReaction(t.actor)) {
+        else if(game.gps.magicUnavailable(checkItem)) return false;
+        else if(reactionCheck && game.gps.reactionUnavailable(t.actor)) {
             if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at reaction available`);
             return;
         }
@@ -308,7 +310,7 @@ export function findValidTokens({initiatingToken, targetedToken, itemName, itemT
         }
 
         // Check if the token is the initiating token or not a qualifying token disposition
-        else if(dispositionCheck && (((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === initiatingToken.document.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== initiatingToken.document.disposition))) {
+        else if(dispositionCheck && (((dispositionCheckType === "enemy" || dispositionCheckType === "enemyAlly") && t.document.disposition === game.gps.tokenDocument(initiatingToken)?.disposition) || (dispositionCheckType === "ally" && t.document.disposition !== game.gps.tokenDocument(initiatingToken)?.disposition))) {
             if(debugEnabled) game.gps.logInfo(`${itemName} for ${t.actor.name} failed at token disposition check`);
             return;
         }
@@ -502,7 +504,8 @@ export function findValidToken({initiatingTokenUuid, targetedTokenUuid, itemName
     }
 
     // Check if the tokens reaction already used
-    else if(reactionCheck && MidiQOL.hasUsedReaction(targetedToken.actor)) {
+    else if(game.gps.magicUnavailable(checkItem)) return false;
+    else if(reactionCheck && game.gps.reactionUnavailable(targetedToken.actor)) {
         if(debugEnabled) game.gps.logInfo(`${itemName} for ${targetedToken.actor.name} failed at reaction available`);
         return false;
     }
@@ -871,7 +874,8 @@ export async function moveTokenByCardinal({ targetUuid, distance, direction }) {
     if (!directions.includes(direction)) return console.log("No valid direction to move (Valid Options: 'North', 'South', 'East', 'West', 'Northwest', 'Northeast', 'Southwest', 'Southeast')");
 
     const targetDocument = await fromUuid(targetUuid);
-    const target = targetDocument.object;
+    const target = targetDocument?.object;
+    if(!target || targetDocument.parent !== canvas.scene) return false;
 
     const gridDistance = canvas.scene.dimensions.distance;
     const pixelsPerFoot = canvas.scene.grid.size / gridDistance;
@@ -1155,7 +1159,7 @@ export async function remoteCompleteItemUse({itemUuid, actorUuid, options, isWea
         castLevel: remoteCIU?.castData?.castLevel,
         baseLevel: remoteCIU?.castData?.baseLevel,
         itemType: remoteCIU?.item?.system?.method,
-        checkHits: (remoteCIU?.hitTargets?.size ?? 0) > 0,
+        checkHits: (remoteCIU?.hitTargets?.count ?? remoteCIU?.hitTargetUuids?.length ?? 0) > 0,
         completed: !!remoteCIU && !remoteCIU.aborted,
         reactionUsed: (itemData.actor?.getFlag("midi-qol", "actions")?.reactionsUsed ?? 0) > reactionsUsed
     };
@@ -1189,7 +1193,7 @@ export async function gpsActivityUse({itemUuid, identifier, targetUuid}) {
     const options = { midiOptions: { targetUuids: targetUuids, noOnUseMacro: true, configureDialog: false, showFullCard: false, ignoreUserTargets: true, checkGMstatus: true, autoRollAttack: true, autoRollDamage: "always", fastForwardAttack: true, fastForwardDamage: true, workflowData: true } };
     let activityUse = await MidiQOL.completeActivityUse(activity.uuid, options, {}, {});
     if (!activityUse || activityUse.aborted) return;
-    const failedSaveUuids = activityUse.failedSaveUuids ?? Array.from(activityUse.failedSaves ?? [], target => target.document.uuid);
+    const failedSaveUuids = activityUse.failedSaveUuids ?? activityUse.failedSaves?.uuids ?? [];
     const message = activityUse.itemCardUuid ? MidiQOL.getCachedChatMessage(activityUse.itemCardUuid) : null;
     const saveRoll = activityUse.tokenSaves?.[targetUuids[0]] ?? Object.values(activityUse.tokenSaves ?? {})[0]
         ?? message?.rolls.find(roll => roll.options?.["midi-qol"]?.rollType === "save" && roll.options["midi-qol"].targetUuid === targetUuids[0]);
@@ -1292,7 +1296,7 @@ export async function gpsApplyTempHp({ actorUuids, tempHp, motivationalSpeechSou
             const amount = Number.parseInt(tempHp);
             if(amount > (actor.system.attributes.hp.temp ?? 0)) await actor.update({
                 "system.attributes.hp.temp": amount,
-                "flags.gambits-premades.motivationalSpeechTempHp": {sourceUuid: motivationalSpeechSource, amount, effectUuid: null}
+                "flags.gambits-premades.motivationalSpeechTempHp": {sourceUuid: motivationalSpeechSource, amount, effectUuid: null, paused: false}
             }, {gpsMotivationalSpeechGrant: true});
         }
         else await actor.applyTempHP(tempHp);

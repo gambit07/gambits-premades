@@ -1,6 +1,6 @@
 export async function powerWordPain({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
     if(args[0].macroPass === "postPreambleComplete") {
-        const targets = workflow.targets;
+        const targets = workflow.targets.documents;
         for(let target of targets) {
             if(target.actor.system.attributes.hp.value > 100 || target.actor.system.traits.ci.value.has("charmed")) {
                 ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.PowerWordPain.TargetMoreThan100"));

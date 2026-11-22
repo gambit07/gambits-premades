@@ -211,7 +211,8 @@
       "img": "icons/magic/fire/elemental-fire-humanoid.webp",
       "type": "base",
       "system": {
-        "changes": []
+        "changes": [],
+        "magical": true
       },
       "start": null,
       "_key": "!items.effects!DMbWJuA83dZ1ilyX.oxzWSYduqkFWENzC"
@@ -241,7 +242,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     }
   },

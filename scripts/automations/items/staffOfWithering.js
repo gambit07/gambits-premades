@@ -1,6 +1,6 @@
 export async function staffOfWithering({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preDamageRollComplete") {
-        if(!workflow.hitTargets.size || workflow.gps?.staffOfWithering) return;
+        if(!workflow.hitTargets.count || workflow.gps?.staffOfWithering) return;
         let remainingCharges = item.system.uses.max - item.system.uses.spent;
         if(!remainingCharges) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.StaffOfWithering.NotAvailable"));
         let chargesText;
@@ -34,7 +34,7 @@ export async function staffOfWithering({ speaker, actor, token, character, item,
             </div>
         `;
 
-        let result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.hitTargets.first().document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+        let result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft: 30,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: workflow.hitTargets.documents[0].uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
             
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
 
@@ -42,11 +42,11 @@ export async function staffOfWithering({ speaker, actor, token, character, item,
             return;
         }
         else if (userDecision) {
-            let target = workflow.hitTargets.first();
+            let target = workflow.hitTargets.documents[0];
 
             let saveResult;
-            if(source && source === "user") saveResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
-            else if(source && source === "gm") saveResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            if(source && source === "user") saveResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
+            else if(source && source === "gm") saveResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
             if(!saveResult) return;
             if(item.system.uses.spent >= item.system.uses.max) return;
             await item.update({"system.uses.spent": item.system.uses.spent + 1});

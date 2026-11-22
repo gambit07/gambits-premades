@@ -4,8 +4,8 @@ export async function wound({ speaker, actor, token, character, item, args, scop
         if(workflow?.damageTotal <= 0) return;
         item = token.actor.items.find(i => i.system.identifier === "wound");
         if(!item) return;
-        let targets = Array.from(workflow?.hitTargets ?? []);
-        const targetUuids = targets.map(t => t.document.uuid);
+        let targets = (workflow?.hitTargets?.documents ?? []);
+        const targetUuids = targets.map(t => game.gps.tokenDocument(t).uuid);
         if(!targetUuids.length) return;
         
         await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticWound", targetUuid: targetUuids});

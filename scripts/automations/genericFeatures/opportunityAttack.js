@@ -70,7 +70,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     if(regionScenario === "onEnter" && !entryReaction) return;
 
     // Check if origin token has already used reaction
-    if (MidiQOL.hasUsedReaction(effectOriginActor)) {
+    if (game.gps.reactionUnavailable(effectOriginActor)) {
         if(debugEnabled) game.gps.logInfo(`Opportunity Attack for ${effectOriginActor.name} failed at reaction available`);
         return;
     }
@@ -228,7 +228,7 @@ export async function opportunityAttackScenarios({tokenUuid, regionUuid, regionS
     }
     else if (userDecision) {
         const chosenWeapon = validWeapons.find(weapon => weapon.uuid === selectedItemUuid);
-        if(!chosenWeapon) return;
+        if(!chosenWeapon || game.gps.reactionUnavailable(effectOriginActor) || game.gps.magicUnavailable(chosenWeapon)) return await resumeMovement?.();
         if (braceItemUuid) {
             let braceRoll;
             const options = {
@@ -606,43 +606,34 @@ function processOaSize({token, maxRange}) {
     return {regionShape, elevationTop, elevationBottom}
 }
 
-function processValidOptions({actor}) {
-    // Check valid weapons
-    let hasWarCaster = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
-    let warCasterMelee = true;
-    let warCasterRange = true;
-    if (hasWarCaster) {
-        if (game.modules.get("cat")?.active) {
-            let cprConfig = cat.utils.automationUtils.getConfigValues(hasWarCaster, ["warCasterRange", "warCasterMelee"]);
-            if (typeof cprConfig.warCasterRange === 'boolean') {
-                warCasterRange = cprConfig.warCasterRange;
-            }
-            if (typeof cprConfig.warCasterMelee === 'boolean') {
-                warCasterMelee = cprConfig.warCasterMelee;
-            }
+/** Use the same attack choices for the reaction dialog and its reach calculation. */
+function opportunityChoices(actor) {
+    const feat = actor.items.find(item => item.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
+    const config = feat && game.modules.get("cat")?.active ? cat.utils.automationUtils.getConfigValues(feat, ["warCasterRange", "warCasterMelee"]) : {};
+    const melee = config.warCasterMelee !== false, ranged = config.warCasterRange !== false;
+    const hasWarCaster = !!feat && (melee || ranged);
+    const weapons = [], spells = [];
+    for(const item of actor.items) {
+        const activities = item.system?.activities;
+        if(!activities) continue;
+        if(item.type === "spell") {
+            if(!hasWarCaster || game.gps.magicUnavailable(item)) continue;
+            const boomingBlade = melee && (item.system.identifier === "booming-blade" || item.name === "Booming Blade");
+            const prepared = item.system.prepared || !["spell", "ritual"].includes(item.system.method);
+            if(prepared && (boomingBlade || activities.some(a => a.activation?.type === "action"
+                && ["creature", "enemy", "creatureOrObject"].includes(a.target?.affects?.type)
+                && ((melee && a.actionType === "msak") || (ranged && (a.actionType === "rsak" || a.isLike("save"))))))) spells.push(item);
         }
+        else if((item.system.equipped === true || (item.type === "feat" && item.system.type?.value === "monster"))
+            && activities.some(a => ["mwak", "msak"].includes(a.actionType) && !game.gps.magicUnavailable(item, a))) weapons.push(item);
     }
-    if(!warCasterMelee && !warCasterRange) hasWarCaster = false;
-    
-    let overrideItems = ["Booming Blade"];
+    return {hasWarCaster, weapons, spells};
+}
 
-    let validWeapons = actor.items.filter(item => {
-        const acts = item.system?.activities ?? [];
-      
-        const qualifiesWeaponOrFeat = (acts.some(a => a.actionType === "mwak") && item.system?.equipped === true) || (item.system?.type?.value === "monster" && item.type === "feat" && acts.some(a => a.actionType === "mwak" || a.actionType === "msak"));
+function processValidOptions({actor}) {
+    const {hasWarCaster, weapons, spells} = opportunityChoices(actor);
+    const validWeapons = [...weapons, ...spells];
 
-        let warCasterSpell;
-        if(hasWarCaster) {
-            let allowedActionTypes = [];
-            if (warCasterMelee) allowedActionTypes.push("msak");
-            if (warCasterRange) allowedActionTypes.push("rsak", "save");
-        
-            warCasterSpell = (item.type === "spell" && acts.some(a => a.activation?.type === "action" && (allowedActionTypes.includes(a.actionType) || (warCasterRange && a.type === "save")) && ["creature", "enemy", "creatureOrObject"].includes(a.target?.affects?.type)) && ( item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual") )) || (warCasterMelee && overrideItems.includes(item.name));
-        }
-      
-        return qualifiesWeaponOrFeat || warCasterSpell;
-    });
-    
     // Sort the weapons alphabetically
     validWeapons.sort((a, b) => a.name.localeCompare(b.name));
     
@@ -668,34 +659,8 @@ function processValidOptions({actor}) {
 }
 
 async function processValidRange({actor, token}) {
-    let hasWarCaster = actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "4cb8e0f5-63fd-49b7-b167-511db23d9dbf");
-    let warCasterMelee = true;
-    let warCasterRange = true;
-    let isMetric = false;
-    if (hasWarCaster) {
-        if (game.modules.get("cat")?.active) {
-            let cprConfig = cat.utils.automationUtils.getConfigValues(hasWarCaster, ["warCasterRange", "warCasterMelee"]);
-            if (typeof cprConfig.warCasterRange === 'boolean') {
-                warCasterRange = cprConfig.warCasterRange;
-            }
-            
-            if (typeof cprConfig.warCasterMelee === 'boolean') {
-                warCasterMelee = cprConfig.warCasterMelee;
-            }
-        }
-    }
-    if(!warCasterMelee && !warCasterRange) hasWarCaster = false;
-    let overrideItems = ["Booming Blade"];
-
-    let validWeapons = actor.items.filter(item =>
-        (item.type === "weapon" && item.system.equipped === true && item.system.activities?.some(a => a.actionType === "msak" || a.actionType === "mwak")) || ((item.system?.type?.value === "monster" && item.type === "feat") && item.system.activities?.some(a => a.actionType === "mwak" || a.actionType === "msak"))
-    );
-
-    let validSpells = actor.items.filter(item =>
-        (hasWarCaster && item.type === "spell" && item.system.activities?.some(a => a.activation?.type === "action" && (a.actionType === "msak" || a.actionType === "rsak" || a.type === "save")) && (item.system?.prepared || (item.system?.method !== "spell" && item.system?.method !== "ritual")) && item.system.activities?.some(a => ["creature", "enemy", "creatureOrObject"].includes(a.target?.affects.type))) || overrideItems.includes(item.name)
-    );
-
-    isMetric ||= validSpells.some(item => ((item.system?.range?.units ?? "").toLowerCase() === "m") || (item.system?.activities ?? []).some(a => ((a.range?.units ?? "").toLowerCase() === "m")));
+    const {weapons: validWeapons, spells: validSpells} = opportunityChoices(actor);
+    let isMetric = validSpells.some(item => item.system.range?.units === "m" || item.system.activities.some(a => a.range?.units === "m"));
 
     let oaDisabled;
     if (!validWeapons.length && !validSpells.length) {

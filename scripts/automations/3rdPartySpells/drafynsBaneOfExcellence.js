@@ -1,3 +1,4 @@
+import {effectToken} from "../../utils/effectTargetUtils.js";
 import {isAttackForcedMiss} from "../../utils/attackOutcomeUtils.js";
 
 const MODULE_ID = "gambits-premades";
@@ -43,7 +44,11 @@ async function showMotes(effect, target, itemUuid, count) {
     const height = Number(token.h) || canvas.grid.size;
     const offsets = [{x: -0.6, y: -0.45}, {x: -0.6, y: 0.45}, {x: 0.6, y: -0.45}, {x: 0.6, y: 0.45}];
     const sequence = new Sequence({moduleName: MODULE_ID, softFail: true});
+    let added = false;
     for(let index = 0; index < count; index++) {
+        const name = `${prefix(effect.uuid)}_mote_${index}`;
+        if(Sequencer.EffectManager.getEffects({name}).length) continue;
+        added = true;
         const offset = {x: offsets[index].x * width, y: offsets[index].y * height};
         const rotation = Math.atan2(-offset.y, -offset.x) * 180 / Math.PI - 90;
         sequence.effect()
@@ -57,9 +62,9 @@ async function showMotes(effect, target, itemUuid, count) {
             .fadeIn(500)
             .fadeOut(500)
             .persist()
-            .name(`${prefix(effect.uuid)}_mote_${index}`);
+            .name(name);
     }
-    await sequence.play();
+    if(added) await sequence.play();
 }
 
 /** Initialize the curse from native cantrip scaling and display one mote per charge. */
@@ -71,9 +76,9 @@ export async function initializeDrafynMotes({effectUuid, itemUuid, tokenUuid, ac
         if(!item?.actor || target?.actor?.uuid !== effect.parent?.uuid || !DAE.effectMatchesSource(effect, itemUuid)) return;
         const level = Number(item.actor.system.cantripLevel?.(item) ?? item.actor.system.details.level ?? 1);
         const count = level >= 17 ? 4 : level >= 11 ? 3 : level >= 5 ? 2 : 1;
-        await effect.setFlag(MODULE_ID, "drafynMotes", {initial: count, remaining: count, activation, consumed: []});
+        await effect.setFlag(MODULE_ID, "drafynMotes", {initial: count, remaining: count, activation, tokenUuid, itemUuid, consumed: []});
         await endMotes(effectUuid);
-        void showMotes(effect, target, itemUuid, count).catch(() => undefined);
+        await showMotes(effect, target, itemUuid, count).catch(() => undefined);
         return {remaining: count};
     });
 }
@@ -82,7 +87,7 @@ export async function initializeDrafynMotes({effectUuid, itemUuid, tokenUuid, ac
 export async function consumeDrafynMote({effectUuid, activation, eventId}) {
     return withCurse(effectUuid, async effect => {
         const state = effect.getFlag(MODULE_ID, "drafynMotes");
-        if(!eventId || !state || state.activation !== activation || state.consumed.includes(eventId)
+        if(!effect.active || !eventId || !state || state.activation !== activation || state.consumed.includes(eventId)
             || !Number.isInteger(state.remaining) || state.remaining < 1) return;
         const remaining = state.remaining - 1;
         await effect.update({[`flags.${MODULE_ID}.drafynMotes.remaining`]: remaining,
@@ -102,6 +107,17 @@ async function announceCancellation(token, kind) {
 
 /** Apply the curse and cancel natural twenties while charges remain. */
 export async function drafynsBaneOfExcellence({actor, token, item, args, workflow, macroItem, workflowData, workflowType}) {
+    if(args?.[0] === "on") {
+        const context = args.at(-1);
+        await withCurse(context.effectUuid, async effect => {
+            const state = effect.getFlag(MODULE_ID, "drafynMotes");
+            const itemUuid = state?.itemUuid ?? item?.uuid;
+            if(!state?.remaining || !itemUuid) return;
+            const target = state.tokenUuid ? await fromUuid(state.tokenUuid) : effectToken(token, context, actor);
+            if(target) await showMotes(effect, target, itemUuid, state.remaining);
+        });
+        return;
+    }
     if(args?.[0] === "off") {
         const context = args.at(-1);
         const effectUuid = context.effectUuid ?? (context.effectId ? `${actor.uuid}.ActiveEffect.${context.effectId}` : null);
@@ -110,11 +126,11 @@ export async function drafynsBaneOfExcellence({actor, token, item, args, workflo
     }
     if(args?.[0]?.macroPass === "postActiveEffects" && !workflow.aborted) {
         item = macroItem ?? item;
-        for(const target of workflow.failedSaves) {
+        for(const target of workflow.failedSaves.documents) {
             const effect = target.actor.appliedEffects.find(candidate => candidate.active && candidate.getFlag(MODULE_ID, "gpsUuid") === EFFECT_ID
                 && DAE.effectMatchesSource(candidate, item.uuid));
             if(effect) await game.gps.queryUser("initializeDrafynMotes", game.gps.getPrimaryGM(), {
-                effectUuid: effect.uuid, itemUuid: item.uuid, tokenUuid: target.document.uuid, activation: workflow.id
+                effectUuid: effect.uuid, itemUuid: item.uuid, tokenUuid: target.uuid, activation: workflow.id
             });
         }
         return;
@@ -135,14 +151,14 @@ export async function drafynsBaneOfExcellence({actor, token, item, args, workflo
     if(workflowType === "save") {
         workflow = MidiQOL.Workflow.getWorkflow(workflowData);
         if(!workflow) return;
-        for(const target of [...workflow.saves]) {
-            const roll = workflow.tokenSaves?.[target.document.uuid];
+        for(const target of workflow.saves.documents) {
+            const roll = workflow.tokenSaves?.[target.uuid];
             if(!naturalTwenty(roll)) continue;
             const effect = curse(target.actor);
             const state = effect?.getFlag(MODULE_ID, "drafynMotes");
             if(!state?.remaining) continue;
             const result = await game.gps.queryUser("consumeDrafynMote", game.gps.getPrimaryGM(), {
-                effectUuid: effect.uuid, activation: state.activation, eventId: `${workflow.id}:save:${target.document.uuid}`
+                effectUuid: effect.uuid, activation: state.activation, eventId: `${workflow.id}:save:${target.uuid}`
             });
             if(!result) continue;
             await game.gps.updateSaveResult({workflow, token: target, roll, saved: false});

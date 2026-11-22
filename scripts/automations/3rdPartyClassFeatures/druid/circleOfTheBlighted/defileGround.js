@@ -1,4 +1,4 @@
-export async function defileGround({ speaker, actor, token, character, item, args, scope, workflow, options }) {
+export async function defileGround({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "postActiveEffects") {
         const template = await fromUuidSync(args[0].templateUuid);
         const distanceTotal = actor.classes.druid?.system.levels < 10 ? 10 : 20;
@@ -110,24 +110,24 @@ export async function defileGround({ speaker, actor, token, character, item, arg
     }
 
     if (args[0].macroPass === "isDamaged") {
-        if(workflow.flavor === 'Defile Ground - Damage (Necrotic)') return;
+        if(!tokenDocument || !game.combat || workflow.item?.flags["gambits-premades"]?.defileGroundDamage) return;
         const currentRound = game.combat.round;
         const currentTurn = game.combat.turn;
-        let defileGroundTurnDamage = await token.actor.getFlag("midi-qol", "defileGroundTurnDamage");
+        let defileGroundTurnDamage = await actor.getFlag("midi-qol", "defileGroundTurnDamage");
         if(defileGroundTurnDamage && defileGroundTurnDamage === `${currentRound}-${currentTurn}`) return;
         const dieAmount = item.parent.classes.druid?.system.levels >= 14 ? "1d8" : (item.parent.classes.druid?.system.levels >= 10 ? "1d6" : "1d4")
         let damageRoll = await new CONFIG.Dice.DamageRoll(`${dieAmount}`, {}, {type: "necrotic", properties: ["mgc"]}).evaluate();
         await MidiQOL.displayDSNForRoll(damageRoll, 'damageRoll')
 
         const itemData = {
-            flags: {autoanimations: {isEnabled: false, version: 5}},
+            flags: {"gambits-premades": {defileGroundDamage: true}, autoanimations: {isEnabled: false, version: 5}},
             name: "Defile Ground - Damage (Necrotic)",
             type: "feat",
             img: item.img
         }
 
-        await MidiQOL.socket().executeAsGM('_gmSetFlag', { actorUuid : token.actor.uuid, base : 'midi-qol', key : 'defileGroundTurnDamage', value : `${currentRound}-${currentTurn}` });
-        await new MidiQOL.DamageOnlyWorkflow(workflow.actor, workflow.token, damageRoll.total, "necrotic", token ? [token] : [], damageRoll, {itemData: itemData, flavor: "Defile Ground - Damage (Necrotic)"});
+        await MidiQOL.socket().executeAsGM('_gmSetFlag', { actorUuid : actor.uuid, base : 'midi-qol', key : 'defileGroundTurnDamage', value : `${currentRound}-${currentTurn}` });
+        await new MidiQOL.DamageOnlyWorkflow(workflow.actor, workflow.tokenDocument, damageRoll.total, "necrotic", [tokenDocument], damageRoll, {itemData: itemData, flavor: "Defile Ground - Damage (Necrotic)"});
         return;
     }
 

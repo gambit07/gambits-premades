@@ -7,7 +7,7 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
     let dialogId = gpsUuid;
     const triggeringTokens = workflowType === "save" && workflow
         ? Object.entries(workflow.tokenSaves ?? {}).filter(([, roll]) => roll.isFumble)
-            .map(([uuid]) => [...(workflow.targets ?? [])].find(token => token.document?.uuid === uuid) ?? fromUuidSync(uuid)?.object).filter(token => token?.actor)
+            .map(([uuid]) => (workflow.targets?.documents ?? []).find(token => token.uuid === uuid) ?? fromUuidSync(uuid)).filter(token => token?.actor)
         : (workflow ? workflow.attackRoll : workflowData.roll)?.isFumble
             ? [workflow?.token ?? await MidiQOL.tokenForActor(workflowData.actor)].filter(token => token?.actor)
             : [];
@@ -20,7 +20,7 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         for(const token of validTokens) if(!candidates.has(token.actor.uuid)) candidates.set(token.actor.uuid, {token, triggeringToken});
     }
     for(const {token: validTokenPrimary, triggeringToken: initiatingToken} of candidates.values()) {
-        if(MidiQOL.hasUsedReaction(validTokenPrimary.actor)) continue;
+        if(game.gps.reactionUnavailable(validTokenPrimary.actor)) continue;
         const itemData = validTokenPrimary.actor.items.find(item => item.identifier?.includes("bardic-inspiration"));
         if(!itemData || !Number.isFinite(itemData.system.uses.spent) || itemData.system.uses.spent <= 0) continue;
         const chosenItem = validTokenPrimary.actor.items.find(item => item.flags["gambits-premades"]?.gpsUuid === gpsUuid);
@@ -59,13 +59,13 @@ export async function poetryInMisery({workflowData,workflowType,workflowCombat})
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initiatingToken.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: game.gps.tokenDocument(initiatingToken)?.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initiatingToken.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: game.gps.tokenDocument(initiatingToken)?.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: initiatingToken.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: game.gps.tokenDocument(initiatingToken)?.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};

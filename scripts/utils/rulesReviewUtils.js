@@ -40,8 +40,8 @@ export function commandExpiredAtTurnStart(effectUuid) {
 
 export function damagedAttackTarget(workflow) {
     if(!workflow.activity?.hasAttack) return;
-    return [...workflow.hitTargets].find(target => workflow.damageList?.some(damage =>
-        (damage.tokenUuid === target.document.uuid || damage.actorUuid === target.actor.uuid)
+    return workflow.hitTargets.documents.find(target => workflow.damageList?.some(damage =>
+        (damage.targetUuid ? damage.targetUuid === target.uuid : damage.actorUuid === target.actor.uuid)
         && Number(damage.totalDamage) > 0));
 }
 
@@ -51,7 +51,7 @@ export async function foresight({actor, item, args, workflow}) {
     for(const scene of game.scenes) for(const token of scene.tokens) {
         if(!token.actorLink && token._source.delta?.effects?.some(effect => effect.flags?.["gambits-premades"]?.foresight)) actors.set(token.actor.uuid, token.actor);
     }
-    const currentTargets = new Set([...workflow.targets].map(token => token.actor.uuid));
+    const currentTargets = new Set(workflow.targets.documents.map(token => token.actor.uuid));
     for(const recipient of actors.values()) {
         const effects = recipient.effects.filter(effect => effect.flags?.["gambits-premades"]?.foresight
             && effect.getSourceActor()?.uuid === actor.uuid);
@@ -80,16 +80,16 @@ export async function bindFeatureResource({actor, item, workflow}) {
 }
 
 export async function huntersSense({actor, token, workflow, args}) {
-    const target = workflow.targets.first();
+    const target = workflow.targets.documents[0];
     if(args?.[0]?.macroPass === "preItemRoll") {
-        if(!target || workflow.targets.size !== 1 || !game.gps.withinRange(token, target, 60) || !MidiQOL.canSee(token, target)) {
+        if(!target || workflow.targets.count !== 1 || !game.gps.withinRange(token, target, 60) || !MidiQOL.canSee(token, target)) {
             workflow.aborted = true;
             return false;
         }
 
     }
     if(args?.[0]?.macroPass !== "postActiveEffects" || workflow.aborted || !target?.actor) return;
-    await game.gps.queryGM("huntersSenseResult", {actorUuid: actor.uuid, targetUuid: target.document.uuid});
+    await game.gps.queryGM("huntersSenseResult", {actorUuid: actor.uuid, targetUuid: target.uuid});
 }
 
 export async function huntersSenseResult({actorUuid, targetUuid}) {
@@ -99,7 +99,7 @@ export async function huntersSenseResult({actorUuid, targetUuid}) {
     const concealed = await game.gps.confirmAutomationDialog({focusTokenUuid: targetUuid, window: {title: game.i18n.localize("GAMBITSPREMADES.RulesReview.HuntersSenseTitle")}, content: `<p>${game.i18n.format("GAMBITSPREMADES.RulesReview.HuntersSenseConcealed", {target: foundry.utils.escapeHTML(target.name)})}</p>`, rejectClose: false});
     if(concealed == null) return;
     const traits = target.actor.system.traits;
-    const labels = key => (concealed ? [] : [...traits[key].value]).map(type => game.i18n.localize(CONFIG.DND5E.damageTypes[type]?.label ?? type)).join(", ") || loc("None");
+    const labels = key => (concealed ? [] : [...traits[key].value]).map(type => dnd5e.documents.Trait.keyLabel(type, {trait: key}) ?? type).join(", ") || loc("None");
     const whisper = [...new Set([MidiQOL.playerForActor(actor)?.id, ...game.users.filter(user => user.isGM).map(user => user.id)].filter(Boolean))];
     await ChatMessage.create({speaker: ChatMessage.getSpeaker({actor}), whisper,
         content: `<p>${foundry.utils.escapeHTML(target.name)}</p><p>${loc("DamageImmunities")}: ${labels("di")}</p><p>${loc("DamageResistances")}: ${labels("dr")}</p><p>${loc("DamageVulnerabilities")}: ${labels("dv")}</p>`});

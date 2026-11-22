@@ -1,10 +1,10 @@
 import {commandExpiredAtTurnStart} from "../../utils/rulesReviewUtils.js";
 
 export async function command2024({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "postSavesComplete" && workflow.failedSaves?.size) {
+    if(args[0].macroPass === "postSavesComplete" && workflow.failedSaves?.count) {
 
         const selection = await game.gps.showAutomationDialog({
-            focusTokenUuid: workflow.failedSaves.size === 1 ? workflow.failedSaves.first().document.uuid : false,
+            focusTokenUuid: workflow.failedSaves.count === 1 ? workflow.failedSaves.documents[0].uuid : false,
             window: { title: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.Spells.Command.WindowTitle") },
             content: `
             <div class="gps-dialog-container">
@@ -46,7 +46,7 @@ export async function command2024({ speaker, actor, token, character, item, args
     else if(args[0]?.macroPass === "postActiveEffects") {
         const word = workflow.gps?.commandWord;
         if(!word) return;
-        for(const target of workflow.failedSaves ?? []) {
+        for(const target of workflow.failedSaves?.documents ?? []) {
             const effect = target.actor.effects.filter(effect => effect.flags?.["gambits-premades"]?.command && DAE.effectMatchesSource(effect, item.uuid)).at(-1);
             if(effect) await MidiQOL.socket().executeAsGM("updateEffects", {actorUuid: target.actor.uuid, updates: [{_id: effect.id, "flags.gambits-premades.commandWord": word}]});
         }

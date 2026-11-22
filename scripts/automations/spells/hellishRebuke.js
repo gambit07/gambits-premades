@@ -1,19 +1,22 @@
-export async function hellishRebuke({ speaker, actor, token, character, item, args, scope, workflow, options, rolledItem, rolledActivity, macroItem }) {
+export async function hellishRebuke({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options, rolledItem, rolledActivity, macroItem }) {
     if(args[0].macroPass === "isDamaged") {
+        if(!tokenDocument?.object) return;
+        token = tokenDocument.object;
         let gpsUuid = "999b21b1-cd4a-45b3-b9e9-c9406a74b3fd";
         item = await actor?.items?.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemName = item.name;
-        let target = workflow.token;
+        let target = workflow.tokenDocument;
+        if(!target) return;
         let itemType = item.system.uses.max;
         (itemType !== "") ? itemType = "feature" : itemType = "spell";
         
-        let findValidToken = game.gps.findValidToken({initiatingTokenUuid: target.document.uuid, targetedTokenUuid: token.document.uuid, itemName: itemName, itemType: itemType, itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: "attack", workflowCombat: "true", gpsUuid: gpsUuid});
+        let findValidToken = game.gps.findValidToken({initiatingTokenUuid: target.uuid, targetedTokenUuid: tokenDocument.uuid, itemName: itemName, itemType: itemType, itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: "attack", workflowCombat: "true", gpsUuid: gpsUuid});
 
         if(!findValidToken) return;
 
         let dialogId = gpsUuid;
-        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: item.name });
-        let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: actor.name, itemName: item.name });
+        let dialogTitlePrimary = `${actor.name} | ${item.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
         let initialTimeLeft = 15;
@@ -42,13 +45,13 @@ export async function hellishRebuke({ speaker, actor, token, character, item, ar
         `;
         
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: target.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: target.uuid,source: "gm",type: "multiDialog" };
         
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: target.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
@@ -57,8 +60,9 @@ export async function hellishRebuke({ speaker, actor, token, character, item, ar
             return;
         }
         else if (userDecision) {
-            if(source && source === "user") await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
-            else if(source && source === "gm") await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            if(game.gps.reactionUnavailable(actor) || game.gps.magicUnavailable(item)) return;
+            if(source && source === "user") await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
+            else if(source && source === "gm") await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
 
             let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
             const { animEnabled } = cprConfig;

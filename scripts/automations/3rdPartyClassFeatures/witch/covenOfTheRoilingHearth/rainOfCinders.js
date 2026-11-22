@@ -6,12 +6,12 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Rain of Cinders";
     let dialogId = gpsUuid;
-    let target = workflow.targets.first();
+    let target = workflow.targets.documents[0];
     let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
-    if(workflow.targets.size > 1) return;
+    if(workflow.targets.count > 1) return;
 
     let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "feature", itemChecked: ["drawing the hearth"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
@@ -75,6 +75,7 @@ export async function rainOfCinders({workflowData,workflowType,workflowCombat}) 
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             if(animEnabled) {
                 for (let i = 0; i < 5; i++) {
                     new Sequence()

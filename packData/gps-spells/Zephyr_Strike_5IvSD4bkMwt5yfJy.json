@@ -227,7 +227,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     }
   },
@@ -252,7 +252,8 @@
             "priority": 20,
             "type": "override"
           }
-        ]
+        ],
+        "magical": true
       },
       "description": "",
       "tint": "#ffffff",
@@ -306,7 +307,8 @@
             "priority": 20,
             "type": "custom"
           }
-        ]
+        ],
+        "magical": true
       },
       "description": "",
       "tint": "#ffffff",

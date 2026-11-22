@@ -1,10 +1,10 @@
 export async function matalotok({ speaker, actor, token, character, item, args, scope, workflow, options }) {
-    if(args[0].macroPass === "preDamageRollComplete" && workflow.hitTargets.first() && workflow.activity.identifier !== "matalotok-cold-damage") {
+    if(args[0].macroPass === "preDamageRollComplete" && workflow.hitTargets.documents[0] && workflow.activity.identifier !== "matalotok-cold-damage") {
         if(!game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) return;
         let source = token;
-        let targets = workflow.hitTargets;
+        let targets = workflow.hitTargets.tokens;
         
-        if (!targets || targets?.size === 0) {
+        if (!targets.length) {
             return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Items.Matalotok.TargetAtLeastOneToken"))
         }
                 
@@ -22,7 +22,7 @@ export async function matalotok({ speaker, actor, token, character, item, args, 
 
         await game.gps.weaponAnimations({weapon, trail, impact, impactScale, soundFileMelee, soundFileRange, delaySound, switchDistanceFt, range, returnFile, delayBetweenAttacks, source, targets});
     
-        let initialTarget = workflow.hitTargets.first();
+        let initialTarget = targets[0];
 
         await new Sequence()
     

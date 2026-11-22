@@ -1,6 +1,6 @@
 export async function graspingArrow({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args?.[0].macroPass === "postPreambleComplete") {
-        let target = workflow.targets.first();
+        let target = workflow.targets.documents[0];
         if(!target) return;
         if(game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled && game.modules.get("jaamod")?.active) {
 
@@ -90,7 +90,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
                 "gambits-premades": {
                     "gpsUuid": "72bc5660-235c-4190-8aa2-4d23a3a592e3",
                     "sourceItemUuid": item.uuid,
-                    "targetUuid": target.document.uuid
+                    "targetUuid": target.uuid
                 },
                 "dae": {
                     "macro": {
@@ -116,7 +116,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
         if (targets.length === 0) return;
             
         for(let target of targets) {
-            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.first()?.document.uuid ?? token.document.uuid));
+            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.documents[0]?.uuid ?? token.document.uuid));
             if(hasItem) await target.actor.deleteEmbeddedDocuments("Item", [hasItem.id]);
             await target.actor.createEmbeddedDocuments("Item", itemData);
         }
@@ -126,7 +126,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
         Sequencer.EffectManager.endEffects({ name: `${token.id}.GraspingArrow` });
 
         let targets = canvas.tokens.placeables.filter(t => {
-            if (!t.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.first()?.document.uuid ?? token.document.uuid))) return;
+            if (!t.actor.items.some(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.documents[0]?.uuid ?? token.document.uuid))) return;
             return t;
         });
 
@@ -136,7 +136,7 @@ export async function graspingArrow({ speaker, actor, token, character, item, ar
         if (targets.length === 0) return;
 
         for(let target of targets) {
-            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.first()?.document.uuid ?? token.document.uuid));
+            let hasItem = target.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === "72bc5660-235c-4190-8aa2-4d23a3a592e3" && i.flags["gambits-premades"].sourceItemUuid === item.uuid && i.flags["gambits-premades"].targetUuid === (workflow?.targets?.documents[0]?.uuid ?? token.document.uuid));
             if(hasItem) await target.actor.deleteEmbeddedDocuments("Item", [hasItem.id]);
         }
     }

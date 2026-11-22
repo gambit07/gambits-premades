@@ -22,7 +22,7 @@ export async function resolveCounterspell({workflowData, workflowType, workflowC
             const gpsUuid = counterspellIds[sourceRules];
             const candidates = game.gps.findValidTokens({initiatingToken: cast.token, targetedToken: null, itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType, workflowCombat, gpsUuid, sourceRules});
             for(const validTokenPrimary of candidates) {
-                if(spent.has(validTokenPrimary.actor.uuid) || MidiQOL.hasUsedReaction(validTokenPrimary.actor)) continue;
+                if(spent.has(validTokenPrimary.actor.uuid) || game.gps.reactionUnavailable(validTokenPrimary.actor)) continue;
                 if(vocalOnly && validTokenPrimary.document.hasStatusEffect("deafened")) continue;
                 const chosenItem = validTokenPrimary.actor.items.find(item => item.flags["gambits-premades"]?.gpsUuid === gpsUuid);
                 if(!chosenItem) continue;
@@ -75,7 +75,7 @@ export async function resolveCounterspell({workflowData, workflowType, workflowC
             }
                     
 
-                if(!result?.userDecision) continue;
+                if(!result?.userDecision || game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
                 const useUser = result.source === "gm" ? gmUser : browserUser;
                 const itemRoll = await game.gps.queryUser("remoteCompleteItemUse", useUser, {
                     itemUuid: chosenItem.uuid, actorUuid: validTokenPrimary.actor.uuid,

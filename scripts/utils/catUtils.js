@@ -15,7 +15,7 @@ export async function registerCatConfig() {
     if (game.settings.get("cat", "automationSources")["gambits-premades"]?.enabled === false) return;
     cat.api.registerSourceName("gambits-premades", game.modules.get("gambits-premades").title);
     const packs = game.packs.filter(pack => pack.metadata.packageName === "gambits-premades" && pack.metadata.type === "Item");
-    const indexes = await Promise.all(packs.map(pack => pack.getIndex({ fields: ["system.identifier", "system.source", "flags.cat.automation", "flags.gambits-premades.itemConfig", "flags.gambits-premades.animationModules", "flags.gambits-premades.animationModuleNote", "flags.gambits-premades.monsterIdentifier"] })));
+    const indexes = await Promise.all(packs.map(pack => pack.getIndex({ fields: ["system.identifier", "system.source", "system.type.value", "flags.cat.automation", "flags.gambits-premades.itemConfig", "flags.gambits-premades.animationModules", "flags.gambits-premades.animationModuleNote", "flags.gambits-premades.monsterIdentifier"] })));
     const automations = indexes.flatMap(index => index.map(entry => {
         const config = foundry.utils.deepClone(entry.flags?.["gambits-premades"]?.itemConfig ?? {});
         for (const descriptor of Object.values(config)) {
@@ -31,6 +31,7 @@ export async function registerCatConfig() {
             uuid: entry.uuid,
             version: entry.flags.cat.automation.version,
             type: entry.type,
+            ...(entry.type === "feat" && entry.system.type?.value ? {featType: entry.system.type.value} : {}),
             ...(entry.flags["gambits-premades"]?.monsterIdentifier ? {monsterIdentifier: entry.flags["gambits-premades"].monsterIdentifier} : {}),
             notes: animationModuleNotes(entry),
             config

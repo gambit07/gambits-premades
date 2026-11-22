@@ -10,7 +10,7 @@
       "ko-fi": "https://ko-fi.com/gambit07"
     }
   ],
-  "version": "3.0.5",
+  "version": "3.0.6",
   "compatibility": {
     "minimum": "14.369",
     "verified": "14",
@@ -216,8 +216,8 @@
         "id": "dnd5e",
         "type": "system",
         "compatibility": {
-          "minimum": "6.0.6",
-          "verified": "6.0.6"
+          "minimum": "6.1.1",
+          "verified": "6.1.1"
         }
       }
     ],
@@ -226,16 +226,16 @@
         "id": "midi-qol",
         "type": "module",
         "compatibility": {
-          "minimum": "14.6.4",
-          "verified": "14.6.4"
+          "minimum": "14.7.0",
+          "verified": "14.7.0"
         }
       },
       {
         "id": "auraeffects",
         "type": "module",
         "compatibility": {
-          "minimum": "2.2.0",
-          "verified": "2.2.3"
+          "minimum": "2.3.1",
+          "verified": "2.3.1"
         }
       },
       {
@@ -250,8 +250,8 @@
         "id": "dae",
         "type": "module",
         "compatibility": {
-          "minimum": "14.6.3",
-          "verified": "14.6.3"
+          "minimum": "14.6.10",
+          "verified": "14.6.10"
         }
       }
     ],
@@ -260,14 +260,14 @@
         "id": "tidy5e-sheet",
         "type": "module",
         "compatibility": {
-          "verified": "14.2.0"
+          "verified": "15.0.1"
         }
       },
       {
         "id": "jb2a_patreon",
         "type": "module",
         "compatibility": {
-          "verified": "0.9.4"
+          "verified": "0.9.5"
         }
       },
       {
@@ -281,14 +281,14 @@
         "id": "eskie-effects",
         "type": "module",
         "compatibility": {
-          "verified": "1.11.0"
+          "verified": "1.14.0"
         }
       },
       {
         "id": "cat",
         "type": "module",
         "compatibility": {
-          "minimum": "0.1.3"
+          "minimum": "0.1.10"
         }
       }
     ]
@@ -312,5 +312,5 @@
     }
   ],
   "manifest": "https://github.com/gambit07/gambits-premades/releases/latest/download/module.json",
-  "download": "https://github.com/gambit07/gambits-premades/releases/download/3.0.5/module.zip"
+  "download": "https://github.com/gambit07/gambits-premades/releases/download/3.0.6/module.zip"
 }

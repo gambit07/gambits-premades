@@ -5,14 +5,14 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Power Word Rebound";
     let dialogId = gpsUuid;
-    let target = workflow.targets.first();
+    let target = workflow.targets.documents[0];
     if(!target) return;
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
     if(target.actor.system.attributes.hp.value >= Math.floor(target.actor.system.attributes.hp.max / 2)) return;
     if(workflow.attackTotal < target.actor.system.attributes.ac.value) return;
-    if(workflow.targets.size > 1) return;
+    if(workflow.targets.count > 1) return;
 
     let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: "spell", itemChecked: null, reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
@@ -55,13 +55,13 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
         let notificationMessage = await MidiQOL.socket().executeAsUser("createChatMessage", gmUser, { chatData });
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.uuid,source: "user",type: "multiDialog", browserUser: browserUser, notificationId: notificationMessage._id };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.uuid,source: "gm",type: "multiDialog", notificationId: notificationMessage._id };
         
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.document.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: validTokenPrimary.document.uuid, focusTokenUuid: target.uuid,source: gmUser === browserUser ? "gm" : "user",type:"singleDialog", notificationId: notificationMessage._id});
         }
 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, source, type } = result || {};
@@ -70,12 +70,13 @@ export async function powerWordRebound({workflowData,workflowType,workflowCombat
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             const options = {
                 showFullCard: false,
                 createWorkflow: true,
                 versatile: false,
                 configureDialog: true,
-                targetUuids: [target.document.uuid]
+                targetUuids: [target.uuid]
             };
 
             let itemRoll;

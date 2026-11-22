@@ -44,7 +44,7 @@
         "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"preAttackRoll\") {\n    if(workflow.activity?.actionType !== \"mwak\" && workflow.activity?.actionType !== \"msak\") return;\n    let target = workflow.targets.first();\n    if(target.actor.system.attributes.hp.effectiveMax !== target.actor.system.attributes.hp.value) workflow.advantage = true;\n}",
+        "command": "if(args[0].macroPass === \"preAttackRoll\") {\n    if(workflow.activity?.actionType !== \"mwak\" && workflow.activity?.actionType !== \"msak\") return;\n    let target = workflow.targets.documents[0];\n    if(target.actor.system.attributes.hp.effectiveMax !== target.actor.system.attributes.hp.value) workflow.advantage = true;\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -88,7 +88,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     }
   },

@@ -94,6 +94,7 @@ export async function dreadCounterspell({ workflowData,workflowType,workflowComb
                 continue;
             }
             else if (userDecision) {
+                if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
                 if(lastMessage && validTokenPrimary.actor.type === "character") lastMessage.update({ whisper: [] });
 
                 const options = {

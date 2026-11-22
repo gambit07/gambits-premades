@@ -1,6 +1,35 @@
-export async function enemiesAbound({ speaker, actor, token, character, item, macroItem, args, scope, workflow, options }) {
+import {effectToken, setEffectFlag} from "../../utils/effectTargetUtils.js";
+
+const MODULE = "gambits-premades";
+const SPELL = "4ad56aaf-b9b4-40ce-9869-ff62b999b7be";
+const pending = new Map();
+
+/** Reconcile overlapping casts against the disposition of this particular token. */
+export async function syncEnemiesAboundDisposition({tokenUuid, effectUuid, active}) {
+    const previous = pending.get(tokenUuid) ?? Promise.resolve();
+    const task = previous.catch(() => {}).then(async () => {
+        const doc = await fromUuid(tokenUuid);
+        if(doc?.documentName !== "Token" || !doc.actor || !effectUuid) return;
+        const claim = doc.getFlag(MODULE, "enemiesAbound");
+        const ids = new Set(claim?.effects);
+        if(active) {
+            const effect = await fromUuid(effectUuid);
+            if(!effect?.active || effect.parent?.uuid !== doc.actor.uuid || effect.getFlag(MODULE, "gpsUuid") !== SPELL
+                || effect.getFlag(MODULE, "enemiesAboundTokenUuid") !== tokenUuid || ids.has(effectUuid)) return;
+            ids.add(effectUuid);
+            await doc.update({disposition: 0, ["flags." + MODULE + ".enemiesAbound"]: {
+                original: claim?.original ?? doc.disposition, effects: [...ids]}});
+        } else if(ids.delete(effectUuid)) {
+            await doc.update(ids.size ? {["flags." + MODULE + ".enemiesAbound.effects"]: [...ids]}
+                : {disposition: claim.original, ["flags." + MODULE + ".-=enemiesAbound"]: null});
+        }
+    });
+    pending.set(tokenUuid, task);
+    try { await task; } finally { if(pending.get(tokenUuid) === task) pending.delete(tokenUuid); }
+}
+export async function enemiesAbound({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, macroItem, args, scope, workflow, options }) {
     if(args[0].macroPass === "postActiveEffects") {
-        const targets = workflow.failedSaves;
+        const targets = workflow.failedSaves.documents;
         for(let target of targets) {
             const immunity = target.actor.system.traits?.ci?.value?.has("frightened");
 
@@ -16,8 +45,12 @@ export async function enemiesAbound({ speaker, actor, token, character, item, ma
                 return;
             }
 
-            await MidiQOL.socket().executeAsGM('_gmSetFlag', { actorUuid : target.actor.uuid, base : 'gambits-premades', key : 'enemiesAboundDisposition', value : target.document.disposition });
-            await game.gps.queryGM("gmUpdateDisposition", {tokenUuid: `${target.document.uuid}`, disposition: 0 });
+            const effects = target.actor.effects.filter(e => e.getFlag(MODULE, "gpsUuid") === SPELL && DAE.effectMatchesSource(e, item.uuid));
+            const effect = effects.find(e => !e.getFlag(MODULE, "enemiesAboundTokenUuid"))
+                ?? effects.find(e => e.getFlag(MODULE, "enemiesAboundTokenUuid") === target.uuid);
+            if(!effect) continue;
+            await setEffectFlag(effect, "enemiesAboundTokenUuid", target.uuid);
+            await game.gps.queryGM("syncEnemiesAboundDisposition", {tokenUuid: target.uuid, effectUuid: effect.uuid, active: true});
 
             let browserUser = game.users?.activeGM;
             let chatData = {
@@ -30,7 +63,7 @@ export async function enemiesAbound({ speaker, actor, token, character, item, ma
 
             let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
             const { animEnabled } = cprConfig;
-            if(animEnabled && game.modules.get("jaamod")?.active) {            
+            if(token && target.object && animEnabled && game.modules.get("jaamod")?.active) {
                 new Sequence()
                 .effect()
                     .atLocation(token)
@@ -55,7 +88,7 @@ export async function enemiesAbound({ speaker, actor, token, character, item, ma
                     .belowTokens()
                     .filter("ColorMatrix", { hue: 87 })
                     .scaleToObject(2.5)
-                    .name(`EnemiesAbound_${target.actor.id}`)
+                    .name(`EnemiesAbound_${effect.uuid}`)
                     .delay(5000)
                     .persist()
                 .play()
@@ -64,26 +97,24 @@ export async function enemiesAbound({ speaker, actor, token, character, item, ma
     }
 
     if(args[0].macroPass === "isDamaged") {
-        const effect = token.actor.appliedEffects.find(e => e.flags["gambits-premades"]?.gpsUuid === "4ad56aaf-b9b4-40ce-9869-ff62b999b7be");
-        if(!effect) return;
-
-        const saveResult = await game.gps.gpsActivityUse({itemUuid: effect.flags["midi-qol"].castData.itemUuid, identifier: "syntheticSave", targetUuid: token.document.uuid});
-
-        if (saveResult?.failedSaves.size === 0) {
+        const target = effectToken(tokenDocument, null, actor);
+        if(!target) return;
+        const effect = actor.appliedEffects.find(e => e.active && e.getFlag(MODULE, "gpsUuid") === SPELL
+            && e.getFlag(MODULE, "enemiesAboundTokenUuid") === target.uuid);
+        const spell = effect && await DAE.getEffectItem(effect);
+        if(!spell?.actor) return;
+        const result = await game.gps.gpsActivityUse({itemUuid: spell.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
+        if(result && !result.aborted && result.failedSaves?.size === 0) {
             await effect.delete();
-            Sequencer.EffectManager.endEffects({name: `EnemiesAbound_${actor.id}`, source: token});
-
-            const hasConcApplied = await MidiQOL.getConcentrationEffect(actor, item.uuid);
-            
-            if (hasConcApplied) {
-                await hasConcApplied.delete();
-            }
+            const concentration = MidiQOL.getConcentrationEffect(spell.actor, spell.uuid);
+            if(concentration) await concentration.delete();
         }
-    }
-    else if(args[0] === "off") {
-        Sequencer.EffectManager.endEffects({name: `EnemiesAbound_${actor.id}`, source: token});
-        let disposition = actor.getFlag("gambits-premades", "enemiesAboundDisposition");
-        await game.gps.queryGM("gmUpdateDisposition", {tokenUuid: `${token.document.uuid}`, disposition: disposition });
-        await actor.unsetFlag("gambits-premades", "enemiesAboundDisposition");
+    } else if(args[0] === "off" || args[0] === "on") {
+        const context = args.at(-1);
+        const tokenUuid = actor.effects.get(context.effectId)?.getFlag(MODULE, "enemiesAboundTokenUuid")
+            ?? context.efData?.flags?.[MODULE]?.enemiesAboundTokenUuid;
+        if(!tokenUuid) return;
+        if(args[0] === "off") await globalThis.Sequencer?.EffectManager?.endEffects({name: `EnemiesAbound_${context.effectUuid}`});
+        await game.gps.queryGM("syncEnemiesAboundDisposition", {tokenUuid, effectUuid: context.effectUuid, active: args[0] === "on"});
     }
 }

@@ -2,7 +2,14 @@ const MODULE_ID = "gambits-premades";
 const FEATURE_ID = "9ec968bf-60fe-4d3b-987c-d3dc16206d89";
 const requests = new Map();
 const prompted = new WeakMap();
-const clone = value => foundry.utils.deepClone(value);
+/** Isolates mutable damage options and properties; document references stay intact. */
+function copyDamage(value) {
+    if(value instanceof Set) return new Set(value);
+    if(Array.isArray(value)) return value.map(copyDamage);
+    if(value && Object.getPrototypeOf(value) === Object.prototype)
+        return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, copyDamage(entry)]));
+    return value;
+}
 const loc = key => game.i18n.localize(`GAMBITSPREMADES.FuryOfTheSmall.${key}`);
 const feature = actor => actor?.items.find(item => item.getFlag(MODULE_ID, "gpsUuid") === FEATURE_ID);
 const size = actor => CONFIG.DND5E.actorSizes[actor?.system.traits.size]?.numerical;
@@ -69,70 +76,57 @@ async function offerFury(item, {sourceUuid, targetUuid, turn, workflowId, bonus,
 }
 
 /** Compare damage calculations with and without the bonus in its original damage part. */
-function damagePlans(actor, damage, bonus) {
-    const details = damage.damageDetails;
-    const config = MidiQOL.configSettings();
-    const selector = damage.damageSelector;
-    const buckets = ["defaultDamage", "otherDamage", "bonusDamage"];
-    const included = selector === "otherDamage" ? ["otherDamage"]
-        : config.singleConcentrationRoll ? buckets : ["defaultDamage", "bonusDamage"];
+function damagePlans(actor, damage, bonus, workflow, target) {
+    const {damages, options, calculatedDamages} = damage;
     const plans = new Map();
+    if(!Array.isArray(damages) || !options || !Array.isArray(calculatedDamages)) return plans;
+    const {singleDamageCalculation: together, singleConcentrationRoll} = MidiQOL.configSettings();
+    let combined = damages;
+    if(together && !singleConcentrationRoll && workflow?.otherDamageRolls && target) {
+        const buckets = [["defaultDamage", () => workflow.damageDetail], ["otherDamage", () => workflow.otherDamageFor(target)], ["bonusDamage", () => workflow.bonusDamageDetail]];
+        combined = buckets.flatMap(([category, source]) => {
+            const onCard = damages.filter(entry => entry.midiCategory === category);
+            return onCard.length ? onCard : (source() ?? []).filter(entry => entry.type !== "midi-none")
+                .map(entry => ({...entry, midiCategory: category}));
+        });
+    }
     const baseline = new Map();
-    for(const bucket of included) {
-        const raw = details?.[`raw${bucket}`] ?? [];
-        for(const [index, part] of raw.entries()) {
-            if(!damaging(part) || plans.has(part.type) || !damage.damageDetail.some(entry => entry.type === part.type && damaging(entry))) continue;
-            const calculationBuckets = config.singleDamageCalculation ? buckets : [bucket];
-            const key = calculationBuckets.join();
-            const options = details.calcDamageOptions[bucket] ?? damage.calcDamageOptions;
-            if(!options) continue;
-            const original = calculationBuckets.flatMap(name => clone(details[`raw${name}`] ?? []));
-            if(!baseline.has(key)) baseline.set(key, actor.calculateDamage(original, clone(options)));
-            const before = baseline.get(key);
-            if(!Array.isArray(before)) continue;
-            const updated = clone(raw);
-            updated[index].value = Number(part.value) + bonus;
-            updated[index].damage = updated[index].value;
-            updated[index].formula = `${part.formula || part.value} + ${bonus}`;
-            const augmented = calculationBuckets.flatMap(name => clone(name === bucket ? updated : details[`raw${name}`] ?? []));
-            const after = actor.calculateDamage(augmented, clone(options));
-            if(!Array.isArray(after)) continue;
-            const delta = total(after) - total(before);
-            if(!Number.isFinite(delta) || delta < 0) continue;
-            plans.set(part.type, {bucket, updated, included, delta, properties: new Set(part.properties ?? [])});
-        }
+    for(const [index, part] of damages.entries()) {
+        if(!damaging(part) || plans.has(part.type) || !calculatedDamages.some(entry =>
+            entry.type === part.type && damaging(entry) && (together || entry.midiCategory === part.midiCategory))) continue;
+        const key = together ? "all" : part.midiCategory;
+        const group = together ? combined : damages.filter(entry => entry.midiCategory === part.midiCategory);
+        if(!baseline.has(key)) baseline.set(key, actor.calculateDamage(copyDamage(group), copyDamage(options)));
+        const before = baseline.get(key);
+        if(!Array.isArray(before)) continue;
+        const value = Number(part.value) + bonus;
+        const updated = {...part, value, damage: value, formula: `${part.formula || part.value} + ${bonus}`};
+        const after = actor.calculateDamage(copyDamage(group.map(entry => entry === part ? updated : entry)), copyDamage(options));
+        if(!Array.isArray(after)) continue;
+        const delta = total(after) - total(before);
+        if(!Number.isFinite(delta) || delta <= 0) continue;
+        const calculated = after.find(entry => entry.type === part.type && entry.midiCategory === part.midiCategory
+            && (part.properties?.size ?? 0) === (entry.properties?.size ?? 0)
+            && [...(part.properties ?? [])].every(property => entry.properties?.has(property)));
+        plans.set(part.type, {index, updated, delta, active: calculated?.active, potential: calculated?.potential});
     }
     return plans;
 }
 
-/** Keep the damage card and HP preview consistent without a second damage application. */
-function applyBonus(actor, damage, plan, type, bonus, name) {
-    const details = damage.damageDetails;
-    details[`raw${plan.bucket}`] = plan.updated;
-    damage.rawDamageDetail = plan.included.flatMap(bucket => clone(details[`raw${bucket}`] ?? []));
-    details[`raw${damage.damageSelector}`] = damage.rawDamageDetail;
-    damage.damageDetail = [...damage.damageDetail, {type, value: plan.delta, properties: plan.properties,
-        active: {multiplier: plan.delta / bonus}, formula: String(bonus)}];
-    details[damage.damageSelector] = damage.damageDetail;
-    damage.details ??= [];
-    damage.details.push(`${name} (+${bonus})`);
-    const hp = actor.system.attributes.hp;
-    const healing = damage.damageDetail.reduce((sum, entry) => sum + (entry.type === "healing" ? entry.value : 0), 0);
-    const temporary = damage.damageDetail.reduce((sum, entry) => sum + (entry.type === "temphp" ? entry.value : 0), 0);
-    damage.totalDamage = Math.max(0, total(damage.damageDetail));
-    const amount = Math.trunc(damage.totalDamage + healing);
-    const tempLoss = Math.min(hp.temp ?? 0, Math.max(0, amount));
-    damage.healingAdjustedTotalDamage = amount;
-    damage.hpDamage = Math.clamp(amount - tempLoss, -(hp.damage ?? 0), hp.value);
-    damage.newHP = hp.value - damage.hpDamage;
-    damage.newTempHP = Math.floor(Math.max(0, (hp.temp ?? 0) - tempLoss, temporary));
-    damage.tempDamage = (hp.temp ?? 0) - damage.newTempHP;
+/** Updates only this target's card. Midi derives HP and temporary HP from the calculated delta. */
+function applyBonus(damage, plan, type, bonus, name) {
+    damage.damages = damage.damages.map((entry, i) => i === plan.index ? plan.updated : entry);
+    const entry = MidiQOL.modifyDamageBy({damageItem: damage, type, value: plan.delta,
+        multiplier: plan.delta / bonus, reason: `${name} (+${bonus})`});
+    Object.assign(entry, {active: {...plan.active, ...entry.active}, potential: copyDamage(plan.potential ?? {}),
+        properties: new Set(plan.updated.properties ?? []), midiCategory: plan.updated.midiCategory, formula: String(bonus)});
 }
 
 /** Add Fury only to a larger creature damaged by this attack or spell. */
 export async function furyOfTheSmall(target, {workflow, damageItem} = {}) {
     if(!workflow || workflow.aborted || (!workflow.activity?.hasAttack && workflow.item?.type !== "spell")) return;
-    if(!target?.actor || !workflow.token?.document || !damageItem?.wasHit || !(damageItem.totalDamage > 0)
+    target = game.gps.tokenDocument(target);
+    if(!target?.actor || !workflow.tokenDocument || !damageItem?.wasHit || !(damageItem.totalDamage > 0)
         || !(damageItem.hpDamage > 0 || damageItem.tempDamage > 0)) return;
     const actor = workflow.actor;
     const item = feature(actor);
@@ -141,17 +135,17 @@ export async function furyOfTheSmall(target, {workflow, damageItem} = {}) {
     const used = actor.getFlag(MODULE_ID, "furyOfTheSmallUse");
     if(used?.workflowId === workflow.id || (turn && used?.turn === turn)) return;
     const seen = prompted.get(workflow) ?? new Set();
-    if(seen.has(target.document.uuid)) return;
+    if(seen.has(target.uuid)) return;
     const bonus = Number(actor.system.attributes.prof);
     if(!(bonus > 0)) return;
-    const plans = damagePlans(target.actor, damageItem, bonus);
+    const plans = damagePlans(target.actor, damageItem, bonus, workflow, target);
     if(!plans.size) return;
-    seen.add(target.document.uuid);
+    seen.add(target.uuid);
     prompted.set(workflow, seen);
     const result = await game.gps.queryUser("requestFuryOfTheSmall", game.gps.getPrimaryGM(), {
-        itemUuid: item.uuid, sourceUuid: workflow.token.document.uuid, targetUuid: target.document.uuid,
+        itemUuid: item.uuid, sourceUuid: workflow.tokenDocument.uuid, targetUuid: target.uuid,
         turn, workflowId: workflow.id, bonus, choices: [...plans.keys()]
     });
     if(!result || workflow.aborted || !plans.has(result.type)) return;
-    applyBonus(target.actor, damageItem, plans.get(result.type), result.type, bonus, item.name);
+    applyBonus(damageItem, plans.get(result.type), result.type, bonus, item.name);
 }

@@ -7,7 +7,7 @@ export async function restrainingRegion({tokenUuid, regionUuid, regionScenario, 
     const region = fromUuidSync(regionUuid);
     if(!region) return;
     const spell = await fromUuid(region.getFlag("dnd5e", "item"));
-    if(!spell) return;
+    if(!spell || game.gps.spellRegionSuppressed(spell, token.actor)) return;
     const eventTurnKey = turnKey ?? game.gps.regionTurnKey();
     const turnEvent = revised && kind === "blackTentacles" ? "tokenTurnEnd" : "tokenTurnStart";
     const flag = `regionTurns.${kind === "web" ? "checkWebRound" : "checkBlackTentacleRound"}.${token.id}`;

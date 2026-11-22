@@ -1,6 +1,6 @@
 export async function grimSiphon({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
     if(args[0].macroPass === "postActiveEffects") {
-        let target = workflow.failedSaves.first();
+        let target = workflow.failedSaves.documents[0];
         if(!target) return;
         const nearbyFriendlies = MidiQOL.findNearby(null, target, 5, { includeToken: false });
         let validFriendlies = nearbyFriendlies.filter(t => t.document.disposition === token.document.disposition);

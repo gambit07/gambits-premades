@@ -62,22 +62,22 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
         let dialogContent;
 
         if(workflowType === "save") {
-            let targetAllies = Array.from(workflow.targets).filter(t => t.document.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && game.gps.withinRange(validTokenPrimary, t, 60));
-            let targetEnemies = Array.from(workflow.targets).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && game.gps.withinRange(validTokenPrimary, t, 60));
+            let targetAllies = workflow.targets.documents.filter(t => t.disposition === validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && game.gps.withinRange(validTokenPrimary, t, 60));
+            let targetEnemies = workflow.targets.documents.filter(t => t.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && game.gps.withinRange(validTokenPrimary, t, 60));
             
             const tokenSaves = workflow.tokenSaves ?? {};
-            targetAllies = targetAllies.filter(t => game.gps.reactionCanChangeOutcome(workflow, {type: "save", desired: "success", target: t}) && tokenSaves[t.document.uuid]?.formula.includes("kl") && !tokenSaves[t.document.uuid].formula.includes("kh"));
-            targetEnemies = targetEnemies.filter(t => game.gps.reactionCanChangeOutcome(workflow, {type: "save", desired: "failure", target: t}) && tokenSaves[t.document.uuid]?.formula.includes("kh") && !tokenSaves[t.document.uuid].formula.includes("kl"));
+            targetAllies = targetAllies.filter(t => game.gps.reactionCanChangeOutcome(workflow, {type: "save", desired: "success", target: t}) && tokenSaves[t.uuid]?.formula.includes("kl") && !tokenSaves[t.uuid].formula.includes("kh"));
+            targetEnemies = targetEnemies.filter(t => game.gps.reactionCanChangeOutcome(workflow, {type: "save", desired: "failure", target: t}) && tokenSaves[t.uuid]?.formula.includes("kh") && !tokenSaves[t.uuid].formula.includes("kl"));
 
             if((!targetAllies || targetAllies?.length === 0) && (!targetEnemies || targetEnemies?.length === 0)) {
                 if(debugEnabled) game.gps.logInfo(`${itemProperName} for ${validTokenPrimary.actor.name} failed at token disposition check`);
                 continue;
             }
 
-            const targetAllyUuids = targetAllies.map(t => t.document.uuid);
-            const targetAllyNames = targetAllies.map(t => t.document.name);
-            const targetEnemyUuids = targetEnemies.map(t => t.document.uuid);
-            const targetEnemyNames = targetEnemies.map(t => t.document.name);
+            const targetAllyUuids = targetAllies.map(t => t.uuid);
+            const targetAllyNames = targetAllies.map(t => t.name);
+            const targetEnemyUuids = targetEnemies.map(t => t.uuid);
+            const targetEnemyNames = targetEnemies.map(t => t.name);
             
             targetAllyUuids.map((uuid, index) => 
                 `<option value="${uuid}">${targetAllyNames[index]}</option>`
@@ -195,7 +195,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
 
             let target;
             let disposition;
-            if(workflowType === "attack") target = await workflow.targets.first();
+            if(workflowType === "attack") target = await workflow.targets.documents[0];
             else if(workflowType === "save") {
                 if(allyTokenUuid) {
                     target = await fromUuid(allyTokenUuid);
@@ -207,12 +207,12 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                 }
 
                 target = target?.object;
-                if(!target || !workflow.tokenSaves?.[target.document.uuid]) continue;
+                if(!target || !workflow.tokenSaves?.[game.gps.tokenDocument(target).uuid]) continue;
             }
 
             let targetAC = target?.actor.system.attributes.ac.value;
             let saveDC = workflow.saveActivity?.save?.dc?.value;
-            let saveDice = workflow.tokenSaves?.[target.document.uuid];
+            let saveDice = workflow.tokenSaves?.[game.gps.tokenDocument(target).uuid];
             let saveResult = saveDice?.dice[0].results[0].result + (saveDice?.total - saveDice?.dice[0].total);
             let baseAttack = workflow.attackRoll?.dice[0].results.find(result => !result.rerolled)?.result;
             let bonusAttack = workflow.attackRoll?.total - workflow.attackRoll?.dice[0].total;
@@ -275,7 +275,7 @@ export async function restoreBalance({workflowData,workflowType,workflowCombat})
                 await game.gps.updateSaveResult({workflow, token: target, roll: revised});
                 saveResult = revised.total;
                 ((workflow.gps ??= {}).restoreBalanceFlag ??= []).push({
-                    targetUuid: target.document.uuid,
+                    targetUuid: game.gps.tokenDocument(target).uuid,
                     disposition,
                     saveResult,
                     saveDC,

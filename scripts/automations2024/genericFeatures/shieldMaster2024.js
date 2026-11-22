@@ -1,8 +1,8 @@
 export async function shieldMaster2024({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
-    if(args?.[0].macroPass === "postAttackRollComplete" && workflow.hitTargets.first() && token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) {
+    if(args?.[0].macroPass === "postAttackRollComplete" && workflow.hitTargets.documents[0] && token.actor.items.filter(i => i.name.toLowerCase().includes('shield') && i.system.equipped === true).length > 0) {
         let debugEnabled = MidiQOL.safeGetGameSetting('gambits-premades', 'debugEnabled');
         if(!game.combat) return;
-        let meleeAttack = ((workflow.activity?.actionType === 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType === 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.first(), game.gps.convertFromFeet({range:6})).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
+        let meleeAttack = ((workflow.activity?.actionType === 'mwak' && !workflow.item.system?.properties?.has('thr')) || (workflow.activity?.actionType === 'mwak' && MidiQOL.findNearby('Hostile',workflow.targets.documents[0], game.gps.convertFromFeet({range:6})).length > 0 && workflow.item.system?.properties?.has('thr'))) ? true : false;
         if (!meleeAttack) return;
         if(game.combat?.current.tokenId !== token.id) {
             if(debugEnabled) game.gps.logInfo(`Shield Bash for ${actor.name} failed due to not tokens turn in combat`);
@@ -13,7 +13,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         let shieldMasterCheck = await item.getFlag("gambits-premades", "checkShieldMaster") ?? null;
         if(shieldMasterCheck === false || shieldMasterCheck === `${token.id}_${game.combat.round}`) return;
 
-        let target = workflow.hitTargets.first();
+        let target = workflow.hitTargets.documents[0];
         let dialogId = "shieldmastershieldbash";
         let dialogTitlePrimary = `${token.actor.name} | ${item.name}`;
         let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: item.name });
@@ -92,13 +92,13 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         `;
 
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source: "gm",type: "multiDialog" };
 
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-        result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+        result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
@@ -110,10 +110,10 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
         else if (userDecision) {
             await item.setFlag("gambits-premades", "checkShieldMaster", `${token.id}_${game.combat.round}`);
 
-            const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
 
             if (saveResult.failedSaves.size !== 0) {
-                if(abilityCheck === "prone") await game.gps.queryGM("gmToggleStatus", {tokenUuid: `${target.document.uuid}`, status: "prone", active: true });
+                if(abilityCheck === "prone") await game.gps.queryGM("gmToggleStatus", {tokenUuid: `${target.uuid}`, status: "prone", active: true });
                 else if(abilityCheck === "push") await MidiQOL.moveTokenAwayFromPoint(target, pushRange, token.center, { animate: true });
                 else return;
             }
@@ -132,7 +132,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
             if(debugEnabled) game.gps.logInfo(`${item.name} Interpose Shield for ${actor.name} failed because shield is not equipped`);
             return;
         }
-        if(MidiQOL.hasUsedReaction(actor)) {
+        if(game.gps.reactionUnavailable(actor)) {
             if(debugEnabled) game.gps.logInfo(`${item.name} Interpose Shield for ${actor.name} failed at reaction available`);
             return;
         }
@@ -187,6 +187,7 @@ export async function shieldMaster2024({ speaker, actor, token, character, item,
             return;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(actor)) return;
             let effectData = await actor.allApplicableEffects().find(e => e.flags["gambits-premades"]?.gpsUuid === "2109c2b7-7640-4649-ad3c-26b5a84d5646");
             await effectData.update({"disabled" : false});
             await game.gps.addReaction({actorUuid: `${actor.uuid}`});

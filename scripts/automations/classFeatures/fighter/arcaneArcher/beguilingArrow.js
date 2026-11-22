@@ -1,10 +1,10 @@
 export async function beguilingArrow({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "postSave") {
-        let target = workflow.failedSaves.first();
+        let target = workflow.failedSaves.documents[0];
         if(!target) return;
-        const allies = canvas.tokens.placeables.filter(t => t.actor && t.actor.uuid !== actor.uuid && t.actor.uuid !== target.actor.uuid && t.document.disposition === token.document.disposition && MidiQOL.canSee(token, t) && game.gps.withinRange(target, t, 30));
+        const allies = canvas.tokens.placeables.filter(t => t.actor && t.actor.uuid !== actor.uuid && t.actor.uuid !== target.actor.uuid && game.gps.tokenDocument(t).disposition === token.document.disposition && MidiQOL.canSee(token, t) && game.gps.withinRange(target, t, 30));
 
-        const allyUuids = allies.map(t => t.document.uuid);
+        const allyUuids = allies.map(t => game.gps.tokenDocument(t).uuid);
         const allyNames = allies.map(t => t.actor.name);
 
         if (allyUuids.length === 0) return;

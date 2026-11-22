@@ -9,7 +9,7 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
     if (!actionTypes.some(type => workflow.activity?.actionType?.includes(type))) {
         return;
     }
-    let target = workflow.targets.first();
+    let target = workflow.targets.documents[0];
     if(!target) return;
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `Calculated Flourish Timeout`));
@@ -17,7 +17,7 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
 
     let targetAC = target.actor.system.attributes.ac.value;
     let attackTotal = workflow.attackTotal;
-    if (workflow.hitDisplayData?.[target.document.uuid]?.isHit ?? game.gps.attackHits(workflow, target)) {
+    if (workflow.hitDisplayData?.[target.uuid]?.isHit ?? game.gps.attackHits(workflow, target)) {
         if(debugEnabled) game.gps.logInfo(`${itemName} failed because attack was a hit`);
         return;
     }
@@ -35,7 +35,7 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
         browserUser = game.gps.getBrowserUser({ actorUuid: validTokenPrimary.actor.uuid });
 
         // Check valid weapons
-        let validWeapons = validTokenPrimary.actor.items.filter(item => item.system.equipped === true && item.system.activities?.some(activity => activity?.actionType === "mwak" && MidiQOL.checkRange(activity, validTokenPrimary, new Set([workflow.token]), false).result !== "fail"));
+        let validWeapons = validTokenPrimary.actor.items.filter(item => item.system.equipped === true && item.system.activities?.some(activity => activity?.actionType === "mwak" && MidiQOL.checkActivityRange(activity, validTokenPrimary, new Set([workflow.token]), false).result !== "fail"));
         if (!validWeapons.length) continue;
 
         // Sort the weapons alphabetically
@@ -113,6 +113,7 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             const chosenWeapon = validWeapons.find(weapon => weapon.uuid === selectedItemUuid);
             if(!chosenWeapon) continue;
             const riposteOptions = {
@@ -168,7 +169,7 @@ export async function calculatedFlourish({workflowData,workflowType,workflowComb
             else if(source && source === "gm") itemRoll = await MidiQOL.socket().executeAsUser("completeItemUse", gmUser, { itemData: chosenWeapon, actorUuid: validTokenPrimary.actor.uuid, config: { midiOptions: { ...options, workflowData: true } } });
             if(!itemRoll || itemRoll.aborted) continue;
 
-            const hasEffectAppliedReaction = MidiQOL.hasUsedReaction(validTokenPrimary.actor);
+            const hasEffectAppliedReaction = game.gps.reactionUnavailable(validTokenPrimary.actor);
             if (!hasEffectAppliedReaction) {
                 MidiQOL.setReactionUsed(validTokenPrimary.actor)
             }

@@ -38,7 +38,7 @@ export async function stinkingCloud({tokenUuid, regionUuid, regionScenario, regi
     }
 
     let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
-    if(!chosenItem) return;
+    if(!chosenItem || game.gps.spellRegionSuppressed(chosenItem, token.actor)) return;
 
     await region.setFlag('gambits-premades', 'spell.stinkingCloud.' + token.id + '.turn', turn);
 
@@ -56,6 +56,7 @@ export async function stinkingCloud({tokenUuid, regionUuid, regionScenario, regi
                 },
                 "description": game.i18n.localize("GAMBITSPREMADES.Effects.StinkingCloud.Description"),
                 "origin": chosenItem.uuid,
+                system: {magical: true},
                 "transfer": false
             }
         ];

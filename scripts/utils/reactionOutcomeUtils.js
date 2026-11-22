@@ -47,12 +47,11 @@ function attackDefinitelyMisses(workflow, target) {
 export function reactionCanChangeOutcome(workflow, {type = "attack", desired = "miss", target} = {}) {
     if(!game.gpsSettings?.skipResolvedReactions || !workflow) return true;
     if(workflow.aborted) return false;
-    const targets = target ? [target] : [...(workflow.targets ?? [])];
+    const targets = target ? [target] : (workflow.targets?.documents ?? []);
     if(!targets.length) return true;
     if(type === "attack" && desired === "miss") return targets.some(token => !attackDefinitelyMisses(workflow, token));
     if(type !== "save" || !["success", "failure"].includes(desired)) return true;
     const resolved = desired === "success" ? workflow.saves : workflow.failedSaves;
     if(!resolved) return true;
-    const uuids = new Set([...resolved].map(token => token.document?.uuid ?? token.uuid));
-    return targets.some(token => !uuids.has(token.document?.uuid ?? token.uuid));
+    return targets.some(token => !resolved.has(token));
 }

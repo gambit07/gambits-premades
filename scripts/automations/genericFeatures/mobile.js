@@ -2,7 +2,7 @@ export async function mobile({ speaker, actor, token, character, item, args, sco
     if(args[0].macroPass === "preWaitForAttackRoll") {
         let actionType = workflow.activity?.actionType;
         if(actionType != "mwak" && actionType != "msak") return;
-        let targetId = workflow.targets.first()?.id;
+        let targetId = workflow.targets.documents[0]?.id;
         if (!targetId) return;
         let existingTargets = await actor.getFlag("midi-qol", `oaMobileFeatAttack`) || [];
         if (!existingTargets.includes(targetId)) {

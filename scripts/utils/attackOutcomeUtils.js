@@ -13,18 +13,18 @@ export function isAttackForcedMiss(workflow, target) {
     if(!override) return false;
     if(override.allTargets) return true;
     if(!target) return false;
-    return override.targetUuids.includes(target.document?.uuid ?? target.uuid);
+    return override.targetUuids.includes(game.gps.tokenDocument(target)?.uuid);
 }
 
 function allTargetsMiss(workflow) {
-    return isAttackForcedMiss(workflow) || (workflow.targets.size > 0
-        && [...workflow.targets].every(target => isAttackForcedMiss(workflow, target)));
+    return isAttackForcedMiss(workflow) || (workflow.targets.count > 0
+        && workflow.targets.documents.every(target => isAttackForcedMiss(workflow, target)));
 }
 
 /** Records an explicit miss without altering the rolled dice or actor effects. Returns false for a duplicate override. */
 export function forceAttackMiss(workflow, target) {
     if(isAttackForcedMiss(workflow, target)) return false;
-    const uuid = target?.document?.uuid ?? target?.uuid;
+    const uuid = game.gps.tokenDocument(target)?.uuid;
     if(target && !uuid) return false;
     const previous = attackMissOverride(workflow);
     const options = workflow.workflowOptions ?? {};
@@ -50,12 +50,15 @@ function applyAttackMisses(workflow) {
     for(const key of ["hitTargets", "hitTargetsEC"]) {
         const targets = workflow[key];
         if(!targets) continue;
-        const remaining = new Set([...targets].filter(target => !isAttackForcedMiss(workflow, target)));
-        if(remaining.size !== targets.size) workflow[key] = remaining;
+        let changed = false;
+        for(const doc of targets.documents) {
+            if(isAttackForcedMiss(workflow, doc)) changed = targets.delete(doc) || changed;
+        }
+        if(changed) workflow[key] = targets;
     }
-    for(const target of workflow.targets) {
+    for(const target of workflow.targets.documents) {
         if(!isAttackForcedMiss(workflow, target)) continue;
-        const hit = workflow.hitDisplayData?.[target.document?.uuid ?? target.uuid];
+        const hit = workflow.hitDisplayData?.[game.gps.tokenDocument(target)?.uuid];
         if(hit) Object.assign(hit, {isHit: false, hitClass: "failure", hitSymbol: "fa-xmark", hitResultNumeric: ""});
     }
     if(allTargetsMiss(workflow) && workflow.isCritical) workflow.isCritical = false;

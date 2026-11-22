@@ -1,10 +1,10 @@
 export async function dissonantWhispers2024({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if (args[0].macroPass === "postActiveEffects") {
-        const targets = workflow.hitTargets;
+        const targets = workflow.hitTargets.documents;
         const gmUser = game.gps.getPrimaryGM();
         for(let target of targets) {
             const targetMovementSpeed = target.actor.system.attributes.movement.speeds.walk;
-            const hasReactionUsed = MidiQOL.hasUsedReaction(target.actor);
+            const hasReactionUsed = game.gps.reactionUnavailable(target.actor);
 
             let cprConfig = game.gps.getCprConfig({itemUuid: item.uuid});
             const { animEnabled } = cprConfig;
@@ -34,12 +34,12 @@ export async function dissonantWhispers2024({ speaker, actor, token, character, 
             damageParts[0].number = castDamage;
 
             await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
-            const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+            const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
 
-            if (saveResult?.failedSaves.size === 1 && !hasReactionUsed) {
+            if (saveResult?.failedSaves.size === 1 && !game.gps.reactionUnavailable(target.actor)) {
                 if(!hasReactionUsed) await game.gps.addReaction({actorUuid: `${target.actor.uuid}`});
 
-                await game.gps.queryGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: target.document.uuid, distance: targetMovementSpeed });
+                await game.gps.queryGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: target.uuid, distance: targetMovementSpeed });
 
                 let chatData = {
                     user: gmUser,

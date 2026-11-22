@@ -1,7 +1,12 @@
 export async function dimensionDoor2024({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if (args[0].macroPass === "preActiveEffects") {
-        if (workflow.targets.size > 1) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.CanOnlySelectOne"));
-        let target = workflow.targets.first() ?? null;
+        if (workflow.targets.count > 1) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.CanOnlySelectOne"));
+        const passenger = workflow.targets.documents[0];
+        const target = passenger?.object;
+        if(!token || (passenger && !target)) {
+            workflow.aborted = true;
+            return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.TokenUnavailable"));
+        }
         if(target) {
             let targetDistance = MidiQOL.computeDistance(target,token, {wallsBlock: true, includeCover: true})
             if(targetDistance < 0 || targetDistance > game.gps.convertFromFeet({range:5})) return ui.notifications.warn(game.i18n.localize("GAMBITSPREMADES.Notifications.Spells.DimensionDoor.MustBeWithin5Feet"));

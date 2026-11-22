@@ -29,7 +29,7 @@ export async function weaponOil({actor, token, item, macroItem, args, workflow})
     if(!coated) return;
     const pass = args[0]?.macroPass;
     if(oilType === "anti-demon") {
-        const target = (pass === "preWaitForAttackRoll" ? workflow.targets : workflow.hitTargets).first();
+        const target = (pass === "preWaitForAttackRoll" ? workflow.targets : workflow.hitTargets).documents[0];
         if(!target || !["undead", "fiend"].includes(MidiQOL.raceOrType(target))) return;
         if(pass === "preWaitForAttackRoll") workflow.advantage = true;
         if(pass !== "preDamageApplication") return;
@@ -38,7 +38,7 @@ export async function weaponOil({actor, token, item, macroItem, args, workflow})
         new MidiQOL.DamageOnlyWorkflow(actor, token, roll.total, "radiant", [target], roll, {itemData: {flags: {}, name: oil.name, type: "feat", img: oil.img}});
     }
     if(oilType === "corrosive") {
-        for(const target of workflow.hitTargets) {
+        for(const target of workflow.hitTargets.documents) {
             if(pass === "preDamageRoll") await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: target.actor.uuid, effects: [{
                 name: "Corrosive Damage DR", img: oil.img, origin: oil.uuid,
                 flags: {"gambits-premades": {corrosiveWorkflow: workflow.id}}, duration: {expiry: "turnEnd"},

@@ -1,7 +1,7 @@
 export async function scatter({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if (args[0].macroPass === "preActiveEffects") {
         const {animEnabled} = game.gps.getCprConfig({itemUuid: item.uuid});
-        for (let target of workflow.failedSaves) {
+        for (let target of workflow.failedSaves.tokens) {
             if(!MidiQOL.canSee(token, target)) continue;
             const portalScale = target.w / canvas.grid.size * 0.7;
 

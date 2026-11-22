@@ -1,6 +1,6 @@
 export async function shroomOfDoom({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
     if(args[0].macroPass === "postSave") {
-        let target = workflow.failedSaves.first();
+        let target = workflow.failedSaves.documents[0];
         if (!target) return;
         let shroomRoll = await new CONFIG.Dice.DamageRoll(`1d8`).evaluate();
         await MidiQOL.displayDSNForRoll(shroomRoll, 'damageRoll');
@@ -101,14 +101,14 @@ export async function shroomOfDoom({ speaker, actor, token, character, item, arg
                         "img": macroItem.img,
                         "type": "script",
                         "scope": "global",
-                        "command": "if(args[0].macroPass === \"preDamageRoll\") {\n    const target = workflow.hitTargets.first() ?? workflow.targets.first();\n    const effectData = target?.actor?.appliedEffects.find(e => e.flags[\"gambits-premades\"]?.gpsUuid === \"df28df0d-f063-4690-be42-9edf2b938255\");\n    const remaining = Number(target?.actor?.getFlag(\"midi-qol\", \"shroomTotal\"));\n    if(!effectData || !Number.isInteger(remaining) || remaining <= 0) {\n        ui.notifications.warn(game.i18n.localize(\"GAMBITSPREMADES.Notifications.Spells.ShroomOfDoom.TargetNotAffected\"));\n        return workflow.aborted = true;\n    }\n    const shroomTotal = remaining - 1;\n    if(shroomTotal === 0) {\n        await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: target.actor.uuid, effects: [effectData.id] });\n        await MidiQOL.socket().executeAsGM('_gmUnsetFlag', { actorUuid : target.actor.uuid, base : 'midi-qol', key : 'shroomTotal' });\n    }\n    else {\n        await MidiQOL.socket().executeAsGM('_gmSetFlag', { actorUuid : target.actor.uuid, base : 'midi-qol', key : 'shroomTotal', value : shroomTotal });\n    }\n}"
+                        "command": "if(args[0].macroPass === \"preDamageRoll\") {\n    const target = workflow.hitTargets.documents[0] ?? workflow.targets.documents[0];\n    const effectData = target?.actor?.appliedEffects.find(e => e.flags[\"gambits-premades\"]?.gpsUuid === \"df28df0d-f063-4690-be42-9edf2b938255\");\n    const remaining = Number(target?.actor?.getFlag(\"midi-qol\", \"shroomTotal\"));\n    if(!effectData || !Number.isInteger(remaining) || remaining <= 0) {\n        ui.notifications.warn(game.i18n.localize(\"GAMBITSPREMADES.Notifications.Spells.ShroomOfDoom.TargetNotAffected\"));\n        return workflow.aborted = true;\n    }\n    const shroomTotal = remaining - 1;\n    if(shroomTotal === 0) {\n        await MidiQOL.socket().executeAsGM(\"removeEffects\", { actorUuid: target.actor.uuid, effects: [effectData.id] });\n        await MidiQOL.socket().executeAsGM('_gmUnsetFlag', { actorUuid : target.actor.uuid, base : 'midi-qol', key : 'shroomTotal' });\n    }\n    else {\n        await MidiQOL.socket().executeAsGM('_gmSetFlag', { actorUuid : target.actor.uuid, base : 'midi-qol', key : 'shroomTotal', value : shroomTotal });\n    }\n}"
                     }
                 }
             }
             }];
 
         let validTargets = canvas.tokens.placeables.filter(t => {
-            if (t.document.disposition !== target.document.disposition) return;
+            if (t.document.disposition !== target.disposition) return;
             return t;
         });
 

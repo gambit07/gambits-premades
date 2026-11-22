@@ -5,7 +5,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     if(workflow.item.flags["gambits-premades"]?.gpsUuid === gpsUuid) return;
     let itemName = "Sentinel";
     let dialogId = gpsUuid;
-    let target = workflow.targets.first();
+    let target = workflow.targets.documents[0];
     if(!target) return;
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
@@ -13,7 +13,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
     let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: target, itemName: itemName, itemType: null, itemChecked: null, reactionCheck: true, sightCheck: false, rangeCheck: true, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
     for (const validTokenPrimary of findValidTokens) {
-        if (target.document.uuid === validTokenPrimary.document.uuid || workflow.token.document.disposition === target.document.disposition) continue;
+        if (target.uuid === validTokenPrimary.document.uuid || workflow.token.document.disposition === target.disposition) continue;
 
         if(validTokenPrimary.id === target.id) continue;
 
@@ -105,6 +105,7 @@ export async function sentinel({workflowData,workflowType,workflowCombat}) {
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             if (!selectedItemUuid) {
                 console.log("No weapon selected");
                 continue;

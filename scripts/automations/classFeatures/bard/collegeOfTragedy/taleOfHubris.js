@@ -10,7 +10,7 @@ export async function taleOfHubris({workflowData,workflowType,workflowCombat}) {
     let gmUser = game.gps.getPrimaryGM();
     const initialTimeLeft = Number(MidiQOL.safeGetGameSetting('gambits-premades', `${itemName} Timeout`));
 
-    let findValidTokens = game.gps.findValidTokens({initiatingToken: initiatingToken, targetedToken: workflow.hitTargets.first(), itemName: itemName, itemType: "feature", itemChecked: ["bardic inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
+    let findValidTokens = game.gps.findValidTokens({initiatingToken: initiatingToken, targetedToken: workflow.hitTargets.documents[0], itemName: itemName, itemType: "feature", itemChecked: ["bardic inspiration"], reactionCheck: true, sightCheck: true, rangeCheck: true, rangeTotal: 60, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
     let browserUser;
 
@@ -65,6 +65,7 @@ export async function taleOfHubris({workflowData,workflowType,workflowCombat}) {
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             let activityUse;
             if(source && source === "user") activityUse = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: chosenItem.uuid, identifier: "syntheticUse", targetUuid: initiatingToken.document.uuid});
             else if(source && source === "gm") activityUse = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: chosenItem.uuid, identifier: "syntheticUse", targetUuid: initiatingToken.document.uuid});

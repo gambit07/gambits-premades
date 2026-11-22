@@ -2,11 +2,11 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
     if (args[0].macroPass === "postPreambleComplete") {
         let numMotes = (actor.system.details.level >= 17) ? 4 : (actor.system.details.level >= 11) ? 3 : (actor.system.details.level >= 5) ? 2 : 1;
         let totalAssignedMotes = 0;
-        if(!workflow.targets.size) {workflow.aborted = true;return;}
+        if(!workflow.targets.count) {workflow.aborted = true;return;}
 
-        if(workflow.targets.size === 1) {
-            await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:workflow.targets.first().actor.uuid, base :"gambits-premades", key: "stormMotesGiven", value: numMotes});
-            await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:workflow.targets.first().actor.uuid, base :"gambits-premades", key: "stormMoteOrigin", value: token.document.uuid});
+        if(workflow.targets.count === 1) {
+            await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:workflow.targets.documents[0].actor.uuid, base :"gambits-premades", key: "stormMotesGiven", value: numMotes});
+            await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:workflow.targets.documents[0].actor.uuid, base :"gambits-premades", key: "stormMoteOrigin", value: token.document.uuid});
             return;
         }
 
@@ -17,8 +17,8 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                     <p class="gps-dialog-paragraph">${game.i18n.format("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.StormMote.AssignMotes", { numMotes: numMotes })}</p>
                     <div class="gps-dialog-flex">
                         <div style="margin-bottom: 10px;">
-                            ${Array.from(workflow.targets).map(target => `
-                                <div data-gps-token-uuid="${target.document.uuid}" style="margin-bottom: 10px; display: flex; align-items: center;">
+                            ${workflow.targets.documents.map(target => `
+                                <div data-gps-token-uuid="${game.gps.tokenDocument(target).uuid}" style="margin-bottom: 10px; display: flex; align-items: center;">
                                     <label  style="flex: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${foundry.utils.escapeHTML(target.actor.name)}</label>
                                     <div class="form-group" style="flex: 1;">
                                         <div class="form-fields" style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
@@ -46,7 +46,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                 action: "Confirm",
                 label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Automations.ThirdPartySpells.StormMote.Confirm"),
                 callback: async (event, button, dialog) => {
-                    for (const target of workflow.targets) {
+                    for (const target of workflow.targets.documents) {
                         let assignedCount = parseInt(dialog.element.querySelector(`#moteDisplay-${target.id}`).textContent, 10);
                         await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:target.actor.uuid, base :"gambits-premades", key: "stormMotesGiven", value: assignedCount});
                         await MidiQOL.socket().executeAsGM("_gmSetFlag",{actorUuid:target.actor.uuid, base :"gambits-premades", key: "stormMoteOrigin", value: token.document.uuid});
@@ -94,7 +94,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
     }
 
     if (args[0].macroPass === "postApplyDynamicEffects") {
-        for (const invalidTarget of workflow.hitTargets) {
+        for (const invalidTarget of workflow.hitTargets.documents) {
             if(!invalidTarget.actor.getFlag("gambits-premades", "stormMotesGiven") || invalidTarget.actor.getFlag("gambits-premades", "stormMotesGiven") === 0) {
                 let effectData = invalidTarget.actor.appliedEffects.find(e => e.name === macroItem.name);
                 if(effectData) await effectData.delete();
@@ -135,8 +135,8 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
                 break;
         }
 
-        if (workflow.targets.size === 1) {
-            let target = workflow.targets.first();
+        if (workflow.targets.count === 1) {
+            let target = workflow.targets.documents[0];
             for (let i = 0; i < numMotes; i++) {
                 let effectData = target.actor.effects.find(e => e.name === "Storm Mote");
                 let offset = offsets[i % offsets.length];
@@ -159,7 +159,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
             }
         }
         else {
-            for (let target of workflow.targets) {
+            for (let target of workflow.targets.documents) {
                 let givenMotes = await target.actor.getFlag("gambits-premades", "stormMotesGiven")
                 for (let i = 0; i < givenMotes; i++) {
                     let effectData = target.actor.effects.find(e => e.name === "Storm Mote");
@@ -187,7 +187,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
 
     if(args[0].macroPass === "postAttackRollComplete") {
         let effectOriginActorUuid = actor.getFlag("gambits-premades", "stormMoteOrigin");
-        if(workflow.targets.first()?.document.uuid !== effectOriginActorUuid) return;
+        if(workflow.targets.documents[0]?.uuid !== effectOriginActorUuid) return;
         let givenMotes = await actor.getFlag("gambits-premades", "stormMotesGiven");
         if((givenMotes - 1) <= 0) {
             await actor.unsetFlag("gambits-premades", "stormMotesGiven");
@@ -212,7 +212,7 @@ export async function stormMote({ speaker, actor, token, character, item, args, 
         }
     }
 
-    if(args[0] === "off") {
+    if(args[0] === "off" && !game.gps.effectSuspended(args.at(-1))) {
         await actor.unsetFlag("gambits-premades", "stormMotesGiven");
     }
 }

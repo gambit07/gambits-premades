@@ -15,7 +15,7 @@ export async function arcaneShot({actor, token, item, args, workflow, macroItem}
     const currentTurn = turnKey();
     const used = currentTurn && actor.getFlag("gambits-premades", "arcaneShotTurnUsed") === currentTurn;
     if(pass === "postAttackRollComplete") {
-        if(used || !isBow(workflow.item) || !workflow.hitTargets.size || workflow.activity.activation.type !== "action" || workflow.workflowOptions?.gps?.opportunityAttack) return;
+        if(used || !isBow(workflow.item) || !workflow.hitTargets.count || workflow.activity.activation.type !== "action" || workflow.workflowOptions?.gps?.opportunityAttack) return;
         if(Number(resource.system.uses.spent) >= Number(resource.system.uses.max)) return;
         const choices = resource.system.activities.filter(activity => learned(actor, activity) && levelAllowed(actor, activity) && !substitutions.has(optionId(activity)));
         if(!choices.length) return;
@@ -25,7 +25,7 @@ export async function arcaneShot({actor, token, item, args, workflow, macroItem}
             {action: "cancel", label: game.i18n.localize("GAMBITSPREMADES.Dialogs.Common.Cancel")}
         ], rejectClose: false});
         const activity = choices.find(activity => activity.id === selected);
-        if(activity) await MidiQOL.completeActivityUse(activity.uuid, {midiOptions: {targetUuids: [workflow.hitTargets.first().document.uuid], ignoreUserTargets: true, configureDialog: false,
+        if(activity) await MidiQOL.completeActivityUse(activity.uuid, {midiOptions: {targetUuids: [workflow.hitTargets.documents[0].uuid], ignoreUserTargets: true, configureDialog: false,
             isCritical: workflow.isCritical, workflowOptions: {gps: {arcaneShotHit: true}}}}, {}, {});
         return;
     }
@@ -44,8 +44,8 @@ export async function arcaneShot({actor, token, item, args, workflow, macroItem}
             ], rejectClose: false});
             const bow = bows.find(item => item.id === selected);
             if(!bow) return false;
-            if(option === "seekingArrow" && (workflow.targets.size !== 1 || !game.gps.withinRange(token, workflow.targets.first(), Number(bow.system.range.long || bow.system.range.value)))) return false;
-            const attack = bow.system.activities.find(activity => activity.type === "attack");
+            if(option === "seekingArrow" && (workflow.targets.count !== 1 || !game.gps.withinRange(token, workflow.targets.documents[0], Number(bow.system.range.long || bow.system.range.value)))) return false;
+            const attack = bow.system.activities.find(activity => activity.isLike("attack"));
             if(!attack) return false;
             const ammoOptions = (bow.system.ammunitionOptions ?? []).filter(option => actor.items.has(option.value));
             let ammoId = bow.getFlag("dnd5e", `last.${attack.id}.ammunition`);
@@ -66,7 +66,7 @@ export async function arcaneShot({actor, token, item, args, workflow, macroItem}
     }
     if(pass === "preDamageRollComplete" && substitutions.has(option) && !workflow.gps?.arcaneWeaponDamage) {
         const bow = await fromUuid(workflow.gps?.arcaneBowUuid);
-        const attack = bow?.system.activities.find(activity => activity.type === "attack");
+        const attack = bow?.system.activities.find(activity => activity.isLike("attack"));
         if(!attack) return;
         const ammunition = actor.items.get(workflow.gps?.arcaneAmmunitionId);
         const config = attack.getDamageConfig({isCritical: false, ammunition});
@@ -80,7 +80,7 @@ export async function arcaneShot({actor, token, item, args, workflow, macroItem}
         await workflow.setDamageRolls([...rolls, ...workflow.damageRolls]);
     }
     if(pass === "preActiveEffects" && option === "burstingArrow") {
-        workflow.hitTargets = new Set(workflow.targets);
+        workflow.hitTargets = new Set(workflow.targets.documents);
         await game.gps.burstingArrow({workflow, args, actor, token, item});
     }
     if(pass === "postSave" && option === "beguilingArrow") await game.gps.beguilingArrow({workflow, args, actor, token, item});

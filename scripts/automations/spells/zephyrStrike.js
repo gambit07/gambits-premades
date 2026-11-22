@@ -61,7 +61,7 @@ export async function zephyrStrike({ speaker, actor, token, character, item, arg
     }
     
     if(args?.[0].macroPass === "preDamageRollComplete") {
-        if(!workflow.gps?.zephyrStrike || workflow.gps.zephyrStrikeDamage || !workflow.hitTargets.size) return;
+        if(!workflow.gps?.zephyrStrike || workflow.gps.zephyrStrikeDamage || !workflow.hitTargets.count) return;
         if(workflow.activity?.actionType !== "mwak" && workflow.activity?.actionType !== "rwak") return;
         const effectAdv = true;
         let numDice = workflow.isCritical ? 2 : 1;

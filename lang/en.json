@@ -49,6 +49,12 @@
           },
           "GrimSiphon": {
             "Healing": "Grim Siphon - Healing"
+          },
+          "FesteringFever": {
+            "Saved": "{name} saves, takes half damage, and the fever ends.",
+            "Spent": "{name} fails the save. The fever deals its last die of damage and ends.",
+            "Continues": "{name} fails the save. The fever can spread at the start of their turn.",
+            "NoTarget": "The fever ends on {name}; no new recipient is within reach."
           }
         },
         "ClassFeatures": {
@@ -128,9 +134,7 @@
           },
           "Rogue": {
             "StrokeOfLuck": {
-              "ChangedAbilityCheck": "You used Stroke of Luck to change your ability check to a {newTotal}",
-              "ChangedSkillCheck": "You used Stroke of Luck to change your skill check to a {newTotal}",
-              "ReactionAvailableSaveTrigger": "{actorName} has a reaction available for a save triggering {itemName}."
+              "Available": "{actorName} can use {itemName} on this roll."
             }
           },
           "Sorcerer": {
@@ -214,7 +218,7 @@
             "MovementRollMovesUsingUp": "The movement roll for {targetName} is {directionResult}: {targetName} moves {directionContent} using up to 5 feet of their movement. This does not provoke Opportunity Attacks."
           },
           "KineticJaunt": {
-            "EndTurnAnotherCreaturesSpace": "You end your turn in another creatures space and take {damageTotal} points of force damage and are moved to your last position before entering that creatures space."
+            "EndTurnAnotherCreaturesSpace": "You take {damageTotal} force damage for ending your turn in another creature’s space. Move your token to the last unoccupied space it occupied."
           },
           "SilveryBarbs": {
             "AttackFailed": "The creature was silvery barbed, and failed their attack.",
@@ -239,7 +243,9 @@
             "NoMoveOrActions": "You can't move or take actions this turn.",
             "RollForIs": "Confusion roll for {actorName} is {result}:",
             "MustMoveAndMeleeAttack": "You must move to {targetName} and attack them with a melee attack.",
-            "NoAction": "The creature does nothing this turn."
+            "NoAction": "The creature does nothing this turn.",
+            "ResolveMelee": "Choose a random creature within melee reach on the affected token’s scene. If none is within reach, the creature takes no action.",
+            "ResolveMovement": "Resolve this movement on the token’s scene."
           },
           "BlackTentacles": {
             "EscapeFailed": "You are unable to escape Black Tentacles this turn.",
@@ -313,6 +319,10 @@
         "OASuppression": {
           "Description": "Prevents token from making any Opportunity Attacks",
           "Name": "Opportunity Attack Suppression"
+        },
+        "StrokeOfLuck": {
+          "Name": "Stroke of Luck",
+          "Description": "Offers to spend this feature on a missed attack or a failed ability or skill check."
         }
       }
     },
@@ -1094,6 +1104,7 @@
         "DimensionDoor": {
           "CanOnlySelectOne": "You can only select one creature to teleport along with yourself",
           "MissingDependency": "You must install the Jack Kerouac's Animated Spell Effects - Cartoon module to use this automation.",
+          "TokenUnavailable": "The caster and the selected passenger must be on this canvas to place their destination.",
           "MustBeWithin5Feet": "You must be within 5 feet of the ally you are trying to teleport",
           "TooLarge": "Your target is too large to teleport with you"
         },

@@ -2,17 +2,17 @@ export async function entangle({ tokenUuid, regionUuid, regionScenario, speaker,
     if(args?.[0]?.macroPass === "postSave")
     {
         const template = await fromUuid(workflow.templateUuid);
-        const targets = Array.from(workflow.failedSaves);
+        const targets = workflow.failedSaves.documents.filter(target => !game.gps.spellRegionSuppressed(item, target.actor));
 
         for (let target of targets) {
             const hasEffectApplied = game.gps.regionStatusEffects(target, template.uuid).length > 0;
 
             if (!hasEffectApplied) {
-                await game.gps.queryGM("setRegionStatus", {tokenUuid: target.document.uuid, regionUuid: template.uuid, active: true });
+                await game.gps.queryGM("setRegionStatus", {tokenUuid: target.uuid, regionUuid: template.uuid, active: true });
             }
         }
 
-        await game.gps.animation.entangle({template, itemUuid: workflow.item.uuid, targets, token});
+        await game.gps.animation.entangle({template, itemUuid: workflow.item.uuid, targets: targets.map(target => target.object).filter(Boolean), token});
     }
 
     if(regionScenario === "tokenTurnStart") {

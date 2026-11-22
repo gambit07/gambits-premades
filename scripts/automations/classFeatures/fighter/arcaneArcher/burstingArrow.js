@@ -1,6 +1,6 @@
 export async function burstingArrow({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "preActiveEffects") {
-        let initialTarget = workflow.hitTargets.first();
+        let initialTarget = workflow.hitTargets.documents[0];
         const rangeCheck = MidiQOL.findNearby(null, initialTarget, 10, { includeToken: true });
         if (rangeCheck.length === 0) return;
 

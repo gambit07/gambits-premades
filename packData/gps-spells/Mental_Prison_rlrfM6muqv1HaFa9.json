@@ -225,7 +225,8 @@
             "priority": 20,
             "type": "custom"
           }
-        ]
+        ],
+        "magical": true
       },
       "description": "",
       "tint": "#ffffff",
@@ -789,7 +790,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.4"
+        "version": "3.0.6"
       }
     }
   },

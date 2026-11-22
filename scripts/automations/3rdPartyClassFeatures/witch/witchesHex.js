@@ -42,10 +42,10 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
         let dialogContent;
 
         if(workflowType === "save") {
-            let targets = Array.from(workflow.saves).filter(t => t.document.disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && game.gps.withinRange(validTokenPrimary, t, 60));
+            let targets = workflow.saves.documents.filter(t => game.gps.tokenDocument(t).disposition !== validTokenPrimary.document.disposition && MidiQOL.canSee(validTokenPrimary, t) && game.gps.withinRange(validTokenPrimary, t, 60));
 
-            const targetUuids = targets.map(t => t.document.uuid);
-            const targetNames = targets.map(t => t.document.name);
+            const targetUuids = targets.map(t => game.gps.tokenDocument(t).uuid);
+            const targetNames = targets.map(t => game.gps.tokenDocument(t).name);
             if(targetUuids.length === 0) continue;
 
             targetUuids.map((uuid, index) => 
@@ -128,6 +128,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             continue;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(validTokenPrimary.actor) || game.gps.magicUnavailable(chosenItem)) continue;
             let target;
             let targetDocument;
             let chatContent;
@@ -145,7 +146,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 createWorkflow: true,
                 versatile: false,
                 configureDialog: true,
-                targetUuids: [`${target.document.uuid}`],
+                targetUuids: [`${game.gps.tokenDocument(target).uuid}`],
             };
 
             let itemRoll;
@@ -171,12 +172,12 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
             
             if(actorLevel >= 6 && flamesEmbrace) {
                 let saveResult;
-                if(source && source === "user") saveResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: flamesEmbrace.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
-                else if(source && source === "gm") saveResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: flamesEmbrace.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+                if(source && source === "user") saveResult = await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: flamesEmbrace.uuid, identifier: "syntheticSave", targetUuid: game.gps.tokenDocument(target).uuid});
+                else if(source && source === "gm") saveResult = await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: flamesEmbrace.uuid, identifier: "syntheticSave", targetUuid: game.gps.tokenDocument(target).uuid});
                 if(saveResult?.failedSaves.size > 0) {
                     if(animEnabled) {
                         const effect = target.actor.appliedEffects.find(e => e.active && e.getFlag("gambits-premades", "gpsUuid") === "c87befde-c36f-4237-b645-e98e1526de42" && DAE.effectMatchesSource(e, flamesEmbrace.uuid));
-                        if(effect) await game.gps.queryGM("setSpellVisual", {effectUuid: effect.uuid, tokenUuid: target.document.uuid, itemUuid: chosenItem.uuid, kind: "embrace", color: "green"});
+                        if(effect) await game.gps.queryGM("setSpellVisual", {effectUuid: effect.uuid, tokenUuid: game.gps.tokenDocument(target).uuid, itemUuid: chosenItem.uuid, kind: "embrace", color: "green"});
                     }
                 }
             }
@@ -208,7 +209,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
                 }
             }
             else if(workflowType === "attack") {
-                let targetAC = workflow.targets.first().actor.system.attributes.ac.value;
+                let targetAC = workflow.targets.documents[0].actor.system.attributes.ac.value;
 
                 if(source && source === "user") reroll = await game.gps.queryUser("rollAsUser", browserUser, { rollParams: `1${hexDie}`, type: workflowType });
                 if(source && source === "gm") reroll = await game.gps.queryUser("rollAsUser", gmUser, { rollParams: `1${hexDie}`, type: workflowType });
@@ -217,7 +218,7 @@ export async function witchesHex({workflowData,workflowType,workflowCombat}) {
 
                 await game.gps.setAttackResult(workflow, rerollNew);
 
-                if(!game.gps.attackHits(workflow, workflow.targets.first())) {
+                if(!game.gps.attackHits(workflow, workflow.targets.documents[0])) {
                     chatContent = `<span style='text-wrap: wrap;'>${game.i18n.format("GAMBITSPREMADES.ChatMessages.Automations.ThirdPartyClassFeatures.Witch.WitchesHex.HexReducedAttackMiss", { reduction: reroll.total })} <img src="${workflow.token.actor.img}" width="30" height="30" style="border:0px"></span>`;
                     await game.gps.queryUser("replaceChatCard", gmUser, {actorUuid: validTokenPrimary.actor.uuid, itemUuid: chosenItem.uuid, chatContent: chatContent, rollData: rerollNew});
                     if(game.gpsSettings.skipResolvedReactions && game.gps.reactionCanChangeOutcome(workflow)) continue;

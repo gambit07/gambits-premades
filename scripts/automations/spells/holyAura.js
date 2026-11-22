@@ -7,7 +7,7 @@ export async function holyAura({actor, item, args, workflow}) {
         if(!data) return;
         delete data._id;
         delete data._key;
-        const recipients = Array.from(workflow.targets, target => target.document.uuid);
+        const recipients = workflow.targets.uuids;
         data.type = "auraeffects.aura";
         data.origin = item.uuid;
         data.flags.dnd5e = {dependentOn: concentration.uuid};
@@ -23,7 +23,7 @@ export async function holyAura({actor, item, args, workflow}) {
         return;
     }
     if(args?.[0]?.macroPass !== "isHit" || !["mwak", "msak"].includes(workflow.activity?.actionType)) return;
-    if(!["undead", "fiend"].includes(MidiQOL.raceOrType(workflow.token))) return;
+    if(!["undead", "fiend"].includes(MidiQOL.raceOrType(workflow.tokenDocument))) return;
     const effects = actor?.appliedEffects?.filter(effect => effect.flags["gambits-premades"]?.gpsUuid === "5f7adec6-3c0f-4654-8516-a4a38260ed85") ?? [];
     for(const effect of effects) {
         const sourceUuid = effect.flags["gambits-premades"]?.holyAuraSource ?? effect.flags["midi-qol"]?.castData?.itemUuid;
@@ -33,17 +33,17 @@ export async function holyAura({actor, item, args, workflow}) {
         workflow.gps.holyAura ??= new Set();
         if(workflow.gps.holyAura.has(source.uuid)) continue;
         workflow.gps.holyAura.add(source.uuid);
-        const save = await game.gps.gpsActivityUse({itemUuid: source.uuid, identifier: "syntheticSave", targetUuid: workflow.token.document.uuid});
+        const save = await game.gps.gpsActivityUse({itemUuid: source.uuid, identifier: "syntheticSave", targetUuid: workflow.tokenDocument.uuid});
         if(save?.failedSaves.size !== 1) continue;
         const concentration = MidiQOL.getConcentrationEffect(source.actor, source.uuid);
         if(!concentration) continue;
         const revised = source.system.source.rules === "2024";
         const data = {
             name: `${source.name}: ${game.i18n.localize("DND5E.ConBlinded")}`,
-            img: source.img, origin: source.uuid, transfer: false, statuses: ["blinded"],
+            img: source.img, origin: source.uuid, transfer: false, system: {magical: true}, statuses: ["blinded"],
             duration: revised ? {expiry: "targetEnd", value: null} : {},
             flags: {"gambits-premades": {holyAuraBlindness: concentration.uuid}, dnd5e: revised ? {} : {dependentOn: concentration.uuid}}
         };
-        await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: workflow.token.actor.uuid, effects: [data]});
+        await MidiQOL.socket().executeAsGM("createEffects", {actorUuid: workflow.tokenDocument.actor.uuid, effects: [data]});
     }
 }

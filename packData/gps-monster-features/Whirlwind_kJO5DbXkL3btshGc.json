@@ -272,7 +272,7 @@
         "img": "icons/magic/air/wind-tornado-cyclone-white.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(args[0].macroPass === \"postSave\") {\n    let targets = workflow.failedSaves;\n    let gmUser = game.gps.getPrimaryGM();\n    if(targets.size === 0) return;\n    for(let target of targets) {\n      const directions = [\"North\", \"South\", \"East\", \"West\", \"Northwest\", \"Northeast\", \"Southwest\", \"Southeast\"];\n      const randomDirection = directions[Math.floor(Math.random() * directions.length)];\n      await game.gps.queryGM(\"moveTokenByCardinal\", {targetUuid: target.document.uuid, distance: 20, direction: randomDirection});\n      await game.gps.queryUser(\"gmToggleStatus\", gmUser, {tokenUuid: `${target.document.uuid}`, status: \"prone\", active: true });\n    }\n}",
+        "command": "if(args[0].macroPass === \"postSave\") {\n    let targets = workflow.failedSaves.documents;\n    let gmUser = game.gps.getPrimaryGM();\n    if(targets.length === 0) return;\n    for(let target of targets) {\n      const directions = [\"North\", \"South\", \"East\", \"West\", \"Northwest\", \"Northeast\", \"Southwest\", \"Southeast\"];\n      const randomDirection = directions[Math.floor(Math.random() * directions.length)];\n      await game.gps.queryGM(\"moveTokenByCardinal\", {targetUuid: target.uuid, distance: 20, direction: randomDirection});\n      await game.gps.queryUser(\"gmToggleStatus\", gmUser, {tokenUuid: `${target.uuid}`, status: \"prone\", active: true });\n    }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -314,7 +314,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.3"
+        "version": "3.0.6"
       }
     }
   },

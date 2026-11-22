@@ -1,13 +1,13 @@
 export async function dissonantWhispers({ speaker, actor, token, character, item, args, scope, workflow, options }) {
     if (args[0].macroPass === "postActiveEffects") {
-        const targets = workflow.hitTargets;
+        const targets = workflow.hitTargets.documents;
         const gmUser = game.gps.getPrimaryGM();
         for(let target of targets) {
             const targetMovementSpeed = target.actor.system.attributes.movement.speeds.walk;
             const damageType = "psychic";
             const attackNum = Math.floor(workflow.castData.castLevel + 2);
-            const hasDeafened = target.document.hasStatusEffect("deafened");
-            const hasReactionUsed = MidiQOL.hasUsedReaction(target.actor);
+            const hasDeafened = target.hasStatusEffect("deafened");
+            const hasReactionUsed = game.gps.reactionUnavailable(target.actor);
             let actorPlayer = MidiQOL.playerForActor(token.actor);
             let content = `<span style='text-wrap: wrap;'>${game.i18n.localize("GAMBITSPREMADES.ChatMessages.Automations.Spells.DissonantWhispers.TargetAutoSaveSuccess")}<br><img src="${target.actor.img}" width="30" height="30" style="border:0px"></span>`;
 
@@ -61,12 +61,12 @@ export async function dissonantWhispers({ speaker, actor, token, character, item
                 damageParts[0].number = castDamage;
 
                 await game.gps.queryUser("gpsActivityUpdate", gmUser, { activityUuid: activityToUpdate.uuid, updates: {"damage.parts": damageParts} });
-                const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.document.uuid});
+                const saveResult = await game.gps.gpsActivityUse({itemUuid: item.uuid, identifier: "syntheticSave", targetUuid: target.uuid});
 
-                if (saveResult?.failedSaves.size === 1 && !hasReactionUsed) {
+                if (saveResult?.failedSaves.size === 1 && !game.gps.reactionUnavailable(target.actor)) {
                     if(!hasReactionUsed) await game.gps.queryGM("addReaction", {actorUuid: `${target.actor.uuid}`});
 
-                    await game.gps.queryGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: target.document.uuid, distance: targetMovementSpeed });
+                    await game.gps.queryGM("moveTokenByOriginPoint", {originX: token.center.x, originY: token.center.y, targetUuid: target.uuid, distance: targetMovementSpeed });
 
                     let chatData = {
                         user: gmUser,

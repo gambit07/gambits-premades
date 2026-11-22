@@ -21,7 +21,7 @@
         "img": "modules/abyssal-brews-magical-kompendium-vol1/artwork/Billy%20the%20Club.webp",
         "type": "script",
         "scope": "global",
-        "command": "if(!game.gps.getCprConfig({itemUuid: macroItem.uuid}).animEnabled) return;\nif(args[0].macroPass === \"postSave\") {\n    let target = workflow.failedSaves.first();\n    if(target && (workflow.activity.type === \"save\" || workflow.activity.hasSave || workflow.saveResults.length !== 0)) {\n        game.gps.animation.spellEffect({kind: \"acidSplash\", at: target, scale: 1, color: \"green\"});\n    }\n}\n\nif(args[0].macroPass === \"postDamageRoll\") {\n    let target = workflow.hitTargets.first();\n    if(target && workflow.activity.type === \"attack\") {\n        new Sequence()\n            .effect()\n            .atLocation(token)\n            .stretchTo(target)\n            .file(\"jb2a.mace.melee.fire.green\")\n            .scale(1)\n        .play();\n    }\n}",
+        "command": "if(!game.gps.getCprConfig({itemUuid: macroItem.uuid}).animEnabled) return;\nif(args[0].macroPass === \"postSave\") {\n    let target = workflow.failedSaves.documents[0]?.object;\n    if(target && (workflow.activity.isLike(\"save\") || workflow.activity.hasSave || workflow.saveResults.length !== 0)) {\n        game.gps.animation.spellEffect({kind: \"acidSplash\", at: target, scale: 1, color: \"green\"});\n    }\n}\n\nif(args[0].macroPass === \"postDamageRoll\") {\n    let target = workflow.hitTargets.documents[0]?.object;\n    if(target && workflow.activity.isLike(\"attack\")) {\n        new Sequence()\n            .effect()\n            .atLocation(token)\n            .stretchTo(target)\n            .file(\"jb2a.mace.melee.fire.green\")\n            .scale(1)\n        .play();\n    }\n}",
         "author": "roRDywD19pu2VxlC",
         "ownership": {
           "default": 3
@@ -285,7 +285,7 @@
     "cat": {
       "automation": {
         "source": "gambits-premades",
-        "version": "3.0.1"
+        "version": "3.0.6"
       }
     },
     "gambits-premades": {

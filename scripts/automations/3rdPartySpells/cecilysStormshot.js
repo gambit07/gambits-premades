@@ -1,7 +1,7 @@
 export async function cecilysStormshot({ speaker, actor, token, character, item, args, scope, workflow, options, macroItem }) {
     if(args[0].macroPass === "postAttackRoll") {
-        let target = workflow.hitTargets.first();
-        let missTarget = workflow.targets.first();
+        let target = workflow.hitTargets.documents[0];
+        let missTarget = workflow.targets.documents[0];
 
         if(!target) {
             if(game.gps.getCprConfig({itemUuid: item.uuid}).animEnabled) {

@@ -1,3 +1,5 @@
+import {strokeOfLuckCheck} from "../automations/classFeatures/rogue/strokeOfLuck.js";
+
 export async function executeWorkflow({ workflowItem, workflowData, workflowType, workflowCombat }) {
     if(!game.gpsSettings.enable3prNoCombat && !game.combat && workflowCombat) return;
 
@@ -15,6 +17,12 @@ export function registerWrapping() {
                 const revised = await game.gps.flashOfGenius({workflowData: {actor: config.subject, roll: rolls[index], abilityId: config.skill ?? config.ability}, workflowType, workflowCombat: false});
                 if(revised) rolls[index] = revised;
             }
+        }
+        if(game.gps?.replaceD20Result && (workflowType === "skill" || workflowType === "ability") && config.subject?.documentName === "Actor"
+            && !names.includes("tool") && !names.includes("initiativedialog") && !names.includes("savingthrow")
+            && config.evaluate !== false && !config.simulate && !midi.simulate && !midi.unattended
+            && config.subject.getFlag("gambits-premades", "strokeOfLuck")) {
+            for(let i = 0; i < rolls.length; i++) rolls[i] = await strokeOfLuckCheck(rolls[i], config, message) ?? rolls[i];
         }
         return wrapped(rolls, config, message);
     }, "WRAPPER");
@@ -170,7 +178,8 @@ export function daeInitFlags() {
         'flags.gambits-premades.oaImmunity',
         'flags.gambits-premades.oaSuppression',
         'flags.gambits-premades.oaDisadvantage',
-        'flags.gambits-premades.oaDisadvantageSource'
+        'flags.gambits-premades.oaDisadvantageSource',
+        'flags.gambits-premades.strokeOfLuck'
     ];
 
     daeFieldBrowserFields.push(...Array.from(new Set(browserFields)).sort());
@@ -199,6 +208,10 @@ export function daeInjectFlags() {
         description: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.OADisadvantageSource.Description")
     });
     
+    foundry.utils.setProperty(game.i18n.translations, 'dae.GPS.fieldData.flags.gambits-premades.strokeOfLuck', {
+        name: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.StrokeOfLuck.Name"),
+        description: game.i18n.localize("GAMBITSPREMADES.DAE.Flags.StrokeOfLuck.Description")
+    });
     DAE.addAutoFields(daeFieldBrowserFields);
 }
 

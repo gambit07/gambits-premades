@@ -1,5 +1,7 @@
-export async function stormsThunder2024({ speaker, actor, token, character, item, args, scope, workflow, options, rolledItem, rolledActivity, macroItem }) {
+export async function stormsThunder2024({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options, rolledItem, rolledActivity, macroItem }) {
     if(args[0].macroPass === "isDamaged") {
+        if(!tokenDocument?.object) return;
+        token = tokenDocument.object;
         macroItem = actor.items.find(i => i.system.identifier === "storms-thunder");
         if (!macroItem) return;
         let itemName = macroItem.name;
@@ -13,24 +15,24 @@ export async function stormsThunder2024({ speaker, actor, token, character, item
         let measuredDistance = MidiQOL.computeDistance(token,target, {wallsBlock: true, includeCover: true});
         let range = game.gps.convertFromFeet({range: 60});
 
-        if(MidiQOL.hasUsedReaction(actor)) {
-            if(debugEnabled) game.gps.logInfo(`${itemName} for ${token.actor.name} failed at reaction available`);
+        if(game.gps.reactionUnavailable(actor)) {
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${actor.name} failed at reaction available`);
             return;
         }
 
         else if(measuredDistance === -1 || (measuredDistance > range)) {
-            if(debugEnabled) game.gps.logInfo(`${itemName} for ${token.actor.name} failed at range check`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${actor.name} failed at range check`);
             return;
         }
 
         else if(MidiQOL.checkIncapacitated(token)) {
-            if(debugEnabled) game.gps.logInfo(`${itemName} for ${token.actor.name} failed at is incapacitated`);
+            if(debugEnabled) game.gps.logInfo(`${itemName} for ${actor.name} failed at is incapacitated`);
             return;
         }
 
         let dialogId = "0110149a-6f47-4a69-8e5e-34b33da48ec0";
-        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: token.actor.name, itemName: macroItem.name });
-        let dialogTitlePrimary = `${token.actor.name} | ${macroItem.name}`;
+        let dialogTitleGM = game.i18n.format("GAMBITSPREMADES.Dialogs.Common.WaitingForSelection", { actorName: actor.name, itemName: macroItem.name });
+        let dialogTitlePrimary = `${actor.name} | ${macroItem.name}`;
         let browserUser = game.gps.getBrowserUser({ actorUuid: actor.uuid });
         let result;
         let initialTimeLeft = 15;
@@ -59,13 +61,13 @@ export async function stormsThunder2024({ speaker, actor, token, character, item
         `;
         
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog" };
         
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: tokenDocument.uuid, focusTokenUuid: target.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
@@ -74,6 +76,7 @@ export async function stormsThunder2024({ speaker, actor, token, character, item
             return;
         }
         else if (userDecision) {
+            if(game.gps.reactionUnavailable(actor)) return;
             if(source && source === "user") await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: macroItem.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
             else if(source && source === "gm") await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: macroItem.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
         }

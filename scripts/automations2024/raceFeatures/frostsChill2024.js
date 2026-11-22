@@ -41,13 +41,13 @@ export async function frostsChill2024({ speaker, actor, token, character, item, 
         `;
         
         if (MidiQOL.safeGetGameSetting('gambits-premades', 'Mirror 3rd Party Dialog for GMs') && browserUser !== gmUser) {
-            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
+            let userDialogArgs = { dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source: "user",type: "multiDialog", browserUser: browserUser };
             
-            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source: "gm",type: "multiDialog" };
+            let gmDialogArgs = { dialogTitle:dialogTitleGM,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source: "gm",type: "multiDialog" };
         
             result = await game.gps.handleDialogPromises({userDialogArgs, gmDialogArgs});
         } else {
-            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.document.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
+            result = await game.gps.queryDialog("process3rdPartyReactionDialog", browserUser, {dialogTitle:dialogTitlePrimary,dialogContent,dialogId,initialTimeLeft,validTokenPrimaryUuid: token.document.uuid, focusTokenUuid: target.uuid,source:gmUser === browserUser ? "gm" : "user",type:"singleDialog"});
         }
                 
         const { userDecision, enemyTokenUuid, allyTokenUuid, damageChosen, abilityCheck, source, type } = result || {};
@@ -56,8 +56,8 @@ export async function frostsChill2024({ speaker, actor, token, character, item, 
             return;
         }
         else if (userDecision) {
-            if(source && source === "user") await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: macroItem.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
-            else if(source && source === "gm") await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: macroItem.uuid, identifier: "syntheticDamage", targetUuid: target.document.uuid});
+            if(source && source === "user") await game.gps.queryUser("gpsActivityUse", browserUser, {itemUuid: macroItem.uuid, identifier: "syntheticDamage", targetUuid: target.uuid});
+            else if(source && source === "gm") await game.gps.queryUser("gpsActivityUse", gmUser, {itemUuid: macroItem.uuid, identifier: "syntheticDamage", targetUuid: target.uuid});
         }
     }
 }

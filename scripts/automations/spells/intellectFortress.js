@@ -1,6 +1,6 @@
 export async function intellectFortress({actor, token, item, args, workflow}) {
     if(args?.[0]?.macroPass !== "prePreambleComplete") return;
-    const targets = [...workflow.targets];
+    const targets = workflow.targets.documents;
     const castTargets = Math.max(1, (workflow.castData?.castLevel || item.system.level) - 2);
     let key;
     if(targets.length > castTargets) key = "SelectedMoreTokensThan";

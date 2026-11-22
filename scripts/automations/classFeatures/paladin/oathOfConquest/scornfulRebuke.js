@@ -1,9 +1,10 @@
-export async function scornfulRebuke({ speaker, actor, token, character, item, args, scope, workflow, options }) {
+export async function scornfulRebuke({ speaker, actor, token, tokenDocument = game.gps.tokenDocument(token), character, item, args, scope, workflow, options }) {
     if(args[0].macroPass === "isHit") {
         let reactingDamage = actor.system.abilities.cha.mod;
         if(reactingDamage < 1) reactingDamage = 1;
-        const target = workflow.token;
-        const isIncapacitated = MidiQOL.checkIncapacitated(token);
+        const target = workflow.tokenDocument;
+        if(!target || !tokenDocument) return;
+        const isIncapacitated = MidiQOL.checkIncapacitated(actor);
 
         if(isIncapacitated) return ui.notifications.error(game.i18n.format("GAMBITSPREMADES.Notifications.ClassFeatures.Paladin.OathOfConquest.ScornfulRebuke.Incapacitated", { name: actor.name }));
         const damageRoll = await new CONFIG.Dice.DamageRoll(`${reactingDamage}`, {}, {type: "psychic", properties: ["mgc"]}).evaluate();
@@ -16,6 +17,6 @@ export async function scornfulRebuke({ speaker, actor, token, character, item, a
             img: item.img
         }
 
-        new MidiQOL.DamageOnlyWorkflow(actor, token, damageRoll.total, "psychic", [target], damageRoll, {itemData: itemData, flavor: "Scornful Rebuke - Damage (Psychic)"});
+        new MidiQOL.DamageOnlyWorkflow(actor, tokenDocument, damageRoll.total, "psychic", [target], damageRoll, {itemData: itemData, flavor: "Scornful Rebuke - Damage (Psychic)"});
     }
 }

@@ -14,7 +14,7 @@ export async function mageSlayer2024({workflowData,workflowType,workflowCombat})
     let findValidTokens = game.gps.findValidTokens({initiatingToken: workflow.token, targetedToken: workflow.token, itemName: itemName, itemType: "feature", itemChecked: ["mage-slayer"], reactionCheck: false, sightCheck: false, rangeCheck: false, rangeTotal: 5, dispositionCheck: true, dispositionCheckType: "enemy", workflowType: workflowType, workflowCombat: workflowCombat, gpsUuid: gpsUuid});
 
    for (const validTokenPrimary of findValidTokens) {
-        let targetUuids = Array.from(workflow.failedSaves).filter(t => t.document.uuid === validTokenPrimary.document.uuid).map(t => t.document.uuid);
+        let targetUuids = workflow.failedSaves.documents.filter(t => t.uuid === validTokenPrimary.document.uuid).map(t => t.uuid);
         if(targetUuids.length === 0) continue;
         let chosenItem = validTokenPrimary.actor.items.find(i => i.flags["gambits-premades"]?.gpsUuid === gpsUuid);
         let itemProperName = chosenItem?.name;

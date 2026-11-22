@@ -46,7 +46,7 @@ export async function cloudOfDaggers({tokenUuid, regionUuid, regionScenario, reg
     const effectOriginActor = game.gps.getRegionActor(region);
     const effectOriginToken = fromUuidSync(region.getFlag("dnd5e", "origin"))?.object;
     let chosenItem = await fromUuid(region.getFlag("dnd5e", "item"));
-    if(!chosenItem || !effectOriginActor) return;
+    if(!chosenItem || !effectOriginActor || game.gps.spellRegionSuppressed(chosenItem, token.actor)) return;
 
     let resumeMovement;
     try {
