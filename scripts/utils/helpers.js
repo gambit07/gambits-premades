@@ -1183,7 +1183,7 @@ export async function remoteAbilityTest({spellcasting, actorUuid}) {
     }
 }
 
-export async function gpsActivityUse({itemUuid, identifier, targetUuid, advantageSave = false, castUuid}) {
+export async function gpsActivityUse({itemUuid, identifier, targetUuid, advantageSave = false, castUuid, skipTargetConfirmation = false}) {
     const item = await fromUuid(itemUuid);
     if(!item) return game.gps.logInfo(`Shame you didn't pass me an itemUuid`);
     const activity = item.system.activities.find(a => a.identifier === identifier);
@@ -1194,13 +1194,15 @@ export async function gpsActivityUse({itemUuid, identifier, targetUuid, advantag
     if(advantageSave || castUuid) options.midiOptions.workflowOptions = {gps: {
         ...(advantageSave && targetUuids.length === 1 ? {advantageSaveTarget: targetUuids[0]} : {}), ...(castUuid ? {castUuid} : {})
     }};
+    if(skipTargetConfirmation) (options.midiOptions.workflowOptions ??= {}).targetConfirmation = "none";
     let activityUse = await MidiQOL.completeActivityUse(activity.uuid, options, {}, {});
     if (!activityUse || activityUse.aborted) return;
     const failedSaveUuids = activityUse.failedSaveUuids ?? activityUse.failedSaves?.uuids ?? [];
     const message = activityUse.itemCardUuid ? MidiQOL.getCachedChatMessage(activityUse.itemCardUuid) : null;
     const saveRoll = activityUse.tokenSaves?.[targetUuids[0]] ?? Object.values(activityUse.tokenSaves ?? {})[0]
         ?? message?.rolls.find(roll => roll.options?.["midi-qol"]?.rollType === "save" && roll.options["midi-qol"].targetUuid === targetUuids[0]);
-    return { saveRolls: saveRoll, failedSaves: { size: failedSaveUuids.length }, failedSaveUuids, utilityRolls: activityUse.utilityRolls?.[0] };
+    const damageTargetUuids = activityUse.damageRolls?.length ? activityUse.targets?.uuids ?? [] : [];
+    return { saveRolls: saveRoll, failedSaves: { size: failedSaveUuids.length }, failedSaveUuids, utilityRolls: activityUse.utilityRolls?.[0], damageTargetUuids };
 }
 
 export async function gpsActivityUpdate({activityUuid, updates}) {
